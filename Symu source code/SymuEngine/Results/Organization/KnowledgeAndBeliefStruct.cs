@@ -1,0 +1,35 @@
+﻿#region Licence
+
+// Description: Symu - SymuEngine
+// Website: Website:     https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+namespace SymuEngine.Results.Organization
+{
+    /// <summary>
+    ///     Structure to store group knowledge information
+    /// </summary>
+    public class KnowledgeAndBeliefStruct
+    {
+        public KnowledgeAndBeliefStruct(float sum, float mean, float standardDeviation, ushort step)
+        {
+            Sum = sum;
+            Mean = mean;
+            StandardDeviation = standardDeviation;
+            Step = step;
+        }
+
+        public float Sum { get; }
+        public float Mean { get; }
+        public float StandardDeviation { get; }
+        public ushort Step { get; }
+
+        public override string ToString()
+        {
+            return "Sum " + Sum + "Average " + Mean + " - Variance " + StandardDeviation + " / step" + Step;
+        }
+    }
+}

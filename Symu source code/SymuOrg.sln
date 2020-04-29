@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuEngine", "SymuEngine\SymuEngine.csproj", "{7FB12021-615C-4B12-B925-701E2C69969F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5475A2E5-E10F-46EF-B24E-450D717AF7CF} = {5475A2E5-E10F-46EF-B24E-450D717AF7CF}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuEngineTests", "SymuEngineTests\SymuEngineTests.csproj", "{B93FE61F-2322-43D4-AAAD-2CA31138BC2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuTools", "SymuTools\SymuTools.csproj", "{5475A2E5-E10F-46EF-B24E-450D717AF7CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuToolsTests", "SymuToolsTests\SymuToolsTests.csproj", "{2B7C6332-BE46-44FA-B3E8-555BA04FE24C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{221F316E-1444-4BD3-BA23-132C94A17F9D}"
+	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
+		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\CONTRIBUTORS.md = ..\CONTRIBUTORS.md
+		..\FAQ.md = ..\FAQ.md
+		..\README.md = ..\README.md
+		..\RELEASENOTES.md = ..\RELEASENOTES.md
+		..\ROADMAP.md = ..\ROADMAP.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuForm", "..\Symu examples\SymuForm\SymuForm.csproj", "{998C00B3-6A46-41D7-9140-57E1D07A7B6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FB12021-615C-4B12-B925-701E2C69969F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FB12021-615C-4B12-B925-701E2C69969F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FB12021-615C-4B12-B925-701E2C69969F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FB12021-615C-4B12-B925-701E2C69969F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93FE61F-2322-43D4-AAAD-2CA31138BC2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93FE61F-2322-43D4-AAAD-2CA31138BC2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93FE61F-2322-43D4-AAAD-2CA31138BC2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93FE61F-2322-43D4-AAAD-2CA31138BC2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5475A2E5-E10F-46EF-B24E-450D717AF7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5475A2E5-E10F-46EF-B24E-450D717AF7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5475A2E5-E10F-46EF-B24E-450D717AF7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5475A2E5-E10F-46EF-B24E-450D717AF7CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7C6332-BE46-44FA-B3E8-555BA04FE24C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7C6332-BE46-44FA-B3E8-555BA04FE24C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7C6332-BE46-44FA-B3E8-555BA04FE24C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7C6332-BE46-44FA-B3E8-555BA04FE24C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3A74494-B5EE-413E-A548-C89155884F06}
+	EndGlobalSection
+EndGlobal

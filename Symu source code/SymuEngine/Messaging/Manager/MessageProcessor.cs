@@ -1,0 +1,218 @@
+#region Licence
+
+// Description: Symu - SymuEngine
+// Website: Website:     https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
+using System.Threading;
+using System.Threading.Tasks;
+using SymuEngine.Messaging.Delayed;
+using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Reply;
+using SymuEngine.Messaging.Subscription;
+
+#endregion
+
+namespace SymuEngine.Messaging.Manager
+{
+    public class MessageProcessor : IDisposable
+    {
+        private readonly Func<MessageProcessor, Task> _body;
+        private readonly CancellationToken _cancellationToken;
+        private readonly MessagesManager _messagesManager;
+        private bool _started;
+
+        public MessageProcessor(Func<MessageProcessor, Task> body)
+        {
+            _body = body;
+            _cancellationToken = Task.Factory.CancellationToken;
+            _messagesManager = new MessagesManager();
+            _started = false;
+        }
+
+        /// <summary>
+        ///     As it is a send and receive parameter, it can be in MailBox
+        /// </summary>
+        public byte NumberMessagesPerPeriod { get; set; }
+
+        #region Waiting replies
+
+        /// <summary>
+        ///     Manage message that are waiting replies
+        /// </summary>
+        public WaitingReplies WaitingReplies { get; } = new WaitingReplies();
+
+        #endregion
+
+        #region Message subscription
+
+        /// <summary>
+        ///     Manage subscriptions/unsubscriptions to an agent's messages
+        ///     The subscription is based on the subject of the message
+        ///     If an agent subscribe, the agent will receive all messages sent on the subject
+        /// </summary>
+        public MessageSubscriptions Subscriptions { get; } = new MessageSubscriptions();
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            _messagesManager.Dispose();
+        }
+
+        #endregion
+
+        public void Start()
+        {
+            if (_started)
+            {
+                throw new InvalidOperationException("MessageProcessor already started");
+            }
+
+            _started = true;
+
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await _body(this).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
+                    exceptionDispatchInfo.Throw();
+                }
+            }, _cancellationToken);
+        }
+
+        #region Post message
+
+        /// <summary>
+        /// </summary>
+        public byte NumberSentPerPeriod { get; set; }
+
+        /// <summary>
+        ///     EventHandler use to update the form after each step
+        /// </summary>
+        public event EventHandler<MessageEventArgs> OnBeforePostEvent;
+
+        public void Post(Message.Message message)
+        {
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            IncrementMessagesPerPeriod(message.Medium, false);
+            var eventArgs = new MessageEventArgs(message);
+            OnBeforePostEvent?.Invoke(this, eventArgs);
+            _messagesManager.Post(message);
+        }
+
+        /// <summary>
+        ///     Increment numberMessagesPerPeriod if the message is not a system message
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="sentMessage">if set message is a posted message, otherwise it's a received message</param>
+        public void IncrementMessagesPerPeriod(CommunicationMediums messageType, bool sentMessage)
+        {
+            if (messageType == CommunicationMediums.System)
+            {
+                return;
+            }
+
+            if (NumberMessagesPerPeriod >= byte.MaxValue)
+            {
+                return;
+            }
+
+            NumberMessagesPerPeriod++;
+            if (sentMessage)
+            {
+                NumberSentPerPeriod++;
+            }
+            else
+            {
+                NumberReceivedPerPeriod++;
+            }
+        }
+
+        /// <summary>
+        ///     Clear numberMessagesPerPeriod done at the beginning of every new period (interaction step)
+        /// </summary>
+        public void ClearMessagesPerPeriod()
+        {
+            NumberMessagesPerPeriod = 0;
+            NumberSentPerPeriod = 0;
+            NumberReceivedPerPeriod = 0;
+        }
+
+        #endregion
+
+        #region Receive message
+
+        /// <summary>
+        /// </summary>
+        public byte NumberReceivedPerPeriod { get; set; }
+
+        public Task<Message.Message> Receive()
+        {
+            return _messagesManager.Receive();
+        }
+
+        #endregion
+
+        #region Delayed MessagesManager
+
+        /// <summary>
+        ///     Postponed MessagesManager until the next interaction step
+        /// </summary>
+        public DelayedMessages DelayedMessages { get; } = new DelayedMessages();
+
+        public void PostAsADelayed(Message.Message message, ushort step)
+        {
+            DelayedMessages.Enqueue(message, step);
+        }
+
+        /// <summary>
+        ///     Get the next delayed message of this step
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns></returns>
+        public Message.Message NextDelayedMessages(ushort step)
+        {
+            return DelayedMessages.Dequeue(step);
+        }
+
+        #endregion
+
+        #region Missed Message
+
+        /// <summary>
+        ///     An sender agent has send a message of type phone, or meeting, ... but the receiver was offline, so he missed the
+        ///     message
+        ///     Missed messages trace those missed message in debug
+        /// </summary>
+        public List<Message.Message> MissedMessages { get; } = new List<Message.Message>();
+
+        public void AddMissedMessage(Message.Message message, bool debug)
+        {
+            if (debug)
+            {
+                MissedMessages.Add(message);
+            }
+        }
+
+        #endregion
+    }
+}
