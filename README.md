@@ -27,7 +27,7 @@ The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Sy
 Those two projects come with their test project, mainly unit tests. They are helpful for developers to understand how to use the framework.
 
 The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget).
-They also come with their test project, which are more integration tests.
+They also come with their test project, which are more integration tests and a guide to use this framework in batch mode.
 They allow you to discover, understand and configure each model, in this sense it is a good entry point.
 
 ### Installing
