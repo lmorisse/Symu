@@ -22,11 +22,11 @@ They interact simultaneously in a shared environment that interacts in turn with
 Because we believe that such a framework is valuable for organizations and academics. And that academics can enrich use cases and models implemented in this framework.
 
 ## Getting Started
-The main project is (SymuEngine)[https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine]. This is the framework you'll use to build your own application in batch or GUI mode.
-(SymuTools)[https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuTools] is a set of utilities for SymuEngine.
+The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
+[SymuTools](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuTools) is a set of utilities for SymuEngine.
 Those two projects come with their test project, mainly unit tests. They are helpful for developers to understand how to use the framework.
 
-The sample projects are interesting to understand what the framework can do. They are divided into models, for example (learning and forgetting models)[https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget].
+The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget).
 They also come with their test project, which are more integration tests.
 They allow you to discover, understand and configure each model, in this sense it is a good entry point.
 
