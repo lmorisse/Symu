@@ -1,6 +1,6 @@
-#ROADMAP
+# ROADMAP
 
-##FRAMEWORK ROADMAP
+## FRAMEWORK
 * App based on the framework for agnostic organizations
 * Implement models :
 ** Transactional memory
@@ -8,14 +8,16 @@
 ** Interaction sphere
 ** Risk aversion
 
-##EXAMPLES ROADMAP
+## EXAMPLES
+* Belief and influence
+* Tasks and messages
 
-##TECHNICAL ROADMAP
+## TECHNICAL
 * Persistance XML files
 
-##WIKI ROADMAP
+## WIKI
 * Describe models
 
-##DOCS ROADMAP
+## DOCS
 * User guides
 * Models templates
