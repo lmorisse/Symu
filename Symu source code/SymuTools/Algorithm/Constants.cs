@@ -14,6 +14,6 @@ namespace SymuTools.Classes.Algorithm
         /// <summary>
         ///     Tolerance for floating point comparison
         /// </summary>
-        public const float tolerance = 0.001F;
+        public const float Tolerance = 0.001F;
     }
 }

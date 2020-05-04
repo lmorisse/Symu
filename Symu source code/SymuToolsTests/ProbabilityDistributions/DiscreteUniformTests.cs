@@ -54,8 +54,8 @@ namespace SymuToolsTests.ProbabilityDistributions
             Assert.AreEqual(10, t.Length);
             for (var i = 0; i < 10; i++)
             {
-                Assert.IsTrue(Math.Abs(t[i]) < Constants.tolerance || Math.Abs(t[i] - 1) < Constants.tolerance ||
-                              Math.Abs(t[i] + 1) < Constants.tolerance);
+                Assert.IsTrue(Math.Abs(t[i]) < Constants.Tolerance || Math.Abs(t[i] - 1) < Constants.Tolerance ||
+                              Math.Abs(t[i] + 1) < Constants.Tolerance);
             }
         }
     }

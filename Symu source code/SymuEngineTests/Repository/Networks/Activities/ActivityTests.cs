@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Repository.Networks.Activities;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -21,8 +22,8 @@ namespace SymuEngineTests.Repository.Networks.Activities
     {
         private readonly Activity _activity = new Activity("a");
 
-        private readonly SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge _knowledge =
-            new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(1, "k", 10);
+        private readonly Knowledge _knowledge =
+            new Knowledge(1, "k", 10);
 
         [TestMethod]
         public void AddKnowledgeTest()

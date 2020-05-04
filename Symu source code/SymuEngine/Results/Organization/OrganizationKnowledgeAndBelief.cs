@@ -49,23 +49,35 @@ namespace SymuEngine.Results.Organization
 
         public void HandleKnowledge(ushort step)
         {
-            var sum = _network.NetworkKnowledges.AgentsRepository.Values
+            var sumKnowledge = _network.NetworkKnowledges.AgentsRepository.Values
                 .Select(expertise => expertise.GetKnowledgesSum()).ToList();
-            KnowledgeAndBeliefStruct knowledge;
-            switch (sum.Count)
+            float sum;
+            float mean;
+            float stdDev;
+            switch (sumKnowledge.Count)
             {
                 case 0:
-                    knowledge = new KnowledgeAndBeliefStruct(0, 0, 0, step);
+                    sum = 0;
+                    mean = 0;
+                    stdDev = 0;
                     break;
                 case 1:
-                    knowledge = new KnowledgeAndBeliefStruct(sum[0], sum[0], 0, step);
+                    sum = sumKnowledge[0];
+                    mean = sumKnowledge[0];
+                    stdDev = 0;
                     break;
                 default:
-                    knowledge = new KnowledgeAndBeliefStruct(sum.Sum(), sum.Average(), (float) sum.StandardDeviation(),
-                        step);
+                    sum = sumKnowledge.Sum();
+                    mean = sumKnowledge.Average();
+                    stdDev = (float) sumKnowledge.StandardDeviation();
                     break;
             }
 
+            var learning = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Learning);
+            var forgetting = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Forgetting);
+            var obsolescence = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Obsolescence);
+
+            var knowledge = new KnowledgeAndBeliefStruct(sum, mean, stdDev, learning, forgetting, obsolescence, step);
             Knowledges.Add(knowledge);
         }
 
@@ -80,16 +92,18 @@ namespace SymuEngine.Results.Organization
             var sum = _network.NetworkBeliefs.AgentsRepository.Values.Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
             KnowledgeAndBeliefStruct belief;
+            //TODO Gain/loss/obsolescence of the beliefs
             switch (sum.Count)
             {
                 case 0:
-                    belief = new KnowledgeAndBeliefStruct(0, 0, 0, step);
+                    belief = new KnowledgeAndBeliefStruct(0, 0, 0, 0, 0, 0, step);
                     break;
                 case 1:
-                    belief = new KnowledgeAndBeliefStruct(sum[0], sum[0], 0, step);
+                    belief = new KnowledgeAndBeliefStruct(sum[0], sum[0], 0, 0, 0, 0, step);
                     break;
                 default:
-                    belief = new KnowledgeAndBeliefStruct(sum.Sum(), sum.Average(), (float) sum.StandardDeviation(),
+                    belief = new KnowledgeAndBeliefStruct(sum.Sum(), sum.Average(), (float) sum.StandardDeviation(), 0,
+                        0, 0,
                         step);
                     break;
             }

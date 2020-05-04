@@ -93,13 +93,26 @@ namespace SymuTools.Classes
                 return 0;
             }
 
-            byte sum = 0;
-            foreach (var value in values)
+            var sum = values.Aggregate<byte, byte>(0, (current, value) => (byte) (current + value));
+
+            return (byte) Math.Round(1.0 * sum / values.Count);
+        }
+
+        public static float Average(this ushort[] values)
+        {
+            if (values is null)
             {
-                sum += value;
+                throw new ArgumentNullException(nameof(values));
             }
 
-            return (byte) Math.Floor(1.0 * sum / values.Count);
+            if (!values.Any())
+            {
+                return 0;
+            }
+
+            var sum = values.Aggregate<ushort, float>(0, (current, value) => current + value);
+
+            return sum / values.Length;
         }
     }
 }

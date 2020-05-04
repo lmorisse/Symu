@@ -31,7 +31,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Email;
             // One year
-            TimeToLive = 365;
+            Cognitive.InternalCharacteristics.TimeToLive = 365;
             Cognitive.TasksAndPerformance.LearningModel.On = true;
             Cognitive.TasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
         }

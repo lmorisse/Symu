@@ -32,7 +32,7 @@ namespace SymuToolsTests
             bytes.Add(1);
             Assert.AreEqual(1, bytes.Average());
             bytes.Add(2);
-            Assert.AreEqual(1, bytes.Average());
+            Assert.AreEqual(2, bytes.Average());
             bytes.Add(3);
             Assert.AreEqual(2, bytes.Average());
         }

@@ -18,7 +18,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the AgentTemplate
     /// </summary>
-    public abstract class CognitiveArchitectureTemplate
+    public class CognitiveArchitectureTemplate
     {
         public CognitiveArchitecture.CognitiveArchitecture Cognitive { get; set; } =
             new CognitiveArchitecture.CognitiveArchitecture(null, new AgentId(0, 1), 0);

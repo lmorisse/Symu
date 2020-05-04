@@ -26,6 +26,8 @@ namespace SymuEngine.Classes.Agent.Models
     /// </example>
     public class ModelEntity
     {
+        private float _rateOfAgentsOn = 0.8F;
+
         public ModelEntity()
         {
         }
@@ -53,7 +55,19 @@ namespace SymuEngine.Classes.Agent.Models
         /// <example>if RateOfAgentsOn = 1, every agent will use the model</example>
         /// <example>if RateOfAgentsOn = 0, no agent will use the model, equivalent to Model Off</example>
         /// <example>if RateOfAgentsOn = 0.8F, 80% of agents will use the model</example>
-        public float RateOfAgentsOn { get; set; } = 0.8F;
+        public float RateOfAgentsOn
+        {
+            get => _rateOfAgentsOn;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RateOfAgentsOn should be between 0 and 1");
+                }
+
+                _rateOfAgentsOn = value;
+            }
+        }
 
         public void CopyTo(ModelEntity entity)
         {

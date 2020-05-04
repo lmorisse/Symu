@@ -13,7 +13,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Databases.Repository;
 
 #endregion
 

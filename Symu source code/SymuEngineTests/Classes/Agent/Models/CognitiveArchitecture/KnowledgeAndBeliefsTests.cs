@@ -12,14 +12,15 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Knowledge;
 using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Repository;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
+
 
 namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
 {
@@ -29,14 +30,14 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly KnowledgeModel _model = new KnowledgeModel();
-        private readonly Network _network = new Network();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private KnowledgeAndBeliefs _knowledgeAndBeliefs;
+        private Network _network;
 
         [TestInitialize]
         public void Initialize()
         {
+            _network = new Network(new AgentTemplates());
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeAndBeliefs = new KnowledgeAndBeliefs(_network, _agentId)
             {
@@ -74,7 +75,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeAndBeliefs.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
@@ -92,7 +93,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeAndBeliefs.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
@@ -108,7 +109,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         [TestMethod]
         public void AddExpertiseTest()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.HasKnowledge = false;
             _knowledgeAndBeliefs.AddExpertise(_expertise);
@@ -124,7 +125,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         {
             _knowledgeAndBeliefs.HasKnowledge = true;
             _knowledgeAndBeliefs.HasBelief = true;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.AddExpertise(_expertise);
             Assert.AreEqual(1, _network.NetworkKnowledges.GetAgentExpertise(_agentId).Count);
@@ -150,11 +151,35 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         {
             _knowledgeAndBeliefs.HasInitialKnowledge = true;
             _network.AddKnowledge(_knowledge);
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.AddExpertise(_expertise);
             _knowledgeAndBeliefs.InitializeExpertise(0);
             Assert.IsNotNull(agentKnowledge.KnowledgeBits);
+        }
+
+        /// <summary>
+        ///     Model off
+        /// </summary>
+        [TestMethod]
+        public void AddKnowledgeTest()
+        {
+            _knowledgeAndBeliefs.HasKnowledge = false;
+            _knowledgeAndBeliefs.AddKnowledge(_knowledge, KnowledgeLevel.Expert, 0, -1);
+            Assert.ThrowsException<NullReferenceException>(() =>
+                _network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id));
+        }
+
+        /// <summary>
+        ///     model on
+        /// </summary>
+        [TestMethod]
+        public void AddKnowledgeTest1()
+        {
+            _knowledgeAndBeliefs.HasKnowledge = true;
+            _knowledgeAndBeliefs.AddKnowledge(_knowledge, KnowledgeLevel.Expert, 0, -1);
+            var agentKnowledge = _network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id);
+            Assert.IsNotNull(agentKnowledge);
         }
 
         #endregion
@@ -167,7 +192,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         [TestMethod]
         public void AddBeliefsTest()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.HasBelief = false;
             _knowledgeAndBeliefs.AddBeliefs(_expertise);
@@ -180,7 +205,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         [TestMethod]
         public void AddBeliefsTest1()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.HasBelief = true;
             _knowledgeAndBeliefs.AddBeliefs(_expertise);
@@ -216,7 +241,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _network.NetworkBeliefs.AddBelief(_knowledge);
             _network.NetworkBeliefs.Add(_agentId, _knowledge.Id);
             var workerBelief = _network.NetworkBeliefs.GetAgentBeliefs(_agentId).GetBelief(_knowledge.Id);
-            workerBelief.InitializeBeliefBits(_model, 1, false);
+            workerBelief.InitializeBeliefBits(RandomGenerator.RandomBinary, 1, false);
             // Force beliefBits
             workerBelief.BeliefBits.SetBit(0, 1);
             _network.NetworkBeliefs.GetBelief(_knowledge.Id).Weights.SetBit(0, 1);
@@ -245,13 +270,37 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         {
             _knowledgeAndBeliefs.HasInitialBelief = true;
             _network.AddKnowledge(_knowledge);
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeAndBeliefs.AddExpertise(_expertise);
             _knowledgeAndBeliefs.InitializeBeliefs();
             var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id);
             Assert.IsNotNull(agentBelief);
             Assert.IsNotNull(agentBelief.BeliefBits);
+        }
+
+        /// <summary>
+        ///     Model off
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefTest()
+        {
+            _knowledgeAndBeliefs.HasBelief = false;
+            _knowledgeAndBeliefs.AddBelief(_knowledge.Id);
+            Assert.ThrowsException<NullReferenceException>(() =>
+                _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id));
+        }
+
+        /// <summary>
+        ///     model on
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefTest1()
+        {
+            _knowledgeAndBeliefs.HasBelief = true;
+            _knowledgeAndBeliefs.AddBelief(_knowledge.Id);
+            var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id);
+            Assert.IsNotNull(agentBelief);
         }
 
         #endregion

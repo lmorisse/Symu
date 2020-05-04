@@ -11,11 +11,10 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
-using SymuEngine.Repository.Networks.Knowledge.Repository;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Results.Organization;
 
 #endregion
@@ -30,7 +29,7 @@ namespace SymuEngineTests.Results.Organization
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
-        private readonly Network _network = new Network();
+        private readonly Network _network = new Network(new AgentTemplates());
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private OrganizationKnowledgeAndBelief _result;
 
@@ -61,7 +60,7 @@ namespace SymuEngineTests.Results.Organization
         [TestMethod]
         public void HandleKnowledge1Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge);
+            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _network.NetworkKnowledges.InitializeExpertise(_agentId, false, 0);
 
@@ -75,8 +74,8 @@ namespace SymuEngineTests.Results.Organization
         [TestMethod]
         public void HandleKnowledge2Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge);
-            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge);
+            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _network.NetworkKnowledges.Add(_agentId2, _expertise);
             _network.NetworkKnowledges.InitializeExpertise(_agentId, false, 0);
@@ -108,7 +107,7 @@ namespace SymuEngineTests.Results.Organization
         [TestMethod]
         public void HandleBelief1Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge);
+            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _network.NetworkBeliefs.Add(_agentId, _expertise);
             _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
             _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id).BeliefBits.SetBit(0, 1);
@@ -122,8 +121,8 @@ namespace SymuEngineTests.Results.Organization
         [TestMethod]
         public void HandleBelief2Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge);
-            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge);
+            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _network.NetworkBeliefs.Add(_agentId, _expertise);
             _network.NetworkBeliefs.Add(_agentId2, _expertise);
             _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);

@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Repository.Networks.Activities;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -31,11 +32,11 @@ namespace SymuEngineTests.Repository.Networks.Activities
         private readonly AgentId _kanbanId = new AgentId(1, 1);
         private readonly AgentId _kanbanId2 = new AgentId(2, 1);
 
-        private readonly SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge _knowledge1 =
-            new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(1, "1", 1);
+        private readonly Knowledge _knowledge1 =
+            new Knowledge(1, "1", 1);
 
-        private readonly SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge _knowledge2 =
-            new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(2, "2", 1);
+        private readonly Knowledge _knowledge2 =
+            new Knowledge(2, "2", 1);
 
         private readonly NetworkActivities _network = new NetworkActivities();
 

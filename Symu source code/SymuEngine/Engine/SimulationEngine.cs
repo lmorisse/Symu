@@ -16,7 +16,6 @@ using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Environment.TimeStep;
 using SymuEngine.Results;
 
 #endregion
@@ -24,7 +23,8 @@ using SymuEngine.Results;
 namespace SymuEngine.Engine
 {
     /// <summary>
-    ///     Simulation Engine
+    ///     Simulation Engine to use in batch mode
+    ///     Use SymuForm in GUI mode
     /// </summary>
     public class SimulationEngine
     {
@@ -38,7 +38,6 @@ namespace SymuEngine.Engine
         public Iterations Iterations { get; set; } = new Iterations();
 
         public SimulationResults SimulationResults { get; set; } = new SimulationResults();
-        public TimeStepType TimeStepType { get; set; } = TimeStepType.Daily;
         public AgentState State { get; private set; } = AgentState.Stopped;
 
         /// <summary>
@@ -51,12 +50,20 @@ namespace SymuEngine.Engine
         /// <summary>
         ///     EventHandler use to update the form after each step
         /// </summary>
-        public event EventHandler AfterNextStep;
+        public event EventHandler AfterStopProcess;
+
+        #region Step level
 
         /// <summary>
-        ///     EventHandler use to update the form after each step
+        ///     Used when Event OnNextDay is triggered by this class
         /// </summary>
-        public event EventHandler AfterStopProcess;
+        public virtual void OnNextStep()
+        {
+            Environment.OnNextStep();
+            Environment.ManageAgentsToStop();
+        }
+
+        #endregion
 
         #region Initialize / set
 
@@ -73,23 +80,12 @@ namespace SymuEngine.Engine
         {
             SimulationResults.Clear();
             Iterations.SetUp();
-            Environment.TimeStep.Type = TimeStepType;
         }
 
         public void SetDebug(bool value)
         {
             Environment.Messages.Debug = value;
             Environment.State.Debug = value;
-        }
-
-        public void SetDelay(int value)
-        {
-            Environment.Delay = value;
-        }
-
-        public void SetRandomLevel(int value)
-        {
-            Environment.SetRandomLevel(value);
         }
 
         public void AddScenario(SimulationScenario scenario)
@@ -114,8 +110,6 @@ namespace SymuEngine.Engine
             }
 
             PostProcess();
-            //For Form Update
-            AfterStopProcess?.Invoke(this, null);
             return SimulationResults;
         }
 
@@ -223,35 +217,6 @@ namespace SymuEngine.Engine
             }
 
             Environment.TimeStep.Step = step0;
-        }
-
-        #endregion
-
-        #region Step level
-
-        /// <summary>
-        ///     Used when Event OnNextDay is triggered by this class
-        /// </summary>
-        public virtual void OnNextStep()
-        {
-            PreStep();
-            Environment.OnNextStep();
-            PostStep();
-        }
-
-        private void PostStep()
-        {
-            // Post Process to avoid problem
-            Environment.ManageAgentsToStop();
-            // For Form Update
-            AfterNextStep?.Invoke(this, null);
-        }
-
-
-        /// <summary>
-        /// </summary>
-        public virtual void PreStep()
-        {
         }
 
         #endregion

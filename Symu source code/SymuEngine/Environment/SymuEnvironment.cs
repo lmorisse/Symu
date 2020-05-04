@@ -16,7 +16,6 @@ using System.Threading;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
 using SymuEngine.Environment.TimeStep;
 using SymuEngine.Messaging.Log;
 using SymuEngine.Messaging.Message;
@@ -40,7 +39,7 @@ namespace SymuEngine.Environment
         ///     The white pages service of the simulation
         ///     To have access to all agents
         /// </summary>
-        public WhitePages WhitePages { get; } = new WhitePages();
+        public WhitePages WhitePages { get; private set; }
 
         public IterationResult IterationResult { get; set; } = new IterationResult();
 
@@ -71,7 +70,8 @@ namespace SymuEngine.Environment
 
         public void SetOrganization(OrganizationEntity organizationEntity)
         {
-            OrganizationEntity = organizationEntity;
+            OrganizationEntity = organizationEntity ?? throw new ArgumentNullException(nameof(organizationEntity));
+            WhitePages = new WhitePages(OrganizationEntity.Templates);
         }
 
         /// <summary>
@@ -87,6 +87,22 @@ namespace SymuEngine.Environment
         public void SetRandomLevel(int value)
         {
             Entity.SetRandomLevel(value);
+        }
+
+        public void SetDebug(bool value)
+        {
+            Messages.Debug = value;
+            State.Debug = value;
+        }
+
+        public void SetDelay(int value)
+        {
+            Delay = value;
+        }
+
+        public void SetTimeStepType(TimeStepType type)
+        {
+            TimeStep.Type = type;
         }
 
         /// <summary>
@@ -126,6 +142,10 @@ namespace SymuEngine.Environment
             State.Clear();
             IterationResult.Clear(this);
             WhitePages.Clear();
+            WhitePages.Network.NetworkKnowledges.Model =
+                OrganizationEntity.OrganizationModels.KnowledgeGenerator;
+            WhitePages.Network.NetworkBeliefs.Model =
+                OrganizationEntity.OrganizationModels.KnowledgeGenerator;
             SetModelForAgents();
         }
 
@@ -230,7 +250,7 @@ namespace SymuEngine.Environment
 
         #endregion
 
-        #region Manage interaction STep
+        #region Manage interaction Step
 
         /// <summary>
         ///     Prevents the program from closing by waiting as long as some agents still run in the environment. This method
@@ -265,13 +285,14 @@ namespace SymuEngine.Environment
                 }
             }
 
-            if (TimeStep.Type != TimeStepType.Monthly && TimeStep.Type != TimeStepType.Yearly && TimeStep.IsEndOfWeek)
+            if (TimeStep.Type <= TimeStepType.Weekly && TimeStep.IsEndOfWeek)
             {
                 agents.ForEach(a => a.ActEndOfWeek());
             }
 
-            if (TimeStep.Type != TimeStepType.Yearly && TimeStep.IsEndOfMonth)
+            if (TimeStep.Type <= TimeStepType.Monthly && TimeStep.IsEndOfMonth)
             {
+                SetMonthlyIterationResult();
                 agents.ForEach(a => a.ActEndOfMonth());
             }
 
@@ -279,6 +300,17 @@ namespace SymuEngine.Environment
             {
                 agents.ForEach(a => a.ActEndOfYear());
             }
+        }
+
+        /// <summary>
+        ///     Set monthly iterationResult
+        /// </summary>
+        public virtual void SetMonthlyIterationResult()
+        {
+            // Flexibility
+            IterationResult.OrganizationFlexibility.HandlePerformance(TimeStep.Step);
+            // Knowledge
+            IterationResult.OrganizationKnowledgeAndBelief.HandlePerformance(TimeStep.Step);
         }
 
         /// <summary>

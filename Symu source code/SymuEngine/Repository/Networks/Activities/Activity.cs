@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -32,9 +33,9 @@ namespace SymuEngine.Repository.Networks.Activities
         /// <summary>
         ///     List of knowledges required to work on this activity
         /// </summary>
-        public List<Knowledge.Repository.Knowledge> Knowledges { get; } = new List<Knowledge.Repository.Knowledge>();
+        public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
-        public void AddKnowledge(Knowledge.Repository.Knowledge knowledge)
+        public void AddKnowledge(Knowledge knowledge)
         {
             if (Knowledges.Contains(knowledge))
             {

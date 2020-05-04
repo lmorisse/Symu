@@ -95,7 +95,7 @@
   <ItemGroup>
     <Compile Include="Classes\GroupAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
-    <Compile Include="Classes\SymuEnvironment.cs" />
+    <Compile Include="Classes\ExampleEnvironment.cs" />
     <Compile Include="Home.cs">
       <SubType>Form</SubType>
     </Compile>

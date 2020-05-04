@@ -13,6 +13,7 @@ using System;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Agent.Models.Templates;
 using SymuEngine.Classes.Task;
+using SymuEngine.Environment;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
 
@@ -24,7 +25,7 @@ namespace Symu.Classes
     {
         public const byte ClassKey = 1;
 
-        public GroupAgent(ushort agentKey, SymuEngine.Environment.SymuEnvironment environment) : base(
+        public GroupAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {

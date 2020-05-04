@@ -15,8 +15,7 @@ using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Classes.ProbabilityDistributions;
 using static SymuTools.Classes.Algorithm.Constants;
 
@@ -68,6 +67,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             tasksAndPerformance.LearningRate = LearningRate;
             tasksAndPerformance.LearningByDoingRate = LearningByDoingRate;
             tasksAndPerformance.CostFactorOfLearningByDoing = CostFactorOfLearningByDoing;
+            tasksAndPerformance.LearningStandardDeviation = LearningStandardDeviation;
             tasksAndPerformance.CanPerformTask = CanPerformTask;
             LearningModel.CopyTo(tasksAndPerformance.LearningModel);
             TasksLimit.CopyTo(tasksAndPerformance.TasksLimit);
@@ -114,25 +114,24 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         public GenericLevel LearningStandardDeviation { get; set; } = GenericLevel.Medium;
 
         /// <summary>
-        ///     Learn by doing a bit of knowledge
+        ///     Agent learn from an other agent who send KnowledgeBits.
+        ///     Knowledge is stored in NetworkKnowledges
         /// </summary>
         /// <param name="knowledgeId">the knowledge Id to learn</param>
-        /// <param name="knowledgeBit">the knowledge Bit to learn</param>
+        /// <param name="knowledgeBits">the knowledge Bits to learn</param>
+        /// <param name="maxRateLearnable">Maximum rate learnable from the message, depending on the medium used</param>
+        /// <param name="internalCharacteristics"></param>
         /// <param name="step"></param>
-        public void LearnByDoing(ushort knowledgeId, byte knowledgeBit, ushort step)
+        public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable,
+            InternalCharacteristics internalCharacteristics, ushort step)
         {
-            if (!LearningModel.IsAgentOn())
+            if (internalCharacteristics == null)
             {
-                return;
+                throw new ArgumentNullException(nameof(internalCharacteristics));
             }
 
-            if (!_network.NetworkKnowledges.Exists(_id, knowledgeId))
-            {
-                _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, step);
-            }
-
-            var workerKnowledge = Expertise.GetKnowledge(knowledgeId);
-            workerKnowledge.Learn(knowledgeBit, NextLearningByDoing(), step);
+            Learn(knowledgeId, knowledgeBits, maxRateLearnable, internalCharacteristics.MinimumRemainingKnowledge,
+                internalCharacteristics.TimeToLive, step);
         }
 
         /// <summary>
@@ -142,11 +141,14 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// <param name="knowledgeId">the knowledge Id to learn</param>
         /// <param name="knowledgeBits">the knowledge Bits to learn</param>
         /// <param name="maxRateLearnable">Maximum rate learnable from the message, depending on the medium used</param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
+        public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
+            short timeToLive, ushort step)
         {
-            if (knowledgeId == 0 || knowledgeBits == null || Math.Abs(LearningRate) < tolerance ||
-                Math.Abs(maxRateLearnable) < tolerance)
+            if (knowledgeId == 0 || knowledgeBits == null || Math.Abs(LearningRate) < Tolerance ||
+                Math.Abs(maxRateLearnable) < Tolerance)
             {
                 return;
             }
@@ -156,9 +158,9 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
 
-            _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, step);
-            var workerKnowledge = Expertise.GetKnowledge(knowledgeId);
-            Learn(knowledgeBits, maxRateLearnable, workerKnowledge, step);
+            _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            var agentKnowledge = Expertise.GetKnowledge(knowledgeId);
+            Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
         }
 
         /// <summary>
@@ -182,7 +184,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             }
 
             var learningRate = NextLearning();
-            if (Math.Abs(learningRate * maxRateLearnable) < tolerance)
+            if (Math.Abs(learningRate * maxRateLearnable) < Tolerance)
             {
                 return;
             }
@@ -203,20 +205,65 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// </summary>
         /// <param name="knowledgeId">the knowledge Id to learn</param>
         /// <param name="knowledgeBit">the knowledge Bit to learn</param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void Learn(ushort knowledgeId, byte knowledgeBit, ushort step)
+        /// <returns>The real learning</returns>
+        public float Learn(ushort knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive, ushort step)
         {
-            if (!LearningModel.IsAgentOn())
+            if (!LearningModel.On)
             {
-                return;
+                return 0;
             }
 
-            _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, step);
-            Expertise.GetKnowledge(knowledgeId).Learn(knowledgeBit, NextLearning(), step);
+            _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            return Expertise.GetKnowledge(knowledgeId).Learn(knowledgeBit, NextLearning(), step);
+        }
+
+        /// <summary>
+        ///     Learn by doing a bit of knowledge
+        /// </summary>
+        /// <param name="knowledgeId">the knowledge Id to learn</param>
+        /// <param name="knowledgeBit">the knowledge Bit to learn</param>
+        /// <param name="internalCharacteristics"></param>
+        /// <param name="step"></param>
+        /// <returns>The real learning</returns>
+        public float LearnByDoing(ushort knowledgeId, byte knowledgeBit,
+            InternalCharacteristics internalCharacteristics, ushort step)
+        {
+            if (internalCharacteristics == null)
+            {
+                throw new ArgumentNullException(nameof(internalCharacteristics));
+            }
+
+            return LearnByDoing(knowledgeId, knowledgeBit, internalCharacteristics.MinimumRemainingKnowledge,
+                internalCharacteristics.TimeToLive, step);
+        }
+
+        /// <summary>
+        ///     Learn by doing a bit of knowledge
+        /// </summary>
+        /// <param name="knowledgeId">the knowledge Id to learn</param>
+        /// <param name="knowledgeBit">the knowledge Bit to learn</param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        /// <param name="step"></param>
+        /// <returns>The real learning</returns>
+        public float LearnByDoing(ushort knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive,
+            ushort step)
+        {
+            if (!LearningModel.On)
+            {
+                return 0;
+            }
+
+            _network.NetworkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            return Expertise.GetKnowledge(knowledgeId).Learn(knowledgeBit, NextLearningByDoing(), step);
         }
 
         public float NextLearning()
         {
+            // LearningModel.IsAgentOn is tested at each learning: it is not binary, sometimes you learn, sometimes not
             if (!LearningModel.IsAgentOn())
             {
                 return 0;
@@ -233,6 +280,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// <returns>NextLearningByDoing Rate if model is On</returns>
         public float NextLearningByDoing()
         {
+            // LearningModel.IsAgentOn is tested at each learning: it is not binary, sometimes you learn, sometimes not
             if (!LearningModel.IsAgentOn())
             {
                 return 0;
@@ -252,8 +300,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
                     return 0.05F;
                 case GenericLevel.Low:
                     return 0.1F;
-                //case GenericLevel.Medium:
-                default:
+                case GenericLevel.Medium:
                     return 0.15F;
                 case GenericLevel.High:
                     return 0.2F;
@@ -261,6 +308,8 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
                     return 0.25F;
                 case GenericLevel.Complete:
                     return 1;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
         }
 
@@ -316,7 +365,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///     Get the all the knowledges for all the activities of an agent
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, List<Repository.Networks.Knowledge.Repository.Knowledge>>
+        public IDictionary<string, List<Knowledge>>
             GetActivitiesKnowledgesByActivity()
         {
             return _network.NetworkActivities.GetActivitiesKnowledgesByActivity(_id);

@@ -70,8 +70,8 @@ namespace SymuTools.Classes.ProbabilityDistributions
         /// </summary>
         /// <param name="length">Dimension of the array</param>
         /// <param name="threshold">
-        ///     Value below the mean is converted in 0
-        ///     Value above the mean is converted in value
+        ///     Value below the threshold is set to 0
+        ///     Value above the threshold is set to value
         ///     Ranging [0;1]
         /// </param>
         /// <param name="value"></param>

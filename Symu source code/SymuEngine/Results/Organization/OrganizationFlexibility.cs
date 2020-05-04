@@ -12,7 +12,7 @@
 using System.Collections.Generic;
 using SymuEngine.Environment;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Knowledge;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 

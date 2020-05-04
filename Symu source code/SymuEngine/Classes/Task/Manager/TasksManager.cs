@@ -137,7 +137,7 @@ namespace SymuEngine.Classes.Task.Manager
         {
             bool Match(SymuTask t)
             {
-                return t.Weight > 0 && Math.Abs(t.WorkToDo) < tolerance;
+                return t.Weight > 0 && Math.Abs(t.WorkToDo) < Tolerance;
             }
 
             // Check tasks stuck in a list

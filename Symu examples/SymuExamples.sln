@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuForm", "SymuForm\SymuForm.csproj", "{998C00B3-6A46-41D7-9140-57E1D07A7B6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuLearnAndForget", "SymuLearnAndForget\SymuLearnAndForget.csproj", "{BA04CB16-3CB0-43B1-B366-13AC620CF759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

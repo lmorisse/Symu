@@ -11,12 +11,11 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
-using SymuEngine.Repository.Networks.Knowledge.Repository;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -28,7 +27,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly Network _network = new Network();
+        private readonly Network _network = new Network(new AgentTemplates());
         private TasksAndPerformance _tasksAndPerformance;
 
         [TestInitialize]
@@ -46,15 +45,46 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             };
         }
 
+        /// <summary>
+        ///     Model Off
+        /// </summary>
+        [TestMethod]
+        public void LearnByDoingTest0()
+        {
+            _tasksAndPerformance.LearningModel.On = false;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _expertise.Add(agentKnowledge);
+            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            var realLearning = _tasksAndPerformance.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
+            Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(0, realLearning);
+        }
+
         [TestMethod]
         public void LearnByDoingTest()
         {
             _tasksAndPerformance.LearningByDoingRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _tasksAndPerformance.LearnByDoing(_knowledge.Id, 0, 0);
+            var realLearning = _tasksAndPerformance.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(1, realLearning);
+        }
+
+        /// <summary>
+        ///     Model Off
+        /// </summary>
+        [TestMethod]
+        public void LearnTest0()
+        {
+            _tasksAndPerformance.LearningModel.On = false;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _expertise.Add(agentKnowledge);
+            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            var realLearning = _tasksAndPerformance.Learn(_knowledge.Id, 0, -1, 0, 0);
+            Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(0, realLearning);
         }
 
         /// <summary>
@@ -64,11 +94,12 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         public void LearnTest()
         {
             _tasksAndPerformance.LearningRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _tasksAndPerformance.Learn(_knowledge.Id, 0, 0);
+            var realLearning = _tasksAndPerformance.Learn(_knowledge.Id, 0, -1, 0, 0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(1, realLearning);
         }
 
         /// <summary>
@@ -78,10 +109,10 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         public void LearnTest1()
         {
             _tasksAndPerformance.LearningRate = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _tasksAndPerformance.Learn(_knowledge.Id, 0, 0);
+            _tasksAndPerformance.Learn(_knowledge.Id, 0, 0, -1, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -92,12 +123,12 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         public void LearnTest2()
         {
             _tasksAndPerformance.LearningRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             var bits = new float[] {1, 1};
             var knowledgeBits = new Bits(bits, 0);
-            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0);
+            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
             Assert.AreEqual(2, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -108,12 +139,12 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         public void LearnTest3()
         {
             _tasksAndPerformance.LearningRate = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             var bits = new float[] {1, 1};
             var knowledgeBits = new Bits(bits, 0);
-            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0);
+            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
         }
 

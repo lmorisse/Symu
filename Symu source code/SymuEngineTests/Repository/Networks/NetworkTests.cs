@@ -12,10 +12,12 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Repository.Networks.Role;
 
 #endregion
@@ -30,22 +32,22 @@ namespace SymuEngineTests.Repository.Networks
         private readonly Activity _activity = new Activity("a");
         private readonly AgentId _componentId = new AgentId(6, 4);
 
-        private readonly SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge _knowledge =
-            new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(1, "1", 1);
+        private readonly Knowledge _knowledge =
+            new Knowledge(1, "1", 1);
 
         private readonly AgentId _managerId = new AgentId(3, 2);
-        private readonly Network _network = new Network();
+        private readonly Network _network = new Network(new AgentTemplates());
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.actor);
         private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.actor);
-        private SymuEngine.Repository.Networks.Belief.Repository.Belief _belief;
+        private Belief _belief;
         private NetworkRole _networkRole;
 
         [TestInitialize]
         public void Initialize()
         {
-            _belief = new SymuEngine.Repository.Networks.Belief.Repository.Belief(1, 1,
+            _belief = new Belief(1, 1,
                 _network.NetworkKnowledges.Model);
             _network.NetworkActivities.AddActivities(new List<Activity> {_activity}, _teamId);
             _networkRole = new NetworkRole(_managerId, _teamId, 1);
@@ -59,7 +61,7 @@ namespace SymuEngineTests.Repository.Networks
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert);
+            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert, 0, -1);
             _network.NetworkBeliefs.Add(_teammateId, _belief);
             _network.NetworkActivities.AddActivities(_teammateId, _teamId, new List<string> {"a1"});
             _network.Clear();
@@ -124,7 +126,7 @@ namespace SymuEngineTests.Repository.Networks
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert);
+            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert, 0, -1);
             _network.NetworkActivities.AddActivities(_teammateId, _teamId, new List<string> {_activity.Name});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));
@@ -155,7 +157,7 @@ namespace SymuEngineTests.Repository.Networks
         [TestMethod]
         public void AddKnowledgeTest()
         {
-            var knowledge = new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(1, "1", 1);
+            var knowledge = new Knowledge(1, "1", 1);
             _network.AddKnowledge(knowledge);
             Assert.IsNotNull(_network.NetworkKnowledges.GetKnowledge(knowledge.Id));
             Assert.IsNotNull(_network.NetworkBeliefs.GetBelief(knowledge.Id));
@@ -164,8 +166,8 @@ namespace SymuEngineTests.Repository.Networks
         [TestMethod]
         public void AddKnowledgesTest()
         {
-            var knowledge = new SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge(1, "1", 1);
-            var knowledges = new List<SymuEngine.Repository.Networks.Knowledge.Repository.Knowledge> {knowledge};
+            var knowledge = new Knowledge(1, "1", 1);
+            var knowledges = new List<Knowledge> {knowledge};
             _network.AddKnowledges(knowledges);
             Assert.IsNotNull(_network.NetworkKnowledges.GetKnowledge(knowledge.Id));
             Assert.IsNotNull(_network.NetworkBeliefs.GetBelief(knowledge.Id));

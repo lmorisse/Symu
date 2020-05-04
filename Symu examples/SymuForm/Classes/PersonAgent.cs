@@ -16,10 +16,11 @@ using SymuEngine.Classes.Agent.Models.Templates;
 using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
 using SymuEngine.Common;
+using SymuEngine.Environment;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases.Repository;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Databases;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Classes.ProbabilityDistributions;
 
 #endregion
@@ -31,7 +32,7 @@ namespace Symu.Classes
         public const byte ClassKey = 2;
         private readonly Database _wiki;
 
-        public PersonAgent(ushort agentKey, SymuEngine.Environment.SymuEnvironment environment) : base(
+        public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {
@@ -79,8 +80,8 @@ namespace Symu.Classes
             var index = DiscreteUniform.SampleToByte(0, (byte) (knowledgeLength - 1));
             bits.SetBit(index, 1);
             // Agent is learning
-            Cognitive.TasksAndPerformance.Learn(knowledgeId, bits, 1, TimeStep.Step);
-            // the complete information is stored in a wiki
+            Cognitive.TasksAndPerformance.Learn(knowledgeId, bits, 1, Cognitive.InternalCharacteristics, TimeStep.Step);
+            // the knowledge is stored in a wiki
             _wiki.StoreKnowledge(knowledgeId, bits, 1, TimeStep.Step);
         }
 

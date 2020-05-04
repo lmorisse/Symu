@@ -10,13 +10,10 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Belief.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -25,9 +22,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
     [TestClass]
     public class MessageContentTests
     {
-        private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly EmailTemplate _emailTemplate = new EmailTemplate();
-        private readonly Network _network = new Network();
         private AgentBelief _agentBelief1;
         private AgentBelief _agentBeliefF;
         private AgentKnowledge _agentKnowledge1;
@@ -39,9 +34,9 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         {
             _messageContent = new MessageContent();
             var knowledge1FBits = new[] {1, 0.5F, 0.3F, 0};
-            _agentKnowledgeF = new AgentKnowledge(0, knowledge1FBits, 0);
+            _agentKnowledgeF = new AgentKnowledge(0, knowledge1FBits, 0, -1, 0);
             var knowledge1Bits = new float[] {1, 1, 1, 1};
-            _agentKnowledge1 = new AgentKnowledge(0, knowledge1Bits, 0);
+            _agentKnowledge1 = new AgentKnowledge(0, knowledge1Bits, 0, -1, 0);
             _agentBeliefF = new AgentBelief(0)
             {
                 BeliefBits = new Bits(knowledge1FBits, -1)
@@ -60,7 +55,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         [TestMethod]
         public void AskKnowledgeToSendTest()
         {
-            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate));
+            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _));
         }
 
         /// <summary>
@@ -76,7 +71,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
-            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate));
+            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _));
         }
 
         /// <summary>
@@ -94,7 +89,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 2;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate));
+            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _));
         }
 
         /// <summary>
@@ -113,7 +108,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 2;
             Assert.AreEqual(1F,
-                _messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate).GetSum());
+                _messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _).GetSum());
         }
 
         /// <summary>
@@ -132,7 +127,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 4;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             Assert.IsTrue(
-                1F <= _messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate).GetSum());
+                1F <= _messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _).GetSum());
         }
 
         /// <summary>
@@ -145,22 +140,26 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
             _messageContent.MinimumKnowledgeToSendPerBit = 0.4F;
             _messageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 3;
-            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate).GetSum() <=
+            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _)
+                              .GetSum() <=
                           3);
-            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate).GetSum() >=
+            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _)
+                              .GetSum() >=
                           1);
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
-            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate).GetSum() <=
+            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _)
+                              .GetSum() <=
                           2);
-            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate).GetSum() >=
+            Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _)
+                              .GetSum() >=
                           1);
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
             Assert.AreEqual(1,
-                _messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate).GetSum());
+                _messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _).GetSum());
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
-            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate));
+            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _));
         }
 
         #endregion

@@ -11,6 +11,7 @@
 
 using System;
 using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Common;
 
 #endregion
 
@@ -24,11 +25,13 @@ namespace SymuEngine.Classes.Organization
         /// <summary>
         ///     If set, the organizationEntity flexibility performance will be followed and stored during the simulation
         /// </summary>
+        //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowGroupFlexibility { get; set; }
 
         /// <summary>
         ///     If set, the organizationEntity knowledge and belief performance will be followed and stored during the simulation
         /// </summary>
+        //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowGroupKnowledge { get; set; }
 
         /// <summary>
@@ -45,7 +48,9 @@ namespace SymuEngine.Classes.Organization
         ///     If true, allow multiple blockers at the same time
         ///     If false, will check new blockers only if there is no blocker
         /// </summary>
-        public bool MultipleBlockers { get; set; } = false;
+        public bool MultipleBlockers { get; set; }
+
+        public RandomGenerator KnowledgeGenerator { get; set; } = RandomGenerator.RandomUniform;
 
         public void CopyTo(OrganizationModels entity)
         {
@@ -58,6 +63,8 @@ namespace SymuEngine.Classes.Organization
             Forgetting.CopyTo(entity.Forgetting);
             entity.FollowGroupFlexibility = FollowGroupFlexibility;
             entity.FollowGroupKnowledge = FollowGroupKnowledge;
+            entity.MultipleBlockers = MultipleBlockers;
+            entity.KnowledgeGenerator = KnowledgeGenerator;
         }
     }
 }

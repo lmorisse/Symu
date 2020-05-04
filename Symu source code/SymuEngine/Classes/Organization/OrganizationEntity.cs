@@ -11,9 +11,10 @@
 
 using System.Collections.Generic;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases.Repository;
-using SymuEngine.Repository.Networks.Knowledge.Repository;
+using SymuEngine.Repository.Networks.Databases;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -43,9 +44,16 @@ namespace SymuEngine.Classes.Organization
         public OrganizationModels OrganizationModels { get; protected set; } = new OrganizationModels();
 
         /// <summary>
+        ///     List of the agent templates that are available
+        ///     Use to set attributes of those templates
+        ///     and to set agent with templates
+        /// </summary>
+        public AgentTemplates Templates { get; } = new AgentTemplates();
+
+        /// <summary>
         ///     List of all databases accessible to everyone
         /// </summary>
-        public Databases Databases { get; } = new Databases();
+        public DatabaseCollection Databases { get; } = new DatabaseCollection();
 
         /// <summary>
         ///     List of all knowledges
@@ -79,6 +87,12 @@ namespace SymuEngine.Classes.Organization
             {
                 Knowledges.Add(knowledge);
             }
+        }
+
+        public void Clear()
+        {
+            Databases.Clear();
+            Knowledges.Clear();
         }
     }
 }

@@ -12,8 +12,8 @@
 using System;
 using SymuEngine.Classes.Task.Knowledge;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Belief.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -71,7 +71,8 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// <summary>
         ///     Get the Agent Expertise
         /// </summary>
-        public AgentExpertise Expertise => HasKnowledge ? _network.NetworkKnowledges.GetAgentExpertise(_id) : null;
+        public AgentExpertise Expertise =>
+            HasKnowledge ? _network.NetworkKnowledges.GetAgentExpertise(_id) : new AgentExpertise();
 
         /// <summary>
         ///     To do the task, an agent must have enough knowledge
@@ -112,6 +113,21 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         }
 
         /// <summary>
+        ///     Check Knowledge required against the worker expertise
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBit">KnowledgeBit index of the task that must be checked against worker Knowledge</param>
+        /// <param name="step"></param>
+        /// <returns>True if the knowledgeBit is known enough</returns>
+        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, ushort step)
+        {
+            // workerKnowledge may don't have the knowledge at all
+            var workerKnowledge = Expertise?.GetKnowledge(knowledgeId);
+            return workerKnowledge != null &&
+                   workerKnowledge.KnowsEnough(knowledgeBit, KnowledgeThreshHoldForDoing, step);
+        }
+
+        /// <summary>
         ///     Initialize the expertise of the agent based on the knowledge network
         /// </summary>
         /// <param name="step"></param>
@@ -145,6 +161,47 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
             _network.NetworkKnowledges.Add(_id, expertise);
             AddBeliefs(expertise);
+        }
+
+        /// <summary>
+        ///     Add an agentId's Knowledge to the network
+        /// </summary>
+        /// <param name="knowledge"></param>
+        /// <param name="level"></param>
+        /// <param name="internalCharacteristics"></param>
+        public void AddKnowledge(Knowledge knowledge, KnowledgeLevel level,
+            InternalCharacteristics internalCharacteristics)
+        {
+            if (internalCharacteristics == null)
+            {
+                throw new ArgumentNullException(nameof(internalCharacteristics));
+            }
+
+            AddKnowledge(knowledge, level, internalCharacteristics.MinimumRemainingKnowledge,
+                internalCharacteristics.TimeToLive);
+        }
+
+        /// <summary>
+        ///     Add an agentId's Knowledge to the network
+        /// </summary>
+        /// <param name="knowledge"></param>
+        /// <param name="level"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        public void AddKnowledge(Knowledge knowledge, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        {
+            if (knowledge == null)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
+            if (!HasKnowledge)
+            {
+                return;
+            }
+
+            _network.NetworkKnowledges.Add(_id, knowledge, level, minimumKnowledge, timeToLive);
+            AddBelief(knowledge.Id);
         }
 
         #endregion
@@ -204,6 +261,20 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             }
 
             _network.NetworkBeliefs.Add(_id, expertiseAgent);
+        }
+
+        /// <summary>
+        ///     Add an agentId's beliefs based on a knowledgeId to the network
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        public void AddBelief(ushort knowledgeId)
+        {
+            if (!HasBelief)
+            {
+                return;
+            }
+
+            _network.NetworkBeliefs.Add(_id, knowledgeId);
         }
 
         /// <summary>

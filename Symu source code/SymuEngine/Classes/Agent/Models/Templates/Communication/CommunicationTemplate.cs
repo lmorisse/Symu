@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System;
 using SymuEngine.Common;
 using SymuTools.Classes.ProbabilityDistributions;
 
@@ -78,15 +79,6 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
         /// <example>If 1, everything is learnable from the message</example>
         public float MaxRateLearnable { get; set; } = 1;
 
-        /// <summary>
-        ///     Time to live : information are stored in a database : email, IRC channel, ...
-        ///     But information have a limited lifetime depending on those database
-        ///     -1 for unlimited time to live
-        /// </summary>
-        /// <example>An information on an IRC channel has a more limited lifetime than an email</example>
-        /// <example>Slack offer a limited historic, some messaging system have a limited storage  </example>
-        public short TimeToLive { get; set; } = -1;
-
         public float CostToSend(byte random)
         {
             return Cost(CostToSendLevel, random);
@@ -120,13 +112,15 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
                 case GenericLevel.VeryHigh:
                     cost = 0.25F;
                     break;
-                //case GenericLevel.Complete:
-                default:
+                case GenericLevel.Complete:
                     cost = 1;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
 
-            return Normal.Sample(cost, 0.1F * random);
+            cost = Normal.Sample(cost, 0.05F * random);
+            return cost < 0 ? 0 : cost;
         }
     }
 }

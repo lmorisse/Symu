@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
+using System.Globalization;
 using System.Linq;
 using Symu.Classes;
-using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Engine.Form;
 using SymuEngine.Environment.TimeStep;
-using SymuEngine.Repository.Networks.Databases.Repository;
+using SymuEngine.Repository.Networks.Databases;
 
 #endregion
 
@@ -24,7 +24,7 @@ namespace Symu
 {
     public partial class Home : SymuForm
     {
-        private readonly SymuEnvironment _environment = new SymuEnvironment();
+        private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private Database _wiki;
 
         public Home()
@@ -37,21 +37,20 @@ namespace Symu
             // Murphy
             UnAvailability.On = true;
             // Common Wiki 
-            CommunicationTemplate communication = new ViaPlatformTemplate();
-            _wiki = new Database(OrganizationEntity.Id.Key, communication.Cognitive.TasksAndPerformance, -1);
+            _wiki = new Database(OrganizationEntity.Id.Key,
+                OrganizationEntity.Templates.Platform.Cognitive.TasksAndPerformance, -1);
             OrganizationEntity.AddDatabase(_wiki);
             // Models
             OrganizationEntity.OrganizationModels.Learning.On = true;
+            TimeStepType = TimeStepType.Daily;
         }
 
         protected override void SetScenarii()
         {
             _ = new TimeStepScenario(OrganizationEntity.NextEntityIndex(), _environment)
             {
-                NumberOfSteps = 500,
-                TimeStepType = TimeStepType.Daily
+                NumberOfSteps = 500
             };
-            TimeStepType = TimeStepType.Daily;
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -89,19 +88,29 @@ namespace Symu
             var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Sum(expertise =>
                 expertise.GetKnowledgesSum());
 
-            WriteTextSafe(lblKnowledge, sum.ToString());
+            WriteTextSafe(lblKnowledge, sum.ToString(CultureInfo.InvariantCulture));
             // Wiki
             sum = _wiki.GetKnowledgesSum();
-            WriteTextSafe(lblWiki, sum.ToString());
+            WriteTextSafe(lblWiki, sum.ToString(CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
         {
-            WriteTextSafe(lblWorked, _environment.IterationResult.Capacity.ToString());
+            WriteTextSafe(lblWorked, _environment.IterationResult.Capacity.ToString(CultureInfo.InvariantCulture));
             var done = _environment.WhitePages.FilteredAgentsByClassKey(GroupAgent.ClassKey)
                 .Aggregate(0, (current, agent) => current + ((GroupAgent) agent).TotalTasksDone);
 
             WriteTextSafe(lblTasksDone, done.ToString());
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Pause();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Resume();
         }
     }
 }

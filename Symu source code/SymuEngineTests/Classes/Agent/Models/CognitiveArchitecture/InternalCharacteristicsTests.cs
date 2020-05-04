@@ -11,10 +11,11 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Belief.Repository;
+using SymuEngine.Repository.Networks.Beliefs;
 
 #endregion
 
@@ -24,12 +25,13 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
     public class InternalCharacteristicsTests
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
-        private readonly Network _network = new Network();
         private InternalCharacteristics _model;
+        private Network _network;
 
         [TestInitialize]
         public void Initialize()
         {
+            _network = new Network(new AgentTemplates());
             _model = new InternalCharacteristics(_network, _agentId);
         }
 
@@ -70,7 +72,7 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnByDoingTest()
         {
-            _network.NetworkBeliefs.Model.RandomGenerator = RandomGenerator.RandomUniform;
+            _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
             var belief = new Belief(1, 1, _network.NetworkBeliefs.Model);
             _network.NetworkBeliefs.AddBelief(belief);
             Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));

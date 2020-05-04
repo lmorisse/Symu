@@ -13,16 +13,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Belief;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Communication;
 using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Databases.Repository;
 using SymuEngine.Repository.Networks.Enculturation;
 using SymuEngine.Repository.Networks.Group;
-using SymuEngine.Repository.Networks.Influence;
-using SymuEngine.Repository.Networks.Knowledge;
+using SymuEngine.Repository.Networks.Influences;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Repository.Networks.Link;
 using SymuEngine.Repository.Networks.Portfolio;
 using SymuEngine.Repository.Networks.Role;
@@ -36,6 +36,11 @@ namespace SymuEngine.Repository.Networks
     /// </summary>
     public class Network
     {
+        public Network(AgentTemplates agentTemplates)
+        {
+            NetworkCommunications = new NetworkCommunications(agentTemplates);
+        }
+
         /// <summary>
         ///     Directory of social links between AgentIds, with their interaction type
         ///     Who report/communicate to who
@@ -62,13 +67,13 @@ namespace SymuEngine.Repository.Networks
 
         /// <summary>
         ///     Knowledge network
-        ///     Who (agentId) knows what (Informations)
+        ///     Who (agentId) knows what (Information)
         /// </summary>
         public NetworkKnowledges NetworkKnowledges { get; } = new NetworkKnowledges();
 
         /// <summary>
         ///     Belief network
-        ///     Who (agentId) believes what (Informations)
+        ///     Who (agentId) believes what (Information)
         /// </summary>
         public NetworkBeliefs NetworkBeliefs { get; } = new NetworkBeliefs();
 
@@ -91,7 +96,7 @@ namespace SymuEngine.Repository.Networks
         /// <summary>
         ///     Communication network
         /// </summary>
-        public NetworkCommunications NetworkCommunications { get; } = new NetworkCommunications();
+        public NetworkCommunications NetworkCommunications { get; }
 
         /// <summary>
         ///     Communication network
@@ -293,7 +298,7 @@ namespace SymuEngine.Repository.Networks
         ///     Add a Knowledge to the repository
         /// </summary>
         /// <param name="knowledge"></param>
-        public void AddKnowledge(Knowledge.Repository.Knowledge knowledge)
+        public void AddKnowledge(Knowledge knowledge)
         {
             NetworkKnowledges.AddKnowledge(knowledge);
             NetworkBeliefs.AddBelief(knowledge);
@@ -302,7 +307,7 @@ namespace SymuEngine.Repository.Networks
         /// <summary>
         ///     Add a set of Knowledges to the repository
         /// </summary>
-        public void AddKnowledges(IEnumerable<Knowledge.Repository.Knowledge> knowledge)
+        public void AddKnowledges(IEnumerable<Knowledge> knowledge)
         {
             var knowledges = knowledge.ToList();
             NetworkKnowledges.AddKnowledges(knowledges);
@@ -350,7 +355,7 @@ namespace SymuEngine.Repository.Networks
             }
 
             var email = new Database(agentId.Key, communication.Cognitive.TasksAndPerformance,
-                communication.TimeToLive);
+                communication.Cognitive.InternalCharacteristics.TimeToLive);
             NetworkDatabases.Add(agentId, email);
         }
 

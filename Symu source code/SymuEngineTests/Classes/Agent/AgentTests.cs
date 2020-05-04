@@ -14,18 +14,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Forgetting;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Knowledge;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
 using SymuEngine.Engine;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Belief.Repository;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
-using SymuEngine.Repository.Networks.Knowledge.Repository;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngineTests.Helpers;
 
 #endregion
@@ -35,9 +31,9 @@ namespace SymuEngineTests.Classes.Agent
     [TestClass]
     public class AgentTests
     {
+        private const RandomGenerator Model = new RandomGenerator();
         private readonly EmailTemplate _emailTemplate = new EmailTemplate();
         private readonly TestEnvironment _environment = new TestEnvironment();
-        private readonly KnowledgeModel _model = new KnowledgeModel();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
         private readonly SimulationEngine _simulation = new SimulationEngine();
         private TestAgent _agent;
@@ -53,14 +49,15 @@ namespace SymuEngineTests.Classes.Agent
             _agent = new TestAgent(1, _environment);
             _agent.Cognitive = new CognitiveArchitecture(_environment.WhitePages.Network, _agent.Id, 0)
             {
-                KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true}
+                KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
+                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true}
             };
-            _belief = new Belief(1, 1, _model);
+            _belief = new Belief(1, 1, Model);
 
             var expertise = new AgentExpertise();
             var knowledge = new Knowledge(1, "1", 1);
             _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(knowledge);
-            _agentKnowledge = new AgentKnowledge(knowledge.Id, new float[] {1}, 0);
+            _agentKnowledge = new AgentKnowledge(knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
             _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
 
@@ -252,7 +249,7 @@ namespace SymuEngineTests.Classes.Agent
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest()
         {
-            var bit1S = new KnowledgeBits(new float[] {1}, 0);
+            var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
                 KnowledgeId = 1,
@@ -274,7 +271,7 @@ namespace SymuEngineTests.Classes.Agent
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest1()
         {
-            var bit1S = new KnowledgeBits(new float[] {1}, 0);
+            var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
                 KnowledgeId = 1,
@@ -300,7 +297,8 @@ namespace SymuEngineTests.Classes.Agent
                 BeliefBits = bit1S
             };
             var belief = SetBeliefs();
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments);
+            var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments,
+                CommunicationMediums.Email);
             _agent.LearnBeliefsFromPostMessage(message);
             Assert.AreEqual(1, _agent.Cognitive.KnowledgeAndBeliefs.Beliefs.GetBelief(belief.Id).GetBeliefSum());
         }
@@ -308,8 +306,7 @@ namespace SymuEngineTests.Classes.Agent
         private Belief SetBeliefs()
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            var model = new KnowledgeModel();
-            var belief = new Belief(1, 1, model);
+            var belief = new Belief(1, 1, RandomGenerator.RandomBinary);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1);
             _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
@@ -620,7 +617,7 @@ namespace SymuEngineTests.Classes.Agent
             };
             // Knowledge
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            var bits = new KnowledgeBits(new float[] {1}, 0);
+            var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
             _environment.WhitePages.Network.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
@@ -652,7 +649,7 @@ namespace SymuEngineTests.Classes.Agent
             };
             // Knowledge
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            var bits = new KnowledgeBits(new float[] {1}, 0);
+            var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
             _environment.WhitePages.Network.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
@@ -706,7 +703,7 @@ namespace SymuEngineTests.Classes.Agent
                 On = false
             };
             var expertise = new AgentExpertise();
-            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0);
+            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
             expertise.Add(agentKnowledge);
             _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
             _agent.PreStep();
@@ -728,7 +725,7 @@ namespace SymuEngineTests.Classes.Agent
                 On = true
             };
             var expertise = new AgentExpertise();
-            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0);
+            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
             expertise.Add(agentKnowledge);
             _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
             _agent.PreStep();
@@ -957,7 +954,7 @@ namespace SymuEngineTests.Classes.Agent
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(_model, 1, true);
+                .InitializeBeliefBits(Model, 1, true);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_agent.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
@@ -972,7 +969,7 @@ namespace SymuEngineTests.Classes.Agent
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(_model, 1, false);
+                .InitializeBeliefBits(Model, 1, false);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 2;
             var bits = _agent.FilterBeliefToSend(1, 0, _emailTemplate);
@@ -989,7 +986,7 @@ namespace SymuEngineTests.Classes.Agent
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(_model, 1, false);
+                .InitializeBeliefBits(Model, 1, false);
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id).BeliefBits
                 .SetBit(0, 1);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;

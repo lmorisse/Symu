@@ -28,6 +28,11 @@ namespace SymuEngine.Common
         Started,
 
         /// <summary>
+        ///     Started but in pause
+        /// </summary>
+        Paused,
+
+        /// <summary>
         ///     During a step, an agent can be marked Stopping
         ///     The agent will be stopped cleanly at the end of the step
         ///     The step is not finished, so that agent is still alive

@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Messaging.Message;
 
@@ -24,16 +25,23 @@ namespace SymuEngine.Repository.Networks.Communication
     /// <example></example>
     public class NetworkCommunications
     {
+        private readonly AgentTemplates _agentTemplates;
+
+        public NetworkCommunications(AgentTemplates agentTemplates)
+        {
+            _agentTemplates = agentTemplates ?? throw new ArgumentNullException(nameof(agentTemplates));
+        }
+
         /// <summary>
         ///     Repository of all the communications used during the simulation
         /// </summary>
-        public EmailTemplate Email { get; } = new EmailTemplate();
+        public EmailTemplate Email => _agentTemplates.Email;
 
-        public IrcTemplate Irc { get; } = new IrcTemplate();
-        public PhoneTemplate Phone { get; } = new PhoneTemplate();
-        public MeetingTemplate Meeting { get; } = new MeetingTemplate();
-        public FaceToFaceTemplate FaceToFace { get; } = new FaceToFaceTemplate();
-        public ViaPlatformTemplate ViaPlatform { get; } = new ViaPlatformTemplate();
+        public IrcTemplate Irc => _agentTemplates.Irc;
+        public PhoneTemplate Phone => _agentTemplates.Phone;
+        public MeetingTemplate Meeting => _agentTemplates.Meeting;
+        public FaceToFaceTemplate FaceToFace => _agentTemplates.FaceToFace;
+        public ViaPlatformTemplate ViaPlatform => _agentTemplates.Platform;
 
         #region repository
 

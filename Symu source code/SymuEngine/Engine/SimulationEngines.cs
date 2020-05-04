@@ -48,9 +48,5 @@ namespace SymuEngine.Engine
         protected override void AnalyzeIteration()
         {
         }
-
-        public override void PreStep()
-        {
-        }
     }
 }

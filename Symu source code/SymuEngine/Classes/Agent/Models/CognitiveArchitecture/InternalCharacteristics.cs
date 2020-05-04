@@ -10,10 +10,9 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Forgetting;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Classes.ProbabilityDistributions;
 
 #endregion
@@ -54,6 +53,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             internalCharacteristics.PartialForgetting = PartialForgetting;
             internalCharacteristics.PartialForgettingRate = PartialForgettingRate;
             internalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode;
+            internalCharacteristics.MinimumRemainingKnowledge = MinimumRemainingKnowledge;
 
             #endregion
 
@@ -98,14 +98,14 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
         /// <summary>
         ///     When forgetting a knowledge there is a minimum level that is remaining, this is the general culture on the subject
-        ///     MinimumRemainingLevel set this minimum level
+        ///     MinimumRemainingKnowledge set this minimum knowledge that remains
         /// </summary>
         /// <remarks>the default is set to be > Murphies.IncompleteKnowledge.KnowledgeThreshHoldForDoing</remarks>
         /// <example>
-        ///     if knowledgeBit = MinimumRemainingLevel and the agent is forgetting this knowledge, the knowledgeBit will
+        ///     if knowledgeBit = MinimumRemainingKnowledge and the agent is forgetting this knowledge, the knowledgeBit will
         ///     remaining equal
         /// </example>
-        public float MinimumRemainingLevel { get; set; } = 0.15F;
+        public float MinimumRemainingKnowledge { get; set; } = 0.15F;
 
         /// <summary>
         ///     Forgetting mode is used to select the knowledges that will be forgotten.
@@ -122,6 +122,11 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///// <example>Forgetting speed = -1 => 1/x</example>
         ///// <example>Forgetting speed = -2 => 1/x2</example>
         //public float ForgettingSpeed { get; set; } = 0;
+        /// <summary>
+        ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
+        ///     -1 for unlimited time to live
+        /// </summary>
+        public short TimeToLive { get; set; } = -1;
 
         #endregion
 

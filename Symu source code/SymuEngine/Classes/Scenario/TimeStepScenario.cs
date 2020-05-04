@@ -11,7 +11,6 @@
 
 using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Environment.TimeStep;
 
 #endregion
 
@@ -31,7 +30,6 @@ namespace SymuEngine.Classes.Scenario
         public ushort NumberOfSteps { get; set; }
 
         public static sbyte NoLimit { get; } = -1;
-        public TimeStepType TimeStepType { get; set; }
 
         public override void PreStep()
         {
@@ -46,8 +44,7 @@ namespace SymuEngine.Classes.Scenario
         {
             var clone = new TimeStepScenario(Id.Key, Environment)
             {
-                NumberOfSteps = NumberOfSteps,
-                TimeStepType = TimeStepType
+                NumberOfSteps = NumberOfSteps
             };
             return clone;
         }

@@ -36,7 +36,7 @@ namespace SymuTools.Classes.ProbabilityDistributions
         /// <returns>a sample from the distribution.</returns>
         public static float Sample(float mean, float stdDev)
         {
-            return System.Math.Abs(stdDev) < Constants.tolerance
+            return System.Math.Abs(stdDev) < Constants.Tolerance
                 ? mean
                 : Convert.ToSingle(Math.Normal.Sample(mean, stdDev));
         }

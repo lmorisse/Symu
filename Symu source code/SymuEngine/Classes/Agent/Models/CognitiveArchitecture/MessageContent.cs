@@ -12,9 +12,8 @@
 using System;
 using System.Linq;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
-using SymuEngine.Repository.Networks.Belief.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Agent;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Classes.ProbabilityDistributions;
 using static SymuTools.Classes.Algorithm.Constants;
 
@@ -90,10 +89,11 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// <param name="agentKnowledge">Full agentKnowledge</param>
         /// <param name="knowledgeBit"></param>
         /// <param name="medium"></param>
+        /// <param name="knowledgeIndexToSend"></param>
         /// <returns>With binary KnowledgeBits it will return a float of 0</returns>
         /// <example>KnowledgeBits[0,1,0.6] and MinimumKnowledgeToSend = 0.8 => KnowledgeBits[0,1,0]</example>
         public Bits GetFilteredKnowledgeToSend(AgentKnowledge agentKnowledge, byte knowledgeBit,
-            CommunicationTemplate medium)
+            CommunicationTemplate medium, out byte[] knowledgeIndexToSend)
         {
             if (agentKnowledge is null)
             {
@@ -105,6 +105,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
                 throw new ArgumentNullException(nameof(medium));
             }
 
+            knowledgeIndexToSend = null;
             // Model On/Off
             if (!CanSendKnowledge)
             {
@@ -119,28 +120,29 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             var minKnowledge = Math.Max(MinimumKnowledgeToSendPerBit,
                 medium.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit);
             // Random knowledgeBits to send
-            var lengthToSend = DiscreteUniform.SampleToByte(minBits, maxBits);
+            var lengthToSend = DiscreteUniform.SampleToByte(Math.Min(minBits, maxBits), Math.Max(minBits, maxBits));
             if (lengthToSend == 0)
             {
                 return null;
             }
 
-            var knowledgeIndexToSend = DiscreteUniform.SamplesToByte(lengthToSend, agentKnowledge.Length - 1);
+            knowledgeIndexToSend = DiscreteUniform.SamplesToByte(lengthToSend, agentKnowledge.Length - 1);
             // Force the first index of the knowledgeIndex To send to be the knowledgeBit asked by an agent
             knowledgeIndexToSend[0] = knowledgeBit;
-            var knowledgeBitsToSend = agentKnowledge.CloneWrittenKnowledgeBits(MinimumKnowledgeToSendPerBit);
-            // knowledgeBitsToSend full of 0 except for the random indexes knowledgeIndexToSend
-            for (byte i = 0; i < knowledgeBitsToSend.Length; i++)
+            var knowledgeBitsToSend = Bits.Initialize(agentKnowledge.Length, 0F);
+            for (byte i = 0; i < knowledgeIndexToSend.Length; i++)
             {
-                if (!knowledgeIndexToSend.Contains(i) || knowledgeBitsToSend.GetBit(i) < minKnowledge)
+                var index = knowledgeIndexToSend[i];
+                if (agentKnowledge.GetKnowledgeBit(index) >= minKnowledge)
                 {
-                    knowledgeBitsToSend.SetBit(i, 0);
+                    knowledgeBitsToSend[index] = agentKnowledge.GetKnowledgeBit(index);
                 }
             }
 
+            var bitsToSend = new Bits(knowledgeBitsToSend, 0);
             // Check Length of message
             // We don't find always what we were looking for
-            return Math.Abs(knowledgeBitsToSend.GetSum()) < tolerance ? null : knowledgeBitsToSend;
+            return Math.Abs(bitsToSend.GetSum()) < Tolerance ? null : bitsToSend;
         }
 
         #endregion
@@ -224,7 +226,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
             // Check Length of message
             // We don't find always what we were looking for
-            return Math.Abs(beliefBitsToSend.GetSum()) < tolerance ? null : beliefBitsToSend;
+            return Math.Abs(beliefBitsToSend.GetSum()) < Tolerance ? null : beliefBitsToSend;
         }
 
         #endregion

@@ -9,7 +9,7 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Forgetting;
+using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Common;
 
 #endregion

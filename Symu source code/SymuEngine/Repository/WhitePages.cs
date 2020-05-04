@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 
@@ -31,6 +32,11 @@ namespace SymuEngine.Repository
     /// <remarks>FIPA Norm : Agent Management System (AMS)</remarks>
     public class WhitePages
     {
+        public WhitePages(AgentTemplates agentTemplates)
+        {
+            Network = new Network(agentTemplates);
+        }
+
         /// <summary>
         ///     Local agents of this environment
         /// </summary>
@@ -44,7 +50,7 @@ namespace SymuEngine.Repository
         /// </summary>
         public List<AgentId> StoppedAgents { get; } = new List<AgentId>();
 
-        public Network Network { get; } = new Network();
+        public Network Network { get; }
 
         #region Clear / remove agent
 

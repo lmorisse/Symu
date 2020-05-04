@@ -14,7 +14,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agent;
-using SymuEngine.Repository.Networks.Databases.Repository;
 
 #endregion
 
@@ -31,7 +30,7 @@ namespace SymuEngine.Repository.Networks.Databases
         /// <summary>
         ///     Repository of all the Databases used during the simulation
         /// </summary>
-        public Repository.Databases Repository { get; } = new Repository.Databases();
+        public DatabaseCollection Repository { get; } = new DatabaseCollection();
 
         /// <summary>
         ///     AgentDataBases.Key = AgentId

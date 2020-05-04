@@ -16,7 +16,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture.Forgetting;
 using SymuEngine.Classes.Agent.Models.Templates;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Classes.Blockers;
@@ -28,8 +27,8 @@ using SymuEngine.Environment.TimeStep;
 using SymuEngine.Messaging.Manager;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases.Repository;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Databases;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Classes;
 using static SymuTools.Classes.Algorithm.Constants;
 
@@ -432,7 +431,8 @@ namespace SymuEngine.Classes.Agent
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (message.Medium == CommunicationMediums.System)
+            if (message.Medium == CommunicationMediums.System || !Cognitive.MessageContent.CanReceiveKnowledge ||
+                message.Attachments.KnowledgeBits is null)
             {
                 return;
             }
@@ -440,7 +440,8 @@ namespace SymuEngine.Classes.Agent
             var communication =
                 Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
             Cognitive.TasksAndPerformance.Learn(message.Attachments.KnowledgeId,
-                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, TimeStep.Step);
+                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, Cognitive.InternalCharacteristics,
+                TimeStep.Step);
             if (message.Medium == CommunicationMediums.Email && HasEmail)
             {
                 Email.StoreKnowledge(message.Attachments.KnowledgeId, message.Attachments.KnowledgeBits,
@@ -460,6 +461,11 @@ namespace SymuEngine.Classes.Agent
             if (message is null || !message.HasAttachments)
             {
                 throw new ArgumentNullException(nameof(message));
+            }
+
+            if (message.Medium == CommunicationMediums.System || !Cognitive.MessageContent.CanReceiveBeliefs)
+            {
+                return;
             }
 
             Cognitive.InternalCharacteristics.Learn(message.Attachments.KnowledgeId, message.Attachments.BeliefBits,
@@ -638,7 +644,9 @@ namespace SymuEngine.Classes.Agent
         ///     It will be effectively sent only if IsMessages is above Limits
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(Message message)
+        /// <param name="delayed"></param>
+        /// <param name="delay"></param>
+        public void Reply(Message message, bool delayed, ushort delay)
         {
             if (message is null)
             {
@@ -661,8 +669,28 @@ namespace SymuEngine.Classes.Agent
             }
 
             OnBeforeSendMessage(message);
-            Environment.SendAgent(message);
+            if (delayed)
+            {
+                SendDelayed(message, delay);
+            }
+            else
+            {
+                Environment.SendAgent(message);
+            }
+
             OnAfterSendMessage(message);
+        }
+
+        /// <summary>
+        ///     Reply to a message from another agent
+        ///     It does count in the Mailbox.NumberMessagesPerPeriod
+        ///     It doesn't count in the Mailbox.NumberSentPerPeriod
+        ///     It will be effectively sent only if IsMessages is above Limits
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(Message message)
+        {
+            Reply(message, false, 0);
         }
 
         /// <summary>
@@ -675,29 +703,7 @@ namespace SymuEngine.Classes.Agent
         /// <param name="delay"></param>
         public void ReplyDelayed(Message message, ushort delay)
         {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
-            if (!IsMessagesPerPeriodBelowLimit(message.Medium))
-            {
-                return;
-            }
-
-            if (message.HasAttachments)
-            {
-                var ma = message.Attachments;
-                var communication =
-                    Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                ma.KnowledgeBits = FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
-                ma.BeliefBits = FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
-            }
-
-            OnBeforeSendMessage(message);
-            SendDelayed(message, delay);
-            OnAfterSendMessage(message);
+            Reply(message, true, delay);
         }
 
         /// <summary>
@@ -813,15 +819,10 @@ namespace SymuEngine.Classes.Agent
         public Bits FilterKnowledgeToSend(ushort knowledgeId, byte knowledgeBit, CommunicationTemplate medium)
         {
             // If can't send knowledge or no knowledge asked
-            if (!Cognitive.MessageContent.CanSendKnowledge || knowledgeId == 0)
+            if (!Cognitive.MessageContent.CanSendKnowledge || knowledgeId == 0 ||
+                Cognitive.KnowledgeAndBeliefs.Expertise == null)
             {
                 return null;
-            }
-
-            // intentionally after Cognitive.MessageContent.CanSendKnowledge test
-            if (Cognitive.KnowledgeAndBeliefs.Expertise == null)
-            {
-                throw new NullReferenceException(nameof(Cognitive.KnowledgeAndBeliefs.Expertise));
             }
 
             if (!Cognitive.KnowledgeAndBeliefs.Expertise.KnowsEnough(knowledgeId, knowledgeBit,
@@ -832,7 +833,16 @@ namespace SymuEngine.Classes.Agent
 
             var agentKnowledge = Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledge(knowledgeId);
             // Filter the Knowledge to send, via the good communication medium
-            return Cognitive.MessageContent.GetFilteredKnowledgeToSend(agentKnowledge, knowledgeBit, medium);
+            var bitsToSend = Cognitive.MessageContent.GetFilteredKnowledgeToSend(agentKnowledge, knowledgeBit, medium,
+                out var knowledgeIndexToSend);
+
+            // The agent is asked for his knowledge, so he can't forget it
+            if (knowledgeIndexToSend != null)
+            {
+                ForgettingModel.UpdateForgettingProcess(knowledgeId, knowledgeIndexToSend);
+            }
+
+            return bitsToSend;
         }
 
         /// <summary>
@@ -842,8 +852,8 @@ namespace SymuEngine.Classes.Agent
         /// <returns>a beliefBits if he has the belief or the right</returns>
         public Bits FilterBeliefToSend(ushort beliefId, byte beliefBit, CommunicationTemplate channel)
         {
-            // If can't send knowledge or no knowledge asked
-            if (!Cognitive.MessageContent.CanSendBeliefs || beliefId == 0)
+            // If don't have belief, can't send belief or no belief asked
+            if (!Cognitive.KnowledgeAndBeliefs.HasBelief || !Cognitive.MessageContent.CanSendBeliefs || beliefId == 0)
             {
                 return null;
             }
@@ -873,7 +883,9 @@ namespace SymuEngine.Classes.Agent
         /// <param name="knowledgeId"></param>
         public void LearnNewKnowledge(ushort knowledgeId, ushort step)
         {
-            Environment.WhitePages.Network.NetworkKnowledges.LearnNewKnowledge(Id, knowledgeId, step);
+            Environment.WhitePages.Network.NetworkKnowledges.LearnNewKnowledge(Id, knowledgeId,
+                Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
+                Cognitive.InternalCharacteristics.TimeToLive, step);
         }
 
         #endregion
@@ -901,7 +913,7 @@ namespace SymuEngine.Classes.Agent
                 var task = new SymuTask(TimeStep.Step)
                 {
                     Type = message.Medium.ToString(),
-                    TimeToLive = communication.TimeToLive,
+                    TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
                     Parent = message,
                     Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
                         Environment.Entity.RandomLevelValue)
@@ -1022,7 +1034,7 @@ namespace SymuEngine.Classes.Agent
         {
             if (ForgettingModel != null && Cognitive.KnowledgeAndBeliefs.HasKnowledge)
             {
-                ForgettingModel.FinalizeForgettingProcess();
+                ForgettingModel.FinalizeForgettingProcess(TimeStep.Step);
             }
         }
 
@@ -1066,7 +1078,7 @@ namespace SymuEngine.Classes.Agent
         /// </summary>
         public virtual void HandleStatus()
         {
-            Status = Math.Abs(Capacity.Initial) < tolerance ? AgentStatus.Offline : AgentStatus.Available;
+            Status = Math.Abs(Capacity.Initial) < Tolerance ? AgentStatus.Offline : AgentStatus.Available;
             if (Status != AgentStatus.Offline)
                 // Open the agent mailbox with all the waiting messages
             {
@@ -1271,13 +1283,19 @@ namespace SymuEngine.Classes.Agent
 
             timeSpent = Math.Min(task.WorkToDo, timeSpent);
             task.WorkToDo -= timeSpent;
-            if (task.WorkToDo < tolerance)
+            if (task.WorkToDo < Tolerance)
             {
                 SetTaskDone(task);
             }
             else
             {
                 UpdateTask(task);
+            }
+
+            // As the agent work on task that requires knowledge, the agent can't forget the associate knowledge today
+            foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
+            {
+                ForgettingModel.UpdateForgettingProcess(knowledgeId, task.KnowledgesBits.GetBits(knowledgeId));
             }
 
             Capacity.Decrement(timeSpent);

@@ -77,5 +77,14 @@ namespace SymuToolsTests.ProbabilityDistributions
             var binaryArray = ContinuousUniform.FilteredSamples(1, 0, 5);
             Assert.AreEqual(5, binaryArray[0]);
         }
+
+        [TestMethod]
+        public void Test()
+        {
+            var test =
+                new MathNet.Numerics.Distributions.ContinuousUniform(0, 1);
+            var ret = test.InverseCumulativeDistribution(0.2);
+            var ret2 = MathNet.Numerics.Distributions.ContinuousUniform.InvCDF(0, 1, 0.2);
+        }
     }
 }

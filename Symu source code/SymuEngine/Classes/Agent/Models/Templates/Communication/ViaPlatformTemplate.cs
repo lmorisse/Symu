@@ -30,8 +30,8 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
             Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.ViaAPlatform;
-            // One week
-            TimeToLive = -1;
+            // Forever
+            Cognitive.InternalCharacteristics.TimeToLive = -1;
             Cognitive.TasksAndPerformance.LearningModel.On = true;
             Cognitive.TasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
         }

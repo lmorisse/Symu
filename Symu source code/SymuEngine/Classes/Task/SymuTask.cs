@@ -113,7 +113,7 @@ namespace SymuEngine.Classes.Task
 
         public bool IsStarted { get; private set; }
         public bool IsToDo => !IsStarted && !IsAssigned && !IsBlocked;
-        public bool IsNotDone => !IsStarted || WorkToDo > tolerance;
+        public bool IsNotDone => !IsStarted || WorkToDo > Tolerance;
         public bool IsBlocked => Blockers.IsBlocked;
 
         /// <summary>

@@ -22,19 +22,24 @@ using SymuEngine.Environment.TimeStep;
 
 namespace SymuEngine.Engine.Form
 {
+    /// <summary>
+    ///     Simulation Engine to use in GUI mode
+    ///     Use SimulationEngine in batch mode
+    /// </summary>
     public partial class SymuForm : System.Windows.Forms.Form
     {
         private SymuEnvironment _environment;
+        private bool _pauseWorker;
 
         public SymuForm()
         {
             InitializeComponent();
         }
 
-        protected OrganizationEntity OrganizationEntity { get; set; }
+        protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
         protected MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
         protected TimeStepType TimeStepType { get; set; } = TimeStepType.Daily;
-        protected AgentState State { get; private set; } = AgentState.Stopped;
+        protected AgentState State { get; private set; } = AgentState.NotStarted;
 
         /// <summary>
         ///     Used when Event OnNextDay is triggered by this class
@@ -42,7 +47,6 @@ namespace SymuEngine.Engine.Form
         public virtual void OnNextStep()
         {
             _environment.OnNextStep();
-            // Post Process to avoid problem
             _environment.ManageAgentsToStop();
             // For Form Update
             Display();
@@ -58,8 +62,8 @@ namespace SymuEngine.Engine.Form
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            SetUp(environment);
             State = AgentState.Starting;
+            SetUp(environment);
             PreIteration();
             if (backgroundWorker1.IsBusy != true)
                 // Start the asynchronous operation.
@@ -100,16 +104,42 @@ namespace SymuEngine.Engine.Form
 
             while (!StopIteration())
             {
-                i++;
-                if (worker.CancellationPending)
+                if (_pauseWorker)
                 {
-                    e.Cancel = true;
-                    break;
-                }
+                    while (_pauseWorker)
+                    {
+                        if (worker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            break;
+                        }
 
-                OnNextStep();
-                worker.ReportProgress(i);
+                        if (_pauseWorker == false)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    i++;
+                    if (worker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+
+                    OnNextStep();
+                    worker.ReportProgress(i);
+                }
             }
+
+            OnStopped();
+        }
+
+        protected virtual void OnStopped()
+        {
+            State = AgentState.Stopped;
         }
 
         private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -124,11 +154,25 @@ namespace SymuEngine.Engine.Form
 
         protected void Cancel()
         {
+            State = AgentState.Stopping;
             if (backgroundWorker1.WorkerSupportsCancellation)
                 // Cancel the asynchronous operation.
             {
                 backgroundWorker1.CancelAsync();
             }
+        }
+
+        protected void Pause()
+        {
+            _pauseWorker = true;
+
+            State = AgentState.Paused;
+        }
+
+        protected void Resume()
+        {
+            _pauseWorker = false;
+            State = AgentState.Started;
         }
 
         #region Nested type: SafeCallTextDelegate
@@ -137,12 +181,11 @@ namespace SymuEngine.Engine.Form
 
         #endregion
 
-
         #region Initialize / set
 
         private void SetUp(SymuEnvironment environment)
         {
-            OrganizationEntity = new OrganizationEntity("symu");
+            OrganizationEntity.Clear();
             _environment = environment;
             _environment.SetOrganization(OrganizationEntity);
             SetUpOrganization();
@@ -161,18 +204,22 @@ namespace SymuEngine.Engine.Form
 
         protected void SetDebug(bool value)
         {
-            _environment.Messages.Debug = value;
-            _environment.State.Debug = value;
+            _environment.SetDebug(value);
         }
 
         protected void SetDelay(int value)
         {
-            _environment.Delay = value;
+            _environment.SetDelay(value);
         }
 
         protected void SetRandomLevel(int value)
         {
             _environment.SetRandomLevel(value);
+        }
+
+        protected void SetTimeStepType(TimeStepType type)
+        {
+            _environment.SetTimeStepType(type);
         }
 
         #endregion

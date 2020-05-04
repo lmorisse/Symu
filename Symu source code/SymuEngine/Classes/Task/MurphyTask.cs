@@ -52,7 +52,7 @@ namespace SymuEngine.Classes.Task
         public static float RequiredBitsRatio(float level)
         {
             // For unit tests
-            if (Math.Abs(level - fullRequiredBits) < tolerance)
+            if (Math.Abs(level - fullRequiredBits) < Tolerance)
             {
                 return 1;
             }
@@ -67,7 +67,7 @@ namespace SymuEngine.Classes.Task
         /// </summary>
         public float MandatoryBitsRatio(float level)
         {
-            if (Math.Abs(RequiredMandatoryRatio) < tolerance)
+            if (Math.Abs(RequiredMandatoryRatio) < Tolerance)
             {
                 return 0;
             }

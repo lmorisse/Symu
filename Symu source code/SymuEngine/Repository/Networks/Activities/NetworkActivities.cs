@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agent;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -167,7 +168,7 @@ namespace SymuEngine.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns>Dictionary</returns>
-        public IDictionary<string, List<Knowledge.Repository.Knowledge>> GetActivitiesKnowledgesByActivity(
+        public IDictionary<string, List<Knowledge>> GetActivitiesKnowledgesByActivity(
             AgentId groupId)
         {
             if (!Exists(groupId))
@@ -175,7 +176,7 @@ namespace SymuEngine.Repository.Networks.Activities
                 return null;
             }
 
-            var activitiesKnowledges = new Dictionary<string, List<Knowledge.Repository.Knowledge>>();
+            var activitiesKnowledges = new Dictionary<string, List<Knowledge>>();
             foreach (var activity in Repository[groupId])
             {
                 activitiesKnowledges[activity.Name] = activity.Knowledges;

@@ -23,7 +23,7 @@ namespace SymuEngine.Classes.Agent.Models
         public float Initial { get; set; }
 
         public float Actual { get; private set; }
-        public bool HasCapacity => Actual > tolerance;
+        public bool HasCapacity => Actual > Tolerance;
 
         /// <summary>
         ///     Reset RemainingCapacity to InitialCapacity

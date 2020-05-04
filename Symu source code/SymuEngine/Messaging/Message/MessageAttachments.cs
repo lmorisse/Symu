@@ -11,7 +11,7 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Repository.Networks.Knowledge.Bits;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
