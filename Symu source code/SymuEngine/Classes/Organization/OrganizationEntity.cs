@@ -39,9 +39,9 @@ namespace SymuEngine.Classes.Organization
 
         /// <summary>
         ///     List of the models used by the organizationEntity
-        ///     You can set your own derived OrganizationModels
+        ///     You can set your own derived Models
         /// </summary>
-        public OrganizationModels OrganizationModels { get; protected set; } = new OrganizationModels();
+        public OrganizationModels Models { get; protected set; } = new OrganizationModels();
 
         /// <summary>
         ///     List of the agent templates that are available

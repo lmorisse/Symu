@@ -41,7 +41,7 @@ namespace Symu
                 OrganizationEntity.Templates.Platform.Cognitive.TasksAndPerformance, -1);
             OrganizationEntity.AddDatabase(_wiki);
             // Models
-            OrganizationEntity.OrganizationModels.Learning.On = true;
+            OrganizationEntity.Models.Learning.On = true;
             TimeStepType = TimeStepType.Daily;
         }
 

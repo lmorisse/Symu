@@ -12,6 +12,7 @@
 using System;
 using SymuEngine.Classes.Agent.Models;
 using SymuEngine.Common;
+using SymuEngine.Engine;
 
 #endregion
 
@@ -49,8 +50,39 @@ namespace SymuEngine.Classes.Organization
         ///     If false, will check new blockers only if there is no blocker
         /// </summary>
         public bool MultipleBlockers { get; set; }
+        /// <summary>
+        ///     Random generator modes in order to create random network
+        /// </summary>
+        public RandomGenerator Generator { get; set; } = RandomGenerator.RandomUniform; 
+        /// <summary>
+        /// Define level of random for the simulation.
+        /// </summary>
+        public SimulationRandom RandomLevel { get; set; } = SimulationRandom.NoRandom;
+        public byte RandomLevelValue => (byte)RandomLevel;
 
-        public RandomGenerator KnowledgeGenerator { get; set; } = RandomGenerator.RandomUniform;
+        /// <summary>
+        /// Define the ratio of task splitting in intraday mode
+        /// </summary>
+        public float Intraday { get; set; } = 0.01F;
+
+        public void SetRandomLevel(int level)
+        {
+            switch (level)
+            {
+                case 1:
+                    RandomLevel = SimulationRandom.Simple;
+                    break;
+                case 2:
+                    RandomLevel = SimulationRandom.Double;
+                    break;
+                case 3:
+                    RandomLevel = SimulationRandom.Triple;
+                    break;
+                default:
+                    RandomLevel = SimulationRandom.NoRandom;
+                    break;
+            }
+        }
 
         public void CopyTo(OrganizationModels entity)
         {
@@ -64,7 +96,7 @@ namespace SymuEngine.Classes.Organization
             entity.FollowGroupFlexibility = FollowGroupFlexibility;
             entity.FollowGroupKnowledge = FollowGroupKnowledge;
             entity.MultipleBlockers = MultipleBlockers;
-            entity.KnowledgeGenerator = KnowledgeGenerator;
+            entity.Generator = Generator;
         }
     }
 }

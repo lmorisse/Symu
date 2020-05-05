@@ -31,10 +31,10 @@ namespace Symu.Classes
             WhitePages.Network.NetworkCommunications.Email.CostToSendLevel = GenericLevel.None;
             WhitePages.Network.NetworkCommunications.Email.CostToReceiveLevel = GenericLevel.None;
             WhitePages.Network.AddKnowledge(_knowledge);
-            var group = new GroupAgent(OrganizationEntity.NextEntityIndex(), this);
+            var group = new GroupAgent(Organization.NextEntityIndex(), this);
             for (var i = 0; i < WorkersCount; i++)
             {
-                var actor = new PersonAgent(OrganizationEntity.NextEntityIndex(), this)
+                var actor = new PersonAgent(Organization.NextEntityIndex(), this)
                 {
                     GroupId = group.Id
                 };

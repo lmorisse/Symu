@@ -68,6 +68,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates
             Cognitive.InteractionPatterns.InteractionsUsingHomophily = 100;
             Cognitive.InteractionPatterns.InteractionsDeliberateSearch = 0;
             Cognitive.InteractionPatterns.InteractionsWithCoWorkers = 0;
+            Cognitive.InternalCharacteristics.TimeToLive = 365;
         }
     }
 }

@@ -68,7 +68,7 @@ namespace SymuEngine.Results
 
             OrganizationFlexibility = new OrganizationFlexibility(environment);
             OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(environment.WhitePages.Network,
-                environment.OrganizationEntity.OrganizationModels);
+                environment.Organization.Models);
             Blockers = new BlockerResults();
             Iteration = 0;
             Step = 0;

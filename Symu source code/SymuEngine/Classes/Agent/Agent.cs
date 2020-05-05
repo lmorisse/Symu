@@ -122,7 +122,7 @@ namespace SymuEngine.Classes.Agent
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment.AddAgent(this);
             State = AgentState.NotStarted;
-            foreach (var database in environment.OrganizationEntity.Databases.List)
+            foreach (var database in environment.Organization.Databases.List)
             {
                 environment.WhitePages.Network.AddDatabase(Id, database.Id);
             }
@@ -145,10 +145,10 @@ namespace SymuEngine.Classes.Agent
                 Cognitive.InternalCharacteristics.NextInfluenceability(),
                 Cognitive.InternalCharacteristics.NextInfluentialness());
             // Learning model
-            Environment.OrganizationEntity.OrganizationModels.Learning.CopyTo(Cognitive.TasksAndPerformance
+            Environment.Organization.Models.Learning.CopyTo(Cognitive.TasksAndPerformance
                 .LearningModel);
             // Forgetting model
-            ForgettingModel = new ForgettingModel(Environment.OrganizationEntity.OrganizationModels.Forgetting,
+            ForgettingModel = new ForgettingModel(Environment.Organization.Models.Forgetting,
                 Cognitive.InternalCharacteristics, Environment.Entity.RandomLevelValue,
                 Environment.WhitePages.Network.NetworkKnowledges, Id);
         }
@@ -1269,8 +1269,7 @@ namespace SymuEngine.Classes.Agent
             float timeSpent;
             if (TimeStep.Type == TimeStepType.Intraday)
             {
-                //TODO => 0.01F should be an attribute of the intraday model
-                timeSpent = Math.Min(0.01F, Capacity.Actual);
+                timeSpent = Math.Min(Environment.Organization.Models.Intraday, Capacity.Actual);
             }
             else
             {
@@ -1358,7 +1357,7 @@ namespace SymuEngine.Classes.Agent
                 throw new ArgumentNullException(nameof(task));
             }
 
-            if (!Environment.OrganizationEntity.OrganizationModels.MultipleBlockers && task.IsBlocked)
+            if (!Environment.Organization.Models.MultipleBlockers && task.IsBlocked)
                 // One blocker at a time
             {
                 return;

@@ -40,7 +40,7 @@ namespace SymuLearnAndForget.Classes
             // The source has the maximum knowledge bit
             bits.SetBit(knowledgeBit, 1);
             Cognitive.TasksAndPerformance.Learn(Knowledge.Id, bits,
-                Environment.OrganizationEntity.Templates.Email.MaxRateLearnable, Cognitive.InternalCharacteristics,
+                Environment.Organization.Templates.Email.MaxRateLearnable, Cognitive.InternalCharacteristics,
                 TimeStep.Step);
             // the information learned is stored in a wiki
             // not the total knowledge of the agent, it is tacit knowledge for the agent

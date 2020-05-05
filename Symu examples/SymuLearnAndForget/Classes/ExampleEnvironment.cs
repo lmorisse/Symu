@@ -33,22 +33,22 @@ namespace SymuLearnAndForget.Classes
             WhitePages.Network.NetworkCommunications.Email.CostToSendLevel = GenericLevel.None;
             WhitePages.Network.NetworkCommunications.Email.CostToReceiveLevel = GenericLevel.None;
             WhitePages.Network.AddKnowledge(Knowledge);
-            LearnFromSourceAgent = new LearnFromSourceAgent(OrganizationEntity.NextEntityIndex(), this);
+            LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this);
             LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
-            LearnByDoingAgent = new LearnByDoingAgent(OrganizationEntity.NextEntityIndex(), this);
+                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+            LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this);
             LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
-            LearnByAskingAgent = new LearnByAskingAgent(OrganizationEntity.NextEntityIndex(), this);
+                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+            LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this);
             LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
-            DoesNotLearnAgent = new LearnAgent(OrganizationEntity.NextEntityIndex(), this);
+                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this);
             DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
-            ExpertAgent = new ExpertAgent(OrganizationEntity.NextEntityIndex(), this);
+                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+            ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this);
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel.Expert,
-                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
         }
     }
 }

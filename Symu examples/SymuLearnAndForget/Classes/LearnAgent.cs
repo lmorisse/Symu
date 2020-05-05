@@ -31,7 +31,7 @@ namespace SymuLearnAndForget.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.OrganizationEntity.Templates.SimpleHuman);
+            SetCognitive(Environment.Organization.Templates.SimpleHuman);
             Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.ViaAPlatform;

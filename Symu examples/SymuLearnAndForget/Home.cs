@@ -49,7 +49,7 @@ namespace SymuLearnAndForget
 
             tbKnowledgeLength.Text = "50";
             cbBinaryKnowledge.Checked =
-                OrganizationEntity.OrganizationModels.KnowledgeGenerator == RandomGenerator.RandomBinary;
+                OrganizationEntity.Models.Generator == RandomGenerator.RandomBinary;
 
             #endregion
 
@@ -137,7 +137,7 @@ namespace SymuLearnAndForget
                 OrganizationEntity.Templates.Email.Cognitive.TasksAndPerformance, -1);
             _wiki.InitializeKnowledge(_environment.Knowledge, 0);
             OrganizationEntity.AddDatabase(_wiki);
-            OrganizationEntity.OrganizationModels.FollowGroupKnowledge = true;
+            OrganizationEntity.Models.FollowGroupKnowledge = true;
         }
 
         protected override void SetScenarii()
@@ -152,7 +152,7 @@ namespace SymuLearnAndForget
         {
             #region Knowledge
 
-            OrganizationEntity.OrganizationModels.KnowledgeGenerator = cbBinaryKnowledge.Checked
+            OrganizationEntity.Models.Generator = cbBinaryKnowledge.Checked
                 ? RandomGenerator.RandomBinary
                 : RandomGenerator.RandomUniform;
 
@@ -160,7 +160,7 @@ namespace SymuLearnAndForget
 
             #region Learning
 
-            OrganizationEntity.OrganizationModels.Learning.On = cbLearningOn.Checked;
+            OrganizationEntity.Models.Learning.On = cbLearningOn.Checked;
             OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasKnowledge =
                 cbHasKnowledge.Checked;
             OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge =
@@ -183,7 +183,7 @@ namespace SymuLearnAndForget
 
             #region Forgetting
 
-            OrganizationEntity.OrganizationModels.Forgetting.On = cbForgettingOn.Checked;
+            OrganizationEntity.Models.Forgetting.On = cbForgettingOn.Checked;
             OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingStandardDeviation =
                 GenericLevelService.GetValue(cgForgettingStdDev.SelectedItem.ToString());
             OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.PartialForgetting =
@@ -354,7 +354,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.OrganizationModels.Learning.RateOfAgentsOn =
+                OrganizationEntity.Models.Learning.RateOfAgentsOn =
                     float.Parse(tbMicroLearningAgentRate.Text, CultureInfo.InvariantCulture);
                 tbMicroLearningAgentRate.BackColor = SystemColors.Window;
             }
@@ -537,7 +537,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.OrganizationModels.Forgetting.RateOfAgentsOn =
+                OrganizationEntity.Models.Forgetting.RateOfAgentsOn =
                     float.Parse(tbForgettingAgentRate.Text, CultureInfo.InvariantCulture);
                 tbForgettingAgentRate.BackColor = SystemColors.Window;
             }

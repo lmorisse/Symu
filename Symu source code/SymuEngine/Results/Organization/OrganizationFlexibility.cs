@@ -73,7 +73,7 @@ namespace SymuEngine.Results.Organization
 
         public void HandlePerformance(ushort step)
         {
-            if (!_environment.OrganizationEntity.OrganizationModels.FollowGroupFlexibility)
+            if (!_environment.Organization.Models.FollowGroupFlexibility)
             {
                 return;
             }

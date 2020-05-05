@@ -32,8 +32,7 @@ namespace SymuEngine.Environment
     /// </summary>
     public abstract class SymuEnvironment
     {
-        public EnvironmentEntity Entity { get; } = new EnvironmentEntity();
-        public OrganizationEntity OrganizationEntity { get; protected set; }
+        public OrganizationEntity Organization { get; protected set; }
 
         /// <summary>
         ///     The white pages service of the simulation
@@ -68,10 +67,10 @@ namespace SymuEngine.Environment
 
         #region Start and Stop
 
-        public void SetOrganization(OrganizationEntity organizationEntity)
+        public void SetOrganization(OrganizationEntity organization)
         {
-            OrganizationEntity = organizationEntity ?? throw new ArgumentNullException(nameof(organizationEntity));
-            WhitePages = new WhitePages(OrganizationEntity.Templates);
+            Organization = organization ?? throw new ArgumentNullException(nameof(organization));
+            WhitePages = new WhitePages(Organization.Templates);
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace SymuEngine.Environment
 
         public void SetRandomLevel(int value)
         {
-            Entity.SetRandomLevel(value);
+            Organization.Models.SetRandomLevel(value);
         }
 
         public void SetDebug(bool value)
@@ -143,9 +142,9 @@ namespace SymuEngine.Environment
             IterationResult.Clear(this);
             WhitePages.Clear();
             WhitePages.Network.NetworkKnowledges.Model =
-                OrganizationEntity.OrganizationModels.KnowledgeGenerator;
+                Organization.Models.Generator;
             WhitePages.Network.NetworkBeliefs.Model =
-                OrganizationEntity.OrganizationModels.KnowledgeGenerator;
+                Organization.Models.Generator;
             SetModelForAgents();
         }
 
@@ -349,7 +348,7 @@ namespace SymuEngine.Environment
         #region Set model
 
         /// <summary>
-        ///     Transform organizationEntity into agents
+        ///     Transform organization into agents
         /// </summary>
         public virtual void SetModelForAgents()
         {
@@ -362,7 +361,7 @@ namespace SymuEngine.Environment
         /// </summary>
         public virtual void SetKnowledges()
         {
-            foreach (var knowledge in OrganizationEntity.Knowledges)
+            foreach (var knowledge in Organization.Knowledges)
             {
                 WhitePages.Network.AddKnowledge(knowledge);
             }
@@ -373,7 +372,7 @@ namespace SymuEngine.Environment
         /// </summary>
         public virtual void SetDatabases()
         {
-            foreach (var database in OrganizationEntity.Databases.List)
+            foreach (var database in Organization.Databases.List)
             {
                 WhitePages.Network.NetworkDatabases.AddDatabase(database);
             }

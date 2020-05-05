@@ -30,6 +30,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
             Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Phone;
+            Cognitive.InternalCharacteristics.TimeToLive = 0;
         }
     }
 }
