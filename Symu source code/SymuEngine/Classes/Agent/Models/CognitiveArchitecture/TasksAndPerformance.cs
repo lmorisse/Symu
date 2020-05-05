@@ -77,6 +77,8 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
         public ModelEntity LearningModel { get; set; } = new ModelEntity();
 
+        private float _learningRate;
+
         /// <summary>
         ///     AgentLearningRate define how quickly an agent will learn new knowledge when interacting with other agents
         ///     It impacts the KnowledgeBits of the Agent
@@ -86,7 +88,21 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///     if AgentLearningRate = 0.01 and the agent is learning on a KnowledgeBit = 0.5 => the upgraded KnowledgeBit =
         ///     0.5 +0.01 = 0.51
         /// </example>
-        public float LearningRate { get; set; }
+        public float LearningRate
+        {
+            get => _learningRate;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("LearningRate should be between 0 and 1");
+                }
+
+                _learningRate = value;
+            }
+        }
+
+        private float _learningByDoingRate;
 
         /// <summary>
         ///     AgentLearningByDoingRate define how quickly an agent will learn new knowledge when performing tasks  without
@@ -99,13 +115,39 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///     if AgentLearningRate = 0.01 and the agent is learning on a KnowledgeBit = 0.5 => the upgraded KnowledgeBit =
         ///     0.5 + 0.01 = 0.51
         /// </example>
-        public float LearningByDoingRate { get; set; }
+        public float LearningByDoingRate
+        {
+            get => _learningByDoingRate;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("LearningByDoingRate should be between 0 and 1");
+                }
+
+                _learningByDoingRate = value;
+            }
+        }
+
+        private float _costFactorOfLearningByDoing = 1;
 
         /// <summary>
         ///     Learning by doing is costly. CostOfLearningByDoing define the factor to know the real cost of the task
         /// </summary>
         /// <example>if a task estimated cost = 1 and CostOfLearningByDoing = 2, then the real task cost = 1*2</example>
-        public float CostFactorOfLearningByDoing { get; set; } = 1;
+        public float CostFactorOfLearningByDoing
+        {
+            get => _costFactorOfLearningByDoing;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("CostFactorOfLearningByDoing should be > 0 ");
+                }
+
+                _costFactorOfLearningByDoing = value;
+            }
+        }
 
         /// <summary>
         ///     Standard deviation around the LearningRate and LearningByDoingRate

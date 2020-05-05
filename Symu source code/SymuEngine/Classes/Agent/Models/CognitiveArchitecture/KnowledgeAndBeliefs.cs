@@ -74,12 +74,26 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         public AgentExpertise Expertise =>
             HasKnowledge ? _network.NetworkKnowledges.GetAgentExpertise(_id) : new AgentExpertise();
 
+        private float _knowledgeThreshHoldForDoing = 0.1F;
+
         /// <summary>
         ///     To do the task, an agent must have enough knowledge
         ///     [0 - 1]
         /// </summary>
         /// <example>if KnowledgeThreshHoldForDoing = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
-        public float KnowledgeThreshHoldForDoing { get; set; } = 0.1F;
+        public float KnowledgeThreshHoldForDoing
+        {
+            get => _knowledgeThreshHoldForDoing;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("KnowledgeThreshHoldForDoing should be between 0 and 1");
+                }
+
+                _knowledgeThreshHoldForDoing = value;
+            }
+        }
 
         /// <summary>
         ///     Check Knowledge required by a task against the worker expertise

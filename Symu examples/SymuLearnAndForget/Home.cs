@@ -10,9 +10,11 @@
 #region using directives
 
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
@@ -42,11 +44,6 @@ namespace SymuLearnAndForget
         private void LoadSettings()
         {
             DisplayButtons();
-            // Models
-            OrganizationEntity.OrganizationModels.Learning.On = true;
-            OrganizationEntity.OrganizationModels.Learning.RateOfAgentsOn = 1;
-            OrganizationEntity.OrganizationModels.Forgetting.On = true;
-            OrganizationEntity.OrganizationModels.Forgetting.RateOfAgentsOn = 1;
 
             #region Knowledge
 
@@ -58,9 +55,8 @@ namespace SymuLearnAndForget
 
             #region Learning
 
-            cbLearningOn.Checked = OrganizationEntity.OrganizationModels.Learning.On;
-            tbMicroLearningAgentRate.Text =
-                OrganizationEntity.OrganizationModels.Learning.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+            cbLearningOn.Checked = true;
+            tbMicroLearningAgentRate.Text ="1";
             cbHasInitialKnowledge.Checked = OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs
                 .HasInitialKnowledge;
             cbInitialKnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
@@ -103,9 +99,8 @@ namespace SymuLearnAndForget
 
             #region Forgetting
 
-            cbForgettingOn.Checked = OrganizationEntity.OrganizationModels.Forgetting.On;
-            tbForgettingAgentRate.Text =
-                OrganizationEntity.OrganizationModels.Forgetting.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+            cbForgettingOn.Checked = true;
+            tbForgettingAgentRate.Text ="1";
             tbForgettingMean.Text =
                 OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean.ToString(
                     CultureInfo.InvariantCulture);
@@ -157,7 +152,6 @@ namespace SymuLearnAndForget
         {
             #region Knowledge
 
-            _environment.Knowledge = new Knowledge(1, "1", byte.Parse(tbKnowledgeLength.Text));
             OrganizationEntity.OrganizationModels.KnowledgeGenerator = cbBinaryKnowledge.Checked
                 ? RandomGenerator.RandomBinary
                 : RandomGenerator.RandomUniform;
@@ -167,67 +161,33 @@ namespace SymuLearnAndForget
             #region Learning
 
             OrganizationEntity.OrganizationModels.Learning.On = cbLearningOn.Checked;
-            OrganizationEntity.OrganizationModels.Learning.RateOfAgentsOn =
-                float.Parse(tbMicroLearningAgentRate.Text, CultureInfo.InvariantCulture);
             OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasKnowledge =
                 cbHasKnowledge.Checked;
             OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge =
                 cbHasInitialKnowledge.Checked;
             _environment.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(cbInitialKnowledgeLevel.SelectedItem.ToString());
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing =
-                float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.TimeToLive =
-                short.Parse(tbTimeToLive.Text, CultureInfo.InvariantCulture);
 
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningRate =
-                float.Parse(tbLearnRate.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningByDoingRate =
-                float.Parse(tbLearnByDoingRate.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing =
-                float.Parse(tbTaskCostFactor.Text, CultureInfo.InvariantCulture);
             OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.CanSendKnowledge =
                 cbCanSendKnowledge.Checked;
             OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.CanReceiveKnowledge =
                 cbCanReceiveKnowledge.Checked;
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
-                float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
-                byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
-                byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
             // In this example:
             // we use email, but we can use other communications medium
             // we set the email template with the same values of SimpleHuman Template, but it could be different
-            OrganizationEntity.Templates.Email.MaxRateLearnable =
-                float.Parse(tbMaxRateLearnable.Text, CultureInfo.InvariantCulture);
             OrganizationEntity.Templates.Email.Cognitive.MessageContent.CanSendKnowledge = cbCanSendKnowledge.Checked;
             OrganizationEntity.Templates.Email.Cognitive.MessageContent.CanReceiveKnowledge =
                 cbCanReceiveKnowledge.Checked;
-            OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
-                float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
-                byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.Email.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
-                byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
 
             #endregion
 
             #region Forgetting
 
             OrganizationEntity.OrganizationModels.Forgetting.On = cbForgettingOn.Checked;
-            OrganizationEntity.OrganizationModels.Forgetting.RateOfAgentsOn =
-                float.Parse(tbForgettingAgentRate.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean =
-                float.Parse(tbForgettingMean.Text, CultureInfo.InvariantCulture);
             OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingStandardDeviation =
                 GenericLevelService.GetValue(cgForgettingStdDev.SelectedItem.ToString());
             OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.PartialForgetting =
                 cbPartialForgetting.Checked;
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.PartialForgettingRate =
-                float.Parse(tbPartialForgettingRate.Text, CultureInfo.InvariantCulture);
-            OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge =
-                float.Parse(tbMinimRemainningLevel.Text, CultureInfo.InvariantCulture);
             OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 rbICForgettingSelectingRandomMode.Checked
                     ? ForgettingSelectingMode.Random
@@ -396,12 +356,15 @@ namespace SymuLearnAndForget
             {
                 OrganizationEntity.OrganizationModels.Learning.RateOfAgentsOn =
                     float.Parse(tbMicroLearningAgentRate.Text, CultureInfo.InvariantCulture);
+                tbMicroLearningAgentRate.BackColor = SystemColors.Window;
             }
             catch (FormatException)
             {
+                tbMicroLearningAgentRate.BackColor = Color.Red;
             }
             catch (ArgumentOutOfRangeException exception)
             {
+                tbMicroLearningAgentRate.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }
@@ -411,5 +374,300 @@ namespace SymuLearnAndForget
         protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
 
         #endregion
+
+        private void tbKnowledgeThreshold_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing =
+                    float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
+                tbKnowledgeThreshold.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbKnowledgeThreshold.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbKnowledgeThreshold.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbLearnRate_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningRate =
+                    float.Parse(tbLearnRate.Text, CultureInfo.InvariantCulture);
+                tbLearnRate.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbLearnRate.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbLearnRate.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbLearnByDoingRate_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningByDoingRate =
+                    float.Parse(tbLearnByDoingRate.Text, CultureInfo.InvariantCulture);
+                tbLearnByDoingRate.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbLearnByDoingRate.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbLearnByDoingRate.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbTaskCostFactor_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing =
+                    float.Parse(tbTaskCostFactor.Text, CultureInfo.InvariantCulture);
+                tbTaskCostFactor.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbTaskCostFactor.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbTaskCostFactor.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbMinKnowledge_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
+                    float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
+                    float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
+                tbMinKnowledge.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbMinKnowledge.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbMinKnowledge.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbMinBitsKnowledge_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
+                    byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
+                    byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
+                tbMinBitsKnowledge.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbMinBitsKnowledge.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbMinBitsKnowledge.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbMaxBitsKnowledge_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
+                    byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
+                    byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
+                tbMaxBitsKnowledge.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbMaxBitsKnowledge.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbMaxBitsKnowledge.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbMaxRateLearnable_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.Email.MaxRateLearnable =
+                    float.Parse(tbMaxRateLearnable.Text, CultureInfo.InvariantCulture);
+                tbMaxRateLearnable.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbMaxRateLearnable.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbMaxRateLearnable.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbForgettingAgentRate_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.OrganizationModels.Forgetting.RateOfAgentsOn =
+                    float.Parse(tbForgettingAgentRate.Text, CultureInfo.InvariantCulture);
+                tbForgettingAgentRate.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbForgettingAgentRate.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbForgettingAgentRate.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbForgettingMean_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean =
+                    float.Parse(tbForgettingMean.Text, CultureInfo.InvariantCulture);
+                tbForgettingMean.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbForgettingMean.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbForgettingMean.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbTimeToLive_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.TimeToLive =
+                    short.Parse(tbTimeToLive.Text, CultureInfo.InvariantCulture);
+                tbTimeToLive.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbTimeToLive.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbTimeToLive.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbPartialForgettingRate_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.PartialForgettingRate =
+                    float.Parse(tbPartialForgettingRate.Text, CultureInfo.InvariantCulture);
+                tbPartialForgettingRate.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbPartialForgettingRate.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbPartialForgettingRate.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbMinimRemainningLevel_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge =
+                    float.Parse(tbMinimRemainningLevel.Text, CultureInfo.InvariantCulture);
+                tbMinimRemainningLevel.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbMinimRemainningLevel.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbMinimRemainningLevel.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbKnowledgeLength_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var value = byte.Parse(tbKnowledgeLength.Text);
+                if (value > Bits.MaxBits)
+                {
+                    throw new ArgumentOutOfRangeException("Knowledge should be < " + Bits.MaxBits);
+                }
+
+                _environment.Knowledge = new Knowledge(1, "1", value);
+                tbKnowledgeLength.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbKnowledgeLength.BackColor = Color.Red;
+            }
+            catch (OverflowException exception)
+            {
+                tbKnowledgeLength.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbSteps_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                byte.Parse(tbSteps.Text);
+                tbSteps.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbSteps.BackColor = Color.Red;
+            }
+            catch (OverflowException exception)
+            {
+                tbSteps.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
     }
 }

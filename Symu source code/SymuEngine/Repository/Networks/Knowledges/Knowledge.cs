@@ -29,6 +29,10 @@ namespace SymuEngine.Repository.Networks.Knowledges
         {
             Id = id;
             Name = name;
+            if (length > Bits.MaxBits)
+            {
+                throw new ArgumentOutOfRangeException("Length should be <= " + Bits.MaxBits);
+            }
             Length = length;
         }
 

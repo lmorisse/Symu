@@ -70,6 +70,8 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
         /// <example>time spent to read an email</example>
         public GenericLevel CostToReceiveLevel { get; set; } = GenericLevel.Medium;
 
+        private float _maxRateLearnable = 1;
+
         /// <summary>
         ///     Maximum rate learnable the message can be
         ///     Range [0;1]
@@ -77,7 +79,19 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
         /// <example>a phone call can be less learnable than an email because you can forget easier</example>
         /// <example>If 0, nothing is learnable from the message</example>
         /// <example>If 1, everything is learnable from the message</example>
-        public float MaxRateLearnable { get; set; } = 1;
+        public float MaxRateLearnable
+        {
+            get => _maxRateLearnable;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MaxRateLearnable should be between 0 and 1");
+                }
+
+                _maxRateLearnable = value;
+            }
+        }
 
         public float CostToSend(byte random)
         {

@@ -198,6 +198,7 @@
             this.tbSteps.Size = new System.Drawing.Size(87, 22);
             this.tbSteps.TabIndex = 39;
             this.tbSteps.Text = "500";
+            this.tbSteps.TextChanged += new System.EventHandler(this.tbSteps_TextChanged);
             // 
             // label8
             // 
@@ -251,6 +252,7 @@
             this.tbKnowledgeLength.Name = "tbKnowledgeLength";
             this.tbKnowledgeLength.Size = new System.Drawing.Size(87, 22);
             this.tbKnowledgeLength.TabIndex = 8;
+            this.tbKnowledgeLength.TextChanged += new System.EventHandler(this.tbKnowledgeLength_TextChanged);
             // 
             // label43
             // 
@@ -303,6 +305,7 @@
             this.tbTimeToLive.Name = "tbTimeToLive";
             this.tbTimeToLive.Size = new System.Drawing.Size(87, 22);
             this.tbTimeToLive.TabIndex = 38;
+            this.tbTimeToLive.TextChanged += new System.EventHandler(this.tbTimeToLive_TextChanged);
             // 
             // label6
             // 
@@ -350,6 +353,7 @@
             this.tbMinimRemainningLevel.Name = "tbMinimRemainningLevel";
             this.tbMinimRemainningLevel.Size = new System.Drawing.Size(86, 22);
             this.tbMinimRemainningLevel.TabIndex = 33;
+            this.tbMinimRemainningLevel.TextChanged += new System.EventHandler(this.tbMinimRemainningLevel_TextChanged);
             // 
             // label34
             // 
@@ -366,6 +370,7 @@
             this.tbPartialForgettingRate.Name = "tbPartialForgettingRate";
             this.tbPartialForgettingRate.Size = new System.Drawing.Size(86, 22);
             this.tbPartialForgettingRate.TabIndex = 22;
+            this.tbPartialForgettingRate.TextChanged += new System.EventHandler(this.tbPartialForgettingRate_TextChanged);
             // 
             // label14
             // 
@@ -409,6 +414,7 @@
             this.tbForgettingMean.Name = "tbForgettingMean";
             this.tbForgettingMean.Size = new System.Drawing.Size(87, 22);
             this.tbForgettingMean.TabIndex = 9;
+            this.tbForgettingMean.TextChanged += new System.EventHandler(this.tbForgettingMean_TextChanged);
             // 
             // label7
             // 
@@ -425,6 +431,7 @@
             this.tbForgettingAgentRate.Name = "tbForgettingAgentRate";
             this.tbForgettingAgentRate.Size = new System.Drawing.Size(87, 22);
             this.tbForgettingAgentRate.TabIndex = 8;
+            this.tbForgettingAgentRate.TextChanged += new System.EventHandler(this.tbForgettingAgentRate_TextChanged);
             // 
             // label11
             // 
@@ -484,11 +491,12 @@
             this.tbMaxRateLearnable.Name = "tbMaxRateLearnable";
             this.tbMaxRateLearnable.Size = new System.Drawing.Size(87, 22);
             this.tbMaxRateLearnable.TabIndex = 37;
+            this.tbMaxRateLearnable.TextChanged += new System.EventHandler(this.tbMaxRateLearnable_TextChanged);
             // 
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(28, 182);
+            this.label37.Location = new System.Drawing.Point(26, 182);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(125, 17);
             this.label37.TabIndex = 35;
@@ -500,15 +508,16 @@
             this.tbMaxBitsKnowledge.Name = "tbMaxBitsKnowledge";
             this.tbMaxBitsKnowledge.Size = new System.Drawing.Size(87, 22);
             this.tbMaxBitsKnowledge.TabIndex = 11;
+            this.tbMaxBitsKnowledge.TextChanged += new System.EventHandler(this.tbMaxBitsKnowledge_TextChanged);
             // 
             // label19
             // 
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(25, 149);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(233, 17);
+            this.label19.Size = new System.Drawing.Size(251, 21);
             this.label19.TabIndex = 10;
-            this.label19.Text = "Max. bits of knowledge to send [0;1]";
+            this.label19.Text = "Max. bits of knowledge to send";
             // 
             // tbMinBitsKnowledge
             // 
@@ -516,15 +525,16 @@
             this.tbMinBitsKnowledge.Name = "tbMinBitsKnowledge";
             this.tbMinBitsKnowledge.Size = new System.Drawing.Size(87, 22);
             this.tbMinBitsKnowledge.TabIndex = 9;
+            this.tbMinBitsKnowledge.TextChanged += new System.EventHandler(this.tbMinBitsKnowledge_TextChanged);
             // 
             // label20
             // 
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(25, 120);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(230, 17);
+            this.label20.Size = new System.Drawing.Size(248, 21);
             this.label20.TabIndex = 8;
-            this.label20.Text = "Min. bits of knowledge to send [0;1]";
+            this.label20.Text = "Min. bits of knowledge to send";
             // 
             // tbMinKnowledge
             // 
@@ -532,6 +542,7 @@
             this.tbMinKnowledge.Name = "tbMinKnowledge";
             this.tbMinKnowledge.Size = new System.Drawing.Size(87, 22);
             this.tbMinKnowledge.TabIndex = 7;
+            this.tbMinKnowledge.TextChanged += new System.EventHandler(this.tbMinKnowledge_TextChanged);
             // 
             // label21
             // 
@@ -596,6 +607,7 @@
             this.tbTaskCostFactor.Name = "tbTaskCostFactor";
             this.tbTaskCostFactor.Size = new System.Drawing.Size(87, 22);
             this.tbTaskCostFactor.TabIndex = 27;
+            this.tbTaskCostFactor.TextChanged += new System.EventHandler(this.tbTaskCostFactor_TextChanged);
             // 
             // label17
             // 
@@ -612,6 +624,7 @@
             this.tbLearnByDoingRate.Name = "tbLearnByDoingRate";
             this.tbLearnByDoingRate.Size = new System.Drawing.Size(87, 22);
             this.tbLearnByDoingRate.TabIndex = 25;
+            this.tbLearnByDoingRate.TextChanged += new System.EventHandler(this.tbLearnByDoingRate_TextChanged);
             // 
             // label10
             // 
@@ -628,6 +641,7 @@
             this.tbLearnRate.Name = "tbLearnRate";
             this.tbLearnRate.Size = new System.Drawing.Size(87, 22);
             this.tbLearnRate.TabIndex = 23;
+            this.tbLearnRate.TextChanged += new System.EventHandler(this.tbLearnRate_TextChanged);
             // 
             // label15
             // 
@@ -644,6 +658,7 @@
             this.tbKnowledgeThreshold.Name = "tbKnowledgeThreshold";
             this.tbKnowledgeThreshold.Size = new System.Drawing.Size(87, 22);
             this.tbKnowledgeThreshold.TabIndex = 5;
+            this.tbKnowledgeThreshold.TextChanged += new System.EventHandler(this.tbKnowledgeThreshold_TextChanged);
             // 
             // label12
             // 
@@ -831,7 +846,7 @@
             this.label32.AutoSize = true;
             this.label32.Location = new System.Drawing.Point(9, 376);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(120, 21);
+            this.label32.Size = new System.Drawing.Size(96, 17);
             this.label32.TabIndex = 42;
             this.label32.Text = "Global agents";
             // 

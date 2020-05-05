@@ -69,12 +69,26 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
         #region Forgetting
 
+        private float _forgettingMean;
+
         /// <summary>
         ///     Define the mean probability an agent will forget a bit of knowledge
         ///     It impacts the KnowledgeBits of the Agent
         ///     range[0;1]
         /// </summary>
-        public float ForgettingMean { get; set; }
+        public float ForgettingMean
+        {
+            get => _forgettingMean;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("ForgettingMean should be between 0 and 1");
+                }
+
+                _forgettingMean = value;
+            }
+        }
 
         /// <summary>
         ///     Standard deviation around the ForgettingMean and ForgettingMean
@@ -89,12 +103,28 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         /// </summary>
         public bool PartialForgetting { get; set; } = true;
 
+        private float _partialForgettingRate = 0.05F;
+
         /// <summary>
         ///     the numerical reduction in knowledge if the bit is to be effected by the stochastic forgetting process
         ///     It impacts the KnowledgeBits of the Agent
         /// </summary>
         /// <example>a knowledgeBit = 0.5 is partially forgotten with a rate of 0.05, it's new value = 0.45</example>
-        public float PartialForgettingRate { get; set; } = 0.05F;
+        public float PartialForgettingRate
+        {
+            get => _partialForgettingRate;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("PartialForgettingRate should be between 0 and 1");
+                }
+
+                _partialForgettingRate = value;
+            }
+        }
+
+        private float _minimumRemainingKnowledge = 0.15F;
 
         /// <summary>
         ///     When forgetting a knowledge there is a minimum level that is remaining, this is the general culture on the subject
@@ -105,7 +135,19 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///     if knowledgeBit = MinimumRemainingKnowledge and the agent is forgetting this knowledge, the knowledgeBit will
         ///     remaining equal
         /// </example>
-        public float MinimumRemainingKnowledge { get; set; } = 0.15F;
+        public float MinimumRemainingKnowledge
+        {
+            get => _minimumRemainingKnowledge;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MinimumRemainingKnowledge should be between 0 and 1");
+                }
+
+                _minimumRemainingKnowledge = value;
+            }
+        }
 
         /// <summary>
         ///     Forgetting mode is used to select the knowledges that will be forgotten.
@@ -122,11 +164,25 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
         ///// <example>Forgetting speed = -1 => 1/x</example>
         ///// <example>Forgetting speed = -2 => 1/x2</example>
         //public float ForgettingSpeed { get; set; } = 0;
+        private short _timeToLive = -1;
+
         /// <summary>
         ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
         ///     -1 for unlimited time to live
         /// </summary>
-        public short TimeToLive { get; set; } = -1;
+        public short TimeToLive
+        {
+            get => _timeToLive;
+            set
+            {
+                if (value < -1 )
+                {
+                    throw new ArgumentOutOfRangeException("TimeToLive should be >= -1");
+                }
+
+                _timeToLive = value;
+            }
+        }
 
         #endregion
 
