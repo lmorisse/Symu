@@ -1,4 +1,5 @@
-#CONTRIBUTING
+# CONTRIBUTING
+
 First off, thank you for considering contributing to SYMU. There are different ways to contribute to this project.
 Contributing start by using the framework and give feedbacks.
 
@@ -17,7 +18,7 @@ As a developper, such a framework brings great challenges to which you can contr
 As an academic, you can bring use cases, models that we will implement for you.
 This is very important because the value of this framework will be based on the richness of the library of models it uses.
 
-#HOW TO CONTRIBUTE
+# HOW TO CONTRIBUTE
 If you've noticed a bug or have a feature request, [make one][new issue]! It's
 generally best if you get confirmation of your bug or approval for your feature
 request this way before starting to code.
@@ -25,6 +26,17 @@ request this way before starting to code.
 If you have a general question about SYMU, If you've noticed a bug or have a feature request, you can [make one][new issue]!
 Every contibution is done via issues.
 General questions will feed the FAQs.
+
+## Getting started
+
+The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
+[SymuTools](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuTools) is a set of utilities for SymuEngine.
+Those two projects come with their test project, mainly unit tests. They are helpful for developers to understand how to use the framework.
+
+The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget).
+They also come with their test project, which are more integration tests and a guide to use this framework in batch mode.
+They allow you to discover, understand and configure each model, in this sense it is a good entry point.
+
 
 ## Fork & create a branch
 

@@ -19,16 +19,19 @@ They interact simultaneously in a shared environment that interacts in turn with
 
 ## Why open source
 
-Because we believe that such a framework is valuable for organizations and academics. And that academics can enrich use cases and models implemented in this framework.
+Because we believe that such a framework is valuable for organizations and academics.
+
+### Academic program
+
+Symu is based on a library of theoretical models:
+organization theory, social networks, socio-cultural environment, information diffusion, socio-technical environment…
+
+With our academic program, we will first implement models that you want to use for you.
 
 ## Getting Started
 The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
-[SymuTools](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuTools) is a set of utilities for SymuEngine.
-Those two projects come with their test project, mainly unit tests. They are helpful for developers to understand how to use the framework.
 
-The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget).
-They also come with their test project, which are more integration tests and a guide to use this framework in batch mode.
-They allow you to discover, understand and configure each model, in this sense it is a good entry point.
+The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget). They allow you to discover, understand and configure each model, in this sense it is a good entry point.
 
 ### Installing
 
