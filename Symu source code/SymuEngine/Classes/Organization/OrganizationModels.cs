@@ -36,6 +36,18 @@ namespace SymuEngine.Classes.Organization
         public bool FollowGroupKnowledge { get; set; }
 
         /// <summary>
+        ///     If set, the organizationEntity tasks metrics will be followed and stored during the simulation
+        /// </summary>
+        //TODO should be with IterationResult as Results Settings with cadence of feeds
+        public bool FollowTasks { get; set; }
+
+        /// <summary>
+        ///     If set, the organizationEntity blockers metrics will be followed and stored during the simulation
+        /// </summary>
+        //TODO should be with IterationResult as Results Settings with cadence of feeds
+        public bool FollowBlockers { get; set; }
+
+        /// <summary>
         ///     Agent knowledge learning model
         /// </summary>
         public ModelEntity Learning { get; set; } = new ModelEntity();
@@ -50,18 +62,21 @@ namespace SymuEngine.Classes.Organization
         ///     If false, will check new blockers only if there is no blocker
         /// </summary>
         public bool MultipleBlockers { get; set; }
+
         /// <summary>
         ///     Random generator modes in order to create random network
         /// </summary>
-        public RandomGenerator Generator { get; set; } = RandomGenerator.RandomUniform; 
-        /// <summary>
-        /// Define level of random for the simulation.
-        /// </summary>
-        public SimulationRandom RandomLevel { get; set; } = SimulationRandom.NoRandom;
-        public byte RandomLevelValue => (byte)RandomLevel;
+        public RandomGenerator Generator { get; set; } = RandomGenerator.RandomUniform;
 
         /// <summary>
-        /// Define the ratio of task splitting in intraday mode
+        ///     Define level of random for the simulation.
+        /// </summary>
+        public SimulationRandom RandomLevel { get; set; } = SimulationRandom.NoRandom;
+
+        public byte RandomLevelValue => (byte) RandomLevel;
+
+        /// <summary>
+        ///     Define the ratio of task splitting in intraday mode
         /// </summary>
         public float Intraday { get; set; } = 0.01F;
 

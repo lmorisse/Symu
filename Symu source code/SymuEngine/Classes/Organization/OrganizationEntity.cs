@@ -26,9 +26,9 @@ namespace SymuEngine.Classes.Organization
     //TODO should be an abstract class
     public class OrganizationEntity : AgentEntity
     {
-        public const byte classKey = SymuYellowPages.organization;
+        public const byte ClassKey = SymuYellowPages.Organization;
 
-        public OrganizationEntity(string name) : base(0, classKey, name)
+        public OrganizationEntity(string name) : base(0, ClassKey, name)
         {
         }
 

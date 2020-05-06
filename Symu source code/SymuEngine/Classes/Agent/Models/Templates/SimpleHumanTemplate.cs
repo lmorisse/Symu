@@ -52,7 +52,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates
             Cognitive.InteractionCharacteristics.MaximumMessagesSentPerPeriod = 1;
             Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod = false;
             Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod = 1;
-            // Done in the simulator
+            // AverageDone in the simulator
             // Cognitive.InteractionCharacteristics.PreferredCommunicationMediums ;
             // Tasks and performance
             Cognitive.TasksAndPerformance.CanPerformTask = true;

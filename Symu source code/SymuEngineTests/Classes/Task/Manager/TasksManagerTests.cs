@@ -79,7 +79,7 @@ namespace SymuEngineTests.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     TasksCHeck ToDo
+        ///     TasksCHeck AverageToDo
         /// </summary>
         [TestMethod]
         public void TasksCheckTest()
@@ -256,11 +256,13 @@ namespace SymuEngineTests.Classes.Task.Manager
         public void SelectNextTaskTest3()
         {
             _tasksLimit.LimitSimultaneousTasks = true;
-            _tasksLimit.MaximumSimultaneousTasks = 0;
+            _tasksLimit.MaximumSimultaneousTasks = 1;
             _tasksManager = new TasksManager(_tasksLimit);
-            var task = new SymuTask(0) {Type = "todo"};
-            _tasksManager.AddToDo(task);
-            Assert.IsNull(_tasksManager.SelectNextTask(0));
+            _tasksManager.AddInProgress(new SymuTask(0) {Type = "ip"});
+            _tasksManager.AddToDo(new SymuTask(0) {Type = "todo"});
+            // without the limit, the task to do should be pushed in progress
+            _tasksManager.SelectNextTask(0);
+            Assert.AreEqual(1, _tasksManager.ToDo.Count);
         }
 
         /// <summary>

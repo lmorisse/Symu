@@ -14,7 +14,7 @@ using Math = MathNet.Numerics.Distributions;
 
 #endregion
 
-namespace SymuTools.Classes.ProbabilityDistributions
+namespace SymuTools.ProbabilityDistributions
 {
     /// <summary>
     ///     The distribution describes an experiment where there is an arbitrary outcome that lies between certain bounds.

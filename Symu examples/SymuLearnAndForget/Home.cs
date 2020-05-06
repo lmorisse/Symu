@@ -14,16 +14,15 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
 using SymuEngine.Engine.Form;
-using SymuEngine.Environment.TimeStep;
+using SymuEngine.Environment;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuLearnAndForget.Classes;
-using SymuTools.Classes.Algorithm;
+using SymuTools.Algorithm;
 
 #endregion
 
@@ -56,7 +55,7 @@ namespace SymuLearnAndForget
             #region Learning
 
             cbLearningOn.Checked = true;
-            tbMicroLearningAgentRate.Text ="1";
+            tbMicroLearningAgentRate.Text = "1";
             cbHasInitialKnowledge.Checked = OrganizationEntity.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs
                 .HasInitialKnowledge;
             cbInitialKnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
@@ -100,7 +99,7 @@ namespace SymuLearnAndForget
             #region Forgetting
 
             cbForgettingOn.Checked = true;
-            tbForgettingAgentRate.Text ="1";
+            tbForgettingAgentRate.Text = "1";
             tbForgettingMean.Text =
                 OrganizationEntity.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean.ToString(
                     CultureInfo.InvariantCulture);
@@ -368,12 +367,6 @@ namespace SymuLearnAndForget
                 MessageBox.Show(exception.Message);
             }
         }
-
-        #region Nested type: SafeCallButtonDelegate
-
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
-
-        #endregion
 
         private void tbKnowledgeThreshold_TextChanged(object sender, EventArgs e)
         {
@@ -669,5 +662,11 @@ namespace SymuLearnAndForget
                 MessageBox.Show(exception.Message);
             }
         }
+
+        #region Nested type: SafeCallButtonDelegate
+
+        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
+
+        #endregion
     }
 }

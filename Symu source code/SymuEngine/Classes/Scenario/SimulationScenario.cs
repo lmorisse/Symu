@@ -21,7 +21,7 @@ namespace SymuEngine.Classes.Scenario
     public class SimulationScenario : Agent.Agent
     {
         public SimulationScenario(ushort key, object parent, SymuEnvironment environment) : base(
-            new AgentId(key, ScenarioEntity.classKey), environment)
+            new AgentId(key, ScenarioEntity.ClassKey), environment)
         {
             if (environment is null)
             {

@@ -27,7 +27,7 @@ namespace SymuEngine.Results.Organization
         /// <summary>
         ///     Set the classKey of the agents that we want to get the flexibility performance
         /// </summary>
-        private const byte ClassKey = SymuYellowPages.actor;
+        private const byte ClassKey = SymuYellowPages.Actor;
 
         /// <summary>
         ///     Network of the simulation

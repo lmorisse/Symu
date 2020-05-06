@@ -14,8 +14,8 @@ using System.Linq;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
-using static SymuTools.Classes.Algorithm.Constants;
+using SymuTools.ProbabilityDistributions;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 
@@ -98,7 +98,8 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             {
                 if (value > Bits.MaxBits)
                 {
-                    throw new ArgumentOutOfRangeException("MinimumNumberOfBitsOfKnowledgeToSend should be <= "+ Bits.MaxBits);
+                    throw new ArgumentOutOfRangeException("MinimumNumberOfBitsOfKnowledgeToSend should be <= " +
+                                                          Bits.MaxBits);
                 }
 
                 _minimumNumberOfBitsOfKnowledgeToSend = value;
@@ -117,7 +118,8 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             {
                 if (value > Bits.MaxBits)
                 {
-                    throw new ArgumentOutOfRangeException("MaximumNumberOfBitsOfKnowledgeToSend should be <= " + Bits.MaxBits);
+                    throw new ArgumentOutOfRangeException("MaximumNumberOfBitsOfKnowledgeToSend should be <= " +
+                                                          Bits.MaxBits);
                 }
 
                 _maximumNumberOfBitsOfKnowledgeToSend = value;

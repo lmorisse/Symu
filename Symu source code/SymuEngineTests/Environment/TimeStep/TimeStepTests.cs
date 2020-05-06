@@ -20,8 +20,8 @@ namespace SymuEngineTests.Environment.TimeStep
     //Ne pas passer en static
     public class TimeStepTests
     {
-        private readonly SymuEngine.Environment.TimeStep.TimeStep _timeStep =
-            new SymuEngine.Environment.TimeStep.TimeStep();
+        private readonly SymuEngine.Environment.TimeStep _timeStep =
+            new SymuEngine.Environment.TimeStep();
 
         [TestMethod]
         [DataRow(0)]

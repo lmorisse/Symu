@@ -39,8 +39,8 @@ namespace SymuEngineTests.Repository.Networks
         private readonly Network _network = new Network(new AgentTemplates());
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
-        private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.actor);
-        private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.actor);
+        private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
+        private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.Actor);
         private Belief _belief;
         private NetworkRole _networkRole;
 

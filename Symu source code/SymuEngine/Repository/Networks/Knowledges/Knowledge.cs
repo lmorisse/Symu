@@ -12,8 +12,8 @@
 using System;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
-using SymuTools.Classes.Algorithm;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.Algorithm;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 
@@ -33,6 +33,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
             {
                 throw new ArgumentOutOfRangeException("Length should be <= " + Bits.MaxBits);
             }
+
             Length = length;
         }
 

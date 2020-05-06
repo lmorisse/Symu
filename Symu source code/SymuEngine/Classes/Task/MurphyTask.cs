@@ -11,7 +11,7 @@
 
 using System;
 using SymuEngine.Classes.Murphies;
-using static SymuTools.Classes.Algorithm.Constants;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 
@@ -22,8 +22,8 @@ namespace SymuEngine.Classes.Task
     /// </summary>
     public class MurphyTask : Murphy
     {
-        public const float noRequiredBits = 0;
-        public const float fullRequiredBits = 2;
+        public const float NoRequiredBits = 0;
+        public const float FullRequiredBits = 2;
 
         /// <summary>
         ///     MandatoryBits = RequiredBits / RequiredMandatoryRatio
@@ -52,7 +52,7 @@ namespace SymuEngine.Classes.Task
         public static float RequiredBitsRatio(float level)
         {
             // For unit tests
-            if (Math.Abs(level - fullRequiredBits) < Tolerance)
+            if (Math.Abs(level - FullRequiredBits) < Tolerance)
             {
                 return 1;
             }

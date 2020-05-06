@@ -77,24 +77,6 @@ namespace SymuEngineTests.Classes.Agent.Models.CognitiveArchitecture
         /// <summary>
         ///     WIth stochastic effect
         ///     Passing test
-        ///     MinimumKnowledgeToSendPerBit > 1
-        /// </summary>
-        [TestMethod]
-        public void AskKnowledgeToSendTest2()
-        {
-            _messageContent.CanSendKnowledge = true;
-            _messageContent.MinimumKnowledgeToSendPerBit = 2;
-            _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
-            _messageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 2;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            Assert.IsNull(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledgeF, 0, _emailTemplate, out _));
-        }
-
-        /// <summary>
-        ///     WIth stochastic effect
-        ///     Passing test
         ///     MinimumKnowledgeToSendPerBit = 1
         /// </summary>
         [TestMethod]

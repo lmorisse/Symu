@@ -14,7 +14,7 @@ using Math = MathNet.Numerics.Distributions;
 
 #endregion
 
-namespace SymuTools.Classes.ProbabilityDistributions
+namespace SymuTools.ProbabilityDistributions
 {
     /// <summary>
     ///     the discrete uniform distribution is a symmetric probability distribution wherein a finite number of values are

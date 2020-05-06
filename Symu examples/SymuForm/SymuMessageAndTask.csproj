@@ -8,8 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{998C00B3-6A46-41D7-9140-57E1D07A7B6D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Symu</RootNamespace>
-    <AssemblyName>Symu</AssemblyName>
+    <RootNamespace>SymuMessageAndTask</RootNamespace>
+    <AssemblyName>SymuMessageAndTask</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -115,6 +115,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

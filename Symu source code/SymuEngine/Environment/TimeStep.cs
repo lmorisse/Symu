@@ -13,17 +13,17 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Environment.TimeStep
+namespace SymuEngine.Environment
 {
     /// <summary>
     ///     TimeStep is used to manage TimeStep depending on the TimeStepType
     /// </summary>
     public class TimeStep
     {
-        public const byte constWeek = 7;
-        public const byte constMonth = 30;
-        public const byte constQuarter = 90;
-        public const ushort constYear = 365;
+        public const byte ConstWeek = 7;
+        public const byte ConstMonth = 30;
+        public const byte ConstQuarter = 90;
+        public const ushort ConstYear = 365;
         private ushort _step;
 
         public TimeStepType Type { get; set; } = TimeStepType.Daily;
@@ -62,11 +62,13 @@ namespace SymuEngine.Environment.TimeStep
                         return (byte) Math.Floor(Step / 52.0F);
                     case TimeStepType.Monthly:
                         return (byte) Math.Floor(Step / 12.0F);
+                    case TimeStepType.Intraday:
                     case TimeStepType.Daily:
-                        return (byte) Math.Floor((float) Step / constYear);
-                    //case TimeStepType.Yearly:
-                    default:
+                        return (byte) Math.Floor((float) Step / ConstYear);
+                    case TimeStepType.Yearly:
                         return (byte) Step;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -81,38 +83,39 @@ namespace SymuEngine.Environment.TimeStep
             {
                 switch (Type)
                 {
-                    case TimeStepType.Weekly:
-                        return (ushort) (Step * constWeek);
-                    case TimeStepType.Monthly:
-                        return (ushort) (Step * constMonth);
-                    case TimeStepType.Yearly:
-                        return (ushort) (Step * constYear);
-                    //case TimeStepType.Intraday:
-                    //case TimeStepType.Yearly:
-                    default:
+                    case TimeStepType.Intraday:
+                    case TimeStepType.Daily:
                         return Step;
+                    case TimeStepType.Weekly:
+                        return (ushort) (Step * ConstWeek);
+                    case TimeStepType.Monthly:
+                        return (ushort) (Step * ConstMonth);
+                    case TimeStepType.Yearly:
+                        return (ushort) (Step * ConstYear);
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
 
         private static bool SetIsEndOfWeek(ushort day)
         {
-            return day % constWeek == 0;
+            return day % ConstWeek == 0;
         }
 
         private static bool SetIsEndOfMonth(ushort day)
         {
-            return day % constMonth == 0;
+            return day % ConstMonth == 0;
         }
 
         private static bool SetIsEndOfQuarter(ushort day)
         {
-            return day % constQuarter == 0;
+            return day % ConstQuarter == 0;
         }
 
         private static bool SetIsEndOfYear(ushort day)
         {
-            return day % constYear == 0;
+            return day % ConstYear == 0;
         }
 
         public static bool SetIsWorkingDay(ushort day)

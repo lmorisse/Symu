@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuForm
+// Description: Symu - SymuMessageAndTask
 // Website: Website:     https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -17,12 +17,12 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("Symu")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SymuMessageAndTask")]
+[assembly: AssemblyDescription("Symu message and task models")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("Symu.org")]
 [assembly: AssemblyProduct("Symu")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2020")]
+[assembly: AssemblyCopyright("Copyright © Symu.org 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

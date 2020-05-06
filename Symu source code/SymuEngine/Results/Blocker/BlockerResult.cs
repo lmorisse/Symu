@@ -17,7 +17,7 @@ namespace SymuEngine.Results.Blocker
         public int InProgress { get; set; }
 
         /// <summary>
-        ///     Number of blockers Done
+        ///     Number of blockers AverageDone
         /// </summary>
         public int Done { get; set; }
 

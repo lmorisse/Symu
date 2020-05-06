@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuForm
+// Description: Symu - SymuMessageAndTask
 // Website: Website:     https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,28 +9,100 @@
 
 #region using directives
 
+using System;
 using SymuEngine.Classes.Agent.Models.Templates.Communication;
-using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Environment.TimeStep;
-using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace Symu.Classes
+namespace SymuMessageAndTask.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        private readonly Knowledge _knowledge = new Knowledge(1, "1", 50);
-        public int WorkersCount { get; set; }
+        private float _costOfTask = 1F;
+
+        private float _initialCapacity = 1F;
+
+        private int _numberOfTasks = 1;
+
+        private float _switchingContextCost = 1F;
+        private int _workersCount = 5;
+
+        public int WorkersCount
+        {
+            get => _workersCount;
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new ArgumentOutOfRangeException("WorkersCount should be > 0");
+                }
+
+                _workersCount = value;
+            }
+        }
+
+        public float InitialCapacity
+        {
+            get => _initialCapacity;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("InitialCapacity should be >= 0");
+                }
+
+                _initialCapacity = value;
+            }
+        }
+
+        public int NumberOfTasks
+        {
+            get => _numberOfTasks;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("NumberOfTasks should be >= 0");
+                }
+
+                _numberOfTasks = value;
+            }
+        }
+
+        public float CostOfTask
+        {
+            get => _costOfTask;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("CostOfTask should be >= 0");
+                }
+
+                _costOfTask = value;
+            }
+        }
+
+        public float SwitchingContextCost
+        {
+            get => _switchingContextCost;
+            set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException("SwitchingContextCost should be >= 1");
+                }
+
+                _switchingContextCost = value;
+            }
+        }
 
         public override void SetModelForAgents()
         {
             base.SetModelForAgents();
-            TimeStep.Type = TimeStepType.Intraday;
-            WhitePages.Network.NetworkCommunications.Email.CostToSendLevel = GenericLevel.None;
-            WhitePages.Network.NetworkCommunications.Email.CostToReceiveLevel = GenericLevel.None;
-            WhitePages.Network.AddKnowledge(_knowledge);
+            Organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.IsolationIsRandom = true;
+            Organization.Models.FollowTasks = true;
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             for (var i = 0; i < WorkersCount; i++)
             {
@@ -41,7 +113,6 @@ namespace Symu.Classes
                 CommunicationTemplate communication = new EmailTemplate();
                 WhitePages.Network.AddEmail(actor.Id, communication);
                 WhitePages.Network.AddMemberToGroup(actor.Id, 100, group.Id);
-                actor.LearnNewKnowledge(_knowledge.Id, 0);
             }
         }
     }

@@ -10,12 +10,12 @@
 #region using directives
 
 using System;
-using SymuTools.Classes.Algorithm;
+using SymuTools.Algorithm;
 using Math = MathNet.Numerics.Distributions;
 
 #endregion
 
-namespace SymuTools.Classes.ProbabilityDistributions
+namespace SymuTools.ProbabilityDistributions
 {
     /// <summary>
     ///     a normal (or Gaussian or Gauss or Laplace–Gauss) distribution is a type of continuous probability distribution for

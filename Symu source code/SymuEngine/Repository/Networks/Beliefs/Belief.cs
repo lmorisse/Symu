@@ -11,7 +11,7 @@
 
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 

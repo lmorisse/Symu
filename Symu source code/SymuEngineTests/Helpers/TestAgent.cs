@@ -22,7 +22,7 @@ namespace SymuEngineTests.Helpers
     /// </summary>
     internal sealed class TestAgent : Agent
     {
-        public static byte ClassKey = SymuYellowPages.actor;
+        public static byte ClassKey = SymuYellowPages.Actor;
 
         public TestAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment)
         {

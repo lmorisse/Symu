@@ -16,12 +16,11 @@ using System.Threading;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
-using SymuEngine.Environment.TimeStep;
 using SymuEngine.Messaging.Log;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
 using SymuEngine.Results;
-using SymuTools.Classes;
+using SymuTools;
 
 #endregion
 
@@ -32,6 +31,11 @@ namespace SymuEngine.Environment
     /// </summary>
     public abstract class SymuEnvironment
     {
+        protected SymuEnvironment()
+        {
+            IterationResult = new IterationResult(this);
+        }
+
         public OrganizationEntity Organization { get; protected set; }
 
         /// <summary>
@@ -40,7 +44,7 @@ namespace SymuEngine.Environment
         /// </summary>
         public WhitePages WhitePages { get; private set; }
 
-        public IterationResult IterationResult { get; set; } = new IterationResult();
+        public IterationResult IterationResult { get; set; }
 
         /// <summary>
         ///     State of the environment
@@ -57,7 +61,7 @@ namespace SymuEngine.Environment
         /// <summary>
         ///     Manage interaction steps
         /// </summary>
-        public TimeStep.TimeStep TimeStep { get; set; } = new TimeStep.TimeStep();
+        public TimeStep TimeStep { get; set; } = new TimeStep();
 
         /// <summary>
         ///     Use to log messages in the simulation
@@ -127,7 +131,7 @@ namespace SymuEngine.Environment
         /// </returns>
         public bool StopIteration()
         {
-            return WhitePages.FilteredAgentsByClassCount(SymuYellowPages.scenario) == 0;
+            return WhitePages.FilteredAgentsByClassCount(SymuYellowPages.Scenario) == 0;
         }
 
         /// <summary>
@@ -139,7 +143,7 @@ namespace SymuEngine.Environment
         {
             Messages.Clear();
             State.Clear();
-            IterationResult.Clear(this);
+            IterationResult.Clear();
             WhitePages.Clear();
             WhitePages.Network.NetworkKnowledges.Model =
                 Organization.Models.Generator;
@@ -159,7 +163,7 @@ namespace SymuEngine.Environment
 
         public List<SimulationScenario> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.ClassKey == SymuYellowPages.scenario);
+            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.ClassKey == SymuYellowPages.Scenario);
 
             return scenarioIds.Select(scenarioId => WhitePages.GetAgent<SimulationScenario>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
@@ -328,6 +332,7 @@ namespace SymuEngine.Environment
         {
             WhitePages.AllAgents().ToList().ForEach(a => a.PostStep());
             Messages.ClearMessagesSent(TimeStep.Step);
+            IterationResult.PostStep(TimeStep.Step);
             TimeStep.Step++;
         }
 

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SymuEngine.Messaging.Message;
-using static SymuTools.Classes.Algorithm.Constants;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 
@@ -22,7 +22,7 @@ namespace SymuEngine.Classes.Task.Manager
 {
     /// <summary>
     ///     Async tasks manager for agent
-    ///     Tasks have 3 states : To Do, In progress, Done
+    ///     Tasks have 3 states : To Do, In progress, AverageDone
     ///     Tasks limits are managed
     /// </summary>
     public class TasksManager
@@ -40,6 +40,11 @@ namespace SymuEngine.Classes.Task.Manager
         ///     Total tasks done by the agent during the simulation
         /// </summary>
         public ushort TotalTasksNumber { get; private set; }
+
+        /// <summary>
+        ///     Total weight of tasks done by the agent during the simulation
+        /// </summary>
+        public float TotalWeightDone { get; private set; }
 
         /// <summary>
         ///     Tasks to do
@@ -85,17 +90,33 @@ namespace SymuEngine.Classes.Task.Manager
             }
 
             ToDo.Add(task);
+            TrackTotalTasksNumber(task);
+        }
+
+        private void TrackTotalTasksNumber(SymuTask task)
+        {
+            // We don't want to track message as Task
+            if (task.Parent is Message)
+            {
+                return;
+            }
+
             TotalTasksNumber += 1;
         }
 
         /// <summary>
-        ///     Add a task directly in InProgress
+        ///     Add a task directly in AverageInProgress
         /// </summary>
         /// <param name="task"></param>
         public void AddInProgress(SymuTask task)
         {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
             InProgress.Add(task);
-            TotalTasksNumber += 1;
+            TrackTotalTasksNumber(task);
         }
 
         /// <summary>
@@ -128,6 +149,7 @@ namespace SymuEngine.Classes.Task.Manager
             task.SetDone();
             InProgress.Remove(task);
             Done.Add(task);
+            TotalWeightDone += task.Weight;
         }
 
         /// <summary>
@@ -265,27 +287,15 @@ namespace SymuEngine.Classes.Task.Manager
                 return symuTask;
             }
 
+            // First push new tasks to do in progress depending of the multi tasking model of the agent
+            while (ToDo.Any() && !HasReachedSimultaneousMaximumLimit)
+            {
+                var task = PrioritizeNextTask(ToDo);
+                PushInProgress(task);
+            }
+
             // Then check tasks already in progress but non blocked today
-            var taskInProgress = PrioritizeNextTask(GetTasksInProgress(step));
-            if (taskInProgress != null)
-            {
-                return taskInProgress;
-            }
-
-            // Check if Worker has reached the maximum number of simultaneous tasks he can do during a step
-            if (HasReachedSimultaneousMaximumLimit)
-            {
-                return null;
-            }
-
-            // Finally, the agent start a new task by pulling it from the to do list
-            taskInProgress = PrioritizeNextTask(ToDo);
-            if (taskInProgress != null)
-            {
-                PushInProgress(taskInProgress);
-            }
-
-            return taskInProgress;
+            return PrioritizeNextTask(GetTasksInProgress(step));
         }
 
         private bool SelectNextMessage(CommunicationMediums medium, out SymuTask symuTask)

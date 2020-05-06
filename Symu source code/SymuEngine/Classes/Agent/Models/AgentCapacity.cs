@@ -9,7 +9,7 @@
 
 #region using directives
 
-using static SymuTools.Classes.Algorithm.Constants;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 

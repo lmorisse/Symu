@@ -12,8 +12,8 @@
 using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
-using static SymuTools.Classes.Algorithm.Constants;
+using SymuTools.ProbabilityDistributions;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 

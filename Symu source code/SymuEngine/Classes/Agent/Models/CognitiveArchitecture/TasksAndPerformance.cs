@@ -16,8 +16,8 @@ using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
-using static SymuTools.Classes.Algorithm.Constants;
+using SymuTools.ProbabilityDistributions;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 
@@ -69,6 +69,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             tasksAndPerformance.CostFactorOfLearningByDoing = CostFactorOfLearningByDoing;
             tasksAndPerformance.LearningStandardDeviation = LearningStandardDeviation;
             tasksAndPerformance.CanPerformTask = CanPerformTask;
+            tasksAndPerformance.CanPerformTaskOnWeekEnds = CanPerformTaskOnWeekEnds;
             LearningModel.CopyTo(tasksAndPerformance.LearningModel);
             TasksLimit.CopyTo(tasksAndPerformance.TasksLimit);
         }
@@ -359,7 +360,17 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
 
         #region Activities
 
+        /// <summary>
+        ///     If set true, agent will be able to perform task if agent has some tasks to perform
+        ///     If set to false, agent won't perform any task even if he has some tasks to perform
+        /// </summary>
         public bool CanPerformTask { get; set; }
+
+        /// <summary>
+        ///     If set true, agent will be able to perform task on weekends if agent has some tasks to perform
+        ///     If set to false, agent won't perform any task on weekends even if he has some tasks to perform
+        /// </summary>
+        public bool CanPerformTaskOnWeekEnds { get; set; }
 
         /// <summary>
         ///     Get all the activities of an agent

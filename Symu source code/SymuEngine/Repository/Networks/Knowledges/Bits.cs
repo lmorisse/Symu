@@ -26,6 +26,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         ///     Maximum number of Bits
         /// </summary>
         public const byte MaxBits = 100;
+
         /// <summary>
         ///     Array of bits
         ///     Every bit is a float of range [0, 1]

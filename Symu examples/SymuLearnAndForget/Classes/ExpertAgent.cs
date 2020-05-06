@@ -42,7 +42,7 @@ namespace SymuLearnAndForget.Classes
             base.ActMessage(message);
             switch (message.Subject)
             {
-                case SymuYellowPages.knowledge:
+                case SymuYellowPages.Knowledge:
                     ActKnowledge(message);
                     break;
             }

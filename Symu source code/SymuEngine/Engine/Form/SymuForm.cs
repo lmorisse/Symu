@@ -16,7 +16,6 @@ using SymuEngine.Classes.Murphies;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Environment.TimeStep;
 
 #endregion
 

@@ -10,8 +10,8 @@
 #region using directives
 
 using System;
-using SymuTools.Classes;
-using SymuTools.Classes.Algorithm;
+using SymuTools;
+using SymuTools.Algorithm;
 
 #endregion
 

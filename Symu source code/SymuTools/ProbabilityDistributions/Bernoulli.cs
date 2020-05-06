@@ -13,7 +13,7 @@ using Math = MathNet.Numerics.Distributions;
 
 #endregion
 
-namespace SymuTools.Classes.ProbabilityDistributions
+namespace SymuTools.ProbabilityDistributions
 {
     /// <summary>
     ///     the discrete probability distribution of a random variable which takes the value 1 with probability p

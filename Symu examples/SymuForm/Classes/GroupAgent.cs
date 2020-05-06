@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuForm
+// Description: Symu - SymuMessageAndTask
 // Website: Website:     https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,8 +10,8 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models.Templates;
 using SymuEngine.Classes.Task;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Message;
@@ -19,7 +19,7 @@ using SymuEngine.Repository;
 
 #endregion
 
-namespace Symu.Classes
+namespace SymuMessageAndTask.Classes
 {
     public sealed class GroupAgent : Agent
     {
@@ -29,13 +29,8 @@ namespace Symu.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(new StandardAgentTemplate());
+            SetCognitive(Environment.Organization.Templates.Standard);
         }
-
-        /// <summary>
-        ///     Total tasks done by the agent during the simulation
-        /// </summary>
-        public ushort TotalTasksDone { get; private set; }
 
         public override void ActMessage(Message message)
         {
@@ -47,7 +42,7 @@ namespace Symu.Classes
             base.ActMessage(message);
             switch (message.Subject)
             {
-                case SymuYellowPages.tasks:
+                case SymuYellowPages.Tasks:
                     ActTasks(message);
                     break;
             }
@@ -58,22 +53,35 @@ namespace Symu.Classes
             switch (message.Action)
             {
                 case MessageAction.Ask:
-                    // Create the next task 
-                    var task = new SymuTask(0)
-                    {
-                        Parent = TimeStep.Step,
-                        Weight = 1
-                    };
-                    // Send it to the sender
-                    var reply = Message.ReplyMessage(message);
-                    reply.Attachments = new MessageAttachments();
-                    reply.Attachments.Add(task);
-                    Send(reply);
-                    break;
-                case MessageAction.Handle:
-                    TotalTasksDone += (ushort) message.Attachments.First;
+                    AskTask(message);
                     break;
             }
+        }
+
+        private void AskTask(Message message)
+        {
+            if (!(Environment is ExampleEnvironment environment))
+            {
+                return;
+            }
+
+            var tasks = new List<SymuTask>();
+            for (var i = 0; i < environment.NumberOfTasks; i++)
+            {
+                // Create the next task 
+                var task = new SymuTask(0)
+                {
+                    Parent = TimeStep.Step,
+                    Weight = environment.CostOfTask
+                };
+                tasks.Add(task);
+            }
+
+            // Send it to the sender
+            var reply = Message.ReplyMessage(message);
+            reply.Attachments = new MessageAttachments();
+            reply.Attachments.Add(tasks);
+            Send(reply);
         }
     }
 }

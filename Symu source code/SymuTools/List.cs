@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuTools.Classes
+namespace SymuTools
 {
     public static class List
     {

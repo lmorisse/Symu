@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuForm
+// Description: Symu - SymuMessageAndTask
 // Website: Website:     https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,45 +10,31 @@
 #region using directives
 
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models.Templates;
 using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Common;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
 
 #endregion
 
-namespace Symu.Classes
+namespace SymuMessageAndTask.Classes
 {
     public sealed class PersonAgent : Agent
     {
         public const byte ClassKey = 2;
-        private readonly Database _wiki;
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(new SimpleHumanTemplate());
-            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Medium;
-            Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
+            SetCognitive(Environment.Organization.Templates.SimpleHuman);
             // Communication medium
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                CommunicationMediums.Email | CommunicationMediums.ViaAPlatform;
-            _wiki = Environment.WhitePages.Network.NetworkDatabases.Repository.List.First();
+                CommunicationMediums.Email;
         }
-
-        /// <summary>
-        ///     Total tasks done by the agent during the simulation
-        /// </summary>
-        public ushort WeekTotalTasksDone { get; private set; }
 
         public AgentId GroupId { get; set; }
 
@@ -61,38 +47,25 @@ namespace Symu.Classes
         public override void GetNewTasks()
         {
             //Ask a task to the group
-            Send(GroupId, MessageAction.Ask, SymuYellowPages.tasks, CommunicationMediums.Email);
+            Send(GroupId, MessageAction.Ask, SymuYellowPages.Tasks, CommunicationMediums.Email);
         }
 
         private void AfterSetTaskDone(object sender, TaskEventArgs e)
         {
             if (!(e.Task.Parent is Message))
             {
-                WeekTotalTasksDone++;
+                // warns the group that he has performed the task
+                Send(GroupId, MessageAction.Close, SymuYellowPages.Tasks, CommunicationMediums.Email);
             }
-
-            // The task is about find information about the knowledge
-            var knowledgeId = GetKnowledgeId();
-            var knowledgeLength = GetKnowledgeLength();
-            var bits = new Bits(0);
-            bits.InitializeWith0(knowledgeLength);
-            // the learning is done randomly on the knowledgeBits
-            var index = DiscreteUniform.SampleToByte(0, (byte) (knowledgeLength - 1));
-            bits.SetBit(index, 1);
-            // Agent is learning
-            Cognitive.TasksAndPerformance.Learn(knowledgeId, bits, 1, Cognitive.InternalCharacteristics, TimeStep.Step);
-            // the knowledge is stored in a wiki
-            _wiki.StoreKnowledge(knowledgeId, bits, 1, TimeStep.Step);
         }
 
-        private ushort GetKnowledgeId()
+        /// <summary>
+        ///     Use to set the baseline value of the initial capacity
+        /// </summary>
+        /// <returns></returns>
+        public override void SetInitialCapacity()
         {
-            return Environment.WhitePages.Network.NetworkKnowledges.GetKnowledgeIds(Id).First();
-        }
-
-        private byte GetKnowledgeLength()
-        {
-            return Environment.WhitePages.Network.NetworkKnowledges.GetKnowledge(GetKnowledgeId()).Length;
+            Capacity.Initial = ((ExampleEnvironment) Environment).InitialCapacity;
         }
 
         protected override void ActClassKey(Message message)
@@ -105,7 +78,7 @@ namespace Symu.Classes
             base.ActClassKey(message);
             switch (message.Subject)
             {
-                case SymuYellowPages.tasks:
+                case SymuYellowPages.Tasks:
                     ActTasks(message);
                     break;
             }
@@ -118,18 +91,34 @@ namespace Symu.Classes
                 return;
             }
 
-            // Get a new task
-            var task = message.Attachments.First as SymuTask;
-            TaskProcessor.Post(task);
+            // Get new tasks
+            if (message.Attachments.First is List<SymuTask> tasks)
+            {
+                foreach (var task in tasks)
+                {
+                    TaskProcessor.Post(task);
+                }
+            }
         }
 
         public override void ActEndOfWeek()
         {
             base.ActEndOfWeek();
-            var attachments = new MessageAttachments();
-            attachments.Add(WeekTotalTasksDone);
-            Send(GroupId, MessageAction.Handle, SymuYellowPages.tasks, attachments, CommunicationMediums.Email);
-            WeekTotalTasksDone = 0;
+            // warns the group that he is leaving for the weekend
+            Send(GroupId, MessageAction.Stop, SymuYellowPages.EndOfWeek, CommunicationMediums.Email);
+        }
+
+        public override void ActEndOfDay()
+        {
+            base.ActEndOfDay();
+            // warns the group that he has finished his day
+            Send(GroupId, MessageAction.Stop, SymuYellowPages.WorkingDay, CommunicationMediums.Email);
+        }
+
+        public override void SwitchingContextModel()
+        {
+            var switchingContextCost = ((ExampleEnvironment) Environment).SwitchingContextCost;
+            Capacity.Multiply(1 / switchingContextCost);
         }
     }
 }

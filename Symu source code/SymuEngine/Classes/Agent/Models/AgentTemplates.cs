@@ -26,6 +26,7 @@ namespace SymuEngine.Classes.Agent.Models
     /// </example>
     public class AgentTemplates
     {
+        public StandardAgentTemplate Standard { get; } = new StandardAgentTemplate();
         public SimpleHumanTemplate SimpleHuman { get; } = new SimpleHumanTemplate();
         public EmailTemplate Email { get; } = new EmailTemplate();
         public FaceToFaceTemplate FaceToFace { get; } = new FaceToFaceTemplate();

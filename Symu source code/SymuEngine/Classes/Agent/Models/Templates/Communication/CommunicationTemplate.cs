@@ -11,7 +11,7 @@
 
 using System;
 using SymuEngine.Common;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 
@@ -23,6 +23,8 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
     /// </summary>
     public class CommunicationTemplate : CognitiveArchitectureTemplate
     {
+        private float _maxRateLearnable = 1;
+
         public CommunicationTemplate()
         {
             // Knowledge & Beliefs
@@ -70,8 +72,6 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
         /// <example>time spent to read an email</example>
         public GenericLevel CostToReceiveLevel { get; set; } = GenericLevel.Medium;
 
-        private float _maxRateLearnable = 1;
-
         /// <summary>
         ///     Maximum rate learnable the message can be
         ///     Range [0;1]
@@ -109,8 +109,7 @@ namespace SymuEngine.Classes.Agent.Models.Templates.Communication
             switch (level)
             {
                 case GenericLevel.None:
-                    cost = 0;
-                    break;
+                    return 0;
                 case GenericLevel.VeryLow:
                     cost = 0.05F;
                     break;

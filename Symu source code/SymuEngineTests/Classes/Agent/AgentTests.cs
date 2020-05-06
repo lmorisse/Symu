@@ -68,15 +68,6 @@ namespace SymuEngineTests.Classes.Agent
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
 
-        [TestMethod]
-        public void StateAgentTests()
-        {
-            _agent.State = AgentState.Stopping;
-            Assert.AreEqual(AgentState.Stopping, _agent.State);
-            _environment.ManageAgentsToStop();
-            Assert.AreEqual(AgentState.Stopped, _agent.State);
-        }
-
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -103,6 +94,78 @@ namespace SymuEngineTests.Classes.Agent
             _agent.Capacity.Set(1);
             _agent.OnBeforeSendMessage(message);
             Assert.IsTrue(_agent.Capacity.Actual < 1);
+        }
+
+        #endregion
+
+        #region status
+
+        [TestMethod]
+        public void StateAgentTests()
+        {
+            _agent.State = AgentState.Stopping;
+            Assert.AreEqual(AgentState.Stopping, _agent.State);
+            _environment.ManageAgentsToStop();
+            Assert.AreEqual(AgentState.Stopped, _agent.State);
+        }
+
+        /// <summary>
+        ///     Isolated
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest()
+        {
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
+            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
+            Assert.IsFalse(_agent.IsPerformingTask());
+        }
+
+        /// <summary>
+        ///     non Isolated, can't perform task
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest1()
+        {
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            _agent.Cognitive.TasksAndPerformance.CanPerformTask = false;
+            _agent.Environment.TimeStep.Step = 1;
+            Assert.IsFalse(_agent.IsPerformingTask());
+        }
+
+        /// <summary>
+        ///     non Isolated, can perform task
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest2()
+        {
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _agent.Environment.TimeStep.Step = 1;
+            Assert.IsTrue(_agent.IsPerformingTask());
+        }
+
+        /// <summary>
+        ///     non Isolated, can't perform task on weekend
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest3()
+        {
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
+            _agent.Environment.TimeStep.Step = 5;
+            Assert.IsFalse(_agent.IsPerformingTask());
+        }
+
+        /// <summary>
+        ///     non Isolated, can't perform task on weekend
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest4()
+        {
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _agent.Environment.TimeStep.Step = 5;
+            Assert.IsTrue(_agent.IsPerformingTask());
         }
 
         #endregion
@@ -595,7 +658,7 @@ namespace SymuEngineTests.Classes.Agent
             Assert.IsNull(_environment.Messages.MessagesSentByAgent(0, _agent.Id));
             Assert.IsFalse(_environment.Messages.LastSentMessages.Any);
             // Agent1
-            Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerPeriod);
+            Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerPeriod);
         }
 
         #endregion
@@ -744,7 +807,7 @@ namespace SymuEngineTests.Classes.Agent
         {
             _agent.Start();
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.subscribe);
+            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
             _agent.RemoveSubscribe(message);
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
         }
@@ -759,7 +822,7 @@ namespace SymuEngineTests.Classes.Agent
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 2);
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 3);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.subscribe);
+            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
             _agent.RemoveSubscribe(message);
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));
@@ -773,7 +836,7 @@ namespace SymuEngineTests.Classes.Agent
             var attachments = new MessageAttachments();
             attachments.Add((byte) 1);
             attachments.Add((byte) 2);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Add, SymuYellowPages.subscribe, attachments);
+            var message = new Message(_agent.Id, _agent.Id, MessageAction.Add, SymuYellowPages.Subscribe, attachments);
             _agent.AddSubscribe(message);
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));
@@ -814,7 +877,7 @@ namespace SymuEngineTests.Classes.Agent
         public void GetFilteredKnowledgeToSendTest2()
         {
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 2;
+            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
             Assert.IsNull(_agent.FilterKnowledgeToSend(_agentKnowledge.KnowledgeId, 0, _emailTemplate));
         }
 
@@ -1006,7 +1069,8 @@ namespace SymuEngineTests.Classes.Agent
         [TestMethod]
         public void HandleStatusTest()
         {
-            _agent.Capacity.Initial = 0;
+            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
             _agent.HandleStatus();
             Assert.AreEqual(AgentStatus.Offline, _agent.Status);
         }
@@ -1017,8 +1081,8 @@ namespace SymuEngineTests.Classes.Agent
         [TestMethod]
         public void HandleStatusTest1()
         {
-            _agent.Start();
-            _agent.Capacity.Initial = 1;
+            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.HandleStatus();
             Assert.AreEqual(AgentStatus.Available, _agent.Status);
         }

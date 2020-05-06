@@ -14,7 +14,7 @@ using Math = MathNet.Numerics.Distributions;
 
 #endregion
 
-namespace SymuTools.Classes.ProbabilityDistributions
+namespace SymuTools.ProbabilityDistributions
 {
     /// <summary>
     ///     a categorical distribution (also called a generalized Bernoulli distribution, multinoulli distribution[1]) is a

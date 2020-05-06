@@ -13,7 +13,7 @@ using System;
 using SymuEngine.Classes.Agent;
 using SymuEngine.Classes.Task.Knowledge;
 using SymuEngine.Common;
-using static SymuTools.Classes.Algorithm.Constants;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 

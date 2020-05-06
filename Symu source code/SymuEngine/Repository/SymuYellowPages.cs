@@ -25,26 +25,26 @@ namespace SymuEngine.Repository
         /// <summary>
         ///     From 0 to 19
         /// </summary>
-        public const byte stop = 0;
+        public const byte Stop = 0;
 
-        public const byte preStep = 1;
-        public const byte workingDay = 2;
-        public const byte cadence = 3;
-        public const byte endOfYear = 4;
-        public const byte endOfMonth = 5;
-        public const byte endOfWeek = 6;
+        public const byte PreStep = 1;
+        public const byte WorkingDay = 2;
+        public const byte Cadence = 3;
+        public const byte EndOfYear = 4;
+        public const byte EndOfMonth = 5;
+        public const byte EndOfWeek = 6;
 
         /// <summary>
         ///     ClassKey
         /// </summary>
-        public const byte knowledge = 7;
+        public const byte Knowledge = 7;
 
-        public const byte subscribe = 8;
-        public const byte timer = 10;
-        public const byte scenario = 11;
+        public const byte Subscribe = 8;
+        public const byte Timer = 10;
+        public const byte Scenario = 11;
 
-        public const byte organization = 12;
-        public const byte actor = 13;
-        public const byte tasks = 14;
+        public const byte Organization = 12;
+        public const byte Actor = 13;
+        public const byte Tasks = 14;
     }
 }

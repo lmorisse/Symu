@@ -13,7 +13,7 @@ using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 
@@ -175,7 +175,7 @@ namespace SymuEngine.Classes.Agent.Models.CognitiveArchitecture
             get => _timeToLive;
             set
             {
-                if (value < -1 )
+                if (value < -1)
                 {
                     throw new ArgumentOutOfRangeException("TimeToLive should be >= -1");
                 }

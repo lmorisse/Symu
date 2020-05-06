@@ -9,11 +9,11 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using SymuEngine.Environment;
 using SymuEngine.Results.Blocker;
 using SymuEngine.Results.Organization;
+using SymuEngine.Results.Task;
 
 #endregion
 
@@ -21,6 +21,13 @@ namespace SymuEngine.Results
 {
     public class IterationResult
     {
+        private readonly SymuEnvironment _environment;
+
+        public IterationResult(SymuEnvironment environment)
+        {
+            _environment = environment;
+        }
+
         /// <summary>
         ///     Number of iterations
         /// </summary>
@@ -54,22 +61,23 @@ namespace SymuEngine.Results
         /// </summary>
         public BlockerResults Blockers { get; private set; }
 
+        /// <summary>
+        ///     Get the Tasks model metrics
+        /// </summary>
+        public TaskResults Tasks { get; private set; }
+
         public float Capacity { get; set; }
 
         //Specific results
         public List<PostProcessResult> SpecificResults { get; } = new List<PostProcessResult>();
 
-        public virtual void Clear(SymuEnvironment environment)
+        public virtual void Clear()
         {
-            if (environment is null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            OrganizationFlexibility = new OrganizationFlexibility(environment);
-            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(environment.WhitePages.Network,
-                environment.Organization.Models);
+            OrganizationFlexibility = new OrganizationFlexibility(_environment);
+            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
+                _environment.Organization.Models);
             Blockers = new BlockerResults();
+            Tasks = new TaskResults();
             Iteration = 0;
             Step = 0;
             Success = false;
@@ -78,6 +86,16 @@ namespace SymuEngine.Results
             NotFinishedInTime = false;
             NumberOfItemsNotDone = 0;
             Capacity = 0;
+        }
+
+        /// <summary>
+        ///     Triggered at each end of step by SymuEnvironment.
+        ///     Use to process metrics
+        /// </summary>
+        /// <param name="step"></param>
+        public void PostStep(ushort step)
+        {
+            Tasks.SetResults(_environment);
         }
 
         #region todo : refactor in SpecificResults

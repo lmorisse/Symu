@@ -23,14 +23,13 @@ using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
 using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Environment.TimeStep;
 using SymuEngine.Messaging.Manager;
 using SymuEngine.Messaging.Message;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Classes;
-using static SymuTools.Classes.Algorithm.Constants;
+using SymuTools;
+using static SymuTools.Algorithm.Constants;
 
 #endregion
 
@@ -137,7 +136,7 @@ namespace SymuEngine.Classes.Agent
         protected virtual void SetCognitive(CognitiveArchitectureTemplate agentTemplate)
         {
             Cognitive = new CognitiveArchitecture(Environment.WhitePages.Network, Id,
-                Environment.Entity.RandomLevelValue);
+                Environment.Organization.Models.RandomLevelValue);
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
             // Initialize parameters
@@ -149,7 +148,7 @@ namespace SymuEngine.Classes.Agent
                 .LearningModel);
             // Forgetting model
             ForgettingModel = new ForgettingModel(Environment.Organization.Models.Forgetting,
-                Cognitive.InternalCharacteristics, Environment.Entity.RandomLevelValue,
+                Cognitive.InternalCharacteristics, Environment.Organization.Models.RandomLevelValue,
                 Environment.WhitePages.Network.NetworkKnowledges, Id);
         }
 
@@ -399,7 +398,7 @@ namespace SymuEngine.Classes.Agent
             // Impact of the Communication channels on the remaining capacity
             var impact =
                 Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, true,
-                    Environment.Entity.RandomLevelValue);
+                    Environment.Organization.Models.RandomLevelValue);
             Capacity.Decrement(impact);
         }
 
@@ -550,13 +549,13 @@ namespace SymuEngine.Classes.Agent
                 throw new ArgumentNullException(nameof(message));
             }
 
-            MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
             if (!IsMessagesPerPeriodBelowLimit(message.Medium) ||
                 !IsMessagesSendPerPeriodBelowLimit(message.Medium))
             {
                 return;
             }
 
+            MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
             OnBeforeSendMessage(message);
             Environment.SendAgent(message);
             OnAfterSendMessage(message);
@@ -653,11 +652,12 @@ namespace SymuEngine.Classes.Agent
                 throw new ArgumentNullException(nameof(message));
             }
 
-            MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
             if (!IsMessagesPerPeriodBelowLimit(message.Medium))
             {
                 return;
             }
+
+            MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
 
             if (message.HasAttachments)
             {
@@ -916,7 +916,7 @@ namespace SymuEngine.Classes.Agent
                     TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
                     Parent = message,
                     Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
-                        Environment.Entity.RandomLevelValue)
+                        Environment.Organization.Models.RandomLevelValue)
                 };
                 TaskProcessor.Post(task);
             }
@@ -939,10 +939,10 @@ namespace SymuEngine.Classes.Agent
 
             switch (message.Subject)
             {
-                case SymuYellowPages.stop:
+                case SymuYellowPages.Stop:
                     State = AgentState.Stopping;
                     break;
-                case SymuYellowPages.subscribe:
+                case SymuYellowPages.Subscribe:
                     ActSubscribe(message);
                     break;
                 default:
@@ -970,11 +970,9 @@ namespace SymuEngine.Classes.Agent
                 Email.ForgettingProcess(TimeStep.Step);
             }
 
-            // Capacity model
-            HandleCapacity(true);
-            // Status model
-            // Intentionally after HandleCapacity
             HandleStatus();
+            // intentionally after Status
+            HandleCapacity(true);
             // Task manager
             if (!Cognitive.TasksAndPerformance.CanPerformTask)
             {
@@ -993,7 +991,11 @@ namespace SymuEngine.Classes.Agent
                             case Message message:
                                 // When TimeStep.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
                                 // Once a message (as a task) is receive it is treated as a message
-                                ActMessage(message);
+                                if (task.IsToDo)
+                                {
+                                    ActMessage(message);
+                                }
+
                                 WorkOnTask(task);
                                 break;
                             default:
@@ -1014,7 +1016,7 @@ namespace SymuEngine.Classes.Agent
 
             await ProcessWorkInProgress().ConfigureAwait(false);
 
-            TaskProcessor?.TasksManager.TasksCheck(TimeStep.Step);
+            ActEndOfDay();
         }
 
         /// <summary>
@@ -1027,7 +1029,7 @@ namespace SymuEngine.Classes.Agent
         }
 
         /// <summary>
-        ///     Trigger every event after the actual step
+        ///     Trigger every event after the actual step,
         ///     Do not send messages
         /// </summary>
         public virtual void PostStep()
@@ -1039,10 +1041,26 @@ namespace SymuEngine.Classes.Agent
         }
 
         /// <summary>
-        ///     Start a weekend
+        ///     Trigger at the end of day,
+        ///     agent can still send message
+        /// </summary>
+        public virtual void ActEndOfDay()
+        {
+            TaskProcessor?.TasksManager.TasksCheck(TimeStep.Step);
+        }
+
+        /// <summary>
+        ///     Start a weekend, by asking new tasks if agent perform tasks on weekends
         /// </summary>
         public virtual void ActWeekEnd()
         {
+            if (!Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds ||
+                TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
+            {
+                return;
+            }
+
+            GetNewTasks();
         }
 
         public virtual void ActCadence()
@@ -1050,17 +1068,21 @@ namespace SymuEngine.Classes.Agent
         }
 
         /// <summary>
-        ///     Start the working day, working on ni progress tasks or asking new tasks
+        ///     Start the working day, by asking new tasks
         /// </summary>
         public virtual void ActWorkingDay()
         {
-            if (Cognitive.TasksAndPerformance.CanPerformTask &&
-                !TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
+            if (!Cognitive.TasksAndPerformance.CanPerformTask || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
             {
-                GetNewTasks();
+                return;
             }
+
+            GetNewTasks();
         }
 
+        /// <summary>
+        ///     Event that occur on friday to end the work week
+        /// </summary>
         public virtual void ActEndOfWeek()
         {
         }
@@ -1074,11 +1096,24 @@ namespace SymuEngine.Classes.Agent
         }
 
         /// <summary>
+        ///     Check if agent is performing task today depending on its settings or if agent is active
+        /// </summary>
+        /// <returns>true if agent is performing task, false if agent is not</returns>
+        public bool IsPerformingTask()
+        {
+            // Agent can be temporary isolated
+            var isPerformingTask = !Cognitive.InteractionPatterns.IsIsolated();
+            return isPerformingTask && (Cognitive.TasksAndPerformance.CanPerformTask && TimeStep.IsWorkingDay ||
+                                        Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
+                                        !TimeStep.IsWorkingDay);
+        }
+
+        /// <summary>
         ///     Set the Status to available if agent as InitialCapacity, Offline otherwise
         /// </summary>
         public virtual void HandleStatus()
         {
-            Status = Math.Abs(Capacity.Initial) < Tolerance ? AgentStatus.Offline : AgentStatus.Available;
+            Status = !Cognitive.InteractionPatterns.IsIsolated() ? AgentStatus.Available : AgentStatus.Offline;
             if (Status != AgentStatus.Offline)
                 // Open the agent mailbox with all the waiting messages
             {
@@ -1109,9 +1144,7 @@ namespace SymuEngine.Classes.Agent
             // Intentionally no test on Agent that must be able to perform tasks
             // && Cognitive.TasksAndPerformance.CanPerformTask
             // Example : internet access don't perform task, but is online
-            if (TimeStep.IsWorkingDay
-                // Agent can be temporary isolated
-                && !Cognitive.InteractionPatterns.IsIsolated())
+            if (IsPerformingTask())
             {
                 SetInitialCapacity();
                 if (Cognitive.TasksAndPerformance.CanPerformTask)
@@ -1201,7 +1234,7 @@ namespace SymuEngine.Classes.Agent
         /// <param name="subject"></param>
         public void Subscribe(AgentId agentId, byte subject)
         {
-            var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.subscribe, subject);
+            var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
             SendDelayed(message, TimeStep.Step);
         }
 
@@ -1210,7 +1243,7 @@ namespace SymuEngine.Classes.Agent
         /// </summary>
         public void Unsubscribe(AgentId agentId, byte subject)
         {
-            Send(agentId, MessageAction.Remove, SymuYellowPages.subscribe, subject);
+            Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
         }
 
         #endregion

@@ -12,7 +12,7 @@
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Messaging.Message;
-using SymuTools.Classes.ProbabilityDistributions;
+using SymuTools.ProbabilityDistributions;
 
 #endregion
 

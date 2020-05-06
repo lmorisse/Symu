@@ -40,10 +40,9 @@ namespace SymuEngineTests.Repository.Networks.Databases
         [TestMethod]
         public void InitializeKnowledgeTest()
         {
-            _database.InitializeKnowledge(KnowledgeId, 1, 0); 
+            _database.InitializeKnowledge(KnowledgeId, 1, 0);
             var agentKnowledge = _database.GetKnowledge(KnowledgeId);
             Assert.IsNotNull(agentKnowledge);
-
         }
 
         /// <summary>

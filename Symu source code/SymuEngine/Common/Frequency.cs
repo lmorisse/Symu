@@ -14,12 +14,12 @@ namespace SymuEngine.Common
     /// </summary>
     public enum Frequency
     {
-        Never,
-        VeryRarely,
-        Rarely,
-        Medium,
-        Often,
-        VeryOften,
-        Always
+        Never = 0,
+        VeryRarely = 1,
+        Rarely = 2,
+        Medium = 3,
+        Often = 4,
+        VeryOften = 5,
+        Always = 6
     }
 }

@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuTools.Classes.MachineLearning
+namespace SymuTools.MachineLearning
 {
     /// <summary>
     ///     Obsolete, should use ML.Net lib

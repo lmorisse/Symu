@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuTools.Classes.Algorithm
+namespace SymuTools.Algorithm
 {
     public static class Constants
     {
