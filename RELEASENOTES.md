@@ -1,1 +1,10 @@
+# Release notes
 
+## 0.3.0
+This release contains a new project example: [SymuMessageAndTask](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMessageAndTask).
+
+## 0.2.0
+This release contains a new project example: [SymuLearnAndForget](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget).
+
+## 0.1.0
+This release contains the project: [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine).
