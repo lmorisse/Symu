@@ -1,4 +1,5 @@
-#CONTRIBUTING
+# CONTRIBUTING
+
 First off, thank you for considering contributing to SYMU. There are different ways to contribute to this project.
 Contributing start by using the framework and give feedbacks.
 
@@ -17,7 +18,7 @@ As a developper, such a framework brings great challenges to which you can contr
 As an academic, you can bring use cases, models that we will implement for you.
 This is very important because the value of this framework will be based on the richness of the library of models it uses.
 
-#HOW TO CONTRIBUTE
+# HOW TO CONTRIBUTE
 If you've noticed a bug or have a feature request, [make one][new issue]! It's
 generally best if you get confirmation of your bug or approval for your feature
 request this way before starting to code.
