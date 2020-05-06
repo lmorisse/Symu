@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuForm", "SymuForm\SymuForm.csproj", "{998C00B3-6A46-41D7-9140-57E1D07A7B6D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuLearnAndForget", "SymuLearnAndForget\SymuLearnAndForget.csproj", "{BA04CB16-3CB0-43B1-B366-13AC620CF759}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymuMessageAndTask", "SymuMessageAndTask\SymuMessageAndTask.csproj", "{998C00B3-6A46-41D7-9140-57E1D07A7B6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuLearnAndForgetTests", "SymuLearnAndForgetTests\SymuLearnAndForgetTests.csproj", "{03DD3D3E-58EA-47C9-8AE3-B35D0E3DE5DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymuMessageAndTaskTests", "SymuMessageAndTaskTests\SymuMessageAndTaskTests.csproj", "{4A229EF5-31C6-4B55-902A-9FAFDE901595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA04CB16-3CB0-43B1-B366-13AC620CF759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998C00B3-6A46-41D7-9140-57E1D07A7B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DD3D3E-58EA-47C9-8AE3-B35D0E3DE5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DD3D3E-58EA-47C9-8AE3-B35D0E3DE5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DD3D3E-58EA-47C9-8AE3-B35D0E3DE5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DD3D3E-58EA-47C9-8AE3-B35D0E3DE5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A229EF5-31C6-4B55-902A-9FAFDE901595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A229EF5-31C6-4B55-902A-9FAFDE901595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A229EF5-31C6-4B55-902A-9FAFDE901595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A229EF5-31C6-4B55-902A-9FAFDE901595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
