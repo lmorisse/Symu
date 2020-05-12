@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,29 +11,29 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Repository.Networks.Link;
 
 #endregion
+
 
 namespace SymuEngineTests.Repository.Networks.Link
 {
     [TestClass]
     public class NetworkLinksTests
     {
+        private readonly AgentId _agentId1 = new AgentId(2, 2);
+        private readonly AgentId _agentId2 = new AgentId(3, 2);
+        private readonly AgentId _agentId3 = new AgentId(4, 2);
         private readonly NetworkLinks _links = new NetworkLinks();
-        private readonly AgentId _teamId = new AgentId(1, 1);
-        private readonly AgentId _teammateId1 = new AgentId(2, 2);
-        private readonly AgentId _teammateId2 = new AgentId(3, 2);
-        private readonly AgentId _teammateId3 = new AgentId(4, 2);
 
 
         [TestMethod]
         public void RemoveAgentTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            _links.AddMembers(_teammateId3, _teammateId1, _teamId);
-            _links.RemoveAgent(_teammateId1);
+            _links.AddLink(_agentId1, _agentId2);
+            _links.AddLink(_agentId3, _agentId1);
+            _links.RemoveAgent(_agentId1);
             Assert.IsFalse(_links.Any());
         }
 
@@ -41,46 +41,15 @@ namespace SymuEngineTests.Repository.Networks.Link
         public void AnyTest()
         {
             Assert.IsFalse(_links.Any());
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
+            _links.AddLink(_agentId1, _agentId2);
             Assert.IsTrue(_links.Any());
-        }
-
-        [TestMethod]
-        public void AddSubordinateTest()
-        {
-            _links.AddSubordinate(_teammateId1, _teammateId2, _teamId);
-            var link = _links[0] as CommunicationLink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual(CommunicationType.ReportTo, link.Communication);
-        }
-
-        [TestMethod]
-        public void RemoveSubordinateTest()
-        {
-            _links.AddSubordinate(_teammateId1, _teammateId2, _teamId);
-            _links.DeactivateSubordinate(_teammateId1, _teammateId2, _teamId);
-            Assert.IsTrue(_links.Any());
-            Assert.IsTrue(_links[0].IsPassive);
-        }
-
-        [TestMethod]
-        public void AddTeammatesTest()
-        {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            Assert.AreEqual(2, _links.List.Count);
-            var link = _links[0] as CommunicationLink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual(CommunicationType.CommunicateTo, link.Communication);
-            link = _links[1] as CommunicationLink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual(CommunicationType.CommunicateTo, link.Communication);
         }
 
         [TestMethod]
         public void ClearTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            _links.AddMembers(_teammateId3, _teammateId1, _teamId);
+            _links.AddLink(_agentId1, _agentId2);
+            _links.AddLink(_agentId3, _agentId1);
             _links.Clear();
             Assert.IsFalse(_links.Any());
         }
@@ -88,112 +57,129 @@ namespace SymuEngineTests.Repository.Networks.Link
         [TestMethod]
         public void DeactivateTeammatesLinkTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
+            _links.AddLink(_agentId1, _agentId2);
             var link = _links[0];
             // Active link
-            Assert.AreEqual(NetworkLinkState.Active, link.State);
             Assert.IsTrue(link.IsActive);
             // Deactivate
-            _links.DeactivateTeammates(_teammateId1, _teammateId2, _teamId);
-            Assert.AreEqual(NetworkLinkState.Passive, link.State);
+            _links.DeactivateLink(_agentId1, _agentId2);
+            Assert.IsFalse(link.IsActive);
             Assert.IsTrue(link.IsPassive);
         }
 
         [TestMethod]
         public void HasActiveLinkTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
+            _links.AddLink(_agentId1, _agentId2);
             var link = _links[0];
-            Assert.IsTrue(link.HasActiveLink(_teammateId1, _teammateId2));
-            Assert.IsFalse(link.HasActiveLink(_teammateId1, _teammateId3));
+            Assert.IsTrue(link.HasActiveLink(_agentId1, _agentId2));
+            Assert.IsFalse(link.HasActiveLink(_agentId1, _agentId3));
         }
 
         [TestMethod]
         public void HasPassiveLinkTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
+            _links.AddLink(_agentId1, _agentId2);
             var link = _links[0];
             link.Deactivate();
-            Assert.IsTrue(link.HasPassiveLink(_teammateId1, _teammateId2));
-            Assert.IsFalse(link.HasPassiveLink(_teammateId1, _teammateId3));
+            Assert.IsTrue(link.HasPassiveLink(_agentId1, _agentId2));
+            Assert.IsFalse(link.HasPassiveLink(_agentId1, _agentId3));
         }
 
         [TestMethod]
         public void GetActiveLinksTest()
         {
-            Assert.AreEqual(0, new List<AgentId>(_links.GetActiveLinks(_teammateId1)).Count);
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            _links.AddMembers(_teammateId3, _teammateId1, _teamId);
-            var teamId2 = new AgentId(2, 1);
+            Assert.AreEqual(0, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
+            _links.AddLink(_agentId1, _agentId2);
+            _links.AddLink(_agentId3, _agentId1);
             var teammateId4 = new AgentId(5, 2);
-            _links.AddMembers(_teammateId1, teammateId4, teamId2);
-            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_teammateId1)).Count);
+            _links.AddLink(_agentId1, teammateId4);
+            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
 
             // Distinct test
-            _links.AddMembers(_teammateId1, _teammateId2, teamId2);
-            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_teammateId1)).Count);
-        }
-
-        [TestMethod]
-        public void SubordinateExistsTest()
-        {
-            _links.AddSubordinate(_teammateId1, _teammateId2, _teamId);
-            Assert.IsFalse(_links.Exists(_teammateId1, CommunicationType.CommunicateTo, _teammateId2, _teamId));
-            Assert.IsFalse(_links.Exists(_teammateId2, CommunicationType.CommunicateTo, _teammateId1, _teamId));
-            Assert.IsFalse(_links.Exists(_teammateId1, CommunicationType.ReportTo, _teammateId1, _teamId));
-            Assert.IsFalse(_links.Exists(_teammateId2, CommunicationType.ReportTo, _teammateId2, _teamId));
-            Assert.IsTrue(_links.Exists(_teammateId1, CommunicationType.ReportTo, _teammateId2, _teamId));
+            _links.AddLink(_agentId1, _agentId2);
+            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
         }
 
         [TestMethod]
         public void TeammateExistsTest()
         {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            Assert.IsTrue(_links.Exists(_teammateId1, CommunicationType.CommunicateTo, _teammateId2, _teamId));
-            Assert.IsFalse(_links.Exists(_teammateId1, CommunicationType.ReportTo, _teammateId2, _teamId));
-        }
-
-        [TestMethod]
-        public void GetActiveLinksByGroupClassKeyTest()
-        {
-            _links.AddMembers(_teammateId1, _teammateId2, _teamId);
-            Assert.AreEqual(1, new List<AgentId>(_links.GetActiveLinks(_teammateId1, _teammateId2.ClassKey)).Count);
-            var teammateId4 = new AgentId(5, 3);
-            _links.AddMembers(_teammateId1, teammateId4, _teamId);
-            Assert.AreEqual(1, new List<AgentId>(_links.GetActiveLinks(_teammateId1, _teammateId2.ClassKey)).Count);
-            Assert.AreEqual(1, new List<AgentId>(_links.GetActiveLinks(_teammateId1, teammateId4.ClassKey)).Count);
-            // Distinct test
-            var teamId2 = new AgentId(2, 1);
-            _links.AddMembers(_teammateId1, _teammateId2, teamId2);
-            Assert.AreEqual(1, new List<AgentId>(_links.GetActiveLinks(_teammateId1, _teammateId2.ClassKey)).Count);
+            _links.AddLink(_agentId1, _agentId2);
+            Assert.IsTrue(_links.Exists(_agentId1, _agentId2));
+            Assert.IsTrue(_links.Exists(_agentId2, _agentId1));
         }
 
         [TestMethod]
         public void ExistsTest()
         {
-            var link = new CommunicationLink(_teammateId1, CommunicationType.CommunicateTo, _teammateId2, _teamId);
-            var linkFalse = new CommunicationLink(_teammateId1, CommunicationType.ReportTo, _teammateId2, _teamId);
+            var link = new NetworkLink(_agentId1, _agentId2);
             Assert.IsFalse(_links.Exists(link));
             _links.List.Add(link);
             Assert.IsTrue(_links.Exists(link));
-            Assert.IsFalse(_links.Exists(linkFalse));
         }
 
         [TestMethod]
         public void AddLinkTest()
         {
-            var link = new CommunicationLink(_teammateId1, CommunicationType.CommunicateTo, _teammateId2, _teamId);
-            _links.AddLink(link);
+            var link = new NetworkLink(_agentId1, _agentId2);
+            _links.AddLink(_agentId1, _agentId2);
             Assert.IsTrue(_links.Exists(link));
             // Deactivate test
             link.Deactivate();
-            _links.AddLink(link);
+            _links.AddLink(_agentId1, _agentId2);
             Assert.AreEqual(1, _links.List.Count);
             Assert.IsTrue(_links[0].IsActive);
-            // Duplicate test
-            link = new CommunicationLink(_teammateId1, CommunicationType.CommunicateTo, _teammateId2, _teamId);
-            _links.AddLink(link);
-            Assert.AreEqual(1, _links.List.Count);
+        }
+
+        /// <summary>
+        ///     Empty list
+        /// </summary>
+        [TestMethod]
+        public void AddLinksTest()
+        {
+            var agents = new List<AgentId>();
+            _links.AddLinks(agents);
+            Assert.AreEqual(0, _links.Count);
+        }
+
+        /// <summary>
+        ///     Empty list
+        /// </summary>
+        [TestMethod]
+        public void AddLinksTest1()
+        {
+            var agents = new List<AgentId> {_agentId1, _agentId2, _agentId3};
+            _links.AddLinks(agents);
+            Assert.AreEqual(3, _links.Count);
+            for (var i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(1, _links[i].Count);
+            }
+        }
+
+        /// <summary>
+        ///     No link
+        /// </summary>
+        [TestMethod]
+        public void CountLinksTest()
+        {
+            Assert.AreEqual(0, _links.CountLinks(_agentId1, _agentId2));
+            _links.AddLink(_agentId1, _agentId2);
+            Assert.AreEqual(1, _links.CountLinks(_agentId1, _agentId2));
+            _links.AddLink(_agentId2, _agentId1);
+            Assert.AreEqual(2, _links.CountLinks(_agentId1, _agentId2));
+        }
+
+        [TestMethod]
+        public void NormalizedCountLinksTest()
+        {
+            Assert.AreEqual(0, _links.NormalizedCountLinks(_agentId1, _agentId2));
+            _links.AddLink(_agentId1, _agentId2);
+            _links.SetMaxLinksCount();
+            Assert.AreEqual(1, _links.NormalizedCountLinks(_agentId1, _agentId2));
+            _links.AddLink(_agentId2, _agentId1);
+            _links.SetMaxLinksCount();
+            Assert.AreEqual(1, _links.NormalizedCountLinks(_agentId1, _agentId2));
         }
     }
 }

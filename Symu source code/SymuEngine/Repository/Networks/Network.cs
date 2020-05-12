@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,9 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models;
-using SymuEngine.Classes.Agent.Models.Templates.Communication;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Agents.Models.Templates.Communication;
+using SymuEngine.Classes.Organization;
+using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Activities;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Communication;
@@ -26,6 +28,7 @@ using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Repository.Networks.Link;
 using SymuEngine.Repository.Networks.Portfolio;
 using SymuEngine.Repository.Networks.Role;
+using SymuEngine.Repository.Networks.Sphere;
 
 #endregion
 
@@ -36,10 +39,13 @@ namespace SymuEngine.Repository.Networks
     /// </summary>
     public class Network
     {
-        public Network(AgentTemplates agentTemplates)
+        public Network(AgentTemplates agentTemplates, InteractionSphereModel interactionSphereModel)
         {
             NetworkCommunications = new NetworkCommunications(agentTemplates);
+            InteractionSphere = new InteractionSphere(interactionSphereModel);
         }
+
+        public AgentState State { get; set; } = AgentState.NotStarted;
 
         /// <summary>
         ///     Directory of social links between AgentIds, with their interaction type
@@ -102,6 +108,12 @@ namespace SymuEngine.Repository.Networks
         ///     Communication network
         /// </summary>
         public NetworkDatabases NetworkDatabases { get; } = new NetworkDatabases();
+
+        /// <summary>
+        ///     Derived Parameters from others networks.
+        ///     these parameters are use indirectly to change agent behavior.
+        /// </summary>
+        public InteractionSphere InteractionSphere { get; }
 
         #region Clear & remove Agents
 
@@ -240,16 +252,31 @@ namespace SymuEngine.Repository.Networks
             lock (NetworkGroups)
             {
                 NetworkGroups.AddGroup(groupId);
-                foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
+                if (State == AgentState.Started)
                 {
-                    NetworkLinks.AddMembers(agentId, newTeammateId, groupId);
+                    // AddLink is done during the simulation. 1t the initialization, use InitializeNetworkLinks, for performance issues
+                    foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
+                    {
+                        NetworkLinks.AddLink(agentId, newTeammateId);
+                    }
                 }
 
-                // intentionally after Links.AddMembers
                 NetworkGroups.AddMember(agentId, allocation, groupId);
             }
 
             NetworkPortfolios.AddMemberToGroup(agentId, groupId);
+        }
+
+        /// <summary>
+        ///     Initialize the network links.
+        ///     For performance it is not done in AddMemberToGroup at initialization
+        /// </summary>
+        public void InitializeNetworkLinks()
+        {
+            foreach (var groupId in NetworkGroups.GetGroups().ToList())
+            {
+                NetworkLinks.AddLinks(NetworkGroups.GetMembers(groupId, SymuYellowPages.Actor).ToList());
+            }
         }
 
         /// <summary>
@@ -262,7 +289,7 @@ namespace SymuEngine.Repository.Networks
         {
             foreach (var oldTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
             {
-                NetworkLinks.DeactivateTeammates(agentId, oldTeammateId, groupId);
+                NetworkLinks.DeactivateLink(agentId, oldTeammateId);
             }
 
             NetworkGroups.RemoveMember(agentId, groupId);
@@ -282,16 +309,6 @@ namespace SymuEngine.Repository.Networks
         public bool IsMemberOfGroup(AgentId agentId, AgentId groupId)
         {
             return NetworkGroups.IsMemberOfGroup(agentId, groupId);
-        }
-
-        /// <summary>
-        ///     Get all the active links of an agent
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <returns></returns>
-        public IEnumerable<AgentId> GetActiveLinks(AgentId agentId)
-        {
-            return NetworkLinks.GetActiveLinks(agentId);
         }
 
         /// <summary>

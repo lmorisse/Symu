@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -18,7 +18,7 @@ namespace SymuEngine.Classes.Task
     /// <summary>
     ///     Manage all limits related to Tasks
     /// </summary>
-    /// <remarks>Tasks and Performance from Construct Software</remarks>
+    /// <remarks>Tasks and Density from Construct Software</remarks>
     public class TasksLimit
     {
         private byte _maximumSimultaneousTasks = 10;

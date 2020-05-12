@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,11 +12,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Repository.Networks.Activities;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
+
 
 namespace SymuEngineTests.Repository.Networks.Activities
 {
@@ -68,7 +69,7 @@ namespace SymuEngineTests.Repository.Networks.Activities
             _network.AddGroup(_kanbanId);
             _network.AddActivities(_agentId, _kanbanId, _activities);
             _network.RemoveAgent(_agentId);
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
         }
 
         [TestMethod]
@@ -79,8 +80,8 @@ namespace SymuEngineTests.Repository.Networks.Activities
             _network.AddActivities(_agentId, _kanbanId, _activities);
             _network.AddActivities(_agentId, _kanbanId2, _activities);
             _network.RemoveMember(_agentId, _kanbanId);
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId));
-            Assert.IsTrue(_network.HasActivitiesOn(_agentId, _kanbanId2));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsTrue(_network.AgentHasActivitiesOn(_agentId, _kanbanId2));
         }
 
         [TestMethod]
@@ -91,8 +92,8 @@ namespace SymuEngineTests.Repository.Networks.Activities
             _network.AddActivities(_agentId, _kanbanId, _activities);
             _network.AddActivities(_agentId, _kanbanId2, _activities);
             _network.RemoveMember(_agentId);
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId));
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId2));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId2));
         }
 
         [TestMethod]
@@ -148,27 +149,27 @@ namespace SymuEngineTests.Repository.Networks.Activities
         public void AddAndGetActivitiesTest()
         {
             _network.AddGroup(_kanbanId);
-            Assert.AreEqual(0, _network.GetActivities(_agentId, _kanbanId).Count());
+            Assert.AreEqual(0, _network.GetAgentActivities(_agentId, _kanbanId).Count());
             _network.AddActivities(_agentId, _kanbanId, _activities);
-            Assert.AreEqual(_activities.Count, _network.GetActivities(_agentId, _kanbanId).Count());
+            Assert.AreEqual(_activities.Count, _network.GetAgentActivities(_agentId, _kanbanId).Count());
         }
 
         [TestMethod]
         public void IsWorkingOnActivityTest()
         {
             _network.AddGroup(_kanbanId);
-            Assert.IsFalse(_network.HasAnActivityOn(_agentId, _kanbanId, StrActivity1));
+            Assert.IsFalse(_network.AgentHasAnActivityOn(_agentId, _kanbanId, StrActivity1));
             _network.AddActivities(_agentId, _kanbanId, _activities);
-            Assert.IsTrue(_network.HasAnActivityOn(_agentId, _kanbanId, StrActivity1));
-            Assert.IsTrue(_network.HasAnActivityOn(_agentId, _kanbanId, StrActivity2));
+            Assert.IsTrue(_network.AgentHasAnActivityOn(_agentId, _kanbanId, StrActivity1));
+            Assert.IsTrue(_network.AgentHasAnActivityOn(_agentId, _kanbanId, StrActivity2));
         }
 
         [TestMethod]
         public void GetActivitiesTest()
         {
-            Assert.AreEqual(0, _network.GetActivities(_kanbanId).Count());
+            Assert.AreEqual(0, _network.GetGroupActivities(_kanbanId).Count());
             _network.AddActivity(_activity1, _kanbanId);
-            Assert.AreEqual(1, _network.GetActivities(_kanbanId).Count());
+            Assert.AreEqual(1, _network.GetGroupActivities(_kanbanId).Count());
         }
 
         [TestMethod]
@@ -197,11 +198,11 @@ namespace SymuEngineTests.Repository.Networks.Activities
         [TestMethod]
         public void AddActivityTest()
         {
-            Assert.IsFalse(_network.HasActivities(_kanbanId));
+            Assert.IsFalse(_network.GroupHasActivities(_kanbanId));
             _network.AddActivity(_activity1, _kanbanId);
-            Assert.IsTrue(_network.HasActivities(_kanbanId));
+            Assert.IsTrue(_network.GroupHasActivities(_kanbanId));
             _network.AddActivity(_activity1, _kanbanId); //Duplicate
-            Assert.AreEqual(1, _network.GetActivities(_kanbanId).Count());
+            Assert.AreEqual(1, _network.GetGroupActivities(_kanbanId).Count());
         }
 
         /// <summary>
@@ -211,9 +212,9 @@ namespace SymuEngineTests.Repository.Networks.Activities
         public void AddActivityTest1()
         {
             _network.AddGroup(_kanbanId);
-            Assert.IsFalse(_network.HasAnActivityOn(_agentId, _kanbanId, StrActivity1));
+            Assert.IsFalse(_network.AgentHasAnActivityOn(_agentId, _kanbanId, StrActivity1));
             _network.AddActivity(_agentId, StrActivity1, _kanbanId);
-            Assert.IsTrue(_network.HasAnActivityOn(_agentId, _kanbanId, StrActivity1));
+            Assert.IsTrue(_network.AgentHasAnActivityOn(_agentId, _kanbanId, StrActivity1));
         }
 
         /// <summary>
@@ -223,9 +224,9 @@ namespace SymuEngineTests.Repository.Networks.Activities
         public void AddActivitiesTest()
         {
             _network.AddGroup(_kanbanId);
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
             _network.AddActivities(_agentId, _kanbanId, _activities);
-            Assert.IsTrue(_network.HasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsTrue(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
         }
 
         /// <summary>
@@ -236,15 +237,15 @@ namespace SymuEngineTests.Repository.Networks.Activities
         {
             _network.AddGroup(_kanbanId);
             _network.AddActivities(_agentId, _kanbanId, new List<ushort> {_knowledge1.Id});
-            Assert.AreEqual(0, _network.GetActivities(_agentId, _kanbanId).Count());
+            Assert.AreEqual(0, _network.GetAgentActivities(_agentId, _kanbanId).Count());
             // Has the knowledge
             _network.AddActivity(_activity1, _kanbanId);
             _network.AddActivities(_agentId, _kanbanId, new List<ushort> {_knowledge1.Id});
-            Assert.AreEqual(1, _network.GetActivities(_agentId, _kanbanId).Count());
+            Assert.AreEqual(1, _network.GetAgentActivities(_agentId, _kanbanId).Count());
             // Hasn't the knowledge
             _network.AddActivity(_activity2, _kanbanId);
             _network.AddActivities(_agentId, _kanbanId, new List<ushort> {_knowledge1.Id});
-            Assert.AreEqual(1, _network.GetActivities(_agentId, _kanbanId).Count());
+            Assert.AreEqual(1, _network.GetAgentActivities(_agentId, _kanbanId).Count());
         }
 
         [TestMethod]
@@ -252,16 +253,16 @@ namespace SymuEngineTests.Repository.Networks.Activities
         {
             _network.AddActivities(_agentId, _kanbanId, _activities);
             _network.TransferTo(_agentId, _kanbanId, _kanbanId2);
-            Assert.IsTrue(_network.HasActivitiesOn(_agentId, _kanbanId2));
-            Assert.IsFalse(_network.HasActivitiesOn(_agentId, _kanbanId));
+            Assert.IsTrue(_network.AgentHasActivitiesOn(_agentId, _kanbanId2));
+            Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
         }
 
         [TestMethod]
         public void AddActivitiesTest2()
         {
-            Assert.IsFalse(_network.HasActivities(_kanbanId));
+            Assert.IsFalse(_network.GroupHasActivities(_kanbanId));
             _network.AddActivities(new List<Activity> {_activity1}, _kanbanId);
-            Assert.IsTrue(_network.HasActivities(_kanbanId));
+            Assert.IsTrue(_network.GroupHasActivities(_kanbanId));
         }
 
         [TestMethod]
@@ -284,6 +285,27 @@ namespace SymuEngineTests.Repository.Networks.Activities
             // One agent working on activity
             _network.AddActivity(_agentId, _activity1.Name, _kanbanId);
             Assert.AreEqual(1, _network.FilterAgentIdsWithActivity(agentIds, _kanbanId, _activity1.Name).Count());
+        }
+
+        /// <summary>
+        ///     With no activities
+        /// </summary>
+        [TestMethod]
+        public void GetAgentActivitiesTest()
+        {
+            Assert.AreEqual(0, _network.GetAgentActivities(_agentId).Count());
+        }
+
+        /// <summary>
+        ///     With activities
+        /// </summary>
+        [TestMethod]
+        public void GetAgentActivitiesTest1()
+        {
+            _network.AddActivity(_agentId, _activity1.Name, _kanbanId);
+            Assert.AreEqual(1, _network.GetAgentActivities(_agentId).Count());
+            _network.AddActivity(_agentId, _activity2.Name, _kanbanId);
+            Assert.AreEqual(2, _network.GetAgentActivities(_agentId).Count());
         }
     }
 }

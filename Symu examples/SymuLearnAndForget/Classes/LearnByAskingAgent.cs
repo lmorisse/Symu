@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuLearnAndForget
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,7 +11,7 @@
 
 using System;
 using SymuEngine.Environment;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
 
 #endregion

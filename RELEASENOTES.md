@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.4.0
+This release contains a new project example:  [SymuGroupAndInteraction](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuGroupAndInteraction).
+
 ## 0.3.0
 This release contains a new project example: [SymuMessageAndTask](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMessageAndTask).
 

@@ -1,7 +1,7 @@
 #region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -19,13 +20,13 @@ namespace SymuEngine.Messaging.Manager
 {
     internal class MessagesManager : IDisposable
     {
-        private readonly Queue<Message.Message> _arrivals;
+        private readonly Queue<Message> _arrivals;
 
         private TaskCompletionSource<bool> _savedCont;
 
         public MessagesManager()
         {
-            _arrivals = new Queue<Message.Message>();
+            _arrivals = new Queue<Message>();
         }
 
         #region IDisposable Members
@@ -66,7 +67,7 @@ namespace SymuEngine.Messaging.Manager
             return await _savedCont.Task.ConfigureAwait(false);
         }
 
-        internal Message.Message ReceiveFromArrivals()
+        internal Message ReceiveFromArrivals()
         {
             lock (_arrivals)
             {
@@ -74,7 +75,7 @@ namespace SymuEngine.Messaging.Manager
             }
         }
 
-        internal void Post(Message.Message msg)
+        internal void Post(Message msg)
         {
             lock (_arrivals)
             {
@@ -95,9 +96,9 @@ namespace SymuEngine.Messaging.Manager
             }
         }
 
-        internal async Task<Message.Message> Receive()
+        internal async Task<Message> Receive()
         {
-            async Task<Message.Message> ProcessFirstArrival()
+            async Task<Message> ProcessFirstArrival()
             {
                 while (true)
                 {

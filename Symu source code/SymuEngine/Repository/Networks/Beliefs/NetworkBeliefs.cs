@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -13,7 +13,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
 
@@ -234,6 +234,16 @@ namespace SymuEngine.Repository.Networks.Beliefs
             }
 
             return AgentsRepository[agentId];
+        }
+
+        public IEnumerable<ushort> GetBeliefIds(AgentId agentId)
+        {
+            if (!Exists(agentId))
+            {
+                throw new NullReferenceException(nameof(agentId));
+            }
+
+            return AgentsRepository[agentId].GetBeliefIds();
         }
 
         /// <summary>

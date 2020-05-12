@@ -1,7 +1,7 @@
 #region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -15,7 +15,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using SymuEngine.Messaging.Delayed;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Messages;
 using SymuEngine.Messaging.Reply;
 using SymuEngine.Messaging.Subscription;
 
@@ -106,7 +106,7 @@ namespace SymuEngine.Messaging.Manager
         /// </summary>
         public event EventHandler<MessageEventArgs> OnBeforePostEvent;
 
-        public void Post(Message.Message message)
+        public void Post(Message message)
         {
             if (message is null)
             {
@@ -165,7 +165,7 @@ namespace SymuEngine.Messaging.Manager
         /// </summary>
         public byte NumberReceivedPerPeriod { get; set; }
 
-        public Task<Message.Message> Receive()
+        public Task<Message> Receive()
         {
             return _messagesManager.Receive();
         }
@@ -179,7 +179,7 @@ namespace SymuEngine.Messaging.Manager
         /// </summary>
         public DelayedMessages DelayedMessages { get; } = new DelayedMessages();
 
-        public void PostAsADelayed(Message.Message message, ushort step)
+        public void PostAsADelayed(Message message, ushort step)
         {
             DelayedMessages.Enqueue(message, step);
         }
@@ -189,7 +189,7 @@ namespace SymuEngine.Messaging.Manager
         /// </summary>
         /// <param name="step"></param>
         /// <returns></returns>
-        public Message.Message NextDelayedMessages(ushort step)
+        public Message NextDelayedMessages(ushort step)
         {
             return DelayedMessages.Dequeue(step);
         }
@@ -203,13 +203,32 @@ namespace SymuEngine.Messaging.Manager
         ///     message
         ///     Missed messages trace those missed message in debug
         /// </summary>
-        public List<Message.Message> MissedMessages { get; } = new List<Message.Message>();
+        public List<Message> MissedMessages { get; } = new List<Message>();
 
-        public void AddMissedMessage(Message.Message message, bool debug)
+        public void AddMissedMessage(Message message, bool debug)
         {
             if (debug)
             {
                 MissedMessages.Add(message);
+            }
+        }
+
+        #endregion
+
+        #region Not accepted Message
+
+        /// <summary>
+        ///     An sender agent has send a message of type phone, or meeting, ... but the sender was not in the interaction sphere
+        ///     of the receiver and did not accept the message
+        ///     NotAcceptedMessages trace those not accepted message in debug
+        /// </summary>
+        public List<Message> NotAcceptedMessages { get; } = new List<Message>();
+
+        public void AddNotAcceptedMessages(Message message, bool debug)
+        {
+            if (debug)
+            {
+                NotAcceptedMessages.Add(message);
             }
         }
 

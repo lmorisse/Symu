@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -170,12 +170,21 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
             Assert.AreEqual(_knowledge01Bits[0], _agentKnowledge01.GetKnowledgeBit(0));
         }
 
+        /// <summary>
+        ///     Non passing test knowledgeBits == null
+        /// </summary>
         [TestMethod]
         public void GetKnowledgeBitTest()
         {
-            // Non passing test knowledgeBits == null
-            Assert.AreEqual(-1, _agentKnowledge.GetKnowledgeBit(0));
-            // Passing tests
+            Assert.AreEqual(0, _agentKnowledge.GetKnowledgeBit(0));
+        }
+
+        /// <summary>
+        ///     Passing test
+        /// </summary>
+        [TestMethod]
+        public void GetKnowledgeBitTest1()
+        {
             for (byte i = 0; i < 2; i++)
             {
                 Assert.AreEqual(_knowledge0Bits[i], _agentKnowledge0.GetKnowledgeBit(i));

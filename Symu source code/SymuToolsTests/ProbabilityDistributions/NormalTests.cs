@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuToolsTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,7 +10,7 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuTools.ProbabilityDistributions;
+using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 

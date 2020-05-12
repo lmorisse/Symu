@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,8 +11,10 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Organization;
+using SymuEngine.Common;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
@@ -36,7 +38,7 @@ namespace SymuEngineTests.Repository.Networks
             new Knowledge(1, "1", 1);
 
         private readonly AgentId _managerId = new AgentId(3, 2);
-        private readonly Network _network = new Network(new AgentTemplates());
+        private readonly Network _network = new Network(new AgentTemplates(), new InteractionSphereModel());
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
@@ -56,7 +58,7 @@ namespace SymuEngineTests.Repository.Networks
         [TestMethod]
         public void ClearTest()
         {
-            _network.NetworkLinks.AddMembers(_teammateId, _managerId, _teamId);
+            _network.NetworkLinks.AddLink(_teammateId, _managerId);
             _network.NetworkGroups.AddGroup(_teamId);
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
@@ -82,9 +84,13 @@ namespace SymuEngineTests.Repository.Networks
             Assert.IsTrue(_network.NetworkGroups.Any());
         }
 
+        /// <summary>
+        ///     With network started
+        /// </summary>
         [TestMethod]
         public void AddMemberToGroupTest()
         {
+            _network.State = AgentState.Started;
             _network.AddGroup(_teamId);
             _network.NetworkPortfolios.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
             // Method to test
@@ -96,6 +102,22 @@ namespace SymuEngineTests.Repository.Networks
             Assert.IsTrue(_network.IsMemberOfGroup(_teammateId, _teamId));
             // Portfolio
             Assert.IsTrue(_network.HasObject(_teammateId, IsSupportOn));
+        }
+
+        /// <summary>
+        ///     With network starting
+        /// </summary>
+        [TestMethod]
+        public void AddMemberToGroupTest2()
+        {
+            _network.State = AgentState.Starting;
+            _network.AddGroup(_teamId);
+            _network.NetworkPortfolios.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
+            // Method to test
+            _network.AddMemberToGroup(_teammateId, 100, _teamId);
+            _network.AddMemberToGroup(_teammateId2, 100, _teamId);
+            // Test link teammates
+            Assert.IsFalse(_network.NetworkLinks.HasActiveLink(_teammateId, _teammateId2));
         }
 
         [TestMethod]
@@ -121,7 +143,7 @@ namespace SymuEngineTests.Repository.Networks
         [TestMethod]
         public void RemoveAgentTest()
         {
-            _network.NetworkLinks.AddMembers(_teammateId, _managerId, _teamId);
+            _network.NetworkLinks.AddLink(_teammateId, _managerId);
             _network.NetworkGroups.AddMember(_teammateId, 100, _teamId);
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
@@ -135,7 +157,7 @@ namespace SymuEngineTests.Repository.Networks
             Assert.IsFalse(_network.NetworkRoles.IsMember(_teammateId, _teamId.ClassKey));
             Assert.IsFalse(_network.NetworkPortfolios.Exists(_teammateId, _componentId, IsWorkingOn));
             Assert.IsFalse(_network.NetworkKnowledges.Any());
-            Assert.IsFalse(_network.NetworkActivities.HasActivitiesOn(_teammateId, _teamId));
+            Assert.IsFalse(_network.NetworkActivities.AgentHasActivitiesOn(_teammateId, _teamId));
         }
 
         [TestMethod]

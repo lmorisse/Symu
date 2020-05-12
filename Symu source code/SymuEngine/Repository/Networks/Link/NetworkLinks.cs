@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -9,9 +9,10 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 
 #endregion
 
@@ -22,7 +23,9 @@ namespace SymuEngine.Repository.Networks.Link
     /// </summary>
     public class NetworkLinks
     {
+        private uint _maxLinksCount;
         public List<NetworkLink> List { get; } = new List<NetworkLink>();
+        public int Count => List.Count;
 
         /// <summary>
         ///     Gets or sets the element at the specified index
@@ -46,33 +49,26 @@ namespace SymuEngine.Repository.Networks.Link
         }
 
         /// <summary>
-        ///     teammateId is managerId subordinate in the context of teamId
+        ///     Reinitialize links between members of a group :
+        ///     Add a bi directional link between every member of a group
         /// </summary>
-        /// <param name="teammateId"></param>
-        /// <param name="managerId"></param>
-        /// <param name="teamId"></param>
-        public void AddSubordinate(AgentId teammateId, AgentId managerId, AgentId teamId)
+        public void AddLinks(List<AgentId> members)
         {
-            var link = new CommunicationLink(teammateId, CommunicationType.ReportTo, managerId, teamId);
-            AddLink(link);
-        }
+            if (members == null)
+            {
+                throw new ArgumentNullException(nameof(members));
+            }
 
-        public void DeactivateSubordinate(AgentId teammateId, AgentId managerId, AgentId teamId)
-        {
-            var link = new CommunicationLink(teammateId, CommunicationType.ReportTo, managerId, teamId);
-            DeactivateLink(link);
-        }
-
-        /// <summary>
-        ///     teammate1 and teammate2 are now teammates in the context of the teamId
-        ///     Link are bidirectional
-        /// </summary>
-        public void AddMembers(AgentId teammateId1, AgentId teammateId2, AgentId teamId)
-        {
-            var link1 = new CommunicationLink(teammateId1, CommunicationType.CommunicateTo, teammateId2, teamId);
-            AddLink(link1);
-            var link2 = new CommunicationLink(teammateId2, CommunicationType.CommunicateTo, teammateId1, teamId);
-            AddLink(link2);
+            var count = members.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var agentId1 = members[i];
+                for (var j = i + 1; j < count; j++)
+                {
+                    var agentId2 = members[j];
+                    AddLink(agentId1, agentId2);
+                }
+            }
         }
 
         public void Clear()
@@ -81,25 +77,26 @@ namespace SymuEngine.Repository.Networks.Link
         }
 
         /// <summary>
-        ///     Use AddMembers
+        ///     Use AddLink
+        ///     Link is bidirectional
         /// </summary>
-        /// <param name="link"></param>
-        public void AddLink(CommunicationLink link)
+        /// <param name="agentId1"></param>
+        /// <param name="agentId2"></param>
+        public void AddLink(AgentId agentId1, AgentId agentId2)
         {
-            if (Exists(link))
+            if (agentId1.Equals(agentId2))
             {
-                Activate(link);
+                return;
+            }
+
+            if (Exists(agentId1, agentId2))
+            {
+                Activate(agentId1, agentId2);
             }
             else
             {
-                List.Add(link);
+                List.Add(new NetworkLink(agentId1, agentId2));
             }
-        }
-
-        public bool Exists(AgentId teammateId1, CommunicationType type, AgentId teammateId2, AgentId teamId)
-        {
-            var link = new CommunicationLink(teammateId1, type, teammateId2, teamId);
-            return Exists(link);
         }
 
         public bool Exists(NetworkLink link)
@@ -107,29 +104,31 @@ namespace SymuEngine.Repository.Networks.Link
             return List.Contains(link);
         }
 
-        private NetworkLink Get(NetworkLink link)
+        /// <summary>
+        ///     Link exists between agentId1 and agentId2 in the context of the groupId
+        /// </summary>
+        /// <param name="agentId1"></param>
+        /// <param name="agentId2"></param>
+        public bool Exists(AgentId agentId1, AgentId agentId2)
         {
-            return List.Find(l => l.Equals(link));
+            return List.Exists(x => x.HasLink(agentId1, agentId2));
         }
 
-        private void Activate(NetworkLink link)
+        private NetworkLink Get(AgentId agentId1, AgentId agentId2)
         {
-            Get(link).Activate();
+            return List.Find(x => x.HasLink(agentId1, agentId2));
         }
 
-        public void DeactivateTeammates(AgentId teammateId1, AgentId teammateId2, AgentId teamId)
+        private void Activate(AgentId agentId1, AgentId agentId2)
         {
-            var link1 = new CommunicationLink(teammateId1, CommunicationType.CommunicateTo, teammateId2, teamId);
-            DeactivateLink(link1);
-            var link2 = new CommunicationLink(teammateId2, CommunicationType.CommunicateTo, teammateId1, teamId);
-            DeactivateLink(link2);
+            Get(agentId1, agentId2).Activate();
         }
 
-        private void DeactivateLink(NetworkLink link)
+        public void DeactivateLink(AgentId agentId1, AgentId agentId2)
         {
-            if (Exists(link))
+            if (Exists(agentId1, agentId2))
             {
-                Get(link).Deactivate();
+                Get(agentId1, agentId2).Deactivate();
             }
         }
 
@@ -138,19 +137,36 @@ namespace SymuEngine.Repository.Networks.Link
             return List.Exists(l => l.HasActiveLink(agentId1, agentId2));
         }
 
+        public float CountLinks(AgentId agentId1, AgentId agentId2)
+        {
+            return Exists(agentId1, agentId2) ? Get(agentId1, agentId2).Count : 0;
+        }
+
+        public float NormalizedCountLinks(AgentId agentId1, AgentId agentId2)
+        {
+            return _maxLinksCount == 0 ? 0 : CountLinks(agentId1, agentId2) / _maxLinksCount;
+        }
+
+        public void SetMaxLinksCount()
+        {
+            _maxLinksCount = List.Any() ? List.Max(x => x.Count) : (uint) 0;
+        }
+
+        #region unit tests
+
         public bool HasPassiveLink(AgentId agentId1, AgentId agentId2)
         {
             return List.Exists(l => l.HasPassiveLink(agentId1, agentId2));
         }
 
+        /// <summary>
+        ///     Get all the active links of an agent
+        /// </summary>
         public IEnumerable<AgentId> GetActiveLinks(AgentId agentId)
         {
             return List.FindAll(l => l.HasActiveLinks(agentId)).Select(l => l.AgentId2).Distinct();
         }
 
-        public IEnumerable<AgentId> GetActiveLinks(AgentId agentId, byte groupClassKey)
-        {
-            return List.FindAll(l => l.HasActiveLinks(agentId, groupClassKey)).Select(l => l.AgentId2).Distinct();
-        }
+        #endregion
     }
 }

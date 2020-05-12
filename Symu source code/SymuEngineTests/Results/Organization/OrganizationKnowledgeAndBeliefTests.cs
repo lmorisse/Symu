@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,8 +10,8 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Knowledges;
@@ -29,7 +29,7 @@ namespace SymuEngineTests.Results.Organization
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
-        private readonly Network _network = new Network(new AgentTemplates());
+        private readonly Network _network = new Network(new AgentTemplates(), new InteractionSphereModel());
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private OrganizationKnowledgeAndBelief _result;
 

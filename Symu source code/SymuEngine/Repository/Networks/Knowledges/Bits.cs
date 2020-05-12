@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -71,12 +71,12 @@ namespace SymuEngine.Repository.Networks.Knowledges
         ///     Get the knowledgeBit at the index i
         /// </summary>
         /// <param name="index"></param>
-        /// <returns>-1 if knowledgeBits == null</returns>
+        /// <returns>0 if knowledgeBits == null</returns>
         public float GetBit(byte index)
         {
             if (IsNull)
             {
-                return -1;
+                return 0;
             }
 
             return _bits[index];
@@ -202,6 +202,35 @@ namespace SymuEngine.Repository.Networks.Knowledges
             }
 
             return bits;
+        }
+
+
+        /// <summary>
+        ///     Get a normalized value of the bits1 * bits2 / Length
+        ///     This is used to set the relative expertise or belief of an agent vs another
+        /// </summary>
+        /// <param name="bits1"></param>
+        /// <param name="bits2"></param>
+        /// <returns></returns>
+        public static float GetRelativeBits(Bits bits1, Bits bits2)
+        {
+            if (bits1 == null)
+            {
+                throw new ArgumentNullException(nameof(bits1));
+            }
+
+            if (bits2 == null)
+            {
+                throw new ArgumentNullException(nameof(bits2));
+            }
+
+            var relativeKnowledgeBits = 0F;
+            for (byte i = 0; i < bits1.Length; i++)
+            {
+                relativeKnowledgeBits += bits1.GetBit(i) * bits2.GetBit(i);
+            }
+
+            return bits1.Length > 0 ? relativeKnowledgeBits / bits1.Length : 0;
         }
     }
 }

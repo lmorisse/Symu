@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuToolsTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,7 +11,7 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuTools.ProbabilityDistributions;
+using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -39,12 +39,21 @@ namespace SymuToolsTests.ProbabilityDistributions
         }
 
         /// <summary>
-        ///     Force Sample to index 0
+        ///     Force Sample to index 1
         /// </summary>
         [TestMethod]
         public void SampleIndexTest1()
         {
-            Assert.AreEqual(0, Categorical.SampleIndex(1, 0, 0));
+            Assert.AreEqual(1, Categorical.SampleIndex(0, 1, 0));
+        }
+
+        /// <summary>
+        ///     Force Sample to not be equal to index 0
+        /// </summary>
+        [TestMethod]
+        public void SampleIndexTest2()
+        {
+            Assert.AreNotEqual(0, Categorical.SampleIndex(0, 0.3F, 0.3F, 0.4F));
         }
 
         /// <summary>

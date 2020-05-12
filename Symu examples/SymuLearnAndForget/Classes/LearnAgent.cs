@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuLearnAndForget
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,12 +10,12 @@
 #region using directives
 
 using System.Linq;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
 using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;
 
@@ -31,7 +31,7 @@ namespace SymuLearnAndForget.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.SimpleHuman);
+            SetCognitive(Environment.Organization.Templates.Human);
             Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.ViaAPlatform;

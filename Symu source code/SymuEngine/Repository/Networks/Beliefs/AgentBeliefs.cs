@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -90,6 +90,16 @@ namespace SymuEngine.Repository.Networks.Beliefs
         public float GetBeliefsSum()
         {
             return List.Sum(l => l.GetBeliefSum());
+        }
+
+
+        /// <summary>
+        ///     Get all the belief Ids of an agent
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ushort> GetBeliefIds()
+        {
+            return List.Select(x => x.BeliefId);
         }
     }
 }

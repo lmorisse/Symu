@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuMessageAndTaskTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -38,7 +38,7 @@ namespace SymuMessageAndTaskTests
         {
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
-            var scenario = new TimeStepScenario(_environment.Organization.NextEntityIndex(), _environment)
+            var scenario = new TimeStepScenario(_environment)
             {
                 NumberOfSteps = NumberOfSteps
             };
@@ -55,7 +55,7 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void TaskModelOffTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = false;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = false;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
         }
@@ -66,11 +66,11 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void TaskModelOnTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _simulation.Process();
             var total = _environment.IterationResult.Tasks.Total;
             Assert.IsTrue(total > 0);
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             _simulation.Process();
             var total2 = _environment.IterationResult.Tasks.Total;
             Assert.IsTrue(total2 > total);
@@ -79,8 +79,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void TotalWeight()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
@@ -94,8 +94,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void TotalWeight1()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _environment.CostOfTask = 0;
@@ -110,7 +110,7 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void ToDoTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _environment.NumberOfTasks = 10;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.Tasks.AverageToDo);
@@ -122,9 +122,9 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void ToDoTest1()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
             _environment.NumberOfTasks = 10;
             _simulation.Process();
             Assert.IsTrue(0 < _environment.IterationResult.Tasks.AverageToDo);
@@ -133,7 +133,7 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void InProgressTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _environment.InitialCapacity = 0.1F;
             _simulation.Process();
             Assert.IsTrue(0 < _environment.IterationResult.Tasks.AverageInProgress);
@@ -143,10 +143,10 @@ namespace SymuMessageAndTaskTests
         public void LimitNumberOfTasksTest()
         {
             const ushort number = 4;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal = number;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal = number;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
@@ -156,8 +156,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void AgentCanBeIsolatedTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Capacity);
@@ -166,8 +166,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void RandomLevelTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _environment.SetRandomLevel(3);
@@ -179,8 +179,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void SwitchingContextTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _environment.SwitchingContextCost = 2;
@@ -200,8 +200,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void LimitMessageTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
             _simulation.Process();
             Assert.AreEqual(0, (int) _environment.Messages.SentMessagesCount);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
@@ -213,10 +213,10 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void LimitMessageTest1()
         {
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 1;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 1;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             _simulation.Process();
             Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, (int) _environment.Messages.SentMessagesCount);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
@@ -228,11 +228,11 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void LimitMessageTest2()
         {
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 2;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 2;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
@@ -247,13 +247,13 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void LimitMessageTest3()
         {
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.MaximumMessagesSentPerPeriod = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod = 1;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesSentPerPeriod = 1;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod = true;
+            _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod = 1;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
@@ -265,8 +265,8 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void CostOfMessageTest()
         {
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Email.CostToReceiveLevel = GenericLevel.Complete;
             _organization.Templates.Email.CostToSendLevel = GenericLevel.Complete;
             _simulation.Process();

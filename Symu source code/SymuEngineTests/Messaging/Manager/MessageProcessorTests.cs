@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -13,7 +13,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Messaging.Manager;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -43,7 +43,7 @@ namespace SymuEngineTests.Messaging.Manager
         [TestMethod]
         public void ExceptionTest()
         {
-            var message = new SymuEngine.Messaging.Message.Message();
+            var message = new SymuEngine.Messaging.Messages.Message();
             _mailbox.Post(message);
         }
 
@@ -65,7 +65,7 @@ namespace SymuEngineTests.Messaging.Manager
         public void PostDelayedTest()
         {
             Assert.AreEqual(0, _mailbox.DelayedMessages.Count);
-            var message = new SymuEngine.Messaging.Message.Message();
+            var message = new SymuEngine.Messaging.Messages.Message();
             _mailbox.PostAsADelayed(message, 0);
             Assert.AreEqual(1, _mailbox.DelayedMessages.Count);
         }
@@ -73,7 +73,7 @@ namespace SymuEngineTests.Messaging.Manager
         [TestMethod]
         public void NextDelayedMessagesTest()
         {
-            var message = new SymuEngine.Messaging.Message.Message();
+            var message = new SymuEngine.Messaging.Messages.Message();
             _mailbox.PostAsADelayed(message, 0);
             Assert.AreEqual(message, _mailbox.NextDelayedMessages(0));
             Assert.AreEqual(0, _mailbox.DelayedMessages.Count);
@@ -99,7 +99,7 @@ namespace SymuEngineTests.Messaging.Manager
         [TestMethod]
         public void PostTest()
         {
-            var message = new SymuEngine.Messaging.Message.Message
+            var message = new SymuEngine.Messaging.Messages.Message
             {
                 Medium = CommunicationMediums.Email
             };

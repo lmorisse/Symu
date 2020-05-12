@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuMessageAndTask
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agent.Models.Templates.Communication;
+using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Environment;
 
 #endregion
@@ -101,7 +101,7 @@ namespace SymuMessageAndTask.Classes
         public override void SetModelForAgents()
         {
             base.SetModelForAgents();
-            Organization.Templates.SimpleHuman.Cognitive.InteractionPatterns.IsolationIsRandom = true;
+            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = true;
             Organization.Models.FollowTasks = true;
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             for (var i = 0; i < WorkersCount; i++)

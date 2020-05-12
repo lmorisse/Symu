@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -65,25 +65,7 @@ namespace SymuEngine.Common
         /// <returns></returns>
         public static string GetName(Frequency level)
         {
-            switch (level)
-            {
-                case Frequency.Never:
-                    return "Never";
-                case Frequency.VeryRarely:
-                    return "VeryRarely";
-                case Frequency.Rarely:
-                    return "Rarely";
-                case Frequency.Medium:
-                    return "Medium";
-                case Frequency.Often:
-                    return "Often";
-                case Frequency.VeryOften:
-                    return "VeryOften";
-                case Frequency.Always:
-                    return "Always";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return level.ToString();
         }
     }
 }

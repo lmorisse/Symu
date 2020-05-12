@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -18,7 +18,7 @@ namespace SymuEngine.Classes.Scenario
 {
     public class TimeStepScenario : SimulationScenario
     {
-        public TimeStepScenario(ushort key, SymuEnvironment environment) : base(key, null, environment)
+        public TimeStepScenario(SymuEnvironment environment) : base(null, environment)
         {
         }
 
@@ -42,7 +42,7 @@ namespace SymuEngine.Classes.Scenario
 
         public override SimulationScenario Clone()
         {
-            var clone = new TimeStepScenario(Id.Key, Environment)
+            var clone = new TimeStepScenario(Environment)
             {
                 NumberOfSteps = NumberOfSteps
             };

@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -65,25 +65,7 @@ namespace SymuEngine.Common
         /// <returns></returns>
         public static string GetName(GenericLevel level)
         {
-            switch (level)
-            {
-                case GenericLevel.None:
-                    return "None";
-                case GenericLevel.VeryLow:
-                    return "VeryLow";
-                case GenericLevel.Low:
-                    return "Low";
-                case GenericLevel.Medium:
-                    return "Medium";
-                case GenericLevel.High:
-                    return "High";
-                case GenericLevel.VeryHigh:
-                    return "VeryHigh";
-                case GenericLevel.Complete:
-                    return "Complete";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return level.ToString();
         }
     }
 }

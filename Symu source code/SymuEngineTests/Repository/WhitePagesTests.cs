@@ -1,7 +1,7 @@
 #region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,7 +12,7 @@
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
 using SymuEngine.Engine;
@@ -44,23 +44,12 @@ namespace SymuEngineTests.Repository
         [TestMethod]
         public void ExistAgentTests()
         {
-            var agentId = new AgentId(1, ClassName1);
-            Assert.IsFalse(_environment.WhitePages.ExistsAgent(agentId));
             Assert.IsTrue(_environment.WhitePages.ExistsAgent(_agent.Id));
-        }
-
-        [TestMethod]
-        public void ExistWithEnvironmentIdAgentTests()
-        {
-            var agentId = new AgentId(1, ClassName1);
-            Assert.IsFalse(_environment.WhitePages.ExistsAgent(agentId));
         }
 
         [TestMethod]
         public void GetAgentTests()
         {
-            var agentId = new AgentId(1, ClassName1);
-            Assert.IsNull(_environment.WhitePages.GetAgent(agentId));
             Assert.AreEqual(_agent, _environment.WhitePages.GetAgent(_agent.Id));
         }
 
@@ -99,16 +88,6 @@ namespace SymuEngineTests.Repository
             Assert.ThrowsException<ArgumentException>(() => new TestAgent(1, _environment));
         }
 
-        /// <summary>
-        ///     2 Agents With different Names
-        /// </summary>
-        [TestMethod]
-        public void TestAgentTest2()
-        {
-            _ = new TestAgent(1, ClassName1, _environment);
-            Assert.AreEqual(1, _environment.WhitePages.FilteredAgentsByClassCount(ClassName1));
-        }
-
         [TestMethod]
         public void SetEnvironment()
         {
@@ -118,12 +97,11 @@ namespace SymuEngineTests.Repository
         [TestMethod]
         public void ClearAgentsTest()
         {
-            var agent = new TestAgent(1, ClassName1, _environment);
             _environment.Start();
-            _environment.WhitePages.WaitingForStart(agent.Id);
-            agent.State = AgentState.Stopping;
+            _environment.WhitePages.WaitingForStart(_agent.Id);
+            _agent.State = AgentState.Stopping;
             _environment.ManageAgentsToStop();
-            _environment.WhitePages.WaitingForStop(agent.Id);
+            _environment.WhitePages.WaitingForStop(_agent.Id);
             _environment.InitializeIteration();
             //Assert
             Assert.IsFalse(_environment.WhitePages.StoppedAgents.Any());

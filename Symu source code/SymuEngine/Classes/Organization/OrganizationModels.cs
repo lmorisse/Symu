@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Common;
 using SymuEngine.Engine;
 
@@ -48,6 +48,12 @@ namespace SymuEngine.Classes.Organization
         public bool FollowBlockers { get; set; }
 
         /// <summary>
+        ///     If true, allow multiple blockers at the same time
+        ///     If false, will check new blockers only if there is no blocker
+        /// </summary>
+        public bool MultipleBlockers { get; set; }
+
+        /// <summary>
         ///     Agent knowledge learning model
         /// </summary>
         public ModelEntity Learning { get; set; } = new ModelEntity();
@@ -57,11 +63,7 @@ namespace SymuEngine.Classes.Organization
         /// </summary>
         public ModelEntity Forgetting { get; set; } = new ModelEntity();
 
-        /// <summary>
-        ///     If true, allow multiple blockers at the same time
-        ///     If false, will check new blockers only if there is no blocker
-        /// </summary>
-        public bool MultipleBlockers { get; set; }
+        public InteractionSphereModel InteractionSphere { get; set; } = new InteractionSphereModel();
 
         /// <summary>
         ///     Random generator modes in order to create random network
@@ -108,6 +110,7 @@ namespace SymuEngine.Classes.Organization
 
             Learning.CopyTo(entity.Learning);
             Forgetting.CopyTo(entity.Forgetting);
+            InteractionSphere.CopyTo(entity.InteractionSphere);
             entity.FollowGroupFlexibility = FollowGroupFlexibility;
             entity.FollowGroupKnowledge = FollowGroupKnowledge;
             entity.MultipleBlockers = MultipleBlockers;

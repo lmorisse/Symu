@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,6 +10,7 @@
 #region using directives
 
 using System.Collections.Generic;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -30,9 +31,9 @@ namespace SymuEngine.Messaging.Reply
 
         public object Param { get; }
 
-        public List<Message.Message> Messages { get; } = new List<Message.Message>();
+        public List<Message> Messages { get; } = new List<Message>();
 
-        public void Increment(Message.Message message)
+        public void Increment(Message message)
         {
             Increment();
             Messages.Add(message);

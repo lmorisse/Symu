@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
@@ -148,7 +148,7 @@ namespace SymuEngine.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool HasActivities(AgentId groupId)
+        public bool GroupHasActivities(AgentId groupId)
         {
             return Exists(groupId) && Repository[groupId].Any();
         }
@@ -158,7 +158,7 @@ namespace SymuEngine.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetActivities(AgentId groupId)
+        public IEnumerable<string> GetGroupActivities(AgentId groupId)
         {
             return Exists(groupId) ? Repository[groupId].Select(x => x.Name) : new List<string>();
         }
@@ -241,7 +241,7 @@ namespace SymuEngine.Repository.Networks.Activities
         public void AddActivity(AgentId agentId, string activity, AgentId groupId)
         {
             AddGroup(groupId);
-            if (HasAnActivityOn(agentId, groupId, activity))
+            if (AgentHasAnActivityOn(agentId, groupId, activity))
             {
                 return;
             }
@@ -250,13 +250,13 @@ namespace SymuEngine.Repository.Networks.Activities
             AgentActivities[groupId].Add(agentActivity);
         }
 
-        public bool HasAnActivityOn(AgentId agentId, AgentId groupId, string activity)
+        public bool AgentHasAnActivityOn(AgentId agentId, AgentId groupId, string activity)
         {
             return Exists(groupId) && AgentActivities[groupId]
                 .Exists(g => g.AgentId.Equals(agentId) && g.Activity == activity);
         }
 
-        public bool HasActivitiesOn(AgentId agentId, AgentId groupId)
+        public bool AgentHasActivitiesOn(AgentId agentId, AgentId groupId)
         {
             return Exists(groupId) && AgentActivities[groupId].Exists(g => g.AgentId.Equals(agentId));
         }
@@ -268,11 +268,28 @@ namespace SymuEngine.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetActivities(AgentId agentId, AgentId groupId)
+        public IEnumerable<string> GetAgentActivities(AgentId agentId, AgentId groupId)
         {
             return Exists(groupId)
                 ? AgentActivities[groupId].FindAll(g => g.AgentId.Equals(agentId)).Select(x => x.Activity)
                 : new List<string>();
+        }
+
+        /// <summary>
+        ///     Get all the activities of an agentId
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetAgentActivities(AgentId agentId)
+        {
+            var activities = new List<string>();
+            foreach (var agentActivities in AgentActivities)
+            {
+                activities.AddRange(agentActivities.Value.Where(x => x.AgentId.Equals(agentId))
+                    .Select(agentActivity => agentActivity.Activity));
+            }
+
+            return activities;
         }
 
         public IEnumerable<AgentId> FilterAgentIdsWithActivity(IEnumerable<AgentId> agentIds, AgentId groupId,
@@ -283,7 +300,7 @@ namespace SymuEngine.Repository.Networks.Activities
                 throw new ArgumentNullException(nameof(agentIds));
             }
 
-            return agentIds.Where(agentId => HasAnActivityOn(agentId, groupId, activity)).ToList();
+            return agentIds.Where(agentId => AgentHasAnActivityOn(agentId, groupId, activity)).ToList();
         }
 
         /// <summary>
@@ -325,7 +342,7 @@ namespace SymuEngine.Repository.Networks.Activities
         /// <param name="groupTargetId"></param>
         public void TransferTo(AgentId agentId, AgentId groupSourceId, AgentId groupTargetId)
         {
-            AddActivities(agentId, groupTargetId, GetActivities(agentId, groupSourceId));
+            AddActivities(agentId, groupTargetId, GetAgentActivities(agentId, groupSourceId));
             RemoveMember(agentId, groupSourceId);
         }
 

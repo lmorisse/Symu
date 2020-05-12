@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuLearnAndForgetTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,7 +11,7 @@
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
@@ -41,7 +41,7 @@ namespace SymuLearnAndForgetTests
         {
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
-            var scenario = new TimeStepScenario(_environment.Organization.NextEntityIndex(), _environment)
+            var scenario = new TimeStepScenario(_environment)
             {
                 NumberOfSteps = 10
             };
@@ -67,7 +67,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = false;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = false;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -81,7 +81,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.IsTrue(0 < _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
@@ -96,7 +96,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _organization.Models.Generator = RandomGenerator.RandomBinary;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
@@ -114,9 +114,9 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _organization.Models.Generator = RandomGenerator.RandomBinary;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing = 0;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing = 0;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             // Should be > 0 because Knowledge threshold for doing is == 0, agent has the knowledge or not but he can't learn
@@ -132,7 +132,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningByDoingRate = 0;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate = 0;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
@@ -164,7 +164,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
+            _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -178,7 +178,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.MessageContent.CanReceiveKnowledge = false;
+            _organization.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge = false;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -192,7 +192,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.MessageContent.CanSendKnowledge = false;
+            _organization.Templates.Human.Cognitive.MessageContent.CanSendKnowledge = false;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -220,8 +220,8 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
-            _organization.Templates.SimpleHuman.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
+            _organization.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
+            _organization.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _organization.Templates.Email.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _organization.Templates.Email.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _simulation.Process();
@@ -237,7 +237,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningRate = 0;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate = 0;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -267,7 +267,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.TasksAndPerformance.LearningRate = 0;
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate = 0;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -314,7 +314,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _organization.Models.Generator = model;
             _environment.KnowledgeLevel = KnowledgeLevel.FullKnowledge;
             _simulation.Process();
@@ -338,7 +338,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasKnowledge = false;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = false;
             _simulation.Process();
             // Should be = 0 because fullKnowledge => nothing to learn
             Assert.AreEqual(0, _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
@@ -364,11 +364,11 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Forgetting.On = true;
             _organization.Models.Forgetting.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.TimeToLive = 0;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive = 0;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 ForgettingSelectingMode.Oldest;
             // must have some knowledge to forget
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.IsTrue(0 > _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting);
@@ -385,10 +385,10 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Forgetting.On = true;
             _organization.Models.Forgetting.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 ForgettingSelectingMode.Random;
             // must have some knowledge to forget
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.IsTrue(0 > _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting);
@@ -405,10 +405,10 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Forgetting.On = true;
             _organization.Models.Forgetting.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.TimeToLive = -1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive = -1;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 ForgettingSelectingMode.Oldest;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting);
@@ -425,10 +425,10 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Forgetting.On = true;
             _organization.Models.Forgetting.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 ForgettingSelectingMode.Random;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean = 0;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean = 0;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting);
@@ -445,12 +445,12 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Forgetting.On = true;
             _organization.Models.Forgetting.RateOfAgentsOn = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 ForgettingSelectingMode.Random;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.ForgettingMean = 1;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.PartialForgetting = false;
-            _organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge = 0;
-            _organization.Templates.SimpleHuman.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean = 1;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgetting = false;
+            _organization.Templates.Human.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge = 0;
+            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _environment.KnowledgeLevel = KnowledgeLevel.Expert;
             _simulation.Process();
             Assert.AreNotEqual(0, _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting);

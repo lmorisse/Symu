@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,8 +12,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 
@@ -32,9 +33,9 @@ namespace SymuEngine.Repository
     /// <remarks>FIPA Norm : Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        public WhitePages(AgentTemplates agentTemplates)
+        public WhitePages(AgentTemplates agentTemplates, InteractionSphereModel interactionSphereModel)
         {
-            Network = new Network(agentTemplates);
+            Network = new Network(agentTemplates, interactionSphereModel);
         }
 
         /// <summary>
@@ -59,9 +60,18 @@ namespace SymuEngine.Repository
         /// </summary>
         public void Clear()
         {
+            Network.State = AgentState.Starting;
             StoppedAgents.Clear();
             Network.Clear();
             Agents.Clear();
+        }
+
+        /// <summary>
+        ///     CLear agents between two iterations
+        /// </summary>
+        public void SetStarted()
+        {
+            Network.State = AgentState.Started;
         }
 
         /// <summary>

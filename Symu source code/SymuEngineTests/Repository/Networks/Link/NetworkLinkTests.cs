@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,7 +10,7 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Repository.Networks.Link;
 
 #endregion
@@ -55,7 +55,7 @@ namespace SymuEngineTests.Repository.Networks.Link
             var link3 = new NetworkLink(_agentId2, _agentId1);
             var link4 = new NetworkLink(_agentId1, _agentId1);
             Assert.IsTrue(link.Equals(link2));
-            Assert.IsFalse(link.Equals(link3));
+            Assert.IsTrue(link.Equals(link3));
             Assert.IsFalse(link.Equals(link4));
         }
 
@@ -81,19 +81,11 @@ namespace SymuEngineTests.Repository.Networks.Link
         {
             var link = new NetworkLink(_agentId1, _agentId2);
             Assert.IsTrue(link.HasActiveLinks(_agentId1));
-            Assert.IsFalse(link.HasActiveLinks(_agentId2));
+            // links are bidirectional
+            Assert.IsTrue(link.HasActiveLinks(_agentId2));
             link.Deactivate();
             Assert.IsFalse(link.HasActiveLinks(_agentId1));
-        }
-
-        [TestMethod]
-        public void HasActiveLinksByClassKeyTest()
-        {
-            var link = new NetworkLink(_agentId1, _agentId2);
-            Assert.IsTrue(link.HasActiveLinks(_agentId1, _agentId2.ClassKey));
-            Assert.IsFalse(link.HasActiveLinks(_agentId1, _agentId1.ClassKey));
-            link.Deactivate();
-            Assert.IsFalse(link.HasActiveLinks(_agentId1, _agentId2.ClassKey));
+            Assert.IsFalse(link.HasActiveLinks(_agentId2));
         }
     }
 }

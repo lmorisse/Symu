@@ -25,7 +25,7 @@ namespace SymuLearnAndForget.Properties {
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
-        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Density", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
         

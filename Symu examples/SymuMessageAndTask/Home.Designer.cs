@@ -78,6 +78,8 @@
             this.cbRandomLevel = new System.Windows.Forms.ComboBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.SwitchingContextCost = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.costOfTask = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.numberTasksSent = new System.Windows.Forms.TextBox();
@@ -95,8 +97,6 @@
             this.maxNumberTasks = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.CanPerformTask = new System.Windows.Forms.CheckBox();
-            this.SwitchingContextCost = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -362,9 +362,9 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(428, 151);
             this.richTextBox1.TabIndex = 17;
-            this.richTextBox1.Text = "Goal:\nMessgae and task models are implemented in Symu.\nThe objective of this exam" +
-    "ple is to show how to use, configure and see the impacts of those models on agen" +
-    "ts.";
+            this.richTextBox1.Text = "Goal:\nMessaging and tasking models are implemented in Symu.\nThe objective of this" +
+    " example is to show how to use, configure and see the impacts of those models on" +
+    " agents.";
             // 
             // groupBox5
             // 
@@ -417,7 +417,7 @@
             this.groupBox11.Size = new System.Drawing.Size(374, 346);
             this.groupBox11.TabIndex = 16;
             this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Message model";
+            this.groupBox11.Text = "Messaging model";
             // 
             // CostToReceive
             // 
@@ -602,7 +602,7 @@
             this.groupBox10.Size = new System.Drawing.Size(403, 491);
             this.groupBox10.TabIndex = 13;
             this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Task model";
+            this.groupBox10.Text = "Tasking model";
             // 
             // groupBox7
             // 
@@ -618,6 +618,23 @@
             this.groupBox7.TabIndex = 32;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Task";
+            // 
+            // SwitchingContextCost
+            // 
+            this.SwitchingContextCost.Location = new System.Drawing.Point(281, 106);
+            this.SwitchingContextCost.Name = "SwitchingContextCost";
+            this.SwitchingContextCost.Size = new System.Drawing.Size(87, 22);
+            this.SwitchingContextCost.TabIndex = 32;
+            this.SwitchingContextCost.TextChanged += new System.EventHandler(this.SwitchingContextCost_TextChanged);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(25, 106);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(146, 17);
+            this.label21.TabIndex = 31;
+            this.label21.Text = "Switching context cost";
             // 
             // costOfTask
             // 
@@ -782,23 +799,6 @@
             this.CanPerformTask.TabIndex = 3;
             this.CanPerformTask.Text = "Can perform task";
             this.CanPerformTask.UseVisualStyleBackColor = true;
-            // 
-            // SwitchingContextCost
-            // 
-            this.SwitchingContextCost.Location = new System.Drawing.Point(281, 106);
-            this.SwitchingContextCost.Name = "SwitchingContextCost";
-            this.SwitchingContextCost.Size = new System.Drawing.Size(87, 22);
-            this.SwitchingContextCost.TabIndex = 32;
-            this.SwitchingContextCost.TextChanged += new System.EventHandler(this.SwitchingContextCost_TextChanged);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(25, 106);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(183, 21);
-            this.label21.TabIndex = 31;
-            this.label21.Text = "Switching context cost";
             // 
             // Home
             // 

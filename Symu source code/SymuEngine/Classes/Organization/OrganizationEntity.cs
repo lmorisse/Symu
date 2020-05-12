@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,8 +10,8 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;

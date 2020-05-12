@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,8 +11,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
@@ -214,6 +215,15 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             _network.AddBelief(_belief);
             _network.LearnNewBelief(_agentId, _belief.Id);
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
+        }
+
+        [TestMethod]
+        public void GetBeliefIdsTest()
+        {
+            _network.AddAgentId(_agentId);
+            Assert.AreEqual(0, _network.GetBeliefIds(_agentId).Count());
+            _network.AddBelief(_agentId, 1);
+            Assert.AreEqual(1, _network.GetBeliefIds(_agentId).Count());
         }
     }
 }

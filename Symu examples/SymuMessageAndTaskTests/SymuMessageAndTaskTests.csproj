@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SymuForm\SymuMessageAndTask.csproj" />
+    <ProjectReference Include="..\SymuMessageAndTask\SymuMessageAndTask.csproj" />
   </ItemGroup>
 
 </Project>

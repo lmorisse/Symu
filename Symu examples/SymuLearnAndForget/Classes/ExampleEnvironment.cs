@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuLearnAndForget
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -35,20 +35,22 @@ namespace SymuLearnAndForget.Classes
             WhitePages.Network.AddKnowledge(Knowledge);
             LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this);
             LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.Human.Cognitive.InternalCharacteristics);
             LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this);
             LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.Human.Cognitive.InternalCharacteristics);
             LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this);
             LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.Human.Cognitive.InternalCharacteristics);
             DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this);
             DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
-                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.Human.Cognitive.InternalCharacteristics);
             ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this);
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel.Expert,
-                Organization.Templates.SimpleHuman.Cognitive.InternalCharacteristics);
+                Organization.Templates.Human.Cognitive.InternalCharacteristics);
+            // Set active link between expert and LearnByAskingAgent to be able to exchange information
+            WhitePages.Network.NetworkLinks.AddLink(LearnByAskingAgent.Id, ExpertAgent.Id);
         }
     }
 }

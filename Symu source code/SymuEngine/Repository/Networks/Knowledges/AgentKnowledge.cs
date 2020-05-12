@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using static SymuTools.Algorithm.Constants;
+using static SymuTools.Constants;
 
 #endregion
 
@@ -224,11 +224,13 @@ namespace SymuEngine.Repository.Networks.Knowledges
 
             for (byte i = 0; i < taskKnowledgeIndexes.Length; i++)
             {
-                if (!KnowsEnough(taskKnowledgeIndexes[i], knowledgeThreshHoldForDoing, step))
+                if (KnowsEnough(taskKnowledgeIndexes[i], knowledgeThreshHoldForDoing, step))
                 {
-                    index = taskKnowledgeIndexes[i];
-                    return false;
+                    continue;
                 }
+
+                index = taskKnowledgeIndexes[i];
+                return false;
             }
 
             index = 0;

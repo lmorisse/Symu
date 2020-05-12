@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -20,11 +21,11 @@ namespace SymuEngine.Messaging.Manager
     /// </summary>
     public class MessageEventArgs : EventArgs
     {
-        public MessageEventArgs(Message.Message message)
+        public MessageEventArgs(Message message)
         {
             Message = message ?? throw new ArgumentNullException(nameof(message));
         }
 
-        public Message.Message Message { get; set; }
+        public Message Message { get; set; }
     }
 }

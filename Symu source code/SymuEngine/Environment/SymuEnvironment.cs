@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -13,11 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Messaging.Log;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
 using SymuEngine.Results;
 using SymuTools;
@@ -74,7 +74,7 @@ namespace SymuEngine.Environment
         public void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Templates);
+            WhitePages = new WhitePages(Organization.Templates, Organization.Models.InteractionSphere);
         }
 
         /// <summary>
@@ -150,6 +150,8 @@ namespace SymuEngine.Environment
             WhitePages.Network.NetworkBeliefs.Model =
                 Organization.Models.Generator;
             SetModelForAgents();
+            WhitePages.Network.InitializeNetworkLinks();
+            WhitePages.SetStarted();
         }
 
         /// <summary>
@@ -274,6 +276,11 @@ namespace SymuEngine.Environment
         public void NextStep()
         {
             SendDelayedMessages();
+            if (TimeStep.Step == 0)
+            {
+                SetInteractionSphere(true);
+            }
+
             var agents = WhitePages.AllAgents().Shuffle();
             if (TimeStep.Type <= TimeStepType.Daily)
             {
@@ -286,23 +293,54 @@ namespace SymuEngine.Environment
                 {
                     agents.ForEach(a => a.ActWeekEnd());
                 }
+
+                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate <=
+                    TimeStepType.Daily && TimeStep.Step > 0)
+                {
+                    SetInteractionSphere(false);
+                }
             }
 
             if (TimeStep.Type <= TimeStepType.Weekly && TimeStep.IsEndOfWeek)
             {
                 agents.ForEach(a => a.ActEndOfWeek());
+                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
+                    TimeStepType.Weekly && TimeStep.Step > 0)
+                {
+                    SetInteractionSphere(false);
+                }
             }
 
             if (TimeStep.Type <= TimeStepType.Monthly && TimeStep.IsEndOfMonth)
             {
                 SetMonthlyIterationResult();
                 agents.ForEach(a => a.ActEndOfMonth());
+                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
+                    TimeStepType.Monthly && TimeStep.Step > 0)
+                {
+                    SetInteractionSphere(false);
+                }
             }
 
             if (TimeStep.IsEndOfYear)
             {
                 agents.ForEach(a => a.ActEndOfYear());
+                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
+                    TimeStepType.Yearly && TimeStep.Step > 0)
+                {
+                    SetInteractionSphere(false);
+                }
             }
+        }
+
+        /// <summary>
+        ///     Set Sphere for the InteractionSphere
+        /// </summary>
+        public void SetInteractionSphere(bool initialization)
+        {
+            var agentIds = WhitePages.AllAgents().Where(x => x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere)
+                .Select(x => x.Id).ToList();
+            WhitePages.Network.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.Network);
         }
 
         /// <summary>
@@ -317,6 +355,8 @@ namespace SymuEngine.Environment
         }
 
         /// <summary>
+        ///     Trigger every event before the new step
+        ///     Do not send messages, use NextStep for that
         ///     Trigger Agent.PreStep()
         /// </summary>
         public void PreStep()

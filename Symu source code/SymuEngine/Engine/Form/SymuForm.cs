@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -36,7 +36,6 @@ namespace SymuEngine.Engine.Form
         }
 
         protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
-        protected MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
         protected TimeStepType TimeStepType { get; set; } = TimeStepType.Daily;
         protected AgentState State { get; private set; } = AgentState.NotStarted;
 

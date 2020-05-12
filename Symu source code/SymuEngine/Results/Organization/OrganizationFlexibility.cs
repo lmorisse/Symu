@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,7 +12,8 @@
 using System.Collections.Generic;
 using SymuEngine.Environment;
 using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Knowledges;
+using SymuEngine.Repository.Networks.Sphere;
+using SymuTools.Math;
 
 #endregion
 
@@ -24,11 +25,6 @@ namespace SymuEngine.Results.Organization
     /// </summary>
     public class OrganizationFlexibility
     {
-        /// <summary>
-        ///     Set the classKey of the agents that we want to get the flexibility performance
-        /// </summary>
-        private const byte ClassKey = SymuYellowPages.Actor;
-
         /// <summary>
         ///     Network of the simulation
         /// </summary>
@@ -48,11 +44,24 @@ namespace SymuEngine.Results.Organization
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical
         ///     value)
         /// </summary>
-        public List<TriadsStruct> Triads { get; } = new List<TriadsStruct>();
+        public List<GroupDensityStruct> Triads { get; } = new List<GroupDensityStruct>();
+
+        /// <summary>
+        ///     The number of connections between agents
+        /// </summary>
+        public List<GroupDensityStruct> Links { get; } = new List<GroupDensityStruct>();
+
+        /// <summary>
+        ///     Sphere of interaction is the weight of the network in the simulation
+        /// </summary>
+
+        public List<GroupDensityStruct> Sphere { get; } = new List<GroupDensityStruct>();
 
         public void Clear()
         {
             Triads.Clear();
+            Links.Clear();
+            Sphere.Clear();
         }
 
         /// <summary>
@@ -60,15 +69,35 @@ namespace SymuEngine.Results.Organization
         ///     Rapid formation and reformation of triads is one key aspect of flexibility
         ///     For flexibility, Triads numbers are normalized with maximum potential triads
         /// </summary>
-        public void HandleTriads(ushort step)
+        public void HandleTriads(ushort agentsCount, ushort step)
         {
-            var numberOfTriads = KnowledgeMatrix.NumberOfTriads(
-                _environment.WhitePages.Network.NetworkKnowledges.Repository,
-                _environment.WhitePages.FilteredAgentIdsByClassKey(ClassKey),
-                _environment.WhitePages.Network.NetworkKnowledges);
-            var maxTriads = KnowledgeMatrix.MaxTriads(_environment.WhitePages.FilteredAgentsByClassCount(ClassKey));
-            var triads = new TriadsStruct(numberOfTriads, maxTriads, step);
+            var numberOfTriads =
+                InteractionMatrix.NumberOfTriads(_environment.WhitePages.Network.InteractionSphere.Sphere);
+            var maxTriads = InteractionMatrix.MaxTriads(agentsCount);
+            var triads = new GroupDensityStruct(numberOfTriads, maxTriads, step);
             Triads.Add(triads);
+        }
+
+        /// <summary>
+        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
+        /// </summary>
+        public void HandleLinks(ushort agentsCount, ushort step)
+        {
+            var actualLinks = _environment.WhitePages.Network.NetworkLinks.Count;
+            var maxLinks = Combinatorics.Combinations(agentsCount, 2);
+            var sphere = new GroupDensityStruct(actualLinks, maxLinks, step);
+            Links.Add(sphere);
+        }
+
+        /// <summary>
+        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
+        /// </summary>
+        public void HandleSphere(ushort step)
+        {
+            var actualSphereWeight = _environment.WhitePages.Network.InteractionSphere.GetSphereWeight();
+            var maxSphereWeight = _environment.WhitePages.Network.InteractionSphere.GetMaxSphereWeight();
+            var sphere = new GroupDensityStruct(actualSphereWeight, maxSphereWeight, step);
+            Sphere.Add(sphere);
         }
 
         public void HandlePerformance(ushort step)
@@ -78,7 +107,10 @@ namespace SymuEngine.Results.Organization
                 return;
             }
 
-            HandleTriads(step);
+            var actorCount = _environment.WhitePages.FilteredAgentsByClassCount(SymuYellowPages.Actor);
+            HandleTriads(actorCount, step);
+            HandleLinks(actorCount, step);
+            HandleSphere(step);
         }
     }
 }

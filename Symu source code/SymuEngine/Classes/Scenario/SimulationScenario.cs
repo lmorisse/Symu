@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,25 +10,25 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agent;
-using SymuEngine.Classes.Agent.Models.Templates;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Environment;
 
 #endregion
 
 namespace SymuEngine.Classes.Scenario
 {
-    public class SimulationScenario : Agent.Agent
+    public class SimulationScenario : Agent
     {
-        public SimulationScenario(ushort key, object parent, SymuEnvironment environment) : base(
-            new AgentId(key, ScenarioEntity.ClassKey), environment)
+        public SimulationScenario(object parent, SymuEnvironment environment) : base(
+            new AgentId(environment.Organization.NextEntityIndex(), ScenarioEntity.ClassKey), environment)
         {
             if (environment is null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            Entity = new ScenarioEntity(key);
+            Entity = new ScenarioEntity(Id.Key);
             Parent = parent;
             SetCognitive(new StandardAgentTemplate());
         }
@@ -41,7 +41,7 @@ namespace SymuEngine.Classes.Scenario
 
         public virtual SimulationScenario Clone()
         {
-            var clone = new SimulationScenario(Id.Key, Parent, Environment);
+            var clone = new SimulationScenario(Parent, Environment);
             return clone;
         }
 

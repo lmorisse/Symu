@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -25,12 +26,12 @@ namespace SymuEngine.Messaging.Delayed
         /// <summary>
         ///     Key => step
         /// </summary>
-        private readonly Dictionary<ushort, Queue<Message.Message>> _messages =
-            new Dictionary<ushort, Queue<Message.Message>>();
+        private readonly Dictionary<ushort, Queue<Message>> _messages =
+            new Dictionary<ushort, Queue<Message>>();
 
         public int Count => _messages.Values.Sum(l => l.Count);
 
-        public void Enqueue(Message.Message message, ushort step)
+        public void Enqueue(Message message, ushort step)
         {
             if (message is null)
             {
@@ -41,7 +42,7 @@ namespace SymuEngine.Messaging.Delayed
             {
                 if (!_messages.ContainsKey(step))
                 {
-                    _messages.Add(step, new Queue<Message.Message>());
+                    _messages.Add(step, new Queue<Message>());
                 }
 
                 _messages[step].Enqueue(message);
@@ -53,7 +54,7 @@ namespace SymuEngine.Messaging.Delayed
         /// </summary>
         /// <param name="step"></param>
         /// <returns></returns>
-        public Message.Message Dequeue(ushort step)
+        public Message Dequeue(ushort step)
         {
             var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key).Select(m => m.Key)
                 .ToList();
@@ -65,7 +66,7 @@ namespace SymuEngine.Messaging.Delayed
         /// </summary>
         /// <param name="step"></param>
         /// <returns></returns>
-        public Message.Message Last(ushort step)
+        public Message Last(ushort step)
         {
             var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key).Select(m => m.Key)
                 .ToList();
@@ -76,7 +77,7 @@ namespace SymuEngine.Messaging.Delayed
         ///     Return the last message without remove it
         /// </summary>
         /// <returns></returns>
-        public Message.Message Last()
+        public Message Last()
         {
             return _messages.Values.Last().Peek();
         }

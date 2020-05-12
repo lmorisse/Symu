@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,8 +12,8 @@
 using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.ProbabilityDistributions;
-using static SymuTools.Algorithm.Constants;
+using SymuTools.Math.ProbabilityDistributions;
+using static SymuTools.Constants;
 
 #endregion
 

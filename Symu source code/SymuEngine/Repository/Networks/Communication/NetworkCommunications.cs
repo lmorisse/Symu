@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -10,9 +10,9 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agent.Models;
-using SymuEngine.Classes.Agent.Models.Templates.Communication;
-using SymuEngine.Messaging.Message;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Agents.Models.Templates.Communication;
+using SymuEngine.Messaging.Messages;
 
 #endregion
 
@@ -61,8 +61,10 @@ namespace SymuEngine.Repository.Networks.Communication
                     return FaceToFace;
                 case CommunicationMediums.ViaAPlatform:
                     return ViaPlatform;
-                default:
+                case CommunicationMediums.System:
                     return null;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(channel), channel, null);
             }
         }
 

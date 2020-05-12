@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngineTests
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -9,7 +9,8 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Environment;
 using SymuEngine.Repository;
 
@@ -26,13 +27,13 @@ namespace SymuEngineTests.Helpers
 
         public TestAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment)
         {
-            SetCognitive(null);
+            SetCognitive(new SimpleHumanTemplate());
         }
 
         public TestAgent(ushort key, byte classKey, SymuEnvironment environment) : base(new AgentId(key, classKey),
             environment)
         {
-            SetCognitive(null);
+            SetCognitive(new SimpleHumanTemplate());
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agent;
+using SymuEngine.Classes.Agents;
 
 #endregion
 
@@ -53,13 +53,7 @@ namespace SymuEngine.Repository.Networks.Group
 
         public void RemoveMember(AgentId agentId)
         {
-            var groupIds = GetGroups();
-            if (groupIds == null)
-            {
-                return;
-            }
-
-            foreach (var groupId in groupIds)
+            foreach (var groupId in GetGroups().ToList())
             {
                 RemoveMember(agentId, groupId);
             }
@@ -75,7 +69,7 @@ namespace SymuEngine.Repository.Networks.Group
 
         public IEnumerable<AgentId> GetGroups()
         {
-            return List.Any() ? List.Keys : null;
+            return List.Any() ? (IEnumerable<AgentId>) List.Keys : new List<AgentId>();
         }
 
         /// <summary>
@@ -207,6 +201,29 @@ namespace SymuEngine.Repository.Networks.Group
             groupIds.AddRange(GetGroups().Where(g => g.ClassKey == groupClassKey && IsMemberOfGroup(agentId, g)));
 
             return groupIds;
+        }
+
+        /// <summary>
+        ///     Get the list of the members of all the groups of a agentId, filtered by group.ClassKey
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="groupClassKey"></param>
+        /// <returns>List of groupIds</returns>
+        public IEnumerable<AgentId> GetCoMemberIds(AgentId agentId, byte groupClassKey)
+        {
+            var coMemberIds = new List<AgentId>();
+            var groupIds = GetGroups(agentId, groupClassKey).ToList();
+            if (!groupIds.Any())
+            {
+                return coMemberIds;
+            }
+
+            foreach (var groupId in groupIds)
+            {
+                coMemberIds.AddRange(List[groupId].FindAll(x => !x.AgentId.Equals(agentId)).Select(x => x.AgentId));
+            }
+
+            return coMemberIds.Distinct();
         }
 
         /// <summary>

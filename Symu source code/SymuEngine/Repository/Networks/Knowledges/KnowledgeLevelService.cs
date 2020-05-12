@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuEngine
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -65,25 +65,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <returns></returns>
         public static string GetName(KnowledgeLevel level)
         {
-            switch (level)
-            {
-                case KnowledgeLevel.NoKnowledge:
-                    return "NoKnowledge";
-                case KnowledgeLevel.BasicKnowledge:
-                    return "BasicKnowledge";
-                case KnowledgeLevel.Foundational:
-                    return "Foundational";
-                case KnowledgeLevel.Intermediate:
-                    return "Intermediate";
-                case KnowledgeLevel.FullProficiency:
-                    return "FullProficiency";
-                case KnowledgeLevel.Expert:
-                    return "Expert";
-                case KnowledgeLevel.FullKnowledge:
-                    return "FullKnowledge";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return level.ToString();
         }
     }
 }

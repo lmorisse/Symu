@@ -1,7 +1,7 @@
 ﻿#region Licence
 
 // Description: Symu - SymuTools
-// Website: Website:     https://symu.org
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuTools.ProbabilityDistributions;
+using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -95,7 +95,7 @@ namespace SymuTools
 
             var sum = values.Aggregate<byte, byte>(0, (current, value) => (byte) (current + value));
 
-            return (byte) Math.Round(1.0 * sum / values.Count);
+            return (byte) System.Math.Round(1.0 * sum / values.Count);
         }
 
         public static float Average(this ushort[] values)
