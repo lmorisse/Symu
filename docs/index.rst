@@ -8,9 +8,8 @@ Welcome to Symu's documentation!
    :caption: User guides:
    
    userguides/symugroupandinteraction
-   userguides/symulearnAndforget
-   userguides/symugmessageandtask
-   models/agent
+   userguides/symulearnandforget
+   userguides/symumessageandtask
 
 .. toctree::
    :maxdepth: 2

@@ -20,7 +20,7 @@ There are different means to learn new knowledge:
 
 * learning from a source of information
 * by interacting with another agent
-* by doing by itself.
+* by doing by itself
 
 .. toctree::
    :maxdepth: 2
@@ -35,7 +35,7 @@ The counterpart of learning is forgetting. Agents may forget knowledge or inform
 Forgetting has different modes: 
 
 * it could be random 
-* based on the age of the information.
+* based on the age of the information
 
 .. toctree::
    :maxdepth: 2

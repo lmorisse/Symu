@@ -14,8 +14,12 @@ Randomly selected
 =================
 
 You define a probability to forget, combined with the length of the knowledge, it will define the number of bits that will be forget during the day. If this rate = 0, agent will forget any bits of knowledge; if rate =1, every bit will be affected by the knowledge.
-For example, if you don’t use Symu, with a forgetting rate of 0.1, you may loose 0.1* 20 bits = 2 bits of knowledge today.
-Stander deviation define the level of randomness you want around the forgetting rate.
+
+.. topic:: Example
+
+    If you don’t use Symu, with a forgetting rate of 0.1, you may loose 0.1* 20 bits = 2 bits of knowledge today.
+    
+Standard deviation define the level of randomness you want around the forgetting rate.
 
 Oldest knowledge
 ================

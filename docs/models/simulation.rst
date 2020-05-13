@@ -23,7 +23,7 @@ Each type of message can be configure via templates.
    cognitivearchitecture/interactioncharacteristics
 
 Tasking model
-=============
+*************
 
 In Symu, agents are task-based. A task is an action with a cost. Some of them don’t perform task, such as a book or a static website; others can perform task such as workers. You can specify if the agent can perform task on weekends or not, that can be useful when your organization is an enterprise.
 
