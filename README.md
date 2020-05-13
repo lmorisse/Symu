@@ -4,6 +4,7 @@ Symu is a C# opensource framework for organization simulation.
 You can develop your own application to run virtual experiments with organizations and capture their dynamic behaviors, their evolutions.<br>
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
 [Website : http://symu.org/](http://symu.org/)
+<br>
 [Docs : http://docs.symu.org/](http://docs.symu.org/)
 
 ## How it works
