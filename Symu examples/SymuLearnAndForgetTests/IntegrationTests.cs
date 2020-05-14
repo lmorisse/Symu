@@ -117,7 +117,7 @@ namespace SymuLearnAndForgetTests
             _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _organization.Models.Generator = RandomGenerator.RandomBinary;
             _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing = 0;
-            _environment.KnowledgeLevel = KnowledgeLevel.Expert;
+            _environment.KnowledgeLevel = KnowledgeLevel.BasicKnowledge;
             _simulation.Process();
             // Should be > 0 because Knowledge threshold for doing is == 0, agent has the knowledge or not but he can't learn
             Assert.IsTrue(0 < _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
@@ -157,14 +157,14 @@ namespace SymuLearnAndForgetTests
 
         /// <summary>
         ///     Non passing test
-        ///     MinimumKnowledgeToSendPerBit =1
+        ///     MinimumLengthToSendPerBit =1
         /// </summary>
         [TestMethod]
         public void LearnByAskingTest1()
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
+            _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 1;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning);
         }
@@ -283,9 +283,10 @@ namespace SymuLearnAndForgetTests
         public void ModelsOffTest()
         {
             _simulation.Process();
-            var global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Last();
-            Assert.AreEqual(0, global.Learning);
-            Assert.AreEqual(0, global.Forgetting);
+            var global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Learning.Last();
+            Assert.AreEqual(0, global.Sum);
+            global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Forgetting.Last();
+            Assert.AreEqual(0, global.Sum);
         }
 
         /// <summary>

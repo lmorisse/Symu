@@ -173,23 +173,16 @@ namespace SymuEngine.Classes.Agents
         ///     based on the interaction strategy of the interaction patterns :
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
-        public IEnumerable<AgentId> GetAgentIdsForInteractions()
-        {
-            return GetAgentIdsForInteractions(Cognitive.InteractionPatterns.NextInteractionStrategy());
-        }
-
-        /// <summary>
-        ///     List of AgentId for interactions : there is Active link (difference with GetAgentIdsForNewInteractions)
-        ///     based on the interaction strategy of the interaction patterns :
-        ///     Filtered with interactionStrategy and limit with number of new interactions
-        /// </summary>
         public IEnumerable<AgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
-            var agentIds = Environment.WhitePages.Network.InteractionSphere
+            return Environment.WhitePages.Network.InteractionSphere
                 .GetAgentIdsForInteractions(Id, interactionStrategy, Cognitive.InteractionPatterns).ToList();
-            return FilterAgentIdsToInteract(agentIds);
         }
-
+        /// <summary>
+        /// Filter the good number of agents based on Cognitive.InteractionPatterns
+        /// </summary>
+        /// <param name="agentIds"></param>
+        /// <returns>List of AgentIds the agent can interact with via message</returns>
         public IEnumerable<AgentId> FilterAgentIdsToInteract(List<AgentId> agentIds)
         {
             if (agentIds == null)
@@ -197,7 +190,6 @@ namespace SymuEngine.Classes.Agents
                 throw new ArgumentNullException(nameof(agentIds));
             }
 
-            // Filter the good number of agents
             var numberOfNewInteractions =
                 Cognitive.InteractionPatterns.MaxNumberOfNewInteractions - _newInteractionCounter;
             if (Cognitive.InteractionPatterns.LimitNumberOfNewInteractions && numberOfNewInteractions > 0 &&

@@ -47,10 +47,81 @@ namespace SymuEngine.Results.Organization
         /// </summary>
         public List<KnowledgeAndBeliefStruct> Beliefs { get; } = new List<KnowledgeAndBeliefStruct>();
 
+        /// <summary>
+        ///     List of learning performance per step
+        /// </summary>
+        public List<KnowledgeAndBeliefStruct> Learning { get; } = new List<KnowledgeAndBeliefStruct>();
+
+        /// <summary>
+        ///     List of forgetting performance per step
+        /// </summary>
+        public List<KnowledgeAndBeliefStruct> Forgetting { get; } = new List<KnowledgeAndBeliefStruct>();
+
+        /// <summary>
+        ///     List of Global Knowledge obsolescence : 1 - LastTouched.Average()/LastStep
+        /// </summary>
+        public List<KnowledgeAndBeliefStruct> KnowledgeObsolescence { get; } = new List<KnowledgeAndBeliefStruct>();
+
+        /// <summary>
+        /// Clear of results
+        /// </summary>
+        public void Clear()
+        {
+            Knowledges.Clear();
+            Beliefs.Clear();
+            Forgetting.Clear();
+            Learning.Clear();
+            KnowledgeObsolescence.Clear();
+        }
+        /// <summary>
+        /// Handle the performance around knowledge and beliefs
+        /// </summary>
+        /// <param name="step"></param>
+        public void HandlePerformance(ushort step)
+        {
+            if (!_models.FollowGroupKnowledge)
+            {
+                return;
+            }
+
+            HandleBelief(step);
+            HandleKnowledge(step);
+            HandleLearning(step);
+            HandleForgetting(step);
+            HandleKnowledgeObsolescence(step);
+        }
+
+        public void HandleLearning(ushort step)
+        {
+            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning).ToList();
+            var learning = SetStructKnowledgeAndBeliefStruct(step, sum);
+            Learning.Add(learning);
+        }
+
+        public void HandleForgetting(ushort step)
+        {
+            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Forgetting).ToList();
+            var forgetting = SetStructKnowledgeAndBeliefStruct(step, sum);
+            Forgetting.Add(forgetting);
+        }
+
+        public void HandleKnowledgeObsolescence(ushort step)
+        {
+            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Obsolescence).ToList();
+            var obsolescence = SetStructKnowledgeAndBeliefStruct(step, sum);
+            KnowledgeObsolescence.Add(obsolescence);
+        }
+
         public void HandleKnowledge(ushort step)
         {
             var sumKnowledge = _network.NetworkKnowledges.AgentsRepository.Values
                 .Select(expertise => expertise.GetKnowledgesSum()).ToList();
+            var knowledge = SetStructKnowledgeAndBeliefStruct(step, sumKnowledge);
+            Knowledges.Add(knowledge);
+        }
+
+        private static KnowledgeAndBeliefStruct SetStructKnowledgeAndBeliefStruct(ushort step, List<float> sumKnowledge)
+        {
             float sum;
             float mean;
             float stdDev;
@@ -73,53 +144,16 @@ namespace SymuEngine.Results.Organization
                     break;
             }
 
-            var learning = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Learning);
-            var forgetting = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Forgetting);
-            var obsolescence = _network.NetworkKnowledges.AgentsRepository.Values.Sum(e => e.Obsolescence);
-
-            var knowledge = new KnowledgeAndBeliefStruct(sum, mean, stdDev, learning, forgetting, obsolescence, step);
-            Knowledges.Add(knowledge);
-        }
-
-        public void Clear()
-        {
-            Knowledges.Clear();
-            Beliefs.Clear();
+            var knowledge = new KnowledgeAndBeliefStruct(sum, mean, stdDev, step);
+            return knowledge;
         }
 
         public void HandleBelief(ushort step)
         {
             var sum = _network.NetworkBeliefs.AgentsRepository.Values.Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
-            KnowledgeAndBeliefStruct belief;
-            //TODO Gain/loss/obsolescence of the beliefs
-            switch (sum.Count)
-            {
-                case 0:
-                    belief = new KnowledgeAndBeliefStruct(0, 0, 0, 0, 0, 0, step);
-                    break;
-                case 1:
-                    belief = new KnowledgeAndBeliefStruct(sum[0], sum[0], 0, 0, 0, 0, step);
-                    break;
-                default:
-                    belief = new KnowledgeAndBeliefStruct(sum.Sum(), sum.Average(), (float) sum.StandardDeviation(), 0,
-                        0, 0,
-                        step);
-                    break;
-            }
-
+            var belief = SetStructKnowledgeAndBeliefStruct(step, sum);
             Beliefs.Add(belief);
-        }
-
-        public void HandlePerformance(ushort step)
-        {
-            if (!_models.FollowGroupKnowledge)
-            {
-                return;
-            }
-
-            HandleBelief(step);
-            HandleKnowledge(step);
         }
     }
 }

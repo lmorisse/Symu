@@ -890,7 +890,7 @@ namespace SymuEngineTests.Classes.Agents
         public void GetFilteredKnowledgeToSendTest3()
         {
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 0;
+            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 0;
             _agentKnowledge.SetKnowledgeBit(0, 1, 0);
             var bits = _agent.FilterKnowledgeToSend(_agentKnowledge.KnowledgeId, 0, _emailTemplate);
             Assert.IsNotNull(bits);
@@ -1035,7 +1035,7 @@ namespace SymuEngineTests.Classes.Agents
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
                 .InitializeBeliefBits(Model, 1, false);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 2;
+            _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
             var bits = _agent.FilterBeliefToSend(1, 0, _emailTemplate);
             Assert.IsNull(bits);
         }

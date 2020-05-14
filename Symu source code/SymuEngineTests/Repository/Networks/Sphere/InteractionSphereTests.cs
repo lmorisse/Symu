@@ -54,12 +54,14 @@ namespace SymuEngineTests.Repository.Networks.Sphere
             _network.NetworkBeliefs.AddBelief(_belief);
             _network.NetworkActivities.AddActivity(_activity, _groupId);
         }
-
+        /// <summary>
+        ///     No interaction
+        /// </summary>
         [TestMethod]
         public void GeAgentIdsForInteractionsTest()
         {
             InteractionSphere.SetSphere(true, _agents, _network);
-            Assert.AreEqual(1, InteractionSphere.GetAgentIdsForInteractions(_agentId1, InteractionStrategy.Homophily,
+            Assert.AreEqual(0, InteractionSphere.GetAgentIdsForInteractions(_agentId1, InteractionStrategy.Homophily,
                 new InteractionPatterns()).Count());
         }
 

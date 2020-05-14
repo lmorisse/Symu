@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Add new project example: [SymuGroupAndInteraction](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluence) by [@lmorisse]
+* Add new project example: [SymuGroupAndInteractionTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluenceTests) by [@lmorisse]
+
 ## 0.4.0 [☰](https://github.com/lmorisse/symu/compare/v0.4.0..v0.3.0)
 * Add new project example: [SymuGroupAndInteraction](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuGroupAndInteraction) by [@lmorisse]
 * Add new project example: [SymuGroupAndInteractionTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuGroupAndInteractionTests) by [@lmorisse]

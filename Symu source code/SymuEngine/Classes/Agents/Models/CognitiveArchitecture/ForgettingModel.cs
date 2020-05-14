@@ -249,19 +249,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         }
 
         /// <summary>
-        ///     As the worker will work on specific taskBit, it can't be forget
-        ///     ForgettingExpertiseOfTheDay is updated
-        /// </summary>
-        /// <param name="knowledgeId"></param>
-        /// <param name="knowledgeBit"></param>
-        public void UpdateForgettingProcess(ushort knowledgeId, byte knowledgeBit)
-        {
-            var forgettingKnowledge = ForgettingExpertise.GetKnowledge(knowledgeId);
-
-            forgettingKnowledge?.SetKnowledgeBit(knowledgeBit, 0, 0);
-        }
-
-        /// <summary>
         ///     As the worker will work on specific taskBits, they can't be forget
         ///     ForgettingExpertiseOfTheDay is updated
         /// </summary>

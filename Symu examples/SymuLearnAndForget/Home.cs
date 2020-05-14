@@ -266,7 +266,7 @@ namespace SymuLearnAndForget
             // Wiki
             WriteTextSafe(lblWiki, _wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
             if (_fullKnowledge == 0 &&
-                Math.Abs(_wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < Tolerance)
+                Math.Abs(_wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < SymuTools.Constants.Tolerance)
             {
                 _fullKnowledge = _environment.TimeStep.Step;
             }
@@ -279,11 +279,14 @@ namespace SymuLearnAndForget
                 return;
             }
 
-            var global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Last();
-            WriteTextSafe(lblGlobalObsolescence, global.Obsolescence.ToString("F1", CultureInfo.InvariantCulture));
-            WriteTextSafe(lblGlobalLearning, global.Learning.ToString("F1", CultureInfo.InvariantCulture));
-            WriteTextSafe(lblGlobalForgetting, global.Forgetting.ToString("F1", CultureInfo.InvariantCulture));
-            WriteTextSafe(lblGlobalKnowledge, global.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            var knowledge = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Last();
+            WriteTextSafe(lblGlobalKnowledge, knowledge.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            var obsolescence = _environment.IterationResult.OrganizationKnowledgeAndBelief.KnowledgeObsolescence.Last();
+            WriteTextSafe(lblGlobalObsolescence, obsolescence.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            var learning = _environment.IterationResult.OrganizationKnowledgeAndBelief.Learning.Last();
+            WriteTextSafe(lblGlobalLearning, learning.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            var forgetting = _environment.IterationResult.OrganizationKnowledgeAndBelief.Forgetting.Last();
+            WriteTextSafe(lblGlobalForgetting, forgetting.Sum.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -448,7 +451,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
+                OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit=
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
                 OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);

@@ -172,27 +172,47 @@ namespace SymuEngine.Repository.Networks.Knowledges
         ///     return the required knowledgeBits index for the task: an array fill of random index of the GetBits
         ///     representing the detailed knowledge of an agent
         /// </summary>
-        /// <param name="level"></param>
+        /// <param name="model">MurphyTask model to define the Required Bits Ratio compared to the length of the knowledgeBits</param>
+        /// <param name="complexity">complexity of the task from 0 to 1</param>
         /// <returns></returns>
         /// <example>
         ///     given a knowledge of size 10 :
         ///     GetAgentBits = [0110110000]
+        ///     complexity = 0.3
         ///     GetTaskRequiredBits = [359] : index 3, 5 and 9 are required
         /// </example>
-        public byte[] GetTaskRequiredBits(float level)
+        public byte[] GetTaskRequiredBits(MurphyTask model, float complexity)
         {
-            var numberRequiredBits = Convert.ToByte(Math.Round(MurphyTask.RequiredBitsRatio(level) * Length));
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+            var numberRequiredBits = Convert.ToByte(Math.Round(model.RequiredBitsRatio(complexity) * Length));
             return DiscreteUniform.SamplesToByte(numberRequiredBits, Length - 1);
         }
 
-        public byte[] GetTaskMandatoryBits(MurphyTask model, float level)
+        /// <summary>
+        ///     Given a KnowledgeModel and a KnowledgeLevel
+        ///     return the mandatory knowledgeBits index for the task: an array fill of random index of the GetBits
+        ///     representing the detailed knowledge of an agent
+        /// </summary>
+        /// <param name="model">MurphyTask model to define the mandatory Bits Ratio compared to the length of the knowledgeBits</param>
+        /// <param name="complexity">complexity of the task from 0 to 1</param>
+        /// <returns></returns>
+        /// <example>
+        ///     given a knowledge of size 10 :
+        ///     GetAgentBits = [0110110000]
+        ///     complexity = 0.2
+        ///     GetTaskMandatoryBits = [17] : index 1 and 7 are mandatory
+        /// </example>
+        public byte[] GetTaskMandatoryBits(MurphyTask model, float complexity)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var numberMandatoryBits = Convert.ToByte(Math.Round(model.MandatoryBitsRatio(level) * Length));
+            var numberMandatoryBits = Convert.ToByte(Math.Round(model.MandatoryBitsRatio(complexity) * Length));
             return DiscreteUniform.SamplesToByte(numberMandatoryBits, Length - 1);
         }
 

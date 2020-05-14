@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuTools;
 using SymuTools.Math;
 
@@ -45,15 +46,27 @@ namespace SymuEngine.Repository.Networks.Sphere
 
             float average = 0;
             for (var i = 0; i < actorsCount; i++)
-            for (var j = 0; j < actorsCount; j++)
+            for (var j = i+1; j < actorsCount; j++)
             {
-                if (i != j)
-                {
-                    average += interactionMatrix[i, j];
-                }
+                average += interactionMatrix[i, j];
             }
 
-            return average / (actorsCount * (actorsCount - 1));
+            return 2 * average / (actorsCount * (actorsCount - 1));
+        }
+
+        /// <summary>
+        ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
+        ///     the actor i knows the fact k or not
+        /// </summary>
+        /// <param name="interactionMatrix"></param>
+        /// <returns></returns>
+        public static DerivedParameter GetAverageInteractionMatrix(DerivedParameter[,] network)
+        {
+            var knowledge = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Knowledge));
+            var activities = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Activities));
+            var beliefs = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Beliefs));
+            var socialDemographics = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
+            return new DerivedParameter(socialDemographics, beliefs, knowledge, activities);
         }
 
         public static uint NumberOfTriads(DerivedParameter[,] network)
@@ -69,22 +82,24 @@ namespace SymuEngine.Repository.Networks.Sphere
                 return 0;
             }
 
-            var interactionMatrix = GetInteractionMatrix(network, actorsCount);
+            var interactionMatrix = GetInteractionMatrix(network);
 
             var averageInteraction = GetAverageInteractionMatrix(interactionMatrix);
             var interactionForTriads = new sbyte[actorsCount, actorsCount];
             for (var i = 0; i < actorsCount; i++)
-            for (var j = 0; j < actorsCount; j++)
+            for (var j = i+1; j < actorsCount; j++)
             {
                 if (interactionMatrix[i, j] >= averageInteraction - Constants.Tolerance &&
                     interactionMatrix[i, j] > Constants.Tolerance)
                 {
                     interactionForTriads[i, j] = 1;
-                }
+                    interactionForTriads[j, i] = 1;
+                    }
                 else
                 {
                     interactionForTriads[i, j] = 0;
-                }
+                    interactionForTriads[j, i] = 0;
+                    }
             }
 
             uint numberOfTriads = 0;
@@ -107,13 +122,51 @@ namespace SymuEngine.Repository.Networks.Sphere
             return numberOfTriads;
         }
 
-        public static float[,] GetInteractionMatrix(DerivedParameter[,] network, int actorsCount)
+        public static float[,] GetInteractionMatrix(DerivedParameter[,] network)
         {
+            return GetInteractionMatrix(network, InteractionStrategy.Homophily);
+        }
+
+        public static float[,] GetInteractionMatrix(DerivedParameter[,] network,
+            InteractionStrategy interactionStrategy)
+        {
+            if (network == null)
+            {
+                throw new ArgumentNullException(nameof(network));
+            }
+
+            var actorsCount = network.GetLength(0);
             var interactionMatrix = new float[actorsCount, actorsCount];
             for (var i = 0; i < actorsCount; i++)
-            for (var j = 0; j < actorsCount; j++)
+
+                // InteractionSphere is a symmetrical matrix with identity == 0
+            for (var j = i + 1; j < actorsCount; j++)
             {
-                interactionMatrix[i, j] = network[i, j].Homophily;
+                switch (interactionStrategy)
+                {
+                    case InteractionStrategy.Homophily:
+                        interactionMatrix[i, j] = network[i, j].Homophily;
+                        interactionMatrix[j, i] = network[i, j].Homophily;
+                            break;
+                    case InteractionStrategy.Knowledge:
+                        interactionMatrix[i, j] = network[i, j].RelativeKnowledge;
+                        interactionMatrix[j, i] = network[i, j].RelativeKnowledge;
+                            break;
+                    case InteractionStrategy.Activities:
+                        interactionMatrix[i, j] = network[i, j].RelativeActivity;
+                        interactionMatrix[j, i] = network[i, j].RelativeActivity;
+                            break;
+                    case InteractionStrategy.Beliefs:
+                        interactionMatrix[i, j] = network[i, j].RelativeBelief;
+                        interactionMatrix[j, i] = network[i, j].RelativeBelief;
+                            break;
+                    case InteractionStrategy.SocialDemographics:
+                        interactionMatrix[i, j] = network[i, j].SocialDemographic;
+                        interactionMatrix[j, i] = network[i, j].SocialDemographic;
+                            break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(interactionStrategy), interactionStrategy, null);
+                }
             }
 
             return interactionMatrix;

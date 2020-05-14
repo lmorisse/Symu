@@ -102,7 +102,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
             Interaction1X1();
             Assert.AreEqual(0,
                 InteractionMatrix.GetAverageInteractionMatrix(
-                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere, _actors.Count)));
+                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere)));
         }
 
         [TestMethod]
@@ -112,7 +112,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
 
             Assert.AreEqual(0,
                 InteractionMatrix.GetAverageInteractionMatrix(
-                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere, _actors.Count)));
+                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere)));
         }
 
         [TestMethod]
@@ -127,7 +127,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
 
             Assert.AreEqual(1F,
                 InteractionMatrix.GetAverageInteractionMatrix(
-                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere, _actors.Count)));
+                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere)));
         }
 
         [TestMethod]
@@ -137,7 +137,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
 
             Assert.AreEqual(0,
                 InteractionMatrix.GetAverageInteractionMatrix(
-                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere, _actors.Count)));
+                    InteractionMatrix.GetInteractionMatrix(_network.InteractionSphere.Sphere)));
         }
 
         #endregion

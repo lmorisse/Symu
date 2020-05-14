@@ -69,7 +69,7 @@ namespace SymuMessageAndTask.Classes
             for (var i = 0; i < environment.NumberOfTasks; i++)
             {
                 // Create the next task 
-                var task = new SymuTask(0)
+                var task = new SymuTask(TimeStep.Step)
                 {
                     Parent = TimeStep.Step,
                     Weight = environment.CostOfTask

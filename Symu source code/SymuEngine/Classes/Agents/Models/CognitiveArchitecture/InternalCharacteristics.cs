@@ -188,13 +188,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
 
         #region Influence
 
-        /// <summary>
-        ///     This parameter, speciﬁed as a range with a min and a max, specify how inﬂuential an agent of this class will be.
-        ///     Inﬂuentialness rates close to zero will mean that the agent will not have much sway over other agents,
-        ///     while values closer to one will mean that the agent has a signiﬁcant amount of inﬂuence.
-        /// </summary>
-        /// <remarks>range [0;1]</remarks>
-        public float InfluentialnessRateMin { get; set; }
+        private float _influentialnessRateMin;
 
         /// <summary>
         ///     This parameter, speciﬁed as a range with a min and a max, specify how inﬂuential an agent of this class will be.
@@ -202,7 +196,43 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         ///     while values closer to one will mean that the agent has a signiﬁcant amount of inﬂuence.
         /// </summary>
         /// <remarks>range [0;1]</remarks>
-        public float InfluentialnessRateMax { get; set; }
+        public float InfluentialnessRateMin
+        {
+            get => _influentialnessRateMin;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("InfluentialnessRateMin should be between 0 and 1");
+                }
+
+                _influentialnessRateMin = value;
+            }
+        }
+
+        private float _influentialnessRateMax;
+
+        /// <summary>
+        ///     This parameter, speciﬁed as a range with a min and a max, specify how inﬂuential an agent of this class will be.
+        ///     Inﬂuentialness rates close to zero will mean that the agent will not have much sway over other agents,
+        ///     while values closer to one will mean that the agent has a signiﬁcant amount of inﬂuence.
+        /// </summary>
+        /// <remarks>range [0;1]</remarks>
+        public float InfluentialnessRateMax
+        {
+            get => _influentialnessRateMax;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("InfluentialnessRateMax should be between 0 and 1");
+                }
+
+                _influentialnessRateMax = value;
+            }
+        }
+
+        private float _influenceabilityRateMin;
 
         /// <summary>
         ///     This parameter, speciﬁed as a range with a min and a max, specify how susceptible an agent of this class will be
@@ -212,7 +242,21 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         ///     while values close to one indicate that an agent is very impressionable.
         /// </summary>
         /// <remarks>range [0;1]</remarks>
-        public float InfluenceabilityRateMin { get; set; }
+        public float InfluenceabilityRateMin
+        {
+            get => _influenceabilityRateMin;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("InfluenceabilityRateMin should be between 0 and 1");
+                }
+
+                _influenceabilityRateMin = value;
+            }
+        }
+
+        private float _influenceabilityRateMax;
 
         /// <summary>
         ///     This parameter, speciﬁed as a range with a min and a max, specify how susceptible an agent of this class will be
@@ -222,7 +266,19 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         ///     while values close to one indicate that an agent is very impressionable.
         /// </summary>
         /// <remarks>range [0;1]</remarks>
-        public float InfluenceabilityRateMax { get; set; }
+        public float InfluenceabilityRateMax
+        {
+            get => _influenceabilityRateMax;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("InfluenceabilityRateMax should be between 0 and 1");
+                }
+
+                _influenceabilityRateMax = value;
+            }
+        }
 
         /// <summary>
         ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,

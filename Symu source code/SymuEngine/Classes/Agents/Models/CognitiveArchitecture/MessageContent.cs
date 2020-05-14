@@ -196,13 +196,27 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         public bool CanSendBeliefs { get; set; }
         public bool CanReceiveBeliefs { get; set; }
 
+        private float _minimumBeliefToSendPerBit = 0.35F;
+
         /// <summary>
-        ///     To send Knowledge, an agent must have enough knowledge per KnowledgeBits
+        ///     To send beliefs, an agent must have enough beliefs per KnowledgeBits
         ///     [0 - 1]
         /// </summary>
-        /// <example>if KnowledgeThreshHoldForAnswer = 0.5 and agent KnowledgeId[index] = 0.6 => he can answer to the question</example>
+        /// <example>if KnowledgeThreshHoldForAnswer = 0.5 and agent BeliefId[index] = 0.6 => he can answer to the question</example>
         /// <remarks>Default value = Min value of the level Foundational</remarks>
-        public float MinimumBeliefToSendPerBit { get; set; } = 0.35F;
+        public float MinimumBeliefToSendPerBit
+        {
+            get => _minimumBeliefToSendPerBit;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MinimumBeliefToSendPerBit should be between 0 and 1");
+                }
+
+                _minimumBeliefToSendPerBit = value;
+            }
+        }
 
         /// <summary>
         ///     The minimum number of non zero Bits of Knowledge to send back during an interaction (message)

@@ -110,8 +110,8 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         [TestMethod]
         public void GetTaskRequiredBitsTest()
         {
-            var taskRequiredBits = _knowledge.GetTaskRequiredBits(0.8F);
-            var numberRequiredBits = Convert.ToByte(Math.Round(MurphyTask.RequiredBitsRatio(0.8F) * _knowledge.Length));
+            var taskRequiredBits = _knowledge.GetTaskRequiredBits(_taskModel, 0.8F);
+            var numberRequiredBits = Convert.ToByte(Math.Round(_taskModel.RequiredBitsRatio(0.8F) * _knowledge.Length));
             Assert.AreEqual(numberRequiredBits, taskRequiredBits.Length);
             for (byte i = 0; i < taskRequiredBits.Length; i++)
                 //It's an index of a Array[knowledge.Size]

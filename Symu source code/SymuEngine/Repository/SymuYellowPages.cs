@@ -34,13 +34,11 @@ namespace SymuEngine.Repository
         public const byte EndOfMonth = 5;
         public const byte EndOfWeek = 6;
 
-        /// <summary>
-        ///     ClassKey
-        /// </summary>
         public const byte Knowledge = 7;
+        public const byte Belief = 8;
 
-        public const byte Subscribe = 8;
-        public const byte Timer = 10;
+        public const byte Subscribe = 9;
+        //public const byte Timer = 10;
         public const byte Scenario = 11;
 
         public const byte Organization = 12;

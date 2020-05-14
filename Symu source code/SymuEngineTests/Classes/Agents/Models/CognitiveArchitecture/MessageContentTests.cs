@@ -77,16 +77,16 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         /// <summary>
         ///     WIth stochastic effect
         ///     Passing test
-        ///     MinimumKnowledgeToSendPerBit = 1
+        ///     MinimumLengthToSendPerBit = 1
         /// </summary>
         [TestMethod]
         public void AskKnowledgeToSendTest3()
         {
             _messageContent.CanSendKnowledge = true;
-            _messageContent.MinimumKnowledgeToSendPerBit = 1;
+            _messageContent.MinimumKnowledgeToSendPerBit= 1;
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
             _messageContent.MinimumNumberOfBitsOfKnowledgeToSend = 2;
-            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
+            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 1;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 2;
             Assert.AreEqual(1F,
@@ -96,16 +96,16 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         /// <summary>
         ///     WIth stochastic effect
         ///     Passing test
-        ///     MinimumKnowledgeToSendPerBit = 0.5F
+        ///     MinimumLengthToSendPerBit = 0.5F
         /// </summary>
         [TestMethod]
         public void AskKnowledgeToSendTest4()
         {
             _messageContent.CanSendKnowledge = true;
-            _messageContent.MinimumKnowledgeToSendPerBit = 0.4F;
+            _messageContent.MinimumKnowledgeToSendPerBit= 0.4F;
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 4;
             _messageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
-            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 0.4F;
+            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 0.4F;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 4;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             Assert.IsTrue(
@@ -119,7 +119,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         public void AskKnowledgeToSend1Test1()
         {
             _messageContent.CanSendKnowledge = true;
-            _messageContent.MinimumKnowledgeToSendPerBit = 0.4F;
+            _messageContent.MinimumKnowledgeToSendPerBit= 0.4F;
             _messageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _messageContent.MaximumNumberOfBitsOfKnowledgeToSend = 3;
             Assert.IsTrue(_messageContent.GetFilteredKnowledgeToSend(_agentKnowledge1, 0, _emailTemplate, out _)
@@ -177,18 +177,19 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         /// <summary>
         ///     WIth stochastic effect
         ///     Passing test
-        ///     MinimumBeliefToSendPerBit > 1
+        ///     MinimumBeliefToSendPerBit > _agentBeliefF
         /// </summary>
         [TestMethod]
         public void AskBeliefToSendTest2()
         {
             _messageContent.CanSendBeliefs = true;
-            _messageContent.MinimumBeliefToSendPerBit = 2;
+            _messageContent.MinimumBeliefToSendPerBit = 1;
             _messageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             _messageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
-            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 2;
+            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
             _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
+            _agentBeliefF.BeliefBits.SetBit(0, 0.5F);
             Assert.IsNull(_messageContent.GetFilteredBeliefToSend(_agentBeliefF, 0, _emailTemplate));
         }
 

@@ -14,15 +14,11 @@ namespace SymuEngine.Results.Organization
     /// </summary>
     public class KnowledgeAndBeliefStruct
     {
-        public KnowledgeAndBeliefStruct(float sum, float mean, float standardDeviation, float learning,
-            float forgetting, float obsolescence, ushort step)
+        public KnowledgeAndBeliefStruct(float sum, float mean, float standardDeviation, ushort step)
         {
             Sum = sum;
             Mean = mean;
             StandardDeviation = standardDeviation;
-            Learning = learning;
-            Forgetting = forgetting;
-            Obsolescence = obsolescence;
             Step = step;
         }
 
@@ -41,27 +37,11 @@ namespace SymuEngine.Results.Organization
         /// </summary>
         public float StandardDeviation { get; }
 
-        /// <summary>
-        ///     Total learning during the simulation
-        /// </summary>
-        public float Learning { get; }
-
-        /// <summary>
-        ///     Total forgetting during the simulation
-        /// </summary>
-        public float Forgetting { get; }
-
-        /// <summary>
-        ///     Global Knowledge or belief obsolescence : 1 - LastTouched.Average()/LastStep
-        /// </summary>
-        public float Obsolescence { get; }
-
         public ushort Step { get; }
 
         public override string ToString()
         {
-            return "Sum " + Sum + "Average " + Mean + " - stdDev " + StandardDeviation + " - learning " + Learning +
-                   " - Forgetting " + Forgetting + " - obsolescence " + Obsolescence + " / step" + Step;
+            return "Sum " + Sum + "Average " + Mean + " - stdDev " + StandardDeviation + " / step" + Step;
         }
     }
 }

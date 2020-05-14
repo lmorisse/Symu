@@ -49,7 +49,7 @@ namespace SymuEngine.Classes.Task
         ///     level Range [0;1]
         /// </summary>
         /// <returns>bits ratio range[0; 0.2F]</returns>
-        public static float RequiredBitsRatio(float level)
+        public float RequiredBitsRatio(float level)
         {
             // For unit tests
             if (Math.Abs(level - FullRequiredBits) < Tolerance)
@@ -58,7 +58,7 @@ namespace SymuEngine.Classes.Task
             }
 
             // Normal use
-            return level * 0.2F;
+            return level * RequiredRatio;
         }
 
         /// <summary>
