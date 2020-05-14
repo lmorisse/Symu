@@ -10,8 +10,9 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Common;
 using static SymuTools.Constants;
 
@@ -39,7 +40,7 @@ namespace SymuEngine.Classes.Task
         /// <summary>
         ///     Manage all the blockers that block the task
         /// </summary>
-        public Blockers.Blockers Blockers { get; } = new Blockers.Blockers();
+        public Blockers.BlockerCollection Blockers { get; } = new Blockers.BlockerCollection();
 
         /// <summary>
         ///     Last step when a worker has worked on that task
@@ -147,6 +148,30 @@ namespace SymuEngine.Classes.Task
         {
             IsStarted = true;
             LastTouched = step;
+        }
+        /// <summary>
+        ///     Set RequiredKnowledges && MandatoryKnowledges based on the task complexity
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="knowledges"></param>
+        /// <param name="complexity"></param>
+        public void SetKnowledgesBits(MurphyTask model, IEnumerable<Knowledge> knowledges, float complexity)
+        {
+            if (knowledges == null)
+            {
+                throw new ArgumentNullException(nameof(knowledges));
+            }
+
+            foreach (var knowledge in knowledges)
+            {
+                var bit = new TaskKnowledgeBits
+                {
+                    KnowledgeId = knowledge.Id
+                };
+                bit.SetRequired(knowledge.GetTaskRequiredBits(model, complexity));
+                bit.SetMandatory(knowledge.GetTaskMandatoryBits(model, complexity));
+                KnowledgesBits.Add(bit);
+            }
         }
     }
 }

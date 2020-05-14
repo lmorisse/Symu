@@ -14,7 +14,6 @@ using System.Linq;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Knowledge;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
@@ -43,16 +42,7 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 Weight = 1
             };
-            foreach (var knowledge in ((ExampleEnvironment) Environment).Knowledges)
-            {
-                var bit = new TaskKnowledgeBits
-                {
-                    KnowledgeId = knowledge.Id
-                };
-                bit.SetRequired(knowledge.GetTaskRequiredBits(_model, 1));
-                bit.SetMandatory(knowledge.GetTaskMandatoryBits(_model, 1));
-                task.KnowledgesBits.Add(bit);
-            }
+            task.SetKnowledgesBits(_model, ((ExampleEnvironment)Environment).Knowledges, 1);
 
             var doTask = true;
             foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)

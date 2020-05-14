@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Classes.Task;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;

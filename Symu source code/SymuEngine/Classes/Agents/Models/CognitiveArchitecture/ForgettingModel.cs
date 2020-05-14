@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;

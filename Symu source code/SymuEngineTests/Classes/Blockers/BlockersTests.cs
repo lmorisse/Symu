@@ -18,7 +18,7 @@ namespace SymuEngineTests.Classes.Blockers
     [TestClass]
     public class BlockersTests
     {
-        private readonly SymuEngine.Classes.Blockers.Blockers _blockers = new SymuEngine.Classes.Blockers.Blockers();
+        private readonly SymuEngine.Classes.Blockers.BlockerCollection _blockers = new SymuEngine.Classes.Blockers.BlockerCollection();
 
         [TestMethod]
         public void AddTest()

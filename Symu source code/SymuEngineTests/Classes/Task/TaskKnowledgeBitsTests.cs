@@ -10,11 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Classes.Task;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Task.Knowledge
+namespace SymuEngineTests.Classes.Task
 {
     [TestClass]
     public class TaskKnowledgeBitsTests

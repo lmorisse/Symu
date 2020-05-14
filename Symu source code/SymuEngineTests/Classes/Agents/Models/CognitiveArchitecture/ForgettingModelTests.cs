@@ -14,7 +14,7 @@ using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Organization;
-using SymuEngine.Classes.Task.Knowledge;
+using SymuEngine.Classes.Task;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Knowledges;
 

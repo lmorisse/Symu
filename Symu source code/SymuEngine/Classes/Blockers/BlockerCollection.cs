@@ -19,7 +19,7 @@ namespace SymuEngine.Classes.Blockers
     /// <summary>
     ///     Manage the list of blockers of a task
     /// </summary>
-    public class Blockers
+    public class BlockerCollection
     {
         public List<Blocker> List { get; } = new List<Blocker>();
         public bool IsBlocked => List.Any();
