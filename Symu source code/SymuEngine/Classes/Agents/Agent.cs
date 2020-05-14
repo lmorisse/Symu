@@ -1338,6 +1338,51 @@ namespace SymuEngine.Classes.Agents
         public virtual void GetNewTasks()
         {
         }
+        /// <summary>
+        /// Post a task in the TasksProcessor
+        /// </summary>
+        /// <param name="task"></param>
+        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
+        public void Post(SymuTask task)
+        {
+            OnBeforePostTask(task);
+            if (!task.IsBlocked)
+            {
+                TaskProcessor.Post(task);
+            }
+        }
+        /// <summary>
+        /// Post a task in the TasksProcessor
+        /// </summary>
+        /// <param name="tasks"></param>
+        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
+        public void Post(IEnumerable<SymuTask> tasks)
+        {
+            if (tasks is null)
+            {
+                throw new ArgumentNullException(nameof(tasks));
+            }
+
+            foreach (var task in tasks)
+            {
+                OnBeforePostTask(task);
+                if (!task.IsBlocked)
+                {
+                    TaskProcessor.Post(task);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     EventHandler triggered before the event TaskProcessor.Post(task)
+        ///     By default CheckBlockerBeliefs
+        ///     If task must be posted, use task.Blockers
+        /// </summary>
+        /// <param name="task"></param>
+        protected virtual void OnBeforePostTask(SymuTask task)
+        {
+            CheckBlockerBeliefs(task);
+        }
 
         /// <summary>
         ///     Work on the next task
@@ -1484,6 +1529,46 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         /// <param name="task"></param>
         public virtual void CheckNewBlockers(SymuTask task)
+        {
+        }
+        /// <summary>
+        ///     Check Task.KnowledgesBits against Agent.expertise
+        /// </summary>
+        public void CheckBlockerBeliefs(SymuTask task)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            if (task.Parent is Message)
+            {
+                return;
+            }
+
+            foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
+            {
+                CheckBlockerBelief(task, knowledgeId);
+            }
+        }
+        public void CheckBlockerBelief(SymuTask task, ushort knowledgeId)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            var taskBits = task.KnowledgesBits.GetBits(knowledgeId);
+            float mandatoryScore = 0;
+            float requiredScore = 0;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            Cognitive.KnowledgeAndBeliefs.CheckBelief(knowledgeId, taskBits, ref mandatoryScore, ref requiredScore,
+                ref mandatoryIndex, ref requiredIndex);
+            CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
+        }
+
+        protected virtual void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore, float requiredScore, byte mandatoryIndex, byte requiredIndex)
         {
         }
 

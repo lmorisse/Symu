@@ -10,13 +10,16 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Classes.Task;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -25,15 +28,16 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class PersonAgent : Agent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
-        private readonly MurphyTask _model = new MurphyTask();
-
+        private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
+        private SimpleHumanTemplate Template => ((ExampleEnvironment) Environment).WorkerTemplate;
+        public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
         public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Human);
-            _model.RequiredRatio = 0.2F;
-            _model.RequiredMandatoryRatio = 2F;
+            SetCognitive(Template);
+            Model.RequiredRatio = 0.2F;
+            Model.RequiredMandatoryRatio = 2F;
         }
 
         public override void GetNewTasks()
@@ -42,46 +46,29 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 Weight = 1
             };
-            task.SetKnowledgesBits(_model, ((ExampleEnvironment)Environment).Knowledges, 1);
-
-            var doTask = true;
-            foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
-            {
-                if (!CheckBelief(task, knowledgeId))
-                {
-                    doTask = false;
-                    break;
-                }
-            }
-
-            if (doTask)
-            {
-                TaskProcessor.Post(task);
-            }
+            task.SetKnowledgesBits(Model, Knowledges, 1);
         }
+
         /// <summary>
         /// True if belief are ok to do the task
         /// </summary>
         /// <param name="task"></param>
         /// <param name="knowledgeId"></param>
+        /// <param name="mandatoryScore"></param>
+        /// <param name="requiredScore"></param>
+        /// <param name="mandatoryIndex"></param>
+        /// <param name="requiredIndex"></param>
         /// <returns></returns>
-        public bool CheckBelief(SymuTask task, ushort knowledgeId)
+        protected override void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore, float requiredScore, byte mandatoryIndex, byte requiredIndex)
         {
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
-
-            var taskBits = task.KnowledgesBits.GetBits(knowledgeId);
-            float mandatoryScore = 0;
-            float requiredScore = 0;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            Cognitive.KnowledgeAndBeliefs.CheckBelief(knowledgeId, taskBits, ref mandatoryScore, ref requiredScore,
-                ref mandatoryIndex, ref requiredIndex);
             if (!(mandatoryScore < 0F))
             {
-                return true;
+                task.Blockers.Add(0, TimeStep.Step);
+                return ;
             }
 
             // mandatoryScore is not enough => Worker don't want to do the task
@@ -96,37 +83,6 @@ namespace SymuBeliefsAndInfluence.Classes
                 };
                 SendToMany(teammates, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
             }
-
-            return false;
-
-        }
-
-        /// <summary>
-        ///     This is where the main logic of the agent should be placed.
-        /// </summary>
-        /// <param name="message"></param>
-        public override void ActMessage(Message message)
-        {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            base.ActMessage(message);
-            switch (message.Subject)
-            {
-                case SymuYellowPages.Belief:
-                    AskBelief(message);
-                    break;
-            }
-        }
-
-        private void AskBelief(Message message)
-        {
-            var replyMessage = Message.ReplyMessage(message);
-            // In this reply message, agent will send back its own belief if he can send beliefs
-            // that will have an impact on the beliefs of the sender if he can receive beliefs
-            Reply(replyMessage);
         }
     }
 }

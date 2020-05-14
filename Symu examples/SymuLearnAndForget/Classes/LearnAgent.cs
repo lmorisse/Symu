@@ -55,7 +55,7 @@ namespace SymuLearnAndForget.Classes
                 Parent = TimeStep.Step,
                 Weight = 1
             };
-            TaskProcessor.Post(task);
+            Post(task);
         }
 
         /// <summary>

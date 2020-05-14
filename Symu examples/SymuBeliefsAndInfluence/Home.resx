@@ -117,4 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="richTextBox2.Text" xml:space="preserve">
+    <value>Scenario:
+* Workers performing tasks according to their beliefs, asking advice from influencers if necessary
+* Influencers with string beliefs trying to influence workers
+
+Beliefs have an impact on different parameters : perform tasks, modify the sphere of interaction, agents beliefs.</value>
+  </data>
 </root>

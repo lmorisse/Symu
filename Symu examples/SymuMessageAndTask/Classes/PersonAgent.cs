@@ -99,7 +99,7 @@ namespace SymuMessageAndTask.Classes
 
             foreach (var task in tasks)
             {
-                TaskProcessor.Post(task);
+                Post(task);
             }
         }
 

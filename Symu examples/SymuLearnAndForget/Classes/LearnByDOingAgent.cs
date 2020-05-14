@@ -31,7 +31,7 @@ namespace SymuLearnAndForget.Classes
                 // Cost impact of learning by doing
                 Weight = 1 * Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing
             };
-            TaskProcessor.Post(task);
+            Post(task);
         }
 
         /// <summary>

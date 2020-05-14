@@ -44,6 +44,9 @@ namespace SymuBeliefsAndInfluence
 
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
             HasInitialBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
+            CanSendBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanSendBeliefs;
+            CanReceiveBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanReceiveBeliefs;
+
             InfluenceabilityMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMin.ToString();
             InfluenceabilityMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMax.ToString();
             InfluentialnessMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMin.ToString();
@@ -78,8 +81,17 @@ namespace SymuBeliefsAndInfluence
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            
-            
+            #region influencer
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
+            _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
+            #endregion
+
+            #region Worker
+            _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
+            _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
+            _environment.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
+            #endregion
+
             Start(_environment);
         }
 
@@ -222,7 +234,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMin = float.Parse(InfluentialnessMin.Text);
+                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = float.Parse(InfluentialnessMin.Text);
                 InfluentialnessMin.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -240,7 +252,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMax = float.Parse(InfluentialnessMax.Text);
+                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = float.Parse(InfluentialnessMax.Text);
                 InfluentialnessMax.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -258,7 +270,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMin= float.Parse(InfluenceabilityMin.Text);
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin= float.Parse(InfluenceabilityMin.Text);
                 InfluenceabilityMin.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -276,7 +288,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = float.Parse(InfluenceabilityMax.Text);
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = float.Parse(InfluenceabilityMax.Text);
                 InfluenceabilityMax.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -294,7 +306,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.MessageContent
+                _environment.InfluencerTemplate.Cognitive.MessageContent
                     .MinimumBeliefToSendPerBit = float.Parse(MinimumBeliefToSendPerBit.Text);
                 MinimumBeliefToSendPerBit.BackColor = SystemColors.Window;
             }
@@ -313,7 +325,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.MessageContent
+                _environment.InfluencerTemplate.Cognitive.MessageContent
                     .MinimumNumberOfBitsOfBeliefToSend = byte.Parse(MinimumNumberOfBitsOfBeliefToSend.Text);
                 MinimumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
             }
@@ -332,7 +344,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.MessageContent
+                _environment.InfluencerTemplate.Cognitive.MessageContent
                     .MaximumNumberOfBitsOfBeliefToSend = byte.Parse(MaximumNumberOfBitsOfBeliefToSend.Text);
                 MaximumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
             }
@@ -343,6 +355,42 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 MaximumNumberOfBitsOfBeliefToSend.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void tbInfluencers_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                _environment.InfluencersCount = byte.Parse(tbInfluencers.Text);
+                tbInfluencers.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                tbInfluencers.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                tbInfluencers.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void MandatoryRatio_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                _environment.Model.RequiredMandatoryRatio = byte.Parse(MandatoryRatio.Text);
+                MandatoryRatio.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                MandatoryRatio.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                MandatoryRatio.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }

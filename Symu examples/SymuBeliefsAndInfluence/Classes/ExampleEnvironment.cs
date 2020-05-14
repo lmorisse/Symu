@@ -12,6 +12,8 @@
 using System.Collections.Generic;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.Templates;
+using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;
@@ -26,26 +28,49 @@ namespace SymuBeliefsAndInfluence.Classes
     {
         public byte KnowledgeCount { get; set; } = 2;
         public byte WorkersCount { get; set; } = 5;
+        public byte InfluencersCount { get; set; } = 5;
         public byte Knowledge { get; set; } = 0;
-        public List<Knowledge> Knowledges { get; private set; } 
+        public List<Knowledge> Knowledges { get; private set; }
+        public List<InfluenceurAgent> Influencers { get; } = new List<InfluenceurAgent>();
+        public SimpleHumanTemplate InfluencerTemplate { get; } = new SimpleHumanTemplate();
+        public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
+        public MurphyTask Model { get; } = new MurphyTask();
 
         public override void SetModelForAgents()
         {
             base.SetModelForAgents();
             Organization.Models.Generator = RandomGenerator.RandomUniform;
 
-            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
-            Organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            #region Influencer
+            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            InfluencerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            InfluencerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            InfluencerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+                CommunicationMediums.Email;
+            InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
+            InfluencerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin = 0;
+            InfluencerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = 0.1F;
+            #endregion
+
+            #region worker
+            WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            WorkerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            WorkerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            WorkerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+                CommunicationMediums.Email;
+            WorkerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
+            WorkerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 0.1F;
+            #endregion
+
             Organization.Models.FollowGroupKnowledge = true;
             Organization.Models.FollowGroupFlexibility= true;
             Organization.Models.InteractionSphere.On = true;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;
             Organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
-            Organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            Organization.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                CommunicationMediums.Email;
-
+            
             Knowledges = new List<Knowledge>();
             for (var i = 0; i < KnowledgeCount; i++)
             {
@@ -70,6 +95,14 @@ namespace SymuBeliefsAndInfluence.Classes
             Organization.Models.InteractionSphere.RelativeKnowledgeWeight = 0F;
             Organization.Models.InteractionSphere.SocialDemographicWeight = 0.5F;
             WhitePages.Network.NetworkLinks.AddLinks(agentIds);
+
+            for (var j = 0; j < WorkersCount; j++)
+            {
+                var actor = new InfluenceurAgent(Organization.NextEntityIndex(), this);
+                //Beliefs are added with knowledge
+                SetKnowledge(actor, Knowledges);
+                Influencers.Add(actor);
+            }
         }
 
         private void SetKnowledge(Agent actor, IReadOnlyList<Knowledge> knowledges)

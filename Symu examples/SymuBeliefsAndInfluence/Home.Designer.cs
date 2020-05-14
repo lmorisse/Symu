@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,16 +51,23 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.InfluenceabilityMax = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.InfluentialnessMin = new System.Windows.Forms.TextBox();
             this.InfluenceabilityMin = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.InfluentialnessMax = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.InfluentialnessMin = new System.Windows.Forms.TextBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.MaximumNumberOfBitsOfBeliefToSend = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.MinimumNumberOfBitsOfBeliefToSend = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.CanReceiveBeliefs = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.CanSendBeliefs = new System.Windows.Forms.CheckBox();
             this.HasInitialBeliefs = new System.Windows.Forms.CheckBox();
             this.HasBeliefs = new System.Windows.Forms.CheckBox();
@@ -68,19 +76,20 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.MinimumNumberOfBitsOfBeliefToSend = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.MaximumNumberOfBitsOfBeliefToSend = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.tbInfluencers = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.MandatoryRatio = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -225,9 +234,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(25, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(121, 17);
+            this.label2.Size = new System.Drawing.Size(159, 21);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Number of people";
+            this.label2.Text = "Number of workers";
             // 
             // tbWorkers
             // 
@@ -267,9 +276,7 @@
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(823, 174);
             this.richTextBox2.TabIndex = 18;
-            this.richTextBox2.Text = "Scenario:\n* People with beliefs who try to influence others\n\nBeliefs have an impa" +
-    "ct on different parameters : perform tasks, modify the sphere of interaction, ag" +
-    "ents beliefs.";
+            this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
             // richTextBox1
             // 
@@ -304,6 +311,7 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox4.Controls.Add(this.groupBox7);
             this.groupBox4.Controls.Add(this.groupBox1);
             this.groupBox4.Controls.Add(this.groupBox9);
             this.groupBox4.Controls.Add(this.groupBox6);
@@ -314,111 +322,185 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Settings";
             // 
-            // groupBox9
+            // groupBox1
             // 
-            this.groupBox9.Controls.Add(this.MaximumNumberOfBitsOfBeliefToSend);
-            this.groupBox9.Controls.Add(this.label15);
-            this.groupBox9.Controls.Add(this.MinimumNumberOfBitsOfBeliefToSend);
-            this.groupBox9.Controls.Add(this.label14);
-            this.groupBox9.Controls.Add(this.MinimumBeliefToSendPerBit);
-            this.groupBox9.Controls.Add(this.CanReceiveBeliefs);
-            this.groupBox9.Controls.Add(this.label13);
-            this.groupBox9.Controls.Add(this.CanSendBeliefs);
-            this.groupBox9.Controls.Add(this.HasInitialBeliefs);
-            this.groupBox9.Controls.Add(this.HasBeliefs);
-            this.groupBox9.Location = new System.Drawing.Point(29, 21);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(374, 289);
-            this.groupBox9.TabIndex = 133;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Agent beliefs";
+            this.groupBox1.Controls.Add(this.label17);
+            this.groupBox1.Controls.Add(this.MaximumNumberOfBitsOfBeliefToSend);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label15);
+            this.groupBox1.Controls.Add(this.InfluentialnessMin);
+            this.groupBox1.Controls.Add(this.CanSendBeliefs);
+            this.groupBox1.Controls.Add(this.MinimumNumberOfBitsOfBeliefToSend);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.InfluentialnessMax);
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.MinimumBeliefToSendPerBit);
+            this.groupBox1.Location = new System.Drawing.Point(28, 310);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(374, 193);
+            this.groupBox1.TabIndex = 134;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Agent influencers";
             // 
             // InfluenceabilityMax
             // 
-            this.InfluenceabilityMax.Location = new System.Drawing.Point(269, 56);
+            this.InfluenceabilityMax.Location = new System.Drawing.Point(281, 93);
             this.InfluenceabilityMax.Name = "InfluenceabilityMax";
             this.InfluenceabilityMax.Size = new System.Drawing.Size(53, 22);
             this.InfluenceabilityMax.TabIndex = 139;
             this.InfluenceabilityMax.Text = "2";
             this.InfluenceabilityMax.TextChanged += new System.EventHandler(this.InfluenceabilityMax_TextChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 70);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(98, 17);
+            this.label6.TabIndex = 132;
+            this.label6.Text = "Influentialness";
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(229, 59);
+            this.label10.Location = new System.Drawing.Point(241, 96);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(37, 17);
             this.label10.TabIndex = 138;
             this.label10.Text = "max.";
             // 
-            // InfluenceabilityMin
-            // 
-            this.InfluenceabilityMin.Location = new System.Drawing.Point(170, 56);
-            this.InfluenceabilityMin.Name = "InfluenceabilityMin";
-            this.InfluenceabilityMin.Size = new System.Drawing.Size(53, 22);
-            this.InfluenceabilityMin.TabIndex = 137;
-            this.InfluenceabilityMin.Text = "2";
-            this.InfluenceabilityMin.TextChanged += new System.EventHandler(this.InfluenceabilityMin_TextChanged);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(31, 59);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(135, 17);
-            this.label11.TabIndex = 136;
-            this.label11.Text = "Influenceability: min.";
-            // 
-            // InfluentialnessMax
-            // 
-            this.InfluentialnessMax.Location = new System.Drawing.Point(269, 27);
-            this.InfluentialnessMax.Name = "InfluentialnessMax";
-            this.InfluentialnessMax.Size = new System.Drawing.Size(53, 22);
-            this.InfluentialnessMax.TabIndex = 135;
-            this.InfluentialnessMax.Text = "2";
-            this.InfluentialnessMax.TextChanged += new System.EventHandler(this.InfluentialnessMax_TextChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(229, 30);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(37, 17);
-            this.label9.TabIndex = 134;
-            this.label9.Text = "max.";
-            // 
             // InfluentialnessMin
             // 
-            this.InfluentialnessMin.Location = new System.Drawing.Point(170, 27);
+            this.InfluentialnessMin.Location = new System.Drawing.Point(182, 67);
             this.InfluentialnessMin.Name = "InfluentialnessMin";
             this.InfluentialnessMin.Size = new System.Drawing.Size(53, 22);
             this.InfluentialnessMin.TabIndex = 133;
             this.InfluentialnessMin.Text = "2";
             this.InfluentialnessMin.TextChanged += new System.EventHandler(this.InfluentialnessMin_TextChanged);
             // 
+            // InfluenceabilityMin
+            // 
+            this.InfluenceabilityMin.Location = new System.Drawing.Point(182, 93);
+            this.InfluenceabilityMin.Name = "InfluenceabilityMin";
+            this.InfluenceabilityMin.Size = new System.Drawing.Size(53, 22);
+            this.InfluenceabilityMin.TabIndex = 137;
+            this.InfluenceabilityMin.Text = "2";
+            this.InfluenceabilityMin.TextChanged += new System.EventHandler(this.InfluenceabilityMin_TextChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(241, 70);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 17);
+            this.label9.TabIndex = 134;
+            this.label9.Text = "max.";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(34, 96);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(101, 17);
+            this.label11.TabIndex = 136;
+            this.label11.Text = "Influenceability";
+            // 
+            // InfluentialnessMax
+            // 
+            this.InfluentialnessMax.Location = new System.Drawing.Point(281, 67);
+            this.InfluentialnessMax.Name = "InfluentialnessMax";
+            this.InfluentialnessMax.Size = new System.Drawing.Size(53, 22);
+            this.InfluentialnessMax.TabIndex = 135;
+            this.InfluentialnessMax.Text = "2";
+            this.InfluentialnessMax.TextChanged += new System.EventHandler(this.InfluentialnessMax_TextChanged);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.label21);
+            this.groupBox9.Controls.Add(this.MandatoryRatio);
+            this.groupBox9.Controls.Add(this.label20);
+            this.groupBox9.Controls.Add(this.InfluenceabilityMax);
+            this.groupBox9.Controls.Add(this.label10);
+            this.groupBox9.Controls.Add(this.CanReceiveBeliefs);
+            this.groupBox9.Controls.Add(this.InfluenceabilityMin);
+            this.groupBox9.Controls.Add(this.HasInitialBeliefs);
+            this.groupBox9.Controls.Add(this.label11);
+            this.groupBox9.Location = new System.Drawing.Point(29, 118);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(374, 171);
+            this.groupBox9.TabIndex = 133;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Agent workers";
+            // 
+            // MaximumNumberOfBitsOfBeliefToSend
+            // 
+            this.MaximumNumberOfBitsOfBeliefToSend.Location = new System.Drawing.Point(248, 164);
+            this.MaximumNumberOfBitsOfBeliefToSend.Name = "MaximumNumberOfBitsOfBeliefToSend";
+            this.MaximumNumberOfBitsOfBeliefToSend.Size = new System.Drawing.Size(87, 22);
+            this.MaximumNumberOfBitsOfBeliefToSend.TabIndex = 50;
+            this.MaximumNumberOfBitsOfBeliefToSend.Text = "5";
+            this.MaximumNumberOfBitsOfBeliefToSend.TextChanged += new System.EventHandler(this.MaximumNumberOfBitsOfBeliefToSend_TextChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(31, 166);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(204, 17);
+            this.label15.TabIndex = 49;
+            this.label15.Text = "Maximum number of bits [0; 10]";
+            // 
+            // MinimumNumberOfBitsOfBeliefToSend
+            // 
+            this.MinimumNumberOfBitsOfBeliefToSend.Location = new System.Drawing.Point(248, 135);
+            this.MinimumNumberOfBitsOfBeliefToSend.Name = "MinimumNumberOfBitsOfBeliefToSend";
+            this.MinimumNumberOfBitsOfBeliefToSend.Size = new System.Drawing.Size(87, 22);
+            this.MinimumNumberOfBitsOfBeliefToSend.TabIndex = 48;
+            this.MinimumNumberOfBitsOfBeliefToSend.Text = "5";
+            this.MinimumNumberOfBitsOfBeliefToSend.TextChanged += new System.EventHandler(this.MinimumNumberOfBitsOfBeliefToSend_TextChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(31, 137);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(201, 17);
+            this.label14.TabIndex = 47;
+            this.label14.Text = "Minimum number of bits [0; 10]";
+            // 
+            // MinimumBeliefToSendPerBit
+            // 
+            this.MinimumBeliefToSendPerBit.Location = new System.Drawing.Point(248, 105);
+            this.MinimumBeliefToSendPerBit.Name = "MinimumBeliefToSendPerBit";
+            this.MinimumBeliefToSendPerBit.Size = new System.Drawing.Size(87, 22);
+            this.MinimumBeliefToSendPerBit.TabIndex = 46;
+            this.MinimumBeliefToSendPerBit.Text = "5";
+            this.MinimumBeliefToSendPerBit.TextChanged += new System.EventHandler(this.MinimumBeliefToSendPerBit_TextChanged);
+            // 
             // CanReceiveBeliefs
             // 
             this.CanReceiveBeliefs.AutoSize = true;
-            this.CanReceiveBeliefs.Location = new System.Drawing.Point(34, 111);
+            this.CanReceiveBeliefs.Location = new System.Drawing.Point(34, 57);
             this.CanReceiveBeliefs.Name = "CanReceiveBeliefs";
             this.CanReceiveBeliefs.Size = new System.Drawing.Size(150, 21);
             this.CanReceiveBeliefs.TabIndex = 3;
             this.CanReceiveBeliefs.Text = "Can receive beliefs";
             this.CanReceiveBeliefs.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // label13
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 30);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(132, 17);
-            this.label6.TabIndex = 132;
-            this.label6.Text = "Influentialness: min.";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(31, 107);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(188, 17);
+            this.label13.TabIndex = 45;
+            this.label13.Text = "Minimum belief to send  [0;1]";
             // 
             // CanSendBeliefs
             // 
             this.CanSendBeliefs.AutoSize = true;
-            this.CanSendBeliefs.Location = new System.Drawing.Point(34, 84);
+            this.CanSendBeliefs.Location = new System.Drawing.Point(34, 36);
             this.CanSendBeliefs.Name = "CanSendBeliefs";
             this.CanSendBeliefs.Size = new System.Drawing.Size(135, 21);
             this.CanSendBeliefs.TabIndex = 2;
@@ -428,7 +510,7 @@
             // HasInitialBeliefs
             // 
             this.HasInitialBeliefs.AutoSize = true;
-            this.HasInitialBeliefs.Location = new System.Drawing.Point(83, 57);
+            this.HasInitialBeliefs.Location = new System.Drawing.Point(34, 30);
             this.HasInitialBeliefs.Name = "HasInitialBeliefs";
             this.HasInitialBeliefs.Size = new System.Drawing.Size(136, 21);
             this.HasInitialBeliefs.TabIndex = 1;
@@ -438,7 +520,7 @@
             // HasBeliefs
             // 
             this.HasBeliefs.AutoSize = true;
-            this.HasBeliefs.Location = new System.Drawing.Point(34, 30);
+            this.HasBeliefs.Location = new System.Drawing.Point(37, 30);
             this.HasBeliefs.Name = "HasBeliefs";
             this.HasBeliefs.Size = new System.Drawing.Size(100, 21);
             this.HasBeliefs.TabIndex = 0;
@@ -447,15 +529,17 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.tbInfluencers);
+            this.groupBox6.Controls.Add(this.label16);
             this.groupBox6.Controls.Add(this.tbKnowledge);
             this.groupBox6.Controls.Add(this.label12);
             this.groupBox6.Controls.Add(this.tbWorkers);
             this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.tbSteps);
             this.groupBox6.Controls.Add(this.label7);
-            this.groupBox6.Location = new System.Drawing.Point(453, 306);
+            this.groupBox6.Location = new System.Drawing.Point(457, 148);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(374, 152);
+            this.groupBox6.Size = new System.Drawing.Size(374, 221);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Simulation";
@@ -480,7 +564,7 @@
             // 
             // tbSteps
             // 
-            this.tbSteps.Location = new System.Drawing.Point(242, 87);
+            this.tbSteps.Location = new System.Drawing.Point(242, 115);
             this.tbSteps.Name = "tbSteps";
             this.tbSteps.Size = new System.Drawing.Size(87, 22);
             this.tbSteps.TabIndex = 39;
@@ -489,82 +573,75 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(25, 92);
+            this.label7.Location = new System.Drawing.Point(25, 120);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(112, 17);
             this.label7.TabIndex = 42;
             this.label7.Text = "Number of steps";
             // 
-            // groupBox1
+            // tbInfluencers
             // 
-            this.groupBox1.Controls.Add(this.InfluenceabilityMax);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.InfluentialnessMin);
-            this.groupBox1.Controls.Add(this.InfluenceabilityMin);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.InfluentialnessMax);
-            this.groupBox1.Location = new System.Drawing.Point(29, 345);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(374, 100);
-            this.groupBox1.TabIndex = 134;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Agent influence";
+            this.tbInfluencers.Location = new System.Drawing.Point(242, 84);
+            this.tbInfluencers.Name = "tbInfluencers";
+            this.tbInfluencers.Size = new System.Drawing.Size(87, 22);
+            this.tbInfluencers.TabIndex = 46;
+            this.tbInfluencers.Text = "2";
+            this.tbInfluencers.TextChanged += new System.EventHandler(this.tbInfluencers_TextChanged);
             // 
-            // MinimumBeliefToSendPerBit
+            // label16
             // 
-            this.MinimumBeliefToSendPerBit.Location = new System.Drawing.Point(248, 157);
-            this.MinimumBeliefToSendPerBit.Name = "MinimumBeliefToSendPerBit";
-            this.MinimumBeliefToSendPerBit.Size = new System.Drawing.Size(87, 22);
-            this.MinimumBeliefToSendPerBit.TabIndex = 46;
-            this.MinimumBeliefToSendPerBit.Text = "5";
-            this.MinimumBeliefToSendPerBit.TextChanged += new System.EventHandler(this.MinimumBeliefToSendPerBit_TextChanged);
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(25, 89);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(184, 21);
+            this.label16.TabIndex = 45;
+            this.label16.Text = "Number of influencers";
             // 
-            // label13
+            // label17
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(31, 159);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(188, 17);
-            this.label13.TabIndex = 45;
-            this.label13.Text = "Minimum belief to send  [0;1]";
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(141, 70);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(34, 17);
+            this.label17.TabIndex = 140;
+            this.label17.Text = "min.";
             // 
-            // MinimumNumberOfBitsOfBeliefToSend
+            // label20
             // 
-            this.MinimumNumberOfBitsOfBeliefToSend.Location = new System.Drawing.Point(248, 187);
-            this.MinimumNumberOfBitsOfBeliefToSend.Name = "MinimumNumberOfBitsOfBeliefToSend";
-            this.MinimumNumberOfBitsOfBeliefToSend.Size = new System.Drawing.Size(87, 22);
-            this.MinimumNumberOfBitsOfBeliefToSend.TabIndex = 48;
-            this.MinimumNumberOfBitsOfBeliefToSend.Text = "5";
-            this.MinimumNumberOfBitsOfBeliefToSend.TextChanged += new System.EventHandler(this.MinimumNumberOfBitsOfBeliefToSend_TextChanged);
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(141, 96);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(34, 17);
+            this.label20.TabIndex = 141;
+            this.label20.Text = "min.";
             // 
-            // label14
+            // MandatoryRatio
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(31, 189);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(251, 21);
-            this.label14.TabIndex = 47;
-            this.label14.Text = "Minimum number of bits [0; 10]";
+            this.MandatoryRatio.Location = new System.Drawing.Point(280, 133);
+            this.MandatoryRatio.Name = "MandatoryRatio";
+            this.MandatoryRatio.Size = new System.Drawing.Size(54, 22);
+            this.MandatoryRatio.TabIndex = 52;
+            this.MandatoryRatio.Text = "5";
+            this.MandatoryRatio.TextChanged += new System.EventHandler(this.MandatoryRatio_TextChanged);
             // 
-            // MaximumNumberOfBitsOfBeliefToSend
+            // label21
             // 
-            this.MaximumNumberOfBitsOfBeliefToSend.Location = new System.Drawing.Point(248, 216);
-            this.MaximumNumberOfBitsOfBeliefToSend.Name = "MaximumNumberOfBitsOfBeliefToSend";
-            this.MaximumNumberOfBitsOfBeliefToSend.Size = new System.Drawing.Size(87, 22);
-            this.MaximumNumberOfBitsOfBeliefToSend.TabIndex = 50;
-            this.MaximumNumberOfBitsOfBeliefToSend.Text = "5";
-            this.MaximumNumberOfBitsOfBeliefToSend.TextChanged += new System.EventHandler(this.MaximumNumberOfBitsOfBeliefToSend_TextChanged);
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(30, 135);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(230, 17);
+            this.label21.TabIndex = 47;
+            this.label21.Text = "Mandatory ratio (which block tasks)";
             // 
-            // label15
+            // groupBox7
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(31, 218);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(255, 21);
-            this.label15.TabIndex = 49;
-            this.label15.Text = "Maximum number of bits [0; 10]";
+            this.groupBox7.Controls.Add(this.HasBeliefs);
+            this.groupBox7.Location = new System.Drawing.Point(29, 29);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(373, 69);
+            this.groupBox7.TabIndex = 51;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "All agents";
             // 
             // Home
             // 
@@ -581,12 +658,14 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -640,5 +719,12 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox MinimumNumberOfBitsOfBeliefToSend;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox tbInfluencers;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox MandatoryRatio;
+        private System.Windows.Forms.GroupBox groupBox7;
     }
 }
