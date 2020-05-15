@@ -6,10 +6,10 @@ You can develop your own application to run virtual experiments with organizatio
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
 
 Some useful links:
-* [Website : https://symu.org/](https://symu.org/)
-* [Documentation : http://docs.symu.org/](http://docs.symu.org/)
-* [Code : http://github.symu.org/](http://github.symu.org/)
-* [Issues : http://github.symu.org/issues](http://github.symu.org/issues/)
+* [Website : symu.org](https://symu.org/)
+* [Documentation : docs.symu.org](http://docs.symu.org/)
+* [Code : github.symu.org](http://github.symu.org/)
+* [Issues : github.symu.org/issues](http://github.symu.org/issues/)
 
 ## How it works
 
