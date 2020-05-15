@@ -1,4 +1,5 @@
 # Symu
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/lmorisse/symu?style=flat-square)](https://github.com/lmorisse/Symu/releases/latest)
 [![Documentation Status](https://readthedocs.org/projects/symu/badge/?version=latest)](https://symu.readthedocs.io/en/latest/?badge=latest)
 
 ``Symu`` is a C# opensource framework for organization simulation. 
