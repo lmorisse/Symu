@@ -1,15 +1,15 @@
 # Symu
-[![alt text](https://symu.readthedocs.io/en/latest/?badge=latest"Symu documentation")](http://docs.symu.org)
+[![Documentation Status](https://readthedocs.org/projects/symu/badge/?version=latest)](https://symu.readthedocs.io/en/latest/?badge=latest)
 
 ``Symu`` is a C# opensource framework for organization simulation. 
 You can develop your own application to run virtual experiments with organizations and capture their dynamic behaviors, their evolutions.<br>
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
 
 Some useful links:
-[Website : https://symu.org/](https://symu.org/)
-[Documentation : http://docs.symu.org/](http://docs.symu.org/)
-[Code : http://github.symu.org/](http://github.symu.org/)
-[Issues : http://github.symu.org/issues](http://github.symu.org/issues/)
+* [Website : https://symu.org/](https://symu.org/)
+* [Documentation : http://docs.symu.org/](http://docs.symu.org/)
+* [Code : http://github.symu.org/](http://github.symu.org/)
+* [Issues : http://github.symu.org/issues](http://github.symu.org/issues/)
 
 ## How it works
 
