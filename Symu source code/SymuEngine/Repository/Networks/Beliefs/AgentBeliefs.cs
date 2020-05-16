@@ -39,9 +39,9 @@ namespace SymuEngine.Repository.Networks.Beliefs
             }
         }
 
-        public void Add(ushort beliefId)
+        public void Add(ushort beliefId, BeliefLevel beliefLevel)
         {
-            var agentBelief = new AgentBelief(beliefId);
+            var agentBelief = new AgentBelief(beliefId, beliefLevel);
             Add(agentBelief);
         }
 

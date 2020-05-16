@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Add SymuTask.SetKnowledgesBits by [@lmorisse]
+* Refactoring NetworkBeliefs by [@lmorisse]
 * Add new project example: [SymuGroupAndInteraction](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluence) by [@lmorisse]
 * Add new project example: [SymuGroupAndInteractionTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluenceTests) by [@lmorisse]
 

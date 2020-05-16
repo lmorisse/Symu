@@ -25,11 +25,33 @@ namespace SymuEngine.Classes.Task
         public const float NoRequiredBits = 0;
         public const float FullRequiredBits = 2;
 
+        private float _mandatoryRatio = 0.2F;
+
         /// <summary>
-        ///     MandatoryBits = RequiredBits / RequiredMandatoryRatio
-        ///     MandatoryBits must be known by the agent
+        ///     Mandatory bit ratio is a function of the task complexity
+        ///     The more complex, the more bits are mandatory
+        ///     Complexity has a normalized range of [0; 1]
+        ///     Mandatory ratio denormalized complexity
         /// </summary>
-        public float RequiredMandatoryRatio { get; set; } = 5;
+        /// <example>
+        ///     KnowledgeBits = 100 with a MandatoryRatio of 0.2 and a complexity of 1 => number of mandatory bits = 1* 0.2
+        ///     *100 = 20 bits
+        /// </example>
+        public float MandatoryRatio
+        {
+            get => _mandatoryRatio;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MandatoryRatio should be between 0 and 1");
+                }
+
+                _mandatoryRatio = value;
+            }
+        }
+
+        private float _requiredRatio = 0.2F;
 
         /// <summary>
         ///     required bit ratio is a function of the task complexity
@@ -41,7 +63,19 @@ namespace SymuEngine.Classes.Task
         ///     KnowledgeBits = 100 with a RequiredRatio of 0.2 and a complexity of 1 => number of required bits = 1* 0.2
         ///     *100 = 20 bits
         /// </example>
-        public float RequiredRatio { get; set; } = 0.2F;
+        public float RequiredRatio
+        {
+            get => _requiredRatio;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RequiredRatio should be between 0 and 1");
+                }
+
+                _requiredRatio = value;
+            }
+        }
 
         /// <summary>
         ///     Define the ratio of Knowledge's size to define the KnowledgeBits required
@@ -67,12 +101,14 @@ namespace SymuEngine.Classes.Task
         /// </summary>
         public float MandatoryBitsRatio(float level)
         {
-            if (Math.Abs(RequiredMandatoryRatio) < Tolerance)
+            // For unit tests
+            if (Math.Abs(level - FullRequiredBits) < Tolerance)
             {
-                return 0;
+                return 1;
             }
 
-            return RequiredBitsRatio(level) / RequiredMandatoryRatio;
+            // Normal use
+            return level * MandatoryRatio;
         }
     }
 }

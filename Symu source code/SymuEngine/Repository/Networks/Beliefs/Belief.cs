@@ -9,8 +9,10 @@
 
 #region using directives
 
+using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
+using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
@@ -32,10 +34,11 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         private const int RangeMax = 1;
 
-        public Belief(ushort beliefId, byte length, RandomGenerator model)
+        public Belief(ushort beliefId, string name, byte length, RandomGenerator model)
         {
             Id = beliefId;
             Length = length;
+            Name = name;
             InitializeWeights(model, length);
         }
 
@@ -43,9 +46,13 @@ namespace SymuEngine.Repository.Networks.Beliefs
         ///     Belief Id
         /// </summary>
         public ushort Id { get; }
+        public string Name { get; }
 
         /// <summary>
-        ///     Length
+        ///     Each area of belief is represented by a collection of BeliefBits
+        ///     The size define the length of the collection
+        ///     each bit represent a single atomic belief
+        ///     size range [0; 10]
         /// </summary>
         public byte Length { get; }
 
@@ -60,9 +67,60 @@ namespace SymuEngine.Repository.Networks.Beliefs
             return obj is Belief belief
                    && Id == belief.Id;
         }
+        /// <summary>
+        ///     Transform BeliefLevel into a value between [0;1]
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        private static float GetValueFromBeliefLevel(BeliefLevel level)
+        {
+            return ContinuousUniform.Sample(GetMinFromBeliefLevel(level), GetMaxFromBeliefLevel(level));
+        }
+
+        public static float GetMaxFromBeliefLevel(BeliefLevel level)
+        {
+            switch (level)
+            {
+                case BeliefLevel.NoBelief:
+                    return 0;
+                case BeliefLevel.StronglyDisagree:
+                    return -0.75F;
+                case BeliefLevel.Disagree:
+                    return -0.25F;
+                case BeliefLevel.NeitherAgreeNorDisagree:
+                    return 0.25F;
+                case BeliefLevel.Agree:
+                    return 0.75F;
+                case BeliefLevel.StronglyAgree:
+                    return 1F;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
+            }
+        }
+
+        public static float GetMinFromBeliefLevel(BeliefLevel level)
+        {
+            switch (level)
+            {
+                case BeliefLevel.NoBelief:
+                    return 0;
+                case BeliefLevel.StronglyDisagree:
+                    return -1F;
+                case BeliefLevel.Disagree:
+                    return -0.75F;
+                case BeliefLevel.NeitherAgreeNorDisagree:
+                    return -0.25F;
+                case BeliefLevel.Agree:
+                    return 0.25F;
+                case BeliefLevel.StronglyAgree:
+                    return 0.75F;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
+            }
+        }
 
         /// <summary>
-        ///     Given a KnowledgeModel
+        ///     Given a random model
         ///     set the weights : an array fill of random float ranging [-1; 1]
         ///     representing the detailed Belief of an agent
         /// </summary>
@@ -76,6 +134,53 @@ namespace SymuEngine.Repository.Networks.Beliefs
                 : DiscreteUniform.Samples(length, RangeMin, RangeMax);
 
             Weights = new Bits(beliefBits, RangeMin);
+        }
+        /// <summary>
+        ///     Given a random model and a BeliefLevel
+        ///     return the beliefBits for the agent: an array fill of random binaries
+        ///     representing the detailed belief of an agent
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="beliefLevel"></param>
+        /// <returns></returns>
+        public float[] InitializeBits(RandomGenerator model, BeliefLevel beliefLevel)
+        {
+            float[] beliefBits;
+            switch (model)
+            {
+                case RandomGenerator.RandomUniform:
+                    {
+                        var min = GetMinFromBeliefLevel(beliefLevel);
+                        var max = GetMaxFromBeliefLevel(beliefLevel);
+                        beliefBits = ContinuousUniform.Samples(Length, min, max);
+                        if (Math.Abs(min - max) < Constants.Tolerance)
+                        {
+                            return beliefBits;
+                        }
+
+                        for (byte i = 0; i < beliefBits.Length; i++)
+                        {
+                            if (beliefBits[i] < min * (1 + 0.05))
+                            {
+                                // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
+                                // We force the lowest (Min +5%) knowledgeBit to 0  
+                                beliefBits[i] = 0;
+                            }
+                        }
+
+                        break;
+                    }
+                case RandomGenerator.RandomBinary:
+                    {
+                        var mean = 1 - GetValueFromBeliefLevel(beliefLevel);
+                        beliefBits = ContinuousUniform.FilteredSamples(Length, mean);
+                        break;
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model), model, null);
+            }
+
+            return beliefBits;
         }
     }
 }

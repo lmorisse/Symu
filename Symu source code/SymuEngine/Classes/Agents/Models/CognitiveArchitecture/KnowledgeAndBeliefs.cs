@@ -243,6 +243,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         ///     Get the agent Beliefs
         /// </summary>
         public AgentBeliefs Beliefs => HasBelief ? _network.NetworkBeliefs.GetAgentBeliefs(_id) : null;
+        /// <summary>
+        /// Default belief level use to create new belief during simulation
+        /// </summary>
+        public BeliefLevel DefaultBeliefLevel { get; set; }
 
         /// <summary>
         ///     Initialize the beliefs of the agent based on the belief network
@@ -274,11 +278,12 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
                 return;
             }
 
-            _network.NetworkBeliefs.Add(_id, expertiseAgent);
+            _network.NetworkBeliefs.Add(_id, expertiseAgent, DefaultBeliefLevel);
         }
 
         /// <summary>
         ///     Add an agentId's beliefs based on a knowledgeId to the network
+        ///     using the DefaultBeliefLevel
         /// </summary>
         /// <param name="knowledgeId"></param>
         public void AddBelief(ushort knowledgeId)
@@ -288,7 +293,23 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
                 return;
             }
 
-            _network.NetworkBeliefs.Add(_id, knowledgeId);
+            _network.NetworkBeliefs.Add(_id, knowledgeId, DefaultBeliefLevel);
+        }
+
+        /// <summary>
+        ///     Add an agentId's beliefs based on a knowledgeId to the network
+        ///     using the beliefLevel
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="beliefLevel"></param>
+        public void AddBelief(ushort knowledgeId, BeliefLevel beliefLevel)
+        {
+            if (!HasBelief)
+            {
+                return;
+            }
+
+            _network.NetworkBeliefs.Add(_id, knowledgeId, beliefLevel);
         }
 
         /// <summary>

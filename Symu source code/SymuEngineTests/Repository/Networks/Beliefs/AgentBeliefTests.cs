@@ -17,56 +17,27 @@ using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
+
 namespace SymuEngineTests.Repository.Networks.Beliefs
 {
     [TestClass]
     public class AgentBeliefTests
     {
         private const RandomGenerator Model = new RandomGenerator();
-        private readonly AgentBelief _agentBelief = new AgentBelief(1);
+        private readonly AgentBelief _agentBelief0 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
+        private readonly AgentBelief _agentBelief1 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
+        private readonly AgentBelief _agentBelief2 = new AgentBelief(2, BeliefLevel.NeitherAgreeNorDisagree);
+        private readonly NetworkBeliefs _network = new NetworkBeliefs();
+        private readonly Belief _belief0 = new Belief(0, "0", 0, Model);
+        private readonly Belief _belief1 = new Belief(1, "1", 1, Model);
+        private readonly Belief _belief2 = new Belief(2, "2", 2, Model);
 
-        /// <summary>
-        ///     Initialize
-        /// </summary>
-        [TestMethod]
-        public void InitializeBeliefBitsTest()
+        [TestInitialize]
+        public void Initialize()
         {
-            Assert.IsNull(_agentBelief.BeliefBits);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            Assert.IsNotNull(_agentBelief.BeliefBits);
-            Assert.AreEqual(1, _agentBelief.BeliefBits.Length);
-        }
-
-        /// <summary>
-        ///     Neutral Initialize
-        /// </summary>
-        [TestMethod]
-        public void InitializeBeliefBitsTest1()
-        {
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            Assert.AreEqual(0, _agentBelief.BeliefBits.GetBit(0));
-        }
-
-        /// <summary>
-        ///     Initialize RandomUniform
-        /// </summary>
-        [TestMethod]
-        public void InitializeBeliefBitsTest2()
-        {
-            _agentBelief.InitializeBeliefBits(RandomGenerator.RandomUniform, 1, false);
-            var t = _agentBelief.BeliefBits.GetBit(0);
-            Assert.IsTrue(-1 <= t && t <= 1);
-        }
-
-        /// <summary>
-        ///     Initialize RandomBinary
-        /// </summary>
-        [TestMethod]
-        public void InitializeBeliefBitsTest3()
-        {
-            _agentBelief.InitializeBeliefBits(RandomGenerator.RandomBinary, 1, false);
-            var t = Convert.ToInt32(_agentBelief.BeliefBits.GetBit(0));
-            Assert.IsTrue(-1 == t || t == 1 || t == 0);
+            _network.AddBelief(_belief0);
+            _network.AddBelief(_belief1);
+            _network.AddBelief(_belief2);
         }
 
         /// <summary>
@@ -76,20 +47,25 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void NullCheckTest()
         {
             byte[] taskKnowledge = { };
-            var belief = new Belief(1, 1, Model);
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief.Check(null, out _, belief, 1));
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief.Check(taskKnowledge, out _, null, 1));
-            // agentBelief not initialized
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief.Check(taskKnowledge, out _, belief, 1));
+            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(null, out _, _belief1, 1));
+            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(taskKnowledge, out _, null, 1));
+        }
+        /// <summary>
+        ///     agentBelief not initialized
+        /// </summary>
+        [TestMethod]
+        public void NotInitializedCheckTest()
+        {
+            byte[] taskKnowledge = { };
+            Assert.AreEqual(0, _agentBelief1.Check(taskKnowledge, out _, _belief1, 1));
         }
 
         [TestMethod]
         public void ZeroLengthCheckTest()
         {
             byte[] taskKnowledge = { };
-            var belief = new Belief(1, 1, Model);
-            _agentBelief.InitializeBeliefBits(Model, 0, true);
-            Assert.AreEqual(0, _agentBelief.Check(taskKnowledge, out _, belief, 1));
+            _network.InitializeAgentBelief(_agentBelief0, true);
+            Assert.AreEqual(0, _agentBelief0.Check(taskKnowledge, out _, _belief0, 1));
         }
 
         /// <summary>
@@ -99,9 +75,8 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void CheckTest()
         {
             byte[] taskKnowledge = {0};
-            var belief = new Belief(1, 1, Model);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            var t = _agentBelief.Check(taskKnowledge, out _, belief, 1);
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            var t = _agentBelief1.Check(taskKnowledge, out _, _belief1, 1);
             Assert.AreEqual(0, t);
         }
 
@@ -112,11 +87,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void CheckTest1()
         {
             byte[] taskIndexes = {0};
-            var belief = new Belief(1, 1, Model);
-            belief.Weights.SetBit(0, 1);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            var t = _agentBelief.Check(taskIndexes, out var index, belief, 0);
+            _belief1.Weights.SetBit(0, 1);
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            var t = _agentBelief1.Check(taskIndexes, out var index, _belief1, 0);
             Assert.AreEqual(1, t);
             Assert.AreEqual(0, index);
         }
@@ -127,7 +101,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void NullLearnTest()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief.Learn(null, 0));
+            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Learn(null, 0));
         }
 
         /// <summary>
@@ -138,10 +112,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void NoLearningLearnTest()
         {
             var bits = new Bits(new float[] {0}, -1);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            _agentBelief.Learn(bits, 1);
-            Assert.AreEqual(1, _agentBelief.BeliefBits.GetBit(0));
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            _agentBelief1.Learn(bits, 1);
+            Assert.AreEqual(1, _agentBelief1.BeliefBits.GetBit(0));
         }
 
         /// <summary>
@@ -151,11 +125,11 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void NoLearningLearnTest1()
         {
             var bits = new Bits(new float[] {-1}, -1);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, 1);
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
             // Non influence
-            _agentBelief.Learn(bits, 0);
-            Assert.AreEqual(1, _agentBelief.BeliefBits.GetBit(0));
+            _agentBelief1.Learn(bits, 0);
+            Assert.AreEqual(1, _agentBelief1.BeliefBits.GetBit(0));
         }
 
         /// <summary>
@@ -165,10 +139,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void LearnTest()
         {
             var bits = new Bits(new float[] {-1}, -1);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            _agentBelief.Learn(bits, 1);
-            Assert.AreEqual(0, _agentBelief.BeliefBits.GetBit(0));
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            _agentBelief1.Learn(bits, 1);
+            Assert.AreEqual(0, _agentBelief1.BeliefBits.GetBit(0));
         }
 
         /// <summary>
@@ -178,10 +152,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void LearnTest1()
         {
             var bits = new Bits(new float[] {1}, -1);
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            _agentBelief.Learn(bits, 1);
-            Assert.AreEqual(1, _agentBelief.BeliefBits.GetBit(0));
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            _agentBelief1.Learn(bits, 1);
+            Assert.AreEqual(1, _agentBelief1.BeliefBits.GetBit(0));
         }
 
         /// <summary>
@@ -191,43 +165,43 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void NullCloneWrittenBeliefBitsTest()
         {
-            Assert.ThrowsException<NullReferenceException>(() => _agentBelief.CloneWrittenBeliefBits(1));
+            Assert.ThrowsException<NullReferenceException>(() => _agentBelief1.CloneWrittenBeliefBits(1));
         }
 
         [TestMethod]
         public void CloneWrittenBeliefBitsTest()
         {
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
+            _network.InitializeAgentBelief(_agentBelief1, true);
             // 1
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            var bits = _agentBelief.CloneWrittenBeliefBits(0);
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            var bits = _agentBelief1.CloneWrittenBeliefBits(0);
             Assert.AreEqual(1, bits.GetBit(0));
-            bits = _agentBelief.CloneWrittenBeliefBits(2);
+            bits = _agentBelief1.CloneWrittenBeliefBits(2);
             Assert.AreEqual(0, bits.GetBit(0));
             // -1
-            _agentBelief.BeliefBits.SetBit(0, -1);
-            bits = _agentBelief.CloneWrittenBeliefBits(0);
+            _agentBelief1.BeliefBits.SetBit(0, -1);
+            bits = _agentBelief1.CloneWrittenBeliefBits(0);
             Assert.AreEqual(-1, bits.GetBit(0));
-            bits = _agentBelief.CloneWrittenBeliefBits(2);
+            bits = _agentBelief1.CloneWrittenBeliefBits(2);
             Assert.AreEqual(0, bits.GetBit(0));
         }
 
         [TestMethod]
         public void BelievesEnoughTest()
         {
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, -1);
-            Assert.IsTrue(_agentBelief.BelievesEnough(0, 0));
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            Assert.IsTrue(_agentBelief.BelievesEnough(0, 0));
-            _agentBelief.BeliefBits.SetBit(0, 0);
-            Assert.IsFalse(_agentBelief.BelievesEnough(0, 1));
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, -1);
+            Assert.IsTrue(_agentBelief1.BelievesEnough(0, 0));
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            Assert.IsTrue(_agentBelief1.BelievesEnough(0, 0));
+            _agentBelief1.BeliefBits.SetBit(0, 0);
+            Assert.IsFalse(_agentBelief1.BelievesEnough(0, 1));
         }
 
         [TestMethod]
-        public void NullGetBeliefSumTest()
+        public void NotInitializedGetBeliefSumTest()
         {
-            Assert.ThrowsException<NullReferenceException>(() => _agentBelief.GetBeliefSum());
+            Assert.AreEqual(0, _agentBelief1.GetBeliefSum());
         }
 
         /// <summary>
@@ -236,13 +210,13 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefSumTest()
         {
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
-            _agentBelief.BeliefBits.SetBit(0, -1);
-            Assert.AreEqual(-1, _agentBelief.GetBeliefSum());
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            Assert.AreEqual(1, _agentBelief.GetBeliefSum());
-            _agentBelief.BeliefBits.SetBit(0, 0);
-            Assert.AreEqual(0, _agentBelief.GetBeliefSum());
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.BeliefBits.SetBit(0, -1);
+            Assert.AreEqual(-1, _agentBelief1.GetBeliefSum());
+            _agentBelief1.BeliefBits.SetBit(0, 1);
+            Assert.AreEqual(1, _agentBelief1.GetBeliefSum());
+            _agentBelief1.BeliefBits.SetBit(0, 0);
+            Assert.AreEqual(0, _agentBelief1.GetBeliefSum());
         }
 
         /// <summary>
@@ -251,24 +225,38 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefSumTest1()
         {
-            _agentBelief.InitializeBeliefBits(Model, 2, true);
-            _agentBelief.BeliefBits.SetBit(0, -1);
-            _agentBelief.BeliefBits.SetBit(1, -1);
-            Assert.AreEqual(-2, _agentBelief.GetBeliefSum());
-            _agentBelief.BeliefBits.SetBit(0, 1);
-            _agentBelief.BeliefBits.SetBit(1, -1);
-            Assert.AreEqual(0, _agentBelief.GetBeliefSum());
+            _network.InitializeAgentBelief(_agentBelief2, true);
+            _agentBelief2.BeliefBits.SetBit(0, -1);
+            _agentBelief2.BeliefBits.SetBit(1, -1);
+            Assert.AreEqual(-2, _agentBelief2.GetBeliefSum());
+            _agentBelief2.BeliefBits.SetBit(0, 1);
+            _agentBelief2.BeliefBits.SetBit(1, -1);
+            Assert.AreEqual(0, _agentBelief2.GetBeliefSum());
         }
-
+        /// <summary>
+        /// Random uniform
+        /// </summary>
         [TestMethod]
         public void LearnTest2()
         {
-            _agentBelief.InitializeBeliefBits(RandomGenerator.RandomUniform, 1, true);
-            Assert.AreEqual(0, _agentBelief.BeliefBits.GetBit(0));
-            _agentBelief.Learn(Model, 0);
-            Assert.AreNotEqual(0, _agentBelief.BeliefBits.GetBit(0));
-            Assert.IsTrue(-1 <= _agentBelief.BeliefBits.GetBit(0));
-            Assert.IsTrue(_agentBelief.BeliefBits.GetBit(0) <= 1);
+            _network.Model = RandomGenerator.RandomUniform;
+            _network.InitializeAgentBelief(_agentBelief1, true);
+            Assert.AreEqual(0, _agentBelief1.BeliefBits.GetBit(0));
+            _agentBelief1.Learn(Model, 0);
+            Assert.AreNotEqual(0, _agentBelief1.BeliefBits.GetBit(0));
+            Assert.IsTrue(-1 <= _agentBelief1.BeliefBits.GetBit(0));
+            Assert.IsTrue(_agentBelief1.BeliefBits.GetBit(0) <= 1);
+        }
+
+        [TestMethod]
+        public void SetBeliefBitsTest()
+        {
+            var bits = new float[] { 1,2 };
+            _agentBelief1.SetBeliefBits(bits);
+            for (byte i = 0; i < 2; i++)
+            {
+                Assert.AreEqual(bits[i], _agentBelief1.BeliefBits.GetBit(i));
+            }
         }
     }
 }

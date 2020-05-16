@@ -75,7 +75,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
                 throw new ArgumentNullException(nameof(knowledge));
             }
 
-            var belief = new Belief(knowledge.Id, knowledge.Length, Model);
+            var belief = new Belief(knowledge.Id, knowledge.Name, knowledge.Length, Model);
             if (Exists(belief))
             {
                 return;
@@ -137,7 +137,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
             return Exists(agentId) && AgentsRepository[agentId].Contains(beliefId);
         }
 
-        public void Add(AgentId agentId, Belief belief)
+        public void Add(AgentId agentId, Belief belief, BeliefLevel beliefLevel)
         {
             if (belief is null)
             {
@@ -145,13 +145,13 @@ namespace SymuEngine.Repository.Networks.Beliefs
             }
 
             AddAgentId(agentId);
-            AddBelief(agentId, belief.Id);
+            AddBelief(agentId, belief.Id, beliefLevel);
         }
 
-        public void Add(AgentId agentId, ushort beliefId)
+        public void Add(AgentId agentId, ushort beliefId, BeliefLevel beliefLevel)
         {
             AddAgentId(agentId);
-            AddBelief(agentId, beliefId);
+            AddBelief(agentId, beliefId, beliefLevel);
         }
 
         /// <summary>
@@ -161,15 +161,16 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="beliefId"></param>
-        public void AddBelief(AgentId agentId, ushort beliefId)
+        /// <param name="beliefLevel"></param>
+        public void AddBelief(AgentId agentId, ushort beliefId, BeliefLevel beliefLevel)
         {
             if (!AgentsRepository[agentId].Contains(beliefId))
             {
-                AgentsRepository[agentId].Add(beliefId);
+                AgentsRepository[agentId].Add(beliefId, beliefLevel);
             }
         }
 
-        public void Add(AgentId agentId, AgentExpertise expertise)
+        public void Add(AgentId agentId, AgentExpertise expertise, BeliefLevel beliefLevel)
         {
             if (expertise is null)
             {
@@ -180,7 +181,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
 
             foreach (var agentKnowledge in expertise.List)
             {
-                AddBelief(agentId, agentKnowledge.KnowledgeId);
+                AddBelief(agentId, agentKnowledge.KnowledgeId, beliefLevel);
             }
         }
 
@@ -206,14 +207,29 @@ namespace SymuEngine.Repository.Networks.Beliefs
 
             foreach (var agentBelief in AgentsRepository[agentId].List)
             {
-                var belief = GetBelief(agentBelief.BeliefId);
-                if (belief == null)
-                {
-                    throw new NullReferenceException(nameof(belief));
-                }
-
-                agentBelief.InitializeBeliefBits(Model, belief.Length, neutral);
+                InitializeAgentBelief(agentBelief, neutral);
             }
+        }
+        /// <summary>
+        ///     Initialize AgentBelief with a stochastic process based on the agent belief level
+        /// </summary>
+        /// <param name="agentBelief">agentBelief to initialize</param>
+        /// <param name="neutral">if !HasInitialBelief, then a neutral initialization is done</param>
+        public void InitializeAgentBelief(AgentBelief agentBelief, bool neutral)
+        {
+            if (agentBelief == null)
+            {
+                throw new ArgumentNullException(nameof(agentBelief));
+            }
+
+            var belief = GetBelief(agentBelief.BeliefId);
+            if (belief == null)
+            {
+                throw new NullReferenceException(nameof(belief));
+            }
+            var level = neutral ? BeliefLevel.NoBelief : agentBelief.BeliefLevel;
+            var beliefBits = belief.InitializeBits(Model, level);
+            agentBelief.SetBeliefBits(beliefBits);
         }
 
         public void RemoveAgent(AgentId agentId)
@@ -270,9 +286,10 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// <param name="beliefId"></param>
         /// <param name="beliefBits"></param>
         /// <param name="influenceWeight"></param>
-        public void Learn(AgentId agentId, ushort beliefId, Bits beliefBits, float influenceWeight)
+        /// <param name="beliefLevel"></param>
+        public void Learn(AgentId agentId, ushort beliefId, Bits beliefBits, float influenceWeight, BeliefLevel beliefLevel)
         {
-            LearnNewBelief(agentId, beliefId);
+            LearnNewBelief(agentId, beliefId, beliefLevel);
             GetAgentBelief(agentId, beliefId).Learn(beliefBits, influenceWeight);
         }
 
@@ -281,14 +298,15 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="beliefId"></param>
-        public void LearnNewBelief(AgentId agentId, ushort beliefId)
+        /// <param name="beliefLevel"></param>
+        public void LearnNewBelief(AgentId agentId, ushort beliefId, BeliefLevel beliefLevel)
         {
             if (Exists(agentId, beliefId))
             {
                 return;
             }
 
-            Add(agentId, beliefId);
+            Add(agentId, beliefId, beliefLevel);
             InitializeBeliefs(agentId, true);
         }
 

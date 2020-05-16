@@ -22,8 +22,18 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
     public class AgentBeliefsTests
     {
         private const RandomGenerator Model = new RandomGenerator();
-        private readonly AgentBelief _agentBelief = new AgentBelief(1);
+        private readonly Belief _belief = new Belief(1, "1", 1, Model);
+        private readonly AgentBelief _agentBelief = new AgentBelief(1, BeliefLevel.NoBelief);
         private readonly AgentBeliefs _beliefs = new AgentBeliefs();
+        private float[] _beliefBitsNeutral;
+        private float[] _beliefBitsNonNeutral;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _beliefBitsNonNeutral = _belief.InitializeBits(Model, BeliefLevel.NeitherAgreeNorDisagree);
+            _beliefBitsNeutral = _belief.InitializeBits(Model, BeliefLevel.NoBelief);
+        }
 
         [TestMethod]
         public void AddTest()
@@ -40,10 +50,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void AddTest1()
         {
             Assert.AreEqual(0, _beliefs.Count);
-            _beliefs.Add(1);
+            _beliefs.Add(1,BeliefLevel.NoBelief);
             Assert.AreEqual(1, _beliefs.Count);
             // Duplicate
-            _beliefs.Add(1);
+            _beliefs.Add(1, BeliefLevel.NoBelief);
             Assert.AreEqual(1, _beliefs.Count);
         }
 
@@ -51,7 +61,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void ContainsTest()
         {
             Assert.IsFalse(_beliefs.Contains(1));
-            _beliefs.Add(1);
+            _beliefs.Add(1, BeliefLevel.NoBelief);
             Assert.IsTrue(_beliefs.Contains(1));
         }
 
@@ -67,7 +77,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void GetBeliefTest()
         {
             Assert.IsNull(_beliefs.GetBelief(1));
-            _beliefs.Add(1);
+            _beliefs.Add(1, BeliefLevel.NoBelief);
             Assert.IsNotNull(_beliefs.GetBelief(1));
         }
 
@@ -75,7 +85,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void BelievesEnoughTest()
         {
             Assert.IsFalse(_beliefs.BelievesEnough(1, 0, 1));
-            _agentBelief.InitializeBeliefBits(Model, 1, false);
+            _agentBelief.SetBeliefBits(_beliefBitsNonNeutral);
             _beliefs.Add(_agentBelief);
             Assert.IsTrue(_beliefs.BelievesEnough(1, 0, 0));
         }
@@ -86,7 +96,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefsSumTest()
         {
-            _agentBelief.InitializeBeliefBits(Model, 1, true);
+            _agentBelief.SetBeliefBits(_beliefBitsNeutral);
             _beliefs.Add(_agentBelief);
             Assert.AreEqual(0, _beliefs.GetBeliefsSum());
         }
@@ -97,7 +107,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefsSumTest1()
         {
-            _agentBelief.InitializeBeliefBits(RandomGenerator.RandomUniform, 1, false);
+            _agentBelief.SetBeliefBits(_beliefBitsNonNeutral);
             _beliefs.Add(_agentBelief);
             Assert.AreNotEqual(0, _beliefs.GetBeliefsSum());
         }

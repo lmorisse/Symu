@@ -53,7 +53,7 @@ namespace SymuEngineTests.Classes.Agents
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
                 MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true}
             };
-            _belief = new Belief(1, 1, Model);
+            _belief = new Belief(1, "1", 1, Model);
 
             var expertise = new AgentExpertise();
             var knowledge = new Knowledge(1, "1", 1);
@@ -370,9 +370,9 @@ namespace SymuEngineTests.Classes.Agents
         private Belief SetBeliefs()
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            var belief = new Belief(1, 1, RandomGenerator.RandomBinary);
+            var belief = new Belief(1,"1",  1, RandomGenerator.RandomBinary);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
             _environment.WhitePages.Network.NetworkInfluences.Update(_agent.Id, 1, 1);
             return belief;
@@ -991,7 +991,7 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void GetFilteredBeliefToSendTest()
         {
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1,BeliefLevel.NeitherAgreeNorDisagree);
             _agent.Cognitive.MessageContent.CanSendBeliefs = false;
             Assert.IsNull(_agent.FilterBeliefToSend(1, 0, _emailTemplate));
         }
@@ -1003,7 +1003,7 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void GetFilteredBeliefToSendTest1()
         {
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_agent.FilterBeliefToSend(0, 0, _emailTemplate));
         }
@@ -1016,9 +1016,8 @@ namespace SymuEngineTests.Classes.Agents
         public void GetFilteredBeliefToSendTest2()
         {
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(Model, 1, true);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_agent.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
@@ -1031,9 +1030,8 @@ namespace SymuEngineTests.Classes.Agents
         public void GetFilteredBeliefToSendTest3()
         {
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(Model, 1, false);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, false);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
             var bits = _agent.FilterBeliefToSend(1, 0, _emailTemplate);
@@ -1048,9 +1046,8 @@ namespace SymuEngineTests.Classes.Agents
         public void GetFilteredBeliefToSendTest4()
         {
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id);
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id)
-                .InitializeBeliefBits(Model, 1, false);
+            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, false);
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id).BeliefBits
                 .SetBit(0, 1);
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;

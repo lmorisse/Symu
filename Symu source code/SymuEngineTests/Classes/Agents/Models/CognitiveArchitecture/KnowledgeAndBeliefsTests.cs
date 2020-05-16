@@ -18,6 +18,7 @@ using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
@@ -240,9 +241,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             _network.NetworkBeliefs.AddBelief(_knowledge);
-            _network.NetworkBeliefs.Add(_agentId, _knowledge.Id);
+            _network.NetworkBeliefs.Add(_agentId, _knowledge.Id, BeliefLevel.NeitherAgreeNorDisagree);
             var workerBelief = _network.NetworkBeliefs.GetAgentBeliefs(_agentId).GetBelief(_knowledge.Id);
-            workerBelief.InitializeBeliefBits(RandomGenerator.RandomBinary, 1, false);
+            _network.NetworkBeliefs.InitializeBeliefs(_agentId,false);
             // Force beliefBits
             workerBelief.BeliefBits.SetBit(0, 1);
             _network.NetworkBeliefs.GetBelief(_knowledge.Id).Weights.SetBit(0, 1);

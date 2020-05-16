@@ -42,7 +42,7 @@ namespace SymuLearnAndForget.Classes
         protected override void AfterSetTaskDone(object sender, TaskEventArgs e)
         {
             // the learning is done randomly on the one knowledgeBit
-            var knowledgeBit = Knowledge.GetRandomBit();
+            var knowledgeBit = Knowledge.GetRandomBitIndex();
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn

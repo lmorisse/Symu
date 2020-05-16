@@ -542,7 +542,7 @@ namespace SymuEngine.Classes.Agents
             }
 
             Cognitive.InternalCharacteristics.Learn(message.Attachments.KnowledgeId, message.Attachments.BeliefBits,
-                message.Sender);
+                message.Sender, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
         }
 
         public void MessageOnBeforePost(object sender, MessageEventArgs e)

@@ -31,7 +31,7 @@ namespace SymuLearnAndForget.Classes
         protected override void AfterSetTaskDone(object sender, TaskEventArgs e)
         {
             // The learning is done randomly on the knowledgeBits
-            var knowledgeBit = Knowledge.GetRandomBit();
+            var knowledgeBit = Knowledge.GetRandomBitIndex();
             // Agent is learning via email
             // We simplify here, we should send an email to ask for information to a database, then treat the reply
             // That is why we have to initialize a Bits

@@ -127,7 +127,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <param name="model"></param>
         /// <param name="knowledgeLevel"></param>
         /// <returns></returns>
-        public float[] GetAgentBits(RandomGenerator model, KnowledgeLevel knowledgeLevel)
+        public float[] InitializeBits(RandomGenerator model, KnowledgeLevel knowledgeLevel)
         {
             float[] knowledgeBits;
             switch (model)
@@ -177,7 +177,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <returns></returns>
         /// <example>
         ///     given a knowledge of size 10 :
-        ///     GetAgentBits = [0110110000]
+        ///     InitializeBits = [0110110000]
         ///     complexity = 0.3
         ///     GetTaskRequiredBits = [359] : index 3, 5 and 9 are required
         /// </example>
@@ -201,7 +201,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <returns></returns>
         /// <example>
         ///     given a knowledge of size 10 :
-        ///     GetAgentBits = [0110110000]
+        ///     InitializeBits = [0110110000]
         ///     complexity = 0.2
         ///     GetTaskMandatoryBits = [17] : index 1 and 7 are mandatory
         /// </example>
@@ -220,7 +220,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         ///     Get a random knowledge Bit (index)index
         /// </summary>
         /// <returns></returns>
-        public byte GetRandomBit()
+        public byte GetRandomBitIndex()
         {
             return DiscreteUniform.SampleToByte(0, (byte) (Length - 1));
         }

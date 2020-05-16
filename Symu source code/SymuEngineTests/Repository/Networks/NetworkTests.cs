@@ -49,7 +49,7 @@ namespace SymuEngineTests.Repository.Networks
         [TestInitialize]
         public void Initialize()
         {
-            _belief = new Belief(1, 1,
+            _belief = new Belief(1, "1", 1,
                 _network.NetworkKnowledges.Model);
             _network.NetworkActivities.AddActivities(new List<Activity> {_activity}, _teamId);
             _networkRole = new NetworkRole(_managerId, _teamId, 1);
@@ -64,7 +64,7 @@ namespace SymuEngineTests.Repository.Networks
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
             _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert, 0, -1);
-            _network.NetworkBeliefs.Add(_teammateId, _belief);
+            _network.NetworkBeliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _network.NetworkActivities.AddActivities(_teammateId, _teamId, new List<string> {"a1"});
             _network.Clear();
             Assert.IsFalse(_network.NetworkLinks.Any());

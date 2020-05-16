@@ -144,7 +144,7 @@ namespace SymuEngine.Classes.Murphies
         ///     Check if worker ask internally some help or search externally an answer
         /// </summary>
         /// <param name="step">Actual step</param>
-        /// <param name="initialStep">Initialstep of the blocker</param>
+        /// <param name="initialStep">Initial step of the blocker</param>
         /// <returns>true if ask internally, false if ask externally</returns>
         public bool AskInternally(ushort step, ushort initialStep)
         {

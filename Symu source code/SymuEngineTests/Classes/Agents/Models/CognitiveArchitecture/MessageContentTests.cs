@@ -37,11 +37,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             _agentKnowledgeF = new AgentKnowledge(0, knowledge1FBits, 0, -1, 0);
             var knowledge1Bits = new float[] {1, 1, 1, 1};
             _agentKnowledge1 = new AgentKnowledge(0, knowledge1Bits, 0, -1, 0);
-            _agentBeliefF = new AgentBelief(0)
+            _agentBeliefF = new AgentBelief(0, BeliefLevel.NeitherAgreeNorDisagree)
             {
                 BeliefBits = new Bits(knowledge1FBits, -1)
             };
-            _agentBelief1 = new AgentBelief(0)
+            _agentBelief1 = new AgentBelief(0, BeliefLevel.NeitherAgreeNorDisagree)
             {
                 BeliefBits = new Bits(knowledge1FBits, -1)
             };

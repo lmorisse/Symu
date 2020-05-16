@@ -14,6 +14,7 @@ using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Results.Organization;
 
@@ -108,7 +109,7 @@ namespace SymuEngineTests.Results.Organization
         public void HandleBelief1Test()
         {
             _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _network.NetworkBeliefs.Add(_agentId, _expertise);
+            _network.NetworkBeliefs.Add(_agentId, _expertise, BeliefLevel.NeitherAgreeNorDisagree);
             _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
             _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id).BeliefBits.SetBit(0, 1);
             _result.HandleBelief(0);
@@ -123,8 +124,8 @@ namespace SymuEngineTests.Results.Organization
         {
             _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _network.NetworkBeliefs.Add(_agentId, _expertise);
-            _network.NetworkBeliefs.Add(_agentId2, _expertise);
+            _network.NetworkBeliefs.Add(_agentId, _expertise, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.NetworkBeliefs.Add(_agentId2, _expertise, BeliefLevel.NeitherAgreeNorDisagree);
             _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
             _network.NetworkBeliefs.InitializeBeliefs(_agentId2, false);
             _network.NetworkBeliefs.GetAgentBelief(_agentId, _knowledge.Id).BeliefBits.SetBit(0, 1);

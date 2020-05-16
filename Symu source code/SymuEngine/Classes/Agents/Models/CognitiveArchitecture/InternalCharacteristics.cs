@@ -12,6 +12,7 @@
 using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 
@@ -306,7 +307,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         /// <param name="beliefId"></param>
         /// <param name="beliefBits">from agentId beliefBits</param>
         /// <param name="agentId"></param>
-        public void Learn(ushort beliefId, Bits beliefBits, AgentId agentId)
+        /// <param name="beliefLevel"></param>
+        public void Learn(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
         {
             if (beliefId == 0 || beliefBits == null)
             {
@@ -323,14 +325,14 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             // to Learner
             var influenceability = _network.NetworkInfluences.GetInfluenceability(_id);
             // Learner learn beliefId from agentId with a weight of influenceability * influentialness
-            _network.NetworkBeliefs.Learn(_id, beliefId, beliefBits, influenceability * influentialness);
+            _network.NetworkBeliefs.Learn(_id, beliefId, beliefBits, influenceability * influentialness, beliefLevel);
         }
 
-        public void LearnByDoing(ushort beliefId, byte beliefBit)
+        public void LearnByDoing(ushort beliefId, byte beliefBit, BeliefLevel beliefLevel)
         {
             if (!_network.NetworkBeliefs.Exists(_id, beliefId))
             {
-                _network.NetworkBeliefs.LearnNewBelief(_id, beliefId);
+                _network.NetworkBeliefs.LearnNewBelief(_id, beliefId, beliefLevel);
             }
 
             var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_id, beliefId);

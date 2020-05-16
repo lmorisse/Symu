@@ -31,13 +31,12 @@ namespace SymuBeliefsAndInfluence.Classes
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
         private SimpleHumanTemplate Template => ((ExampleEnvironment) Environment).WorkerTemplate;
         public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.Id);
         public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {
             SetCognitive(Template);
-            Model.RequiredRatio = 0.2F;
-            Model.RequiredMandatoryRatio = 2F;
         }
 
         public override void GetNewTasks()
@@ -47,6 +46,7 @@ namespace SymuBeliefsAndInfluence.Classes
                 Weight = 1
             };
             task.SetKnowledgesBits(Model, Knowledges, 1);
+            Post(task);
         }
 
         /// <summary>
@@ -65,24 +65,21 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 throw new ArgumentNullException(nameof(task));
             }
-            if (!(mandatoryScore < 0F))
+            if (mandatoryScore >= 0F)
             {
-                task.Blockers.Add(0, TimeStep.Step);
                 return ;
             }
 
-            // mandatoryScore is not enough => Worker don't want to do the task
-            // Ask another agent advice
-            var teammates = GetAgentIdsForInteractions(InteractionStrategy.Homophily).ToList();
-            if (teammates.Any())
+            // MandatoryScore is not enough
+            // Worker don't want to do the task
+            task.Blockers.Add(0, TimeStep.Step);
+            // Ask advice from influencers
+            var attachments = new MessageAttachments
             {
-                var attachments = new MessageAttachments
-                {
-                    KnowledgeId = knowledgeId,
-                    KnowledgeBit = mandatoryIndex
-                };
-                SendToMany(teammates, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
-            }
+                KnowledgeId = knowledgeId,
+                KnowledgeBit = mandatoryIndex
+            };
+            SendToMany(Influencers, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
         }
     }
 }

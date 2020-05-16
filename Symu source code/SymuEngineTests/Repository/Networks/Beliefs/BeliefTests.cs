@@ -26,7 +26,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestInitialize]
         public void Initialize()
         {
-            _belief = new Belief(1, 1, RandomGenerator.RandomUniform);
+            _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform);
         }
 
         /// <summary>

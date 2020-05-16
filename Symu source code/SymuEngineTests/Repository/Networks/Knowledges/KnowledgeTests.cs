@@ -37,7 +37,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void GetBitsTest()
         {
             _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.GetAgentBits(_knowledgeModel, KnowledgeLevel.Expert);
+            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.Expert);
             for (byte i = 0; i < 10; i++)
             {
                 Assert.IsTrue(Math.Abs(knowledgeBits[i]) < Tolerance ||
@@ -52,7 +52,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void GetBitsTest1()
         {
             _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.GetAgentBits(_knowledgeModel, KnowledgeLevel.FullKnowledge);
+            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.FullKnowledge);
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
             {
@@ -73,7 +73,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void GetBitsTest2()
         {
             _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.GetAgentBits(_knowledgeModel, KnowledgeLevel.NoKnowledge);
+            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.NoKnowledge);
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
             {
@@ -94,7 +94,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void GetBitsTest3()
         {
             _knowledgeModel = RandomGenerator.RandomUniform;
-            var knowledgeBits = _knowledge.GetAgentBits(_knowledgeModel, KnowledgeLevel.Expert);
+            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.Expert);
             for (byte i = 0; i < 10; i++)
             {
                 Assert.IsTrue(
@@ -132,12 +132,12 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     RequiredMandatoryRatio = 0
+        ///     MandatoryRatio = 0
         /// </summary>
         [TestMethod]
         public void GetTaskMandatoryBitsTest1()
         {
-            _taskModel.RequiredMandatoryRatio = 0;
+            _taskModel.MandatoryRatio = 0;
             var taskMandatoryBits = _knowledge.GetTaskMandatoryBits(_taskModel, 0.8F);
             Assert.AreEqual(0, taskMandatoryBits.Length);
         }

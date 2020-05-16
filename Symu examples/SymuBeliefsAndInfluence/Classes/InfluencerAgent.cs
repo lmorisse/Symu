@@ -22,10 +22,10 @@ using SymuEngine.Repository;
 
 namespace SymuBeliefsAndInfluence.Classes
 {
-    public sealed class InfluenceurAgent : Agent
+    public sealed class InfluencerAgent : Agent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
-        public InfluenceurAgent(ushort agentKey, SymuEnvironment environment) : base(
+        public InfluencerAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
             environment)
         {
@@ -51,12 +51,14 @@ namespace SymuBeliefsAndInfluence.Classes
                     break;
             }
         }
-
+        /// <summary>
+        /// Influencer send back its own belief if he can send beliefs
+        /// which has an impact on the beliefs of the worker if he can receive them
+        /// </summary>
+        /// <param name="message"></param>
         private void AskBelief(Message message)
         {
             var replyMessage = Message.ReplyMessage(message);
-            // In this reply message, agent will send back its own belief if he can send beliefs
-            // that will have an impact on the beliefs of the sender if he can receive beliefs
             Reply(replyMessage);
         }
     }

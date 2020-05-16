@@ -19,6 +19,7 @@ using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
 using SymuEngine.Engine.Form;
 using SymuEngine.Environment;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuTools;
 
 #endregion
@@ -28,6 +29,7 @@ namespace SymuBeliefsAndInfluence
     public partial class Home : SymuForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
+        private int _initialTasksDone;
 
         public Home()
         {
@@ -40,6 +42,7 @@ namespace SymuBeliefsAndInfluence
             DisplayButtons();
 
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            tbInfluencers.Text = _environment.InfluencersCount.ToString(CultureInfo.InvariantCulture);
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
 
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
@@ -58,6 +61,8 @@ namespace SymuBeliefsAndInfluence
             MaximumNumberOfBitsOfBeliefToSend.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MaximumNumberOfBitsOfBeliefToSend.ToString();
 
+            InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
+            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
         }
 
         protected override void SetUpOrganization()
@@ -84,6 +89,8 @@ namespace SymuBeliefsAndInfluence
             #region influencer
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedText);
+
             #endregion
 
             #region Worker
@@ -112,14 +119,26 @@ namespace SymuBeliefsAndInfluence
             WriteTextSafe(Triads,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density
                     .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(InitialTriads,
+                _environment.IterationResult.OrganizationFlexibility.Triads.First().Density
+                    .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(TotalBeliefs,
                 _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum
+                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(InitialTotalBeliefs,
+                _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum
                     .ToString("F1", CultureInfo.InvariantCulture));
             var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
                   (_environment.TimeStep.Step * _environment.WorkersCount);
+            if (_environment.TimeStep.Step == 1)
+            {
+                _initialTasksDone = tasksDoneRatio;
+            }
 
+            WriteTextSafe(InitialTasksDone, _initialTasksDone
+                .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(TasksDone, tasksDoneRatio
                     .ToString("F1", CultureInfo.InvariantCulture));
         }
@@ -381,7 +400,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.Model.RequiredMandatoryRatio = byte.Parse(MandatoryRatio.Text);
+                _environment.Model.MandatoryRatio = float.Parse(MandatoryRatio.Text);
                 MandatoryRatio.BackColor = SystemColors.Window;
             }
             catch (FormatException)

@@ -36,53 +36,17 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         private const int RangeMax = 1;
 
-        public AgentBelief(ushort beliefId)
+        public AgentBelief(ushort beliefId, BeliefLevel beliefLevel)
         {
             BeliefId = beliefId;
+            BeliefLevel = beliefLevel;
         }
 
         public ushort BeliefId { get; }
-        public Bits BeliefBits { get; set; }
+        public Bits BeliefBits { get; set; } = new Bits(RangeMin);
+        public BeliefLevel BeliefLevel { get; }
 
         public byte Length => BeliefBits?.Length ?? 0;
-
-        /// <summary>
-        ///     Given a KnowledgeModel
-        ///     set the weights : an array fill of random float ranging [-1; 1]
-        ///     representing the detailed Belief of an agent
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="length"></param>
-        /// <param name="neutral">If set, initialize agent belief to neutral value (O)</param>
-        /// <returns></returns>
-        public void InitializeBeliefBits(RandomGenerator model, byte length, bool neutral)
-        {
-            float[] beliefBits;
-            if (neutral)
-            {
-                beliefBits = new float[length];
-                for (var i = 0; i < length; i++)
-                {
-                    beliefBits.SetValue(0, i);
-                }
-            }
-            else
-            {
-                switch (model)
-                {
-                    case RandomGenerator.RandomUniform:
-                        beliefBits = ContinuousUniform.Samples(length, RangeMin, RangeMax);
-                        break;
-                    case RandomGenerator.RandomBinary:
-                        beliefBits = DiscreteUniform.Samples(length, RangeMin, RangeMax);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(model), model, null);
-                }
-            }
-
-            BeliefBits = new Bits(beliefBits, RangeMin);
-        }
 
         /// <summary>
         ///     Check the agent beliefs against the taskKnowledges
@@ -103,11 +67,6 @@ namespace SymuEngine.Repository.Networks.Beliefs
             if (belief is null)
             {
                 throw new ArgumentNullException(nameof(belief));
-            }
-
-            if (BeliefBits is null)
-            {
-                throw new ArgumentNullException(nameof(BeliefBits));
             }
 
             index = 0;
@@ -131,11 +90,11 @@ namespace SymuEngine.Repository.Networks.Beliefs
         }
 
         /// <summary>
-        ///     Get a clone of the knowledgeBits filtered by minimumKnowledge
+        ///     Get a clone of the beliefBits filtered by minimumKnowledge
         ///     if a KnowledgeBit inferior minimumKnowledge then KnowledgeBit = 0
         /// </summary>
-        /// <returns>clone of knowledgeBits</returns>
-        /// <returns>null of knowledgeBits == null</returns>
+        /// <returns>clone of beliefBits</returns>
+        /// <returns>null of beliefBits == null</returns>
         public Bits CloneWrittenBeliefBits(float minimumBelief)
         {
             var clone = BeliefBits.Clone();
@@ -248,12 +207,11 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// <returns>if _knowledgeBits == null, return 0;</returns>
         public float GetBeliefSum()
         {
-            if (BeliefBits is null)
-            {
-                throw new NullReferenceException(nameof(BeliefBits));
-            }
-
             return BeliefBits.GetSum();
+        }
+        public void SetBeliefBits(float[] beliefBits)
+        {
+            BeliefBits.SetBits(beliefBits);
         }
     }
 }

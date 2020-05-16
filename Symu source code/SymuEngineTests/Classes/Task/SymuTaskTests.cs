@@ -31,6 +31,7 @@ namespace SymuEngineTests.Classes.Task
         public void SetKnowledgesBitsTest()
         {
             _model.RequiredRatio = 0;
+            _model.MandatoryRatio= 0;
             _task.SetKnowledgesBits(_model, _knowledges,1);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {
@@ -39,14 +40,14 @@ namespace SymuEngineTests.Classes.Task
             }
         }
         /// <summary>
-        /// With RequiredRatio = 1 & RequiredMandatoryRatio =0
+        /// With RequiredRatio = 1 & MandatoryRatio =0
         /// Complexity = 1
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest1()
         {
             _model.RequiredRatio = 1;
-            _model.RequiredMandatoryRatio = 0;
+            _model.MandatoryRatio = 0;
             _task.SetKnowledgesBits(_model, _knowledges, 1);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {
@@ -55,14 +56,14 @@ namespace SymuEngineTests.Classes.Task
             }
         }
         /// <summary>
-        /// With RequiredRatio = 1 & RequiredMandatoryRatio =1
+        /// With RequiredRatio = 1 & MandatoryRatio =1
         /// Complexity = 1
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest2()
         {
             _model.RequiredRatio = 1;
-            _model.RequiredMandatoryRatio = 1;
+            _model.MandatoryRatio = 1;
             _task.SetKnowledgesBits(_model, _knowledges, 1);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {
@@ -71,14 +72,14 @@ namespace SymuEngineTests.Classes.Task
             }
         }
         /// <summary>
-        /// With RequiredRatio = 1 & RequiredMandatoryRatio =1
+        /// With RequiredRatio = 1 & MandatoryRatio =1
         /// Complexity = 0
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest3()
         {
             _model.RequiredRatio = 1;
-            _model.RequiredMandatoryRatio = 1;
+            _model.MandatoryRatio = 1;
             _task.SetKnowledgesBits(_model, _knowledges, 0);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {
@@ -87,14 +88,14 @@ namespace SymuEngineTests.Classes.Task
             }
         }
         /// <summary>
-        /// With RequiredRatio = 1 & RequiredMandatoryRatio =1
+        /// With RequiredRatio = 1 & MandatoryRatio =1
         /// Complexity = 0.5F
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest4()
         {
             _model.RequiredRatio = 1;
-            _model.RequiredMandatoryRatio = 1;
+            _model.MandatoryRatio = 1;
             _task.SetKnowledgesBits(_model, _knowledges, 0.5F);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {

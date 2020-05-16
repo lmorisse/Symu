@@ -32,13 +32,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             new Knowledge(1, "1", 1);
 
         private readonly NetworkBeliefs _network = new NetworkBeliefs();
-        private Belief _belief;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _belief = new Belief(_knowledge.Id, 1, Model);
-        }
+        private readonly Belief _belief = new Belief(1, "1", 1, Model);
 
         [TestMethod]
         public void AddBeliefTest()
@@ -62,7 +56,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             Assert.IsFalse(_network.Any());
             _network.AddBelief(_belief);
             Assert.IsFalse(_network.Any());
-            _network.Add(_agentId, _belief.Id);
+            _network.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             Assert.IsTrue(_network.Any());
         }
 
@@ -95,7 +89,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void AddTest()
         {
             Assert.IsFalse(_network.Exists(_agentId));
-            _network.Add(_agentId, _belief.Id);
+            _network.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             Assert.IsTrue(_network.Exists(_agentId));
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
         }
@@ -104,7 +98,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void AddTest1()
         {
             Assert.IsFalse(_network.Exists(_agentId));
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             Assert.IsTrue(_network.Exists(_agentId));
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
         }
@@ -125,7 +119,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         {
             // AgentId
             Assert.ThrowsException<NullReferenceException>(() => _network.InitializeBeliefs(_agentId, true));
-            _network.Add(_agentId, 0);
+            _network.Add(_agentId, 0, BeliefLevel.NoBelief);
             // Belief
             Assert.ThrowsException<NullReferenceException>(() => _network.InitializeBeliefs(_agentId, true));
         }
@@ -137,7 +131,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void InitializeBeliefsTest()
         {
             _network.AddBelief(_belief);
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _network.InitializeBeliefs(_agentId, true);
             var agentBelief = _network.GetAgentBelief(_agentId, _belief.Id);
             Assert.IsNotNull(agentBelief.BeliefBits);
@@ -151,7 +145,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void InitializeBeliefsTest1()
         {
             _network.AddBelief(_belief);
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.StronglyAgree);
             _network.InitializeBeliefs(_agentId, false);
             var agentBelief = _network.GetAgentBelief(_agentId, _belief.Id);
             Assert.IsNotNull(agentBelief.BeliefBits);
@@ -164,7 +158,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         {
             // no agent Id
             _network.RemoveAgent(_agentId);
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.NoBelief);
             _network.RemoveAgent(_agentId);
             Assert.IsFalse(_network.Exists(_belief));
         }
@@ -178,7 +172,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetAgentBeliefsTest()
         {
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.NoBelief);
             var agentBeliefs = _network.GetAgentBeliefs(_agentId);
             Assert.AreEqual(1, agentBeliefs.Count);
         }
@@ -192,7 +186,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetAgentBeliefTest()
         {
-            _network.Add(_agentId, _belief);
+            _network.Add(_agentId, _belief, BeliefLevel.NoBelief);
             Assert.IsNull(_network.GetAgentBelief(_agentId, 0));
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
         }
@@ -203,7 +197,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void NullLearnTest()
         {
-            Assert.ThrowsException<NullReferenceException>(() => _network.Learn(_agentId, _belief.Id, null, 1));
+            Assert.ThrowsException<NullReferenceException>(() => _network.Learn(_agentId, _belief.Id, null, 1, BeliefLevel.NoBelief));
         }
 
         /// <summary>
@@ -213,7 +207,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void LearnNewBeliefTest()
         {
             _network.AddBelief(_belief);
-            _network.LearnNewBelief(_agentId, _belief.Id);
+            _network.LearnNewBelief(_agentId, _belief.Id, BeliefLevel.NoBelief);
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
         }
 
@@ -222,8 +216,24 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         {
             _network.AddAgentId(_agentId);
             Assert.AreEqual(0, _network.GetBeliefIds(_agentId).Count());
-            _network.AddBelief(_agentId, 1);
+            _network.AddBelief(_agentId, 1, BeliefLevel.NoBelief);
             Assert.AreEqual(1, _network.GetBeliefIds(_agentId).Count());
+        }
+        [TestMethod]
+        public void NullInitializeAgentBeliefTest()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _network.InitializeAgentBelief(null, false));
+        }
+
+        [TestMethod]
+        public void InitializeAgentBeliefTest()
+        {
+            _network.AddBelief(_belief);
+            var agentKnowledge = new AgentBelief(1, BeliefLevel.NoBelief);
+            Assert.IsTrue(agentKnowledge.BeliefBits.IsNull);
+            _network.InitializeAgentBelief(agentKnowledge, false);
+            Assert.IsFalse(agentKnowledge.BeliefBits.IsNull);
+            Assert.AreEqual(0, agentKnowledge.BeliefBits.GetBit(0));
         }
     }
 }

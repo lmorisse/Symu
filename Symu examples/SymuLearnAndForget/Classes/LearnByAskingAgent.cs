@@ -32,7 +32,7 @@ namespace SymuLearnAndForget.Classes
             var attachments = new MessageAttachments
             {
                 KnowledgeId = Knowledge.Id,
-                KnowledgeBit = Knowledge.GetRandomBit()
+                KnowledgeBit = Knowledge.GetRandomBitIndex()
             };
             Send(((ExampleEnvironment) Environment).ExpertAgent.Id, MessageAction.Ask, SymuYellowPages.Knowledge,
                 attachments, CommunicationMediums.Email);
