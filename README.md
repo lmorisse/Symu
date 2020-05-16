@@ -1,18 +1,25 @@
 # Symu
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/lmorisse/symu?style=flat-square)](https://github.com/lmorisse/Symu/releases/latest)
+[![Documentation Status](https://readthedocs.org/projects/symu/badge/?version=latest)](https://symu.readthedocs.io/en/latest/?badge=latest)
 
-Symu is a C# opensource framework for organization simulation. 
+``Symu`` is a C# opensource framework for organization simulation. 
 You can develop your own application to run virtual experiments with organizations and capture their dynamic behaviors, their evolutions.<br>
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
-[Website : http://symu.org/](http://symu.org/)
+
+Some useful links:
+* [Website : symu.org](https://symu.org/)
+* [Documentation : docs.symu.org](http://docs.symu.org/)
+* [Code : github.symu.org](http://github.symu.org/)
+* [Issues : github.symu.org/issues](http://github.symu.org/issues/)
 
 ## How it works
 
-Symu models groups and organizations as complex systems and captures the variability in human, technological and organizational factors through heterogeneity in information processing capabilities, knowledge and resources.<br>
+``Symu`` models groups and organizations as complex systems and captures the variability in human, technological and organizational factors through heterogeneity in information processing capabilities, knowledge and resources.<br>
 The non-linearity of the model generates complex temporal behavior due to dynamic relationships among agents.
 
 ## What it is
 
-Symu, is a multi-agent system, time based with discrete events, for the co-evolution of agents and socio-cultural environments.
+``Symu`` is a multi-agent system, time based with discrete events, for the co-evolution of agents and socio-cultural environments.
 Agents are decision-making units and can represent various levels of analysis such as individuals, groups or organizations.<br>
 Agents are autonomous, rationally bounded and tasks based.<br>
 They interact simultaneously in a shared environment that interacts in turn with the agents, via asynchronous messages.
@@ -23,10 +30,10 @@ Because we believe that such a framework is valuable for organizations and acade
 
 ### Academic program
 
-Symu is based on a library of theoretical models:
+``Symu`` is based on a library of theoretical models:
 organization theory, social networks, socio-cultural environment, information diffusion, socio-technical environment…
 
-With our academic program, we will first implement models that you want to use for you.
+With our **academic program**, we will first implement models that you want to use for you.
 
 ## Getting Started
 The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
@@ -62,4 +69,4 @@ This project is licensed under the GNU General Public License v2.0 - see the [LI
 ## Integration
 
 Symu is used in projects:
-- Symu.biz, an enterprise level implementation
+- ``Symu.biz``: an enterprise level implementation
