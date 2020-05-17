@@ -1,3 +1,6 @@
+Main navigation
+===============
+
 .. toctree::
    :maxdepth: 1
 
@@ -5,8 +8,8 @@
    models/models
    userguides/examples_guide
 
-Indices and tables
-==================
+Indices
+=======
 
 * :ref:`genindex`
 * :ref:`search`
