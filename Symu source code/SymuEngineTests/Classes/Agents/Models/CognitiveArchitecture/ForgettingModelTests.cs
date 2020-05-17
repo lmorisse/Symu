@@ -37,7 +37,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestInitialize]
         public void Initialize()
         {
-            var network = new Network(new AgentTemplates(), new InteractionSphereModel());
+            var network = new Network(new AgentTemplates(), new OrganizationModels());
             _networkKnowledges = network.NetworkKnowledges;
             _networkKnowledges.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});

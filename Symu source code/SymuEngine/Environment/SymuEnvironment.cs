@@ -74,7 +74,7 @@ namespace SymuEngine.Environment
         public void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Templates, Organization.Models.InteractionSphere);
+            WhitePages = new WhitePages(Organization.Templates, Organization.Models);
         }
 
         /// <summary>

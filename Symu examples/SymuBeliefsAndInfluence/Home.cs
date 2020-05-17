@@ -13,6 +13,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SymuBeliefsAndInfluence.Classes;
 using SymuEngine.Classes.Scenario;
@@ -64,6 +65,8 @@ namespace SymuBeliefsAndInfluence
             InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
             InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             MandatoryRatio.Text = _environment.Model.MandatoryRatio.ToString();
+            BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
+            BeliefWeight.SelectedItem = BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
         }
 
         protected override void SetUpOrganization()
@@ -98,6 +101,7 @@ namespace SymuBeliefsAndInfluence
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
+            OrganizationEntity.Models.ImpactOfBeliefOnTask = BeliefWeightLevelService.GetValue(BeliefWeight.SelectedItem.ToString());
             #endregion
 
             Start(_environment);

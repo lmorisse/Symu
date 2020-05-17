@@ -34,12 +34,12 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         private const int RangeMax = 1;
 
-        public Belief(ushort beliefId, string name, byte length, RandomGenerator model)
+        public Belief(ushort beliefId, string name, byte length, RandomGenerator model, BeliefWeightLevel beliefWeightLevel)
         {
             Id = beliefId;
             Length = length;
             Name = name;
-            InitializeWeights(model, length);
+            InitializeWeights(model, length, beliefWeightLevel);
         }
 
         /// <summary>
@@ -126,12 +126,27 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         /// <param name="model"></param>
         /// <param name="length"></param>
+        /// <param name="beliefWeightLevel"></param>
         /// <returns></returns>
-        public void InitializeWeights(RandomGenerator model, byte length)
+        public void InitializeWeights(RandomGenerator model, byte length, BeliefWeightLevel beliefWeightLevel)
         {
-            var beliefBits = model == RandomGenerator.RandomUniform
-                ? ContinuousUniform.Samples(length, 0, RangeMax)
-                : DiscreteUniform.Samples(length, 0, RangeMax);
+            float[] beliefBits;
+            switch (beliefWeightLevel)
+            {
+                case BeliefWeightLevel.NoWeight:
+                    beliefBits = DiscreteUniform.Samples(length, 0, 0);
+                    break;
+                case BeliefWeightLevel.RandomWeight:
+                    beliefBits = model == RandomGenerator.RandomUniform
+                        ? ContinuousUniform.Samples(length, 0, RangeMax)
+                        : DiscreteUniform.Samples(length, 0, RangeMax);
+                    break;
+                case BeliefWeightLevel.FullWeight:
+                    beliefBits = DiscreteUniform.Samples(length, 1, 1);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(beliefWeightLevel), beliefWeightLevel, null);
+            }
             Weights = new Bits(beliefBits, 0);
         }
         /// <summary>

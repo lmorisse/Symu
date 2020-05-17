@@ -49,8 +49,8 @@ namespace SymuEngineTests.Repository.Networks.Sphere
         public void Initialize()
         {
             _templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(InteractionStrategy.Knowledge);
-            var model = new InteractionSphereModel {On = true};
-            _network = new Network(_templates, model);
+            var organizationModels = new OrganizationModels {InteractionSphere = {On = true}};
+            _network = new Network(_templates, organizationModels);
             _networkKnowledge = _network.NetworkKnowledges;
         }
 

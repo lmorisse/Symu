@@ -39,10 +39,16 @@ namespace SymuEngine.Repository.Networks
     /// </summary>
     public class Network
     {
-        public Network(AgentTemplates agentTemplates, InteractionSphereModel interactionSphereModel)
+        public Network(AgentTemplates agentTemplates, OrganizationModels models)
         {
+            if (models == null)
+            {
+                throw new ArgumentNullException(nameof(models));
+            }
+
             NetworkCommunications = new NetworkCommunications(agentTemplates);
-            InteractionSphere = new InteractionSphere(interactionSphereModel);
+            InteractionSphere = new InteractionSphere(models.InteractionSphere);
+            NetworkBeliefs = new NetworkBeliefs(models.ImpactOfBeliefOnTask);
         }
 
         public AgentState State { get; set; } = AgentState.NotStarted;
@@ -81,7 +87,7 @@ namespace SymuEngine.Repository.Networks
         ///     Belief network
         ///     Who (agentId) believes what (Information)
         /// </summary>
-        public NetworkBeliefs NetworkBeliefs { get; } = new NetworkBeliefs();
+        public NetworkBeliefs NetworkBeliefs { get; } 
 
         /// <summary>
         ///     Kanban activities network

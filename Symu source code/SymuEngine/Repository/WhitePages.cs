@@ -33,9 +33,9 @@ namespace SymuEngine.Repository
     /// <remarks>FIPA Norm : Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        public WhitePages(AgentTemplates agentTemplates, InteractionSphereModel interactionSphereModel)
+        public WhitePages(AgentTemplates agentTemplates, OrganizationModels models)
         {
-            Network = new Network(agentTemplates, interactionSphereModel);
+            Network = new Network(agentTemplates, models);
         }
 
         /// <summary>

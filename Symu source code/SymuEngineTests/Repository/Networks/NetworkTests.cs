@@ -38,7 +38,7 @@ namespace SymuEngineTests.Repository.Networks
             new Knowledge(1, "1", 1);
 
         private readonly AgentId _managerId = new AgentId(3, 2);
-        private readonly Network _network = new Network(new AgentTemplates(), new InteractionSphereModel());
+        private readonly Network _network = new Network(new AgentTemplates(), new OrganizationModels());
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
@@ -50,7 +50,7 @@ namespace SymuEngineTests.Repository.Networks
         public void Initialize()
         {
             _belief = new Belief(1, "1", 1,
-                _network.NetworkKnowledges.Model);
+                _network.NetworkKnowledges.Model, BeliefWeightLevel.RandomWeight);
             _network.NetworkActivities.AddActivities(new List<Activity> {_activity}, _teamId);
             _networkRole = new NetworkRole(_managerId, _teamId, 1);
         }

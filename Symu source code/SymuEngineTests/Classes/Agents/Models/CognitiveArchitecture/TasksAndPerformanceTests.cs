@@ -28,7 +28,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly Network _network = new Network(new AgentTemplates(), new InteractionSphereModel());
+        private readonly Network _network = new Network(new AgentTemplates(), new OrganizationModels());
         private TasksAndPerformance _tasksAndPerformance;
 
         [TestInitialize]

@@ -31,8 +31,8 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);
 
-        private readonly NetworkBeliefs _network = new NetworkBeliefs();
-        private readonly Belief _belief = new Belief(1, "1", 1, Model);
+        private readonly NetworkBeliefs _network = new NetworkBeliefs(BeliefWeightLevel.RandomWeight);
+        private readonly Belief _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
         [TestMethod]
         public void AddBeliefTest()

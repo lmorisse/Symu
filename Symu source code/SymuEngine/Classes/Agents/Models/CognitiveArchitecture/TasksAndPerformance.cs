@@ -15,6 +15,7 @@ using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
+using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
@@ -73,7 +74,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             LearningModel.CopyTo(tasksAndPerformance.LearningModel);
             TasksLimit.CopyTo(tasksAndPerformance.TasksLimit);
         }
-
 
         #region Agent Learning
 

@@ -30,7 +30,7 @@ namespace SymuEngineTests.Results.Organization
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
-        private readonly Network _network = new Network(new AgentTemplates(), new InteractionSphereModel());
+        private readonly Network _network = new Network(new AgentTemplates(), new OrganizationModels());
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private OrganizationKnowledgeAndBelief _result;
 

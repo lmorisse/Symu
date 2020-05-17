@@ -28,7 +28,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestInitialize]
         public void Initialize()
         {
-            _belief = new Belief(1, "1", 10, RandomGenerator.RandomUniform);
+            _belief = new Belief(1, "1", 10, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void InitializeWeightsTest()
         {
-            _belief.InitializeWeights(RandomGenerator.RandomBinary, 1);
+            _belief.InitializeWeights(RandomGenerator.RandomBinary, 1, BeliefWeightLevel.RandomWeight);
             float[] results = {-1, 0, 1};
             Assert.IsTrue(results.Contains(_belief.Weights.GetBit(0)));
         }
@@ -48,7 +48,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void InitializeWeightsTest1()
         {
-            _belief.InitializeWeights(RandomGenerator.RandomUniform, 1);
+            _belief.InitializeWeights(RandomGenerator.RandomUniform, 1, BeliefWeightLevel.RandomWeight);
             Assert.IsTrue(-1 <= _belief.Weights.GetBit(0) && _belief.Weights.GetBit(0) <= 1);
         }
         /// <summary>

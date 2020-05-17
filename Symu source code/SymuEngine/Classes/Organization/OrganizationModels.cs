@@ -13,6 +13,7 @@ using System;
 using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Common;
 using SymuEngine.Engine;
+using SymuEngine.Repository.Networks.Beliefs;
 
 #endregion
 
@@ -62,6 +63,10 @@ namespace SymuEngine.Classes.Organization
         ///     Agent knowledge forgetting model
         /// </summary>
         public ModelEntity Forgetting { get; set; } = new ModelEntity();
+        /// <summary>
+        /// Impact level of agent's belief on how agent will accept to do the task
+        /// </summary>
+        public BeliefWeightLevel ImpactOfBeliefOnTask { get; set; } = BeliefWeightLevel.RandomWeight;
 
         public InteractionSphereModel InteractionSphere { get; set; } = new InteractionSphereModel();
 
@@ -115,6 +120,7 @@ namespace SymuEngine.Classes.Organization
             entity.FollowGroupKnowledge = FollowGroupKnowledge;
             entity.MultipleBlockers = MultipleBlockers;
             entity.Generator = Generator;
+            entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
         }
     }
 }

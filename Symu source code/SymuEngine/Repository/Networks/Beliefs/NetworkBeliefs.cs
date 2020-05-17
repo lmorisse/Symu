@@ -30,6 +30,10 @@ namespace SymuEngine.Repository.Networks.Beliefs
     /// <example></example>
     public class NetworkBeliefs
     {
+        /// <summary>
+        /// Impact level of agent's belief on how agent will accept to do the task
+        /// </summary>
+        public BeliefWeightLevel BeliefWeightLevel { get; set; }
         public RandomGenerator Model { get; set; } = new RandomGenerator();
 
         /// <summary>
@@ -44,6 +48,11 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         public ConcurrentDictionary<AgentId, AgentBeliefs> AgentsRepository { get; } =
             new ConcurrentDictionary<AgentId, AgentBeliefs>();
+
+        public NetworkBeliefs(BeliefWeightLevel beliefWeightLevel)
+        {
+            BeliefWeightLevel = beliefWeightLevel;
+        }
 
         public int Count => AgentsRepository.Count;
 
@@ -75,7 +84,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
                 throw new ArgumentNullException(nameof(knowledge));
             }
 
-            var belief = new Belief(knowledge.Id, knowledge.Name, knowledge.Length, Model);
+            var belief = new Belief(knowledge.Id, knowledge.Name, knowledge.Length, Model, BeliefWeightLevel);
             if (Exists(belief))
             {
                 return;

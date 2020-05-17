@@ -53,7 +53,7 @@ namespace SymuEngineTests.Classes.Agents
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
                 MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true}
             };
-            _belief = new Belief(1, "1", 1, Model);
+            _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
             var expertise = new AgentExpertise();
             var knowledge = new Knowledge(1, "1", 1);
@@ -370,7 +370,7 @@ namespace SymuEngineTests.Classes.Agents
         private Belief SetBeliefs()
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            var belief = new Belief(1,"1",  1, RandomGenerator.RandomBinary);
+            var belief = new Belief(1,"1",  1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);

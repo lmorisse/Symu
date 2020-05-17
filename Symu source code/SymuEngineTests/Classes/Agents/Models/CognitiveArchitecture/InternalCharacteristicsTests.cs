@@ -32,7 +32,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new InteractionSphereModel());
+            _network = new Network(new AgentTemplates(), new OrganizationModels());
             _model = new InternalCharacteristics(_network, _agentId);
         }
 
@@ -74,7 +74,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         public void LearnByDoingTest()
         {
             _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model);
+            var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model, BeliefWeightLevel.RandomWeight);
             _network.NetworkBeliefs.AddBelief(belief);
             Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
             _model.LearnByDoing(belief.Id, 0, BeliefLevel.NoBelief);

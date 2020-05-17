@@ -39,7 +39,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new InteractionSphereModel());
+            _network = new Network(new AgentTemplates(), new OrganizationModels());
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeAndBeliefs = new KnowledgeAndBeliefs(_network, _agentId)
             {

@@ -20,7 +20,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
     [TestClass]
     public class BeliefCollectionTests
     {
-        private readonly Belief _belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary);
+        private readonly Belief _belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
         private readonly BeliefCollection _beliefs = new BeliefCollection();
 
         [TestMethod]

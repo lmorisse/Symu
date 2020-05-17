@@ -27,10 +27,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         private readonly AgentBelief _agentBelief0 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
         private readonly AgentBelief _agentBelief1 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
         private readonly AgentBelief _agentBelief2 = new AgentBelief(2, BeliefLevel.NeitherAgreeNorDisagree);
-        private readonly NetworkBeliefs _network = new NetworkBeliefs();
-        private readonly Belief _belief0 = new Belief(0, "0", 0, Model);
-        private readonly Belief _belief1 = new Belief(1, "1", 1, Model);
-        private readonly Belief _belief2 = new Belief(2, "2", 2, Model);
+        private readonly NetworkBeliefs _network = new NetworkBeliefs(BeliefWeightLevel.RandomWeight);
+        private readonly Belief _belief0 = new Belief(0, "0", 0, Model, BeliefWeightLevel.RandomWeight);
+        private readonly Belief _belief1 = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
+        private readonly Belief _belief2 = new Belief(2, "2", 2, Model, BeliefWeightLevel.RandomWeight);
 
         [TestInitialize]
         public void Initialize()

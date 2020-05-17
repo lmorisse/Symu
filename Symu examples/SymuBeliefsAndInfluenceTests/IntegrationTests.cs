@@ -187,6 +187,34 @@ namespace SymuBeliefsAndInfluenceTests
                   (_environment.TimeStep.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
+
+        [TestMethod]
+        public void NoWeightTest()
+        {
+            _environment.Model.MandatoryRatio = 1;
+            _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
+            _simulation.Process();
+            CheckNoChange();
+            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+                ? 0
+                : _environment.IterationResult.Tasks.Total * 100 /
+                  (_environment.TimeStep.Step * _environment.WorkersCount);
+            Assert.AreEqual(100, tasksDoneRatio);
+        }
+
+        [TestMethod]
+        public void FullWeightTest()
+        {
+            _environment.Model.MandatoryRatio = 1;
+            _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
+            _simulation.Process();
+            CheckNoChange();
+            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+                ? 0
+                : _environment.IterationResult.Tasks.Total * 100 /
+                  (_environment.TimeStep.Step * _environment.WorkersCount);
+            Assert.AreNotEqual(100, tasksDoneRatio);
+        }
         /// <summary>
         /// Influencers strongly disagree
         /// Belief should decrease
