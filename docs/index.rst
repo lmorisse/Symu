@@ -44,10 +44,3 @@ Project infos
 .. image:: https://img.shields.io/github/v/release/lmorisse/symu?style=social   :alt: GitHub last release
 .. image:: https://img.shields.io/github/last-commit/lmorisse/symu?style=social   :alt: GitHub last commit
 .. image:: https://img.shields.io/github/license/lmorisse/symu?style=social   :alt: GitHub last commit
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
