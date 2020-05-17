@@ -1,3 +1,5 @@
+.. index:: Message content, message
+
 ***************
 Message content
 ***************

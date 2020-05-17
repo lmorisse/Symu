@@ -1,3 +1,5 @@
+.. index:: Knowledge, Beliefs
+
 *********************
 Knowledge and beliefs
 *********************

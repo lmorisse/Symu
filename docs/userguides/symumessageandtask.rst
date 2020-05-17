@@ -5,7 +5,7 @@ SymuMessageAndTask example
 .. image:: ../_static/SymuMessageAndTask.PNG 
    :align: center
 
-Different models are implemented in this simulator. This example demonstrates the use of two of them: messaging and tasking.
+Different models are implemented in this simulator. This example demonstrates the use of two of them: index:: messaging and index:: tasking.
 We have treated those two models at the same time because both are the engines of the simulation.
 
 Messaging model

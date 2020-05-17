@@ -5,7 +5,7 @@ SymuLearnAndForget example
 .. image:: ../_static/SymuLearnAndForget.PNG 
    :align: center
 
-Different models are implemented in this simulator. This example demonstrates the use of three of them: knowledge, learning and forgetting.
+Different models are implemented in this simulator. This example demonstrates the use of three of them: index:: knowledge, index:: learning and index:: forgetting.
 
 Knowledge model
 ***************

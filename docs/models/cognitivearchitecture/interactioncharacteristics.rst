@@ -1,9 +1,11 @@
+.. index::Interaction characteristics
+
 ***************************
 Interaction characteristics
 ***************************
 
-Messaging is the only way agents communicate to each other. So messaging model represents the interaction mechanism of agents. This is one of the means of ensuring the autonomy of agents. A message can have different types: it can be a phone call, a meeting, an email, …
-Interaction characteritics model deinfes the way an agent will interact with other agents.
+index:: Messaging is the only way agents communicate to each other. So messaging model represents the interaction mechanism of agents. This is one of the means of ensuring the autonomy of agents. A message can have different types: it can be a phone call, a meeting, an email, …
+Interaction characteritics model defines the way an agent will interact with other agents.
 There are two main aspects of the model that you can configure: 
 
 * limit
@@ -12,7 +14,7 @@ There are two main aspects of the model that you can configure:
 Limit messages
 **************
 
-You can limit the total number of messages an agent can send or received during a step; you can also specify the number of messages sent or the number of receptions per agent per step.
+You can limit the total number of index:: messages an agent can send or received during a step; you can also specify the number of messages sent or the number of receptions per agent per step.
 It can be useful when you want to test the limitation of interaction between agents, whatever the interaction.
 
 Cost of the messages

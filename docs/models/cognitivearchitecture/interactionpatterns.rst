@@ -1,10 +1,12 @@
+.. index:: Interaction patterns, interaction sphere, Knowledge, Activities, Beliefs, Social-demographics, similarity matching
+
 ********************
 Interaction patterns
 ********************
 
 Symu is a multi-agent system for the co-evolution of agents and socio-cultural environments with an interaction model between agents. Each agent defines the way the agent interacts with other agents.
-certain types of non-relational agents such as a database are not part of the sphere.
-For those who are part of the interaction sphere, the sphere is computed depending on different parameters
+Certain types of non-relational agents such as a database are not part of the sphere.
+For those who are part of the interaction sphere, the sphere is computed depending on different parameters.
 
 Interaction sphere
 ******************
@@ -16,7 +18,7 @@ It is based on different parameters:
 * Relative beliefs
 * Social demographics
 
-Each parameter has an associated weight to calculate the homophily factor.
+Each parameter has an associated weight to calculate the index:: homophily factor.
 
 To interact with another agent, an agent filter the interaction sphere with an interaction strategy based on:
 

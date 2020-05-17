@@ -1,3 +1,5 @@
+.. index:: Internal characteristics, forgetting
+
 ************************
 Internal characteristics 
 ************************

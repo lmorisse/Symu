@@ -1,3 +1,5 @@
+.. index:: Task, learning
+
 *********************
 Tasks and performance
 *********************
