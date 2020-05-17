@@ -11,6 +11,7 @@ Some useful links:
 * [Documentation : docs.symu.org](http://docs.symu.org/)
 * [Code : github.symu.org](http://github.symu.org/)
 * [Issues : github.symu.org/issues](http://github.symu.org/issues/)
+* [Twitter : symuorg](https://twitter.com/symuorg)
 
 ## How it works
 
