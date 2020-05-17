@@ -32,17 +32,17 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <summary>
         ///     Accumulates all learning of the agent for all knowledge during the simulation
         /// </summary>
-        public float Learning => List.Sum(t => t.Learning);
+        public float Learning => List.Any() ? List.Sum(t => t.Learning) : 0;
 
         /// <summary>
         ///     Accumulates all forgetting of the agent for all knowledge during the simulation
         /// </summary>
-        public float Forgetting => List.Sum(t => t.Forgetting);
+        public float Forgetting => List.Any() ? List.Sum(t => t.Forgetting) : 0;
 
         /// <summary>
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public float Obsolescence => List.Average(t => t.Obsolescence);
+        public float Obsolescence => List.Any() ? List.Average(t => t.Obsolescence) : 0;
 
         public int Count => List.Count;
 

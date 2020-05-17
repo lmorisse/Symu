@@ -927,7 +927,7 @@ namespace SymuEngine.Classes.Agents
         public Bits FilterBeliefToSend(ushort beliefId, byte beliefBit, CommunicationTemplate channel)
         {
             // If don't have belief, can't send belief or no belief asked
-            if (!Cognitive.KnowledgeAndBeliefs.HasBelief || !Cognitive.MessageContent.CanSendBeliefs || beliefId == 0)
+            if (!Cognitive.KnowledgeAndBeliefs.HasBelief || !Cognitive.MessageContent.CanSendBeliefs)// || beliefId == 0)
             {
                 return null;
             }
@@ -1345,6 +1345,11 @@ namespace SymuEngine.Classes.Agents
         /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
         public void Post(SymuTask task)
         {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
             OnBeforePostTask(task);
             if (!task.IsBlocked)
             {

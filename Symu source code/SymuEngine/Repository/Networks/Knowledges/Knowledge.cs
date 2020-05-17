@@ -134,8 +134,20 @@ namespace SymuEngine.Repository.Networks.Knowledges
             {
                 case RandomGenerator.RandomUniform:
                 {
-                    var min = GetMinFromKnowledgeLevel(knowledgeLevel);
-                    var max = GetMaxFromKnowledgeLevel(knowledgeLevel);
+                    float min;
+                    float max;
+
+                    switch (knowledgeLevel)
+                    {
+                        case KnowledgeLevel.Random:
+                            min = 0;
+                            max = 1;
+                            break;
+                        default:
+                            min = GetMinFromKnowledgeLevel(knowledgeLevel);
+                            max = GetMaxFromKnowledgeLevel(knowledgeLevel);
+                            break;
+                    } 
                     knowledgeBits = ContinuousUniform.Samples(Length, min, max);
                     if (Math.Abs(min - max) < Constants.Tolerance)
                     {
@@ -156,8 +168,16 @@ namespace SymuEngine.Repository.Networks.Knowledges
                 }
                 case RandomGenerator.RandomBinary:
                 {
-                    var mean = 1 - GetValueFromKnowledgeLevel(knowledgeLevel);
-                    knowledgeBits = ContinuousUniform.FilteredSamples(Length, mean);
+                    switch (knowledgeLevel)
+                    {
+                        case KnowledgeLevel.Random:
+                            knowledgeBits = ContinuousUniform.FilteredSamples(Length, 0, 1);
+                            break;
+                        default:
+                            var mean = 1 - GetValueFromKnowledgeLevel(knowledgeLevel);
+                            knowledgeBits = ContinuousUniform.FilteredSamples(Length, mean);
+                            break;
+                    }
                     break;
                 }
                 default:

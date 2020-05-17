@@ -52,6 +52,8 @@ namespace SymuEngine.Repository.Networks.Beliefs
                     return BeliefLevel.Agree;
                 case "StronglyAgree":
                     return BeliefLevel.StronglyAgree;
+                case "Random":
+                    return BeliefLevel.Random;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

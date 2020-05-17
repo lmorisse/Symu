@@ -32,6 +32,8 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <summary>
         ///     For unit test
         /// </summary>
-        FullKnowledge = 6
+        FullKnowledge = 6,
+
+        Random = 7
     }
 }

@@ -74,6 +74,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             TasksLimit.CopyTo(tasksAndPerformance.TasksLimit);
         }
 
+
         #region Agent Learning
 
         public ModelEntity LearningModel { get; set; } = new ModelEntity();

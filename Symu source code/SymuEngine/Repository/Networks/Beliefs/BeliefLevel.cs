@@ -23,6 +23,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         Disagree = 2,
         NeitherAgreeNorDisagree= 3,
         Agree= 4,
-        StronglyAgree = 5
+        StronglyAgree = 5,
+        Random = 6
     }
 }

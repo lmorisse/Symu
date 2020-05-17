@@ -28,16 +28,16 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
 
         private readonly MurphyTask _taskModel = new MurphyTask();
 
-        private RandomGenerator _knowledgeModel;
 
         /// <summary>
         ///     Random Binary Generator
         /// </summary>
+        [DataRow(KnowledgeLevel.Expert)]
+        [DataRow(KnowledgeLevel.Random)]
         [TestMethod]
-        public void GetBitsTest()
+        public void InitializeBitsTest(KnowledgeLevel level)
         {
-            _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.Expert);
+            var knowledgeBits = _knowledge.InitializeBits(RandomGenerator.RandomBinary, level);
             for (byte i = 0; i < 10; i++)
             {
                 Assert.IsTrue(Math.Abs(knowledgeBits[i]) < Tolerance ||
@@ -49,10 +49,9 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         ///     Random Binary Generator with full knowledge
         /// </summary>
         [TestMethod]
-        public void GetBitsTest1()
+        public void InitializeBitsTest1()
         {
-            _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.FullKnowledge);
+            var knowledgeBits = _knowledge.InitializeBits(RandomGenerator.RandomBinary, KnowledgeLevel.FullKnowledge);
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
             {
@@ -70,10 +69,9 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         ///     Random Binary Generator with no knowledge
         /// </summary>
         [TestMethod]
-        public void GetBitsTest2()
+        public void InitializeBitsTest2()
         {
-            _knowledgeModel = RandomGenerator.RandomBinary;
-            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.NoKnowledge);
+            var knowledgeBits = _knowledge.InitializeBits(RandomGenerator.RandomBinary, KnowledgeLevel.NoKnowledge);
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
             {
@@ -90,20 +88,37 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         /// <summary>
         ///     Random Uniform Generator
         /// </summary>
+        [DataRow(KnowledgeLevel.Expert)]
+        [DataRow(KnowledgeLevel.BasicKnowledge)]
+        [DataRow(KnowledgeLevel.Foundational)]
+        [DataRow(KnowledgeLevel.FullProficiency)]
+        [DataRow(KnowledgeLevel.Intermediate)]
         [TestMethod]
-        public void GetBitsTest3()
+        public void InitializeBitsTest3(KnowledgeLevel level)
         {
-            _knowledgeModel = RandomGenerator.RandomUniform;
-            var knowledgeBits = _knowledge.InitializeBits(_knowledgeModel, KnowledgeLevel.Expert);
+            var knowledgeBits = _knowledge.InitializeBits(RandomGenerator.RandomUniform, level);
             for (byte i = 0; i < 10; i++)
             {
                 Assert.IsTrue(
-                    Knowledge.GetMinFromKnowledgeLevel(
-                        KnowledgeLevel.Expert) <= knowledgeBits[i] ||
+                    Knowledge.GetMinFromKnowledgeLevel(level) <= knowledgeBits[i] ||
                     Math.Abs(knowledgeBits[i]) < Tolerance);
                 Assert.IsTrue(knowledgeBits[i] <=
-                              Knowledge.GetMaxFromKnowledgeLevel(
-                                  KnowledgeLevel.Expert));
+                              Knowledge.GetMaxFromKnowledgeLevel(level));
+            }
+        }
+
+        /// <summary>
+        ///     Random Uniform Generator with random knowledge
+        /// </summary>
+        [TestMethod]
+        public void InitializeBitsTest5()
+        {
+            var knowledgeBits = _knowledge.InitializeBits(RandomGenerator.RandomUniform, KnowledgeLevel.Random);
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(0 <= knowledgeBits[i] ||
+                    Math.Abs(knowledgeBits[i]) < Tolerance);
+                Assert.IsTrue(knowledgeBits[i] <=1);
             }
         }
 

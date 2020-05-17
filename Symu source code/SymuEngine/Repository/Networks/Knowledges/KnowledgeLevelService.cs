@@ -53,6 +53,8 @@ namespace SymuEngine.Repository.Networks.Knowledges
                     return KnowledgeLevel.Expert;
                 case "FullKnowledge":
                     return KnowledgeLevel.FullKnowledge;
+                case "Random":
+                    return KnowledgeLevel.Random;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

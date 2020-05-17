@@ -263,6 +263,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             var minKnowledge = Math.Max(MinimumBeliefToSendPerBit,
                 medium.Cognitive.MessageContent.MinimumBeliefToSendPerBit);
             // Random knowledgeBits to send
+            if (minBits > maxBits)
+            {
+                minBits = maxBits ;
+            }
             var lengthToSend = DiscreteUniform.SampleToByte(minBits, maxBits);
             if (lengthToSend == 0)
             {

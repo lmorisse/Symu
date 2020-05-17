@@ -310,14 +310,15 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         /// <param name="beliefLevel"></param>
         public void Learn(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
         {
-            if (beliefId == 0 || beliefBits == null)
+            //if (beliefId == 0 || beliefBits == null)
+            //{
+            //    return;
+            //}
+
+            if ( beliefBits == null)// && beliefId > 0)
             {
                 return;
-            }
-
-            if (beliefId > 0 && beliefBits == null)
-            {
-                throw new ArgumentNullException(nameof(beliefBits));
+                //throw new ArgumentNullException(nameof(beliefBits));
             }
 
             // Learning From agent

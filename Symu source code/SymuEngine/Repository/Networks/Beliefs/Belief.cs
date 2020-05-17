@@ -130,10 +130,9 @@ namespace SymuEngine.Repository.Networks.Beliefs
         public void InitializeWeights(RandomGenerator model, byte length)
         {
             var beliefBits = model == RandomGenerator.RandomUniform
-                ? ContinuousUniform.Samples(length, RangeMin, RangeMax)
-                : DiscreteUniform.Samples(length, RangeMin, RangeMax);
-
-            Weights = new Bits(beliefBits, RangeMin);
+                ? ContinuousUniform.Samples(length, 0, RangeMax)
+                : DiscreteUniform.Samples(length, 0, RangeMax);
+            Weights = new Bits(beliefBits, 0);
         }
         /// <summary>
         ///     Given a random model and a BeliefLevel
@@ -150,8 +149,21 @@ namespace SymuEngine.Repository.Networks.Beliefs
             {
                 case RandomGenerator.RandomUniform:
                     {
-                        var min = GetMinFromBeliefLevel(beliefLevel);
-                        var max = GetMaxFromBeliefLevel(beliefLevel);
+                        float min;
+                        float max ;
+
+                        switch (beliefLevel)
+                        {
+                            case BeliefLevel.Random:
+                                min = RangeMin;
+                                max = RangeMax;
+                                break;
+                            default:
+                                min = GetMinFromBeliefLevel(beliefLevel);
+                                max = GetMaxFromBeliefLevel(beliefLevel);
+                                break;
+                        }
+
                         beliefBits = ContinuousUniform.Samples(Length, min, max);
                         if (Math.Abs(min - max) < Constants.Tolerance)
                         {
@@ -172,8 +184,16 @@ namespace SymuEngine.Repository.Networks.Beliefs
                     }
                 case RandomGenerator.RandomBinary:
                     {
-                        var mean = 1 - GetValueFromBeliefLevel(beliefLevel);
-                        beliefBits = ContinuousUniform.FilteredSamples(Length, mean);
+                        switch (beliefLevel)
+                        {
+                            case BeliefLevel.Random:
+                                beliefBits = ContinuousUniform.FilteredSamples(Length, RangeMin, RangeMax);
+                                break;
+                            default:
+                                var mean = 1 - GetValueFromBeliefLevel(beliefLevel);
+                                beliefBits = ContinuousUniform.FilteredSamples(Length, mean);
+                                break;
+                        }
                         break;
                     }
                 default:

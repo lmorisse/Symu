@@ -52,6 +52,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             knowledgeAndBeliefs.HasKnowledge = HasKnowledge;
             knowledgeAndBeliefs.KnowledgeThreshHoldForDoing = KnowledgeThreshHoldForDoing;
             knowledgeAndBeliefs.HasInitialBelief = HasInitialBelief;
+            knowledgeAndBeliefs.DefaultBeliefLevel = DefaultBeliefLevel;
             knowledgeAndBeliefs.HasBelief = HasBelief;
             knowledgeAndBeliefs.BeliefThreshHoldForReacting = BeliefThreshHoldForReacting;
         }
@@ -243,10 +244,11 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         ///     Get the agent Beliefs
         /// </summary>
         public AgentBeliefs Beliefs => HasBelief ? _network.NetworkBeliefs.GetAgentBeliefs(_id) : null;
+
         /// <summary>
         /// Default belief level use to create new belief during simulation
         /// </summary>
-        public BeliefLevel DefaultBeliefLevel { get; set; }
+        public BeliefLevel DefaultBeliefLevel { get; set; } = BeliefLevel.NeitherAgreeNorDisagree;
 
         /// <summary>
         ///     Initialize the beliefs of the agent based on the belief network

@@ -63,6 +63,7 @@ namespace SymuBeliefsAndInfluence
 
             InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
             InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            MandatoryRatio.Text = _environment.Model.MandatoryRatio.ToString();
         }
 
         protected override void SetUpOrganization()
@@ -89,7 +90,7 @@ namespace SymuBeliefsAndInfluence
             #region influencer
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedText);
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedItem.ToString());
 
             #endregion
 
@@ -235,7 +236,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.Knowledge = byte.Parse(tbKnowledge.Text);
+                _environment.KnowledgeCount = byte.Parse(tbKnowledge.Text);
                 tbKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
