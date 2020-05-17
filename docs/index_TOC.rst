@@ -2,5 +2,5 @@
    :maxdepth: 1
 
    Overview <index>
-   models
+   models/models
    userguides/examples_guide
