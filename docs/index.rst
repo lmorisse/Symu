@@ -15,6 +15,7 @@ Some useful links
  * `Website : symu.org <https://symu.org>`_
  * `Code : github.symu.org <http://github.symu.org>`_
  * `Issues : github.symu.org/issues <http://github.symu.org/issues>`_
+ * `Twitter : symuorg <https://twitter.com/symuorg>`_
 
 Organization simulation
 =======================
