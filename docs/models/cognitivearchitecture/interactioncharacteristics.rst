@@ -1,8 +1,10 @@
-.. index::Interaction characteristics
+.. index::Interaction characteristics, cognitive architecture
 
 ***************************
 Interaction characteristics
 ***************************
+
+Interaction characteristics is part of the :doc:`cognitivearchitecture`. 
 
 index:: Messaging is the only way agents communicate to each other. So messaging model represents the interaction mechanism of agents. This is one of the means of ensuring the autonomy of agents. A message can have different types: it can be a phone call, a meeting, an email, …
 Interaction characteritics model defines the way an agent will interact with other agents.

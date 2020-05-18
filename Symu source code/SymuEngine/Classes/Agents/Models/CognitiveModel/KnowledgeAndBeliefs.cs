@@ -318,7 +318,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         ///     Check belief required by a task against the worker expertise
         /// </summary>
         /// <param name="beliefId"></param>
-        /// <param name="taskBitIndexes">KnowledgeBot indexes of the task that must be checked against agent's beliefs</param>
+        /// <param name="taskBitIndexes">KnowledgeBit indexes of the task that must be checked against agent's beliefs</param>
         /// <param name="mandatoryCheck"></param>
         /// <param name="requiredCheck"></param>
         /// <param name="mandatoryIndex"></param>

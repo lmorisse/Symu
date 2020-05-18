@@ -1,11 +1,13 @@
-.. index:: Internal characteristics, forgetting
+.. index:: Internal characteristics, forgetting, cognitive architecture, risk aversion
 
 ************************
 Internal characteristics 
 ************************
 
-Model of forgetting
-*******************
+Internal characteristics is part of the :doc:`cognitivearchitecture`. 
+
+Forgetting model
+****************
 The counterpart of learning is forgetting. Agents may forget knowledge or information if they are not solicited during the simulation. Using a bit of knowledge during a step is enough to be sure that this bit will not be forget today.
 Forgetting has different modes: 
 
@@ -33,3 +35,10 @@ Partial forgetting
 
 Then you must define the how every bit of knowledge is affected. If partial forgetting is chosen, the partial forgetting rate define how much an agent loose at each step, otherwise, the bit is completely forgotten.
 You can define the minimum level of information that left for each bit.
+
+Risk aversion
+*************
+The risk aversion parameter affects whether or not an agent can make a particular decision.
+The risk aversion parameter prevent an agent from acting on a particular belief.
+Agents who are risk averse will still be able to communicate their knowledge and beliefs like any other agent, but will never be able to make the corresponding decision.
+        

@@ -1,21 +1,29 @@
+.. index:: Beliefs, influence
+
 *******************************
-SymuGroupAndInteraction example
+SymuBeliefsAndInfluence example
 *******************************
 
-.. image:: ../_static/SymuGroupAndInteraction.PNG 
+.. image:: ../_static/SymuBeliefsAndInfluence.PNG 
    :align: center
 
-Different models are implemented in this simulator. SymuGroupAndInteraction demonstrate the use of one of them: the index:: interaction model.
+Different models are implemented in this simulator. SymuBeliefsAndInfluence demonstrate the use of two of them: the beliefs and the influence model.
 
 You can use this example to discover and understand the impact of all the setups on the agents. That will help you setup you own interaction model.
 
-Interaction model
-*****************
+Beliefs model
+*************
 
 Symu is a multi-agent system for the co-evolution of agents and socio-cultural environments with an interaction model between agents.
-Find more information about the interaction model :
+These interactions are based on the information exchanged but also the beliefs. 
 
-.. seealso:: :doc:`../models/cognitivearchitecture/interactionpatterns`
+.. seealso:: :doc:`../models/cognitivearchitecture/Knowledgeandbeliefs`
+
+Influence model
+***************
+This model define how an agent will reinforce its belief or change its belief from influencer.
+.. seealso:: :doc:`../models/agent`
+
 
 Scenario
 ********
@@ -27,4 +35,4 @@ Knowledge, activites, beliefs and social-demographics are defined for every agen
 Play with the interaction strategy to see the impact on the organization flexibility, defined by the capacity of creating triads.
 Try to increase triads with the creation of new interactions.
 
-Find the `source code <https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuGroupAndInteraction>`_
+Find the `source code <https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluence>`_

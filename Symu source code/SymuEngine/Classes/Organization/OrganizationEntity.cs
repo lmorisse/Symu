@@ -60,6 +60,11 @@ namespace SymuEngine.Classes.Organization
         /// </summary>
         public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
+        /// <summary>
+        ///     List of the /Maydays handle in the simulation
+        /// </summary>
+        public MurphyCollection Murphies { get; } = new MurphyCollection();
+
         public ushort NextEntityIndex()
         {
             return EntityIndex++;

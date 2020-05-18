@@ -1,8 +1,10 @@
-.. index:: Message content, message
+.. index:: Message content, message, cognitive architecture
 
 ***************
 Message content
 ***************
+
+Message content is part of the :doc:`cognitivearchitecture`. 
 
 Messaging is the only way agents communicate to each other. So messaging model represents the interaction mechanism of agents. This is one of the means of ensuring the autonomy of agents. A message can have different types: it can be a phone call, a meeting, an email, …
 Message content helps you define the content of a message : knowledge, beliefs, referral, ...

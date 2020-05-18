@@ -1,8 +1,10 @@
-.. index:: Task, learning
+.. index:: Task, learning, cognitive architecture
 
 *********************
 Tasks and performance
 *********************
+
+Tasks and performance is part of the :doc:`cognitivearchitecture`. 
 
 Tasking model
 *************

@@ -1,8 +1,10 @@
-.. index:: Interaction patterns, interaction sphere, Knowledge, Activities, Beliefs, Social-demographics, similarity matching
+.. index:: Interaction patterns, interaction sphere, Knowledge, Activities, Beliefs, Social-demographics, similarity matching, cognitive architecture
 
 ********************
 Interaction patterns
 ********************
+
+Interaction patterns is part of the :doc:`cognitivearchitecture`. 
 
 Symu is a multi-agent system for the co-evolution of agents and socio-cultural environments with an interaction model between agents. Each agent defines the way the agent interacts with other agents.
 Certain types of non-relational agents such as a database are not part of the sphere.
