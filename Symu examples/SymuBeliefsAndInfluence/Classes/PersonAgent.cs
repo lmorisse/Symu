@@ -64,14 +64,14 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 throw new ArgumentNullException(nameof(task));
             }
-            if (mandatoryScore >= 0F)
+            base.CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
+            if (mandatoryScore > -Cognitive.InternalCharacteristics.RiskAversionThreshold)
             {
-                return ;
+                return;
             }
 
-            // MandatoryScore is not enough
-            // Worker don't want to do the task
-            task.Blockers.Add(0, TimeStep.Step);
+            // RiskAversionThreshold has been exceeded =>
+            // Worker don't want to do the task, the task is blocked in base method
             // Ask advice from influencers
             var attachments = new MessageAttachments
             {

@@ -49,6 +49,7 @@ namespace SymuEngine.Classes.Agents.Models.Templates
             Cognitive.InternalCharacteristics.InfluenceabilityRateMin = 0;
             Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
+            Cognitive.InternalCharacteristics.RiskAversionThreshold = 0.1F;
             // Interaction Characteristics
             Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
             Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = false;

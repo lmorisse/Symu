@@ -81,6 +81,9 @@
             this.label13 = new System.Windows.Forms.Label();
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.RiskAversion = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
             this.BeliefWeight = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
             this.MandatoryRatio = new System.Windows.Forms.TextBox();
@@ -503,9 +506,9 @@
             // InfluencerBeliefLevel
             // 
             this.InfluencerBeliefLevel.FormattingEnabled = true;
-            this.InfluencerBeliefLevel.Location = new System.Drawing.Point(225, 211);
+            this.InfluencerBeliefLevel.Location = new System.Drawing.Point(200, 211);
             this.InfluencerBeliefLevel.Name = "InfluencerBeliefLevel";
-            this.InfluencerBeliefLevel.Size = new System.Drawing.Size(124, 24);
+            this.InfluencerBeliefLevel.Size = new System.Drawing.Size(149, 24);
             this.InfluencerBeliefLevel.TabIndex = 145;
             // 
             // label26
@@ -637,6 +640,9 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.label32);
+            this.groupBox9.Controls.Add(this.RiskAversion);
+            this.groupBox9.Controls.Add(this.label31);
             this.groupBox9.Controls.Add(this.BeliefWeight);
             this.groupBox9.Controls.Add(this.label27);
             this.groupBox9.Controls.Add(this.MandatoryRatio);
@@ -655,18 +661,45 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Agent workers";
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(31, 128);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(220, 17);
+            this.label32.TabIndex = 150;
+            this.label32.Text = "Parameters that block tasks) [0;1]";
+            // 
+            // RiskAversion
+            // 
+            this.RiskAversion.Location = new System.Drawing.Point(294, 177);
+            this.RiskAversion.Name = "RiskAversion";
+            this.RiskAversion.Size = new System.Drawing.Size(54, 22);
+            this.RiskAversion.TabIndex = 149;
+            this.RiskAversion.Text = "5";
+            this.RiskAversion.TextChanged += new System.EventHandler(this.RiskAversion_TextChanged);
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(74, 179);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(188, 17);
+            this.label31.TabIndex = 148;
+            this.label31.Text = "Risk aversion threshold [0;1]";
+            // 
             // BeliefWeight
             // 
             this.BeliefWeight.FormattingEnabled = true;
-            this.BeliefWeight.Location = new System.Drawing.Point(234, 176);
+            this.BeliefWeight.Location = new System.Drawing.Point(209, 212);
             this.BeliefWeight.Name = "BeliefWeight";
-            this.BeliefWeight.Size = new System.Drawing.Size(114, 24);
+            this.BeliefWeight.Size = new System.Drawing.Size(139, 24);
             this.BeliefWeight.TabIndex = 147;
             // 
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(30, 179);
+            this.label27.Location = new System.Drawing.Point(30, 215);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(167, 17);
             this.label27.TabIndex = 146;
@@ -674,7 +707,7 @@
             // 
             // MandatoryRatio
             // 
-            this.MandatoryRatio.Location = new System.Drawing.Point(294, 133);
+            this.MandatoryRatio.Location = new System.Drawing.Point(294, 148);
             this.MandatoryRatio.Name = "MandatoryRatio";
             this.MandatoryRatio.Size = new System.Drawing.Size(54, 22);
             this.MandatoryRatio.TabIndex = 52;
@@ -740,7 +773,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(34, 96);
+            this.label11.Location = new System.Drawing.Point(31, 96);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(101, 17);
             this.label11.TabIndex = 136;
@@ -749,11 +782,11 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(30, 135);
+            this.label21.Location = new System.Drawing.Point(74, 150);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(262, 17);
+            this.label21.Size = new System.Drawing.Size(139, 17);
             this.label21.TabIndex = 47;
-            this.label21.Text = "Mandatory ratio (which block tasks) [0;1]";
+            this.label21.Text = "Mandatory ratio [0;1]";
             // 
             // groupBox6
             // 
@@ -924,5 +957,8 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.TextBox RateOfAgentsOn;
         private System.Windows.Forms.CheckBox InfluenceModel;
+        private System.Windows.Forms.TextBox RiskAversion;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label32;
     }
 }

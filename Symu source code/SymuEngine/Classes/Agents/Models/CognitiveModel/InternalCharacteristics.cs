@@ -39,6 +39,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             internalCharacteristics.CanLearn = CanLearn;
             #endregion
 
+            #region Risk aversion
+            internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
+            #endregion
+
             #region Forgetting
 
             internalCharacteristics.CanForget = CanForget;
@@ -302,6 +306,31 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #endregion
 
         #region Risk aversion
+
+        private float _riskAversionThreshold;
+
+        /// <summary>
+        /// The risk aversion parameter affects whether or not an agent can make a particular decision.
+        /// Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these beliefs.
+        /// The risk aversion parameter, however, acts as a catch-all for factors not included in the model which prevent an agent from acting on a particular belief.
+        /// Agents who are risk averse will still be able to communicate their knowledge and beliefs like any other agent, but will never be able to make the corresponding decision.
+        /// RiskAversionThreshold == 0, full risk aversion
+        /// RiskAversionThreshold == 1, no risk aversion
+        /// Range [0;1]
+        /// </summary>
+        public float RiskAversionThreshold
+        {
+            get => _riskAversionThreshold;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RiskAversionThreshold should be between 0 and 1");
+                }
+
+                _riskAversionThreshold = value;
+            }
+        }
 
         #endregion
 

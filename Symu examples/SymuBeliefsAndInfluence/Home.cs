@@ -53,26 +53,34 @@ namespace SymuBeliefsAndInfluence
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
 
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
-            HasInitialBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
-            CanSendBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanSendBeliefs;
-            CanReceiveBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanReceiveBeliefs;
 
-            InfluenceabilityMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMin.ToString();
-            InfluenceabilityMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMax.ToString();
-            InfluentialnessMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMin.ToString();
-            InfluentialnessMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMax.ToString();
+
+
+            #region Influencer
+            InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
+            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             MinimumBeliefToSendPerBit.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MinimumBeliefToSendPerBit.ToString();
             MinimumNumberOfBitsOfBeliefToSend.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MinimumNumberOfBitsOfBeliefToSend.ToString();
             MaximumNumberOfBitsOfBeliefToSend.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MaximumNumberOfBitsOfBeliefToSend.ToString();
+            InfluentialnessMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMin.ToString();
+            InfluentialnessMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMax.ToString();
+            CanSendBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanSendBeliefs;
 
-            InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
-            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            #endregion
+
+            #region Worker
             MandatoryRatio.Text = _environment.Model.MandatoryRatio.ToString();
+            RiskAversion.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold.ToString();
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
             BeliefWeight.SelectedItem = BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
+            InfluenceabilityMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMin.ToString();
+            InfluenceabilityMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMax.ToString();
+            CanReceiveBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanReceiveBeliefs;
+            HasInitialBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
+            #endregion
         }
 
         protected override void SetUpOrganization()
@@ -442,6 +450,24 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 RateOfAgentsOn.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void RiskAversion_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = float.Parse(RiskAversion.Text);
+                RiskAversion.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                RiskAversion.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                RiskAversion.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }

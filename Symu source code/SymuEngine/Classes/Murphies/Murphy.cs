@@ -25,6 +25,10 @@ namespace SymuEngine.Classes.Murphies
     /// </example>
     public abstract class Murphy
     {
+        public const int IncompleteKnowledge = 1;
+        public const int Unavailability = 2;
+        public const int IncompleteBelief = 3;
+
         /// <summary>
         ///     If (On) the Murphy is active
         /// </summary>

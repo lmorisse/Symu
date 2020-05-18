@@ -19,6 +19,7 @@ using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Blockers;
+using SymuEngine.Classes.Murphies;
 using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
 using SymuEngine.Common;
@@ -1572,6 +1573,27 @@ namespace SymuEngine.Classes.Agents
 
         protected virtual void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore, float requiredScore, byte mandatoryIndex, byte requiredIndex)
         {
+            if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionThreshold))
+            {
+                return;
+            }
+
+            // Prevent the agent from acting on a particular belief
+            // mandatoryScore is not enough => agent don't want to do the task, the task is blocked
+            var blocker = AddBlocker(task, Murphy.IncompleteBelief, knowledgeId, mandatoryIndex);
+            TryRecoverBlocker(task, blocker);
+        }
+
+        public Blocker AddBlocker(SymuTask task, int murphyType, object parameter, object parameter2)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            var blocker = task.Blockers.Add(murphyType, TimeStep.Step, parameter, parameter2);
+            Environment.IterationResult.Blockers.AddBlockerInProgress(TimeStep.Step);
+            return blocker;
         }
 
         /// <summary>

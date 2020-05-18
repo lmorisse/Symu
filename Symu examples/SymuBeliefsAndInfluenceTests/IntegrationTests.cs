@@ -210,6 +210,20 @@ namespace SymuBeliefsAndInfluenceTests
         }
 
         [TestMethod]
+        public void NoRiskAversionTest()
+        {
+            _environment.Model.MandatoryRatio = 1;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _simulation.Process();
+            CheckNoChange();
+            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+                ? 0
+                : _environment.IterationResult.Tasks.Total * 100 /
+                  (_environment.TimeStep.Step * _environment.WorkersCount);
+            Assert.AreEqual(100, tasksDoneRatio);
+        }
+
+        [TestMethod]
         public void NoWeightTest()
         {
             _environment.Model.MandatoryRatio = 1;
@@ -227,6 +241,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void FullWeightTest()
         {
             _environment.Model.MandatoryRatio = 1;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
             CheckNoChange();
@@ -244,6 +259,7 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void StronglyDisagreeTest()
         {
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevel.StronglyDisagree;
@@ -261,6 +277,7 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void StronglyAgreeTest()
         {
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.StronglyAgree;
