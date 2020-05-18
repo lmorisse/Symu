@@ -148,7 +148,7 @@ namespace SymuEngine.Messaging.Manager
         }
 
         /// <summary>
-        ///     Clear numberMessagesPerPeriod done at the beginning of every new period (interaction step)
+        ///     Initialize numberMessagesPerPeriod done at the beginning of every new period (interaction step)
         /// </summary>
         public void ClearMessagesPerPeriod()
         {

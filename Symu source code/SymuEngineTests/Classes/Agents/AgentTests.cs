@@ -17,6 +17,7 @@ using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Organization;
+using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Engine;
 using SymuEngine.Messaging.Messages;
@@ -1248,6 +1249,19 @@ namespace SymuEngineTests.Classes.Agents
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 
+        #endregion
+
+        #region blocker
+        [TestMethod]
+        public void AddBlockerTest()
+        {
+            _environment.Organization.Models.FollowBlockers = true;
+            _environment.IterationResult.Initialize();
+            var task = new SymuTask(0);
+            Assert.IsNotNull(_agent.AddBlocker(task, 0, 1, 0));
+            Assert.IsTrue(task.IsBlocked);
+            Assert.AreEqual(1, _environment.IterationResult.Blockers.BlockersStillInProgress);
+        }
         #endregion
     }
 }

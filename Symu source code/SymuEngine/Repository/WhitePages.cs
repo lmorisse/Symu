@@ -53,7 +53,7 @@ namespace SymuEngine.Repository
 
         public Network Network { get; }
 
-        #region Clear / remove agent
+        #region Initialize / remove agent
 
         /// <summary>
         ///     CLear agents between two iterations

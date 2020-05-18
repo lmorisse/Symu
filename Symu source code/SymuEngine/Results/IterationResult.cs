@@ -47,7 +47,6 @@ namespace SymuEngine.Results
         ///     The important factor is how fast the organizations reaches this state and what happens along the way
         ///     Focus on the time at which stability is reached
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical)
-        ///     value)
         /// </summary>
         public OrganizationFlexibility OrganizationFlexibility { get; private set; }
 
@@ -59,25 +58,25 @@ namespace SymuEngine.Results
         /// <summary>
         ///     Get the Task blockers metrics
         /// </summary>
-        public BlockerResults Blockers { get; private set; }
+        public BlockerResults Blockers { get; private set; } 
 
         /// <summary>
         ///     Get the Tasks model metrics
         /// </summary>
-        public TaskResults Tasks { get; private set; }
+        public TaskResults Tasks { get; private set; } 
 
         public float Capacity { get; set; }
 
         //Specific results
         public List<PostProcessResult> SpecificResults { get; } = new List<PostProcessResult>();
 
-        public virtual void Clear()
+        public virtual void Initialize()
         {
             OrganizationFlexibility = new OrganizationFlexibility(_environment);
             OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
                 _environment.Organization.Models);
-            Blockers = new BlockerResults();
-            Tasks = new TaskResults();
+            Blockers = new BlockerResults(_environment.Organization.Models.FollowBlockers);
+            Tasks = new TaskResults(_environment.Organization.Models.FollowTasks);
             Iteration = 0;
             Step = 0;
             Success = false;
@@ -92,8 +91,7 @@ namespace SymuEngine.Results
         ///     Triggered at each end of step by SymuEnvironment.
         ///     Use to process metrics
         /// </summary>
-        /// <param name="step"></param>
-        public void PostStep(ushort step)
+        public void PostStep()
         {
             Tasks.SetResults(_environment);
         }

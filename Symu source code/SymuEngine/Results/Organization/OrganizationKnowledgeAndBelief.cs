@@ -63,7 +63,7 @@ namespace SymuEngine.Results.Organization
         public List<KnowledgeAndBeliefStruct> KnowledgeObsolescence { get; } = new List<KnowledgeAndBeliefStruct>();
 
         /// <summary>
-        /// Clear of results
+        /// Initialize of results
         /// </summary>
         public void Clear()
         {

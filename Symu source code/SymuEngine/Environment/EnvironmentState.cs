@@ -69,7 +69,7 @@ namespace SymuEngine.Environment
         }
 
         /// <summary>
-        ///     Clear the class
+        ///     Initialize the class
         /// </summary>
         public void Clear()
         {

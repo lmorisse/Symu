@@ -118,7 +118,7 @@ namespace SymuEngine.Repository.Networks
         /// </summary>
         public InteractionSphere InteractionSphere { get; }
 
-        #region Clear & remove Agents
+        #region Initialize & remove Agents
 
         public void Clear()
         {

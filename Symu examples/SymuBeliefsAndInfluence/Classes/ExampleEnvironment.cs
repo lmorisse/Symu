@@ -43,6 +43,7 @@ namespace SymuBeliefsAndInfluence.Classes
             Organization.Models.Generator = RandomGenerator.RandomUniform;
             Organization.Models.FollowGroupKnowledge = true;
             Organization.Models.FollowGroupFlexibility = true;
+            Organization.Models.FollowTasks = true;
             Organization.Models.InteractionSphere.On = true;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;

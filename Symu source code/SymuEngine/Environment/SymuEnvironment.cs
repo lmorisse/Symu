@@ -144,13 +144,14 @@ namespace SymuEngine.Environment
         {
             Messages.Clear();
             State.Clear();
-            IterationResult.Clear();
             WhitePages.Clear();
             WhitePages.Network.NetworkKnowledges.Model =
                 Organization.Models.Generator;
             WhitePages.Network.NetworkBeliefs.Model =
                 Organization.Models.Generator;
             SetModelForAgents();
+            // Intentionally after SetModelForAgents
+            IterationResult.Initialize();
             WhitePages.Network.InitializeNetworkLinks();
             WhitePages.SetStarted();
         }
@@ -373,7 +374,7 @@ namespace SymuEngine.Environment
         {
             WhitePages.AllAgents().ToList().ForEach(a => a.PostStep());
             Messages.ClearMessagesSent(TimeStep.Step);
-            IterationResult.PostStep(TimeStep.Step);
+            IterationResult.PostStep();
             TimeStep.Step++;
         }
 

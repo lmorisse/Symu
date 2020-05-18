@@ -25,6 +25,14 @@ namespace SymuEngine.Results.Task
     public class TaskResults
     {
         /// <summary>
+        /// If set to true, TaskResults will be filled with value
+        /// </summary>
+        private readonly bool _followTasks;
+        public TaskResults(bool followTasks)
+        {
+            _followTasks = followTasks;
+        }
+        /// <summary>
         ///     Key => step
         ///     Value => TaskResult for the step
         /// </summary>
@@ -59,6 +67,7 @@ namespace SymuEngine.Results.Task
 
         public void SetResults(SymuEnvironment environment)
         {
+            if (!_followTasks) { return; }
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));

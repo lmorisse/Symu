@@ -124,7 +124,7 @@ namespace SymuEngine.Classes.Blockers
         }
 
         /// <summary>
-        ///     Clear the list of blockers
+        ///     Initialize the list of blockers
         /// </summary>
         public void Clear()
         {

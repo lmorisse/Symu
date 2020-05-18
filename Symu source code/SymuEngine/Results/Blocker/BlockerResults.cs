@@ -23,6 +23,14 @@ namespace SymuEngine.Results.Blocker
     public class BlockerResults
     {
         /// <summary>
+        /// If set to true, blockerResults will be filled with value
+        /// </summary>
+        private readonly bool _followBlockers;
+        public BlockerResults(bool followBlockers)
+        {
+            _followBlockers = followBlockers;
+        }
+        /// <summary>
         ///     Key => step
         ///     Value => BlockerResult for the step
         /// </summary>
@@ -61,12 +69,15 @@ namespace SymuEngine.Results.Blocker
 
         public void AddBlockerInProgress(ushort step)
         {
+            if (!_followBlockers) { return;} 
             SetStep(step);
             _results[step].InProgress++;
         }
 
         public void BlockerDone(BlockerResolution resolution, ushort step)
         {
+            if (!_followBlockers) { return; }
+            
             SetStep(step);
             switch (resolution)
             {
