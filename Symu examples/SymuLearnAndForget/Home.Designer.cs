@@ -633,7 +633,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(164, 17);
             this.label10.TabIndex = 24;
-            this.label10.Text = "Learn by doing rate [0;1]";
+            this.label10.Text = "BeInfluenced by doing rate [0;1]";
             // 
             // tbLearnRate
             // 
@@ -650,7 +650,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(106, 17);
             this.label15.TabIndex = 22;
-            this.label15.Text = "Learn rate [0;1]";
+            this.label15.Text = "BeInfluenced rate [0;1]";
             // 
             // tbKnowledgeThreshold
             // 
@@ -1037,7 +1037,7 @@
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(103, 17);
             this.label24.TabIndex = 21;
-            this.label24.Text = "Learn by doing";
+            this.label24.Text = "BeInfluenced by doing";
             // 
             // lblKnowledge1
             // 

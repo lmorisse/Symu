@@ -1,35 +1,25 @@
-﻿#region Licence
-
-// Description: Symu - SymuEngineTests
-// Website: https://symu.org
-// Copyright: (c) 2020 laurent morisseau
-// License : the program is distributed under the terms of the GNU General Public License
-
-#endregion
-
-#region using directives
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
+using SymuEngine.Engine;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Knowledges;
 
-#endregion
-
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
-    [TestClass]
-    public class TasksAndPerformanceTests
+    [TestClass()]
+    public class LearningModelTests
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Network _network = new Network(new AgentTemplates(), new OrganizationModels());
-        private TasksAndPerformance _tasksAndPerformance;
+        private CognitiveArchitecture _cognitiveArchitecture;
+        private readonly OrganizationModels _organizationModels = new OrganizationModels();
+        private LearningModel _learningModel;
 
         [TestInitialize]
         public void Initialize()
@@ -38,12 +28,13 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             InitializeModel(0, true);
         }
 
-        public void InitializeModel(byte randomLevel, bool modelOn)
+        public void InitializeModel(SimulationRandom randomLevel, bool modelOn)
         {
-            _tasksAndPerformance = new TasksAndPerformance(_network, _agentId, randomLevel)
-            {
-                LearningModel = {On = modelOn, RateOfAgentsOn = 1}
-            };
+            _organizationModels.RandomLevel = randomLevel;
+            _cognitiveArchitecture = new CognitiveArchitecture(_network, _agentId);
+            _cognitiveArchitecture.InternalCharacteristics.CanLearn = true;
+            _learningModel = new LearningModel(_agentId, _organizationModels, _network.NetworkKnowledges,
+                _cognitiveArchitecture) {On = modelOn, RateOfAgentsOn = 1};
         }
 
         /// <summary>
@@ -52,11 +43,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnByDoingTest0()
         {
-            _tasksAndPerformance.LearningModel.On = false;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _learningModel.On = false;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var realLearning = _tasksAndPerformance.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
+            var realLearning = _learningModel.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
             Assert.AreEqual(0, realLearning);
         }
@@ -64,11 +55,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnByDoingTest()
         {
-            _tasksAndPerformance.LearningByDoingRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = 1;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var realLearning = _tasksAndPerformance.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
+            var realLearning = _learningModel.LearnByDoing(_knowledge.Id, 0, 0, -1, 0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
             Assert.AreEqual(1, realLearning);
         }
@@ -79,11 +70,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnTest0()
         {
-            _tasksAndPerformance.LearningModel.On = false;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _learningModel.On = false;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var realLearning = _tasksAndPerformance.Learn(_knowledge.Id, 0, -1, 0, 0);
+            var realLearning = _learningModel.Learn(_knowledge.Id, 0, -1, 0, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
             Assert.AreEqual(0, realLearning);
         }
@@ -94,11 +85,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnTest()
         {
-            _tasksAndPerformance.LearningRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var realLearning = _tasksAndPerformance.Learn(_knowledge.Id, 0, -1, 0, 0);
+            var realLearning = _learningModel.Learn(_knowledge.Id, 0, -1, 0, 0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
             Assert.AreEqual(1, realLearning);
         }
@@ -109,11 +100,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnTest1()
         {
-            _tasksAndPerformance.LearningRate = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = 0;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _tasksAndPerformance.Learn(_knowledge.Id, 0, 0, -1, 0);
+            _learningModel.Learn(_knowledge.Id, 0, 0, -1, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -123,13 +114,13 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnTest2()
         {
-            _tasksAndPerformance.LearningRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0, -1, 0);
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0, 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var bits = new float[] {1, 1};
+            var bits = new float[] { 1, 1 };
             var knowledgeBits = new Bits(bits, 0);
-            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
+            _learningModel.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
             Assert.AreEqual(2, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -139,24 +130,14 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void LearnTest3()
         {
-            _tasksAndPerformance.LearningRate = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0, 0}, 0, -1, 0);
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = 0;
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0, 0 }, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            var bits = new float[] {1, 1};
+            var bits = new float[] { 1, 1 };
             var knowledgeBits = new Bits(bits, 0);
-            _tasksAndPerformance.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
+            _learningModel.Learn(_knowledge.Id, knowledgeBits, 1, 0, -1, 0);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeSum());
-        }
-
-        [TestMethod]
-        public void IsMaximumTasksInTotalTest()
-        {
-            _tasksAndPerformance.TasksLimit.MaximumTasksInTotal = 2;
-            _tasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
-            Assert.IsFalse(_tasksAndPerformance.TasksLimit.HasReachedTotalMaximumLimit(2));
-            _tasksAndPerformance.TasksLimit.LimitTasksInTotal = true;
-            Assert.IsTrue(_tasksAndPerformance.TasksLimit.HasReachedTotalMaximumLimit(2));
         }
 
         /// <summary>
@@ -165,9 +146,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningTest()
         {
-            InitializeModel(0, false);
-            _tasksAndPerformance.LearningRate = 1;
-            Assert.AreEqual(0, _tasksAndPerformance.NextLearning());
+            InitializeModel(SimulationRandom.NoRandom, false);
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
+            Assert.AreEqual(0, _learningModel.NextLearning());
         }
 
         /// <summary>
@@ -178,11 +159,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningTest1(float learningRate)
         {
-            InitializeModel(0, true);
-            _tasksAndPerformance.LearningModel.On = true;
-            _tasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
-            _tasksAndPerformance.LearningRate = learningRate;
-            Assert.AreEqual(learningRate, _tasksAndPerformance.NextLearning());
+            InitializeModel(SimulationRandom.NoRandom, true);
+            _learningModel.On = true;
+            _learningModel.RateOfAgentsOn = 1;
+            _cognitiveArchitecture.TasksAndPerformance.LearningRate = learningRate;
+            Assert.AreEqual(learningRate, _learningModel.NextLearning());
         }
 
         /// <summary>
@@ -191,10 +172,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningTest2()
         {
-            InitializeModel(1, true);
-            _tasksAndPerformance.LearningRate = 1;
-            _tasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
-            Assert.AreNotEqual(1, _tasksAndPerformance.NextLearning());
+            InitializeModel(SimulationRandom.Simple, true);
+            _learningModel.TasksAndPerformance.LearningRate = 1;
+            _learningModel.TasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
+            Assert.AreNotEqual(1, _learningModel.NextLearning());
         }
 
         /// <summary>
@@ -203,9 +184,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningByDoingTest()
         {
-            InitializeModel(0, false);
-            _tasksAndPerformance.LearningByDoingRate = 1;
-            Assert.AreEqual(0, _tasksAndPerformance.NextLearningByDoing());
+            InitializeModel(SimulationRandom.NoRandom, false);
+            _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = 1;
+            Assert.AreEqual(0, _learningModel.NextLearningByDoing());
         }
 
         /// <summary>
@@ -216,9 +197,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningByDoingTest1(float learningRate)
         {
-            InitializeModel(0, true);
-            _tasksAndPerformance.LearningByDoingRate = learningRate;
-            Assert.AreEqual(learningRate, _tasksAndPerformance.NextLearningByDoing());
+            InitializeModel(SimulationRandom.NoRandom, true);
+            _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = learningRate;
+            Assert.AreEqual(learningRate, _learningModel.NextLearningByDoing());
         }
 
         /// <summary>
@@ -227,10 +208,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextLearningByDoingTest2()
         {
-            InitializeModel(1, true);
-            _tasksAndPerformance.LearningByDoingRate = 1;
-            _tasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
-            Assert.AreNotEqual(1, _tasksAndPerformance.NextLearningByDoing());
+            InitializeModel(SimulationRandom.Simple, true);
+            _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = 1;
+            _cognitiveArchitecture.TasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
+            Assert.AreNotEqual(1, _learningModel.NextLearningByDoing());
         }
     }
 }

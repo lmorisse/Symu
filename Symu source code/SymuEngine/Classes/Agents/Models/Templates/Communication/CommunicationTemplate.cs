@@ -42,6 +42,9 @@ namespace SymuEngine.Classes.Agents.Models.Templates.Communication
             Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             // Internal Characteristics
+            Cognitive.InternalCharacteristics.CanLearn = false;
+            Cognitive.InternalCharacteristics.CanForget = false;
+            Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = true;
             // Interaction Characteristics
             Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
             Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = true;
@@ -51,7 +54,6 @@ namespace SymuEngine.Classes.Agents.Models.Templates.Communication
             Cognitive.TasksAndPerformance.CanPerformTask = false; // For network.NetworkActivities.AddActivities
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
             Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
-            Cognitive.TasksAndPerformance.LearningModel.On = false;
             Cognitive.TasksAndPerformance.LearningRate = 0;
             Cognitive.TasksAndPerformance.LearningByDoingRate = 0;
             // Cognitive.InteractionPatterns

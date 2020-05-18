@@ -10,7 +10,8 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
@@ -32,39 +33,24 @@ namespace SymuEngine.Repository.Networks.Databases
         /// <summary>
         ///     Define the cognitive architecture model of this class
         /// </summary>
-        private readonly TasksAndPerformance _cognitive = new TasksAndPerformance();
+        public DataBaseEntity Entity { get; }
 
         /// <summary>
         ///     Database of the stored information
         /// </summary>
         private readonly AgentExpertise _database = new AgentExpertise();
 
-        /// <summary>
-        ///     Time to live : information are stored in the database
-        ///     But information have a limited lifetime depending on those database
-        ///     -1 for unlimited time to live
-        ///     Initialized by CommunicationTemplate.TimeToLive
-        /// </summary>
-        private readonly short _timeToLive;
+        private readonly LearningModel _learningModel;
 
-        public Database(ushort id, TasksAndPerformance cognitive, short timeToLive)
+        public Database(DataBaseEntity entity, OrganizationModels organizationModels, NetworkKnowledges networkKnowledges)
         {
-            if (cognitive is null)
+            if (organizationModels is null)
             {
-                throw new ArgumentNullException(nameof(cognitive));
+                throw new ArgumentNullException(nameof(organizationModels));
             }
-
-            Id = id;
-            cognitive.CopyTo(_cognitive);
-            // the knowledge of the email is entirely stored
-            _cognitive.LearningRate = 1;
-            _timeToLive = timeToLive;
+            Entity = new DataBaseEntity(entity.AgentId, entity.CognitiveArchitecture);
+            _learningModel = new LearningModel(Entity.AgentId, organizationModels, networkKnowledges, entity.CognitiveArchitecture);
         }
-
-        /// <summary>
-        ///     Database Id
-        /// </summary>
-        public ushort Id { get; }
 
         public bool Exists(ushort knowledgeId)
         {
@@ -88,7 +74,7 @@ namespace SymuEngine.Repository.Networks.Databases
                 return;
             }
 
-            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, 0, _timeToLive);
+            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, 0, Entity.TimeToLive);
             agentKnowledge.InitializeWith0(knowledgeLength, step);
             _database.Add(agentKnowledge);
         }
@@ -109,7 +95,7 @@ namespace SymuEngine.Repository.Networks.Databases
 
             InitializeKnowledge(knowledgeId, knowledgeBits.Length, step);
             var agentKnowledge = GetKnowledge(knowledgeId);
-            _cognitive.Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
+            _learningModel.Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
         }
 
         /// <summary>
@@ -158,7 +144,7 @@ namespace SymuEngine.Repository.Networks.Databases
         /// </summary>
         public void ForgettingProcess(ushort step)
         {
-            if (_timeToLive < 1)
+            if (Entity.TimeToLive < 1)
             {
                 return;
             }

@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
 using SymuEngine.Engine.Form;
@@ -32,7 +32,6 @@ namespace SymuLearnAndForget
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private ushort _fullKnowledge;
-        private Database _wiki;
 
         public Home()
         {
@@ -132,9 +131,7 @@ namespace SymuLearnAndForget
         {
             SetRandomLevel(cbRandomLevel.SelectedIndex);
             TimeStepType = TimeStepType.Daily;
-            _wiki = new Database(OrganizationEntity.Id.Key,
-                OrganizationEntity.Templates.Email.Cognitive.TasksAndPerformance, -1);
-            _wiki.InitializeKnowledge(_environment.Knowledge, 0);
+            var _wiki = new DataBaseEntity(OrganizationEntity.Id, OrganizationEntity.Templates.Email.Cognitive);
             OrganizationEntity.AddDatabase(_wiki);
             OrganizationEntity.Models.FollowGroupKnowledge = true;
         }
@@ -264,9 +261,9 @@ namespace SymuLearnAndForget
                 _environment.ExpertAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Wiki
-            WriteTextSafe(lblWiki, _wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblWiki, _environment.Wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
             if (_fullKnowledge == 0 &&
-                Math.Abs(_wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < SymuTools.Constants.Tolerance)
+                Math.Abs(_environment.Wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < SymuTools.Constants.Tolerance)
             {
                 _fullKnowledge = _environment.TimeStep.Step;
             }

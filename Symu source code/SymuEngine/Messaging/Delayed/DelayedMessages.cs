@@ -56,9 +56,15 @@ namespace SymuEngine.Messaging.Delayed
         /// <returns></returns>
         public Message Dequeue(ushort step)
         {
-            var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key).Select(m => m.Key)
+            Message message;
+            lock (_messages)
+            {
+                var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key).Select(m => m.Key)
                 .ToList();
-            return keys.Any() ? _messages[keys.First()].Dequeue() : null;
+                message = keys.Any() ? _messages[keys.First()].Dequeue() : null;
+            }
+
+            return message;
         }
 
         /// <summary>

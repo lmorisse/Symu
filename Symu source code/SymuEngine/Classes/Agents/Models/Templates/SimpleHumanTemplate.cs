@@ -9,7 +9,7 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Common;
 
 #endregion
@@ -38,6 +38,9 @@ namespace SymuEngine.Classes.Agents.Models.Templates
             Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
             // Internal Characteristics
+            Cognitive.InternalCharacteristics.CanLearn = true;
+            Cognitive.InternalCharacteristics.CanForget = true;
+            Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = true;
             Cognitive.InternalCharacteristics.ForgettingMean = 0.05F;
             Cognitive.InternalCharacteristics.PartialForgettingRate = 0.01F;
             Cognitive.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Oldest;

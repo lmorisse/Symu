@@ -11,7 +11,7 @@
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
@@ -48,19 +48,17 @@ namespace SymuLearnAndForgetTests
             _simulation.AddScenario(scenario);
             _environment.Knowledge = new Knowledge(1, "1", 50);
             _environment.TimeStep.Type = TimeStepType.Daily;
-            var wiki = new Database(_organization.Id.Key, _organization.Templates.Email.Cognitive.TasksAndPerformance,
-                -1);
-            wiki.InitializeKnowledge(_environment.Knowledge, 0);
+            var wiki = new DataBaseEntity(_organization.Id, _organization.Templates.Email.Cognitive);
             _organization.AddDatabase(wiki);
             _organization.Models.FollowGroupKnowledge = true;
             _organization.Models.Generator = RandomGenerator.RandomUniform;
         }
 
-        #region LearnByDoing
+        #region ReinforcementByDoing
 
         /// <summary>
         ///     Learning Model on
-        ///     Learn by doing without initialKnowledge
+        ///     BeInfluenced by doing without initialKnowledge
         /// </summary>
         [TestMethod]
         public void LearnByDoingTest()
@@ -74,7 +72,7 @@ namespace SymuLearnAndForgetTests
 
         /// <summary>
         ///     Learning Model on
-        ///     Learn by doing with initialKnowledge - random uniform
+        ///     BeInfluenced by doing with initialKnowledge - random uniform
         /// </summary>
         [TestMethod]
         public void LearnByDoingTest1()
@@ -89,7 +87,7 @@ namespace SymuLearnAndForgetTests
 
         /// <summary>
         ///     Learning Model on
-        ///     Learn by doing with initialKnowledge - random binary
+        ///     BeInfluenced by doing with initialKnowledge - random binary
         /// </summary>
         [TestMethod]
         public void LearnByDoingTest2()
@@ -106,7 +104,7 @@ namespace SymuLearnAndForgetTests
 
         /// <summary>
         ///     Learning Model on
-        ///     Learn by doing with initialKnowledge - random binary
+        ///     BeInfluenced by doing with initialKnowledge - random binary
         ///     KnowledgeThreshHoldForDoing == 0
         /// </summary>
         [TestMethod]
@@ -306,7 +304,7 @@ namespace SymuLearnAndForgetTests
 
         /// <summary>
         ///     Learning Model on
-        ///     Learn by doing with initialKnowledge : Full Knowledge- random binary
+        ///     BeInfluenced by doing with initialKnowledge : Full Knowledge- random binary
         /// </summary>
         [DataRow(RandomGenerator.RandomBinary)]
         [DataRow(RandomGenerator.RandomUniform)]

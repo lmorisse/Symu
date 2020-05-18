@@ -14,7 +14,7 @@ using SymuEngine.Repository.Networks;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Define the cognitive architecture model of an agent
@@ -24,11 +24,11 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
     /// </summary>
     public class CognitiveArchitecture
     {
-        public CognitiveArchitecture(Network network, AgentId agentId, byte randomLevel)
+        public CognitiveArchitecture(Network network, AgentId agentId)
         {
             KnowledgeAndBeliefs = new KnowledgeAndBeliefs(network, agentId);
-            InternalCharacteristics = new InternalCharacteristics(network, agentId);
-            TasksAndPerformance = new TasksAndPerformance(network, agentId, randomLevel);
+            InternalCharacteristics = new InternalCharacteristics();
+            TasksAndPerformance = new TasksAndPerformance(network, agentId);
             MessageContent = new MessageContent();
             InteractionCharacteristics = new InteractionCharacteristics();
             InteractionPatterns = new InteractionPatterns();

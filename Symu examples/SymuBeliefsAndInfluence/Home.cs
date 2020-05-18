@@ -42,6 +42,12 @@ namespace SymuBeliefsAndInfluence
         {
             DisplayButtons();
 
+            OrganizationEntity.Models.Influence.On = true;
+            OrganizationEntity.Models.Influence.RateOfAgentsOn = 1;
+
+            InfluenceModel.Checked = OrganizationEntity.Models.Influence.On;
+            RateOfAgentsOn.Text = OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString();
+
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
             tbInfluencers.Text = _environment.InfluencersCount.ToString(CultureInfo.InvariantCulture);
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
@@ -90,11 +96,14 @@ namespace SymuBeliefsAndInfluence
 
         private void Button1_Click(object sender, EventArgs e)
         {
+
+            OrganizationEntity.Models.Influence.On = InfluenceModel.Checked;
+
             #region influencer
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedItem.ToString());
-
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedItem.ToString());
             #endregion
 
             #region Worker
@@ -415,6 +424,24 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 MandatoryRatio.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void RateOfAgentsOn_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Models.Influence.RateOfAgentsOn = float.Parse(RateOfAgentsOn.Text);
+                RateOfAgentsOn.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                RateOfAgentsOn.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                RateOfAgentsOn.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }

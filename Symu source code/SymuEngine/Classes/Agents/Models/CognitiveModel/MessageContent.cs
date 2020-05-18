@@ -19,7 +19,7 @@ using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Message content from Construct Software

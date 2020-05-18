@@ -12,7 +12,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
 using SymuEngine.Repository.Networks;
@@ -20,7 +20,7 @@ using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class ForgettingModelTests
@@ -30,8 +30,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         private readonly ModelEntity _forgetting = new ModelEntity();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
+        private CognitiveArchitecture _cognitiveArchitecture;
         private InternalCharacteristics _internalCharacteristics;
-        private ForgettingModel _model;
+        private ForgettingModel _forgettingModel;
         private NetworkKnowledges _networkKnowledges;
 
         [TestInitialize]
@@ -44,17 +45,20 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             _taskBits.SetRequired(new byte[] {0});
             _forgetting.On = true;
             _forgetting.RateOfAgentsOn = 1;
-            _internalCharacteristics = new InternalCharacteristics(network, _agentId)
-            {
-                ForgettingSelectingMode = ForgettingSelectingMode.Random
-            };
+            _cognitiveArchitecture = new CognitiveArchitecture(network, _agentId);
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
+            _cognitiveArchitecture.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
+            _internalCharacteristics = _cognitiveArchitecture.InternalCharacteristics;
         }
 
         public void InitializeModel(bool modelOn, byte randomLevel)
         {
+            _cognitiveArchitecture.InternalCharacteristics.CanForget = true;
             _forgetting.On = modelOn;
-            _model = new ForgettingModel(_forgetting, _internalCharacteristics, randomLevel, _networkKnowledges,
+            _forgetting.RateOfAgentsOn  = 1;
+            _forgettingModel = new ForgettingModel(_forgetting, _cognitiveArchitecture, randomLevel, _networkKnowledges,
                 _agentId);
+
         }
 
         /// <summary>
@@ -64,7 +68,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         public void NextRateTest()
         {
             InitializeModel(false, 0);
-            Assert.AreEqual(0, _model.NextRate());
+            Assert.AreEqual(0, _forgettingModel.NextRate());
         }
 
         /// <summary>
@@ -73,9 +77,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextRateTest1()
         {
-            _internalCharacteristics.PartialForgetting = false;
             InitializeModel(true, 0);
-            Assert.AreEqual(1, _model.NextRate());
+            _forgettingModel.InternalCharacteristics.PartialForgetting = false;
+            Assert.AreEqual(1, _forgettingModel.NextRate());
         }
 
         /// <summary>
@@ -84,9 +88,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void NextRateTest2()
         {
-            _internalCharacteristics.PartialForgetting = true;
             InitializeModel(true, 0);
-            Assert.AreEqual(_internalCharacteristics.PartialForgettingRate, _model.NextRate());
+            _forgettingModel.InternalCharacteristics.PartialForgetting = true;
+            Assert.AreEqual(_internalCharacteristics.PartialForgettingRate, _forgettingModel.NextRate());
         }
 
         /// <summary>
@@ -96,7 +100,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         public void NextMeanTest()
         {
             InitializeModel(false, 0);
-            Assert.AreEqual(0, _model.NextMean());
+            Assert.AreEqual(0, _forgettingModel.NextMean());
         }
 
         /// <summary>
@@ -107,7 +111,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             InitializeModel(true, 0);
 
-            Assert.AreEqual(_internalCharacteristics.ForgettingMean, _model.NextMean());
+            Assert.AreEqual(_internalCharacteristics.ForgettingMean, _forgettingModel.NextMean());
         }
 
         #region forgetting process
@@ -118,10 +122,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void InitializeForgettingProcessTest()
         {
-            _internalCharacteristics.ForgettingMean = 0;
             InitializeModel(true, 0);
-            _model.InitializeForgettingProcess();
-            Assert.AreEqual(0, _model.ForgettingExpertise.Count);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
+            _forgettingModel.InitializeForgettingProcess();
+            Assert.AreEqual(0, _forgettingModel.ForgettingExpertise.Count);
         }
 
         /// <summary>
@@ -130,13 +134,13 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void InitializeForgettingProcessTest1()
         {
-            _internalCharacteristics.ForgettingMean = 1;
             InitializeModel(true, 0);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _networkKnowledges.Add(_agentId, _expertise);
-            _model.InitializeForgettingProcess();
-            Assert.AreEqual(1, _model.ForgettingExpertise.Count);
+            _forgettingModel.InitializeForgettingProcess();
+            Assert.AreEqual(1, _forgettingModel.ForgettingExpertise.Count);
         }
 
         /// <summary>
@@ -145,14 +149,14 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void FinalizeForgettingProcessTest()
         {
-            _internalCharacteristics.ForgettingMean = 0;
-            _internalCharacteristics.PartialForgettingRate = 1;
             InitializeModel(true, 0);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
+            _forgettingModel.InternalCharacteristics.PartialForgettingRate = 1;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _networkKnowledges.Add(_agentId, _expertise);
-            _model.InitializeForgettingProcess();
-            _model.FinalizeForgettingProcess(0);
+            _forgettingModel.InitializeForgettingProcess();
+            _forgettingModel.FinalizeForgettingProcess(0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -162,16 +166,16 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         [TestMethod]
         public void FinalizeForgettingProcessTest1()
         {
-            _internalCharacteristics.ForgettingMean = 1;
-            // ForgettingRate < minimumRemainingLevel
-            _internalCharacteristics.PartialForgettingRate = 0.1F;
-            _internalCharacteristics.PartialForgetting = true;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _networkKnowledges.Add(_agentId, _expertise);
             InitializeModel(true, 0);
-            _model.InitializeForgettingProcess();
-            _model.FinalizeForgettingProcess(0);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
+            // ForgettingRate < minimumRemainingLevel
+            _forgettingModel.InternalCharacteristics.PartialForgettingRate = 0.1F;
+            _forgettingModel.InternalCharacteristics.PartialForgetting = true;
+            _forgettingModel.InitializeForgettingProcess();
+            _forgettingModel.FinalizeForgettingProcess(0);
             Assert.AreEqual(0.9F, agentKnowledge.GetKnowledgeSum());
         }
 
@@ -184,9 +188,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             var knowledgeBits = new float[] {1};
             var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
-            _internalCharacteristics.ForgettingMean = 0;
             InitializeModel(true, 0);
-            var forgetting = _model.InitializeForgettingKnowledge(knowledge);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
 
@@ -199,10 +203,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             var knowledgeBits = new float[] {1};
             var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
-            _internalCharacteristics.ForgettingMean = 1;
             InitializeModel(true, 0);
-            var forgetting = _model.InitializeForgettingKnowledge(knowledge);
-            Assert.AreEqual(_internalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
         }
 
         /// <summary>
@@ -214,10 +218,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             var knowledgeBits = new float[] {1};
             var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
-            _internalCharacteristics.ForgettingMean = 0;
-            _internalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
             InitializeModel(true, 0);
-            var forgetting = _model.InitializeForgettingKnowledge(knowledge);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
+            _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
 
@@ -231,12 +235,12 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             var knowledgeBits = new float[] {1};
             var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
-            _internalCharacteristics.ForgettingMean = 1;
-            _internalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
-            _internalCharacteristics.PartialForgetting = true;
             InitializeModel(true, 0);
-            var forgetting = _model.InitializeForgettingKnowledge(knowledge);
-            Assert.AreEqual(_internalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
+            _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
+            _forgettingModel.InternalCharacteristics.PartialForgetting = true;
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
         }
 
         /// <summary>
@@ -249,11 +253,11 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
         {
             var knowledgeBits = new float[] {1};
             var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
-            _internalCharacteristics.ForgettingMean = 1;
-            _internalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
-            _internalCharacteristics.PartialForgetting = false;
             InitializeModel(true, 0);
-            var forgetting = _model.InitializeForgettingKnowledge(knowledge);
+            _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
+            _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
+            _forgettingModel.InternalCharacteristics.PartialForgetting = false;
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
             Assert.AreEqual(1, forgetting.GetKnowledgeBit(0));
         }
 
@@ -266,10 +270,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             var forgettingBits = new float[] {1};
             var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
             InitializeModel(true, 0);
-            _model.ForgettingExpertise.Add(forgetting);
+            _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _model.UpdateForgettingProcess(2, workingBits);
+            _forgettingModel.UpdateForgettingProcess(2, workingBits);
             // ForgettingBits should not be updated because the KnowledgeId is not the same
             Assert.AreEqual(1, forgetting.GetKnowledgeBit(0));
         }
@@ -283,10 +287,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             var forgettingBits = new float[] {1};
             var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
             InitializeModel(true, 0);
-            _model.ForgettingExpertise.Add(forgetting);
+            _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _model.UpdateForgettingProcess(1, workingBits);
+            _forgettingModel.UpdateForgettingProcess(1, workingBits);
             // ForgettingBits should be set to 0
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
@@ -301,7 +305,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
             // ForgettingBits value > minimumRemainingLevel 
             var forgettingBits = new[] {0.1F};
             var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
-            _model.FinalizeForgettingKnowledge(forgetting, 0);
+            _forgettingModel.FinalizeForgettingKnowledge(forgetting, 0);
             // Knowledge has been forgotten
             Assert.AreEqual(0.9F, knowledge.GetKnowledgeBit(0));
         }

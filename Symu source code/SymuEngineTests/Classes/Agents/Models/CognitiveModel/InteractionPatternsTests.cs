@@ -10,12 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Common;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class InteractionPatternsTests

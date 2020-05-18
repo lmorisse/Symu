@@ -122,6 +122,7 @@
 * Workers performing tasks according to their beliefs, asking advice from influencers if necessary
 * Influencers with string beliefs trying to influence workers
 
-Beliefs have an impact on different parameters : perform tasks, modify the sphere of interaction, agents beliefs.</value>
+Beliefs and influence model have an impact on different parameters : 
+perform tasks, modify the sphere of interaction, agents beliefs.</value>
   </data>
 </root>

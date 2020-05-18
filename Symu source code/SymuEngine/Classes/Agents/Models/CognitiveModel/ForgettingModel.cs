@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks.Knowledges;
@@ -17,7 +18,7 @@ using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will forget
@@ -29,11 +30,13 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
     public class ForgettingModel : ModelEntity
     {
         private readonly AgentId _id;
-        private readonly InternalCharacteristics _internalCharacteristics;
+        public InternalCharacteristics InternalCharacteristics { get; set; }
+        private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly NetworkKnowledges _network;
         private readonly byte _randomLevel;
+        private bool _isAgentOnToday;
 
-        public ForgettingModel(ModelEntity entity, InternalCharacteristics internalCharacteristics, byte randomLevel) :
+        public ForgettingModel(ModelEntity entity, CognitiveArchitecture cognitive, byte randomLevel) :
             base(entity)
         {
             if (entity is null)
@@ -41,22 +44,35 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (internalCharacteristics is null)
+            if (cognitive is null)
             {
-                throw new ArgumentNullException(nameof(internalCharacteristics));
+                throw new ArgumentNullException(nameof(cognitive));
             }
 
             entity.CopyTo(this);
-            _internalCharacteristics = internalCharacteristics;
+            InternalCharacteristics = cognitive.InternalCharacteristics;
+            _knowledgeAndBeliefs = cognitive.KnowledgeAndBeliefs;
             _randomLevel = randomLevel;
+            if (!InternalCharacteristics.CanForget)
+            {
+                // Agent is not concerned by this model
+                On = false;
+            }
         }
 
-        public ForgettingModel(ModelEntity entity, InternalCharacteristics internalCharacteristics, byte randomLevel,
+        public ForgettingModel(ModelEntity entity, CognitiveArchitecture cognitive, byte randomLevel,
             NetworkKnowledges network, AgentId id) :
-            this(entity, internalCharacteristics, randomLevel)
+            this(entity, cognitive, randomLevel)
         {
             _network = network;
             _id = id;
+        }
+            
+        public ForgettingModel(AgentId agentId, OrganizationModels models, CognitiveArchitecture cognitive, NetworkKnowledges network) :
+            this(models.Forgetting, cognitive, models.RandomLevelValue)
+        {
+            _network = network;
+            _id = agentId;
         }
 
         private AgentExpertise Expertise => _network.GetAgentExpertise(_id);
@@ -69,9 +85,9 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         /// <returns>NextRate if model is On</returns>
         public float NextMean()
         {
-            if (_internalCharacteristics is null)
+            if (InternalCharacteristics is null)
             {
-                throw new ArgumentNullException(nameof(_internalCharacteristics));
+                throw new ArgumentNullException(nameof(InternalCharacteristics));
             }
 
             // IsAgentOn is tested at each learning: it is not binary, sometimes you forget, sometimes not
@@ -81,8 +97,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             }
 
             var forgettingStandardDeviation =
-                ForgettingStandardDeviationValue(_internalCharacteristics.ForgettingStandardDeviation);
-            return Normal.Sample(_internalCharacteristics.ForgettingMean, forgettingStandardDeviation * _randomLevel);
+                ForgettingStandardDeviationValue(InternalCharacteristics.ForgettingStandardDeviation);
+            return Normal.Sample(InternalCharacteristics.ForgettingMean, forgettingStandardDeviation * _randomLevel);
         }
 
         /// <summary>
@@ -93,17 +109,17 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         /// <returns>NextPartialRate if model is On</returns>
         public float NextRate()
         {
-            if (_internalCharacteristics is null)
+            if (InternalCharacteristics is null)
             {
-                throw new ArgumentNullException(nameof(_internalCharacteristics));
+                throw new ArgumentNullException(nameof(InternalCharacteristics));
             }
 
-            if (!On)
+            if (!IsAgentOn())
             {
                 return 0;
             }
 
-            return _internalCharacteristics.PartialForgetting ? _internalCharacteristics.PartialForgettingRate : 1;
+            return InternalCharacteristics.PartialForgetting ? InternalCharacteristics.PartialForgettingRate : 1;
         }
 
         public static float ForgettingStandardDeviationValue(GenericLevel level)
@@ -135,15 +151,16 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         /// </summary>
         public void InitializeForgettingProcess()
         {
+            // Check if forgetting process is On
+            _isAgentOnToday = IsAgentOn() && _knowledgeAndBeliefs.HasKnowledge;
+            if (!_isAgentOnToday)
+            {
+                return;
+            }
+            
             if (Expertise == null)
             {
                 throw new NullReferenceException(nameof(Expertise));
-            }
-
-            // Check if forgetting process is On
-            if (!On)
-            {
-                return;
             }
 
             ForgettingExpertise.Clear();
@@ -161,7 +178,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         public void FinalizeForgettingProcess(ushort step)
         {
             // Check if forgetting process is On
-            if (!On)
+            if (!_isAgentOnToday)
             {
                 return;
             }
@@ -181,7 +198,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
 
             var forgetBits = forget.CloneBits();
             var agentKnowledge = Expertise.GetKnowledge(forget.KnowledgeId);
-            switch (_internalCharacteristics.ForgettingSelectingMode)
+            switch (InternalCharacteristics.ForgettingSelectingMode)
             {
                 case ForgettingSelectingMode.Random:
                     for (byte i = 0; i < forgetBits.Length; i++)
@@ -210,7 +227,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             }
 
             float[] forgettingKnowledgeBits;
-            switch (_internalCharacteristics.ForgettingSelectingMode)
+            switch (InternalCharacteristics.ForgettingSelectingMode)
             {
                 case ForgettingSelectingMode.Random:
                     forgettingKnowledgeBits = InitializeForgettingKnowledgeRandom(knowledge, NextRate());
@@ -288,7 +305,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             }
 
             // Check if forgetting process is On
-            if (!On)
+            if (!_isAgentOnToday)
             {
                 return;
             }

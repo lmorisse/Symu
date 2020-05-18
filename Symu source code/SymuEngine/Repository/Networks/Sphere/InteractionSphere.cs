@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks.Activities;
 using SymuEngine.Repository.Networks.Beliefs;

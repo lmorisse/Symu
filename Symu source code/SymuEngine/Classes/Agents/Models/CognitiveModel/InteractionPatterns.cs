@@ -15,7 +15,7 @@ using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     InteractionPatterns from Construct Software

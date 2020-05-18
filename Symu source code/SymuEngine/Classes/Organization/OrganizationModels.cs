@@ -64,6 +64,10 @@ namespace SymuEngine.Classes.Organization
         /// </summary>
         public ModelEntity Forgetting { get; set; } = new ModelEntity();
         /// <summary>
+        ///     Agent influence model
+        /// </summary>
+        public ModelEntity Influence { get; set; } = new ModelEntity();
+        /// <summary>
         /// Impact level of agent's belief on how agent will accept to do the task
         /// </summary>
         public BeliefWeightLevel ImpactOfBeliefOnTask { get; set; } = BeliefWeightLevel.RandomWeight;
@@ -115,6 +119,7 @@ namespace SymuEngine.Classes.Organization
 
             Learning.CopyTo(entity.Learning);
             Forgetting.CopyTo(entity.Forgetting);
+            Influence.CopyTo(entity.Influence);
             InteractionSphere.CopyTo(entity.InteractionSphere);
             entity.FollowGroupFlexibility = FollowGroupFlexibility;
             entity.FollowGroupKnowledge = FollowGroupKnowledge;

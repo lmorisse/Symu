@@ -14,7 +14,7 @@ using SymuEngine.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Interaction Characteristics from Construct Software

@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuTools;
 using SymuTools.Math;
 

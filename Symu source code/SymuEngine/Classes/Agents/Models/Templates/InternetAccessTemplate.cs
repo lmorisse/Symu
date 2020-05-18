@@ -37,6 +37,9 @@ namespace SymuEngine.Classes.Agents.Models.Templates
             Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
             Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 3;
             // Internal Characteristics
+            Cognitive.InternalCharacteristics.CanLearn = true;
+            Cognitive.InternalCharacteristics.CanForget = false;
+            Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = false;
             Cognitive.InternalCharacteristics.InfluenceabilityRateMax = 0;
             Cognitive.InternalCharacteristics.InfluenceabilityRateMin = 0;
             Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;

@@ -60,6 +60,9 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.RateOfAgentsOn = new System.Windows.Forms.TextBox();
+            this.InfluenceModel = new System.Windows.Forms.CheckBox();
             this.HasBeliefs = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.InfluencerBeliefLevel = new System.Windows.Forms.ComboBox();
@@ -78,6 +81,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.BeliefWeight = new System.Windows.Forms.ComboBox();
+            this.label27 = new System.Windows.Forms.Label();
             this.MandatoryRatio = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.InfluenceabilityMax = new System.Windows.Forms.TextBox();
@@ -94,8 +99,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.BeliefWeight = new System.Windows.Forms.ComboBox();
-            this.label27 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -424,6 +427,9 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label30);
+            this.groupBox7.Controls.Add(this.RateOfAgentsOn);
+            this.groupBox7.Controls.Add(this.InfluenceModel);
             this.groupBox7.Controls.Add(this.HasBeliefs);
             this.groupBox7.Location = new System.Drawing.Point(29, 29);
             this.groupBox7.Name = "groupBox7";
@@ -432,10 +438,38 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "All agents";
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(67, 99);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(153, 17);
+            this.label30.TabIndex = 146;
+            this.label30.Text = "Rate of agents on [0;1]";
+            // 
+            // RateOfAgentsOn
+            // 
+            this.RateOfAgentsOn.Location = new System.Drawing.Point(295, 96);
+            this.RateOfAgentsOn.Name = "RateOfAgentsOn";
+            this.RateOfAgentsOn.Size = new System.Drawing.Size(53, 22);
+            this.RateOfAgentsOn.TabIndex = 148;
+            this.RateOfAgentsOn.Text = "1";
+            this.RateOfAgentsOn.TextChanged += new System.EventHandler(this.RateOfAgentsOn_TextChanged);
+            // 
+            // InfluenceModel
+            // 
+            this.InfluenceModel.AutoSize = true;
+            this.InfluenceModel.Location = new System.Drawing.Point(37, 63);
+            this.InfluenceModel.Name = "InfluenceModel";
+            this.InfluenceModel.Size = new System.Drawing.Size(149, 21);
+            this.InfluenceModel.TabIndex = 1;
+            this.InfluenceModel.Text = "Influence model on";
+            this.InfluenceModel.UseVisualStyleBackColor = true;
+            // 
             // HasBeliefs
             // 
             this.HasBeliefs.AutoSize = true;
-            this.HasBeliefs.Location = new System.Drawing.Point(37, 30);
+            this.HasBeliefs.Location = new System.Drawing.Point(37, 33);
             this.HasBeliefs.Name = "HasBeliefs";
             this.HasBeliefs.Size = new System.Drawing.Size(100, 21);
             this.HasBeliefs.TabIndex = 0;
@@ -469,9 +503,9 @@
             // InfluencerBeliefLevel
             // 
             this.InfluencerBeliefLevel.FormattingEnabled = true;
-            this.InfluencerBeliefLevel.Location = new System.Drawing.Point(262, 211);
+            this.InfluencerBeliefLevel.Location = new System.Drawing.Point(225, 211);
             this.InfluencerBeliefLevel.Name = "InfluencerBeliefLevel";
-            this.InfluencerBeliefLevel.Size = new System.Drawing.Size(87, 24);
+            this.InfluencerBeliefLevel.Size = new System.Drawing.Size(124, 24);
             this.InfluencerBeliefLevel.TabIndex = 145;
             // 
             // label26
@@ -620,6 +654,23 @@
             this.groupBox9.TabIndex = 133;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Agent workers";
+            // 
+            // BeliefWeight
+            // 
+            this.BeliefWeight.FormattingEnabled = true;
+            this.BeliefWeight.Location = new System.Drawing.Point(234, 176);
+            this.BeliefWeight.Name = "BeliefWeight";
+            this.BeliefWeight.Size = new System.Drawing.Size(114, 24);
+            this.BeliefWeight.TabIndex = 147;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(30, 179);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(167, 17);
+            this.label27.TabIndex = 146;
+            this.label27.Text = "Impact of beliefs on tasks";
             // 
             // MandatoryRatio
             // 
@@ -774,23 +825,6 @@
             this.label7.TabIndex = 42;
             this.label7.Text = "Number of steps";
             // 
-            // BeliefWeight
-            // 
-            this.BeliefWeight.FormattingEnabled = true;
-            this.BeliefWeight.Location = new System.Drawing.Point(261, 176);
-            this.BeliefWeight.Name = "BeliefWeight";
-            this.BeliefWeight.Size = new System.Drawing.Size(87, 24);
-            this.BeliefWeight.TabIndex = 147;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(30, 179);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(209, 21);
-            this.label27.TabIndex = 146;
-            this.label27.Text = "Impact of beliefs on tasks";
-            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -887,5 +921,8 @@
         private System.Windows.Forms.ComboBox InfluencerBeliefLevel;
         private System.Windows.Forms.ComboBox BeliefWeight;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox RateOfAgentsOn;
+        private System.Windows.Forms.CheckBox InfluenceModel;
     }
 }

@@ -19,6 +19,7 @@ using SymuEngine.Classes.Scenario;
 using SymuEngine.Messaging.Log;
 using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
+using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Results;
 using SymuTools;
 
@@ -417,7 +418,7 @@ namespace SymuEngine.Environment
         /// </summary>
         public virtual void SetDatabases()
         {
-            foreach (var database in Organization.Databases.List)
+            foreach (var database in Organization.Databases.Select(databaseEntity => new Database(databaseEntity, Organization.Models, WhitePages.Network.NetworkKnowledges)))
             {
                 WhitePages.Network.NetworkDatabases.AddDatabase(database);
             }

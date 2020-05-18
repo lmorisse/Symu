@@ -53,7 +53,7 @@ namespace SymuEngine.Classes.Organization
         /// <summary>
         ///     List of all databases accessible to everyone
         /// </summary>
-        public DatabaseCollection Databases { get; } = new DatabaseCollection();
+        public List<DataBaseEntity> Databases { get; } = new List<DataBaseEntity>();
 
         /// <summary>
         ///     List of all knowledges
@@ -69,7 +69,7 @@ namespace SymuEngine.Classes.Organization
         ///     Add a database accessible to everyone
         /// </summary>
         /// <param name="database"></param>
-        public void AddDatabase(Database database)
+        public void AddDatabase(DataBaseEntity database)
         {
             if (!Databases.Contains(database))
             {

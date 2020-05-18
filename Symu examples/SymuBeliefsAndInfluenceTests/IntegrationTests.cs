@@ -12,7 +12,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuBeliefsAndInfluence.Classes;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
 using SymuEngine.Common;
@@ -41,6 +40,8 @@ namespace SymuBeliefsAndInfluenceTests
         [TestInitialize]
         public void Initialize()
         {
+            _organization.Models.Influence.On = true;
+            _organization.Models.Influence.RateOfAgentsOn = 1;
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             var scenario = new TimeStepScenario(_environment)
@@ -72,6 +73,26 @@ namespace SymuBeliefsAndInfluenceTests
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
+        }
+        /// <summary>
+        /// Influence model off
+        /// </summary>
+        [TestMethod]
+        public void InfluenceModelTest()
+        {
+            _environment.Organization.Models.Influence.On = false;
+            _simulation.Process();
+            CheckNoChange();
+        }
+        /// <summary>
+        /// Influence model on && rate of agents = 0
+        /// </summary>
+        [TestMethod]
+        public void InfluenceModelTest1()
+        {
+            _environment.Organization.Models.Influence.RateOfAgentsOn= 0;
+            _simulation.Process();
+            CheckNoChange();
         }
         /// <summary>
         /// No Influencers

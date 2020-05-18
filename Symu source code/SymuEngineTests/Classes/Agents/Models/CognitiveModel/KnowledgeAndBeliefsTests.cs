@@ -13,10 +13,9 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
-using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
@@ -24,7 +23,7 @@ using SymuEngine.Repository.Networks.Knowledges;
 #endregion
 
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class KnowledgeAndBeliefsTests

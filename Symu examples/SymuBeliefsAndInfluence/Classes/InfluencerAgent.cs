@@ -12,7 +12,6 @@
 using System;
 using System.Linq;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Task;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;

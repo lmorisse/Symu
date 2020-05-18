@@ -10,7 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using SymuEngine.Classes.Organization;
+using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;
 
@@ -23,18 +27,25 @@ namespace SymuEngineTests.Repository.Networks.Databases
     {
         private const ushort KnowledgeId = 1;
         private readonly float[] _floats1 = {1, 1};
-        private readonly TasksAndPerformance _tasks = new TasksAndPerformance();
         private Bits _bits1;
         private Database _database;
 
         [TestInitialize]
         public void Initialize()
         {
-            _tasks.LearningRate = 1;
-            _tasks.LearningModel.On = true;
-            _tasks.LearningModel.RateOfAgentsOn = 1;
+            var agentId = new AgentId(1, 1);
+            var agentTemplates = new AgentTemplates();
+            var models = new OrganizationModels();
+            var network = new Network(agentTemplates, models);
+            var cognitive = new CognitiveArchitecture(network, agentId);
+
+            cognitive.TasksAndPerformance.LearningRate = 1;
+            cognitive.InternalCharacteristics.CanLearn = true;
+            models.Learning.On = true;
+            models.Learning.RateOfAgentsOn = 1;
             _bits1 = new Bits(_floats1, 0);
-            _database = new Database(1, _tasks, -1);
+            var databaseEntity = new DataBaseEntity(agentId, cognitive);
+            _database = new Database(databaseEntity, models, network.NetworkKnowledges);
         }
 
         [TestMethod]
@@ -111,7 +122,7 @@ namespace SymuEngineTests.Repository.Networks.Databases
         [TestMethod]
         public void ForgettingProcessTest1()
         {
-            _database = new Database(1, _tasks, 1);
+            _database.Entity.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
             _database.StoreKnowledge(KnowledgeId, _bits1, 1, 0);
             _database.ForgettingProcess(2);
             Assert.IsFalse(_database.SearchKnowledge(KnowledgeId, 0, 0));

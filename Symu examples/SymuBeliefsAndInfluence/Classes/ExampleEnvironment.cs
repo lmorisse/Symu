@@ -11,7 +11,6 @@
 
 using System.Collections.Generic;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
 using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;

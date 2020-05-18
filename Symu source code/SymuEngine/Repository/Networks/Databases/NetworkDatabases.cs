@@ -24,7 +24,7 @@ namespace SymuEngine.Repository.Networks.Databases
     ///     All databases in the network
     ///     A database is a system where agent store temporary or permanent information
     /// </summary>
-    /// <example>messaging database, IRC channel, wiki pages, jira comments, ...</example>
+    /// <example>messaging database, IRC channel, wiki pages, comments, ...</example>
     public class NetworkDatabases
     {
         /// <summary>
@@ -112,7 +112,7 @@ namespace SymuEngine.Repository.Networks.Databases
 
             AddDatabase(database);
             AddAgentId(agentId);
-            AddDatabase(agentId, database.Id);
+            AddDatabase(agentId, database.Entity.AgentId.Key);
         }
 
         public void Add(AgentId agentId, ushort databaseId)

@@ -32,8 +32,9 @@ namespace SymuEngine.Classes.Agents.Models.Templates.Communication
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.ViaAPlatform;
             // Forever
             Cognitive.InternalCharacteristics.TimeToLive = -1;
-            Cognitive.TasksAndPerformance.LearningModel.On = true;
-            Cognitive.TasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
+            Cognitive.InternalCharacteristics.CanLearn = true;
+            Cognitive.InternalCharacteristics.CanForget = false;
+            Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = false;
         }
     }
 }

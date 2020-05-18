@@ -14,7 +14,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Common;
@@ -46,12 +46,19 @@ namespace SymuEngineTests.Classes.Agents
         {
             _environment.SetOrganization(_organizationEntity);
             _simulation.SetEnvironment(_environment);
+            _organizationEntity.Models.Influence.On = true;
+            _organizationEntity.Models.Influence.RateOfAgentsOn = 1;
+            _organizationEntity.Models.Learning.On = true;
+            _organizationEntity.Models.Learning.RateOfAgentsOn = 1;
+            _organizationEntity.Models.Forgetting.On = true;
+            _organizationEntity.Models.Forgetting.RateOfAgentsOn = 1;
 
             _agent = new TestAgent(1, _environment);
-            _agent.Cognitive = new CognitiveArchitecture(_environment.WhitePages.Network, _agent.Id, 0)
+            _agent.Cognitive = new CognitiveArchitecture(_environment.WhitePages.Network, _agent.Id)
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
-                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true}
+                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
+                InternalCharacteristics ={CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
@@ -319,8 +326,9 @@ namespace SymuEngineTests.Classes.Agents
                 KnowledgeId = 1,
                 KnowledgeBits = bit1S
             };
-            _agent.Cognitive.TasksAndPerformance.LearningModel.On = true;
-            _agent.Cognitive.TasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
+            _agent.LearningModel.On = true;
+            _agent.LearningModel.RateOfAgentsOn = 1;
+            _agent.Cognitive.InternalCharacteristics.CanLearn = true;
             _agent.Cognitive.TasksAndPerformance.LearningRate = 1;
             var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.System);
@@ -341,9 +349,9 @@ namespace SymuEngineTests.Classes.Agents
                 KnowledgeId = 1,
                 KnowledgeBits = bit1S
             };
-            _agent.Cognitive.TasksAndPerformance.LearningModel.On = true;
-            _agent.Cognitive.TasksAndPerformance.LearningModel.RateOfAgentsOn = 1;
-            _agent.Cognitive.TasksAndPerformance.LearningRate = 1;
+            _agent.LearningModel.On = true;
+            _agent.LearningModel.RateOfAgentsOn = 1;
+            _agent.LearningModel.TasksAndPerformance.LearningRate = 1;
             var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnKnowledgesFromPostMessage(message);
@@ -741,7 +749,7 @@ namespace SymuEngineTests.Classes.Agents
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.MessageProcessor.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
-            _agent.Cognitive.InternalCharacteristics.ForgettingMean = 1;
+            _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
             _agent.Start();
             _agent.PreStep();
             // Status test
@@ -761,11 +769,7 @@ namespace SymuEngineTests.Classes.Agents
         public void AskPreStepTest1()
         {
             _agent.Start();
-            _agent.ForgettingModel = new ForgettingModel(new ModelEntity(), _agent.Cognitive.InternalCharacteristics, 0,
-                _environment.WhitePages.Network.NetworkKnowledges, _agent.Id)
-            {
-                On = false
-            };
+            _agent.ForgettingModel.On = false;
             var expertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
             expertise.Add(agentKnowledge);
@@ -782,12 +786,8 @@ namespace SymuEngineTests.Classes.Agents
         public void AskPreStepTest2()
         {
             _agent.Start();
-            _agent.Cognitive.InternalCharacteristics.ForgettingMean = 1;
-            _agent.ForgettingModel = new ForgettingModel(new ModelEntity(), _agent.Cognitive.InternalCharacteristics, 0,
-                _environment.WhitePages.Network.NetworkKnowledges, _agent.Id)
-            {
-                On = true
-            };
+            _agent.ForgettingModel.On = true;
+            _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
             var expertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
             expertise.Add(agentKnowledge);
@@ -1200,8 +1200,8 @@ namespace SymuEngineTests.Classes.Agents
         public void AcceptNewInteractionTest2()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestAgent(2, _environment);
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            var agent2 = new TestAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1213,10 +1213,10 @@ namespace SymuEngineTests.Classes.Agents
         public void AcceptNewInteractionTest3()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestAgent(2, _environment);
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 0;
+            var agent2 = new TestAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1228,9 +1228,9 @@ namespace SymuEngineTests.Classes.Agents
         public void AcceptNewInteractionTest4()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestAgent(2, _environment);
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
+            var agent2 = new TestAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1242,9 +1242,9 @@ namespace SymuEngineTests.Classes.Agents
         public void AcceptNewInteractionTest5()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestAgent(2, _environment);
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            var agent2 = new TestAgent(2, _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 

@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 
 #endregion
 
@@ -20,10 +21,10 @@ namespace SymuEngine.Classes.Agents.Models.Templates
     /// </summary>
     public class CognitiveArchitectureTemplate
     {
-        public CognitiveArchitecture.CognitiveArchitecture Cognitive { get; set; } =
-            new CognitiveArchitecture.CognitiveArchitecture(null, new AgentId(0, 1), 0);
+        public CognitiveArchitecture Cognitive { get; set; } =
+            new CognitiveArchitecture(null, new AgentId(0, 1));
 
-        public void Set(CognitiveArchitecture.CognitiveArchitecture cognitive)
+        public void Set(CognitiveArchitecture cognitive)
         {
             if (cognitive is null)
             {

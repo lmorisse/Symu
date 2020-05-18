@@ -134,7 +134,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         }
 
         /// <summary>
-        ///     Learn from beliefBits with a weight of influenceWeight
+        ///     BeInfluenced from beliefBits with a weight of influenceWeight
         /// </summary>
         /// <param name="beliefBits"></param>
         /// <param name="influenceWeight">range [-1; 1] based on influenceability and influentialness</param>
@@ -168,7 +168,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         }
 
         /// <summary>
-        ///     Learn a beliefBit by doing
+        ///     BeInfluenced a beliefBit by doing
         ///     Random value is used to set the new value
         /// </summary>
         /// <param name="model"></param>

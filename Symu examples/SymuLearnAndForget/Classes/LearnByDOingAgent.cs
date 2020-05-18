@@ -52,8 +52,7 @@ namespace SymuLearnAndForget.Classes
             }
 
             // Agent is learning
-            var realLearning = Cognitive.TasksAndPerformance.LearnByDoing(Knowledge.Id, knowledgeBit,
-                Cognitive.InternalCharacteristics, TimeStep.Step);
+            var realLearning = LearningModel.LearnByDoing(Knowledge.Id, knowledgeBit, TimeStep.Step);
             // the knowledge is stored in a wiki
             Wiki.StoreKnowledge(Knowledge.Id, knowledgeBit, realLearning, TimeStep.Step);
         }

@@ -17,7 +17,7 @@ using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Knowledge & Beliefs from Construct Software

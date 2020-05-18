@@ -12,13 +12,10 @@
 using System;
 using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     InternalCharacteristics from Construct Software
@@ -31,15 +28,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
     /// <remarks>Knowledge & Beliefs from Construct Software</remarks>
     public class InternalCharacteristics
     {
-        private readonly AgentId _id;
-        private readonly Network _network;
-
-        public InternalCharacteristics(Network network, AgentId id)
-        {
-            _network = network;
-            _id = id;
-        }
-
         public void CopyTo(InternalCharacteristics internalCharacteristics)
         {
             if (internalCharacteristics is null)
@@ -47,8 +35,13 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
                 throw new ArgumentNullException(nameof(internalCharacteristics));
             }
 
+            #region Learning
+            internalCharacteristics.CanLearn = CanLearn;
+            #endregion
+
             #region Forgetting
 
+            internalCharacteristics.CanForget = CanForget;
             internalCharacteristics.ForgettingMean = ForgettingMean;
             internalCharacteristics.ForgettingStandardDeviation = ForgettingStandardDeviation;
             internalCharacteristics.PartialForgetting = PartialForgetting;
@@ -60,6 +53,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
 
             #region Influence
 
+            internalCharacteristics.CanInfluenceOrBeInfluence = CanInfluenceOrBeInfluence;
             internalCharacteristics.InfluenceabilityRateMax = InfluenceabilityRateMax;
             internalCharacteristics.InfluenceabilityRateMin = InfluenceabilityRateMin;
             internalCharacteristics.InfluentialnessRateMax = InfluentialnessRateMax;
@@ -68,7 +62,22 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
             #endregion
         }
 
+        #region Learning
+
+        /// <summary>
+        ///     This parameter specify whether agents of this class can learn new knowledge.
+        ///     If set to true, agent will use the Learning Model
+        /// </summary>
+        public bool CanLearn { get; set; }
+        #endregion
+
         #region Forgetting
+
+        /// <summary>
+        ///     This parameter specify whether agents of this class can forget knowledge
+        ///     If set to true, agent will use the Forgetting Model
+        /// </summary>
+        public bool CanForget { get; set; }
 
         private float _forgettingMean;
 
@@ -188,6 +197,11 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
         #endregion
 
         #region Influence
+        /// <summary>
+        ///     This parameter specify whether agents of this class can influence others or be influence by others
+        ///     If set to true, agent will use the Influence Model
+        /// </summary>
+        public bool CanInfluenceOrBeInfluence { get; set; }
 
         private float _influentialnessRateMin;
 
@@ -279,65 +293,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveArchitecture
 
                 _influenceabilityRateMax = value;
             }
-        }
-
-        /// <summary>
-        ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
-        ///     InfluentialnessRateMax]
-        /// </summary>
-        /// <returns></returns>
-        public float NextInfluentialness()
-        {
-            return ContinuousUniform.Sample(InfluentialnessRateMin, InfluentialnessRateMax);
-        }
-
-        /// <summary>
-        ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
-        ///     InfluentialnessRateMax]
-        /// </summary>
-        /// <returns></returns>
-        public float NextInfluenceability()
-        {
-            return ContinuousUniform.Sample(InfluenceabilityRateMin, InfluenceabilityRateMax);
-        }
-
-        /// <summary>
-        ///     Learn beliefId from agentId
-        /// </summary>
-        /// <param name="beliefId"></param>
-        /// <param name="beliefBits">from agentId beliefBits</param>
-        /// <param name="agentId"></param>
-        /// <param name="beliefLevel"></param>
-        public void Learn(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
-        {
-            //if (beliefId == 0 || beliefBits == null)
-            //{
-            //    return;
-            //}
-
-            if ( beliefBits == null)// && beliefId > 0)
-            {
-                return;
-                //throw new ArgumentNullException(nameof(beliefBits));
-            }
-
-            // Learning From agent
-            var influentialness = _network.NetworkInfluences.GetInfluentialness(agentId);
-            // to Learner
-            var influenceability = _network.NetworkInfluences.GetInfluenceability(_id);
-            // Learner learn beliefId from agentId with a weight of influenceability * influentialness
-            _network.NetworkBeliefs.Learn(_id, beliefId, beliefBits, influenceability * influentialness, beliefLevel);
-        }
-
-        public void LearnByDoing(ushort beliefId, byte beliefBit, BeliefLevel beliefLevel)
-        {
-            if (!_network.NetworkBeliefs.Exists(_id, beliefId))
-            {
-                _network.NetworkBeliefs.LearnNewBelief(_id, beliefId, beliefLevel);
-            }
-
-            var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_id, beliefId);
-            agentBelief.Learn(_network.NetworkBeliefs.Model, beliefBit);
         }
 
         #endregion

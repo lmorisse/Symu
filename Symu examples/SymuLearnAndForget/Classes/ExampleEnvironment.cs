@@ -9,8 +9,10 @@
 
 #region using directives
 
+using System.Linq;
 using SymuEngine.Common;
 using SymuEngine.Environment;
+using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
@@ -26,6 +28,7 @@ namespace SymuLearnAndForget.Classes
         public ExpertAgent ExpertAgent { get; private set; }
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
+        public Database Wiki => WhitePages.Network.NetworkDatabases.Repository.List.First();
 
         public override void SetModelForAgents()
         {
@@ -33,6 +36,8 @@ namespace SymuLearnAndForget.Classes
             WhitePages.Network.NetworkCommunications.Email.CostToSendLevel = GenericLevel.None;
             WhitePages.Network.NetworkCommunications.Email.CostToReceiveLevel = GenericLevel.None;
             WhitePages.Network.AddKnowledge(Knowledge);
+            Wiki.InitializeKnowledge(Knowledge, 0);
+
             LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this);
             LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);

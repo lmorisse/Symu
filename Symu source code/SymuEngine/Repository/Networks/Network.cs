@@ -39,13 +39,10 @@ namespace SymuEngine.Repository.Networks
     /// </summary>
     public class Network
     {
+        private readonly OrganizationModels _models;
         public Network(AgentTemplates agentTemplates, OrganizationModels models)
         {
-            if (models == null)
-            {
-                throw new ArgumentNullException(nameof(models));
-            }
-
+            _models = models ?? throw new ArgumentNullException(nameof(models));
             NetworkCommunications = new NetworkCommunications(agentTemplates);
             InteractionSphere = new InteractionSphere(models.InteractionSphere);
             NetworkBeliefs = new NetworkBeliefs(models.ImpactOfBeliefOnTask);
@@ -376,9 +373,9 @@ namespace SymuEngine.Repository.Networks
             {
                 throw new ArgumentNullException(nameof(communication));
             }
+            var entity = new DataBaseEntity(agentId, communication.Cognitive);
 
-            var email = new Database(agentId.Key, communication.Cognitive.TasksAndPerformance,
-                communication.Cognitive.InternalCharacteristics.TimeToLive);
+            var email = new Database(entity, _models, NetworkKnowledges);
             NetworkDatabases.Add(agentId, email);
         }
 

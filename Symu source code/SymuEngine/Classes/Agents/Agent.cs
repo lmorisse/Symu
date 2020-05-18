@@ -15,7 +15,7 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Blockers;
@@ -114,8 +114,18 @@ namespace SymuEngine.Classes.Agents
         ///     If agent has an email
         /// </summary>
         protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
-
+        /// <summary>
+        /// Define how agent will forget knowledge during the simulation based on its cognitive architecture
+        /// </summary>
         public ForgettingModel ForgettingModel { get; set; }
+        /// <summary>
+        /// Define how agent will learn knowledge during the simulation based on its cognitive architecture
+        /// </summary>
+        public LearningModel LearningModel { get; set; }
+        /// <summary>
+        /// Define how agent will influence or be influenced during the simulation based on its cognitive architecture
+        /// </summary>
+        public InfluenceModel InfluenceModel { get; set; }
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
@@ -123,9 +133,10 @@ namespace SymuEngine.Classes.Agents
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment.AddAgent(this);
             State = AgentState.NotStarted;
-            foreach (var database in environment.Organization.Databases.List)
+            foreach (var database in environment.Organization.Databases)
             {
-                environment.WhitePages.Network.AddDatabase(Id, database.Id);
+
+                environment.WhitePages.Network.AddDatabase(Id, database.AgentId.Key);
             }
         }
 
@@ -137,21 +148,15 @@ namespace SymuEngine.Classes.Agents
         /// <param name="agentTemplate"></param>
         protected virtual void SetCognitive(CognitiveArchitectureTemplate agentTemplate)
         {
-            Cognitive = new CognitiveArchitecture(Environment.WhitePages.Network, Id,
-                Environment.Organization.Models.RandomLevelValue);
+            Cognitive = new CognitiveArchitecture(Environment.WhitePages.Network, Id);
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
-            // Initialize parameters
-            Environment.WhitePages.Network.NetworkInfluences.Add(Id,
-                Cognitive.InternalCharacteristics.NextInfluenceability(),
-                Cognitive.InternalCharacteristics.NextInfluentialness());
-            // Learning model
-            Environment.Organization.Models.Learning.CopyTo(Cognitive.TasksAndPerformance
-                .LearningModel);
-            // Forgetting model
-            ForgettingModel = new ForgettingModel(Environment.Organization.Models.Forgetting,
-                Cognitive.InternalCharacteristics, Environment.Organization.Models.RandomLevelValue,
-                Environment.WhitePages.Network.NetworkKnowledges, Id);
+            // Initialize agent models
+            LearningModel = new LearningModel(Id, Environment.Organization.Models,
+                Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
+            ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
+                Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
+            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence, Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
         }
 
         #region Interaction strategy
@@ -512,9 +517,8 @@ namespace SymuEngine.Classes.Agents
 
             var communication =
                 Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-            Cognitive.TasksAndPerformance.Learn(message.Attachments.KnowledgeId,
-                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, Cognitive.InternalCharacteristics,
-                TimeStep.Step);
+            LearningModel.Learn(message.Attachments.KnowledgeId,
+                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, TimeStep.Step);
             if (message.Medium == CommunicationMediums.Email && HasEmail)
             {
                 Email.StoreKnowledge(message.Attachments.KnowledgeId, message.Attachments.KnowledgeBits,
@@ -541,7 +545,7 @@ namespace SymuEngine.Classes.Agents
                 return;
             }
 
-            Cognitive.InternalCharacteristics.Learn(message.Attachments.KnowledgeId, message.Attachments.BeliefBits,
+            InfluenceModel.BeInfluenced(message.Attachments.KnowledgeId, message.Attachments.BeliefBits,
                 message.Sender, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
         }
 
@@ -940,7 +944,7 @@ namespace SymuEngine.Classes.Agents
 
             // If Agent don't have the belief, he can't reply
             if (!Cognitive.KnowledgeAndBeliefs.Beliefs.BelievesEnough(beliefId, beliefBit,
-                Cognitive.MessageContent.MinimumKnowledgeToSendPerBit))
+                Cognitive.MessageContent.MinimumBeliefToSendPerBit))
             {
                 return null;
             }
@@ -1020,12 +1024,8 @@ namespace SymuEngine.Classes.Agents
         public virtual async void PreStep()
         {
             MessageProcessor?.ClearMessagesPerPeriod();
-            // Forgetting model
-            if (ForgettingModel != null && Cognitive.KnowledgeAndBeliefs.HasKnowledge)
-            {
-                ForgettingModel.InitializeForgettingProcess();
-            }
-
+            ForgettingModel?.InitializeForgettingProcess();
+            
             // Databases
             if (HasEmail)
             {
@@ -1097,10 +1097,7 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         public virtual void PostStep()
         {
-            if (ForgettingModel != null && Cognitive.KnowledgeAndBeliefs.HasKnowledge)
-            {
-                ForgettingModel.FinalizeForgettingProcess(TimeStep.Step);
-            }
+            ForgettingModel?.FinalizeForgettingProcess(TimeStep.Step);
         }
 
         /// <summary>

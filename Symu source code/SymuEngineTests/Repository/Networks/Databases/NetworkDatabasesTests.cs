@@ -11,8 +11,12 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using SymuEngine.Classes.Organization;
+using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Databases;
+using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -28,14 +32,18 @@ namespace SymuEngineTests.Repository.Networks.Databases
         [TestInitialize]
         public void Initialize()
         {
-            var tasks = new TasksAndPerformance();
-            _database = new Database(1, tasks, -1);
+            var agentTemplates = new AgentTemplates();
+            var models = new OrganizationModels();
+            var network = new Network(agentTemplates, models);
+            var cognitive = new CognitiveArchitecture(network, _agentId);
+            var databaseEntity = new DataBaseEntity(_agentId, cognitive);
+            _database = new Database(databaseEntity, models, network.NetworkKnowledges);
         }
 
         [TestMethod]
         public void ClearTest()
         {
-            _databases.Add(_agentId, _database.Id);
+            _databases.Add(_agentId, _database.Entity.AgentId.Key);
             Assert.IsTrue(_databases.Any());
             _databases.Clear();
             Assert.IsFalse(_databases.Any());
@@ -44,45 +52,45 @@ namespace SymuEngineTests.Repository.Networks.Databases
         [TestMethod]
         public void GetDatabaseTest()
         {
-            Assert.IsNull(_databases.GetDatabase(_database.Id));
+            Assert.IsNull(_databases.GetDatabase(_database.Entity.AgentId.Key));
             _databases.AddDatabase(_database);
-            Assert.IsNotNull(_databases.GetDatabase(_database.Id));
-            Assert.AreEqual(_database, _databases.GetDatabase(_database.Id));
+            Assert.IsNotNull(_databases.GetDatabase(_database.Entity.AgentId.Key));
+            Assert.AreEqual(_database, _databases.GetDatabase(_database.Entity.AgentId.Key));
         }
 
         [TestMethod]
         public void AddDatabaseTest()
         {
-            Assert.IsFalse(_databases.Exists(_database.Id));
+            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId.Key));
             _databases.AddDatabase(_database);
-            Assert.IsTrue(_databases.Exists(_database.Id));
+            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId.Key));
         }
 
         [TestMethod]
         public void RemoveAgentTest()
         {
-            _databases.Add(_agentId, _database.Id);
+            _databases.Add(_agentId, _database.Entity.AgentId.Key);
             _databases.RemoveAgent(_agentId);
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Id));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Key));
             Assert.IsFalse(_databases.Any());
         }
 
         [TestMethod]
         public void AddTest()
         {
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Id));
-            _databases.Add(_agentId, _database.Id);
-            Assert.IsTrue(_databases.Exists(_agentId, _database.Id));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Key));
+            _databases.Add(_agentId, _database.Entity.AgentId.Key);
+            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId.Key));
         }
 
         [TestMethod]
         public void AddTest1()
         {
-            Assert.IsFalse(_databases.Exists(_database.Id));
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Id));
+            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId.Key));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Key));
             _databases.Add(_agentId, _database);
-            Assert.IsTrue(_databases.Exists(_database.Id));
-            Assert.IsTrue(_databases.Exists(_agentId, _database.Id));
+            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId.Key));
+            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId.Key));
         }
 
         [TestMethod]

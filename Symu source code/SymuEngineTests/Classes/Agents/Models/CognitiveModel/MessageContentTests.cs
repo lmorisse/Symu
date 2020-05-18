@@ -10,14 +10,14 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents.Models.CognitiveArchitecture;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveArchitecture
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class MessageContentTests
