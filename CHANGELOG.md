@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+* Add new models : knowledge, Beliefs, Influence by [@lmorisse]
 * Add SymuTask.SetKnowledgesBits by [@lmorisse]
 * Refactoring NetworkBeliefs by [@lmorisse]
 * Add new project example: [SymuGroupAndInteraction](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuBeliefsAndInfluence) by [@lmorisse]
