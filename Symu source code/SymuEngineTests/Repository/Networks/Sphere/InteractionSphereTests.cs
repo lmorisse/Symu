@@ -144,7 +144,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
 
         private void AddKnowledge(AgentId agentId, KnowledgeLevel level)
         {
-            _network.NetworkKnowledges.Add(agentId, _knowledge, level, 0, -1);
+            _network.NetworkKnowledges.Add(agentId, _knowledge.Id, level, 0, -1);
             _network.NetworkKnowledges.InitializeExpertise(agentId, false, 0);
         }
 

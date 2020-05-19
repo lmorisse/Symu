@@ -33,14 +33,11 @@ namespace SymuEngineTests.Classes.Agents
     [TestClass]
     public class AgentTests
     {
-        private const RandomGenerator Model = new RandomGenerator();
-        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
         private readonly SimulationEngine _simulation = new SimulationEngine();
         private TestAgent _agent;
         private AgentKnowledge _agentKnowledge;
-        private Belief _belief;
 
         [TestInitialize]
         public void Initialize()
@@ -53,15 +50,18 @@ namespace SymuEngineTests.Classes.Agents
             _organizationEntity.Models.Learning.RateOfAgentsOn = 1;
             _organizationEntity.Models.Forgetting.On = true;
             _organizationEntity.Models.Forgetting.RateOfAgentsOn = 1;
+            _organizationEntity.Models.Beliefs.On = true;
+            _organizationEntity.Models.Beliefs.RateOfAgentsOn = 1;
+            _organizationEntity.Models.Knowledge.On = true;
+            _organizationEntity.Models.Knowledge.RateOfAgentsOn = 1;
 
             _agent = new TestAgent(1, _environment);
-            _agent.Cognitive = new CognitiveArchitecture(_environment.WhitePages.Network, _agent.Id)
+            _agent.Cognitive = new CognitiveArchitecture()
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
                 MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
                 InternalCharacteristics ={CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
-            _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
             var expertise = new AgentExpertise();
             var knowledge = new Knowledge(1, "1", 1);
@@ -335,7 +335,7 @@ namespace SymuEngineTests.Classes.Agents
                 CommunicationMediums.System);
 
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(0, _agent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledge(1).GetKnowledgeSum());
+            Assert.AreEqual(0, _agent.KnowledgeModel.GetKnowledge(1).GetKnowledgeSum());
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace SymuEngineTests.Classes.Agents
             var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(1, _agent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledge(1).GetKnowledgeSum());
+            Assert.AreEqual(1, _agent.KnowledgeModel.GetKnowledge(1).GetKnowledgeSum());
         }
 
         [TestMethod]
@@ -373,7 +373,7 @@ namespace SymuEngineTests.Classes.Agents
             var message = new Message(_agent.Id, _agent.Id, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnBeliefsFromPostMessage(message);
-            Assert.AreEqual(1, _agent.Cognitive.KnowledgeAndBeliefs.Beliefs.GetBelief(belief.Id).GetBeliefSum());
+            Assert.AreEqual(1, _agent.BeliefsModel.GetBelief(belief.Id).GetBeliefSum());
         }
 
         private Belief SetBeliefs()
@@ -847,58 +847,7 @@ namespace SymuEngineTests.Classes.Agents
 
         #endregion
 
-        #region Knowledge
 
-        /// <summary>
-        ///     Passing test
-        ///     Can't send belief
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredKnowledgeToSendTest()
-        {
-            _agent.Cognitive.MessageContent.CanSendKnowledge = false;
-            Assert.IsNull(_agent.FilterKnowledgeToSend(1, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     no belief asked
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredKnowledgeToSendTest1()
-        {
-            _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            Assert.IsNull(_agent.FilterKnowledgeToSend(0, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     don't BelievesEnough
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredKnowledgeToSendTest2()
-        {
-            _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
-            Assert.IsNull(_agent.FilterKnowledgeToSend(_agentKnowledge.KnowledgeId, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     enough belief
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredKnowledgeToSendTest3()
-        {
-            _agent.Cognitive.MessageContent.CanSendKnowledge = true;
-            _agent.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 0;
-            _agentKnowledge.SetKnowledgeBit(0, 1, 0);
-            var bits = _agent.FilterKnowledgeToSend(_agentKnowledge.KnowledgeId, 0, _emailTemplate);
-            Assert.IsNotNull(bits);
-            Assert.AreEqual(1, bits.GetSum());
-        }
-
-        #endregion
 
         #region Capacity management
 
@@ -972,93 +921,7 @@ namespace SymuEngineTests.Classes.Agents
 
         #endregion
 
-        #region Belief
 
-        /// <summary>
-        ///     Non passing test
-        /// </summary>
-        [TestMethod]
-        public void NullGetFilteredBeliefToSendTest()
-        {
-            Assert.IsNull(_agent.FilterBeliefToSend(1, 0, _emailTemplate));
-            _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            Assert.IsNull(_agent.FilterBeliefToSend(1, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     Can't send belief
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredBeliefToSendTest()
-        {
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1,BeliefLevel.NeitherAgreeNorDisagree);
-            _agent.Cognitive.MessageContent.CanSendBeliefs = false;
-            Assert.IsNull(_agent.FilterBeliefToSend(1, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     no belief asked
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredBeliefToSendTest1()
-        {
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
-            _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            Assert.IsNull(_agent.FilterBeliefToSend(0, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     don't BelievesEnough
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredBeliefToSendTest2()
-        {
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
-            _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            Assert.IsNull(_agent.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     MinimumBeliefToSendPerBit too high
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredBeliefToSendTest3()
-        {
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, false);
-            _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
-            var bits = _agent.FilterBeliefToSend(1, 0, _emailTemplate);
-            Assert.IsNull(bits);
-        }
-
-        /// <summary>
-        ///     Passing test
-        ///     enough belief
-        /// </summary>
-        [TestMethod]
-        public void GetFilteredBeliefToSendTest4()
-        {
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, false);
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, _belief.Id).BeliefBits
-                .SetBit(0, 1);
-            _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            _agent.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 0;
-            var bits = _agent.FilterBeliefToSend(1, 0, _emailTemplate);
-            Assert.IsNotNull(bits);
-            Assert.AreEqual(1, bits.GetSum());
-        }
-
-        #endregion
 
         #region Status
 

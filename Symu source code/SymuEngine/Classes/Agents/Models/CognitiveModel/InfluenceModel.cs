@@ -26,8 +26,9 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     ///     The InfluenceModel initialize the real value of the agent's influence parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
-    public class InfluenceModel : ModelEntity
+    public class InfluenceModel
     {
+        public bool On { get; set; }
         private readonly AgentId _agentId;
         private readonly NetworkBeliefs _networkBeliefs;
         private readonly NetworkInfluences _networkInfluences;
@@ -39,7 +40,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         /// <param name="entity"></param>
         /// <param name="internalCharacteristics"></param>
         /// <param name="network"></param>
-        public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics, Network network)
+        public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics, Network network) 
         {
             if (entity is null)
             {
@@ -56,11 +57,12 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 throw new ArgumentNullException(nameof(network));
             }
 
+            On = entity.IsAgentOn();
             _agentId = agentAgentId;
             _networkInfluences = network.NetworkInfluences;
             _networkBeliefs = network.NetworkBeliefs;
 
-            if (internalCharacteristics.CanInfluenceOrBeInfluence && entity.IsAgentOn())
+            if (internalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
                 _networkInfluences.Add(agentAgentId,
                     NextInfluenceability(internalCharacteristics),
@@ -118,7 +120,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             //    return;
             //}
 
-            if (beliefBits == null)// && beliefId > 0)
+            if (!On || beliefBits == null)// && beliefId > 0)
             {
                 return;
                 //throw new ArgumentNullException(nameof(beliefBits));
@@ -134,6 +136,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
         public void ReinforcementByDoing(ushort beliefId, byte beliefBit, BeliefLevel beliefLevel)
         {
+            if (!On)
+            {
+                return;
+            }
             if (!_networkBeliefs.Exists(_agentId, beliefId))
             {
                 _networkBeliefs.LearnNewBelief(_agentId, beliefId, beliefLevel);

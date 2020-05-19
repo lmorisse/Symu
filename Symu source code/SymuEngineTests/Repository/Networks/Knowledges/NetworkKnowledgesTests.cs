@@ -39,7 +39,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeExpertiseTest()
         {
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Intermediate, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
             _network.InitializeExpertise(_agentId, false, 0);
             Assert.AreEqual(10, _network.AgentsRepository[_agentId].List[0].Length);
         }
@@ -57,7 +57,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
             filteredAgents = _network.FilterAgentsWithKnowledge(agentIds, _knowledge.Id);
             Assert.AreEqual(0, filteredAgents.Count());
             // Passing test
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Intermediate, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
             filteredAgents = _network.FilterAgentsWithKnowledge(agentIds, _knowledge.Id);
             Assert.AreEqual(1, filteredAgents.Count());
         }
@@ -79,7 +79,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         {
             Assert.IsFalse(_network.Exists(_agentId));
             Assert.IsFalse(_network.Exists(_agentId, _knowledge.Id));
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Intermediate, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
             Assert.IsTrue(_network.Exists(_agentId));
             Assert.IsTrue(_network.Exists(_agentId, _knowledge.Id));
         }
@@ -113,7 +113,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         [TestMethod]
         public void ClearTest()
         {
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.Clear();
             Assert.IsFalse(_network.Any());
         }
@@ -122,7 +122,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void ExistsTest()
         {
             Assert.IsFalse(_network.Exists(_agentId));
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.IsTrue(_network.Exists(_agentId));
         }
 
@@ -130,7 +130,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void ExistsAgentTest()
         {
             Assert.IsFalse(_network.Exists(_agentId, _knowledge.Id));
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.IsTrue(_network.Exists(_agentId, _knowledge.Id));
         }
 
@@ -141,7 +141,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void Add1Test()
         {
             Assert.IsFalse(_network.Any());
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.IsTrue(_network.Any());
         }
 
@@ -160,7 +160,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         [TestMethod]
         public void GetAgentExpertiseTest1()
         {
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             var agentExpertise = _network.GetAgentExpertise(_agentId);
             Assert.IsNotNull(agentExpertise);
         }
@@ -197,7 +197,7 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
         public void GetAgentKnowledgeTest()
         {
             Assert.ThrowsException<NullReferenceException>(() => _network.GetAgentKnowledge(_agentId, _knowledge.Id));
-            _network.Add(_agentId, _knowledge, KnowledgeLevel.NoKnowledge, 0, -1);
+            _network.Add(_agentId, _knowledge.Id, KnowledgeLevel.NoKnowledge, 0, -1);
             Assert.IsNotNull(_network.GetAgentKnowledge(_agentId, _knowledge.Id));
         }
 

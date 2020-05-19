@@ -44,17 +44,20 @@ namespace SymuBeliefsAndInfluence
 
             OrganizationEntity.Models.Influence.On = true;
             OrganizationEntity.Models.Influence.RateOfAgentsOn = 1;
+            InfluenceModelOn.Checked = OrganizationEntity.Models.Influence.On;
+            InfluenceRateOfAgentsOn.Text = OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString();
 
-            InfluenceModel.Checked = OrganizationEntity.Models.Influence.On;
-            RateOfAgentsOn.Text = OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString();
+
+            OrganizationEntity.Models.Beliefs.On = true;
+            OrganizationEntity.Models.Beliefs.RateOfAgentsOn = 1;
+            BeliefsModelOn.Checked = OrganizationEntity.Models.Beliefs.On;
+            BeliefsRateOfAgentsOn.Text = OrganizationEntity.Models.Beliefs.RateOfAgentsOn.ToString();
 
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
             tbInfluencers.Text = _environment.InfluencersCount.ToString(CultureInfo.InvariantCulture);
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
 
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
-
-
 
             #region Influencer
             InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
@@ -105,7 +108,8 @@ namespace SymuBeliefsAndInfluence
         private void Button1_Click(object sender, EventArgs e)
         {
 
-            OrganizationEntity.Models.Influence.On = InfluenceModel.Checked;
+            OrganizationEntity.Models.Influence.On = InfluenceModelOn.Checked;
+            OrganizationEntity.Models.Beliefs.On = BeliefsModelOn.Checked;
 
             #region influencer
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
@@ -440,16 +444,16 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Models.Influence.RateOfAgentsOn = float.Parse(RateOfAgentsOn.Text);
-                RateOfAgentsOn.BackColor = SystemColors.Window;
+                OrganizationEntity.Models.Influence.RateOfAgentsOn = float.Parse(InfluenceRateOfAgentsOn.Text);
+                InfluenceRateOfAgentsOn.BackColor = SystemColors.Window;
             }
             catch (FormatException)
             {
-                RateOfAgentsOn.BackColor = Color.Red;
+                InfluenceRateOfAgentsOn.BackColor = Color.Red;
             }
             catch (ArgumentOutOfRangeException exception)
             {
-                RateOfAgentsOn.BackColor = Color.Red;
+                InfluenceRateOfAgentsOn.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }
@@ -468,6 +472,24 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 RiskAversion.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void BeliefsRateOfAgentsOn_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Models.Beliefs.RateOfAgentsOn = float.Parse(BeliefsRateOfAgentsOn.Text);
+                BeliefsRateOfAgentsOn.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                BeliefsRateOfAgentsOn.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                BeliefsRateOfAgentsOn.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }

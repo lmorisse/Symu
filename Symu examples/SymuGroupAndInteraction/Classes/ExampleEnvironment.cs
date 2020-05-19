@@ -72,21 +72,21 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    actor.Cognitive.KnowledgeAndBeliefs.AddKnowledge(knowledges[0],
+                    actor.KnowledgeModel.AddKnowledge(knowledges[0].Id,
                         KnowledgeLevel,
                         Organization.Templates.Human.Cognitive.InternalCharacteristics);
 
                     break;
                 case 1:
                     // Knowledge is by group
-                    actor.Cognitive.KnowledgeAndBeliefs.AddKnowledge(knowledges[i],
+                    actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                         KnowledgeLevel,
                         Organization.Templates.Human.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    actor.Cognitive.KnowledgeAndBeliefs.AddKnowledge(knowledges[index],
+                    actor.KnowledgeModel.AddKnowledge(knowledges[index].Id,
                         KnowledgeLevel,
                         Organization.Templates.Human.Cognitive.InternalCharacteristics);
                     break;

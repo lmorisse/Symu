@@ -46,7 +46,7 @@ namespace SymuLearnAndForget.Classes
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
-            if (!Cognitive.KnowledgeAndBeliefs.CheckKnowledge(Knowledge.Id, knowledgeBit, TimeStep.Step))
+            if (!KnowledgeModel.CheckKnowledge(Knowledge.Id, knowledgeBit, TimeStep.Step))
             {
                 return;
             }

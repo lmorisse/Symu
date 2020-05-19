@@ -48,8 +48,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 throw new ArgumentNullException(nameof(cognitive));
             }
-
-            entity.CopyTo(this);
             InternalCharacteristics = cognitive.InternalCharacteristics;
             _knowledgeAndBeliefs = cognitive.KnowledgeAndBeliefs;
             _randomLevel = randomLevel;

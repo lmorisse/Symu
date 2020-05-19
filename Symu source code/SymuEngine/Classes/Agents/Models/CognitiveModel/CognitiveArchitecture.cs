@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using SymuEngine.Repository.Networks;
 
 #endregion
 
@@ -24,11 +23,11 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     /// </summary>
     public class CognitiveArchitecture
     {
-        public CognitiveArchitecture(Network network, AgentId agentId)
+        public CognitiveArchitecture()
         {
-            KnowledgeAndBeliefs = new KnowledgeAndBeliefs(network, agentId);
+            KnowledgeAndBeliefs = new KnowledgeAndBeliefs();
             InternalCharacteristics = new InternalCharacteristics();
-            TasksAndPerformance = new TasksAndPerformance(network, agentId);
+            TasksAndPerformance = new TasksAndPerformance();
             MessageContent = new MessageContent();
             InteractionCharacteristics = new InteractionCharacteristics();
             InteractionPatterns = new InteractionPatterns();
@@ -87,12 +86,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         ///     Interactions patterns
         /// </summary>
         public InteractionPatterns InteractionPatterns { get; }
-
-        public void Initialize(ushort step)
-        {
-            KnowledgeAndBeliefs.InitializeExpertise(step);
-            KnowledgeAndBeliefs.InitializeBeliefs();
-        }
 
         public void CopyTo(CognitiveArchitecture cognitive)
         {

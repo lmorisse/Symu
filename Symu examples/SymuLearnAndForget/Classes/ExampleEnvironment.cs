@@ -39,20 +39,20 @@ namespace SymuLearnAndForget.Classes
             Wiki.InitializeKnowledge(Knowledge, 0);
 
             LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this);
-            LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
+            LearnFromSourceAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
             LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this);
-            LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
+            LearnByDoingAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
             LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this);
-            LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
+            LearnByAskingAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
             DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this);
-            DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel,
+            DoesNotLearnAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
             ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this);
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            ExpertAgent.Cognitive.KnowledgeAndBeliefs.AddKnowledge(Knowledge, KnowledgeLevel.Expert,
+            ExpertAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel.Expert,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
             // Set active link between expert and LearnByAskingAgent to be able to exchange information
             WhitePages.Network.NetworkLinks.AddLink(LearnByAskingAgent.Id, ExpertAgent.Id);

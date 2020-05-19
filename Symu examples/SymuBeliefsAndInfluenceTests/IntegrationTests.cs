@@ -42,6 +42,8 @@ namespace SymuBeliefsAndInfluenceTests
         {
             _organization.Models.Influence.On = true;
             _organization.Models.Influence.RateOfAgentsOn = 1;
+            _organization.Models.Beliefs.On = true;
+            _organization.Models.Beliefs.RateOfAgentsOn = 1;
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             var scenario = new TimeStepScenario(_environment)

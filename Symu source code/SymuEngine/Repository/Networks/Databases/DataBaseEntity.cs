@@ -43,7 +43,7 @@ namespace SymuEngine.Repository.Networks.Databases
             }
 
             AgentId = agentId;
-            CognitiveArchitecture = new CognitiveArchitecture(null, AgentId);
+            CognitiveArchitecture = new CognitiveArchitecture();
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
 

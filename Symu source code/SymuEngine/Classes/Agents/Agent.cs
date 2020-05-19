@@ -127,6 +127,18 @@ namespace SymuEngine.Classes.Agents
         /// Define how agent will influence or be influenced during the simulation based on its cognitive architecture
         /// </summary>
         public InfluenceModel InfluenceModel { get; set; }
+        /// <summary>
+        /// Define how agent will manage its beliefs during the simulation based on its cognitive architecture
+        /// </summary>
+        public BeliefsModel BeliefsModel { get; set; }
+        /// <summary>
+        /// Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        /// </summary>
+        public KnowledgeModel KnowledgeModel { get; set; }
+        /// <summary>
+        /// Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        /// </summary>
+        public ActivityModel ActivityModel { get; set; }
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
@@ -149,15 +161,18 @@ namespace SymuEngine.Classes.Agents
         /// <param name="agentTemplate"></param>
         protected virtual void SetCognitive(CognitiveArchitectureTemplate agentTemplate)
         {
-            Cognitive = new CognitiveArchitecture(Environment.WhitePages.Network, Id);
+            Cognitive = new CognitiveArchitecture();
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
             // Initialize agent models
-            LearningModel = new LearningModel(Id, Environment.Organization.Models,
+            LearningModel = new LearningModel(Id,  Environment.Organization.Models,
                 Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
             ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
                 Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
             InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence, Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
+            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive, Environment.WhitePages.Network);
+            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive, Environment.WhitePages.Network);
+            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.Network);
         }
 
         #region Interaction strategy
@@ -219,7 +234,8 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         public virtual void BeforeStart()
         {
-            Cognitive.Initialize(TimeStep.Step);
+            KnowledgeModel.InitializeExpertise(TimeStep.Step);
+            BeliefsModel.InitializeBeliefs();
             // Messaging initializing
             while (MessageProcessor is null)
             {
@@ -738,13 +754,18 @@ namespace SymuEngine.Classes.Agents
 
             MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
 
-            if (message.HasAttachments)
+            if (message.HasAttachments && message.Medium != CommunicationMediums.System)
             {
                 var ma = message.Attachments;
                 var communication =
                     Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                ma.KnowledgeBits = FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
-                ma.BeliefBits = FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
+                ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication, TimeStep.Step, out var knowledgeIndexToSend);
+                ma.BeliefBits = BeliefsModel.FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
+                // The agent is asked for his knowledge, so he can't forget it
+                if (ma.KnowledgeBits != null)
+                {
+                    ForgettingModel.UpdateForgettingProcess(ma.KnowledgeId, knowledgeIndexToSend);
+                }
             }
 
             OnBeforeSendMessage(message);
@@ -884,75 +905,6 @@ namespace SymuEngine.Classes.Agents
                         MessageProcessor.NumberReceivedPerPeriod <
                         Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod;
             return limit | noLimit;
-        }
-
-        #endregion
-
-        #region Knowledge and Beliefs
-
-        /// <summary>
-        ///     The agent have received a message that ask for knowledge in return
-        /// </summary>
-        /// <returns>null if he don't have the knowledge or the right</returns>
-        /// <returns>a knowledgeBits if he has the knowledge or the right</returns>
-        public Bits FilterKnowledgeToSend(ushort knowledgeId, byte knowledgeBit, CommunicationTemplate medium)
-        {
-            // If can't send knowledge or no knowledge asked
-            if (!Cognitive.MessageContent.CanSendKnowledge || knowledgeId == 0 ||
-                Cognitive.KnowledgeAndBeliefs.Expertise == null)
-            {
-                return null;
-            }
-
-            if (!Cognitive.KnowledgeAndBeliefs.Expertise.KnowsEnough(knowledgeId, knowledgeBit,
-                Cognitive.MessageContent.MinimumKnowledgeToSendPerBit, TimeStep.Step))
-            {
-                return null;
-            }
-
-            var agentKnowledge = Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledge(knowledgeId);
-            // Filter the Knowledge to send, via the good communication medium
-            var bitsToSend = Cognitive.MessageContent.GetFilteredKnowledgeToSend(agentKnowledge, knowledgeBit, medium,
-                out var knowledgeIndexToSend);
-
-            // The agent is asked for his knowledge, so he can't forget it
-            if (knowledgeIndexToSend != null)
-            {
-                ForgettingModel.UpdateForgettingProcess(knowledgeId, knowledgeIndexToSend);
-            }
-
-            return bitsToSend;
-        }
-
-        /// <summary>
-        ///     The agent have received a message that ask for belief in return
-        /// </summary>
-        /// <returns>null if he don't have the belief or the right</returns>
-        /// <returns>a beliefBits if he has the belief or the right</returns>
-        public Bits FilterBeliefToSend(ushort beliefId, byte beliefBit, CommunicationTemplate channel)
-        {
-            // If don't have belief, can't send belief or no belief asked
-            if (!Cognitive.KnowledgeAndBeliefs.HasBelief || !Cognitive.MessageContent.CanSendBeliefs)// || beliefId == 0)
-            {
-                return null;
-            }
-
-            // intentionally after Cognitive.MessageContent.CanSendKnowledge test
-            if (Cognitive.KnowledgeAndBeliefs.Beliefs == null)
-            {
-                throw new NullReferenceException(nameof(Cognitive.KnowledgeAndBeliefs.Expertise));
-            }
-
-            // If Agent don't have the belief, he can't reply
-            if (!Cognitive.KnowledgeAndBeliefs.Beliefs.BelievesEnough(beliefId, beliefBit,
-                Cognitive.MessageContent.MinimumBeliefToSendPerBit))
-            {
-                return null;
-            }
-
-            var agentBelief = Cognitive.KnowledgeAndBeliefs.Beliefs.GetBelief(beliefId);
-            // Filter the belief to send, via the good communication channel
-            return Cognitive.MessageContent.GetFilteredBeliefToSend(agentBelief, beliefBit, channel);
         }
 
         #endregion

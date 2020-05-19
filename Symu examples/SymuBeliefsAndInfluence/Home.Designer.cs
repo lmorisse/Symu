@@ -60,9 +60,12 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.BeliefsRateOfAgentsOn = new System.Windows.Forms.TextBox();
+            this.BeliefsModelOn = new System.Windows.Forms.CheckBox();
             this.label30 = new System.Windows.Forms.Label();
-            this.RateOfAgentsOn = new System.Windows.Forms.TextBox();
-            this.InfluenceModel = new System.Windows.Forms.CheckBox();
+            this.InfluenceRateOfAgentsOn = new System.Windows.Forms.TextBox();
+            this.InfluenceModelOn = new System.Windows.Forms.CheckBox();
             this.HasBeliefs = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.InfluencerBeliefLevel = new System.Windows.Forms.ComboBox();
@@ -81,6 +84,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.RiskAversion = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
@@ -430,9 +435,12 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label34);
+            this.groupBox7.Controls.Add(this.BeliefsRateOfAgentsOn);
+            this.groupBox7.Controls.Add(this.BeliefsModelOn);
             this.groupBox7.Controls.Add(this.label30);
-            this.groupBox7.Controls.Add(this.RateOfAgentsOn);
-            this.groupBox7.Controls.Add(this.InfluenceModel);
+            this.groupBox7.Controls.Add(this.InfluenceRateOfAgentsOn);
+            this.groupBox7.Controls.Add(this.InfluenceModelOn);
             this.groupBox7.Controls.Add(this.HasBeliefs);
             this.groupBox7.Location = new System.Drawing.Point(29, 29);
             this.groupBox7.Name = "groupBox7";
@@ -441,38 +449,66 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "All agents";
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(67, 74);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(153, 17);
+            this.label34.TabIndex = 150;
+            this.label34.Text = "Rate of agents on [0;1]";
+            // 
+            // BeliefsRateOfAgentsOn
+            // 
+            this.BeliefsRateOfAgentsOn.Location = new System.Drawing.Point(295, 71);
+            this.BeliefsRateOfAgentsOn.Name = "BeliefsRateOfAgentsOn";
+            this.BeliefsRateOfAgentsOn.Size = new System.Drawing.Size(53, 22);
+            this.BeliefsRateOfAgentsOn.TabIndex = 151;
+            this.BeliefsRateOfAgentsOn.Text = "1";
+            this.BeliefsRateOfAgentsOn.TextChanged += new System.EventHandler(this.BeliefsRateOfAgentsOn_TextChanged);
+            // 
+            // BeliefsModelOn
+            // 
+            this.BeliefsModelOn.AutoSize = true;
+            this.BeliefsModelOn.Location = new System.Drawing.Point(37, 48);
+            this.BeliefsModelOn.Name = "BeliefsModelOn";
+            this.BeliefsModelOn.Size = new System.Drawing.Size(127, 21);
+            this.BeliefsModelOn.TabIndex = 149;
+            this.BeliefsModelOn.Text = "Belief model on";
+            this.BeliefsModelOn.UseVisualStyleBackColor = true;
+            // 
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(67, 99);
+            this.label30.Location = new System.Drawing.Point(67, 126);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(153, 17);
             this.label30.TabIndex = 146;
             this.label30.Text = "Rate of agents on [0;1]";
             // 
-            // RateOfAgentsOn
+            // InfluenceRateOfAgentsOn
             // 
-            this.RateOfAgentsOn.Location = new System.Drawing.Point(295, 96);
-            this.RateOfAgentsOn.Name = "RateOfAgentsOn";
-            this.RateOfAgentsOn.Size = new System.Drawing.Size(53, 22);
-            this.RateOfAgentsOn.TabIndex = 148;
-            this.RateOfAgentsOn.Text = "1";
-            this.RateOfAgentsOn.TextChanged += new System.EventHandler(this.RateOfAgentsOn_TextChanged);
+            this.InfluenceRateOfAgentsOn.Location = new System.Drawing.Point(295, 123);
+            this.InfluenceRateOfAgentsOn.Name = "InfluenceRateOfAgentsOn";
+            this.InfluenceRateOfAgentsOn.Size = new System.Drawing.Size(53, 22);
+            this.InfluenceRateOfAgentsOn.TabIndex = 148;
+            this.InfluenceRateOfAgentsOn.Text = "1";
+            this.InfluenceRateOfAgentsOn.TextChanged += new System.EventHandler(this.RateOfAgentsOn_TextChanged);
             // 
-            // InfluenceModel
+            // InfluenceModelOn
             // 
-            this.InfluenceModel.AutoSize = true;
-            this.InfluenceModel.Location = new System.Drawing.Point(37, 63);
-            this.InfluenceModel.Name = "InfluenceModel";
-            this.InfluenceModel.Size = new System.Drawing.Size(149, 21);
-            this.InfluenceModel.TabIndex = 1;
-            this.InfluenceModel.Text = "Influence model on";
-            this.InfluenceModel.UseVisualStyleBackColor = true;
+            this.InfluenceModelOn.AutoSize = true;
+            this.InfluenceModelOn.Location = new System.Drawing.Point(37, 100);
+            this.InfluenceModelOn.Name = "InfluenceModelOn";
+            this.InfluenceModelOn.Size = new System.Drawing.Size(149, 21);
+            this.InfluenceModelOn.TabIndex = 1;
+            this.InfluenceModelOn.Text = "Influence model on";
+            this.InfluenceModelOn.UseVisualStyleBackColor = true;
             // 
             // HasBeliefs
             // 
             this.HasBeliefs.AutoSize = true;
-            this.HasBeliefs.Location = new System.Drawing.Point(37, 33);
+            this.HasBeliefs.Location = new System.Drawing.Point(37, 24);
             this.HasBeliefs.Name = "HasBeliefs";
             this.HasBeliefs.Size = new System.Drawing.Size(100, 21);
             this.HasBeliefs.TabIndex = 0;
@@ -640,6 +676,8 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.textBox1);
+            this.groupBox9.Controls.Add(this.label33);
             this.groupBox9.Controls.Add(this.label32);
             this.groupBox9.Controls.Add(this.RiskAversion);
             this.groupBox9.Controls.Add(this.label31);
@@ -661,18 +699,35 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Agent workers";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(293, 172);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(54, 22);
+            this.textBox1.TabIndex = 152;
+            this.textBox1.Text = "5";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(73, 174);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(180, 17);
+            this.label33.TabIndex = 151;
+            this.label33.Text = "Threshold for reacting [0;1]";
+            // 
             // label32
             // 
             this.label32.AutoSize = true;
             this.label32.Location = new System.Drawing.Point(31, 128);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(220, 17);
+            this.label32.Size = new System.Drawing.Size(183, 17);
             this.label32.TabIndex = 150;
-            this.label32.Text = "Parameters that block tasks) [0;1]";
+            this.label32.Text = "Parameters that block tasks";
             // 
             // RiskAversion
             // 
-            this.RiskAversion.Location = new System.Drawing.Point(294, 177);
+            this.RiskAversion.Location = new System.Drawing.Point(293, 196);
             this.RiskAversion.Name = "RiskAversion";
             this.RiskAversion.Size = new System.Drawing.Size(54, 22);
             this.RiskAversion.TabIndex = 149;
@@ -682,7 +737,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(74, 179);
+            this.label31.Location = new System.Drawing.Point(73, 198);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(188, 17);
             this.label31.TabIndex = 148;
@@ -691,7 +746,7 @@
             // BeliefWeight
             // 
             this.BeliefWeight.FormattingEnabled = true;
-            this.BeliefWeight.Location = new System.Drawing.Point(209, 212);
+            this.BeliefWeight.Location = new System.Drawing.Point(209, 225);
             this.BeliefWeight.Name = "BeliefWeight";
             this.BeliefWeight.Size = new System.Drawing.Size(139, 24);
             this.BeliefWeight.TabIndex = 147;
@@ -699,7 +754,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(30, 215);
+            this.label27.Location = new System.Drawing.Point(30, 228);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(167, 17);
             this.label27.TabIndex = 146;
@@ -955,10 +1010,15 @@
         private System.Windows.Forms.ComboBox BeliefWeight;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.TextBox RateOfAgentsOn;
-        private System.Windows.Forms.CheckBox InfluenceModel;
+        private System.Windows.Forms.TextBox InfluenceRateOfAgentsOn;
+        private System.Windows.Forms.CheckBox InfluenceModelOn;
         private System.Windows.Forms.TextBox RiskAversion;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TextBox BeliefsRateOfAgentsOn;
+        private System.Windows.Forms.CheckBox BeliefsModelOn;
     }
 }

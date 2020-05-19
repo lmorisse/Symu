@@ -24,6 +24,9 @@ namespace SymuEngine.Repository.Networks.Group
         }
 
         public AgentId AgentId { get; }
+        /// <summary>
+        /// Range 0 - 100
+        /// </summary>
         public float Allocation { get; set; }
     }
 }

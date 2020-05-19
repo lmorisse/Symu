@@ -28,7 +28,7 @@ namespace SymuEngine.Classes.Murphies
         ///     To do the task, an agent must have enough knowledge
         ///     [0 - 1]
         /// </summary>
-        /// <example>if KnowledgeThreshHoldForDoing = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
+        /// <example>if KnowledgeThreshHoldForReacting = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
         public float KnowledgeThreshHoldForDoing { get; set; } = 0.1F;
 
         /// <summary>

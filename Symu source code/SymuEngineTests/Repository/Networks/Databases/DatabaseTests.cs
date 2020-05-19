@@ -37,7 +37,7 @@ namespace SymuEngineTests.Repository.Networks.Databases
             var agentTemplates = new AgentTemplates();
             var models = new OrganizationModels();
             var network = new Network(agentTemplates, models);
-            var cognitive = new CognitiveArchitecture(network, agentId);
+            var cognitive = new CognitiveArchitecture();
 
             cognitive.TasksAndPerformance.LearningRate = 1;
             cognitive.InternalCharacteristics.CanLearn = true;

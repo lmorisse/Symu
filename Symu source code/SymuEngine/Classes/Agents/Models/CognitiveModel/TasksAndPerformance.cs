@@ -10,12 +10,8 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -31,20 +27,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     /// <remarks>Tasks and Density from Construct Software</remarks>
     public class TasksAndPerformance
     {
-        private readonly AgentId _id;
-        private readonly Network _network;
-
-        public TasksAndPerformance()
-        {
-        }
-
-        public TasksAndPerformance(Network network, AgentId id)
-        {
-            _network = network;
-            _id = id;
-        }
-
-
         public MurphyTask TaskModel { get; } = new MurphyTask();
 
         /// <summary>
@@ -95,6 +77,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 _learningRate = value;
             }
         }
+
 
         private float _learningByDoingRate;
 
@@ -164,58 +147,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         ///     If set to false, agent won't perform any task on weekends even if he has some tasks to perform
         /// </summary>
         public bool CanPerformTaskOnWeekEnds { get; set; }
-
-        /// <summary>
-        ///     Get all the activities of an agent
-        /// </summary>
-        public IEnumerable<string> Activities => _network.NetworkActivities.GetGroupActivities(_id);
-
-        /// <summary>
-        ///     Add a list of activities an agent can perform
-        /// </summary>
-        /// <param name="activities"></param>
-        public void AddActivities(IEnumerable<Activity> activities)
-        {
-            if (!CanPerformTask)
-            {
-                return;
-            }
-
-            _network.NetworkActivities.AddActivities(activities, _id);
-        }
-
-        /// <summary>
-        ///     List of the activities on which an agent is working, filtered by groupId
-        /// </summary>
-        public IEnumerable<string> GetGroupActivities(AgentId groupId)
-        {
-            return _network.NetworkActivities.GetAgentActivities(_id, groupId);
-        }
-
-        /// <summary>
-        ///     Add all the groupId's activities to the AgentId, filtered by the agentId's knowledges
-        /// </summary>
-        /// <param name="activities"></param>
-        /// <param name="groupId"></param>
-        public void AddActivities(AgentId groupId, IEnumerable<string> activities)
-        {
-            if (!CanPerformTask)
-            {
-                return;
-            }
-
-            _network.NetworkActivities.AddActivities(_id, groupId, activities);
-        }
-
-        /// <summary>
-        ///     Get the all the knowledges for all the activities of an agent
-        /// </summary>
-        /// <returns></returns>
-        public IDictionary<string, List<Knowledge>>
-            GetActivitiesKnowledgesByActivity()
-        {
-            return _network.NetworkActivities.GetActivitiesKnowledgesByActivity(_id);
-        }
 
         #endregion
     }

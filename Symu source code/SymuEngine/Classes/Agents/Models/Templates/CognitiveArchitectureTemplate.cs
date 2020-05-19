@@ -22,7 +22,7 @@ namespace SymuEngine.Classes.Agents.Models.Templates
     public class CognitiveArchitectureTemplate
     {
         public CognitiveArchitecture Cognitive { get; set; } =
-            new CognitiveArchitecture(null, new AgentId(0, 1));
+            new CognitiveArchitecture();
 
         public void Set(CognitiveArchitecture cognitive)
         {

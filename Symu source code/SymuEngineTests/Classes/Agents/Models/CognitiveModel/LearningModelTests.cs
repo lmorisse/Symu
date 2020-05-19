@@ -31,8 +31,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         public void InitializeModel(SimulationRandom randomLevel, bool modelOn)
         {
             _organizationModels.RandomLevel = randomLevel;
-            _cognitiveArchitecture = new CognitiveArchitecture(_network, _agentId);
+            _cognitiveArchitecture = new CognitiveArchitecture();
             _cognitiveArchitecture.InternalCharacteristics.CanLearn = true;
+            var learningEntity = new ModelEntity();
             _learningModel = new LearningModel(_agentId, _organizationModels, _network.NetworkKnowledges,
                 _cognitiveArchitecture) {On = modelOn, RateOfAgentsOn = 1};
         }

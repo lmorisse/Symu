@@ -290,6 +290,10 @@ namespace SymuEngine.Repository.Networks
         /// <param name="groupId"></param>
         public void RemoveMemberFromGroup(AgentId agentId, AgentId groupId)
         {
+            if (!NetworkGroups.Exists(groupId))
+            {
+                return;
+            }
             foreach (var oldTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
             {
                 NetworkLinks.DeactivateLink(agentId, oldTeammateId);

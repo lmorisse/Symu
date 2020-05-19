@@ -27,6 +27,8 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         public byte ClassKey { get; set; }
 
+        public bool IsNull => Key == 0;
+
         public AgentId(ushort key, byte classKey)
         {
             if (classKey == 0)

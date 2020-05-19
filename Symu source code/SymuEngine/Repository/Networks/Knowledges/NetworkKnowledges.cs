@@ -125,16 +125,11 @@ namespace SymuEngine.Repository.Networks.Knowledges
             }
         }
 
-        public void Add(AgentId agentId, Knowledge knowledge, KnowledgeLevel level, float minimumKnowledge,
+        public void Add(AgentId agentId, ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge,
             short timeToLive)
         {
-            if (knowledge is null)
-            {
-                throw new ArgumentNullException(nameof(knowledge));
-            }
-
             AddAgentId(agentId);
-            AddKnowledge(agentId, knowledge.Id, level, minimumKnowledge, timeToLive);
+            AddKnowledge(agentId, knowledgeId, level, minimumKnowledge, timeToLive);
         }
 
         /// <summary>

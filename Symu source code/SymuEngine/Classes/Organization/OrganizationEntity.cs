@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Murphies;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks.Databases;
 using SymuEngine.Repository.Networks.Knowledges;

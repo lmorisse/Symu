@@ -62,7 +62,7 @@ namespace SymuLearnAndForget
             cbHasKnowledge.Checked =
                 OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge;
             tbKnowledgeThreshold.Text =
-                OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing
+                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.KnowledgeThreshHoldForReacting
                     .ToString(CultureInfo.InvariantCulture);
             tbTimeToLive.Text =
                 OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive.ToString(
@@ -212,58 +212,58 @@ namespace SymuLearnAndForget
             WriteTextSafe(TimeStep, _environment.TimeStep.Step.ToString());
             // 1st Agent
             WriteTextSafe(lblKnowledge1,
-                _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledgesSum()
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning1,
-                _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning.ToString("F1",
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting1,
-                _environment.LearnFromSourceAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 2nd Agent
             WriteTextSafe(lblKnowledge2,
-                _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledgesSum()
+                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning2,
-                _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning.ToString("F1",
+                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting2,
-                _environment.LearnByDoingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
+                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 3rd Agent
             WriteTextSafe(lblKnowledge3,
-                _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledgesSum()
+                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning3,
-                _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning.ToString("F1",
+                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting3,
-                _environment.LearnByAskingAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
+                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 4th Agent
             WriteTextSafe(lblKnowledge4,
-                _environment.DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledgesSum()
+                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning4,
-                _environment.DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning.ToString("F1",
+                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting4,
-                _environment.DoesNotLearnAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
+                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Expert Agent
             WriteTextSafe(lblExpertKnowledge,
-                _environment.ExpertAgent.Cognitive.KnowledgeAndBeliefs.Expertise.GetKnowledgesSum()
+                _environment.ExpertAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblExpertLearning,
-                _environment.ExpertAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Learning.ToString("F1",
+                _environment.ExpertAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblExpertForgetting,
-                _environment.ExpertAgent.Cognitive.KnowledgeAndBeliefs.Expertise.Forgetting.ToString("F1",
+                _environment.ExpertAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Wiki
             WriteTextSafe(lblWiki, _environment.Wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
             if (_fullKnowledge == 0 &&
-                Math.Abs(_environment.Wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < SymuTools.Constants.Tolerance)
+                Math.Abs(_environment.Wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < Tolerance)
             {
                 _fullKnowledge = _environment.TimeStep.Step;
             }
@@ -372,7 +372,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.KnowledgeThreshHoldForDoing =
+                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.KnowledgeThreshHoldForReacting =
                     float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshold.BackColor = SystemColors.Window;
             }

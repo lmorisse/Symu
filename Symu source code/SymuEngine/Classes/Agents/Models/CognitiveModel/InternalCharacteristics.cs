@@ -41,6 +41,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
             #region Risk aversion
             internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
+            internalCharacteristics.BeliefThreshHoldForReacting = BeliefThreshHoldForReacting;
+            internalCharacteristics.KnowledgeThreshHoldForReacting = KnowledgeThreshHoldForReacting;
             #endregion
 
             #region Forgetting
@@ -144,7 +146,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         ///     When forgetting a knowledge there is a minimum level that is remaining, this is the general culture on the subject
         ///     MinimumRemainingKnowledge set this minimum knowledge that remains
         /// </summary>
-        /// <remarks>the default is set to be > Murphies.IncompleteKnowledge.KnowledgeThreshHoldForDoing</remarks>
+        /// <remarks>the default is set to be > Murphies.IncompleteKnowledge.KnowledgeThreshHoldForReacting</remarks>
         /// <example>
         ///     if knowledgeBit = MinimumRemainingKnowledge and the agent is forgetting this knowledge, the knowledgeBit will
         ///     remaining equal
@@ -306,6 +308,47 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #endregion
 
         #region Risk aversion
+
+        private float _knowledgeThreshHoldForReacting = 0.1F;
+
+        /// <summary>
+        ///     To react, an agent must have enough knowledge
+        ///     [0 - 1]
+        /// </summary>
+        /// <example>if KnowledgeThreshHoldForReacting = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
+        public float KnowledgeThreshHoldForReacting
+        {
+            get => _knowledgeThreshHoldForReacting;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("KnowledgeThreshHoldForReacting should be between 0 and 1");
+                }
+
+                _knowledgeThreshHoldForReacting = value;
+            }
+        }
+        private float _beliefThreshHoldForReacting = 0.1F;
+        /// <summary>
+        ///     To react, an agent must have enough belief
+        ///     BeliefThreshHoldForReacting should be inferior to RiskAversionThreshold
+        ///     [0 - 1]
+        /// </summary>
+        /// <example>if BeliefThreshHoldForReacting = 0.05 and agent BeliefId[index] = 0.6 => he won't react</example>
+        public float BeliefThreshHoldForReacting
+        {
+            get => _beliefThreshHoldForReacting;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("BeliefThreshHoldForReacting should be between 0 and 1");
+                }
+
+                _beliefThreshHoldForReacting = value;
+            }
+        }
 
         private float _riskAversionThreshold;
 

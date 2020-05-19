@@ -27,6 +27,7 @@ namespace SymuEngineTests.Classes.Agents.Models
         [TestMethod]
         public void IsMultiTaskingTest()
         {
+            _entity.On = false;
             _entity.RateOfAgentsOn = 1F;
             Assert.IsFalse(_entity.IsAgentOn());
         }

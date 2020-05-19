@@ -45,7 +45,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _taskBits.SetRequired(new byte[] {0});
             _forgetting.On = true;
             _forgetting.RateOfAgentsOn = 1;
-            _cognitiveArchitecture = new CognitiveArchitecture(network, _agentId);
+            _cognitiveArchitecture = new CognitiveArchitecture();
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
             _cognitiveArchitecture.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
             _internalCharacteristics = _cognitiveArchitecture.InternalCharacteristics;

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models.Templates;
+using SymuEngine.Classes.Blockers;
 using SymuEngine.Classes.Task;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;
@@ -49,34 +50,28 @@ namespace SymuBeliefsAndInfluence.Classes
         }
 
         /// <summary>
-        /// True if belief are ok to do the task
+        /// 
         /// </summary>
         /// <param name="task"></param>
-        /// <param name="knowledgeId"></param>
-        /// <param name="mandatoryScore"></param>
-        /// <param name="requiredScore"></param>
-        /// <param name="mandatoryIndex"></param>
-        /// <param name="requiredIndex"></param>
+        /// <param name="blocker"></param>
         /// <returns></returns>
-        protected override void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore, float requiredScore, byte mandatoryIndex, byte requiredIndex)
+        public override void TryRecoverBlockerIncompleteBelief(SymuTask task, Blocker blocker)
         {
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
-            base.CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
-            if (mandatoryScore > -Cognitive.InternalCharacteristics.RiskAversionThreshold)
+            if (blocker is null)
             {
-                return;
+                throw new ArgumentNullException(nameof(blocker));
             }
-
             // RiskAversionThreshold has been exceeded =>
             // Worker don't want to do the task, the task is blocked in base method
             // Ask advice from influencers
             var attachments = new MessageAttachments
             {
-                KnowledgeId = knowledgeId,
-                KnowledgeBit = mandatoryIndex
+                KnowledgeId = (ushort)blocker.Parameter,
+                KnowledgeBit = (byte)blocker.Parameter2
             };
             SendToMany(Influencers, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
         }

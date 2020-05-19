@@ -115,9 +115,10 @@ namespace SymuBeliefsAndInfluence.Classes
         {
             for (var i = 0; i < KnowledgeCount; i++)
             {
-                actor.Cognitive.KnowledgeAndBeliefs.AddKnowledge(knowledges[i],
+                actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                     KnowledgeLevel.FullKnowledge,
                         Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                actor.BeliefsModel.AddBelief(knowledges[i].Id);
 
             }
         }

@@ -353,7 +353,7 @@ namespace SymuEngine.Classes.Agents
         }
         #endregion
 
-        #region Incomplete blockers
+        #region Incomplete beliefs
         /// <summary>
         ///     Check Task.BeliefBits against Agent.Beliefs
         /// </summary>
@@ -386,7 +386,7 @@ namespace SymuEngine.Classes.Agents
             float requiredScore = 0;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            Cognitive.KnowledgeAndBeliefs.CheckBelief(knowledgeId, taskBits, ref mandatoryScore, ref requiredScore,
+            BeliefsModel.CheckBelief(knowledgeId, taskBits, ref mandatoryScore, ref requiredScore,
                 ref mandatoryIndex, ref requiredIndex);
             CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
         }
@@ -405,11 +405,11 @@ namespace SymuEngine.Classes.Agents
         }
         /// <summary>
         ///     Ask Help to teammates about it belief
-        ///     when block from belief
+        ///     when task is blocked because of a lack of belief
         /// </summary>
         /// <param name="task"></param>
         /// <param name="blocker"></param>
-        protected virtual void TryRecoverBlockerIncompleteBelief(SymuTask task, Blocker blocker)
+        public virtual void TryRecoverBlockerIncompleteBelief(SymuTask task, Blocker blocker)
         {
             if (task is null)
             {
@@ -429,9 +429,9 @@ namespace SymuEngine.Classes.Agents
 
             // If agent has no other strategy 
             // Blocker must be unblocked in a way or another
-            var knowledgeId = (ushort)blocker.Parameter;
-            var knowledgeBit = (byte)blocker.Parameter2;
-            RecoverBlockerBeliefByGuessing(task, blocker, knowledgeId, knowledgeBit);
+            var beliefId = (ushort)blocker.Parameter;
+            var beliefBit = (byte)blocker.Parameter2;
+            RecoverBlockerBeliefByGuessing(task, blocker, beliefId, beliefBit);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace SymuEngine.Classes.Agents.Models
     /// </example>
     public class ModelEntity
     {
-        private float _rateOfAgentsOn = 0.8F;
+        private float _rateOfAgentsOn = 1F;
 
         public ModelEntity()
         {
@@ -45,7 +45,7 @@ namespace SymuEngine.Classes.Agents.Models
         /// <summary>
         ///     If (On) the model is active globally
         /// </summary>
-        public bool On { get; set; }
+        public bool On { get; set; } = true;
 
         /// <summary>
         ///     If model is On, individuals may use or not the model

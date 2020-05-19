@@ -63,7 +63,7 @@ namespace SymuEngineTests.Repository.Networks
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.NetworkKnowledges.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.NetworkBeliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _network.NetworkActivities.AddActivities(_teammateId, _teamId, new List<string> {"a1"});
             _network.Clear();
@@ -148,7 +148,7 @@ namespace SymuEngineTests.Repository.Networks
             _network.NetworkRoles.Add(_networkRole);
             _network.NetworkPortfolios.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_teammateId, _knowledge, KnowledgeLevel.Expert, 0, -1);
+            _network.NetworkKnowledges.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.NetworkActivities.AddActivities(_teammateId, _teamId, new List<string> {_activity.Name});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));

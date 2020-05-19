@@ -26,11 +26,26 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _influenceModel = new InfluenceModel(_agentId, entity, _internalCharacteristics, _network);
         }
 
-
-
+        /// <summary>
+        /// Model off
+        /// </summary>
         [TestMethod]
         public void LearnByDoingTest()
         {
+            _influenceModel.On = false;
+            _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
+            var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model, BeliefWeightLevel.RandomWeight);
+            _network.NetworkBeliefs.AddBelief(belief);
+            _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
+            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
+        }
+        /// <summary>
+        /// Model on
+        /// </summary>
+        [TestMethod]
+        public void LearnByDoingTest1()
+        {
+            _influenceModel.On = true;
             _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
             var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model, BeliefWeightLevel.RandomWeight);
             _network.NetworkBeliefs.AddBelief(belief);

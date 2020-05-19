@@ -1,0 +1,400 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SymuEngine.Classes.Agents;
+using SymuEngine.Classes.Agents.Models;
+using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using SymuEngine.Classes.Agents.Models.Templates.Communication;
+using SymuEngine.Classes.Organization;
+using SymuEngine.Classes.Task;
+using SymuEngine.Common;
+using SymuEngine.Engine;
+using SymuEngine.Repository.Networks;
+using SymuEngine.Repository.Networks.Beliefs;
+using SymuEngine.Repository.Networks.Knowledges;
+using SymuEngineTests.Helpers;
+
+namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
+{
+    [TestClass]
+    public class BeliefsModelTests
+    {
+        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
+        private readonly AgentId _agentId = new AgentId(1, 1);
+        private Network _network ;
+        private CognitiveArchitecture _cognitiveArchitecture;
+        private Belief _belief;
+        private BeliefsModel _beliefsModel;
+        private readonly float[] _knowledge1FBits = new[] { 1, 0.5F, 0.3F, 0 };
+        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
+        private readonly AgentExpertise _expertise = new AgentExpertise();
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _network = new Network(new AgentTemplates(), new OrganizationModels());
+            _cognitiveArchitecture = new CognitiveArchitecture()
+            {
+                KnowledgeAndBeliefs = { HasBelief = true, HasKnowledge = true },
+                MessageContent = { CanReceiveBeliefs = true, CanReceiveKnowledge = true },
+                InternalCharacteristics = { CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true }
+            };
+            var modelEntity = new ModelEntity();
+            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
+            _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
+
+            _network.NetworkBeliefs.AddBelief(_belief);
+            _network.NetworkBeliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+
+            _taskBits.SetMandatory(new byte[] { 0 });
+            _taskBits.SetRequired(new byte[] { 0 });
+        }
+        /// <summary>
+        ///     Non passing test
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefsTest()
+        {
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = false;
+            var agentKnowledge = new AgentKnowledge(2, new float[] { 0 }, 0, -1, 0);
+            _expertise.Add(agentKnowledge);
+            _beliefsModel.AddBeliefs(_expertise);
+            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId,2));
+        }
+
+        /// <summary>
+        ///     Passing test
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefsTest1()
+        {
+            var agentKnowledge = new AgentKnowledge(2, new float[] { 0 }, 0, -1, 0);
+            _expertise.Add(agentKnowledge);
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
+            _beliefsModel.AddBeliefs(_expertise);
+            Assert.IsTrue(_network.NetworkBeliefs.Exists(_agentId));
+            Assert.AreEqual(2, _network.NetworkBeliefs.GetAgentBeliefs(_agentId).Count);
+        }
+
+        /// <summary>
+        ///     Non passing test
+        /// </summary>
+        [TestMethod]
+        public void NullCheckBeliefTest()
+        {
+            float mandatoryCheck = 0;
+            float requiredCheck = 0;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                _beliefsModel.CheckBelief(1, null, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+                    ref requiredIndex));
+            // no belief
+            Assert.ThrowsException<NullReferenceException>(() => _beliefsModel.CheckBelief(2, _taskBits,
+                ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex, ref requiredIndex));
+        }
+        /// <summary>
+        /// Model off
+        /// </summary>
+        [TestMethod]
+        public void CheckBeliefTest()
+        {
+            float mandatoryCheck = 0;
+            float requiredCheck = 0;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            _beliefsModel.On = false;
+            _beliefsModel.CheckBelief(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+                ref requiredIndex);
+            Assert.AreEqual(0, mandatoryCheck);
+            Assert.AreEqual(0, requiredCheck);
+        }
+        /// <summary>
+        /// Model on
+        /// </summary>
+        [TestMethod]
+        public void CheckBeliefTest1()
+        {
+            float mandatoryCheck = 0;
+            float requiredCheck = 0;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            _beliefsModel.On = true;
+            _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _beliefsModel.InitializeBeliefs();
+            // Force beliefBits
+            _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 1);
+            _belief.Weights.SetBit(0, 1);
+            _beliefsModel.CheckBelief(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+                ref requiredIndex);
+            Assert.AreEqual(1, mandatoryCheck);
+            Assert.AreEqual(1, requiredCheck);
+        }
+
+        /// <summary>
+        ///     Don't have initial belief
+        /// </summary>
+        [TestMethod]
+        public void InitializeBeliefTest()
+        {
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialBelief = false;
+            _beliefsModel.InitializeBeliefs();
+            Assert.IsTrue(_network.NetworkBeliefs.Exists(_agentId));
+        }
+
+        /// <summary>
+        ///     Have initial Knowledge
+        /// </summary>
+        [TestMethod]
+        public void InitializeBeliefTest1()
+        {
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialBelief = true;
+
+            _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _beliefsModel.InitializeBeliefs();
+            var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_agentId, _belief.Id);
+            Assert.IsNotNull(agentBelief);
+            Assert.IsNotNull(agentBelief.BeliefBits);
+        }
+
+        /// <summary>
+        ///     Model off
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefTest()
+        {
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = false;
+            _beliefsModel.AddBelief(_belief.Id);
+            Assert.ThrowsException<NullReferenceException>(() =>
+                _beliefsModel.GetBelief(_belief.Id));
+        }
+
+        /// <summary>
+        ///     model on
+        /// </summary>
+        [TestMethod]
+        public void AddBeliefTest1()
+        {
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
+            _beliefsModel.AddBelief(_belief.Id);
+            var agentBelief = _beliefsModel.GetBelief(_belief.Id);
+            Assert.IsNotNull(agentBelief);
+        }
+        /// <summary>
+        ///     Non passing test
+        /// </summary>
+        [TestMethod]
+        public void NullGetFilteredBeliefToSendTest()
+        {
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     Non passing test
+        ///     Model Off
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest0()
+        {
+            _beliefsModel.On = false;
+            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     Non passing test
+        ///     Can't send belief
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest()
+        {
+            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = false;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     Non passing test
+        ///     no belief asked
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest1()
+        {
+            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(0, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     Non passing test
+        ///     don't BelievesEnough
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest2()
+        {
+            _network.NetworkBeliefs.AddBelief(_belief);
+            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.NetworkBeliefs.InitializeBeliefs(_agentId, true);
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     Non passing test
+        ///     MinimumBeliefToSendPerBit too high
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest3()
+        {
+            _network.NetworkBeliefs.AddBelief(_belief);
+            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
+            var bits = _beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate);
+            Assert.IsNull(bits);
+        }
+
+        /// <summary>
+        ///     Passing test
+        ///     enough belief
+        /// </summary>
+        [TestMethod]
+        public void GetFilteredBeliefToSendTest4()
+        {
+            _network.NetworkBeliefs.AddBelief(_belief);
+            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
+            _network.NetworkBeliefs.GetAgentBelief(_agentId, _belief.Id).BeliefBits
+                .SetBit(0, 1);
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0;
+            var bits = _beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate);
+            Assert.IsNotNull(bits);
+            Assert.AreEqual(1, bits.GetSum());
+        }
+
+        #region Belief
+
+        /// <summary>
+        ///     WIth stochastic effect - non passing
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSendTest()
+        {
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     WIth stochastic effect
+        ///     Passing test
+        ///     length to send == 0
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSendTest1()
+        {
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     WIth stochastic effect
+        ///     Passing test
+        ///     MinimumBeliefToSendPerBit > _agentBeliefF
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSendTest2()
+        {
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
+            _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
+            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
+            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
+            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
+            _beliefsModel.AddBelief(_belief.Id);
+            _beliefsModel.InitializeBeliefs();
+            _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 0.5F);
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
+        }
+
+        /// <summary>
+        ///     WIth stochastic effect
+        ///     Passing test
+        ///     MinimumBeliefToSendPerBit = 1
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSendTest3()
+        {
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
+            _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 2;
+            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
+            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
+            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 2;
+            _beliefsModel.AddBelief(_belief.Id);
+            _beliefsModel.InitializeBeliefs();
+            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            Assert.AreEqual(1F, _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum());
+        }
+
+        /// <summary>
+        ///     WIth stochastic effect
+        ///     Passing test
+        ///     MinimumBeliefToSendPerBit = 0.5F
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSendTest4()
+        {
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0.4F;
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 4;
+            _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 4;
+            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 0.4F;
+            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 4;
+            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 4;
+            _beliefsModel.AddBelief(_belief.Id);
+            _beliefsModel.InitializeBeliefs();
+            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            Assert.IsTrue(1F <= _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum());
+        }
+
+        /// <summary>
+        ///     Without stochastic effect
+        /// </summary>
+        [TestMethod]
+        public void AskBeliefToSend1Test1()
+        {
+            _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
+            _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0.4F;
+            _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 3;
+            _beliefsModel.AddBelief(_belief.Id);
+            _beliefsModel.InitializeBeliefs();
+            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            var sum = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum();
+            Assert.IsTrue(sum <= 3);
+            Assert.IsTrue(sum >= 1);
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
+            sum = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum();
+            Assert.IsTrue(sum <= 2);
+            Assert.IsTrue(sum >= 1);
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
+            sum = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum();
+            Assert.AreEqual(1, sum);
+            _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
+        }
+
+        #endregion
+
+    }
+}

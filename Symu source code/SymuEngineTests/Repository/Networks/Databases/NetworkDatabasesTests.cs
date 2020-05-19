@@ -35,7 +35,7 @@ namespace SymuEngineTests.Repository.Networks.Databases
             var agentTemplates = new AgentTemplates();
             var models = new OrganizationModels();
             var network = new Network(agentTemplates, models);
-            var cognitive = new CognitiveArchitecture(network, _agentId);
+            var cognitive = new CognitiveArchitecture();
             var databaseEntity = new DataBaseEntity(_agentId, cognitive);
             _database = new Database(databaseEntity, models, network.NetworkKnowledges);
         }
