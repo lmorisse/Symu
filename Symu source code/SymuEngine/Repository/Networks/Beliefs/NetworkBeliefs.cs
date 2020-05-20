@@ -30,10 +30,16 @@ namespace SymuEngine.Repository.Networks.Beliefs
     /// <example></example>
     public class NetworkBeliefs
     {
+        public NetworkBeliefs(BeliefWeightLevel beliefWeightLevel)
+        {
+            BeliefWeightLevel = beliefWeightLevel;
+        }
+
         /// <summary>
-        /// Impact level of agent's belief on how agent will accept to do the task
+        ///     Impact level of agent's belief on how agent will accept to do the task
         /// </summary>
         public BeliefWeightLevel BeliefWeightLevel { get; set; }
+
         public RandomGenerator Model { get; set; } = new RandomGenerator();
 
         /// <summary>
@@ -48,11 +54,6 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         public ConcurrentDictionary<AgentId, AgentBeliefs> AgentsRepository { get; } =
             new ConcurrentDictionary<AgentId, AgentBeliefs>();
-
-        public NetworkBeliefs(BeliefWeightLevel beliefWeightLevel)
-        {
-            BeliefWeightLevel = beliefWeightLevel;
-        }
 
         public int Count => AgentsRepository.Count;
 
@@ -219,6 +220,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
                 InitializeAgentBelief(agentBelief, neutral);
             }
         }
+
         /// <summary>
         ///     Initialize AgentBelief with a stochastic process based on the agent belief level
         /// </summary>
@@ -236,6 +238,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
             {
                 throw new NullReferenceException(nameof(belief));
             }
+
             var level = neutral ? BeliefLevel.NoBelief : agentBelief.BeliefLevel;
             var beliefBits = belief.InitializeBits(Model, level);
             agentBelief.SetBeliefBits(beliefBits);
@@ -296,7 +299,8 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// <param name="beliefBits"></param>
         /// <param name="influenceWeight"></param>
         /// <param name="beliefLevel"></param>
-        public void Learn(AgentId agentId, ushort beliefId, Bits beliefBits, float influenceWeight, BeliefLevel beliefLevel)
+        public void Learn(AgentId agentId, ushort beliefId, Bits beliefBits, float influenceWeight,
+            BeliefLevel beliefLevel)
         {
             LearnNewBelief(agentId, beliefId, beliefLevel);
             GetAgentBelief(agentId, beliefId).Learn(beliefBits, influenceWeight);

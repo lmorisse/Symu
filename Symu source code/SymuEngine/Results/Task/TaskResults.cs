@@ -25,19 +25,21 @@ namespace SymuEngine.Results.Task
     public class TaskResults
     {
         /// <summary>
-        /// If set to true, TaskResults will be filled with value
+        ///     If set to true, TaskResults will be filled with value
         /// </summary>
         private readonly bool _followTasks;
-        public TaskResults(bool followTasks)
-        {
-            _followTasks = followTasks;
-        }
+
         /// <summary>
         ///     Key => step
         ///     Value => TaskResult for the step
         /// </summary>
         private readonly ConcurrentDictionary<ushort, TaskResult> _results =
             new ConcurrentDictionary<ushort, TaskResult>();
+
+        public TaskResults(bool followTasks)
+        {
+            _followTasks = followTasks;
+        }
 
         /// <summary>
         ///     Total tasks still in to do
@@ -67,7 +69,11 @@ namespace SymuEngine.Results.Task
 
         public void SetResults(SymuEnvironment environment)
         {
-            if (!_followTasks) { return; }
+            if (!_followTasks)
+            {
+                return;
+            }
+
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));

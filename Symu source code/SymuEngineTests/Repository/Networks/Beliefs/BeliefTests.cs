@@ -1,10 +1,8 @@
 ﻿#region Licence
-
 // Description: Symu - SymuEngineTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
-
 #endregion
 
 #region using directives
@@ -51,6 +49,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             _belief.InitializeWeights(RandomGenerator.RandomUniform, 1, BeliefWeightLevel.RandomWeight);
             Assert.IsTrue(-1 <= _belief.Weights.GetBit(0) && _belief.Weights.GetBit(0) <= 1);
         }
+
         /// <summary>
         ///     Random Binary Generator
         /// </summary>

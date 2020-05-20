@@ -58,12 +58,12 @@ namespace SymuEngine.Results
         /// <summary>
         ///     Get the Task blockers metrics
         /// </summary>
-        public BlockerResults Blockers { get; private set; } 
+        public BlockerResults Blockers { get; private set; }
 
         /// <summary>
         ///     Get the Tasks model metrics
         /// </summary>
-        public TaskResults Tasks { get; private set; } 
+        public TaskResults Tasks { get; private set; }
 
         public float Capacity { get; set; }
 

@@ -27,12 +27,12 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
     {
         private const RandomGenerator Model = new RandomGenerator();
         private readonly AgentId _agentId = new AgentId(1, 1);
+        private readonly Belief _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);
 
         private readonly NetworkBeliefs _network = new NetworkBeliefs(BeliefWeightLevel.RandomWeight);
-        private readonly Belief _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
 
         [TestMethod]
         public void AddBeliefTest()
@@ -197,7 +197,8 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void NullLearnTest()
         {
-            Assert.ThrowsException<NullReferenceException>(() => _network.Learn(_agentId, _belief.Id, null, 1, BeliefLevel.NoBelief));
+            Assert.ThrowsException<NullReferenceException>(() =>
+                _network.Learn(_agentId, _belief.Id, null, 1, BeliefLevel.NoBelief));
         }
 
         /// <summary>
@@ -219,6 +220,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             _network.AddBelief(_agentId, 1, BeliefLevel.NoBelief);
             Assert.AreEqual(1, _network.GetBeliefIds(_agentId).Count());
         }
+
         [TestMethod]
         public void NullInitializeAgentBeliefTest()
         {

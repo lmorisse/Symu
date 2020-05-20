@@ -1,4 +1,15 @@
-﻿using System;
+﻿#region Licence
+
+// Description: Symu - SymuEngineTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
@@ -9,39 +20,41 @@ using SymuEngine.Classes.Task;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Knowledges;
 
+#endregion
+
 namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class KnowledgeModelTests
     {
-        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
         private readonly AgentId _agentId = new AgentId(1, 1);
-        private Network _network;
+        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
+        private readonly AgentExpertise _expertise = new AgentExpertise();
+        private readonly float[] _knowledge1Bits = {1, 1, 1, 1};
+        private readonly float[] _knowledge1FBits = {1, 0.5F, 0.3F, 0};
+        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private CognitiveArchitecture _cognitiveArchitecture;
         private Knowledge _knowledge;
         private KnowledgeModel _knowledgeModel;
-        private readonly AgentExpertise _expertise = new AgentExpertise();
-        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
-        private readonly float[] _knowledge1FBits = new[] { 1, 0.5F, 0.3F, 0 };
-        private readonly float[] _knowledge1Bits = new float[] { 1, 1, 1, 1 };
+        private Network _network;
 
         [TestInitialize]
         public void Initialize()
         {
             _network = new Network(new AgentTemplates(), new OrganizationModels());
-            _cognitiveArchitecture = new CognitiveArchitecture()
+            _cognitiveArchitecture = new CognitiveArchitecture
             {
-                KnowledgeAndBeliefs = { HasBelief = true, HasKnowledge = true },
-                MessageContent = { CanReceiveBeliefs = true, CanReceiveKnowledge = true },
-                InternalCharacteristics = { CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true }
+                KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
+                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
+                InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new ModelEntity();
             _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, _network);
             _knowledge = new Knowledge(1, "1", 1);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _taskBits.SetMandatory(new byte[] { 0 });
-            _taskBits.SetRequired(new byte[] { 0 });
+            _taskBits.SetMandatory(new byte[] {0});
+            _taskBits.SetRequired(new byte[] {0});
         }
 
 
@@ -70,7 +83,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeModel.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
@@ -88,7 +101,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 1 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _knowledgeModel.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
@@ -104,7 +117,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void AddExpertiseTest()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = false;
             _knowledgeModel.AddExpertise(_expertise);
@@ -120,7 +133,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);
             Assert.AreEqual(1, _network.NetworkKnowledges.GetAgentExpertise(_agentId).Count);
@@ -145,7 +158,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _network.AddKnowledge(_knowledge);
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);
             _knowledgeModel.InitializeExpertise(0);
@@ -297,7 +310,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits,0);
+            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.IsTrue(1F <= bits.GetSum());

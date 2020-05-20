@@ -1,7 +1,7 @@
 ﻿#region Licence
 
-// Description: Symu - Modeling
-// Website: Website:     https://symu.org
+// Description: Symu - SymuEngine
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -29,19 +29,19 @@ namespace SymuEngine.Classes.Murphies
     /// </example>
     public class MurphyCollection
     {
-        public MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
-        public MurphyIncompleteKnowledge IncompleteKnowledge { get; } = new MurphyIncompleteKnowledge();
-        
-        public MurphyIncompleteBelief IncompleteBelief { get; } = new MurphyIncompleteBelief();
-
-        public List<Murphy> Murphies { get; } = new List<Murphy>();
-
         public MurphyCollection()
         {
             Add(IncompleteKnowledge);
             Add(IncompleteBelief);
             Add(UnAvailability);
         }
+
+        public MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
+        public MurphyIncompleteKnowledge IncompleteKnowledge { get; } = new MurphyIncompleteKnowledge();
+
+        public MurphyIncompleteBelief IncompleteBelief { get; } = new MurphyIncompleteBelief();
+
+        public List<Murphy> Murphies { get; } = new List<Murphy>();
 
         public void Add(Murphy murphy)
         {

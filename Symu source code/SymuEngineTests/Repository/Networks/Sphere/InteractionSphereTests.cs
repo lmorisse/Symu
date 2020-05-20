@@ -35,7 +35,10 @@ namespace SymuEngineTests.Repository.Networks.Sphere
         private readonly AgentId _agentId1 = new AgentId(1, 1);
         private readonly AgentId _agentId2 = new AgentId(2, 1);
         private readonly List<AgentId> _agents = new List<AgentId>();
-        private readonly Belief _belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
+
+        private readonly Belief _belief =
+            new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
+
         private readonly AgentId _groupId = new AgentId(3, 2);
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly OrganizationModels _model = new OrganizationModels();
@@ -54,6 +57,7 @@ namespace SymuEngineTests.Repository.Networks.Sphere
             _network.NetworkBeliefs.AddBelief(_belief);
             _network.NetworkActivities.AddActivity(_activity, _groupId);
         }
+
         /// <summary>
         ///     No interaction
         /// </summary>

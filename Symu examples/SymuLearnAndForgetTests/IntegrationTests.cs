@@ -162,7 +162,7 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = true;
             _organization.Models.Learning.RateOfAgentsOn = 1;
-            _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit= 1;
+            _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
             _simulation.Process();
             Assert.AreEqual(0, _environment.LearnByAskingAgent.KnowledgeModel.Expertise.Learning);
         }

@@ -31,26 +31,29 @@ namespace SymuEngine.Repository.Networks.Databases
         private const float ForgettingRate = 1;
 
         /// <summary>
-        ///     Define the cognitive architecture model of this class
-        /// </summary>
-        public DataBaseEntity Entity { get; }
-
-        /// <summary>
         ///     Database of the stored information
         /// </summary>
         private readonly AgentExpertise _database = new AgentExpertise();
 
         private readonly LearningModel _learningModel;
 
-        public Database(DataBaseEntity entity, OrganizationModels organizationModels, NetworkKnowledges networkKnowledges)
+        public Database(DataBaseEntity entity, OrganizationModels organizationModels,
+            NetworkKnowledges networkKnowledges)
         {
             if (organizationModels is null)
             {
                 throw new ArgumentNullException(nameof(organizationModels));
             }
+
             Entity = new DataBaseEntity(entity.AgentId, entity.CognitiveArchitecture);
-            _learningModel = new LearningModel(Entity.AgentId, organizationModels, networkKnowledges, entity.CognitiveArchitecture);
+            _learningModel = new LearningModel(Entity.AgentId, organizationModels, networkKnowledges,
+                entity.CognitiveArchitecture);
         }
+
+        /// <summary>
+        ///     Define the cognitive architecture model of this class
+        /// </summary>
+        public DataBaseEntity Entity { get; }
 
         public bool Exists(ushort knowledgeId)
         {

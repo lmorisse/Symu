@@ -117,8 +117,8 @@ namespace SymuEngineTests.Repository.Networks.Knowledges
             for (byte i = 0; i < 10; i++)
             {
                 Assert.IsTrue(0 <= knowledgeBits[i] ||
-                    Math.Abs(knowledgeBits[i]) < Tolerance);
-                Assert.IsTrue(knowledgeBits[i] <=1);
+                              Math.Abs(knowledgeBits[i]) < Tolerance);
+                Assert.IsTrue(knowledgeBits[i] <= 1);
             }
         }
 

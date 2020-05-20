@@ -1,6 +1,18 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿#region Licence
+
+// Description: Symu - SymuBeliefsAndInfluence
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System.Reflection;
 using System.Runtime.InteropServices;
+
+#endregion
 
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations

@@ -27,10 +27,10 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         private readonly AgentBelief _agentBelief0 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
         private readonly AgentBelief _agentBelief1 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
         private readonly AgentBelief _agentBelief2 = new AgentBelief(2, BeliefLevel.NeitherAgreeNorDisagree);
-        private readonly NetworkBeliefs _network = new NetworkBeliefs(BeliefWeightLevel.RandomWeight);
         private readonly Belief _belief0 = new Belief(0, "0", 0, Model, BeliefWeightLevel.RandomWeight);
         private readonly Belief _belief1 = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
         private readonly Belief _belief2 = new Belief(2, "2", 2, Model, BeliefWeightLevel.RandomWeight);
+        private readonly NetworkBeliefs _network = new NetworkBeliefs(BeliefWeightLevel.RandomWeight);
 
         [TestInitialize]
         public void Initialize()
@@ -50,6 +50,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(null, out _, _belief1, 1));
             Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(taskKnowledge, out _, null, 1));
         }
+
         /// <summary>
         ///     agentBelief not initialized
         /// </summary>
@@ -233,8 +234,9 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
             _agentBelief2.BeliefBits.SetBit(1, -1);
             Assert.AreEqual(0, _agentBelief2.GetBeliefSum());
         }
+
         /// <summary>
-        /// Random uniform
+        ///     Random uniform
         /// </summary>
         [TestMethod]
         public void LearnTest2()
@@ -251,7 +253,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         [TestMethod]
         public void SetBeliefBitsTest()
         {
-            var bits = new float[] { 1,2 };
+            var bits = new float[] {1, 2};
             _agentBelief1.SetBeliefBits(bits);
             for (byte i = 0; i < 2; i++)
             {

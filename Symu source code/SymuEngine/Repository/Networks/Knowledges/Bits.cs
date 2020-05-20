@@ -65,7 +65,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
             var clone = new Bits(RangeMin);
             clone.SetBits(_bits);
             return clone;
-        }  
+        }
 
         /// <summary>
         ///     Get the knowledgeBit at the index i

@@ -16,13 +16,13 @@ namespace SymuEngine.Repository.Networks.Beliefs
     public enum BeliefLevel
     {
         /// <summary>
-        /// For unit test
+        ///     For unit test
         /// </summary>
         NoBelief = 0,
         StronglyDisagree = 1,
         Disagree = 2,
-        NeitherAgreeNorDisagree= 3,
-        Agree= 4,
+        NeitherAgreeNorDisagree = 3,
+        Agree = 4,
         StronglyAgree = 5,
         Random = 6
     }

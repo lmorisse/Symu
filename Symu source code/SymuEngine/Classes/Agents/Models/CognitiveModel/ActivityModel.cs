@@ -13,10 +13,7 @@ using System;
 using System.Collections.Generic;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Influences;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -33,16 +30,16 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         private readonly AgentId _agentId;
         private readonly NetworkActivities _networkActivities;
         private readonly TasksAndPerformance _tasksAndPerformance;
+
         /// <summary>
-        /// Initialize influence model :
-        /// update networkInfluences
+        ///     Initialize influence model :
+        ///     update networkInfluences
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public ActivityModel(AgentId agentId, CognitiveArchitecture cognitiveArchitecture, Network network) 
+        public ActivityModel(AgentId agentId, CognitiveArchitecture cognitiveArchitecture, Network network)
         {
-
             if (cognitiveArchitecture == null)
             {
                 throw new ArgumentNullException(nameof(cognitiveArchitecture));

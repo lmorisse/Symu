@@ -131,8 +131,8 @@ namespace SymuLearnAndForget
         {
             SetRandomLevel(cbRandomLevel.SelectedIndex);
             TimeStepType = TimeStepType.Daily;
-            var _wiki = new DataBaseEntity(OrganizationEntity.Id, OrganizationEntity.Templates.Email.Cognitive);
-            OrganizationEntity.AddDatabase(_wiki);
+            var wiki = new DataBaseEntity(OrganizationEntity.Id, OrganizationEntity.Templates.Email.Cognitive);
+            OrganizationEntity.AddDatabase(wiki);
             OrganizationEntity.Models.FollowGroupKnowledge = true;
         }
 
@@ -448,7 +448,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit=
+                OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
                 OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);

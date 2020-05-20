@@ -30,7 +30,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     public class ForgettingModel : ModelEntity
     {
         private readonly AgentId _id;
-        public InternalCharacteristics InternalCharacteristics { get; set; }
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly NetworkKnowledges _network;
         private readonly byte _randomLevel;
@@ -48,6 +47,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 throw new ArgumentNullException(nameof(cognitive));
             }
+
             InternalCharacteristics = cognitive.InternalCharacteristics;
             _knowledgeAndBeliefs = cognitive.KnowledgeAndBeliefs;
             _randomLevel = randomLevel;
@@ -65,13 +65,16 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             _network = network;
             _id = id;
         }
-            
-        public ForgettingModel(AgentId agentId, OrganizationModels models, CognitiveArchitecture cognitive, NetworkKnowledges network) :
+
+        public ForgettingModel(AgentId agentId, OrganizationModels models, CognitiveArchitecture cognitive,
+            NetworkKnowledges network) :
             this(models.Forgetting, cognitive, models.RandomLevelValue)
         {
             _network = network;
             _id = agentId;
         }
+
+        public InternalCharacteristics InternalCharacteristics { get; set; }
 
         private AgentExpertise Expertise => _network.GetAgentExpertise(_id);
         public AgentExpertise ForgettingExpertise { get; } = new AgentExpertise();
@@ -155,7 +158,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 return;
             }
-            
+
             if (Expertise == null)
             {
                 throw new NullReferenceException(nameof(Expertise));

@@ -1,18 +1,29 @@
-﻿using System.Collections.Generic;
+﻿#region Licence
+
+// Description: Symu - SymuEngineTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Task;
-using SymuEngine.Repository;
-using SymuTools;
 using SymuEngine.Repository.Networks.Knowledges;
+
+#endregion
 
 namespace SymuEngineTests.Classes.Task
 {
     [TestClass]
     public class SymuTaskTests
     {
-        private readonly SymuTask _task = new SymuTask(0);
-        private readonly MurphyTask _model = new MurphyTask();
         private readonly List<Knowledge> _knowledges = new List<Knowledge>();
+        private readonly MurphyTask _model = new MurphyTask();
+        private readonly SymuTask _task = new SymuTask(0);
 
         [TestInitialize]
         public void Initialize()
@@ -20,28 +31,30 @@ namespace SymuEngineTests.Classes.Task
             for (var i = 0; i < 2; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 _knowledges.Add(knowledge);
             }
         }
+
         /// <summary>
-        /// With RequiredRatio = 0
+        ///     With RequiredRatio = 0
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest()
         {
             _model.RequiredRatio = 0;
-            _model.MandatoryRatio= 0;
-            _task.SetKnowledgesBits(_model, _knowledges,1);
+            _model.MandatoryRatio = 0;
+            _task.SetKnowledgesBits(_model, _knowledges, 1);
             foreach (var knowledgeBits in _task.KnowledgesBits.List)
             {
                 Assert.AreEqual(0, knowledgeBits.GetRequired().Length);
                 Assert.AreEqual(0, knowledgeBits.GetMandatory().Length);
             }
         }
+
         /// <summary>
-        /// With RequiredRatio = 1 & MandatoryRatio =0
-        /// Complexity = 1
+        ///     With RequiredRatio = 1 & MandatoryRatio =0
+        ///     Complexity = 1
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest1()
@@ -55,9 +68,10 @@ namespace SymuEngineTests.Classes.Task
                 Assert.AreEqual(0, knowledgeBits.GetMandatory().Length);
             }
         }
+
         /// <summary>
-        /// With RequiredRatio = 1 & MandatoryRatio =1
-        /// Complexity = 1
+        ///     With RequiredRatio = 1 & MandatoryRatio =1
+        ///     Complexity = 1
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest2()
@@ -71,9 +85,10 @@ namespace SymuEngineTests.Classes.Task
                 Assert.AreEqual(10, knowledgeBits.GetMandatory().Length);
             }
         }
+
         /// <summary>
-        /// With RequiredRatio = 1 & MandatoryRatio =1
-        /// Complexity = 0
+        ///     With RequiredRatio = 1 & MandatoryRatio =1
+        ///     Complexity = 0
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest3()
@@ -87,9 +102,10 @@ namespace SymuEngineTests.Classes.Task
                 Assert.AreEqual(0, knowledgeBits.GetMandatory().Length);
             }
         }
+
         /// <summary>
-        /// With RequiredRatio = 1 & MandatoryRatio =1
-        /// Complexity = 0.5F
+        ///     With RequiredRatio = 1 & MandatoryRatio =1
+        ///     Complexity = 0.5F
         /// </summary>
         [TestMethod]
         public void SetKnowledgesBitsTest4()

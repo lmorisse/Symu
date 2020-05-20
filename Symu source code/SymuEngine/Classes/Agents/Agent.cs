@@ -12,15 +12,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
-using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Blockers;
-using SymuEngine.Classes.Murphies;
-using SymuEngine.Classes.Task;
 using SymuEngine.Classes.Task.Manager;
 using SymuEngine.Common;
 using SymuEngine.Environment;
@@ -28,10 +21,8 @@ using SymuEngine.Messaging.Manager;
 using SymuEngine.Messaging.Messages;
 using SymuEngine.Repository;
 using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
-using static SymuTools.Constants;
 
 #endregion
 
@@ -115,28 +106,34 @@ namespace SymuEngine.Classes.Agents
         ///     If agent has an email
         /// </summary>
         protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
+
         /// <summary>
-        /// Define how agent will forget knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will forget knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public ForgettingModel ForgettingModel { get; set; }
+
         /// <summary>
-        /// Define how agent will learn knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will learn knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public LearningModel LearningModel { get; set; }
+
         /// <summary>
-        /// Define how agent will influence or be influenced during the simulation based on its cognitive architecture
+        ///     Define how agent will influence or be influenced during the simulation based on its cognitive architecture
         /// </summary>
         public InfluenceModel InfluenceModel { get; set; }
+
         /// <summary>
-        /// Define how agent will manage its beliefs during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its beliefs during the simulation based on its cognitive architecture
         /// </summary>
         public BeliefsModel BeliefsModel { get; set; }
+
         /// <summary>
-        /// Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public KnowledgeModel KnowledgeModel { get; set; }
+
         /// <summary>
-        /// Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public ActivityModel ActivityModel { get; set; }
 
@@ -148,7 +145,6 @@ namespace SymuEngine.Classes.Agents
             State = AgentState.NotStarted;
             foreach (var database in environment.Organization.Databases)
             {
-
                 environment.WhitePages.Network.AddDatabase(Id, database.AgentId.Key);
             }
         }
@@ -165,13 +161,16 @@ namespace SymuEngine.Classes.Agents
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
             // Initialize agent models
-            LearningModel = new LearningModel(Id,  Environment.Organization.Models,
+            LearningModel = new LearningModel(Id, Environment.Organization.Models,
                 Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
             ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
                 Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
-            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence, Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
-            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive, Environment.WhitePages.Network);
-            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive, Environment.WhitePages.Network);
+            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
+                Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
+            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,
+                Environment.WhitePages.Network);
+            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive,
+                Environment.WhitePages.Network);
             ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.Network);
         }
 
@@ -184,6 +183,12 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         public IEnumerable<AgentId> GetAgentIdsForNewInteractions()
         {
+            if (!Environment.Organization.Models.InteractionSphere.IsAgentOn())
+            {
+                // Agent don't want to have new interactions today
+                return new List<AgentId>();
+            }
+
             var agentIds = Environment.WhitePages.Network.InteractionSphere.GetAgentIdsForNewInteractions(Id,
                 Cognitive.InteractionPatterns.NextInteractionStrategy(), Cognitive.InteractionPatterns).ToList();
             return FilterAgentIdsToInteract(agentIds);
@@ -199,8 +204,9 @@ namespace SymuEngine.Classes.Agents
             return Environment.WhitePages.Network.InteractionSphere
                 .GetAgentIdsForInteractions(Id, interactionStrategy, Cognitive.InteractionPatterns).ToList();
         }
+
         /// <summary>
-        /// Filter the good number of agents based on Cognitive.InteractionPatterns
+        ///     Filter the good number of agents based on Cognitive.InteractionPatterns
         /// </summary>
         /// <param name="agentIds"></param>
         /// <returns>List of AgentIds the agent can interact with via message</returns>
@@ -759,7 +765,8 @@ namespace SymuEngine.Classes.Agents
                 var ma = message.Attachments;
                 var communication =
                     Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication, TimeStep.Step, out var knowledgeIndexToSend);
+                ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication,
+                    TimeStep.Step, out var knowledgeIndexToSend);
                 ma.BeliefBits = BeliefsModel.FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
                 // The agent is asked for his knowledge, so he can't forget it
                 if (ma.KnowledgeBits != null)
@@ -905,254 +912,6 @@ namespace SymuEngine.Classes.Agents
                         MessageProcessor.NumberReceivedPerPeriod <
                         Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod;
             return limit | noLimit;
-        }
-
-        #endregion
-
-        #region Act
-
-        /// <summary>
-        ///     This is the method that is called when the agent receives a message and is activated.
-        ///     When TimeStep.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
-        /// </summary>
-        /// <param name="message">The message that the agent has received and should respond to</param>
-        public void Act(Message message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            //if (TimeStep.Type == TimeStepType.Intraday && message.Medium != CommunicationMediums.System)
-            if (Cognitive.TasksAndPerformance.CanPerformTask && message.Medium != CommunicationMediums.System)
-            {
-                // Switch message into a task in the task manager
-                var communication =
-                    Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                var task = new SymuTask(TimeStep.Step)
-                {
-                    Type = message.Medium.ToString(),
-                    TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
-                    Parent = message,
-                    Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
-                        Environment.Organization.Models.RandomLevelValue)
-                };
-                TaskProcessor.Post(task);
-            }
-            else
-            {
-                ActMessage(message);
-            }
-        }
-
-        /// <summary>
-        ///     This is where the main logic of the agent should be placed.
-        /// </summary>
-        /// <param name="message"></param>
-        public virtual void ActMessage(Message message)
-        {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            switch (message.Subject)
-            {
-                case SymuYellowPages.Stop:
-                    State = AgentState.Stopping;
-                    break;
-                case SymuYellowPages.Subscribe:
-                    ActSubscribe(message);
-                    break;
-                default:
-                    ActClassKey(message);
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     Trigger every event before the new step
-        ///     Do not send messages, use NextStep for that
-        /// </summary>
-        public virtual async void PreStep()
-        {
-            MessageProcessor?.ClearMessagesPerPeriod();
-            ForgettingModel?.InitializeForgettingProcess();
-            
-            // Databases
-            if (HasEmail)
-            {
-                Email.ForgettingProcess(TimeStep.Step);
-            }
-
-            _newInteractionCounter = 0;
-            HandleStatus();
-            // intentionally after Status
-            HandleCapacity(true);
-            // Task manager
-            if (!Cognitive.TasksAndPerformance.CanPerformTask)
-            {
-                return;
-            }
-
-            async Task<bool> ProcessWorkInProgress()
-            {
-                while (Capacity.HasCapacity && Status != AgentStatus.Offline)
-                {
-                    try
-                    {
-                        var task = await TaskProcessor.Receive(TimeStep.Step).ConfigureAwait(false);
-                        switch (task.Parent)
-                        {
-                            case Message message:
-                                // When TimeStep.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
-                                // Once a message (as a task) is receive it is treated as a message
-                                if (task.IsToDo)
-                                {
-                                    ActMessage(message);
-                                }
-
-                                WorkOnTask(task);
-                                break;
-                            default:
-                                WorkInProgress(task);
-                                break;
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
-                        exceptionDispatchInfo.Throw();
-                    }
-                }
-
-                // If we didn't deschedule then run the continuation immediately
-                return true;
-            }
-
-            await ProcessWorkInProgress().ConfigureAwait(false);
-
-            ActEndOfDay();
-        }
-
-        /// <summary>
-        ///     Trigger event after the taskManager is started.
-        ///     Used by the agent to subscribe to AfterSetTaskDone event
-        /// </summary>
-        /// <example>TaskManager.AfterSetTaskDone += AfterSetTaskDone;</example>
-        public virtual void OnAfterTaskProcessorStart()
-        {
-        }
-
-        /// <summary>
-        ///     Trigger every event after the actual step,
-        ///     Do not send messages
-        /// </summary>
-        public virtual void PostStep()
-        {
-            ForgettingModel?.FinalizeForgettingProcess(TimeStep.Step);
-        }
-
-        /// <summary>
-        ///     Trigger at the end of day,
-        ///     agent can still send message
-        /// </summary>
-        public virtual void ActEndOfDay()
-        {
-            SendNewInteractions();
-            TaskProcessor?.TasksManager.TasksCheck(TimeStep.Step);
-        }
-
-        /// <summary>
-        ///     Send new interactions to augment its sphere of interaction if possible
-        ///     Depends on Cognitive.InteractionPatterns && Cognitive.InteractionCharacteristics
-        /// </summary>
-        public void SendNewInteractions()
-        {
-            var agents = GetAgentIdsForNewInteractions().ToList();
-            if (!agents.Any())
-            {
-                return;
-            }
-
-            // Send new interactions
-            SendToMany(agents, MessageAction.Ask, SymuYellowPages.Actor, CommunicationMediums.FaceToFace);
-        }
-
-        /// <summary>
-        ///     Start a weekend, by asking new tasks if agent perform tasks on weekends
-        /// </summary>
-        public virtual void ActWeekEnd()
-        {
-            if (!Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds ||
-                TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
-            {
-                return;
-            }
-
-            GetNewTasks();
-        }
-
-        public virtual void ActCadence()
-        {
-        }
-
-        /// <summary>
-        ///     Start the working day, by asking new tasks
-        /// </summary>
-        public virtual void ActWorkingDay()
-        {
-            if (!Cognitive.TasksAndPerformance.CanPerformTask || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
-            {
-                return;
-            }
-
-            GetNewTasks();
-        }
-
-        /// <summary>
-        ///     Event that occur on friday to end the work week
-        /// </summary>
-        public virtual void ActEndOfWeek()
-        {
-        }
-
-        public virtual void ActEndOfMonth()
-        {
-        }
-
-        public virtual void ActEndOfYear()
-        {
-        }
-
-        /// <summary>
-        ///     Check if agent is performing task today depending on its settings or if agent is active
-        /// </summary>
-        /// <returns>true if agent is performing task, false if agent is not</returns>
-        public bool IsPerformingTask()
-        {
-            // Agent can be temporary isolated
-            var isPerformingTask = !Cognitive.InteractionPatterns.IsIsolated();
-            return isPerformingTask && (Cognitive.TasksAndPerformance.CanPerformTask && TimeStep.IsWorkingDay ||
-                                        Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
-                                        !TimeStep.IsWorkingDay);
-        }
-
-        /// <summary>
-        ///     Set the Status to available if agent as InitialCapacity, Offline otherwise
-        /// </summary>
-        public virtual void HandleStatus()
-        {
-            Status = !Cognitive.InteractionPatterns.IsIsolated() ? AgentStatus.Available : AgentStatus.Offline;
-            if (Status != AgentStatus.Offline)
-                // Open the agent mailbox with all the waiting messages
-            {
-                PostDelayedMessages();
-            }
-        }
-
-        protected virtual void ActClassKey(Message message)
-        {
         }
 
         #endregion

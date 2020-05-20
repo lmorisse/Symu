@@ -52,7 +52,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
         #region Agent Learning
 
-
         private float _learningRate;
 
         /// <summary>

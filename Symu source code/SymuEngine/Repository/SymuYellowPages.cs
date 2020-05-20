@@ -38,6 +38,7 @@ namespace SymuEngine.Repository
         public const byte Belief = 8;
 
         public const byte Subscribe = 9;
+
         //public const byte Timer = 10;
         public const byte Scenario = 11;
 

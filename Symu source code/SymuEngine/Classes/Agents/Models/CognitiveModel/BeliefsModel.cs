@@ -29,28 +29,24 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     ///     The BeliefsModel initialize the real value of the agent's beliefs parameters and its real behaviour
     /// </summary>
     /// <remarks>From Construct Software</remarks>
-    public class BeliefsModel 
+    public class BeliefsModel
     {
-        public bool On { get; set; }
-
         private readonly AgentId _agentId;
-        private readonly NetworkBeliefs _networkBeliefs;
         private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
+        private readonly NetworkBeliefs _networkBeliefs;
+
         /// <summary>
-        ///     Get the agent Beliefs
-        /// </summary>
-        public AgentBeliefs Beliefs => _knowledgeAndBeliefs.HasBelief ? _networkBeliefs.GetAgentBeliefs(_agentId) : null;
-        /// <summary>
-        /// Initialize Beliefs model :
-        /// update NetworkBeliefs
+        ///     Initialize Beliefs model :
+        ///     update NetworkBeliefs
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public BeliefsModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture, Network network)
+        public BeliefsModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+            Network network)
         {
             if (entity is null)
             {
@@ -71,9 +67,17 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             _agentId = agentId;
             _networkBeliefs = network.NetworkBeliefs;
             _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
-            _knowledgeAndBeliefs= cognitiveArchitecture.KnowledgeAndBeliefs;
+            _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
         }
+
+        public bool On { get; set; }
+
+        /// <summary>
+        ///     Get the agent Beliefs
+        /// </summary>
+        public AgentBeliefs Beliefs =>
+            _knowledgeAndBeliefs.HasBelief ? _networkBeliefs.GetAgentBeliefs(_agentId) : null;
 
         /// <summary>
         ///     Initialize the beliefs of the agent based on the belief network
@@ -86,7 +90,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             if (!_networkBeliefs.Exists(_agentId))
-            // An agent may be able to have belief but with no expertise for the moment
+                // An agent may be able to have belief but with no expertise for the moment
             {
                 _networkBeliefs.AddAgentId(_agentId);
             }
@@ -187,6 +191,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             requiredCheck = agentBelief.Check(taskBitIndexes.GetRequired(), out requiredIndex, belief,
                 _internalCharacteristics.BeliefThreshHoldForReacting);
         }
+
         /// <summary>
         ///     The agent have received a message that ask for belief in return
         ///     stochastic Filtering agentKnowledge based on MinimumBitsOfKnowledgeToSend/MaximumBitsOfKnowledgeToSend
@@ -204,7 +209,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             // If don't have belief, can't send belief or no belief asked
-            if (!_knowledgeAndBeliefs.HasBelief || !_messageContent.CanSendBeliefs || !On)// || beliefId == 0)
+            if (!_knowledgeAndBeliefs.HasBelief || !_messageContent.CanSendBeliefs || !On) // || beliefId == 0)
             {
                 return null;
             }
@@ -227,6 +232,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 throw new ArgumentNullException(nameof(agentBelief));
             }
+
             // Filter the belief to send, via the good communication channel// Filtering via the good channel
             var minBits = Math.Max(_messageContent.MinimumNumberOfBitsOfBeliefToSend,
                 medium.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend);
@@ -239,6 +245,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 minBits = maxBits;
             }
+
             var lengthToSend = DiscreteUniform.SampleToByte(minBits, maxBits);
             if (lengthToSend == 0)
             {

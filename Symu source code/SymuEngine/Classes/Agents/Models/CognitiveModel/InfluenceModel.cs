@@ -28,19 +28,20 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     /// <remarks>From Construct Software</remarks>
     public class InfluenceModel
     {
-        public bool On { get; set; }
         private readonly AgentId _agentId;
         private readonly NetworkBeliefs _networkBeliefs;
         private readonly NetworkInfluences _networkInfluences;
+
         /// <summary>
-        /// Initialize influence model :
-        /// update networkInfluences
+        ///     Initialize influence model :
+        ///     update networkInfluences
         /// </summary>
         /// <param name="agentAgentId"></param>
         /// <param name="entity"></param>
         /// <param name="internalCharacteristics"></param>
         /// <param name="network"></param>
-        public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics, Network network) 
+        public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics,
+            Network network)
         {
             if (entity is null)
             {
@@ -70,10 +71,11 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
             else
             {
-                _networkInfluences.Add(agentAgentId,0,0);
+                _networkInfluences.Add(agentAgentId, 0, 0);
             }
-
         }
+
+        public bool On { get; set; }
 
         /// <summary>
         ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
@@ -88,7 +90,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             return ContinuousUniform.Sample(internalCharacteristics.InfluentialnessRateMin,
-                    internalCharacteristics.InfluentialnessRateMax);
+                internalCharacteristics.InfluentialnessRateMax);
         }
 
         /// <summary>
@@ -104,8 +106,9 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             return ContinuousUniform.Sample(internalCharacteristics.InfluenceabilityRateMin,
-                    internalCharacteristics.InfluenceabilityRateMax);
+                internalCharacteristics.InfluenceabilityRateMax);
         }
+
         /// <summary>
         ///     Be influenced beliefId from agentAgentId
         /// </summary>
@@ -120,7 +123,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             //    return;
             //}
 
-            if (!On || beliefBits == null)// && beliefId > 0)
+            if (!On || beliefBits == null) // && beliefId > 0)
             {
                 return;
                 //throw new ArgumentNullException(nameof(beliefBits));
@@ -140,6 +143,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 return;
             }
+
             if (!_networkBeliefs.Exists(_agentId, beliefId))
             {
                 _networkBeliefs.LearnNewBelief(_agentId, beliefId, beliefLevel);

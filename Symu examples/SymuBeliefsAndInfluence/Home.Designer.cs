@@ -38,14 +38,12 @@
             this.label28 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.InitialTasksDone = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.InitialTriads = new System.Windows.Forms.Label();
             this.InitialTotalBeliefs = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.TasksDone = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Triads = new System.Windows.Forms.Label();
@@ -160,14 +158,12 @@
             this.groupBox3.Controls.Add(this.label28);
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.InitialTasksDone);
-            this.groupBox3.Controls.Add(this.label24);
             this.groupBox3.Controls.Add(this.label25);
             this.groupBox3.Controls.Add(this.InitialTriads);
             this.groupBox3.Controls.Add(this.InitialTotalBeliefs);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.TasksDone);
-            this.groupBox3.Controls.Add(this.label19);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.Triads);
@@ -203,7 +199,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.ForeColor = System.Drawing.SystemColors.Window;
-            this.label22.Location = new System.Drawing.Point(311, 116);
+            this.label22.Location = new System.Drawing.Point(322, 116);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(20, 17);
             this.label22.TabIndex = 29;
@@ -219,21 +215,11 @@
             this.InitialTasksDone.TabIndex = 28;
             this.InitialTasksDone.Text = "0";
             // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.ForeColor = System.Drawing.SystemColors.Window;
-            this.label24.Location = new System.Drawing.Point(311, 55);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(20, 17);
-            this.label24.TabIndex = 27;
-            this.label24.Text = "%";
-            // 
             // label25
             // 
             this.label25.AutoSize = true;
             this.label25.ForeColor = System.Drawing.SystemColors.Window;
-            this.label25.Location = new System.Drawing.Point(311, 85);
+            this.label25.Location = new System.Drawing.Point(322, 85);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(20, 17);
             this.label25.TabIndex = 26;
@@ -262,7 +248,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(211, 116);
+            this.label3.Location = new System.Drawing.Point(222, 116);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 17);
             this.label3.TabIndex = 23;
@@ -286,19 +272,10 @@
             this.TasksDone.TabIndex = 22;
             this.TasksDone.Text = "0";
             // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(211, 55);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(20, 17);
-            this.label19.TabIndex = 20;
-            this.label19.Text = "%";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(211, 85);
+            this.label5.Location = new System.Drawing.Point(222, 85);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(20, 17);
             this.label5.TabIndex = 19;
@@ -963,7 +940,6 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label Triads;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label TotalBeliefs;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label18;
@@ -998,7 +974,6 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label InitialTasksDone;
-        private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label InitialTriads;
         private System.Windows.Forms.Label InitialTotalBeliefs;

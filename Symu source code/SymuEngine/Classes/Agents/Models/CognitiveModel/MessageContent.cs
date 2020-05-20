@@ -10,12 +10,7 @@
 #region using directives
 
 using System;
-using System.Linq;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
-using static SymuTools.Constants;
 
 #endregion
 

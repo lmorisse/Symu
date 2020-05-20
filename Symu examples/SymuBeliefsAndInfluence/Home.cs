@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteraction
+// Description: Symu - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,7 +13,6 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SymuBeliefsAndInfluence.Classes;
 using SymuEngine.Classes.Scenario;
@@ -60,29 +59,40 @@ namespace SymuBeliefsAndInfluence
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
 
             #region Influencer
+
             InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
-            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive
+                .KnowledgeAndBeliefs.DefaultBeliefLevel);
             MinimumBeliefToSendPerBit.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MinimumBeliefToSendPerBit.ToString();
             MinimumNumberOfBitsOfBeliefToSend.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MinimumNumberOfBitsOfBeliefToSend.ToString();
             MaximumNumberOfBitsOfBeliefToSend.Text = OrganizationEntity.Templates.Human.Cognitive.MessageContent
                 .MaximumNumberOfBitsOfBeliefToSend.ToString();
-            InfluentialnessMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMin.ToString();
-            InfluentialnessMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluentialnessRateMax.ToString();
+            InfluentialnessMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics
+                .InfluentialnessRateMin.ToString();
+            InfluentialnessMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics
+                .InfluentialnessRateMax.ToString();
             CanSendBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanSendBeliefs;
 
             #endregion
 
             #region Worker
+
             MandatoryRatio.Text = _environment.Model.MandatoryRatio.ToString();
-            RiskAversion.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold.ToString();
+            RiskAversion.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold
+                .ToString();
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
-            BeliefWeight.SelectedItem = BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
-            InfluenceabilityMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMin.ToString();
-            InfluenceabilityMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.InfluenceabilityRateMax.ToString();
+            BeliefWeight.SelectedItem =
+                BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
+            InfluenceabilityMin.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics
+                .InfluenceabilityRateMin.ToString();
+            InfluenceabilityMax.Text = OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics
+                .InfluenceabilityRateMax.ToString();
             CanReceiveBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanReceiveBeliefs;
-            HasInitialBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
+            HasInitialBeliefs.Checked =
+                OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
+
             #endregion
         }
 
@@ -107,22 +117,26 @@ namespace SymuBeliefsAndInfluence
 
         private void Button1_Click(object sender, EventArgs e)
         {
-
             OrganizationEntity.Models.Influence.On = InfluenceModelOn.Checked;
             OrganizationEntity.Models.Beliefs.On = BeliefsModelOn.Checked;
 
             #region influencer
+
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedItem.ToString());
+
             #endregion
 
             #region Worker
+
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
-            OrganizationEntity.Models.ImpactOfBeliefOnTask = BeliefWeightLevelService.GetValue(BeliefWeight.SelectedItem.ToString());
+            OrganizationEntity.Models.ImpactOfBeliefOnTask =
+                BeliefWeightLevelService.GetValue(BeliefWeight.SelectedItem.ToString());
+
             #endregion
 
             Start(_environment);
@@ -166,7 +180,7 @@ namespace SymuBeliefsAndInfluence
             WriteTextSafe(InitialTasksDone, _initialTasksDone
                 .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(TasksDone, tasksDoneRatio
-                    .ToString("F1", CultureInfo.InvariantCulture));
+                .ToString("F1", CultureInfo.InvariantCulture));
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -250,13 +264,6 @@ namespace SymuBeliefsAndInfluence
             }
         }
 
-        #region Nested type: SafeCallButtonDelegate
-
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
-
-
-        #endregion
-
         private void tbKnowledge_TextChanged(object sender, EventArgs e)
         {
             try
@@ -279,7 +286,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = float.Parse(InfluentialnessMin.Text);
+                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin =
+                    float.Parse(InfluentialnessMin.Text);
                 InfluentialnessMin.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -297,7 +305,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = float.Parse(InfluentialnessMax.Text);
+                _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax =
+                    float.Parse(InfluentialnessMax.Text);
                 InfluentialnessMax.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -315,7 +324,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin= float.Parse(InfluenceabilityMin.Text);
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin =
+                    float.Parse(InfluenceabilityMin.Text);
                 InfluenceabilityMin.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -333,7 +343,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = float.Parse(InfluenceabilityMax.Text);
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax =
+                    float.Parse(InfluenceabilityMax.Text);
                 InfluenceabilityMax.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -462,7 +473,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = float.Parse(RiskAversion.Text);
+                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
+                    float.Parse(RiskAversion.Text);
                 RiskAversion.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -493,5 +505,11 @@ namespace SymuBeliefsAndInfluence
                 MessageBox.Show(exception.Message);
             }
         }
+
+        #region Nested type: SafeCallButtonDelegate
+
+        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
+
+        #endregion
     }
 }

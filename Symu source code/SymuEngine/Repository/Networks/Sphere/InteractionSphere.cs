@@ -33,9 +33,9 @@ namespace SymuEngine.Repository.Networks.Sphere
     /// </summary>
     public class InteractionSphere
     {
+        private readonly InteractionSphereModel _model;
         private Dictionary<AgentId, int> _agentIndex;
         private Dictionary<int, AgentId> _indexAgent;
-        private readonly InteractionSphereModel _model;
         private DerivedParameter _lastAverage;
 
         public InteractionSphere(InteractionSphereModel model)
@@ -350,7 +350,8 @@ namespace SymuEngine.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     List of AgentId for interactions, interactions that are below above interactions (difference with GetAgentIdsForNewInteractions)
+        ///     List of AgentId for interactions, interactions that are below above interactions (difference with
+        ///     GetAgentIdsForNewInteractions)
         ///     based on the interaction strategy of the interaction patterns :
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
@@ -383,34 +384,47 @@ namespace SymuEngine.Repository.Networks.Sphere
                 switch (interactionStrategy)
                 {
                     case InteractionStrategy.Homophily:
-                        if (Sphere[agentIndex, i].Homophily < _lastAverage.Homophily - Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].Homophily) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].Homophily < _lastAverage.Homophily - Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].Homophily) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Knowledge:
-                        if (Sphere[agentIndex, i].RelativeKnowledge < _lastAverage.RelativeKnowledge - Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeKnowledge) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeKnowledge <
+                            _lastAverage.RelativeKnowledge - Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeKnowledge) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Activities:
-                        if (Sphere[agentIndex, i].RelativeActivity < _lastAverage.RelativeActivity - Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeActivity) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeActivity <
+                            _lastAverage.RelativeActivity - Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeActivity) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Beliefs:
-                        if (Sphere[agentIndex, i].RelativeBelief< _lastAverage.RelativeBelief - Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeBelief) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeBelief < _lastAverage.RelativeBelief - Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeBelief) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.SocialDemographics:
-                        if (Sphere[agentIndex, i].SocialDemographic< _lastAverage.SocialDemographic - Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].SocialDemographic) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].SocialDemographic <
+                            _lastAverage.SocialDemographic - Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].SocialDemographic) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(interactionStrategy), interactionStrategy, null);
@@ -458,7 +472,8 @@ namespace SymuEngine.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     List of AgentId for new interactions, interactions that are below average interactions (difference with GetAgentIdsForInteractions)
+        ///     List of AgentId for new interactions, interactions that are below average interactions (difference with
+        ///     GetAgentIdsForInteractions)
         ///     based on the interaction strategy of the interaction patterns :
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
@@ -491,34 +506,47 @@ namespace SymuEngine.Repository.Networks.Sphere
                 switch (interactionStrategy)
                 {
                     case InteractionStrategy.Homophily:
-                        if (Sphere[agentIndex, i].Homophily > _lastAverage.Homophily + Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].Homophily - 1) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].Homophily > _lastAverage.Homophily + Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].Homophily - 1) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Knowledge:
-                        if (Sphere[agentIndex, i].RelativeKnowledge > _lastAverage.RelativeKnowledge + Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeKnowledge - 1) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeKnowledge >
+                            _lastAverage.RelativeKnowledge + Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeKnowledge - 1) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Activities:
-                        if (Sphere[agentIndex, i].RelativeActivity > _lastAverage.RelativeActivity + Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeActivity - 1) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeActivity >
+                            _lastAverage.RelativeActivity + Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeActivity - 1) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.Beliefs:
-                        if (Sphere[agentIndex, i].RelativeBelief > _lastAverage.RelativeBelief + Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].RelativeBelief - 1) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].RelativeBelief > _lastAverage.RelativeBelief + Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].RelativeBelief - 1) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     case InteractionStrategy.SocialDemographics:
-                        if (Sphere[agentIndex, i].SocialDemographic > _lastAverage.SocialDemographic + Constants.Tolerance || Math.Abs(Sphere[agentIndex, i].SocialDemographic - 1) < Constants.Tolerance)
+                        if (Sphere[agentIndex, i].SocialDemographic >
+                            _lastAverage.SocialDemographic + Constants.Tolerance ||
+                            Math.Abs(Sphere[agentIndex, i].SocialDemographic - 1) < Constants.Tolerance)
                         {
                             continue;
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(interactionStrategy), interactionStrategy, null);

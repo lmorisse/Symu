@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Licence
+
+// Description: Symu - SymuBeliefsAndInfluence
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System;
 using System.Windows.Forms;
+
+#endregion
 
 namespace SymuBeliefsAndInfluence
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
-        /// Point d'entrée principal de l'application.
+        ///     Point d'entrée principal de l'application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

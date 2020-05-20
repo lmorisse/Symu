@@ -10,7 +10,7 @@
 namespace SymuEngine.Repository.Networks.Beliefs
 {
     /// <summary>
-    ///     Measure of the weight's belief 
+    ///     Measure of the weight's belief
     /// </summary>
     public enum BeliefWeightLevel
     {

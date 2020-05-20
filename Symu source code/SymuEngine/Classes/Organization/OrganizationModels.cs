@@ -63,20 +63,24 @@ namespace SymuEngine.Classes.Organization
         ///     Agent knowledge forgetting model
         /// </summary>
         public ModelEntity Forgetting { get; set; } = new ModelEntity();
+
         /// <summary>
         ///     Agent influence model
         /// </summary>
         public ModelEntity Influence { get; set; } = new ModelEntity();
+
         /// <summary>
         ///     Agent influence model
         /// </summary>
         public ModelEntity Beliefs { get; set; } = new ModelEntity();
+
         /// <summary>
         ///     Agent knowledge model
         /// </summary>
         public ModelEntity Knowledge { get; set; } = new ModelEntity();
+
         /// <summary>
-        /// Impact level of agent's belief on how agent will accept to do the task
+        ///     Impact level of agent's belief on how agent will accept to do the task
         /// </summary>
         public BeliefWeightLevel ImpactOfBeliefOnTask { get; set; } = BeliefWeightLevel.RandomWeight;
 

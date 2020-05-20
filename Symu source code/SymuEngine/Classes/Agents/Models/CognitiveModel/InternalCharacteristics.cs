@@ -11,7 +11,6 @@
 
 using System;
 using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
 
 #endregion
 
@@ -28,6 +27,16 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     /// <remarks>Knowledge & Beliefs from Construct Software</remarks>
     public class InternalCharacteristics
     {
+        #region Learning
+
+        /// <summary>
+        ///     This parameter specify whether agents of this class can learn new knowledge.
+        ///     If set to true, agent will use the Learning Model
+        /// </summary>
+        public bool CanLearn { get; set; }
+
+        #endregion
+
         public void CopyTo(InternalCharacteristics internalCharacteristics)
         {
             if (internalCharacteristics is null)
@@ -36,13 +45,17 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             #region Learning
+
             internalCharacteristics.CanLearn = CanLearn;
+
             #endregion
 
             #region Risk aversion
+
             internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
             internalCharacteristics.BeliefThreshHoldForReacting = BeliefThreshHoldForReacting;
             internalCharacteristics.KnowledgeThreshHoldForReacting = KnowledgeThreshHoldForReacting;
+
             #endregion
 
             #region Forgetting
@@ -67,15 +80,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
             #endregion
         }
-
-        #region Learning
-
-        /// <summary>
-        ///     This parameter specify whether agents of this class can learn new knowledge.
-        ///     If set to true, agent will use the Learning Model
-        /// </summary>
-        public bool CanLearn { get; set; }
-        #endregion
 
         #region Forgetting
 
@@ -203,6 +207,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #endregion
 
         #region Influence
+
         /// <summary>
         ///     This parameter specify whether agents of this class can influence others or be influence by others
         ///     If set to true, agent will use the Influence Model
@@ -329,7 +334,9 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 _knowledgeThreshHoldForReacting = value;
             }
         }
+
         private float _beliefThreshHoldForReacting = 0.1F;
+
         /// <summary>
         ///     To react, an agent must have enough belief
         ///     BeliefThreshHoldForReacting should be inferior to RiskAversionThreshold
@@ -353,13 +360,16 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         private float _riskAversionThreshold;
 
         /// <summary>
-        /// The risk aversion parameter affects whether or not an agent can make a particular decision.
-        /// Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these beliefs.
-        /// The risk aversion parameter, however, acts as a catch-all for factors not included in the model which prevent an agent from acting on a particular belief.
-        /// Agents who are risk averse will still be able to communicate their knowledge and beliefs like any other agent, but will never be able to make the corresponding decision.
-        /// RiskAversionThreshold == 0, full risk aversion
-        /// RiskAversionThreshold == 1, no risk aversion
-        /// Range [0;1]
+        ///     The risk aversion parameter affects whether or not an agent can make a particular decision.
+        ///     Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these
+        ///     beliefs.
+        ///     The risk aversion parameter, however, acts as a catch-all for factors not included in the model which prevent an
+        ///     agent from acting on a particular belief.
+        ///     Agents who are risk averse will still be able to communicate their knowledge and beliefs like any other agent, but
+        ///     will never be able to make the corresponding decision.
+        ///     RiskAversionThreshold == 0, full risk aversion
+        ///     RiskAversionThreshold == 1, no risk aversion
+        ///     Range [0;1]
         /// </summary>
         public float RiskAversionThreshold
         {

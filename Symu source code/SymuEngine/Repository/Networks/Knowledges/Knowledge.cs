@@ -147,7 +147,8 @@ namespace SymuEngine.Repository.Networks.Knowledges
                             min = GetMinFromKnowledgeLevel(knowledgeLevel);
                             max = GetMaxFromKnowledgeLevel(knowledgeLevel);
                             break;
-                    } 
+                    }
+
                     knowledgeBits = ContinuousUniform.Samples(Length, min, max);
                     if (Math.Abs(min - max) < Constants.Tolerance)
                     {
@@ -178,6 +179,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
                             knowledgeBits = ContinuousUniform.FilteredSamples(Length, mean);
                             break;
                     }
+
                     break;
                 }
                 default:
@@ -207,6 +209,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
             {
                 throw new ArgumentNullException(nameof(model));
             }
+
             var numberRequiredBits = Convert.ToByte(Math.Round(model.RequiredBitsRatio(complexity) * Length));
             return DiscreteUniform.SamplesToByte(numberRequiredBits, Length - 1);
         }

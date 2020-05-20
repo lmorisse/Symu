@@ -419,7 +419,8 @@ namespace SymuEngine.Environment
         /// </summary>
         public virtual void SetDatabases()
         {
-            foreach (var database in Organization.Databases.Select(databaseEntity => new Database(databaseEntity, Organization.Models, WhitePages.Network.NetworkKnowledges)))
+            foreach (var database in Organization.Databases.Select(databaseEntity =>
+                new Database(databaseEntity, Organization.Models, WhitePages.Network.NetworkKnowledges)))
             {
                 WhitePages.Network.NetworkDatabases.AddDatabase(database);
             }

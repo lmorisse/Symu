@@ -63,7 +63,7 @@ namespace SymuEngine.Results.Organization
         public List<KnowledgeAndBeliefStruct> KnowledgeObsolescence { get; } = new List<KnowledgeAndBeliefStruct>();
 
         /// <summary>
-        /// Initialize of results
+        ///     Initialize of results
         /// </summary>
         public void Clear()
         {
@@ -73,8 +73,9 @@ namespace SymuEngine.Results.Organization
             Learning.Clear();
             KnowledgeObsolescence.Clear();
         }
+
         /// <summary>
-        /// Handle the performance around knowledge and beliefs
+        ///     Handle the performance around knowledge and beliefs
         /// </summary>
         /// <param name="step"></param>
         public void HandlePerformance(ushort step)

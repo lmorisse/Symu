@@ -13,9 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
@@ -55,12 +53,17 @@ namespace SymuEngineTests.Classes.Agents
             _organizationEntity.Models.Knowledge.On = true;
             _organizationEntity.Models.Knowledge.RateOfAgentsOn = 1;
 
-            _agent = new TestAgent(1, _environment);
-            _agent.Cognitive = new CognitiveArchitecture()
+            _agent = new TestAgent(1, _environment)
             {
-                KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
-                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
-                InternalCharacteristics ={CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
+                Cognitive = new CognitiveArchitecture
+                {
+                    KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
+                    MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
+                    InternalCharacteristics =
+                    {
+                        CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true
+                    }
+                }
             };
 
             var expertise = new AgentExpertise();
@@ -103,6 +106,21 @@ namespace SymuEngineTests.Classes.Agents
             _agent.Capacity.Set(1);
             _agent.OnBeforeSendMessage(message);
             Assert.IsTrue(_agent.Capacity.Actual < 1);
+        }
+
+        #endregion
+
+        #region blocker
+
+        [TestMethod]
+        public void AddBlockerTest()
+        {
+            _environment.Organization.Models.FollowBlockers = true;
+            _environment.IterationResult.Initialize();
+            var task = new SymuTask(0);
+            Assert.IsNotNull(_agent.AddBlocker(task, 0, 1, 0));
+            Assert.IsTrue(task.IsBlocked);
+            Assert.AreEqual(1, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
         #endregion
@@ -379,7 +397,7 @@ namespace SymuEngineTests.Classes.Agents
         private Belief SetBeliefs()
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            var belief = new Belief(1,"1",  1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
+            var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(belief);
             _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
@@ -848,7 +866,6 @@ namespace SymuEngineTests.Classes.Agents
         #endregion
 
 
-
         #region Capacity management
 
         /// <summary>
@@ -920,7 +937,6 @@ namespace SymuEngineTests.Classes.Agents
         }
 
         #endregion
-
 
 
         #region Status
@@ -1112,19 +1128,6 @@ namespace SymuEngineTests.Classes.Agents
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 
-        #endregion
-
-        #region blocker
-        [TestMethod]
-        public void AddBlockerTest()
-        {
-            _environment.Organization.Models.FollowBlockers = true;
-            _environment.IterationResult.Initialize();
-            var task = new SymuTask(0);
-            Assert.IsNotNull(_agent.AddBlocker(task, 0, 1, 0));
-            Assert.IsTrue(task.IsBlocked);
-            Assert.AreEqual(1, _environment.IterationResult.Blockers.BlockersStillInProgress);
-        }
         #endregion
     }
 }

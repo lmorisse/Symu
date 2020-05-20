@@ -31,8 +31,8 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private CognitiveArchitecture _cognitiveArchitecture;
-        private InternalCharacteristics _internalCharacteristics;
         private ForgettingModel _forgettingModel;
+        private InternalCharacteristics _internalCharacteristics;
         private NetworkKnowledges _networkKnowledges;
 
         [TestInitialize]
@@ -55,10 +55,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.InternalCharacteristics.CanForget = true;
             _forgetting.On = modelOn;
-            _forgetting.RateOfAgentsOn  = 1;
+            _forgetting.RateOfAgentsOn = 1;
             _forgettingModel = new ForgettingModel(_forgetting, _cognitiveArchitecture, randomLevel, _networkKnowledges,
                 _agentId);
-
         }
 
         /// <summary>
@@ -206,7 +205,8 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
-            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
+            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate,
+                forgetting.GetKnowledgeBit(0));
         }
 
         /// <summary>
@@ -240,7 +240,8 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
             _forgettingModel.InternalCharacteristics.PartialForgetting = true;
             var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
-            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate, forgetting.GetKnowledgeBit(0));
+            Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate,
+                forgetting.GetKnowledgeBit(0));
         }
 
         /// <summary>

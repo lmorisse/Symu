@@ -62,6 +62,7 @@ namespace SymuEngine.Classes.Task.Manager
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             TasksManager.Post(task);
         }
 

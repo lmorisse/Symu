@@ -11,7 +11,6 @@
 
 using System;
 using System.Linq;
-using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 

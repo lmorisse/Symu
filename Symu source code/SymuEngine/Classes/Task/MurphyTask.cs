@@ -27,6 +27,8 @@ namespace SymuEngine.Classes.Task
 
         private float _mandatoryRatio = 0.2F;
 
+        private float _requiredRatio = 0.2F;
+
         /// <summary>
         ///     Mandatory bit ratio is a function of the task complexity
         ///     The more complex, the more bits are mandatory
@@ -50,8 +52,6 @@ namespace SymuEngine.Classes.Task
                 _mandatoryRatio = value;
             }
         }
-
-        private float _requiredRatio = 0.2F;
 
         /// <summary>
         ///     required bit ratio is a function of the task complexity

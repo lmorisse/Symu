@@ -16,7 +16,6 @@ using SymuEngine.Classes.Agents.Models.CognitiveModel;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 

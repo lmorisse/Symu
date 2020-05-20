@@ -46,7 +46,7 @@ namespace SymuEngine.Repository.Networks.Sphere
 
             float average = 0;
             for (var i = 0; i < actorsCount; i++)
-            for (var j = i+1; j < actorsCount; j++)
+            for (var j = i + 1; j < actorsCount; j++)
             {
                 average += interactionMatrix[i, j];
             }
@@ -65,7 +65,8 @@ namespace SymuEngine.Repository.Networks.Sphere
             var knowledge = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Knowledge));
             var activities = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Activities));
             var beliefs = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Beliefs));
-            var socialDemographics = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
+            var socialDemographics =
+                GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
             return new DerivedParameter(socialDemographics, beliefs, knowledge, activities);
         }
 
@@ -87,19 +88,19 @@ namespace SymuEngine.Repository.Networks.Sphere
             var averageInteraction = GetAverageInteractionMatrix(interactionMatrix);
             var interactionForTriads = new sbyte[actorsCount, actorsCount];
             for (var i = 0; i < actorsCount; i++)
-            for (var j = i+1; j < actorsCount; j++)
+            for (var j = i + 1; j < actorsCount; j++)
             {
                 if (interactionMatrix[i, j] >= averageInteraction - Constants.Tolerance &&
                     interactionMatrix[i, j] > Constants.Tolerance)
                 {
                     interactionForTriads[i, j] = 1;
                     interactionForTriads[j, i] = 1;
-                    }
+                }
                 else
                 {
                     interactionForTriads[i, j] = 0;
                     interactionForTriads[j, i] = 0;
-                    }
+                }
             }
 
             uint numberOfTriads = 0;
@@ -147,23 +148,23 @@ namespace SymuEngine.Repository.Networks.Sphere
                     case InteractionStrategy.Homophily:
                         interactionMatrix[i, j] = network[i, j].Homophily;
                         interactionMatrix[j, i] = network[i, j].Homophily;
-                            break;
+                        break;
                     case InteractionStrategy.Knowledge:
                         interactionMatrix[i, j] = network[i, j].RelativeKnowledge;
                         interactionMatrix[j, i] = network[i, j].RelativeKnowledge;
-                            break;
+                        break;
                     case InteractionStrategy.Activities:
                         interactionMatrix[i, j] = network[i, j].RelativeActivity;
                         interactionMatrix[j, i] = network[i, j].RelativeActivity;
-                            break;
+                        break;
                     case InteractionStrategy.Beliefs:
                         interactionMatrix[i, j] = network[i, j].RelativeBelief;
                         interactionMatrix[j, i] = network[i, j].RelativeBelief;
-                            break;
+                        break;
                     case InteractionStrategy.SocialDemographics:
                         interactionMatrix[i, j] = network[i, j].SocialDemographic;
                         interactionMatrix[j, i] = network[i, j].SocialDemographic;
-                            break;
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(interactionStrategy), interactionStrategy, null);
                 }

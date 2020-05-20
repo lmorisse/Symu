@@ -22,8 +22,8 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
     public class AgentBeliefsTests
     {
         private const RandomGenerator Model = new RandomGenerator();
-        private readonly Belief _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
         private readonly AgentBelief _agentBelief = new AgentBelief(1, BeliefLevel.NoBelief);
+        private readonly Belief _belief = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
         private readonly AgentBeliefs _beliefs = new AgentBeliefs();
         private float[] _beliefBitsNeutral;
         private float[] _beliefBitsNonNeutral;
@@ -50,7 +50,7 @@ namespace SymuEngineTests.Repository.Networks.Beliefs
         public void AddTest1()
         {
             Assert.AreEqual(0, _beliefs.Count);
-            _beliefs.Add(1,BeliefLevel.NoBelief);
+            _beliefs.Add(1, BeliefLevel.NoBelief);
             Assert.AreEqual(1, _beliefs.Count);
             // Duplicate
             _beliefs.Add(1, BeliefLevel.NoBelief);

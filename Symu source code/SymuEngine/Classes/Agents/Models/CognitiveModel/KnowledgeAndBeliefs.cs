@@ -10,10 +10,7 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Task;
-using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -57,6 +54,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         ///     This parameter specify whether agents of this class has initial knowledge
         /// </summary>
         public bool HasInitialKnowledge { get; set; }
+
         #endregion
 
         #region Beliefs
@@ -72,9 +70,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         public bool HasInitialBelief { get; set; }
 
         /// <summary>
-        /// Default belief level use to create new belief during simulation
+        ///     Default belief level use to create new belief during simulation
         /// </summary>
         public BeliefLevel DefaultBeliefLevel { get; set; } = BeliefLevel.NeitherAgreeNorDisagree;
+
         #endregion
 
         #region Transactive memories

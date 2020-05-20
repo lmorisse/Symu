@@ -29,14 +29,10 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     public class LearningModel : ModelEntity
     {
         private readonly AgentId _id;
-        private readonly NetworkKnowledges _networkKnowledges;
         private readonly InternalCharacteristics _internalCharacteristics;
-
-        public TasksAndPerformance TasksAndPerformance { get; set; }
+        private readonly NetworkKnowledges _networkKnowledges;
 
         private readonly byte _randomLevel;
-
-        private AgentExpertise Expertise => _networkKnowledges.GetAgentExpertise(_id);
 
         public LearningModel(AgentId agentId, OrganizationModels models, NetworkKnowledges networkKnowledges,
             CognitiveArchitecture cognitiveArchitecture)
@@ -64,6 +60,9 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
         }
 
+        public TasksAndPerformance TasksAndPerformance { get; set; }
+
+        private AgentExpertise Expertise => _networkKnowledges.GetAgentExpertise(_id);
 
 
         /// <summary>
@@ -76,7 +75,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         /// <param name="step"></param>
         public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
         {
-            Learn(knowledgeId, knowledgeBits, maxRateLearnable, _internalCharacteristics.MinimumRemainingKnowledge, _internalCharacteristics.TimeToLive, step);
+            Learn(knowledgeId, knowledgeBits, maxRateLearnable, _internalCharacteristics.MinimumRemainingKnowledge,
+                _internalCharacteristics.TimeToLive, step);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             }
 
             for (byte i = 0; i < knowledgeBits.Length; i++)
-            // other agent must have more knowledge bit than the agent
+                // other agent must have more knowledge bit than the agent
             {
                 if (!(knowledgeBits.GetBit(i) > 0) || !(knowledgeBits.GetBit(i) >= agentKnowledge.GetKnowledgeBit(i)))
                 {
@@ -209,7 +209,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 return 0;
             }
 
-            var learningStandardDeviation = LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
+            var learningStandardDeviation =
+                LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
             return Normal.Sample(TasksAndPerformance.LearningRate, learningStandardDeviation * _randomLevel);
         }
 
@@ -226,7 +227,8 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 return 0;
             }
 
-            var learningStandardDeviation = LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
+            var learningStandardDeviation =
+                LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
             return Normal.Sample(TasksAndPerformance.LearningByDoingRate, learningStandardDeviation * _randomLevel);
         }
 

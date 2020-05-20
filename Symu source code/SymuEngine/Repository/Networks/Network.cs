@@ -40,6 +40,7 @@ namespace SymuEngine.Repository.Networks
     public class Network
     {
         private readonly OrganizationModels _models;
+
         public Network(AgentTemplates agentTemplates, OrganizationModels models)
         {
             _models = models ?? throw new ArgumentNullException(nameof(models));
@@ -84,7 +85,7 @@ namespace SymuEngine.Repository.Networks
         ///     Belief network
         ///     Who (agentId) believes what (Information)
         /// </summary>
-        public NetworkBeliefs NetworkBeliefs { get; } 
+        public NetworkBeliefs NetworkBeliefs { get; }
 
         /// <summary>
         ///     Kanban activities network
@@ -294,6 +295,7 @@ namespace SymuEngine.Repository.Networks
             {
                 return;
             }
+
             foreach (var oldTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
             {
                 NetworkLinks.DeactivateLink(agentId, oldTeammateId);
@@ -377,6 +379,7 @@ namespace SymuEngine.Repository.Networks
             {
                 throw new ArgumentNullException(nameof(communication));
             }
+
             var entity = new DataBaseEntity(agentId, communication.Cognitive);
 
             var email = new Database(entity, _models, NetworkKnowledges);

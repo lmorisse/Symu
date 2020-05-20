@@ -11,27 +11,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
 using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Blockers;
 using SymuEngine.Classes.Murphies;
 using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Common;
 using SymuEngine.Environment;
-using SymuEngine.Messaging.Manager;
 using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
 using SymuEngine.Results.Blocker;
-using SymuTools;
-using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
 
 #endregion
@@ -41,56 +27,10 @@ namespace SymuEngine.Classes.Agents
     /// <summary>
     ///     An abstract base class for agents.
     ///     You must define your own agent derived classes derived
+    ///     This partial class focus on tasks management methods
     /// </summary>
     public abstract partial class Agent
     {
-        #region Capacity
-
-        /// <summary>
-        ///     Describe the agent capacity
-        /// </summary>
-        public AgentCapacity Capacity { get; } = new AgentCapacity();
-
-        /// <summary>
-        ///     Set the initial capacity for the new step based on SetInitialCapacity, working day,
-        ///     By default = Initial capacity if it's a working day, 0 otherwise
-        ///     If resetRemainingCapacity set to true, Remaining capacity is reset to Initial Capacity value
-        /// </summary>
-        public void HandleCapacity(bool resetRemainingCapacity)
-        {
-            // Intentionally no test on Agent that must be able to perform tasks
-            // && Cognitive.TasksAndPerformance.CanPerformTask
-            // Example : internet access don't perform task, but is online
-            if (IsPerformingTask())
-            {
-                SetInitialCapacity();
-                if (Cognitive.TasksAndPerformance.CanPerformTask)
-                {
-                    Environment.IterationResult.Capacity += Capacity.Initial;
-                }
-            }
-            else
-            {
-                Capacity.Initial = 0;
-            }
-
-            if (resetRemainingCapacity)
-            {
-                Capacity.Reset();
-            }
-        }
-
-        /// <summary>
-        ///     Use to set the baseline value of the initial capacity
-        /// </summary>
-        /// <returns></returns>
-        public virtual void SetInitialCapacity()
-        {
-            Capacity.Initial = 1;
-        }
-
-        #endregion
-
         /// <summary>
         ///     Override this method to specify how an agent will get new tasks to complete
         ///     By default, if worker can't perform task or has reached the maximum number of tasks,
@@ -99,60 +39,6 @@ namespace SymuEngine.Classes.Agents
         public virtual void GetNewTasks()
         {
         }
-
-        #region Post task
-
-        /// <summary>
-        /// Post a task in the TasksProcessor
-        /// </summary>
-        /// <param name="task"></param>
-        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
-        public void Post(SymuTask task)
-        {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-
-            OnBeforePostTask(task);
-            if (!task.IsBlocked)
-            {
-                TaskProcessor.Post(task);
-            }
-        }
-        /// <summary>
-        /// Post a task in the TasksProcessor
-        /// </summary>
-        /// <param name="tasks"></param>
-        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
-        public void Post(IEnumerable<SymuTask> tasks)
-        {
-            if (tasks is null)
-            {
-                throw new ArgumentNullException(nameof(tasks));
-            }
-
-            foreach (var task in tasks)
-            {
-                OnBeforePostTask(task);
-                if (!task.IsBlocked)
-                {
-                    TaskProcessor.Post(task);
-                }
-            }
-        }
-
-        /// <summary>
-        ///     EventHandler triggered before the event TaskProcessor.Post(task)
-        ///     By default CheckBlockerBeliefs
-        ///     If task must be posted, use task.Blockers
-        /// </summary>
-        /// <param name="task"></param>
-        protected virtual void OnBeforePostTask(SymuTask task)
-        {
-            CheckBlockerBeliefs(task);
-        }
-        #endregion
 
         /// <summary>
         ///     Work on the next task
@@ -251,12 +137,116 @@ namespace SymuEngine.Classes.Agents
 
             task.Update(TimeStep.Step);
         }
+
         /// <summary>
         ///     Switching context may have an impact on the agent capacity
         /// </summary>
         public virtual void SwitchingContextModel()
         {
         }
+
+        #region Capacity
+
+        /// <summary>
+        ///     Describe the agent capacity
+        /// </summary>
+        public AgentCapacity Capacity { get; } = new AgentCapacity();
+
+        /// <summary>
+        ///     Set the initial capacity for the new step based on SetInitialCapacity, working day,
+        ///     By default = Initial capacity if it's a working day, 0 otherwise
+        ///     If resetRemainingCapacity set to true, Remaining capacity is reset to Initial Capacity value
+        /// </summary>
+        public void HandleCapacity(bool resetRemainingCapacity)
+        {
+            // Intentionally no test on Agent that must be able to perform tasks
+            // && Cognitive.TasksAndPerformance.CanPerformTask
+            // Example : internet access don't perform task, but is online
+            if (IsPerformingTask())
+            {
+                SetInitialCapacity();
+                if (Cognitive.TasksAndPerformance.CanPerformTask)
+                {
+                    Environment.IterationResult.Capacity += Capacity.Initial;
+                }
+            }
+            else
+            {
+                Capacity.Initial = 0;
+            }
+
+            if (resetRemainingCapacity)
+            {
+                Capacity.Reset();
+            }
+        }
+
+        /// <summary>
+        ///     Use to set the baseline value of the initial capacity
+        /// </summary>
+        /// <returns></returns>
+        public virtual void SetInitialCapacity()
+        {
+            Capacity.Initial = 1;
+        }
+
+        #endregion
+
+        #region Post task
+
+        /// <summary>
+        ///     Post a task in the TasksProcessor
+        /// </summary>
+        /// <param name="task"></param>
+        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
+        public void Post(SymuTask task)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            OnBeforePostTask(task);
+            if (!task.IsBlocked)
+            {
+                TaskProcessor.Post(task);
+            }
+        }
+
+        /// <summary>
+        ///     Post a task in the TasksProcessor
+        /// </summary>
+        /// <param name="tasks"></param>
+        /// <remarks>Don't use TaskProcessor.Post directly to handle the OnBeforeTaskPost event</remarks>
+        public void Post(IEnumerable<SymuTask> tasks)
+        {
+            if (tasks is null)
+            {
+                throw new ArgumentNullException(nameof(tasks));
+            }
+
+            foreach (var task in tasks)
+            {
+                OnBeforePostTask(task);
+                if (!task.IsBlocked)
+                {
+                    TaskProcessor.Post(task);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     EventHandler triggered before the event TaskProcessor.Post(task)
+        ///     By default CheckBlockerBeliefs
+        ///     If task must be posted, use task.Blockers
+        /// </summary>
+        /// <param name="task"></param>
+        protected virtual void OnBeforePostTask(SymuTask task)
+        {
+            CheckBlockerBeliefs(task);
+        }
+
+        #endregion
 
         #region Common Blocker
 
@@ -280,6 +270,20 @@ namespace SymuEngine.Classes.Agents
         /// <param name="blocker"></param>
         protected virtual void TryRecoverBlocker(SymuTask task, Blocker blocker)
         {
+            if (blocker is null)
+            {
+                throw new ArgumentNullException(nameof(blocker));
+            }
+
+            switch (blocker.Type)
+            {
+                case Murphy.IncompleteKnowledge:
+                    TryRecoverBlockerIncompleteKnowledge(task, blocker);
+                    break;
+                case Murphy.IncompleteBelief:
+                    TryRecoverBlockerIncompleteBelief(task, blocker);
+                    break;
+            }
         }
 
         /// <summary>
@@ -308,11 +312,30 @@ namespace SymuEngine.Classes.Agents
         /// <param name="task"></param>
         public virtual void CheckNewBlockers(SymuTask task)
         {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            if (task.Parent is Message)
+            {
+                return;
+            }
+
+            CheckBlockerIncompleteKnowledge(task);
         }
 
         /// <summary>
-        /// Add a new blocker to the task
-        /// And follow it in the IterationResult if FollowBlocker is true
+        ///     Impact of blockers on the remaining capacity
+        ///     Blockers may create idle time
+        /// </summary>
+        public virtual void ImpactOfBlockersOnCapacity()
+        {
+        }
+
+        /// <summary>
+        ///     Add a new blocker to the task
+        ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="task"></param>
         /// <param name="murphyType"></param>
@@ -330,9 +353,10 @@ namespace SymuEngine.Classes.Agents
             Environment.IterationResult.Blockers.AddBlockerInProgress(TimeStep.Step);
             return blocker;
         }
+
         /// <summary>
-        /// Remove an existing blocker from a task
-        /// And update IterationResult if FollowBlocker is true
+        ///     Remove an existing blocker from a task
+        ///     And update IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="task"></param>
         /// <param name="blocker"></param>
@@ -351,11 +375,160 @@ namespace SymuEngine.Classes.Agents
 
             Environment.IterationResult.Blockers.BlockerDone(resolution, TimeStep.Step);
         }
+
+        #endregion
+
+        #region Incomplete Knowledge
+
+        /// <summary>
+        ///     Check Task.KnowledgesBits against WorkerAgent.expertise
+        ///     If Has expertise Task will be complete
+        ///     If has expertise for mandatoryKnowledgesBits but not for requiredKnowledgesBits, he will guess, and possibly
+        ///     complete the task incorrectly
+        ///     If hasn't expertise for mandatoryKnowledgesBits && for requiredKnowledgesBits, he will ask for help (co workers,
+        ///     internet forum, ...) && learn
+        /// </summary>
+        /// <param name="task"></param>
+        public void CheckBlockerIncompleteKnowledge(SymuTask task)
+        {
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.On)
+            {
+                return;
+            }
+
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
+            {
+                CheckBlockerIncompleteKnowledge(task, knowledgeId);
+            }
+        }
+
+        /// <summary>
+        ///     Check Task.KnowledgesBits for a specific KnowledgeBit against WorkerAgent.expertise
+        ///     If Has expertise Task will be complete
+        ///     If has expertise for mandatoryKnowledgesBits but not for requiredKnowledgesBits, he will guess, and possibly
+        ///     complete the task incorrectly
+        ///     If hasn't expertise for mandatoryKnowledgesBits && for requiredKnowledgesBits, he will ask for help (co workers,
+        ///     internet forum, ...) && learn
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="knowledgeId"></param>
+        protected virtual void CheckBlockerIncompleteKnowledge(SymuTask task, ushort knowledgeId)
+        {
+            var taskBits = task.KnowledgesBits.GetBits(knowledgeId);
+            // If taskBits.Mandatory.Any => mandatoryCheck is false unless workerKnowledge has the good knowledge or there is no mandatory knowledge
+            var mandatoryOk = taskBits.GetMandatory().Length == 0;
+            // If taskBits.Required.Any => RequiredCheck is false unless workerKnowledge has the good knowledge or there is no required knowledge
+            var requiredOk = taskBits.GetRequired().Length == 0;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            KnowledgeModel.CheckKnowledge(knowledgeId, taskBits, ref mandatoryOk, ref requiredOk,
+                ref mandatoryIndex, ref requiredIndex, TimeStep.Step);
+            if (!mandatoryOk)
+            {
+                // mandatoryCheck is false => Task is blocked
+                var blocker = AddBlocker(task, Murphy.IncompleteKnowledge, knowledgeId, mandatoryIndex);
+                TryRecoverBlocker(task, blocker);
+            }
+            else if (!requiredOk)
+            {
+                RecoverBlockerKnowledgeByDoing(task, null, knowledgeId, requiredIndex, BlockerResolution.Guessing);
+            }
+        }
+
+        /// <summary>
+        ///     Missing knowledge is guessed or searched in agent's databases
+        ///     The worker possibly complete the task incorrectly
+        ///     and learn by doing
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBit"></param>
+        /// <param name="blocker"></param>
+        /// <param name="resolution">guessing or searched</param>
+        public void RecoverBlockerKnowledgeByDoing(SymuTask task, Blocker blocker, ushort knowledgeId,
+            byte knowledgeBit, BlockerResolution resolution)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            var impact = Environment.Organization.Murphies.IncompleteKnowledge.NextGuess();
+            if (impact > task.Incorrect)
+            {
+                task.Incorrect = impact;
+            }
+
+            task.Weight *= Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing;
+            LearningModel.LearnByDoing(knowledgeId, knowledgeBit,
+                TimeStep.Step);
+            switch (blocker)
+            {
+                // No blocker, it's a required knowledgeBit
+                case null:
+                    task.KnowledgesBits.RemoveFirstRequired(knowledgeId);
+                    // Blockers Management - no blocker has been created
+                    // We create a fake one to follow the impact of the murphy
+                    Environment.IterationResult.Blockers.AddBlockerInProgress(TimeStep.Step);
+                    break;
+                // blocker, it's a mandatory knowledgeBit
+                default:
+                    task.KnowledgesBits.RemoveFirstMandatory(knowledgeId);
+                    break;
+            }
+
+            RecoverBlocker(task, blocker, resolution);
+        }
+
+        /// <summary>
+        ///     Ask Help to teammates that have the adequate knowledge
+        ///     when block from lack of knowledge
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="blocker"></param>
+        public virtual void TryRecoverBlockerIncompleteKnowledge(SymuTask task, Blocker blocker)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            if (blocker is null)
+            {
+                throw new ArgumentNullException(nameof(blocker));
+            }
+
+            var knowledgeId = (ushort) blocker.Parameter;
+            var knowledgeBit = (byte) blocker.Parameter2;
+            // Check if he has the right to receive knowledge from others agents
+            if (!Cognitive.MessageContent.CanReceiveKnowledge)
+            {
+                RecoverBlockerKnowledgeByDoing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Guessing);
+                return;
+            }
+
+            // He has the right
+            // first search in the databases of the actor
+            if (HasEmail && Email.SearchKnowledge(knowledgeId, knowledgeBit,
+                Cognitive.TasksAndPerformance.LearningRate))
+            {
+                RecoverBlockerKnowledgeByDoing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Searching);
+            }
+        }
+
         #endregion
 
         #region Incomplete beliefs
+
         /// <summary>
         ///     Check Task.BeliefBits against Agent.Beliefs
+        ///     Prevent the agent from acting on a particular belief
+        ///     Task may be blocked if it is the case
         /// </summary>
         public void CheckBlockerBeliefs(SymuTask task)
         {
@@ -374,6 +547,12 @@ namespace SymuEngine.Classes.Agents
                 CheckBlockerBelief(task, knowledgeId);
             }
         }
+
+        /// <summary>
+        ///     Check a particular beliefId from Task.BeliefBits against Agent.Beliefs
+        ///     Prevent the agent from acting on a particular belief
+        ///     Task may be blocked if it is the case
+        /// </summary>
         public void CheckBlockerBelief(SymuTask task, ushort knowledgeId)
         {
             if (task is null)
@@ -391,7 +570,8 @@ namespace SymuEngine.Classes.Agents
             CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
         }
 
-        protected virtual void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore, float requiredScore, byte mandatoryIndex, byte requiredIndex)
+        protected virtual void CheckBlockerBelief(SymuTask task, ushort knowledgeId, float mandatoryScore,
+            float requiredScore, byte mandatoryIndex, byte requiredIndex)
         {
             if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionThreshold))
             {
@@ -403,6 +583,7 @@ namespace SymuEngine.Classes.Agents
             var blocker = AddBlocker(task, Murphy.IncompleteBelief, knowledgeId, mandatoryIndex);
             TryRecoverBlockerIncompleteBelief(task, blocker);
         }
+
         /// <summary>
         ///     Ask Help to teammates about it belief
         ///     when task is blocked because of a lack of belief
@@ -424,14 +605,10 @@ namespace SymuEngine.Classes.Agents
             // Check if he has the right to receive knowledge from others agents
             if (!Cognitive.MessageContent.CanReceiveBeliefs)
             {
-                return;
+                // If agent has no other strategy 
+                // Blocker must be unblocked in a way or another
+                RecoverBlockerBeliefByGuessing(task, blocker);
             }
-
-            // If agent has no other strategy 
-            // Blocker must be unblocked in a way or another
-            var beliefId = (ushort)blocker.Parameter;
-            var beliefBit = (byte)blocker.Parameter2;
-            RecoverBlockerBeliefByGuessing(task, blocker, beliefId, beliefBit);
         }
 
         /// <summary>
@@ -441,14 +618,20 @@ namespace SymuEngine.Classes.Agents
         /// </summary>
         /// <param name="task"></param>
         /// <param name="blocker"></param>
-        /// <param name="beliefId"></param>
-        /// <param name="beliefBit"></param>
-        public void RecoverBlockerBeliefByGuessing(SymuTask task, Blocker blocker, ushort beliefId, byte beliefBit)
+        public void RecoverBlockerBeliefByGuessing(SymuTask task, Blocker blocker)
         {
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
+            if (blocker == null)
+            {
+                throw new ArgumentNullException(nameof(blocker));
+            }
+
+            var beliefId = (ushort) blocker.Parameter;
+            var beliefBit = (byte) blocker.Parameter2;
 
             var impact = Environment.Organization.Murphies.IncompleteBelief.NextGuess();
             if (impact > task.Incorrect)

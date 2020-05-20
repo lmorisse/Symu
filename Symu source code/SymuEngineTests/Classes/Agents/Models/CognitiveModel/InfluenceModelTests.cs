@@ -1,4 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#region Licence
+
+// Description: Symu - SymuEngineTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
 using SymuEngine.Classes.Agents.Models.CognitiveModel;
@@ -7,15 +18,17 @@ using SymuEngine.Common;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Beliefs;
 
+#endregion
+
 namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
-    [TestClass()]
+    [TestClass]
     public class InfluenceModelTests
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly InternalCharacteristics _internalCharacteristics = new InternalCharacteristics();
-        private Network _network;
         private InfluenceModel _influenceModel;
+        private Network _network;
 
 
         [TestInitialize]
@@ -27,7 +40,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        /// Model off
+        ///     Model off
         /// </summary>
         [TestMethod]
         public void LearnByDoingTest()
@@ -39,8 +52,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
             Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
         }
+
         /// <summary>
-        /// Model on
+        ///     Model on
         /// </summary>
         [TestMethod]
         public void LearnByDoingTest1()
@@ -90,6 +104,5 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             var influence = InfluenceModel.NextInfluenceability(_internalCharacteristics);
             Assert.IsTrue(0 <= influence && influence <= 1);
         }
-
     }
 }

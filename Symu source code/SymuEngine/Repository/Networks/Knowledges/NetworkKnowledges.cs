@@ -196,6 +196,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
             {
                 throw new ArgumentNullException(nameof(knowledge));
             }
+
             var level = neutral ? KnowledgeLevel.NoKnowledge : agentKnowledge.KnowledgeLevel;
             var knowledgeBits = knowledge.InitializeBits(Model, level);
             agentKnowledge.SetKnowledgeBits(knowledgeBits, step);

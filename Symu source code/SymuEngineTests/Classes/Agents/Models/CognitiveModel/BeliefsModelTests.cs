@@ -1,4 +1,15 @@
-﻿using System;
+﻿#region Licence
+
+// Description: Symu - SymuEngineTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuEngine.Classes.Agents;
 using SymuEngine.Classes.Agents.Models;
@@ -7,36 +18,36 @@ using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Task;
 using SymuEngine.Common;
-using SymuEngine.Engine;
 using SymuEngine.Repository.Networks;
 using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngineTests.Helpers;
+
+#endregion
 
 namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class BeliefsModelTests
     {
-        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
         private readonly AgentId _agentId = new AgentId(1, 1);
-        private Network _network ;
-        private CognitiveArchitecture _cognitiveArchitecture;
+        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
+        private readonly AgentExpertise _expertise = new AgentExpertise();
+        private readonly float[] _knowledge1FBits = {1, 0.5F, 0.3F, 0};
+        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private Belief _belief;
         private BeliefsModel _beliefsModel;
-        private readonly float[] _knowledge1FBits = new[] { 1, 0.5F, 0.3F, 0 };
-        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
-        private readonly AgentExpertise _expertise = new AgentExpertise();
+        private CognitiveArchitecture _cognitiveArchitecture;
+        private Network _network;
 
         [TestInitialize]
         public void Initialize()
         {
             _network = new Network(new AgentTemplates(), new OrganizationModels());
-            _cognitiveArchitecture = new CognitiveArchitecture()
+            _cognitiveArchitecture = new CognitiveArchitecture
             {
-                KnowledgeAndBeliefs = { HasBelief = true, HasKnowledge = true },
-                MessageContent = { CanReceiveBeliefs = true, CanReceiveKnowledge = true },
-                InternalCharacteristics = { CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true }
+                KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
+                MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
+                InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new ModelEntity();
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
@@ -45,9 +56,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _network.NetworkBeliefs.AddBelief(_belief);
             _network.NetworkBeliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
 
-            _taskBits.SetMandatory(new byte[] { 0 });
-            _taskBits.SetRequired(new byte[] { 0 });
+            _taskBits.SetMandatory(new byte[] {0});
+            _taskBits.SetRequired(new byte[] {0});
         }
+
         /// <summary>
         ///     Non passing test
         /// </summary>
@@ -55,10 +67,10 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         public void AddBeliefsTest()
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = false;
-            var agentKnowledge = new AgentKnowledge(2, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(2, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _beliefsModel.AddBeliefs(_expertise);
-            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId,2));
+            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, 2));
         }
 
         /// <summary>
@@ -67,7 +79,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void AddBeliefsTest1()
         {
-            var agentKnowledge = new AgentKnowledge(2, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(2, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
             _beliefsModel.AddBeliefs(_expertise);
@@ -92,8 +104,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             Assert.ThrowsException<NullReferenceException>(() => _beliefsModel.CheckBelief(2, _taskBits,
                 ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex, ref requiredIndex));
         }
+
         /// <summary>
-        /// Model off
+        ///     Model off
         /// </summary>
         [TestMethod]
         public void CheckBeliefTest()
@@ -108,8 +121,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             Assert.AreEqual(0, mandatoryCheck);
             Assert.AreEqual(0, requiredCheck);
         }
+
         /// <summary>
-        /// Model on
+        ///     Model on
         /// </summary>
         [TestMethod]
         public void CheckBeliefTest1()
@@ -179,6 +193,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             var agentBelief = _beliefsModel.GetBelief(_belief.Id);
             Assert.IsNotNull(agentBelief);
         }
+
         /// <summary>
         ///     Non passing test
         /// </summary>
@@ -395,6 +410,5 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         }
 
         #endregion
-
     }
 }

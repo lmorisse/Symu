@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteractionTests
+// Description: Symu - SymuBeliefsAndInfluenceTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -14,11 +14,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SymuBeliefsAndInfluence.Classes;
 using SymuEngine.Classes.Organization;
 using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
 using SymuEngine.Engine;
-using SymuEngine.Environment;
 using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools;
 
 #endregion
@@ -51,21 +48,22 @@ namespace SymuBeliefsAndInfluenceTests
                 NumberOfSteps = NumberOfSteps
             };
             _simulation.AddScenario(scenario);
-
         }
+
         /// <summary>
-        /// No belief
+        ///     No belief
         /// </summary>
         [TestMethod]
         public void NoBeliefTest()
         {
-            _environment.KnowledgeCount= 0;
+            _environment.KnowledgeCount = 0;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
+
         /// <summary>
-        /// Agents don't have beliefs
+        ///     Agents don't have beliefs
         /// </summary>
         [TestMethod]
         public void HasBeliefsTest()
@@ -76,8 +74,9 @@ namespace SymuBeliefsAndInfluenceTests
             Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
+
         /// <summary>
-        /// Influence model off
+        ///     Influence model off
         /// </summary>
         [TestMethod]
         public void InfluenceModelTest()
@@ -86,18 +85,20 @@ namespace SymuBeliefsAndInfluenceTests
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influence model on && rate of agents = 0
+        ///     Influence model on && rate of agents = 0
         /// </summary>
         [TestMethod]
         public void InfluenceModelTest1()
         {
-            _environment.Organization.Models.Influence.RateOfAgentsOn= 0;
+            _environment.Organization.Models.Influence.RateOfAgentsOn = 0;
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// No Influencers
+        ///     No Influencers
         /// </summary>
         [TestMethod]
         public void NoInfluencerTest()
@@ -106,59 +107,67 @@ namespace SymuBeliefsAndInfluenceTests
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influencers can't send beliefs
-        /// Belief should not change
+        ///     Influencers can't send beliefs
+        ///     Belief should not change
         /// </summary>
         [TestMethod]
         public void CantSendBeliefsTest()
         {
-            _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs= false;
+            _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = false;
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influencers don't have the minimum belief to send
-        /// Belief should not change
-        /// Strongly Disagree
+        ///     Influencers don't have the minimum belief to send
+        ///     Belief should not change
+        ///     Strongly Disagree
         /// </summary>
         [TestMethod]
         public void MinimumBeliefsToSendTest()
         {
-            _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit= 1;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.StronglyDisagree;
+            _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.StronglyDisagree;
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influencers have the minimum belief to send, but can't send any belief
-        /// Belief should not change
+        ///     Influencers have the minimum belief to send, but can't send any belief
+        ///     Belief should not change
         /// </summary>
         [TestMethod]
         public void BeliefBitsToSendTest()
         {
             _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
-            _environment.InfluencerTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend= 0;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.StronglyDisagree;
+            _environment.InfluencerTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.StronglyDisagree;
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influencers don't have the minimum belief to send
-        /// Belief should not change
-        /// Strongly agree
+        ///     Influencers don't have the minimum belief to send
+        ///     Belief should not change
+        ///     Strongly agree
         /// </summary>
         [TestMethod]
         public void MinimumBeliefsToSendTest2()
         {
             _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.StronglyAgree;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.StronglyAgree;
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Worker can't receive beliefs
-        /// Belief should not change
+        ///     Worker can't receive beliefs
+        ///     Belief should not change
         /// </summary>
         [TestMethod]
         public void CantReceiveBeliefsTest()
@@ -167,9 +176,10 @@ namespace SymuBeliefsAndInfluenceTests
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Influencers have no Influentialness
-        /// Belief should not change
+        ///     Influencers have no Influentialness
+        ///     Belief should not change
         /// </summary>
         [TestMethod]
         public void NoInfluentialnessTest()
@@ -178,9 +188,10 @@ namespace SymuBeliefsAndInfluenceTests
             _simulation.Process();
             CheckNoChange();
         }
+
         /// <summary>
-        /// Workers have no influenceability
-        /// Belief should not change
+        ///     Workers have no influenceability
+        ///     Belief should not change
         /// </summary>
         [TestMethod]
         public void NoInfluenceabilityTest()
@@ -243,7 +254,8 @@ namespace SymuBeliefsAndInfluenceTests
         public void FullWeightTest()
         {
             _environment.Model.MandatoryRatio = 1;
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
+                0; // Full risk aversion
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
             CheckNoChange();
@@ -253,53 +265,65 @@ namespace SymuBeliefsAndInfluenceTests
                   (_environment.TimeStep.Step * _environment.WorkersCount);
             Assert.AreNotEqual(100, tasksDoneRatio);
         }
+
         /// <summary>
-        /// Influencers strongly disagree
-        /// Belief should decrease
-        /// Triads should increase
+        ///     Influencers strongly disagree
+        ///     Belief should decrease
+        ///     Triads should increase
         /// </summary>
         [TestMethod]
         public void StronglyDisagreeTest()
         {
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
+                0; // Full risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel= BeliefLevel.StronglyDisagree;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.StronglyDisagree;
             _simulation.Process();
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum > _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean > _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
-            Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density < _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
+            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum >
+                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
+            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean >
+                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
+            Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density <
+                          _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
 
         /// <summary>
-        /// Influencers strongly agree
-        /// Belief should increase
-        /// Triads should increase
+        ///     Influencers strongly agree
+        ///     Belief should increase
+        ///     Triads should increase
         /// </summary>
         [TestMethod]
         public void StronglyAgreeTest()
         {
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;// Full risk aversion
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
+                0; // Full risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.StronglyAgree;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.StronglyAgree;
             _simulation.Process();
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum < _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean < _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
-            Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density < _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
+            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum <
+                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
+            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean <
+                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
+            Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density <
+                          _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
 
         /// <summary>
-        /// Influencers strongly agree
-        /// Belief should increase
-        /// Triads should increase
+        ///     Influencers strongly agree
+        ///     Belief should increase
+        ///     Triads should increase
         /// </summary>
         [TestMethod]
         public void NeitherAgreeNorDisagreeTest()
         {
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
-            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.NeitherAgreeNorDisagree;
+            _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+                BeliefLevel.NeitherAgreeNorDisagree;
             _simulation.Process();
             CheckNoChange();
         }

@@ -12,8 +12,9 @@
 using System;
 using System.Collections.Generic;
 using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Knowledges;
+using SymuEngine.Classes.Blockers;
 using SymuEngine.Common;
+using SymuEngine.Repository.Networks.Knowledges;
 using static SymuTools.Constants;
 
 #endregion
@@ -40,7 +41,7 @@ namespace SymuEngine.Classes.Task
         /// <summary>
         ///     Manage all the blockers that block the task
         /// </summary>
-        public Blockers.BlockerCollection Blockers { get; } = new Blockers.BlockerCollection();
+        public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         /// <summary>
         ///     Last step when a worker has worked on that task
@@ -149,6 +150,7 @@ namespace SymuEngine.Classes.Task
             IsStarted = true;
             LastTouched = step;
         }
+
         /// <summary>
         ///     Set RequiredKnowledges && MandatoryKnowledges based on the task complexity
         /// </summary>

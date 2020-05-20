@@ -209,6 +209,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         {
             return BeliefBits.GetSum();
         }
+
         public void SetBeliefBits(float[] beliefBits)
         {
             BeliefBits.SetBits(beliefBits);

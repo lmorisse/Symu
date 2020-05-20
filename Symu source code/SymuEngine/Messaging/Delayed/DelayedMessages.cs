@@ -59,8 +59,9 @@ namespace SymuEngine.Messaging.Delayed
             Message message;
             lock (_messages)
             {
-                var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key).Select(m => m.Key)
-                .ToList();
+                var keys = _messages.Where(m => m.Key <= step && m.Value.Count > 0).OrderBy(m => m.Key)
+                    .Select(m => m.Key)
+                    .ToList();
                 message = keys.Any() ? _messages[keys.First()].Dequeue() : null;
             }
 

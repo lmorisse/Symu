@@ -12,10 +12,7 @@
 using System;
 using SymuEngine.Classes.Agents.Models.Templates.Communication;
 using SymuEngine.Classes.Task;
-using SymuEngine.Environment;
 using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Influences;
 using SymuEngine.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
@@ -27,33 +24,27 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
     /// <summary>
     ///     CognitiveArchitecture define how an actor will manage its knowledge
     ///     Entity enable or not this mechanism for all the agents during the simulation
-    ///     The KnowledgeModels initialize the real value of the agent's knowledge parameters 
+    ///     The KnowledgeModels initialize the real value of the agent's knowledge parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
     public class KnowledgeModel
     {
-        public bool On { get; set; }
         private readonly AgentId _agentId;
-        private readonly NetworkKnowledges _networkKnowledges;
+        private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
-        private readonly InternalCharacteristics _internalCharacteristics;
+        private readonly NetworkKnowledges _networkKnowledges;
 
         /// <summary>
-        ///     Get the Agent Expertise
-        /// </summary>
-        public AgentExpertise Expertise =>
-            _knowledgeAndBeliefs.HasKnowledge ? _networkKnowledges.GetAgentExpertise(_agentId) : new AgentExpertise();
-
-        /// <summary>
-        /// Initialize Knowledge model :
-        /// update NetworkKnowledges
+        ///     Initialize Knowledge model :
+        ///     update NetworkKnowledges
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public KnowledgeModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture, Network network)
+        public KnowledgeModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+            Network network)
         {
             if (entity is null)
             {
@@ -69,14 +60,22 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 throw new ArgumentNullException(nameof(cognitiveArchitecture));
             }
+
             On = entity.IsAgentOn();
             _agentId = agentId;
             _networkKnowledges = network.NetworkKnowledges;
-            _knowledgeAndBeliefs= cognitiveArchitecture.KnowledgeAndBeliefs;
+            _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
             _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
-
         }
+
+        public bool On { get; set; }
+
+        /// <summary>
+        ///     Get the Agent Expertise
+        /// </summary>
+        public AgentExpertise Expertise =>
+            _knowledgeAndBeliefs.HasKnowledge ? _networkKnowledges.GetAgentExpertise(_agentId) : new AgentExpertise();
 
         /// <summary>
         ///     Check Knowledge required by a task against the worker expertise
@@ -128,10 +127,12 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
             {
                 return false;
             }
+
             // workerKnowledge may don't have the knowledge at all
             var workerKnowledge = Expertise?.GetKnowledge(knowledgeId);
             return workerKnowledge != null &&
-                   workerKnowledge.KnowsEnough(knowledgeBit, _internalCharacteristics.KnowledgeThreshHoldForReacting, step);
+                   workerKnowledge.KnowsEnough(knowledgeBit, _internalCharacteristics.KnowledgeThreshHoldForReacting,
+                       step);
         }
 
         /// <summary>
@@ -141,13 +142,13 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         /// <returns></returns>
         public void InitializeExpertise(ushort step)
         {
-            if (!On || !_knowledgeAndBeliefs.HasKnowledge) 
+            if (!On || !_knowledgeAndBeliefs.HasKnowledge)
             {
                 return;
             }
 
             if (!_networkKnowledges.Exists(_agentId))
-            // An agent may be able to have knowledge but with no expertise for the moment
+                // An agent may be able to have knowledge but with no expertise for the moment
             {
                 _networkKnowledges.AddAgentId(_agentId);
             }
@@ -214,13 +215,15 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         /// <returns>a knowledgeBits if he has the knowledge or the right</returns>
         /// <returns>With binary KnowledgeBits it will return a float of 0</returns>
         /// <example>KnowledgeBits[0,1,0.6] and MinimumKnowledgeToSend = 0.8 => KnowledgeBits[0,1,0]</example>
-        public Bits FilterKnowledgeToSend(ushort knowledgeId, byte knowledgeBit, CommunicationTemplate medium, ushort step, out byte[] knowledgeIndexToSend)
+        public Bits FilterKnowledgeToSend(ushort knowledgeId, byte knowledgeBit, CommunicationTemplate medium,
+            ushort step, out byte[] knowledgeIndexToSend)
         {
             knowledgeIndexToSend = null;
             if (medium is null)
             {
                 throw new ArgumentNullException(nameof(medium));
             }
+
             // If can't send knowledge or no knowledge asked
             if (!On || !_messageContent.CanSendKnowledge || knowledgeId == 0 ||
                 Expertise == null)

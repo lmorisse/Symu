@@ -61,9 +61,9 @@ namespace SymuTools.Math.MachineLearning
             var X = MatrixCreate(rows, cols - 1);
             var Y = MatrixCreate(rows, 1); // a column vector
 
-            int j;
             for (var i = 0; i < rows; ++i)
             {
+                int j;
                 for (j = 0; j < cols - 1; ++j)
                 {
                     X[i][j] = design[i][j];

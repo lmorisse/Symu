@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteraction
+// Description: Symu - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -16,9 +16,7 @@ using SymuEngine.Classes.Task;
 using SymuEngine.Common;
 using SymuEngine.Environment;
 using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository.Networks.Beliefs;
 using SymuEngine.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -40,6 +38,7 @@ namespace SymuBeliefsAndInfluence.Classes
             base.SetModelForAgents();
 
             #region Common
+
             Organization.Models.Generator = RandomGenerator.RandomUniform;
             Organization.Models.FollowGroupKnowledge = true;
             Organization.Models.FollowGroupFlexibility = true;
@@ -59,15 +58,17 @@ namespace SymuBeliefsAndInfluence.Classes
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 WhitePages.Network.AddKnowledge(knowledge);
                 Knowledges.Add(knowledge);
             }
+
             #endregion
 
             var agentIds = new List<AgentId>();
 
             #region Influencer
+
             InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             InfluencerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
@@ -86,9 +87,11 @@ namespace SymuBeliefsAndInfluence.Classes
                 Influencers.Add(actor);
                 agentIds.Add(actor.Id);
             }
+
             #endregion
 
             #region worker
+
             WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             WorkerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
@@ -117,9 +120,8 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                     KnowledgeLevel.FullKnowledge,
-                        Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                    Organization.Templates.Human.Cognitive.InternalCharacteristics);
                 actor.BeliefsModel.AddBelief(knowledges[i].Id);
-
             }
         }
     }

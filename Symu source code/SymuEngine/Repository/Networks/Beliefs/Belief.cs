@@ -34,7 +34,8 @@ namespace SymuEngine.Repository.Networks.Beliefs
         /// </summary>
         private const int RangeMax = 1;
 
-        public Belief(ushort beliefId, string name, byte length, RandomGenerator model, BeliefWeightLevel beliefWeightLevel)
+        public Belief(ushort beliefId, string name, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel)
         {
             Id = beliefId;
             Length = length;
@@ -46,6 +47,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         ///     Belief Id
         /// </summary>
         public ushort Id { get; }
+
         public string Name { get; }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
             return obj is Belief belief
                    && Id == belief.Id;
         }
+
         /// <summary>
         ///     Transform BeliefLevel into a value between [0;1]
         /// </summary>
@@ -147,8 +150,10 @@ namespace SymuEngine.Repository.Networks.Beliefs
                 default:
                     throw new ArgumentOutOfRangeException(nameof(beliefWeightLevel), beliefWeightLevel, null);
             }
+
             Weights = new Bits(beliefBits, 0);
         }
+
         /// <summary>
         ///     Given a random model and a BeliefLevel
         ///     return the beliefBits for the agent: an array fill of random binaries
@@ -163,54 +168,55 @@ namespace SymuEngine.Repository.Networks.Beliefs
             switch (model)
             {
                 case RandomGenerator.RandomUniform:
+                {
+                    float min;
+                    float max;
+
+                    switch (beliefLevel)
                     {
-                        float min;
-                        float max ;
-
-                        switch (beliefLevel)
-                        {
-                            case BeliefLevel.Random:
-                                min = RangeMin;
-                                max = RangeMax;
-                                break;
-                            default:
-                                min = GetMinFromBeliefLevel(beliefLevel);
-                                max = GetMaxFromBeliefLevel(beliefLevel);
-                                break;
-                        }
-
-                        beliefBits = ContinuousUniform.Samples(Length, min, max);
-                        if (Math.Abs(min - max) < Constants.Tolerance)
-                        {
-                            return beliefBits;
-                        }
-
-                        for (byte i = 0; i < beliefBits.Length; i++)
-                        {
-                            if (beliefBits[i] < min * (1 + 0.05))
-                            {
-                                // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
-                                // We force the lowest (Min +5%) knowledgeBit to 0  
-                                beliefBits[i] = 0;
-                            }
-                        }
-
-                        break;
+                        case BeliefLevel.Random:
+                            min = RangeMin;
+                            max = RangeMax;
+                            break;
+                        default:
+                            min = GetMinFromBeliefLevel(beliefLevel);
+                            max = GetMaxFromBeliefLevel(beliefLevel);
+                            break;
                     }
+
+                    beliefBits = ContinuousUniform.Samples(Length, min, max);
+                    if (Math.Abs(min - max) < Constants.Tolerance)
+                    {
+                        return beliefBits;
+                    }
+
+                    for (byte i = 0; i < beliefBits.Length; i++)
+                    {
+                        if (beliefBits[i] < min * (1 + 0.05))
+                        {
+                            // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
+                            // We force the lowest (Min +5%) knowledgeBit to 0  
+                            beliefBits[i] = 0;
+                        }
+                    }
+
+                    break;
+                }
                 case RandomGenerator.RandomBinary:
+                {
+                    switch (beliefLevel)
                     {
-                        switch (beliefLevel)
-                        {
-                            case BeliefLevel.Random:
-                                beliefBits = ContinuousUniform.FilteredSamples(Length, RangeMin, RangeMax);
-                                break;
-                            default:
-                                var mean = 1 - GetValueFromBeliefLevel(beliefLevel);
-                                beliefBits = ContinuousUniform.FilteredSamples(Length, mean);
-                                break;
-                        }
-                        break;
+                        case BeliefLevel.Random:
+                            beliefBits = ContinuousUniform.FilteredSamples(Length, RangeMin, RangeMax);
+                            break;
+                        default:
+                            var mean = 1 - GetValueFromBeliefLevel(beliefLevel);
+                            beliefBits = ContinuousUniform.FilteredSamples(Length, mean);
+                            break;
                     }
+
+                    break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model), model, null);
             }
