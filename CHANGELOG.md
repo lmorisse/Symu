@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 0.5.0 [☰](https://github.com/lmorisse/symu/compare/v0.5.0..v0.4.0)
 * Add new models : knowledge, Beliefs, Influence by [@lmorisse]
 * Add SymuTask.SetKnowledgesBits by [@lmorisse]
 * Refactoring NetworkBeliefs by [@lmorisse]
