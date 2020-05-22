@@ -146,12 +146,16 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Symu source code\SymuForm\SymuForm.csproj">
+      <Project>{fb0a9519-923e-4a4f-a6ac-dab4c7a03f63}</Project>
+      <Name>SymuForm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj">
       <Project>{5475a2e5-e10f-46ef-b24e-450d717af7cf}</Project>
       <Name>SymuTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj">
-      <Project>{67a5cc91-b376-4d62-be91-7fcbb95df7d8}</Project>
+      <Project>{bd01bccd-7194-4bd1-8e62-9be1343af2ce}</Project>
       <Name>Symu</Name>
     </ProjectReference>
   </ItemGroup>

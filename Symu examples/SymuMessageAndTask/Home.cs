@@ -15,15 +15,15 @@ using System.Globalization;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Engine.Form;
 using Symu.Environment;
+using SymuForm;
 using SymuMessageAndTask.Classes;
 
 #endregion
 
 namespace SymuMessageAndTask
 {
-    public partial class Home : SymuForm
+    public partial class Home : BaseForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 

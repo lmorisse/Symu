@@ -18,18 +18,18 @@ using Symu.Environment;
 
 #endregion
 
-namespace Symu.Engine.Form
+namespace SymuForm
 {
     /// <summary>
     ///     Symu Engine to use in GUI mode
     ///     Use SymuEngine in batch mode
     /// </summary>
-    public partial class SymuForm : System.Windows.Forms.Form
+    public partial class BaseForm : System.Windows.Forms.Form
     {
         private SymuEnvironment _environment;
         private bool _pauseWorker;
 
-        public SymuForm()
+        public BaseForm()
         {
             InitializeComponent();
         }

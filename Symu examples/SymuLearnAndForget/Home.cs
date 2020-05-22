@@ -17,9 +17,9 @@ using System.Windows.Forms;
 using Symu.Classes.Agents.Models.CognitiveModel;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Engine.Form;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
+using SymuForm;
 using SymuLearnAndForget.Classes;
 using static SymuTools.Constants;
 
@@ -27,7 +27,7 @@ using static SymuTools.Constants;
 
 namespace SymuLearnAndForget
 {
-    public partial class Home : SymuForm
+    public partial class Home : BaseForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private ushort _fullKnowledge;

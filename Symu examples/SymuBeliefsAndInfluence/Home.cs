@@ -16,17 +16,17 @@ using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Engine.Form;
 using Symu.Environment;
 using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
+using SymuForm;
 using SymuTools;
 
 #endregion
 
 namespace SymuBeliefsAndInfluence
 {
-    public partial class Home : SymuForm
+    public partial class Home : BaseForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private int _initialTasksDone;

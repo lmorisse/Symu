@@ -1,6 +1,6 @@
-﻿namespace Symu.Engine.Form
+﻿namespace SymuForm
 {
-    partial class SymuForm
+    partial class BaseForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.

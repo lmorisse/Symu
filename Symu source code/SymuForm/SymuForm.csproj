@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SymuForm</AssemblyName>
+    <RootNamespace>SymuForm</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +20,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SymuTools\SymuTools.csproj" />
+    <ProjectReference Include="..\Symu\Symu.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Resources\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -16,8 +16,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Engine.Form;
 using Symu.Environment;
+using SymuForm;
 using SymuMurphiesAndBlockers.Classes;
 using SymuTools;
 
@@ -25,7 +25,7 @@ using SymuTools;
 
 namespace SymuMurphiesAndBlockers
 {
-    public partial class Home : SymuForm
+    public partial class Home : BaseForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 
