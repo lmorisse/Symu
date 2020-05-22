@@ -49,7 +49,7 @@ The sample projects are interesting to understand what the framework can do. The
 
 ## Contributors
 
-See the list of [CONTRIBUTORs.md](CONTRIBUTORs.md) who participated in this project.
+See the list of [CONTRIBUTORS.md](CONTRIBUTORS.md) who participated in this project.
 
 ## Contributing
 
