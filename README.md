@@ -49,15 +49,15 @@ The sample projects are interesting to understand what the framework can do. The
 
 ## Contributors
 
-See the list of [CONTRIBUTORS.md](CONTRIBUTORS.md) who participated in this project.
+See the list of [CONTRIBUTORS](CONTRIBUTORS.md) who participated in this project.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute and the process for contributing.
+Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how you can contribute and the process for contributing.
 
 ## Code of conduct
 
-Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on our code of conduct if you want to contribute.
+Please read [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details on our code of conduct if you want to contribute.
 
 ## Versioning
 
@@ -65,7 +65,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE.md) file for details
 
 ## Integration
 
