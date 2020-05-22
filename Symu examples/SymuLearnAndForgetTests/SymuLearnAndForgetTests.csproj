@@ -21,8 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Symu source code\SymuEngine\Symu.csproj" />
     <ProjectReference Include="..\SymuLearnAndForget\SymuLearnAndForget.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Symu">
+      <HintPath>..\..\Symu source code\Symu\bin\Debug\netstandard2.0\Symu.dll</HintPath>
+    </Reference>
+    <Reference Include="SymuTools">
+      <HintPath>..\..\Symu source code\SymuTools\bin\Debug\netstandard2.0\SymuTools.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
