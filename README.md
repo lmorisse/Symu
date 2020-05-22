@@ -37,11 +37,13 @@ organization theory, social networks, socio-cultural environment, information di
 With our **academic program**, we will first implement models that you want to use for you.
 
 ## Getting Started
-The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
+The main project is [Symu](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/Symu). This is the framework you'll use to build your own application in batch. You can use [SymuForm](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuForm) for a GUI mode.
 
 The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget). They allow you to discover, understand and configure each model, in this sense it is a good entry point.
 
 ### Installing
+
+Symu works only on Windows for the moment.
 
 ### Built With
 
