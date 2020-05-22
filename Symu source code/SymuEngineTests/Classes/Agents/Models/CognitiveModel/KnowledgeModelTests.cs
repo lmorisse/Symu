@@ -11,18 +11,18 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Classes.Task;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Organization;
+using Symu.Classes.Task;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class KnowledgeModelTests
@@ -55,60 +55,6 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
-        }
-
-
-        /// <summary>
-        ///     Non passing test
-        /// </summary>
-        [TestMethod]
-        public void CheckKnowledgeTest()
-        {
-            var mandatoryCheck = false;
-            var requiredCheck = false;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            _knowledgeModel.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                ref requiredIndex, 0);
-            Assert.IsFalse(mandatoryCheck && requiredCheck);
-        }
-
-        /// <summary>
-        ///     Without the good knowledge
-        /// </summary>
-        [TestMethod]
-        public void CheckKnowledgeTest1()
-        {
-            var mandatoryCheck = false;
-            var requiredCheck = false;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _knowledgeModel.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                ref requiredIndex, 0);
-            Assert.IsFalse(mandatoryCheck && requiredCheck);
-        }
-
-        /// <summary>
-        ///     With the good knowledge
-        /// </summary>
-        [TestMethod]
-        public void CheckKnowledgeTest2()
-        {
-            var mandatoryCheck = false;
-            var requiredCheck = false;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
-            _knowledgeModel.CheckKnowledge(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                ref requiredIndex, 0);
-            Assert.IsTrue(mandatoryCheck && requiredCheck);
-            Assert.AreEqual(0, mandatoryIndex);
-            Assert.AreEqual(0, requiredIndex);
         }
 
         /// <summary>

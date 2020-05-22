@@ -10,12 +10,12 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Murphies;
+using Symu.Classes.Murphies;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Task
+namespace Symu.Classes.Task
 {
     /// <summary>
     ///     Model task's murphies

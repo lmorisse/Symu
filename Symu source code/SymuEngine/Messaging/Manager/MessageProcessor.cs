@@ -14,14 +14,14 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-using SymuEngine.Messaging.Delayed;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Messaging.Reply;
-using SymuEngine.Messaging.Subscription;
+using Symu.Messaging.Delayed;
+using Symu.Messaging.Messages;
+using Symu.Messaging.Reply;
+using Symu.Messaging.Subscription;
 
 #endregion
 
-namespace SymuEngine.Messaging.Manager
+namespace Symu.Messaging.Manager
 {
     public class MessageProcessor : IDisposable
     {

@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Environment;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngine.Classes.Organization
+namespace Symu.Classes.Organization
 {
     /// <summary>
     ///     Model for interaction sphere settings

@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Measure of the weight's belief

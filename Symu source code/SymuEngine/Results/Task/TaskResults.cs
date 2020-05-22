@@ -12,15 +12,15 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
+using Symu.Environment;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Results.Task
+namespace Symu.Results.Task
 {
     /// <summary>
-    ///     Manage the task metrics for the simulation
+    ///     Manage the task metrics for the symu
     /// </summary>
     public class TaskResults
     {
@@ -58,12 +58,12 @@ namespace SymuEngine.Results.Task
         public float AverageDone => _results.Values.Any() ? (float) _results.Values.Average(x => x.Done) : 0F;
 
         /// <summary>
-        ///     Total tasks done during the simulation
+        ///     Total tasks done during the symu
         /// </summary>
         public int Total => _results.Values.Any() ? _results.Values.Last().TotalTasksNumber : 0;
 
         /// <summary>
-        ///     Total weight of tasks done during the simulation
+        ///     Total weight of tasks done during the symu
         /// </summary>
         public float Weight => _results.Values.Any() ? _results.Values.Last().WeightDone : 0;
 

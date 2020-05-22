@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Message content from Construct Software

@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Results.Organization
+namespace Symu.Results.Organization
 {
     /// <summary>
     ///     Structure to store group knowledge information

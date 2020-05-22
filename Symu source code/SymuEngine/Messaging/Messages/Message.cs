@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     /// <summary>
     ///     A message that the agents use to communicate. In an agent-based system, the communication between the agents is

@@ -11,21 +11,29 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Results.Blocker;
 
 #endregion
 
-namespace SymuEngine.Classes.Blockers
+namespace Symu.Classes.Blockers
 {
     /// <summary>
     ///     Manage the list of blockers of a task
     /// </summary>
     public class BlockerCollection
     {
+        private readonly BlockerResults _blockerResults;
         public List<Blocker> List { get; } = new List<Blocker>();
         public bool IsBlocked => List.Any();
 
+        public BlockerCollection(BlockerResults blockerResults)
+        {
+            _blockerResults = blockerResults;
+        }
+
         /// <summary>
         ///     Add a blocker with two parameters
+        ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
         /// <param name="step">step of creation of the blocker</param>
@@ -34,12 +42,12 @@ namespace SymuEngine.Classes.Blockers
         public Blocker Add(int type, ushort step, object parameter1, object parameter2)
         {
             var blocker = new Blocker(type, step, parameter1, parameter2);
-            List.Add(blocker);
-            return blocker;
+            return Add(step, blocker);
         }
 
         /// <summary>
         ///     Add a blocker with one parameter
+        ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
         /// <param name="step">step of creation of the blocker</param>
@@ -47,20 +55,48 @@ namespace SymuEngine.Classes.Blockers
         public Blocker Add(int type, ushort step, object parameter)
         {
             var blocker = new Blocker(type, step, parameter);
+            return Add(step, blocker);
+        }
+
+        private Blocker Add(ushort step, Blocker blocker)
+        {
+            _blockerResults.AddBlockerInProgress(step);
             List.Add(blocker);
             return blocker;
         }
 
         /// <summary>
         ///     Add a blocker without parameter
+        ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
         /// <param name="step">step of creation of the blocker</param>
         public Blocker Add(int type, ushort step)
         {
             var blocker = new Blocker(type, step);
-            List.Add(blocker);
-            return blocker;
+            return Add(step, blocker);
+        }
+
+        /// <summary>
+        ///     Remove an existing blocker from a task
+        ///     And update IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="blocker"></param>
+        /// <param name="resolution"></param>
+        /// <param name="step"></param>
+        public void Recover(Blocker blocker, BlockerResolution resolution, ushort step)
+        {
+            if (!Contains(blocker))
+            {
+                // Blocker may have been already resolved
+                return;
+            }
+            if (blocker != null)
+            {
+                Remove(blocker);
+            }
+
+            _blockerResults.BlockerDone(resolution, step);
         }
 
         /// <summary>

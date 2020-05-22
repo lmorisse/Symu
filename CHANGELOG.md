@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* Refactoring Murphies by [@lmorisse]
+* Add Agent.TimeSpent by [@lmorisse]
+* Add new project example: [SymuMurphiesAndBlockers](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMurphiesAndBlockers) by [@lmorisse]
+* Add new project example: [SymuMurphiesAndBlockersTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMurphiesAndBlockersTests) by [@lmorisse]
+
 ## 0.5.0 [☰](https://github.com/lmorisse/symu/compare/v0.5.0..v0.4.0)
 * Add new models : knowledge, Beliefs, Influence by [@lmorisse]
 * Add SymuTask.SetKnowledgesBits by [@lmorisse]

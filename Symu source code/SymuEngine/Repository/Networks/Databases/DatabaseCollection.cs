@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Databases
+namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
     ///     List of all the Database

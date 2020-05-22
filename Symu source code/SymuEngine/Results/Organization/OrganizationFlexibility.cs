@@ -10,14 +10,14 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Environment;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Sphere;
+using Symu.Environment;
+using Symu.Repository;
+using Symu.Repository.Networks.Sphere;
 using SymuTools.Math;
 
 #endregion
 
-namespace SymuEngine.Results.Organization
+namespace Symu.Results.Organization
 {
     /// <summary>
     ///     The ability of an organizationEntity to respond rapidly to the changing environment
@@ -26,7 +26,7 @@ namespace SymuEngine.Results.Organization
     public class OrganizationFlexibility
     {
         /// <summary>
-        ///     Network of the simulation
+        ///     Network of the symu
         /// </summary>
         private readonly SymuEnvironment _environment;
 
@@ -52,7 +52,7 @@ namespace SymuEngine.Results.Organization
         public List<GroupDensityStruct> Links { get; } = new List<GroupDensityStruct>();
 
         /// <summary>
-        ///     Sphere of interaction is the weight of the network in the simulation
+        ///     Sphere of interaction is the weight of the network in the symu
         /// </summary>
 
         public List<GroupDensityStruct> Sphere { get; } = new List<GroupDensityStruct>();
@@ -79,7 +79,7 @@ namespace SymuEngine.Results.Organization
         }
 
         /// <summary>
-        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
+        ///     Sphere of interaction is the length of the network in the symu, the number of connections between agents
         /// </summary>
         public void HandleLinks(ushort agentsCount, ushort step)
         {
@@ -90,7 +90,7 @@ namespace SymuEngine.Results.Organization
         }
 
         /// <summary>
-        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
+        ///     Sphere of interaction is the length of the network in the symu, the number of connections between agents
         /// </summary>
         public void HandleSphere(ushort step)
         {

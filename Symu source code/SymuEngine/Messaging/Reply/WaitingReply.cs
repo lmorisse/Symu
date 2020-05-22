@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Messaging.Reply
+namespace Symu.Messaging.Reply
 {
     /// <summary>
     ///     Manage the waiting replies sent with SendToClass method

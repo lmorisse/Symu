@@ -11,12 +11,12 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
+using Symu.Classes.Agents;
+using Symu.Classes.Task;
+using Symu.Classes.Task.Manager;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository;
 
 #endregion
 

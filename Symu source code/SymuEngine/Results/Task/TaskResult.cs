@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Results.Task
+namespace Symu.Results.Task
 {
     public class TaskResult
     {

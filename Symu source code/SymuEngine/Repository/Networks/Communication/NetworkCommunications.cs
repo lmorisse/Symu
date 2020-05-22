@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Messaging.Messages;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Communication
+namespace Symu.Repository.Networks.Communication
 {
     /// <summary>
     ///     Communication network
@@ -33,7 +33,7 @@ namespace SymuEngine.Repository.Networks.Communication
         }
 
         /// <summary>
-        ///     Repository of all the communications used during the simulation
+        ///     Repository of all the communications used during the symu
         /// </summary>
         public EmailTemplate Email => _agentTemplates.Email;
 

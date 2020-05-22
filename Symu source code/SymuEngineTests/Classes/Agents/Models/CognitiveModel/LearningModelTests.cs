@@ -10,18 +10,18 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Engine;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Engine;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class LearningModelTests
@@ -41,9 +41,9 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
             InitializeModel(0, true);
         }
 
-        public void InitializeModel(SimulationRandom randomLevel, bool modelOn)
+        public void InitializeModel(RandomLevel randomLevelLevel, bool modelOn)
         {
-            _organizationModels.RandomLevel = randomLevel;
+            _organizationModels.RandomLevel = randomLevelLevel;
             _cognitiveArchitecture = new CognitiveArchitecture();
             _cognitiveArchitecture.InternalCharacteristics.CanLearn = true;
             _learningModel = new LearningModel(_agentId, _organizationModels, _network.NetworkKnowledges,
@@ -159,7 +159,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningTest()
         {
-            InitializeModel(SimulationRandom.NoRandom, false);
+            InitializeModel(RandomLevel.NoRandom, false);
             _cognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
             Assert.AreEqual(0, _learningModel.NextLearning());
         }
@@ -172,7 +172,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningTest1(float learningRate)
         {
-            InitializeModel(SimulationRandom.NoRandom, true);
+            InitializeModel(RandomLevel.NoRandom, true);
             _learningModel.On = true;
             _learningModel.RateOfAgentsOn = 1;
             _cognitiveArchitecture.TasksAndPerformance.LearningRate = learningRate;
@@ -185,7 +185,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningTest2()
         {
-            InitializeModel(SimulationRandom.Simple, true);
+            InitializeModel(RandomLevel.Simple, true);
             _learningModel.TasksAndPerformance.LearningRate = 1;
             _learningModel.TasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
             Assert.AreNotEqual(1, _learningModel.NextLearning());
@@ -197,7 +197,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningByDoingTest()
         {
-            InitializeModel(SimulationRandom.NoRandom, false);
+            InitializeModel(RandomLevel.NoRandom, false);
             _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = 1;
             Assert.AreEqual(0, _learningModel.NextLearningByDoing());
         }
@@ -210,7 +210,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningByDoingTest1(float learningRate)
         {
-            InitializeModel(SimulationRandom.NoRandom, true);
+            InitializeModel(RandomLevel.NoRandom, true);
             _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = learningRate;
             Assert.AreEqual(learningRate, _learningModel.NextLearningByDoing());
         }
@@ -221,7 +221,7 @@ namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void NextLearningByDoingTest2()
         {
-            InitializeModel(SimulationRandom.Simple, true);
+            InitializeModel(RandomLevel.Simple, true);
             _cognitiveArchitecture.TasksAndPerformance.LearningByDoingRate = 1;
             _cognitiveArchitecture.TasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
             Assert.AreNotEqual(1, _learningModel.NextLearningByDoing());

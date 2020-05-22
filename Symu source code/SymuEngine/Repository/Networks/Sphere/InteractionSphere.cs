@@ -12,19 +12,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngine.Repository.Networks.Link;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Repository.Networks.Activities;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Link;
 using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Sphere
+namespace Symu.Repository.Networks.Sphere
 {
     /// <summary>
     ///     Array Agent * Agent of derived parameters from all networks.

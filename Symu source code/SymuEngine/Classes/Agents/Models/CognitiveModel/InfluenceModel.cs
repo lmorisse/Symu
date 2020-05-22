@@ -10,19 +10,19 @@
 #region using directives
 
 using System;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Influences;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Influences;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will influence or be influenced
-    ///     Entity enable or not this mechanism for all the agents during the simulation
+    ///     Entity enable or not this mechanism for all the agents during the symu
     ///     The InfluenceModel initialize the real value of the agent's influence parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>

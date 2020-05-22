@@ -13,10 +13,10 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
-using SymuEngine.Engine.Form;
-using SymuEngine.Environment;
+using Symu.Classes.Scenario;
+using Symu.Common;
+using Symu.Engine.Form;
+using Symu.Environment;
 using SymuMessageAndTask.Classes;
 
 #endregion
@@ -99,28 +99,9 @@ namespace SymuMessageAndTask
             #endregion
         }
 
-        protected override void SetUpOrganization()
+        protected override void UpdateSettings()
         {
-            SetRandomLevel(cbRandomLevel.SelectedIndex);
-            TimeStepType = TimeStepType.Daily;
-        }
 
-        protected override void SetScenarii()
-        {
-            _ = new TimeStepScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
-            };
-        }
-
-        protected override void OnStopped()
-        {
-            base.OnStopped();
-            DisplayButtons();
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
             #region Task model
 
             OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask =
@@ -162,6 +143,26 @@ namespace SymuMessageAndTask
 
             #endregion
 
+            SetRandomLevel(cbRandomLevel.SelectedIndex);
+            TimeStepType = TimeStepType.Daily;
+        }
+
+        protected override void SetScenarii()
+        {
+            _ = new TimeStepScenario(_environment)
+            {
+                NumberOfSteps = ushort.Parse(tbSteps.Text)
+            };
+        }
+
+        protected override void OnStopped()
+        {
+            base.OnStopped();
+            DisplayButtons();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
             Start(_environment);
         }
 

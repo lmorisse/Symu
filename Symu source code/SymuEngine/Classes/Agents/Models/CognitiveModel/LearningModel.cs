@@ -10,19 +10,19 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will learn
-    ///     Entity enable or not this mechanism for all the agents during the simulation
+    ///     Entity enable or not this mechanism for all the agents during the symu
     ///     The LearningModel initialize the real value of the agent's learning parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>

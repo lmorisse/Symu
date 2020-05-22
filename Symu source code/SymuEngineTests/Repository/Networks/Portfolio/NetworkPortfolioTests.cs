@@ -10,12 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Portfolio;
+using Symu.Classes.Agents;
+using Symu.Repository.Networks.Portfolio;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Portfolio
+namespace SymuTests.Repository.Networks.Portfolio
 {
     [TestClass]
     public class NetworkPortfolioTests

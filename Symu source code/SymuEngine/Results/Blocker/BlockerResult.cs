@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Results.Blocker
+namespace Symu.Results.Blocker
 {
     public class BlockerResult
     {

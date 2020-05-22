@@ -10,20 +10,19 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Task;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will manage its knowledge
-    ///     Entity enable or not this mechanism for all the agents during the simulation
+    ///     Entity enable or not this mechanism for all the agents during the symu
     ///     The KnowledgeModels initialize the real value of the agent's knowledge parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
@@ -76,64 +75,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         /// </summary>
         public AgentExpertise Expertise =>
             _knowledgeAndBeliefs.HasKnowledge ? _networkKnowledges.GetAgentExpertise(_agentId) : new AgentExpertise();
-
-        /// <summary>
-        ///     Check Knowledge required by a task against the worker expertise
-        /// </summary>
-        /// <param name="knowledgeId"></param>
-        /// <param name="taskBitIndexes">KnowledgeBits indexes of the task that must be checked against worker Knowledge</param>
-        /// <param name="mandatoryCheck"></param>
-        /// <param name="requiredCheck"></param>
-        /// <param name="mandatoryIndex"></param>
-        /// <param name="requiredIndex"></param>
-        /// <param name="step"></param>
-        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, ref bool mandatoryCheck,
-            ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
-        {
-            if (taskBitIndexes is null)
-            {
-                throw new ArgumentNullException(nameof(taskBitIndexes));
-            }
-
-            // model is off
-            if (!On)
-            {
-                return;
-            }
-
-            // agent may don't have the knowledge at all
-            var workerKnowledge = Expertise?.GetKnowledge(knowledgeId);
-            if (workerKnowledge == null)
-            {
-                return;
-            }
-
-            mandatoryCheck = workerKnowledge.Check(taskBitIndexes.GetMandatory(), out mandatoryIndex,
-                _internalCharacteristics.KnowledgeThreshHoldForReacting, step);
-            requiredCheck = workerKnowledge.Check(taskBitIndexes.GetRequired(), out requiredIndex,
-                _internalCharacteristics.KnowledgeThreshHoldForReacting, step);
-        }
-
-        /// <summary>
-        ///     Check Knowledge required against the worker expertise
-        /// </summary>
-        /// <param name="knowledgeId"></param>
-        /// <param name="knowledgeBit">KnowledgeBit index of the task that must be checked against worker Knowledge</param>
-        /// <param name="step"></param>
-        /// <returns>True if the knowledgeBit is known enough</returns>
-        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, ushort step)
-        {
-            if (!On)
-            {
-                return false;
-            }
-
-            // workerKnowledge may don't have the knowledge at all
-            var workerKnowledge = Expertise?.GetKnowledge(knowledgeId);
-            return workerKnowledge != null &&
-                   workerKnowledge.KnowsEnough(knowledgeBit, _internalCharacteristics.KnowledgeThreshHoldForReacting,
-                       step);
-        }
 
         /// <summary>
         ///     Initialize the expertise of the agent based on the knowledge network
@@ -243,8 +184,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
                 throw new ArgumentNullException(nameof(agentKnowledge));
             }
             // Filter the Knowledge to send, via the good communication medium
-            //var bitsToSend = GetFilteredKnowledgeToSend(agentKnowledge, knowledgeBit, medium,
-            //    out knowledgeIndexToSend);
 
             knowledgeIndexToSend = null;
             // Filtering via the good channel

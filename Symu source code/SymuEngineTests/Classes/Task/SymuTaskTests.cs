@@ -11,23 +11,26 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Task;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Task;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Results.Blocker;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Task
+namespace SymuTests.Classes.Task
 {
     [TestClass]
     public class SymuTaskTests
     {
         private readonly List<Knowledge> _knowledges = new List<Knowledge>();
-        private readonly MurphyTask _model = new MurphyTask();
-        private readonly SymuTask _task = new SymuTask(0);
+        private readonly MurphyTask _model = new MurphyTask(); private SymuTask _task;
 
         [TestInitialize]
         public void Initialize()
         {
+            var blockerResults = new BlockerResults(false);
+            _task = new SymuTask(0, blockerResults);
+
             for (var i = 0; i < 2; i++)
             {
                 // knowledge length of 10 is arbitrary in this example

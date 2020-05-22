@@ -10,13 +10,13 @@
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Beliefs;
+using Symu.Common;
+using Symu.Repository.Networks.Beliefs;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Beliefs
+namespace SymuTests.Repository.Networks.Beliefs
 {
     [TestClass]
     public class BeliefTests

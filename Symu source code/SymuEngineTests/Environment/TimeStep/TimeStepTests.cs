@@ -14,14 +14,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #endregion
 
-namespace SymuEngineTests.Environment.TimeStep
+namespace SymuTests.Environment.TimeStep
 {
     [TestClass]
     //Ne pas passer en static
     public class TimeStepTests
     {
-        private readonly SymuEngine.Environment.TimeStep _timeStep =
-            new SymuEngine.Environment.TimeStep();
+        private readonly Symu.Environment.TimeStep _timeStep =
+            new Symu.Environment.TimeStep();
 
         [TestMethod]
         [DataRow(0)]

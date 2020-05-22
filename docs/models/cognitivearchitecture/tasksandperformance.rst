@@ -1,4 +1,4 @@
-.. index:: Task, learning, cognitive architecture
+.. index:: Task, learning, capacity, cognitive architecture
 
 *********************
 Tasks and performance
@@ -25,7 +25,10 @@ When you allow multi-tasking, you can define the impact of context switching bet
 Cost of task and capacity of the agent
 ======================================
 
-A task has a cost. To perform a task, an agent has capacity, re initialized at each new step. Each time an agent is performing a task, the capacity of the agent is decreased.
+By default, agent's capacity is initialized every step to 1.  This method can be overload to add more sophisticated models.
+This capacity can be less than 1. It depends on the :index:`murphies`' setups.
+This capacity is used to perform tasks.
+So, a task has a cost. Each time an agent has done a task, the capacity of the agent is decreased of the cost of the task.
 
 Learning model
 **************

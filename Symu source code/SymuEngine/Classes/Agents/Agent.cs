@@ -12,21 +12,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Manager;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Blockers;
+using Symu.Classes.Task.Manager;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Messaging.Manager;
+using Symu.Messaging.Messages;
+using Symu.Repository;
+using Symu.Repository.Networks.Databases;
 using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents
+namespace Symu.Classes.Agents
 {
     /// <summary>
     ///     An abstract base class for agents.
@@ -52,6 +53,7 @@ namespace SymuEngine.Classes.Agents
         protected Agent(AgentId agentId, SymuEnvironment environment)
         {
             CreateAgent(agentId, environment);
+            Blockers = new BlockerCollection(environment.IterationResult.Blockers);
         }
 
         /// <summary>
@@ -108,34 +110,38 @@ namespace SymuEngine.Classes.Agents
         protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
 
         /// <summary>
-        ///     Define how agent will forget knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will forget knowledge during the symu based on its cognitive architecture
         /// </summary>
         public ForgettingModel ForgettingModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will learn knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will learn knowledge during the symu based on its cognitive architecture
         /// </summary>
         public LearningModel LearningModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will influence or be influenced during the simulation based on its cognitive architecture
+        ///     Define how agent will influence or be influenced during the symu based on its cognitive architecture
         /// </summary>
         public InfluenceModel InfluenceModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its beliefs during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its beliefs during the symu based on its cognitive architecture
         /// </summary>
         public BeliefsModel BeliefsModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the symu based on its cognitive architecture
         /// </summary>
         public KnowledgeModel KnowledgeModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the symu based on its cognitive architecture
         /// </summary>
         public ActivityModel ActivityModel { get; set; }
+        /// <summary>
+        ///     Manage every blocker of the agent
+        /// </summary>
+        public BlockerCollection Blockers { get; }
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
@@ -298,10 +304,8 @@ namespace SymuEngine.Classes.Agents
                 return;
             }
 
-            {
-                TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit);
-                OnAfterTaskProcessorStart();
-            }
+            TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit);
+            OnAfterTaskProcessorStart();
         }
 
         /// <summary>

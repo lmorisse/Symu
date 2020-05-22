@@ -13,11 +13,11 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Databases
+namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
     ///     NetworkDatabases
@@ -28,7 +28,7 @@ namespace SymuEngine.Repository.Networks.Databases
     public class NetworkDatabases
     {
         /// <summary>
-        ///     Repository of all the Databases used during the simulation
+        ///     Repository of all the Databases used during the symu
         /// </summary>
         public DatabaseCollection Repository { get; } = new DatabaseCollection();
 

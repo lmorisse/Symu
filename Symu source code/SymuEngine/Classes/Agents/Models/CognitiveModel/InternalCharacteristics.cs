@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Common;
+using Symu.Common;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     InternalCharacteristics from Construct Software
@@ -54,7 +54,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
             internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
             internalCharacteristics.BeliefThreshHoldForReacting = BeliefThreshHoldForReacting;
-            internalCharacteristics.KnowledgeThreshHoldForReacting = KnowledgeThreshHoldForReacting;
 
             #endregion
 
@@ -314,27 +313,6 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
         #region Risk aversion
 
-        private float _knowledgeThreshHoldForReacting = 0.1F;
-
-        /// <summary>
-        ///     To react, an agent must have enough knowledge
-        ///     [0 - 1]
-        /// </summary>
-        /// <example>if KnowledgeThreshHoldForReacting = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
-        public float KnowledgeThreshHoldForReacting
-        {
-            get => _knowledgeThreshHoldForReacting;
-            set
-            {
-                if (value < 0 || value > 1)
-                {
-                    throw new ArgumentOutOfRangeException("KnowledgeThreshHoldForReacting should be between 0 and 1");
-                }
-
-                _knowledgeThreshHoldForReacting = value;
-            }
-        }
-
         private float _beliefThreshHoldForReacting = 0.1F;
 
         /// <summary>
@@ -361,7 +339,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
 
         /// <summary>
         ///     The risk aversion parameter affects whether or not an agent can make a particular decision.
-        ///     Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these
+        ///     Agents can accumulate beliefs during the symu and in the absence of risk aversion will act upon these
         ///     beliefs.
         ///     The risk aversion parameter, however, acts as a catch-all for factors not included in the model which prevent an
         ///     agent from acting on a particular belief.

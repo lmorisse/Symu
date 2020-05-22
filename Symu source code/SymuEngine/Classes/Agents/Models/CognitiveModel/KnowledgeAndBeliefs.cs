@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Knowledge & Beliefs from Construct Software
@@ -70,7 +70,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         public bool HasInitialBelief { get; set; }
 
         /// <summary>
-        ///     Default belief level use to create new belief during simulation
+        ///     Default belief level use to create new belief during symu
         /// </summary>
         public BeliefLevel DefaultBeliefLevel { get; set; } = BeliefLevel.NeitherAgreeNorDisagree;
 

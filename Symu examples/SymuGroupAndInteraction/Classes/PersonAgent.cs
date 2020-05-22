@@ -10,10 +10,10 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
+using Symu.Classes.Agents;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository;
 
 #endregion
 

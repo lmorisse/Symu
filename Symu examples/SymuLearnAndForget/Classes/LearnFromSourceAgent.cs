@@ -9,9 +9,9 @@
 
 #region using directives
 
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Task.Manager;
+using Symu.Environment;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 

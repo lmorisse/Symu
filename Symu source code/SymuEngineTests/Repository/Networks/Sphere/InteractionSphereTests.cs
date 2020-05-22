@@ -12,21 +12,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngine.Repository.Networks.Link;
-using SymuEngine.Repository.Networks.Sphere;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Activities;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Link;
+using Symu.Repository.Networks.Sphere;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Sphere
+namespace SymuTests.Repository.Networks.Sphere
 {
     [TestClass]
     public class InteractionSphereTests

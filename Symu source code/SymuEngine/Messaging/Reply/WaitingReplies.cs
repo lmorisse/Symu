@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SymuEngine.Messaging.Reply
+namespace Symu.Messaging.Reply
 {
     /// <summary>
     ///     Manage the list of waiting messages sent with SendToClass method

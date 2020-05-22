@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModel;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.Templates
+namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the AgentTemplate

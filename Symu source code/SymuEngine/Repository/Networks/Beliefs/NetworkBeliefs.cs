@@ -13,13 +13,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Belief network
@@ -43,7 +43,7 @@ namespace SymuEngine.Repository.Networks.Beliefs
         public RandomGenerator Model { get; set; } = new RandomGenerator();
 
         /// <summary>
-        ///     Repository of all the Beliefs used during the simulation
+        ///     Repository of all the Beliefs used during the symu
         /// </summary>
         public BeliefCollection Repository { get; } = new BeliefCollection();
 

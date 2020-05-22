@@ -11,20 +11,20 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngine.Repository.Networks.Role;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Activities;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Role;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks
+namespace SymuTests.Repository.Networks
 {
     [TestClass]
     public class NetworkTests

@@ -12,28 +12,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Engine;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngineTests.Helpers;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Murphies;
+using Symu.Classes.Organization;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Engine;
+using Symu.Messaging.Messages;
+using Symu.Repository;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
+using SymuTests.Helpers;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents
+namespace SymuTests.Classes.Agents
 {
     [TestClass]
     public class AgentTests
     {
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
-        private readonly SimulationEngine _simulation = new SimulationEngine();
+        private readonly SymuEngine _symu = new SymuEngine();
         private TestAgent _agent;
         private AgentKnowledge _agentKnowledge;
 
@@ -41,7 +42,7 @@ namespace SymuEngineTests.Classes.Agents
         public void Initialize()
         {
             _environment.SetOrganization(_organizationEntity);
-            _simulation.SetEnvironment(_environment);
+            _symu.SetEnvironment(_environment);
             _organizationEntity.Models.Influence.On = true;
             _organizationEntity.Models.Influence.RateOfAgentsOn = 1;
             _organizationEntity.Models.Learning.On = true;
@@ -52,6 +53,7 @@ namespace SymuEngineTests.Classes.Agents
             _organizationEntity.Models.Beliefs.RateOfAgentsOn = 1;
             _organizationEntity.Models.Knowledge.On = true;
             _organizationEntity.Models.Knowledge.RateOfAgentsOn = 1;
+            _organizationEntity.Models.FollowBlockers = true ;
 
             _agent = new TestAgent(1, _environment)
             {
@@ -62,7 +64,8 @@ namespace SymuEngineTests.Classes.Agents
                     InternalCharacteristics =
                     {
                         CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true
-                    }
+                    },
+                    TasksAndPerformance = { CanPerformTask = true }
                 }
             };
 
@@ -78,6 +81,7 @@ namespace SymuEngineTests.Classes.Agents
             Assert.AreEqual(AgentState.Starting, _agent.State);
             _agent.WaitingToStart();
             Assert.AreEqual(AgentState.Started, _agent.State);
+            _environment.TimeStep.Step = 0;
         }
 
         /// <summary>
@@ -106,21 +110,6 @@ namespace SymuEngineTests.Classes.Agents
             _agent.Capacity.Set(1);
             _agent.OnBeforeSendMessage(message);
             Assert.IsTrue(_agent.Capacity.Actual < 1);
-        }
-
-        #endregion
-
-        #region blocker
-
-        [TestMethod]
-        public void AddBlockerTest()
-        {
-            _environment.Organization.Models.FollowBlockers = true;
-            _environment.IterationResult.Initialize();
-            var task = new SymuTask(0);
-            Assert.IsNotNull(_agent.AddBlocker(task, 0, 1, 0));
-            Assert.IsTrue(task.IsBlocked);
-            Assert.AreEqual(1, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
         #endregion
@@ -769,7 +758,6 @@ namespace SymuEngineTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.MessageProcessor.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            _agent.Start();
             _agent.PreStep();
             // Status test
             Assert.AreEqual(AgentStatus.Available, _agent.Status);
@@ -787,7 +775,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void AskPreStepTest1()
         {
-            _agent.Start();
             _agent.ForgettingModel.On = false;
             var expertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
@@ -804,7 +791,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void AskPreStepTest2()
         {
-            _agent.Start();
             _agent.ForgettingModel.On = true;
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
             var expertise = new AgentExpertise();
@@ -825,7 +811,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void RemoveSubscribeTest()
         {
-            _agent.Start();
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
             var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
             _agent.RemoveSubscribe(message);
@@ -838,7 +823,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void RemoveSubscribeTest1()
         {
-            _agent.Start();
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 2);
             _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 3);
@@ -852,7 +836,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void AddSubscribeTest()
         {
-            _agent.Start();
             var attachments = new MessageAttachments();
             attachments.Add((byte) 1);
             attachments.Add((byte) 2);
@@ -864,7 +847,6 @@ namespace SymuEngineTests.Classes.Agents
         }
 
         #endregion
-
 
         #region Capacity management
 
@@ -938,6 +920,22 @@ namespace SymuEngineTests.Classes.Agents
 
         #endregion
 
+        #region task management
+        [TestMethod]
+        public void PostTasksTest()
+        {
+            var tasks = new List<SymuTask>();
+            for (var i = 0; i < 3; i++)
+            {
+                var task = new SymuTask(0, _environment.IterationResult.Blockers) {Weight = 0.1F};
+                tasks.Add(task);
+            }
+
+            _agent.PreStep();
+            _agent.Post(tasks);
+            Assert.IsTrue(_agent.Capacity.Actual < 1);
+        }
+        #endregion
 
         #region Status
 
@@ -971,8 +969,6 @@ namespace SymuEngineTests.Classes.Agents
         [TestMethod]
         public void HandleStatusTest2()
         {
-            _agent.Start();
-            _agent.WaitingToStart();
             _agent.Capacity.Initial = 1;
             var message = new Message
             {
@@ -1126,6 +1122,25 @@ namespace SymuEngineTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             var agent2 = new TestAgent(2, _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
+        }
+
+        #endregion
+
+        #region Blockers & help
+
+        /// <summary>
+        ///     CHeck MultipleBlockers false
+        /// </summary>
+        [TestMethod]
+        public void CheckBlockersTest()
+        {
+            _environment.IterationResult.Initialize();
+            _organizationEntity.Murphies.MultipleBlockers = false;
+            var task = new SymuTask(0, _environment.IterationResult.Blockers);
+            task.Blockers.Add(Murphy.IncompleteBelief, 0);
+            _agent.CheckNewBlockers(task);
+            // We don't add another blocker
+            Assert.AreEqual(1, task.Blockers.List.Count);
         }
 
         #endregion

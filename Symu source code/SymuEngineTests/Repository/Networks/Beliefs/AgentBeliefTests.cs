@@ -11,14 +11,14 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Common;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
 
-namespace SymuEngineTests.Repository.Networks.Beliefs
+namespace SymuTests.Repository.Networks.Beliefs
 {
     [TestClass]
     public class AgentBeliefTests

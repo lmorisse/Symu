@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Activities
+namespace Symu.Repository.Networks.Activities
 {
     public class AgentActivity
     {

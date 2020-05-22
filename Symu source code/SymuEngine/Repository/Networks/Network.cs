@@ -12,27 +12,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Communication;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Enculturation;
-using SymuEngine.Repository.Networks.Group;
-using SymuEngine.Repository.Networks.Influences;
-using SymuEngine.Repository.Networks.Knowledges;
-using SymuEngine.Repository.Networks.Link;
-using SymuEngine.Repository.Networks.Portfolio;
-using SymuEngine.Repository.Networks.Role;
-using SymuEngine.Repository.Networks.Sphere;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository.Networks.Activities;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Communication;
+using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Enculturation;
+using Symu.Repository.Networks.Group;
+using Symu.Repository.Networks.Influences;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Link;
+using Symu.Repository.Networks.Portfolio;
+using Symu.Repository.Networks.Role;
+using Symu.Repository.Networks.Sphere;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks
+namespace Symu.Repository.Networks
 {
     /// <summary>
     ///     Network: referential for social, communication, knowledge, authority
@@ -258,7 +258,7 @@ namespace SymuEngine.Repository.Networks
                 NetworkGroups.AddGroup(groupId);
                 if (State == AgentState.Started)
                 {
-                    // AddLink is done during the simulation. 1t the initialization, use InitializeNetworkLinks, for performance issues
+                    // AddLink is done during the symu. 1t the initialization, use InitializeNetworkLinks, for performance issues
                     foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
                     {
                         NetworkLinks.AddLink(agentId, newTeammateId);

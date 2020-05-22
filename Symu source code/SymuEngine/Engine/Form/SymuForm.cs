@@ -12,17 +12,17 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Environment;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngine.Engine.Form
+namespace Symu.Engine.Form
 {
     /// <summary>
-    ///     Simulation Engine to use in GUI mode
-    ///     Use SimulationEngine in batch mode
+    ///     Symu Engine to use in GUI mode
+    ///     Use SymuEngine in batch mode
     /// </summary>
     public partial class SymuForm : System.Windows.Forms.Form
     {
@@ -185,13 +185,17 @@ namespace SymuEngine.Engine.Form
             OrganizationEntity.Clear();
             _environment = environment;
             _environment.SetOrganization(OrganizationEntity);
-            SetUpOrganization();
+            UpdateSettings();
             _environment.TimeStep.Step = 0;
             _environment.InitializeIteration();
             SetScenarii();
         }
 
-        protected virtual void SetUpOrganization()
+        /// <summary>
+        /// Update settings of the environment and the organization via the form
+        /// Use SetOrganization to initialize organization 
+        /// </summary>
+        protected virtual void UpdateSettings()
         {
         }
 

@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Messaging.Delayed
+namespace Symu.Messaging.Delayed
 {
     /// <summary>
     ///     Manage Delayed MessagesManager

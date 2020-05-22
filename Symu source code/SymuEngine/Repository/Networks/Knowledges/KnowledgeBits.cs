@@ -14,7 +14,7 @@ using SymuTools;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Describe every bit of knowledge
@@ -22,7 +22,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
     public class KnowledgeBits : Bits
     {
         /// <summary>
-        ///     LastStep of the simulation
+        ///     LastStep of the symu
         /// </summary>
         private ushort _lastStep;
 
@@ -53,7 +53,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         /// <summary>
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        /// <returns>0 for the first step of the simulation</returns>
+        /// <returns>0 for the first step of the symu</returns>
         public float Obsolescence => _lastStep > 0 ? 1F - _lastTouched.Average() / _lastStep : 0;
 
         /// <summary>

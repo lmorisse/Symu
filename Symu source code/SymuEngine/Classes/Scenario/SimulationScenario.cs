@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Environment;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngine.Classes.Scenario
+namespace Symu.Classes.Scenario
 {
     public class SimulationScenario : Agent
     {

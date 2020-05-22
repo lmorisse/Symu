@@ -14,7 +14,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     /// <summary>
     ///     A message is an interaction between tow agents

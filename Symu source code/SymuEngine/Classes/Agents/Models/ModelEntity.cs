@@ -14,10 +14,10 @@ using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models
+namespace Symu.Classes.Agents.Models
 {
     /// <summary>
-    ///     Base Class to a simulation model
+    ///     Base Class to a symu model
     /// </summary>
     /// <example>
     ///     Multi tasking

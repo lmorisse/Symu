@@ -14,7 +14,7 @@ using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Describe the Knowledge of an agent :
@@ -83,7 +83,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
 
         /// <summary>
         ///     If agent has a knowledgeBit, and the forgetting model is on
-        ///     Minimum knowledge is the minimum the agent can't forget during the simulation for this KnowledgeBit.
+        ///     Minimum knowledge is the minimum the agent can't forget during the symu for this KnowledgeBit.
         ///     Range[0;1]
         /// </summary>
         public float MinimumKnowledge { get; set; }
@@ -95,12 +95,12 @@ namespace SymuEngine.Repository.Networks.Knowledges
         public short TimeToLive { get; set; }
 
         /// <summary>
-        ///     Accumulates all learning of the agent for this knowledge during the simulation
+        ///     Accumulates all learning of the agent for this knowledge during the symu
         /// </summary>
         public float Learning { get; private set; }
 
         /// <summary>
-        ///     Accumulates all forgetting of the agent for this knowledge during the simulation
+        ///     Accumulates all forgetting of the agent for this knowledge during the symu
         /// </summary>
         public float Forgetting { get; private set; }
 

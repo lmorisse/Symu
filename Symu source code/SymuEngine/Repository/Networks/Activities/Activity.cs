@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Activities
+namespace Symu.Repository.Networks.Activities
 {
     /// <summary>
     ///     Define an activity by its name and the list of knowledgeIds required by the activity

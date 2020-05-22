@@ -12,12 +12,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Activities
+namespace Symu.Repository.Networks.Activities
 {
     /// <summary>
     ///     Dictionary of all the activities of the network

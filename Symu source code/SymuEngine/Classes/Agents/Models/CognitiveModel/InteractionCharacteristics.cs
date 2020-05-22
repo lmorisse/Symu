@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Interaction Characteristics from Construct Software
@@ -44,7 +44,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #region Interactions
 
         /// <summary>
-        ///     specify if the total number of interactions in which an agent of this class can participate during each simulation
+        ///     specify if the total number of interactions in which an agent of this class can participate during each symu
         ///     period is limited or not
         ///     If set to true, defines the MaximumIterationsPerPeriod parameter
         ///     If an agent has exceeded the MaximumMessagesPerPeriod, the next messages will be considered as missed (not
@@ -54,7 +54,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         public bool LimitMessagesPerPeriod { get; set; }
 
         /// <summary>
-        ///     specify the total number of interactions in which an agent of this class can participate during each simulation
+        ///     specify the total number of interactions in which an agent of this class can participate during each symu
         ///     period.
         ///     The total number of interactions each period is the sum of all initiated and received interactions, so limiting
         ///     this number will either limit the number of initiations, receptions, or both.
@@ -70,7 +70,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #region Initiations
 
         /// <summary>
-        ///     specify if the number of messages in which an agent can initiate during each simulation period is limited or not
+        ///     specify if the number of messages in which an agent can initiate during each symu period is limited or not
         ///     If set to true, defines the MaximumInitiationsPerPeriod parameter
         ///     If an agent has exceeded the MaximumInitiationsPerPeriod, the next messages will be considered as missed (not
         ///     postponed)
@@ -79,7 +79,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         public bool LimitMessagesSentPerPeriod { get; set; }
 
         /// <summary>
-        ///     specify the total number of interactions that an agent will initiate during each simulation period.
+        ///     specify the total number of interactions that an agent will initiate during each symu period.
         ///     An agent that cannot initiate contact with any agent should have a maximum initiation value of zero.
         ///     Agents will never exceed more than their maximum initiation count.
         /// </summary>
@@ -91,7 +91,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #region Receptions
 
         /// <summary>
-        ///     specify if the number of messages in which an agent can received during each simulation period is limited or not
+        ///     specify if the number of messages in which an agent can received during each symu period is limited or not
         ///     If set to true, defines the MaximumReceptionsPerPeriod parameter
         ///     If an agent has exceeded the MaximumReceptionsPerPeriod, the next messages will be considered as missed (not
         ///     postponed)
@@ -100,7 +100,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         public bool LimitReceptionsPerPeriod { get; set; }
 
         /// <summary>
-        ///     specify the total number of interactions that an agent can receive during each simulation period.
+        ///     specify the total number of interactions that an agent can receive during each symu period.
         ///     Agents will never exceed more than their maximum reception count,
         /// </summary>
         /// <remarks>MaximumInitiationsPerPeriod in Construct Software</remarks>

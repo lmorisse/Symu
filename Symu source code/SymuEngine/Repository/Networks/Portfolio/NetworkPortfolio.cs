@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Portfolio
+namespace Symu.Repository.Networks.Portfolio
 {
     /// <summary>
     ///     Define who is using an object and how

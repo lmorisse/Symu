@@ -7,9 +7,9 @@
 
 #endregion
 
-namespace SymuEngine.Engine
+namespace Symu.Engine
 {
-    public enum SimulationRandom
+    public enum RandomLevel
     {
         NoRandom = 0,
         Simple = 1,

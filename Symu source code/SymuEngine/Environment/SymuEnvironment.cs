@@ -13,19 +13,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Messaging.Log;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Results;
+using Symu.Classes.Agents;
+using Symu.Classes.Organization;
+using Symu.Classes.Scenario;
+using Symu.Messaging.Log;
+using Symu.Messaging.Messages;
+using Symu.Repository;
+using Symu.Repository.Networks.Databases;
+using Symu.Results;
 using SymuTools;
 
 #endregion
 
-namespace SymuEngine.Environment
+namespace Symu.Environment
 {
     /// <summary>
     ///     A environment, where the agents run in parallel
@@ -40,7 +40,7 @@ namespace SymuEngine.Environment
         public OrganizationEntity Organization { get; protected set; }
 
         /// <summary>
-        ///     The white pages service of the simulation
+        ///     The white pages service of the symu
         ///     To have access to all agents
         /// </summary>
         public WhitePages WhitePages { get; private set; }
@@ -53,7 +53,7 @@ namespace SymuEngine.Environment
         public EnvironmentState State { get; } = new EnvironmentState();
 
         /// <summary>
-        ///     Use to slow down or speed up the simulation
+        ///     Use to slow down or speed up the symu
         ///     Delay is in milliseconds
         /// </summary>
         /// <example>Delay = 1000</example>
@@ -65,14 +65,14 @@ namespace SymuEngine.Environment
         public TimeStep TimeStep { get; set; } = new TimeStep();
 
         /// <summary>
-        ///     Use to log messages in the simulation
+        ///     Use to log messages in the symu
         ///     to debug and manage TimeBased Step
         /// </summary>
         public MessagesLog Messages { get; set; } = new MessagesLog();
 
         #region Start and Stop
 
-        public void SetOrganization(OrganizationEntity organization)
+        public virtual void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
             WhitePages = new WhitePages(Organization.Templates, Organization.Models);
@@ -125,7 +125,7 @@ namespace SymuEngine.Environment
         }
 
         /// <summary>
-        ///     Simulation will stop when all scenario are stopped
+        ///     Symu will stop when all scenario are stopped
         /// </summary>
         /// <returns>
         ///     true if iteration must stop, false otherwise
@@ -149,9 +149,10 @@ namespace SymuEngine.Environment
                 Organization.Models.Generator;
             WhitePages.Network.NetworkBeliefs.Model =
                 Organization.Models.Generator;
+            IterationResult.Initialize();
+            // Intentionally before SetModelForAgents
             SetModelForAgents();
             // Intentionally after SetModelForAgents
-            IterationResult.Initialize();
             WhitePages.Network.InitializeNetworkLinks();
             WhitePages.SetStarted();
         }

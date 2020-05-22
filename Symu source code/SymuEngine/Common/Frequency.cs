@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Common
+namespace Symu.Common
 {
     /// <summary>
     ///     Different level of frequencies

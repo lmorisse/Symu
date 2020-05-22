@@ -9,12 +9,12 @@
 
 #region using directives
 
-using SymuEngine.Common;
-using SymuEngine.Messaging.Messages;
+using Symu.Common;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.Templates.Communication
+namespace Symu.Classes.Agents.Models.Templates.Communication
 {
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the Email

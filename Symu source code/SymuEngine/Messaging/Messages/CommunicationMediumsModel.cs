@@ -15,7 +15,7 @@ using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     public static class CommunicationMediumsModel
     {

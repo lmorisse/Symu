@@ -9,11 +9,13 @@
 
 #region using directives
 
+using System;
 using System.Linq;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -29,6 +31,22 @@ namespace SymuLearnAndForget.Classes
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
         public Database Wiki => WhitePages.Network.NetworkDatabases.Repository.List.First();
+
+        public override void SetOrganization(OrganizationEntity organization)
+        {
+            if (organization == null)
+            {
+                throw new ArgumentNullException(nameof(organization));
+            }
+
+            base.SetOrganization(organization);
+
+            var wiki = new DataBaseEntity(organization.Id, organization.Templates.Email.Cognitive);
+            organization.AddDatabase(wiki);
+            organization.Models.FollowGroupKnowledge = true;
+
+            SetDebug(false);
+        }
 
         public override void SetModelForAgents()
         {

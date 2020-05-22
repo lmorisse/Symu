@@ -13,7 +13,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     [SuppressMessage("Design", "CA1028:Le stockage d'enum doit être de type Int32", Justification = "<En attente>")]
     public enum MessageAction : byte

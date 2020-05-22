@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Group
+namespace Symu.Repository.Networks.Group
 {
     public class GroupAllocation
     {

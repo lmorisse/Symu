@@ -12,15 +12,15 @@
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Engine;
-using SymuEngineTests.Helpers;
+using Symu.Classes.Agents;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Engine;
+using SymuTests.Helpers;
 
 #endregion
 
-namespace SymuEngineTests.Repository
+namespace SymuTests.Repository
 {
     [TestClass]
     public class WhitePagesTests
@@ -28,7 +28,7 @@ namespace SymuEngineTests.Repository
         private const byte ClassName1 = 11;
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
-        private readonly SimulationEngine _simulation = new SimulationEngine();
+        private readonly SymuEngine _symu = new SymuEngine();
 
         private TestAgent _agent;
 
@@ -37,7 +37,7 @@ namespace SymuEngineTests.Repository
         {
             _environment.SetOrganization(_organizationEntity);
             _environment.InitializeIteration();
-            _simulation.SetEnvironment(_environment);
+            _symu.SetEnvironment(_environment);
             _agent = new TestAgent(1, _environment);
         }
 
@@ -91,7 +91,7 @@ namespace SymuEngineTests.Repository
         [TestMethod]
         public void SetEnvironment()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => _simulation.SetEnvironment(null));
+            Assert.ThrowsException<ArgumentNullException>(() => _symu.SetEnvironment(null));
         }
 
         [TestMethod]

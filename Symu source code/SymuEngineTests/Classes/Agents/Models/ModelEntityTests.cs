@@ -10,11 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents.Models;
+using Symu.Classes.Agents.Models;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models
+namespace SymuTests.Classes.Agents.Models
 {
     [TestClass]
     public class ModelEntityTests

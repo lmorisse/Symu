@@ -10,16 +10,16 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Murphies;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Murphies;
+using Symu.Repository;
+using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Classes.Organization
+namespace Symu.Classes.Organization
 {
     /// <summary>
     ///     A base class for organizationEntity. You must define your own organizationEntity derived classes.
@@ -62,7 +62,7 @@ namespace SymuEngine.Classes.Organization
         public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
         /// <summary>
-        ///     List of the /Maydays handle in the simulation
+        ///     List of the /Maydays handle in the symu
         /// </summary>
         public MurphyCollection Murphies { get; } = new MurphyCollection();
 

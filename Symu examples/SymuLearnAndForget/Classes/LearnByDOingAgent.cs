@@ -9,9 +9,9 @@
 
 #region using directives
 
-using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Environment;
+using Symu.Classes.Task;
+using Symu.Classes.Task.Manager;
+using Symu.Environment;
 
 #endregion
 
@@ -25,7 +25,7 @@ namespace SymuLearnAndForget.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(0)
+            var task = new SymuTask(0, Environment.IterationResult.Blockers)
             {
                 Parent = TimeStep.Step,
                 // Cost impact of learning by doing
@@ -46,7 +46,7 @@ namespace SymuLearnAndForget.Classes
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
-            if (!KnowledgeModel.CheckKnowledge(Knowledge.Id, knowledgeBit, TimeStep.Step))
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.Id, knowledgeBit, KnowledgeModel.Expertise, TimeStep.Step))
             {
                 return;
             }

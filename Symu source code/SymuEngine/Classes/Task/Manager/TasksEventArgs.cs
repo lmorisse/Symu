@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SymuEngine.Classes.Task.Manager
+namespace Symu.Classes.Task.Manager
 {
     /// <summary>
     ///     The eventArg class for TaskProcessor.

@@ -14,7 +14,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     A utility to easily switch from BeliefLevel to values

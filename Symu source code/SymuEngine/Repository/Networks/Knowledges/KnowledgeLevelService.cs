@@ -14,7 +14,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     A utility to easily switch from KnowledgeLevel to values

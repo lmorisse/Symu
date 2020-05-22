@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Results
+namespace Symu.Results
 {
     public abstract class PostProcessResult
     {

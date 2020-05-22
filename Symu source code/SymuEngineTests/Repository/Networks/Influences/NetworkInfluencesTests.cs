@@ -10,12 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Influences;
+using Symu.Classes.Agents;
+using Symu.Repository.Networks.Influences;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Influences
+namespace SymuTests.Repository.Networks.Influences
 {
     [TestClass]
     public class NetworkInfluencesTests

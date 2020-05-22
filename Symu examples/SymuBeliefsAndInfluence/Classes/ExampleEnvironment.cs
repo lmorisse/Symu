@@ -9,14 +9,16 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Organization;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -33,25 +35,42 @@ namespace SymuBeliefsAndInfluence.Classes
         public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
         public MurphyTask Model { get; } = new MurphyTask();
 
+        public override void SetOrganization(OrganizationEntity organization)
+        {
+            if (organization == null)
+            {
+                throw new ArgumentNullException(nameof(organization));
+            }
+
+            base.SetOrganization(organization);
+
+            organization.Models.Influence.On = true;
+            organization.Models.Influence.RateOfAgentsOn = 1;
+            organization.Models.Beliefs.On = true;
+            organization.Models.Beliefs.RateOfAgentsOn = 1;
+            organization.Models.Generator = RandomGenerator.RandomUniform;
+            organization.Models.FollowGroupKnowledge = true;
+            organization.Models.FollowGroupFlexibility = true;
+            organization.Models.FollowTasks = true;
+            organization.Models.InteractionSphere.On = true;
+            organization.Models.InteractionSphere.SphereUpdateOverTime = true;
+            organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;
+            organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
+            // Interaction sphere setup
+            organization.Models.InteractionSphere.RelativeBeliefWeight = 0.5F;
+            organization.Models.InteractionSphere.RelativeActivityWeight = 0;
+            organization.Models.InteractionSphere.RelativeKnowledgeWeight = 0.25F;
+            organization.Models.InteractionSphere.SocialDemographicWeight = 0.25F;
+
+            SetDebug(false);
+        }
+
         public override void SetModelForAgents()
         {
             base.SetModelForAgents();
 
             #region Common
 
-            Organization.Models.Generator = RandomGenerator.RandomUniform;
-            Organization.Models.FollowGroupKnowledge = true;
-            Organization.Models.FollowGroupFlexibility = true;
-            Organization.Models.FollowTasks = true;
-            Organization.Models.InteractionSphere.On = true;
-            Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
-            Organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;
-            Organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
-            // Interaction sphere setup
-            Organization.Models.InteractionSphere.RelativeBeliefWeight = 0.5F;
-            Organization.Models.InteractionSphere.RelativeActivityWeight = 0;
-            Organization.Models.InteractionSphere.RelativeKnowledgeWeight = 0.25F;
-            Organization.Models.InteractionSphere.SocialDemographicWeight = 0.25F;
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
             Knowledges = new List<Knowledge>();

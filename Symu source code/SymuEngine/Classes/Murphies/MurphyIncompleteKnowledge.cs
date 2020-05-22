@@ -9,27 +9,45 @@
 
 #region using directives
 
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Messaging.Messages;
+using System;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Messaging.Messages;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Murphies
+namespace Symu.Classes.Murphies
 {
     /// <summary>
-    ///     Tasks on which worker require more knowledges than the worker have
+    ///     Tasks on which agent require more knowledges than the agent have
     ///     If so, task may be blocked or complete incorrectly
     /// </summary>
     public class MurphyIncompleteKnowledge : MurphyTask
     {
+        private float _knowledgeThresholdForDoing = 0.1F;
+
         /// <summary>
-        ///     To do the task, an agent must have enough knowledge
+        ///     To do the task, an agent must have enough knowledge.
         ///     [0 - 1]
         /// </summary>
         /// <example>if KnowledgeThreshHoldForReacting = 0.05 and agent KnowledgeId[index] = 0.6 => he can do to the question</example>
-        public float KnowledgeThreshHoldForDoing { get; set; } = 0.1F;
+        public float KnowledgeThresholdForDoing
+        {
+            get => _knowledgeThresholdForDoing;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("KnowledgeThresholdForDoing should be between [0;1]");
+                }
+
+                _knowledgeThresholdForDoing = value;
+            }
+        }
+
+        private float _rateOfIncorrectGuess = 0.3F;
 
         /// <summary>
         ///     Rate of incorrect task
@@ -38,7 +56,21 @@ namespace SymuEngine.Classes.Murphies
         ///     [0 - 1]
         /// </summary>
         /// <example>if rate = 0.3 (default), 3 tasks out of 10 will be incorrects</example>
-        public float RateOfIncorrectGuess { get; set; } = 0.3F;
+        public float RateOfIncorrectGuess
+        {
+            get => _rateOfIncorrectGuess;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RateOfIncorrectGuess should be between [0;1]");
+                }
+
+                _rateOfIncorrectGuess = value;
+            }
+        }
+
+        private float _rateOfAnswers = 0.5F;
 
         /// <summary>
         ///     Rate of answers
@@ -46,7 +78,19 @@ namespace SymuEngine.Classes.Murphies
         ///     [0 - 1]
         /// </summary>
         /// <example>if rate = 0.1 , 1 teammate out of 10 will answer</example>
-        public float RateOfAnswers { get; set; } = 0.5F;
+        public float RateOfAnswers
+        {
+            get => _rateOfAnswers;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RateOfAnswers should be between [0;1]");
+                }
+
+                _rateOfAnswers = value;
+            }
+        }
 
         /// <summary>
         ///     Delay to answer in days
@@ -77,6 +121,66 @@ namespace SymuEngine.Classes.Murphies
         public CommunicationMediums CommunicationMediums { get; set; }
 
         /// <summary>
+        ///     Check Knowledge required by a task against the worker expertise
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="taskBitIndexes">KnowledgeBits indexes of the task that must be checked against worker Knowledge</param>
+        /// <param name="expertise"></param>
+        /// <param name="mandatoryCheck"></param>
+        /// <param name="requiredCheck"></param>
+        /// <param name="mandatoryIndex"></param>
+        /// <param name="requiredIndex"></param>
+        /// <param name="step"></param>
+        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, AgentExpertise expertise, ref bool mandatoryCheck,
+            ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
+        {
+            if (taskBitIndexes is null)
+            {
+                throw new ArgumentNullException(nameof(taskBitIndexes));
+            }
+
+            // model is off
+            if (!IsAgentOn())
+            {
+                return;
+            }
+
+            // agent may don't have the knowledge at all
+            var workerKnowledge = expertise?.GetKnowledge(knowledgeId);
+            if (workerKnowledge == null)
+            {
+                return;
+            }
+
+            mandatoryCheck = workerKnowledge.Check(taskBitIndexes.GetMandatory(), out mandatoryIndex,
+                KnowledgeThresholdForDoing, step);
+            requiredCheck = workerKnowledge.Check(taskBitIndexes.GetRequired(), out requiredIndex,
+                KnowledgeThresholdForDoing, step);
+        }
+
+        /// <summary>
+        ///     Check Knowledge required against the worker expertise
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBit">KnowledgeBit index of the task that must be checked against worker Knowledge</param>
+        /// <param name="expertise"></param>
+        /// <param name="step"></param>
+        /// <returns>True if the knowledgeBit is known enough</returns>
+        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, AgentExpertise expertise, ushort step)
+        {
+            if (!IsAgentOn())
+            {
+                return false;
+            }
+
+            // workerKnowledge may don't have the knowledge at all
+            var workerKnowledge = expertise?.GetKnowledge(knowledgeId);
+            return workerKnowledge != null &&
+                   workerKnowledge.KnowsEnough(knowledgeBit, KnowledgeThresholdForDoing,
+                       step);
+        }
+
+        /// <summary>
         ///     Check if agent should guess or try to recover the blocker
         /// </summary>
         /// <param name="numberOfTries"></param>
@@ -95,11 +199,6 @@ namespace SymuEngine.Classes.Murphies
         /// </returns>
         public ImpactLevel NextGuess()
         {
-            if (!On)
-            {
-                return ImpactLevel.None;
-            }
-
             if (!Bernoulli.Sample(RateOfIncorrectGuess))
             {
                 return ImpactLevel.None;

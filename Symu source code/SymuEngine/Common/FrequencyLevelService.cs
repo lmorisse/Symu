@@ -14,7 +14,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Common
+namespace Symu.Common
 {
     /// <summary>
     ///     A utility to easily switch from FrequencyLevel to values

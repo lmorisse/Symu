@@ -13,14 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Common;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Beliefs
+namespace SymuTests.Repository.Networks.Beliefs
 {
     [TestClass]
     public class NetworkBeliefsTests

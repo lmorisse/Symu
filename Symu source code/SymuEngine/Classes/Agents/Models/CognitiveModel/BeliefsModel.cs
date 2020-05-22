@@ -11,21 +11,21 @@
 
 using System;
 using System.Linq;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Task;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Task;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will manage its beliefs
-    ///     Entity enable or not this mechanism for all the agents during the simulation
+    ///     Entity enable or not this mechanism for all the agents during the symu
     ///     The BeliefsModel initialize the real value of the agent's beliefs parameters and its real behaviour
     /// </summary>
     /// <remarks>From Construct Software</remarks>

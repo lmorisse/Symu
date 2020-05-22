@@ -10,11 +10,11 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Messaging.Reply
+namespace Symu.Messaging.Reply
 {
     /// <summary>
     ///     Manage the waiting replies sent with SendToClass method

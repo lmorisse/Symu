@@ -15,7 +15,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     List of all the Beliefs

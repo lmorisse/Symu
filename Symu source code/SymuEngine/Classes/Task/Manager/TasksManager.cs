@@ -13,12 +13,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Task.Manager
+namespace Symu.Classes.Task.Manager
 {
     /// <summary>
     ///     Async tasks manager for agent
@@ -37,12 +37,12 @@ namespace SymuEngine.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     Total tasks done by the agent during the simulation
+        ///     Total tasks done by the agent during the symu
         /// </summary>
         public ushort TotalTasksNumber { get; private set; }
 
         /// <summary>
-        ///     Total weight of tasks done by the agent during the simulation
+        ///     Total weight of tasks done by the agent during the symu
         /// </summary>
         public float TotalWeightDone { get; private set; }
 
@@ -342,13 +342,13 @@ namespace SymuEngine.Classes.Task.Manager
         #region Tasks Limit management
 
         /// <summary>
-        ///     Check if Worker has reached the maximum number of tasks he can do during the simulation
+        ///     Check if Worker has reached the maximum number of tasks he can do during the symu
         /// </summary>
         /// <returns>true if worker has not reached yet the maximum number of tasks</returns>
         public bool HasReachedTotalMaximumLimit => TasksLimit.HasReachedTotalMaximumLimit(TotalTasksNumber);
 
         /// <summary>
-        ///     Check if Worker has reached the maximum number of tasks he can do during the simulation
+        ///     Check if Worker has reached the maximum number of tasks he can do during the symu
         /// </summary>
         /// <returns>true if worker has not reached yet the maximum number of tasks</returns>
         public bool HasReachedSimultaneousMaximumLimit =>
@@ -374,7 +374,7 @@ namespace SymuEngine.Classes.Task.Manager
             // An arrival may have happened while we're preparing to deschedule
             lock (ToDo)
             {
-                if (ToDo.Count == 0)
+                if (ToDo.Count == 0 || HasReachedSimultaneousMaximumLimit || HasReachedTotalMaximumLimit)
                 {
                     _savedCont = new TaskCompletionSource<bool>();
                     descheduled = true;

@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents
+namespace Symu.Classes.Agents
 {
     public struct AgentId
     {

@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.Templates
+namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the standardAgent

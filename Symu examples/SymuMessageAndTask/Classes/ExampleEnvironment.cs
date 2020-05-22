@@ -10,8 +10,9 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Environment;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Organization;
+using Symu.Environment;
 
 #endregion
 
@@ -97,12 +98,24 @@ namespace SymuMessageAndTask.Classes
                 _switchingContextCost = value;
             }
         }
+        public override void SetOrganization(OrganizationEntity organization)
+        {
+            if (organization == null)
+            {
+                throw new ArgumentNullException(nameof(organization));
+            }
+
+            base.SetOrganization(organization);
+
+            organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = true;
+            organization.Models.FollowTasks = true;
+
+            SetDebug(false);
+        }
 
         public override void SetModelForAgents()
         {
             base.SetModelForAgents();
-            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = true;
-            Organization.Models.FollowTasks = true;
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             for (var i = 0; i < WorkersCount; i++)
             {

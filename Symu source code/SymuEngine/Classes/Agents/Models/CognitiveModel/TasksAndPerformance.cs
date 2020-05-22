@@ -10,12 +10,12 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
+using Symu.Classes.Task;
+using Symu.Common;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Tasks & Density from Construct Software

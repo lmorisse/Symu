@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Messaging.Manager
+namespace Symu.Messaging.Manager
 {
     /// <summary>
     ///     The eventArg class for Message processor

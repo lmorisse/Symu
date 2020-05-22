@@ -12,28 +12,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Results;
+using Symu.Classes.Agents;
+using Symu.Classes.Organization;
+using Symu.Classes.Scenario;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Results;
 
 #endregion
 
-namespace SymuEngine.Engine
+namespace Symu.Engine
 {
     /// <summary>
-    ///     Simulation Engine to use in batch mode
+    ///     Symu Engine to use in batch mode
     ///     Use SymuForm in GUI mode
     /// </summary>
-    public class SimulationEngine
+    public class SymuEngine
     {
         private readonly List<SimulationScenario> _scenarii = new List<SimulationScenario>();
 
         /// <summary>
-        ///     Manage the multiple iterations of the simulation
+        ///     Manage the multiple iterations of the symu
         ///     A interaction is a number of interaction steps
-        ///     Multiple iterations are used to replay a simulation for MonteCarlo process or to vary parameters
+        ///     Multiple iterations are used to replay a symu for MonteCarlo process or to vary parameters
         /// </summary>
         public Iterations Iterations { get; set; } = new Iterations();
 
@@ -41,7 +42,7 @@ namespace SymuEngine.Engine
         public AgentState State { get; private set; } = AgentState.Stopped;
 
         /// <summary>
-        ///     Environment of the simulation
+        ///     Environment of the symu
         /// </summary>
         protected SymuEnvironment Environment { get; set; }
 
@@ -63,7 +64,7 @@ namespace SymuEngine.Engine
         #region Initialize / set
 
         /// <summary>
-        ///     Add a new environment to the simulation engine
+        ///     Add a new environment to the symu engine
         /// </summary>
         /// <param name="environment"></param>
         public void SetEnvironment(SymuEnvironment environment)
@@ -75,12 +76,6 @@ namespace SymuEngine.Engine
         {
             SimulationResults.Clear();
             Iterations.SetUp();
-        }
-
-        public void SetDebug(bool value)
-        {
-            Environment.Messages.Debug = value;
-            Environment.State.Debug = value;
         }
 
         public void AddScenario(SimulationScenario scenario)
@@ -214,6 +209,27 @@ namespace SymuEngine.Engine
             Environment.TimeStep.Step = step0;
         }
 
+        /// <summary>
+        /// Initialize the engine, environment ready to launch the first step
+        /// Used in unit tests
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="organization"></param>
+        public void Initialize(SymuEnvironment environment, OrganizationEntity organization)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            environment.SetOrganization(organization);
+            SetEnvironment(environment);
+            PreIteration();
+            InitializeIteration();
+            environment.Start();
+            environment.PreStep();
+        }
         #endregion
+
     }
 }

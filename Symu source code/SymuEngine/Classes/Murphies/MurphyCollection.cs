@@ -10,10 +10,11 @@
 #region using directives
 
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Classes.Murphies
+namespace Symu.Classes.Murphies
 {
     /// <summary>
     ///     Base Class to model a murphy
@@ -36,12 +37,41 @@ namespace SymuEngine.Classes.Murphies
             Add(UnAvailability);
         }
 
+        /// <summary>
+        ///     If true, allow multiple blockers at the same time
+        ///     If false, will check new blockers only if there is no blocker
+        /// </summary>
+        public bool MultipleBlockers { get; set; }
         public MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
         public MurphyIncompleteKnowledge IncompleteKnowledge { get; } = new MurphyIncompleteKnowledge();
 
         public MurphyIncompleteBelief IncompleteBelief { get; } = new MurphyIncompleteBelief();
 
         public List<Murphy> Murphies { get; } = new List<Murphy>();
+
+        /// <summary>
+        /// Set all murphies on
+        /// </summary>
+        /// <param name="rate"></param>
+        public void On( float rate)
+        {
+            foreach (var murphy in Murphies.Where(x => x != null))
+            {
+                murphy.On = true;
+                murphy.RateOfAgentsOn = rate;
+            }
+        }
+
+        /// <summary>
+        /// Set all murphies off
+        /// </summary>
+        public void Off()
+        {
+            foreach (var murphy in Murphies.Where(x => x != null))
+            {
+                murphy.On = false;
+            }
+        }
 
         public void Add(Murphy murphy)
         {

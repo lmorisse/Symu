@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Environment
+namespace Symu.Environment
 {
     public enum TimeStepType
     {

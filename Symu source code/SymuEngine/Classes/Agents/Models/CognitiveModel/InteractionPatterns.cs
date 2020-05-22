@@ -10,12 +10,12 @@
 #region using directives
 
 using System;
-using SymuEngine.Common;
+using Symu.Common;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     InteractionPatterns from Construct Software
@@ -56,7 +56,7 @@ namespace SymuEngine.Classes.Agents.Models.CognitiveModel
         #region Isolation
 
         /// <summary>
-        ///     This parameter specify whether agent must be isolated or whether they are active during the entire simulation
+        ///     This parameter specify whether agent must be isolated or whether they are active during the entire symu
         /// </summary>
         public Frequency AgentCanBeIsolated { get; set; }
 

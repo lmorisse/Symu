@@ -13,7 +13,7 @@ using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models
+namespace Symu.Classes.Agents.Models
 {
     public class AgentCapacity
     {
@@ -56,7 +56,7 @@ namespace SymuEngine.Classes.Agents.Models
         }
 
         /// <summary>
-        ///     Set the remaining capacity
+        ///     Set the actual capacity
         /// </summary>
         /// <param name="value"></param>
         public void Set(float value)

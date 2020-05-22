@@ -14,13 +14,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
-using SymuEngine.Engine.Form;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Scenario;
+using Symu.Common;
+using Symu.Engine.Form;
+using Symu.Environment;
+using Symu.Repository.Networks.Knowledges;
 using SymuLearnAndForget.Classes;
 using static SymuTools.Constants;
 
@@ -62,7 +61,7 @@ namespace SymuLearnAndForget
             cbHasKnowledge.Checked =
                 OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge;
             tbKnowledgeThreshold.Text =
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.KnowledgeThreshHoldForReacting
+                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing
                     .ToString(CultureInfo.InvariantCulture);
             tbTimeToLive.Text =
                 OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive.ToString(
@@ -127,24 +126,7 @@ namespace SymuLearnAndForget
             #endregion
         }
 
-        protected override void SetUpOrganization()
-        {
-            SetRandomLevel(cbRandomLevel.SelectedIndex);
-            TimeStepType = TimeStepType.Daily;
-            var wiki = new DataBaseEntity(OrganizationEntity.Id, OrganizationEntity.Templates.Email.Cognitive);
-            OrganizationEntity.AddDatabase(wiki);
-            OrganizationEntity.Models.FollowGroupKnowledge = true;
-        }
-
-        protected override void SetScenarii()
-        {
-            _ = new TimeStepScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
-            };
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
+        protected override void UpdateSettings()
         {
             #region Knowledge
 
@@ -192,6 +174,21 @@ namespace SymuLearnAndForget
             #endregion
 
             _fullKnowledge = 0;
+
+            SetRandomLevel(cbRandomLevel.SelectedIndex);
+            TimeStepType = TimeStepType.Daily;
+        }
+
+        protected override void SetScenarii()
+        {
+            _ = new TimeStepScenario(_environment)
+            {
+                NumberOfSteps = ushort.Parse(tbSteps.Text)
+            };
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
             Start(_environment);
         }
 
@@ -271,10 +268,15 @@ namespace SymuLearnAndForget
             WriteTextSafe(lblFullKnowledge, _fullKnowledge.ToString(CultureInfo.InvariantCulture));
 
             // Global Knowledge - using iteration result
-            if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Any())
+
+            lock(_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges)
             {
-                return;
+                if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Any())
+                {
+                    return;
+                }
             }
+
 
             var knowledge = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Last();
             WriteTextSafe(lblGlobalKnowledge, knowledge.Sum.ToString("F1", CultureInfo.InvariantCulture));
@@ -372,7 +374,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.KnowledgeThreshHoldForReacting =
+                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing=
                     float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshold.BackColor = SystemColors.Window;
             }

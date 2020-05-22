@@ -9,11 +9,13 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
@@ -28,14 +30,28 @@ namespace SymuGroupAndInteraction.Classes
         public byte Activities { get; set; } = 0;
         public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
 
-        public override void SetModelForAgents()
+        public override void SetOrganization(OrganizationEntity organization)
         {
-            base.SetModelForAgents();
+            if (organization == null)
+            {
+                throw new ArgumentNullException(nameof(organization));
+            }
+
+            base.SetOrganization(organization);
+
             Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             Organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Organization.Models.FollowGroupFlexibility = true;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.On = true;
+            Organization.Models.Generator = RandomGenerator.RandomUniform;
+
+            SetDebug(false);
+        }
+
+        public override void SetModelForAgents()
+        {
+            base.SetModelForAgents();
             var knowledges = new List<Knowledge>();
             var activities = new List<string>();
             for (var i = 0; i < GroupsCount; i++)

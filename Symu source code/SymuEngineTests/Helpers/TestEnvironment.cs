@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Environment;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngineTests.Helpers
+namespace SymuTests.Helpers
 {
     internal class TestEnvironment : SymuEnvironment
     {

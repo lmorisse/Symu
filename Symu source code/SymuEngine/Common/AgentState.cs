@@ -7,11 +7,11 @@
 
 #endregion
 
-namespace SymuEngine.Common
+namespace Symu.Common
 {
     /// <summary>
     ///     State of the agent
-    ///     It is the global life cycle of the agent during a simulation
+    ///     It is the global life cycle of the agent during a symu
     /// </summary>
     public enum AgentState
     {

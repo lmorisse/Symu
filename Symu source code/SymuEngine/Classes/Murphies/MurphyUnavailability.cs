@@ -7,17 +7,19 @@
 
 #endregion
 
-namespace SymuEngine.Classes.Murphies
+using System;
+
+namespace Symu.Classes.Murphies
 {
     /// <summary>
-    ///     agent unavailability do to unplannable events
-    ///     such as bottleneck, illness, ...
-    ///     Holidays is not a murphy, it's plannable
-    ///     MurphyUnAvailability has an impact on the worker's initial capacity
-    ///     This happens in addition to Agent.Cognitive.InteractionPatterns.AgentCanBeIsolated
+    /// This murphy defines unplanned :index:`unavailability` of agent such as illness, ...
+    /// This murphy has an impact on the agent's initial capacity.
+    /// It should not be confused with Agent.Cognitive.InteractionPatterns.AgentCanBeIsolated which deals with plannable unavailability(even if it can be randomly generated, such as holidays).
     /// </summary>
     public class MurphyUnAvailability : Murphy
     {
+        private float _threshold = 0.1F;
+
         /// <summary>
         ///     Unavailability Threshold is linked to worker's initial capacity.
         ///     As capacity is already a stochastic function, we choose to fix the threshold
@@ -28,7 +30,19 @@ namespace SymuEngine.Classes.Murphies
         ///     UnavailabilityThreshold = 0.1 by default
         ///     if initial capacity = 0.05, worker is not available today
         /// </example>
-        public float Threshold { get; set; } = 0.1F;
+        public float Threshold
+        {
+            get => _threshold;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("Threshold should be between [0;1]");
+                }
+
+                _threshold = value;
+            }
+        }
 
         /// <summary>
         ///     Unavailability has an impact on the daily availability or sub optimal work
@@ -37,18 +51,13 @@ namespace SymuEngine.Classes.Murphies
         /// <returns>0 if capacity is below Threshold, capacity if above</returns>
         public float Next(float capacity)
         {
-            if (!On)
+            if (!IsAgentOn())
             {
                 return capacity;
             }
 
-            // Below a certain threshold, we can presume the worker is not available
-            if (capacity < Threshold)
-            {
-                capacity = 0;
-            }
-
-            return capacity;
+            // Below a certain threshold, we can presume the agent is not available
+            return capacity < Threshold ? 0 : capacity;
         }
     }
 }

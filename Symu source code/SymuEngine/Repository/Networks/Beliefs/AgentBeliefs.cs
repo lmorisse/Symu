@@ -15,7 +15,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Expertise of an agent is defined by the list of all its knowledge (hard skills)  x KnowledgeLevel

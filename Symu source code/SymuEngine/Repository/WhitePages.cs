@@ -12,15 +12,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository.Networks;
 
 #endregion
 
-namespace SymuEngine.Repository
+namespace Symu.Repository
 {
     /// <summary>
     ///     white pages services

@@ -13,12 +13,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Common;
+using Symu.Classes.Agents;
+using Symu.Common;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Knowledge network
@@ -36,7 +36,7 @@ namespace SymuEngine.Repository.Networks.Knowledges
         public RandomGenerator Model { get; set; } = RandomGenerator.RandomBinary;
 
         /// <summary>
-        ///     Repository of all the knowledges used during the simulation
+        ///     Repository of all the knowledges used during the symu
         /// </summary>
         public KnowledgeCollection Repository { get; } = new KnowledgeCollection();
 

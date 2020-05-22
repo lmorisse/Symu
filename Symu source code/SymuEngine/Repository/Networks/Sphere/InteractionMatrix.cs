@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModel;
 using SymuTools;
 using SymuTools.Math;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Sphere
+namespace Symu.Repository.Networks.Sphere
 {
     /// <summary>
     ///     Knowledge matrix

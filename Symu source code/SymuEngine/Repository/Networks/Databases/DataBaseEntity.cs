@@ -10,15 +10,15 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModel;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Databases
+namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
-    ///     Entity for DataBase class, used to store and search information during the simulation
+    ///     Entity for DataBase class, used to store and search information during the symu
     /// </summary>
     public class DataBaseEntity
     {

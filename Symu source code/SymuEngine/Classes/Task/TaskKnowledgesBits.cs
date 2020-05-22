@@ -14,7 +14,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Classes.Task
+namespace Symu.Classes.Task
 {
     /// <summary>
     ///     A task to be complete must go through different activities (Kanban.Columns)

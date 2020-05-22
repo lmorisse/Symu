@@ -9,12 +9,12 @@
 
 #region using directives
 
-using SymuEngine.Common;
-using SymuEngine.Environment;
+using Symu.Common;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngine.Classes.Scenario
+namespace Symu.Classes.Scenario
 {
     public class TimeStepScenario : SimulationScenario
     {

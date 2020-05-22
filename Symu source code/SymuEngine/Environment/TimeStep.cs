@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Environment
+namespace Symu.Environment
 {
     /// <summary>
     ///     TimeStep is used to manage TimeStep depending on the TimeStepType

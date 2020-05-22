@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents
+namespace Symu.Classes.Agents
 {
     /// <summary>
     ///     class for Entity class of the Agent

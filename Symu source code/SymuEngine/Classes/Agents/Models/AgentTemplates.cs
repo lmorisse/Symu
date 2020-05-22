@@ -9,12 +9,12 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Agents.Models.Templates.Communication;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models
+namespace Symu.Classes.Agents.Models
 {
     /// <summary>
     ///     List of all available agent templates

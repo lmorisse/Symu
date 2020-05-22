@@ -10,14 +10,14 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Common;
-using SymuEngine.Engine;
-using SymuEngine.Repository.Networks.Beliefs;
+using Symu.Classes.Agents.Models;
+using Symu.Common;
+using Symu.Engine;
+using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
-namespace SymuEngine.Classes.Organization
+namespace Symu.Classes.Organization
 {
     /// <summary>
     ///     List of the models used by the organizationEntity
@@ -25,34 +25,29 @@ namespace SymuEngine.Classes.Organization
     public class OrganizationModels
     {
         /// <summary>
-        ///     If set, the organizationEntity flexibility performance will be followed and stored during the simulation
+        ///     If set, the organizationEntity flexibility performance will be followed and stored during the symu
         /// </summary>
         //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowGroupFlexibility { get; set; }
 
         /// <summary>
-        ///     If set, the organizationEntity knowledge and belief performance will be followed and stored during the simulation
+        ///     If set, the organizationEntity knowledge and belief performance will be followed and stored during the symu
         /// </summary>
         //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowGroupKnowledge { get; set; }
 
         /// <summary>
-        ///     If set, the organizationEntity tasks metrics will be followed and stored during the simulation
+        ///     If set, the organizationEntity tasks metrics will be followed and stored during the symu
         /// </summary>
         //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowTasks { get; set; }
 
         /// <summary>
-        ///     If set, the organizationEntity blockers metrics will be followed and stored during the simulation
+        ///     If set, the organizationEntity blockers metrics will be followed and stored during the symu
         /// </summary>
         //TODO should be with IterationResult as Results Settings with cadence of feeds
         public bool FollowBlockers { get; set; }
 
-        /// <summary>
-        ///     If true, allow multiple blockers at the same time
-        ///     If false, will check new blockers only if there is no blocker
-        /// </summary>
-        public bool MultipleBlockers { get; set; }
 
         /// <summary>
         ///     Agent knowledge learning model
@@ -92,9 +87,9 @@ namespace SymuEngine.Classes.Organization
         public RandomGenerator Generator { get; set; } = RandomGenerator.RandomUniform;
 
         /// <summary>
-        ///     Define level of random for the simulation.
+        ///     Define level of random for the symu.
         /// </summary>
-        public SimulationRandom RandomLevel { get; set; } = SimulationRandom.NoRandom;
+        public RandomLevel RandomLevel { get; set; } = RandomLevel.NoRandom;
 
         public byte RandomLevelValue => (byte) RandomLevel;
 
@@ -108,16 +103,16 @@ namespace SymuEngine.Classes.Organization
             switch (level)
             {
                 case 1:
-                    RandomLevel = SimulationRandom.Simple;
+                    RandomLevel = RandomLevel.Simple;
                     break;
                 case 2:
-                    RandomLevel = SimulationRandom.Double;
+                    RandomLevel = RandomLevel.Double;
                     break;
                 case 3:
-                    RandomLevel = SimulationRandom.Triple;
+                    RandomLevel = RandomLevel.Triple;
                     break;
                 default:
-                    RandomLevel = SimulationRandom.NoRandom;
+                    RandomLevel = RandomLevel.NoRandom;
                     break;
             }
         }
@@ -136,7 +131,6 @@ namespace SymuEngine.Classes.Organization
             InteractionSphere.CopyTo(entity.InteractionSphere);
             entity.FollowGroupFlexibility = FollowGroupFlexibility;
             entity.FollowGroupKnowledge = FollowGroupKnowledge;
-            entity.MultipleBlockers = MultipleBlockers;
             entity.Generator = Generator;
             entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
         }

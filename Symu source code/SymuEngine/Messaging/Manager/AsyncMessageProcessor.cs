@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace SymuEngine.Messaging.Manager
+namespace Symu.Messaging.Manager
 {
     public static class AsyncMessageProcessor
     {

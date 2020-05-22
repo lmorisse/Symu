@@ -15,7 +15,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Expertise of an agent is defined by the list of all its knowledge (hard skills)  x KnowledgeLevel
@@ -30,12 +30,12 @@ namespace SymuEngine.Repository.Networks.Knowledges
         public List<AgentKnowledge> List { get; } = new List<AgentKnowledge>();
 
         /// <summary>
-        ///     Accumulates all learning of the agent for all knowledge during the simulation
+        ///     Accumulates all learning of the agent for all knowledge during the symu
         /// </summary>
         public float Learning => List.Any() ? List.Sum(t => t.Learning) : 0;
 
         /// <summary>
-        ///     Accumulates all forgetting of the agent for all knowledge during the simulation
+        ///     Accumulates all forgetting of the agent for all knowledge during the symu
         /// </summary>
         public float Forgetting => List.Any() ? List.Sum(t => t.Forgetting) : 0;
 

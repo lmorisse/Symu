@@ -13,7 +13,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     /// <summary>
     ///     Message life cycle

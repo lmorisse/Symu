@@ -11,12 +11,12 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Messaging.Delayed;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Delayed;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngineTests.Messaging.Delayed
+namespace SymuTests.Messaging.Delayed
 {
     [TestClass]
     public class DelayedMessagesTests
@@ -26,11 +26,11 @@ namespace SymuEngineTests.Messaging.Delayed
         [TestMethod]
         public void EnqueueSameStepsTest()
         {
-            var message = new SymuEngine.Messaging.Messages.Message();
+            var message = new Symu.Messaging.Messages.Message();
             Assert.AreEqual(0, _delayedMessages.Count);
             _delayedMessages.Enqueue(message, 0);
             Assert.AreEqual(1, _delayedMessages.Count);
-            message = new SymuEngine.Messaging.Messages.Message();
+            message = new Symu.Messaging.Messages.Message();
             _delayedMessages.Enqueue(message, 0);
             Assert.AreEqual(2, _delayedMessages.Count);
         }
@@ -38,11 +38,11 @@ namespace SymuEngineTests.Messaging.Delayed
         [TestMethod]
         public void EnqueueDifferentStepsTest()
         {
-            var message = new SymuEngine.Messaging.Messages.Message();
+            var message = new Symu.Messaging.Messages.Message();
             Assert.AreEqual(0, _delayedMessages.Count);
             _delayedMessages.Enqueue(message, 0);
             Assert.AreEqual(1, _delayedMessages.Count);
-            message = new SymuEngine.Messaging.Messages.Message();
+            message = new Symu.Messaging.Messages.Message();
             _delayedMessages.Enqueue(message, 1);
             Assert.AreEqual(2, _delayedMessages.Count);
         }
@@ -59,7 +59,7 @@ namespace SymuEngineTests.Messaging.Delayed
         [TestMethod]
         public void DequeueTest()
         {
-            var message = new SymuEngine.Messaging.Messages.Message();
+            var message = new Symu.Messaging.Messages.Message();
             _delayedMessages.Enqueue(message, 1);
             // Non passing test
             Assert.IsNull(_delayedMessages.Dequeue(0));
@@ -79,7 +79,7 @@ namespace SymuEngineTests.Messaging.Delayed
         [TestMethod]
         public void DequeueTest1()
         {
-            var message = new SymuEngine.Messaging.Messages.Message
+            var message = new Symu.Messaging.Messages.Message
             {
                 Attachments = new MessageAttachments()
             };
@@ -93,7 +93,7 @@ namespace SymuEngineTests.Messaging.Delayed
         [TestMethod]
         public void LastTest()
         {
-            var message = new SymuEngine.Messaging.Messages.Message();
+            var message = new Symu.Messaging.Messages.Message();
             _delayedMessages.Enqueue(message, 1);
             // Non passing test
             Assert.IsNull(_delayedMessages.Last(0));

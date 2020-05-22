@@ -10,14 +10,14 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
+using Symu.Classes.Task;
+using Symu.Common;
 using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Knowledges
+namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Describe an area of knowledge

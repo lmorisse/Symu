@@ -9,14 +9,15 @@
 
 #region using directives
 
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Messaging.Messages;
+using System;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Messaging.Messages;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Murphies
+namespace Symu.Classes.Murphies
 {
     /// <summary>
     ///     The belief of the worker hav an impact on the way he work on a specific Task
@@ -30,6 +31,8 @@ namespace SymuEngine.Classes.Murphies
         /// </summary>
         public CommunicationMediums CommunicationMediums { get; set; }
 
+        private float _rateOfIncorrectGuess = 0.3F;
+
         /// <summary>
         ///     Rate of incorrect task
         ///     If worker doesn't have enough knowledge for the task, the worker can guess and complete the task
@@ -37,7 +40,21 @@ namespace SymuEngine.Classes.Murphies
         ///     [0 - 1]
         /// </summary>
         /// <example>if rate = 0.3 (default), 3 tasks out of 10 will be incorrects</example>
-        public float RateOfIncorrectGuess { get; set; } = 0.3F;
+        public float RateOfIncorrectGuess
+        {
+            get => _rateOfIncorrectGuess;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RateOfIncorrectGuess should be between [0;1]");
+                }
+
+                _rateOfIncorrectGuess = value;
+            }
+        }
+
+        private float _rateOfAnswers = 0.5F;
 
         /// <summary>
         ///     Rate of answers
@@ -45,7 +62,19 @@ namespace SymuEngine.Classes.Murphies
         ///     [0 - 1]
         /// </summary>
         /// <example>if rate = 0.1 , 1 teammate out of 10 will answer</example>
-        public float RateOfAnswers { get; set; } = 0.5F;
+        public float RateOfAnswers
+        {
+            get => _rateOfAnswers;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RateOfAnswers should be between [0;1]");
+                }
+
+                _rateOfAnswers = value;
+            }
+        }
 
         /// <summary>
         ///     Delay to answer in days

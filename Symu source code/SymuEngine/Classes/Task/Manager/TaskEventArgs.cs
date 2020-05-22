@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Classes.Task.Manager
+namespace Symu.Classes.Task.Manager
 {
     /// <summary>
     ///     The eventArg class for TaskProcessor.

@@ -12,12 +12,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Repository.Networks;
+using Symu.Classes.Organization;
+using Symu.Repository.Networks;
 
 #endregion
 
-namespace SymuEngine.Results.Organization
+namespace Symu.Results.Organization
 {
     /// <summary>
     ///     Get the knowledge and Belief performance for the group
@@ -27,7 +27,7 @@ namespace SymuEngine.Results.Organization
         private readonly OrganizationModels _models;
 
         /// <summary>
-        ///     Network of the simulation
+        ///     Network of the symu
         /// </summary>
         private readonly Network _network;
 

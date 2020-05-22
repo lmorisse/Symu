@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace SymuEngine.Classes.Task.Manager
+namespace Symu.Classes.Task.Manager
 {
     /// <summary>
     ///     TaskProcessor handle the tasksManager.

@@ -11,14 +11,14 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Knowledges
+namespace SymuTests.Repository.Networks.Knowledges
 {
     [TestClass]
     public class KnowledgeTests

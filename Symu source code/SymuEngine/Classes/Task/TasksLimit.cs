@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Classes.Task
+namespace Symu.Classes.Task
 {
     /// <summary>
     ///     Manage all limits related to Tasks
@@ -52,7 +52,7 @@ namespace SymuEngine.Classes.Task
 
         /// <summary>
         ///     This parameter specify that the total maximum number of tasks that an agent of this class can perform during the
-        ///     simulation is not fixed if false
+        ///     symu is not fixed if false
         ///     Default is set to false
         /// </summary>
         public bool LimitTasksInTotal { get; set; }

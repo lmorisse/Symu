@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Environment
+namespace Symu.Environment
 {
     /// <summary>
     ///     Manage the state of the Environment

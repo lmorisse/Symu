@@ -10,13 +10,13 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Murphies;
-using SymuEngine.Common;
-using SymuEngine.Messaging.Messages;
+using Symu.Classes.Murphies;
+using Symu.Common;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Murphy
+namespace SymuTests.Classes.Murphies
 {
     [TestClass]
     public class MurphyIncompleteBeliefTests
@@ -29,6 +29,7 @@ namespace SymuEngineTests.Classes.Murphy
         [TestMethod]
         public void NextGuessTest()
         {
+            _murphy.On = false;
             Assert.AreEqual(ImpactLevel.None, _murphy.NextGuess());
         }
 
@@ -39,6 +40,7 @@ namespace SymuEngineTests.Classes.Murphy
         public void NextGuessTest1()
         {
             _murphy.On = true;
+            _murphy.RateOfAgentsOn = 1;
             _murphy.RateOfIncorrectGuess = 0;
             Assert.AreEqual(ImpactLevel.None, _murphy.NextGuess());
         }
@@ -50,6 +52,7 @@ namespace SymuEngineTests.Classes.Murphy
         public void NextGuessTest2()
         {
             _murphy.On = true;
+            _murphy.RateOfAgentsOn = 1;
             _murphy.RateOfIncorrectGuess = 1;
             Assert.AreNotEqual(ImpactLevel.None, _murphy.NextGuess());
         }
@@ -89,6 +92,7 @@ namespace SymuEngineTests.Classes.Murphy
         [TestMethod]
         public void NextImpactOnTimeSpentTest()
         {
+            _murphy.On = false;
             Assert.AreEqual(0, _murphy.NextImpactOnTimeSpent());
         }
 
@@ -99,6 +103,7 @@ namespace SymuEngineTests.Classes.Murphy
         public void NextImpactOnTimeSpentTest1()
         {
             _murphy.On = true;
+            _murphy.RateOfAgentsOn = 1;
             _murphy.ImpactOnTimeSpentRatio = 1;
             Assert.AreNotEqual(0, _murphy.NextImpactOnTimeSpent());
         }

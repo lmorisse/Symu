@@ -12,25 +12,28 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Messaging.Messages;
+using Symu.Classes.Task;
+using Symu.Classes.Task.Manager;
+using Symu.Messaging.Messages;
+using Symu.Results.Blocker;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Task.Manager
+namespace SymuTests.Classes.Task.Manager
 {
     [TestClass]
     public class TasksManagerTests
     {
-        private readonly SymuTask _task = new SymuTask(0);
+        private SymuTask _task ;
         private readonly TasksLimit _tasksLimit = new TasksLimit();
         private List<SymuTask> _tasks;
         private TasksManager _tasksManager;
+        private readonly BlockerResults _blockerResults = new BlockerResults(false);
 
         [TestInitialize]
         public void Initialize()
         {
+            _task = new SymuTask(0, _blockerResults);
             var tasksLimit = new TasksLimit();
             _tasksManager = new TasksManager(tasksLimit);
             _tasks = new List<SymuTask> {_task};
@@ -212,9 +215,9 @@ namespace SymuEngineTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest()
         {
-            var task = new SymuTask(0) {Type = CommunicationMediums.FaceToFace.ToString()};
+            var task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.FaceToFace.ToString()};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0) {Type = CommunicationMediums.Email.ToString()};
+            task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.Email.ToString()};
             _tasksManager.AddToDo(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, CommunicationMediums.FaceToFace.ToString());
@@ -227,9 +230,9 @@ namespace SymuEngineTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest1()
         {
-            var task = new SymuTask(0) {Type = CommunicationMediums.FaceToFace.ToString()};
+            var task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.FaceToFace.ToString()};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0);
+            task = new SymuTask(0, _blockerResults);
             _tasksManager.AddInProgress(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, CommunicationMediums.FaceToFace.ToString());
@@ -241,9 +244,9 @@ namespace SymuEngineTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest2()
         {
-            var task = new SymuTask(0) {Type = "todo"};
+            var task = new SymuTask(0, _blockerResults) {Type = "todo"};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0) {Type = "ip"};
+            task = new SymuTask(0, _blockerResults) {Type = "ip"};
             _tasksManager.AddInProgress(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, "ip");
@@ -258,8 +261,8 @@ namespace SymuEngineTests.Classes.Task.Manager
             _tasksLimit.LimitSimultaneousTasks = true;
             _tasksLimit.MaximumSimultaneousTasks = 1;
             _tasksManager = new TasksManager(_tasksLimit);
-            _tasksManager.AddInProgress(new SymuTask(0) {Type = "ip"});
-            _tasksManager.AddToDo(new SymuTask(0) {Type = "todo"});
+            _tasksManager.AddInProgress(new SymuTask(0, _blockerResults) {Type = "ip"});
+            _tasksManager.AddToDo(new SymuTask(0, _blockerResults) {Type = "todo"});
             // without the limit, the task to do should be pushed in progress
             _tasksManager.SelectNextTask(0);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
@@ -274,7 +277,7 @@ namespace SymuEngineTests.Classes.Task.Manager
         {
             _tasksLimit.LimitSimultaneousTasks = false;
             _tasksManager = new TasksManager(_tasksLimit);
-            var task = new SymuTask(0) {Type = "todo"};
+            var task = new SymuTask(0, _blockerResults) {Type = "todo"};
             _tasksManager.AddToDo(task);
             Assert.IsNotNull(_tasksManager.SelectNextTask(0));
             Assert.AreEqual(1, _tasksManager.InProgress.Count);

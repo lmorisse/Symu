@@ -15,10 +15,10 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Results.Blocker
+namespace Symu.Results.Blocker
 {
     /// <summary>
-    ///     Manage the task blockers metrics for the simulation
+    ///     Manage the task blockers metrics for the symu
     /// </summary>
     public class BlockerResults
     {
@@ -40,32 +40,32 @@ namespace SymuEngine.Results.Blocker
         }
 
         /// <summary>
-        ///     Total blockers done during the simulation
+        ///     Total blockers done during the symu
         /// </summary>
         public int TotalBlockersDone => _results.Values.Any() ? _results.Values.Sum(x => x.Done) : 0;
 
         /// <summary>
-        ///     Total blockers done during the simulation
+        ///     Total blockers done during the symu
         /// </summary>
         public int BlockersStillInProgress => _results.Values.Any() ? _results.Values.Last().InProgress : 0;
 
         /// <summary>
-        ///     Total blockers resolved by Internal Help during the simulation
+        ///     Total blockers resolved by Internal Help during the symu
         /// </summary>
         public int TotalInternalHelp => _results.Values.Any() ? _results.Values.Sum(x => x.InternalHelp) : 0;
 
         /// <summary>
-        ///     Total blockers resolved by External Help during the simulation
+        ///     Total blockers resolved by External Help during the symu
         /// </summary>
         public int TotalExternalHelp => _results.Values.Any() ? _results.Values.Sum(x => x.ExternalHelp) : 0;
 
         /// <summary>
-        ///     Total blockers resolved by guessing during the simulation
+        ///     Total blockers resolved by guessing during the symu
         /// </summary>
         public int TotalGuesses => _results.Values.Any() ? _results.Values.Sum(x => x.Guess) : 0;
 
         /// <summary>
-        ///     Total blockers resolved by searching during the simulation
+        ///     Total blockers resolved by searching during the symu
         /// </summary>
         public int TotalSearches => _results.Values.Any() ? _results.Values.Sum(x => x.Search) : 0;
 

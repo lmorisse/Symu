@@ -12,14 +12,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Classes.Blockers;
-using SymuEngine.Classes.Task;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Blockers;
+using Symu.Classes.Task;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -43,7 +43,7 @@ namespace SymuBeliefsAndInfluence.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(TimeStep.Step)
+            var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
             {
                 Weight = 1
             };

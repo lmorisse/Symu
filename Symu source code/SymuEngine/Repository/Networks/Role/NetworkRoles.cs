@@ -11,11 +11,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Role
+namespace Symu.Repository.Networks.Role
 {
     public class NetworkRoles
     {

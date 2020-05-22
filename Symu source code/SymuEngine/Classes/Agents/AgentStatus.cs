@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Classes.Agents
+namespace Symu.Classes.Agents
 {
     /// <summary>
     ///     Status of the agent during a interaction

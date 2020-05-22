@@ -9,12 +9,12 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Common;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Common;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.Templates
+namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the Simple human template

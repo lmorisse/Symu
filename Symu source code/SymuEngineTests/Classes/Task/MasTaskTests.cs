@@ -10,17 +10,25 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Task;
+using Symu.Classes.Agents;
+using Symu.Classes.Task;
+using Symu.Results.Blocker;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Task
+namespace SymuTests.Classes.Task
 {
     [TestClass]
     public class MasTaskTests
     {
-        private readonly SymuTask _task = new SymuTask(0);
+        private SymuTask _task;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            var blockerResults = new BlockerResults(false);
+            _task = new SymuTask(0, blockerResults);
+        }
 
         [TestMethod]
         public void SetWeightTest()

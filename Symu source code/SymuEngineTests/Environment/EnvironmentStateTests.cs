@@ -10,12 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Environment;
+using Symu.Classes.Agents;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuEngineTests.Environment
+namespace SymuTests.Environment
 {
     [TestClass]
     public class EnvironmentStateTests

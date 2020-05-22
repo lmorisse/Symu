@@ -13,7 +13,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace SymuEngine.Repository
+namespace Symu.Repository
 {
     /// <summary>
     ///     List of all the subjects that are managed in MAS
@@ -36,14 +36,13 @@ namespace SymuEngine.Repository
 
         public const byte Knowledge = 7;
         public const byte Belief = 8;
-
         public const byte Subscribe = 9;
 
-        //public const byte Timer = 10;
-        public const byte Scenario = 11;
+        public const byte Scenario = 10;
 
-        public const byte Organization = 12;
-        public const byte Actor = 13;
-        public const byte Tasks = 14;
+        public const byte Organization = 11;
+        public const byte Actor = 12;
+        public const byte Tasks = 13;
+        public const byte Help = 14;
     }
 }

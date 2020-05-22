@@ -11,17 +11,17 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Activities;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Activities;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will perform task
-    ///     Entity enable or not this mechanism for all the agents during the simulation
+    ///     Entity enable or not this mechanism for all the agents during the symu
     ///     The ActivityModel initialize the real value of the agent's activity parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>

@@ -10,15 +10,15 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Results;
+using Symu.Results;
 
 #endregion
 
-namespace SymuEngine.Engine
+namespace Symu.Engine
 {
-    public class SimulationEngines : SimulationEngine
+    public class SymuEngines : SymuEngine
     {
-        public List<SimulationEngine> List { get; } = new List<SimulationEngine>();
+        public List<SymuEngine> List { get; } = new List<SymuEngine>();
 
         public override SimulationResults Process()
         {

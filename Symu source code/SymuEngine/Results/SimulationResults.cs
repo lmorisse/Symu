@@ -13,10 +13,10 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SymuEngine.Results
+namespace Symu.Results
 {
     /// <summary>
-    ///     The list of all IterationResults of a simulation
+    ///     The list of all IterationResults of a symu
     /// </summary>
     public class SimulationResults
     {

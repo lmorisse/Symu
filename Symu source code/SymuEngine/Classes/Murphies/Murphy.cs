@@ -7,7 +7,9 @@
 
 #endregion
 
-namespace SymuEngine.Classes.Murphies
+using Symu.Classes.Agents.Models;
+
+namespace Symu.Classes.Murphies
 {
     /// <summary>
     ///     Base Class to model a murphy
@@ -23,15 +25,10 @@ namespace SymuEngine.Classes.Murphies
     ///     Communication breakdown
     ///     agent unavailable (bottleneck, illness, holidays, ...)
     /// </example>
-    public abstract class Murphy
+    public abstract class Murphy : ModelEntity
     {
         public const int IncompleteKnowledge = 1;
         public const int Unavailability = 2;
         public const int IncompleteBelief = 3;
-
-        /// <summary>
-        ///     If (On) the Murphy is active
-        /// </summary>
-        public bool On { get; set; } = false;
     }
 }

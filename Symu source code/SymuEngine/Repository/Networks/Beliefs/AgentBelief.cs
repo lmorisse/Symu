@@ -10,14 +10,14 @@
 #region using directives
 
 using System;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 using static SymuTools.Constants;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Describe the Knowledge of an agent :

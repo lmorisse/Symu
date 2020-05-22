@@ -9,12 +9,12 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository;
+using Symu.Classes.Agents;
+using Symu.Repository;
 
 #endregion
 
-namespace SymuEngine.Classes.Scenario
+namespace Symu.Classes.Scenario
 {
     public class ScenarioEntity : AgentEntity
     {

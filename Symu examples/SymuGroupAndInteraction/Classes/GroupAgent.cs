@@ -9,8 +9,8 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
-using SymuEngine.Environment;
+using Symu.Classes.Agents;
+using Symu.Environment;
 
 #endregion
 

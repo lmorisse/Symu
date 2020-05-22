@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Link
+namespace Symu.Repository.Networks.Link
 {
     /// <summary>
     ///     List of Links of a NetWork

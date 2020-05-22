@@ -11,11 +11,11 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Classes.Scenario;
+using Symu.Classes.Scenario;
 
 #endregion
 
-namespace SymuEngine.Engine
+namespace Symu.Engine
 {
     public class Iterations
     {

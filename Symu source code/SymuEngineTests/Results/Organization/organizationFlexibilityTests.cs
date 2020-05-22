@@ -12,15 +12,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Results.Organization;
-using SymuEngineTests.Helpers;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Results.Organization;
+using SymuTests.Helpers;
 
 #endregion
 
-namespace SymuEngineTests.Results.Organization
+namespace SymuTests.Results.Organization
 {
     [TestClass]
     public class OrganizationFlexibilityTests

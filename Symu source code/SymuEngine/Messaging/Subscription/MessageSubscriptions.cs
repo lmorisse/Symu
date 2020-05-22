@@ -11,11 +11,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Messaging.Subscription
+namespace Symu.Messaging.Subscription
 {
     /// <summary>
     ///     Manage subscriptions/unsubscriptions to an agent's messages

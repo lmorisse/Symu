@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuEngine.Classes.Blockers
+namespace Symu.Classes.Blockers
 {
     /// <summary>
     ///     Blocker are used to block the tasks in progress, when the system is sub-optimal

@@ -10,16 +10,24 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Blockers;
+using Symu.Classes.Blockers;
+using Symu.Results.Blocker;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Blockers
+namespace SymuTests.Classes.Blockers
 {
     [TestClass]
     public class BlockersTests
     {
-        private readonly BlockerCollection _blockers = new BlockerCollection();
+        private BlockerCollection _blockers;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            var blockerResults = new BlockerResults(false);
+            _blockers = new BlockerCollection(blockerResults);
+        }
 
         [TestMethod]
         public void AddTest()

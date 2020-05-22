@@ -11,11 +11,11 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Messaging.Messages
+namespace Symu.Messaging.Messages
 {
     /// <summary>
     ///     Manage the message attachments

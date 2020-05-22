@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Portfolio
+namespace Symu.Repository.Networks.Portfolio
 {
     /// <summary>
     ///     Directory of objects used by the agentIds
@@ -232,7 +232,7 @@ namespace SymuEngine.Repository.Networks.Portfolio
         }
 
         /// <summary>
-        ///     Make a clone of Portfolios from modeling to Simulation
+        ///     Make a clone of Portfolios from modeling to Symu
         /// </summary>
         /// <param name="portfolios"></param>
         public void CopyTo(NetworkPortfolios portfolios)

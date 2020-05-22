@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngine.Messaging.Manager
+namespace Symu.Messaging.Manager
 {
     internal class MessagesManager : IDisposable
     {

@@ -11,11 +11,11 @@
 
 using System;
 using System.Collections.Generic;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Task;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
+using Symu.Classes.Agents;
+using Symu.Classes.Task;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository;
 
 #endregion
 
@@ -69,7 +69,7 @@ namespace SymuMessageAndTask.Classes
             for (var i = 0; i < environment.NumberOfTasks; i++)
             {
                 // Create the next task 
-                var task = new SymuTask(TimeStep.Step)
+                var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
                 {
                     Parent = TimeStep.Step,
                     Weight = environment.CostOfTask

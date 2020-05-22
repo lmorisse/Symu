@@ -10,11 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Messaging.Messages;
+using Symu.Messaging.Messages;
 
 #endregion
 
-namespace SymuEngineTests.Messaging.Message
+namespace SymuTests.Messaging.Message
 {
     [TestClass]
     public class MessageTypesToolsTests

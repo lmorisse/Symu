@@ -11,11 +11,11 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Messaging.Reply;
+using Symu.Messaging.Reply;
 
 #endregion
 
-namespace SymuEngineTests.Messaging.Reply
+namespace SymuTests.Messaging.Reply
 {
     [TestClass]
     public class AgentWaitingRepliesTests

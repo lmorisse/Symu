@@ -14,12 +14,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
-using SymuEngine.Engine.Form;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Scenario;
+using Symu.Common;
+using Symu.Engine.Form;
+using Symu.Environment;
+using Symu.Repository.Networks.Knowledges;
 using SymuGroupAndInteraction.Classes;
 
 #endregion
@@ -90,26 +90,7 @@ namespace SymuGroupAndInteraction
             #endregion
         }
 
-        protected override void SetUpOrganization()
-        {
-            TimeStepType = TimeStepType.Daily;
-        }
-
-        protected override void SetScenarii()
-        {
-            _ = new TimeStepScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
-            };
-        }
-
-        protected override void OnStopped()
-        {
-            base.OnStopped();
-            DisplayButtons();
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
+        protected override void UpdateSettings()
         {
             #region Knowledge
 
@@ -128,12 +109,10 @@ namespace SymuGroupAndInteraction
                 _environment.Knowledge = 2;
             }
 
-            OrganizationEntity.Models.Generator = RandomGenerator.RandomUniform;
             _environment.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(cbInitialKnowledgeLevel.SelectedItem.ToString());
 
             #endregion
-
 
             #region sphere of interaction
 
@@ -167,6 +146,25 @@ namespace SymuGroupAndInteraction
 
             #endregion
 
+            TimeStepType = TimeStepType.Daily;
+        }
+
+        protected override void SetScenarii()
+        {
+            _ = new TimeStepScenario(_environment)
+            {
+                NumberOfSteps = ushort.Parse(tbSteps.Text)
+            };
+        }
+
+        protected override void OnStopped()
+        {
+            base.OnStopped();
+            DisplayButtons();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
             Start(_environment);
         }
 

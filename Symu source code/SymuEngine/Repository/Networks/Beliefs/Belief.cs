@@ -10,14 +10,14 @@
 #region using directives
 
 using System;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 using SymuTools;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Beliefs
+namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Describe a belief, based on knowledge/fact

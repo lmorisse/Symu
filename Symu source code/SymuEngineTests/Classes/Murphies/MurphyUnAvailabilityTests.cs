@@ -10,11 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Murphies;
+using Symu.Classes.Murphies;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Murphy
+namespace SymuTests.Classes.Murphies
 {
     [TestClass]
     public class MurphyUnAvailabilityTests
@@ -24,6 +24,7 @@ namespace SymuEngineTests.Classes.Murphy
         [TestMethod]
         public void NonPassingNextTest()
         {
+            _murphy.On = false;
             _murphy.Threshold = 0.5F;
             Assert.AreEqual(0.4F, _murphy.Next(0.4F));
         }
@@ -31,8 +32,9 @@ namespace SymuEngineTests.Classes.Murphy
         [TestMethod]
         public void PassingNextTest()
         {
-            _murphy.Threshold = 0.5F;
             _murphy.On = true;
+            _murphy.RateOfAgentsOn = 1;
+            _murphy.Threshold = 0.5F;
             Assert.AreEqual(0, _murphy.Next(0.4F));
             Assert.AreEqual(0.5F, _murphy.Next(0.5F));
         }

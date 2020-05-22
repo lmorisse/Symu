@@ -9,14 +9,14 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models.Templates;
-using SymuEngine.Environment;
-using SymuEngine.Repository;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.Templates;
+using Symu.Environment;
+using Symu.Repository;
 
 #endregion
 
-namespace SymuEngineTests.Helpers
+namespace SymuTests.Helpers
 {
     /// <summary>
     ///     Class for tests

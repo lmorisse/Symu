@@ -14,7 +14,7 @@ using System.Linq;
 
 #endregion
 
-namespace SymuEngine.Environment
+namespace Symu.Environment
 {
     public static class TimeStepTypeService
     {

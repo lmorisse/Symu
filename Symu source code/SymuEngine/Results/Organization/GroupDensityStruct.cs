@@ -14,7 +14,7 @@ using SymuTools;
 
 #endregion
 
-namespace SymuEngine.Results.Organization
+namespace Symu.Results.Organization
 {
     /// <summary>
     ///     Group density is used to store information about group density per step : number of groups, max potential number of

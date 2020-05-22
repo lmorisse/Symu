@@ -10,27 +10,27 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Engine;
-using SymuEngine.Messaging.Messages;
-using SymuEngineTests.Helpers;
+using Symu.Classes.Organization;
+using Symu.Engine;
+using Symu.Messaging.Messages;
+using SymuTests.Helpers;
 
 #endregion
 
-namespace SymuEngineTests.Environment
+namespace SymuTests.Environment
 {
     [TestClass]
     public class SymuEnvironmentTests
     {
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
-        private readonly SimulationEngine _simulation = new SimulationEngine();
+        private readonly SymuEngine _symu = new SymuEngine();
 
         [TestInitialize]
         public void Initialize()
         {
             _environment.SetOrganization(_organizationEntity);
-            _simulation.SetEnvironment(_environment);
+            _symu.SetEnvironment(_environment);
         }
 
         [TestMethod]

@@ -13,14 +13,14 @@ using System;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Messaging.Messages;
+using Symu.Repository;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents
+namespace Symu.Classes.Agents
 {
     /// <summary>
     ///     An abstract base class for agents.
@@ -41,13 +41,12 @@ namespace SymuEngine.Classes.Agents
                 throw new ArgumentNullException(nameof(message));
             }
 
-            //if (TimeStep.Type == TimeStepType.Intraday && message.Medium != CommunicationMediums.System)
             if (Cognitive.TasksAndPerformance.CanPerformTask && message.Medium != CommunicationMediums.System)
             {
                 // Switch message into a task in the task manager
                 var communication =
                     Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                var task = new SymuTask(TimeStep.Step)
+                var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
                 {
                     Type = message.Medium.ToString(),
                     TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
@@ -81,6 +80,9 @@ namespace SymuEngine.Classes.Agents
                     break;
                 case SymuYellowPages.Subscribe:
                     ActSubscribe(message);
+                    break;
+                case SymuYellowPages.Help:
+                    ActHelp(message);
                     break;
                 default:
                     ActClassKey(message);

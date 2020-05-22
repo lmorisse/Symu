@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Link
+namespace Symu.Repository.Networks.Link
 {
     /// <summary>
     ///     Sphere of interaction - link are bidirectional.

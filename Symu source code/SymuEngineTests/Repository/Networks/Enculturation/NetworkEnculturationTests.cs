@@ -10,12 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Enculturation;
+using Symu.Classes.Agents;
+using Symu.Repository.Networks.Enculturation;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Enculturation
+namespace SymuTests.Repository.Networks.Enculturation
 {
     [TestClass]
     public class NetworkEnculturationTests

@@ -10,14 +10,14 @@
 #region using directives
 
 using System.Linq;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Task;
-using SymuEngine.Classes.Task.Manager;
-using SymuEngine.Common;
-using SymuEngine.Environment;
-using SymuEngine.Messaging.Messages;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Task;
+using Symu.Classes.Task.Manager;
+using Symu.Common;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -50,7 +50,7 @@ namespace SymuLearnAndForget.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(0)
+            var task = new SymuTask(0, Environment.IterationResult.Blockers)
             {
                 Parent = TimeStep.Step,
                 Weight = 1

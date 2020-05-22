@@ -10,14 +10,14 @@
 #region using directives
 
 using System.Collections.Generic;
-using SymuEngine.Environment;
-using SymuEngine.Results.Blocker;
-using SymuEngine.Results.Organization;
-using SymuEngine.Results.Task;
+using Symu.Environment;
+using Symu.Results.Blocker;
+using Symu.Results.Organization;
+using Symu.Results.Task;
 
 #endregion
 
-namespace SymuEngine.Results
+namespace Symu.Results
 {
     public class IterationResult
     {
@@ -99,7 +99,7 @@ namespace SymuEngine.Results
         #region todo : refactor in SpecificResults
 
         /// <summary>
-        ///     Simulation has been stopped SpecificResults
+        ///     Symu has been stopped SpecificResults
         /// </summary>
         public bool HasItemsNotDone { get; set; }
 

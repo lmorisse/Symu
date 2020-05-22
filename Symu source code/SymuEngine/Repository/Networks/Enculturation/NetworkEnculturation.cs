@@ -11,11 +11,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Enculturation
+namespace Symu.Repository.Networks.Enculturation
 {
     /// <summary>
     ///     Dictionary of all enculturation information of the network

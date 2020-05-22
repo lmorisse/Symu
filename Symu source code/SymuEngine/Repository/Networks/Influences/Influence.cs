@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Influences
+namespace Symu.Repository.Networks.Influences
 {
     /// <summary>
     ///     Influence specify influenceability(how susceptible an agent will be to the influentialness of another agent)

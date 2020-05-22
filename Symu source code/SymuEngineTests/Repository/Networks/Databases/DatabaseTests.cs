@@ -10,17 +10,17 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Databases;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Databases
+namespace SymuTests.Repository.Networks.Databases
 {
     [TestClass]
     public class DatabaseTests

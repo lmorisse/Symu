@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Common
+namespace Symu.Common
 {
     public enum ImpactLevel
     {

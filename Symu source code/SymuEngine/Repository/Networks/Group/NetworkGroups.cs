@@ -12,11 +12,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Group
+namespace Symu.Repository.Networks.Group
 {
     /// <summary>
     ///     Dictionary of all the group of the network

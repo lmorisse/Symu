@@ -10,13 +10,13 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Databases
+namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
     ///     Database used to store and search information

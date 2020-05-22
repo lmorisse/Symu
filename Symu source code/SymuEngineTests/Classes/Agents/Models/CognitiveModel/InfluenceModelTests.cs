@@ -10,17 +10,17 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class InfluenceModelTests

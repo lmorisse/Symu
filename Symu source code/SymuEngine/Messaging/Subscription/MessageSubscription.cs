@@ -9,11 +9,11 @@
 
 #region using directives
 
-using SymuEngine.Classes.Agents;
+using Symu.Classes.Agents;
 
 #endregion
 
-namespace SymuEngine.Messaging.Subscription
+namespace Symu.Messaging.Subscription
 {
     /// <summary>
     ///     Manage the subscription by agent to a message content

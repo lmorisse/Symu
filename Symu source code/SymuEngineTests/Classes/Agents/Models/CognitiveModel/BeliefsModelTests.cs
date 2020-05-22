@@ -11,20 +11,20 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Classes.Agents.Models;
-using SymuEngine.Classes.Agents.Models.CognitiveModel;
-using SymuEngine.Classes.Agents.Models.Templates.Communication;
-using SymuEngine.Classes.Organization;
-using SymuEngine.Classes.Task;
-using SymuEngine.Common;
-using SymuEngine.Repository.Networks;
-using SymuEngine.Repository.Networks.Beliefs;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Organization;
+using Symu.Classes.Task;
+using Symu.Common;
+using Symu.Repository.Networks;
+using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModel
 {
     [TestClass]
     public class BeliefsModelTests

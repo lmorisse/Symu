@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.CognitiveModel
+namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     Enum the different interaction strategy used in InteractionPatterns

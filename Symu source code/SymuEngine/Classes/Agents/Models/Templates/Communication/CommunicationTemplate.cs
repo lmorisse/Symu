@@ -10,12 +10,12 @@
 #region using directives
 
 using System;
-using SymuEngine.Common;
+using Symu.Common;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuEngine.Classes.Agents.Models.Templates.Communication
+namespace Symu.Classes.Agents.Models.Templates.Communication
 {
     /// <summary>
     ///     Set all the CognitiveArchitecture parameters for the CommunicationChannels

@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
-using SymuEngine.Classes.Organization;
+using Symu.Classes.Organization;
 
 #endregion
 
-namespace SymuEngine.Repository.Networks.Sphere
+namespace Symu.Repository.Networks.Sphere
 {
     public readonly struct DerivedParameter
     {

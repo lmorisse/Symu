@@ -12,12 +12,12 @@
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Classes.Agents;
-using SymuEngine.Repository.Networks.Group;
+using Symu.Classes.Agents;
+using Symu.Repository.Networks.Group;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Group
+namespace SymuTests.Repository.Networks.Group
 {
     [TestClass]
     public class NetworkGroupsTests

@@ -11,11 +11,11 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuEngine.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuEngineTests.Repository.Networks.Knowledges
+namespace SymuTests.Repository.Networks.Knowledges
 {
     [TestClass]
     public class AgentKnowledgeTests

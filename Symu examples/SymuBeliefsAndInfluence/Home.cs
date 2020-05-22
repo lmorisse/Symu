@@ -14,12 +14,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Symu.Classes.Scenario;
+using Symu.Common;
+using Symu.Engine.Form;
+using Symu.Environment;
+using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
-using SymuEngine.Classes.Scenario;
-using SymuEngine.Common;
-using SymuEngine.Engine.Form;
-using SymuEngine.Environment;
-using SymuEngine.Repository.Networks.Beliefs;
 using SymuTools;
 
 #endregion
@@ -41,14 +41,9 @@ namespace SymuBeliefsAndInfluence
         {
             DisplayButtons();
 
-            OrganizationEntity.Models.Influence.On = true;
-            OrganizationEntity.Models.Influence.RateOfAgentsOn = 1;
             InfluenceModelOn.Checked = OrganizationEntity.Models.Influence.On;
             InfluenceRateOfAgentsOn.Text = OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString();
 
-
-            OrganizationEntity.Models.Beliefs.On = true;
-            OrganizationEntity.Models.Beliefs.RateOfAgentsOn = 1;
             BeliefsModelOn.Checked = OrganizationEntity.Models.Beliefs.On;
             BeliefsRateOfAgentsOn.Text = OrganizationEntity.Models.Beliefs.RateOfAgentsOn.ToString();
 
@@ -96,27 +91,9 @@ namespace SymuBeliefsAndInfluence
             #endregion
         }
 
-        protected override void SetUpOrganization()
+        protected override void UpdateSettings()
         {
-            TimeStepType = TimeStepType.Daily;
-        }
 
-        protected override void SetScenarii()
-        {
-            _ = new TimeStepScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
-            };
-        }
-
-        protected override void OnStopped()
-        {
-            base.OnStopped();
-            DisplayButtons();
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
             OrganizationEntity.Models.Influence.On = InfluenceModelOn.Checked;
             OrganizationEntity.Models.Beliefs.On = BeliefsModelOn.Checked;
 
@@ -139,6 +116,25 @@ namespace SymuBeliefsAndInfluence
 
             #endregion
 
+            TimeStepType = TimeStepType.Daily;
+        }
+
+        protected override void SetScenarii()
+        {
+            _ = new TimeStepScenario(_environment)
+            {
+                NumberOfSteps = ushort.Parse(tbSteps.Text)
+            };
+        }
+
+        protected override void OnStopped()
+        {
+            base.OnStopped();
+            DisplayButtons();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
             Start(_environment);
         }
 
