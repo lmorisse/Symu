@@ -2,8 +2,11 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/lmorisse/symu?style=flat-square)](https://github.com/lmorisse/Symu/releases/latest)
 [![Documentation Status](https://readthedocs.org/projects/symu/badge/?version=latest)](https://symu.readthedocs.io/en/latest/?badge=latest)
 
-``Symu`` is a C# opensource framework for organization simulation. 
-You can develop your own application to run virtual experiments with organizations and capture their dynamic behaviors, their evolutions.<br>
+``Develop your own application to run virtual experiments with organizations`` and capture their dynamic behaviors, their evolutions.<br>
+``Symu`` is a core of discrete-event multiagent simulation library in C#. It is designed to be the foundation for custom-purpose organization simulations. It also to provides enough functionality for many simulation needs. Symu implements agnostic organizations as social groups to target the most general use cases.
+
+## Organization as complex systems
+Symu models groups and organizations as complex systems. It captures the variability in human, technological and organizational factors through heterogeneity in information processing capabilities, but also in knowledge and resources. Also, the non-linearity of the model generates complex temporal behavior due to dynamic relationships among agents.
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
 
 Some useful links:
