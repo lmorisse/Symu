@@ -53,7 +53,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             #region Risk aversion
 
             internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
-            internalCharacteristics.BeliefThreshHoldForReacting = BeliefThreshHoldForReacting;
 
             #endregion
 
@@ -312,29 +311,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         #endregion
 
         #region Risk aversion
-
-        private float _beliefThreshHoldForReacting = 0.1F;
-
-        /// <summary>
-        ///     To react, an agent must have enough belief
-        ///     BeliefThreshHoldForReacting should be inferior to RiskAversionThreshold
-        ///     [0 - 1]
-        /// </summary>
-        /// <example>if BeliefThreshHoldForReacting = 0.05 and agent BeliefId[index] = 0.6 => he won't react</example>
-        public float BeliefThreshHoldForReacting
-        {
-            get => _beliefThreshHoldForReacting;
-            set
-            {
-                if (value < 0 || value > 1)
-                {
-                    throw new ArgumentOutOfRangeException("BeliefThreshHoldForReacting should be between 0 and 1");
-                }
-
-                _beliefThreshHoldForReacting = value;
-            }
-        }
-
+        
         private float _riskAversionThreshold;
 
         /// <summary>

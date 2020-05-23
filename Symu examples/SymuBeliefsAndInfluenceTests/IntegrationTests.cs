@@ -212,10 +212,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.Model.MandatoryRatio = 0;
             _symu.Process();
             CheckNoChange();
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
+                  (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
 
@@ -226,10 +226,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
             _symu.Process();
             CheckNoChange();
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
+                  (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
 
@@ -240,10 +240,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
             _symu.Process();
             CheckNoChange();
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
+                  (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
 
@@ -256,10 +256,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _symu.Process();
             CheckNoChange();
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
+                  (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreNotEqual(100, tasksDoneRatio);
         }
 

@@ -109,6 +109,7 @@ namespace SymuMessageAndTask.Classes
 
             organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = true;
             organization.Models.FollowTasks = true;
+            organization.Murphies.Off();
 
             SetDebug(false);
         }

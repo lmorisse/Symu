@@ -50,9 +50,9 @@ namespace SymuLearnAndForget.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(0, Environment.IterationResult.Blockers)
+            var task = new SymuTask(0)
             {
-                Parent = TimeStep.Step,
+                Parent = Schedule.Step,
                 Weight = 1
             };
             Post(task);

@@ -25,18 +25,30 @@ namespace SymuTests.Classes.Murphies
         public void NonPassingNextTest()
         {
             _murphy.On = false;
-            _murphy.Threshold = 0.5F;
-            Assert.AreEqual(0.4F, _murphy.Next(0.4F));
+            _murphy.RateOfUnavailability = 1;
+            Assert.IsFalse(_murphy.Next());
         }
-
+        /// <summary>
+        /// RateOfUnavailability = 0
+        /// </summary>
         [TestMethod]
         public void PassingNextTest()
         {
             _murphy.On = true;
             _murphy.RateOfAgentsOn = 1;
-            _murphy.Threshold = 0.5F;
-            Assert.AreEqual(0, _murphy.Next(0.4F));
-            Assert.AreEqual(0.5F, _murphy.Next(0.5F));
+            _murphy.RateOfUnavailability = 0;
+            Assert.IsFalse(_murphy.Next());
+        }
+        /// <summary>
+        /// RateOfUnavailability = 1
+        /// </summary>
+        [TestMethod]
+        public void PassingNextTest1()
+        {
+            _murphy.On = true;
+            _murphy.RateOfAgentsOn = 1;
+            _murphy.RateOfUnavailability = 1;
+            Assert.IsTrue(_murphy.Next());
         }
     }
 }

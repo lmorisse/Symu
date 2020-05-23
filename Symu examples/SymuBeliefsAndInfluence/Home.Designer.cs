@@ -143,7 +143,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // TimeStep
+            // Schedule
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -691,7 +691,7 @@
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(180, 17);
             this.label33.TabIndex = 151;
-            this.label33.Text = "Threshold for reacting [0;1]";
+            this.label33.Text = "RateOfUnavailability for reacting [0;1]";
             // 
             // label32
             // 

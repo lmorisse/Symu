@@ -69,9 +69,9 @@ namespace SymuMessageAndTask.Classes
             for (var i = 0; i < environment.NumberOfTasks; i++)
             {
                 // Create the next task 
-                var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
+                var task = new SymuTask(Schedule.Step)
                 {
-                    Parent = TimeStep.Step,
+                    Parent = Schedule.Step,
                     Weight = environment.CostOfTask
                 };
                 tasks.Add(task);

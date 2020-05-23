@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Messaging.Messages;
+using Symu.Repository.Networks.Beliefs;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
@@ -98,6 +99,72 @@ namespace Symu.Classes.Murphies
         /// </summary>
         /// <example>if 1 (default), teammate will answer the next day</example>
         public byte ImpactOnTimeSpentRatio { get; set; } = 1;
+        private float _beliefThreshHoldForReacting = 0.1F;
+
+        /// <summary>
+        ///     To react, an agent must have enough belief
+        ///     BeliefThreshHoldForReacting should be inferior to RiskAversionThreshold
+        ///     [0 - 1]
+        /// </summary>
+        /// <example>if BeliefThreshHoldForReacting = 0.05 and agent BeliefId[index] = 0.6 => he won't react</example>
+        public float BeliefThreshHoldForReacting
+        {
+            get => _beliefThreshHoldForReacting;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("BeliefThreshHoldForReacting should be between 0 and 1");
+                }
+
+                _beliefThreshHoldForReacting = value;
+            }
+        }
+
+        /// <summary>
+        ///     Check belief required by a task against the worker expertise
+        /// </summary>
+        /// <param name="belief"></param>
+        /// <param name="taskBitIndexes">KnowledgeBit indexes of the task that must be checked against agent's beliefs</param>
+        /// <param name="agentBeliefs"></param>
+        /// <param name="mandatoryCheck">The normalized score of the agent belief [-1; 1] at the first mandatoryIndex that is above beliefThreshHoldForReacting</param>
+        /// <param name="requiredCheck"></param>
+        /// <param name="mandatoryIndex"></param>
+        /// <param name="requiredIndex"></param>
+        /// <returns>0 if agent has no beliefs</returns>
+        public void CheckBelief(Belief belief, TaskKnowledgeBits taskBitIndexes, AgentBeliefs agentBeliefs,  ref float mandatoryCheck,
+            ref float requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex)
+        {
+            if (taskBitIndexes is null)
+            {
+                throw new ArgumentNullException(nameof(taskBitIndexes));
+            }
+            if (belief is null)
+            {
+                throw new NullReferenceException(nameof(belief));
+            }
+
+            // model is off
+            if (!IsAgentOn())
+            {
+                mandatoryCheck = 0;
+                requiredCheck = 0;
+                return;
+            }
+            // agent may don't have the belief at all
+            var agentBelief = agentBeliefs?.GetBelief(belief.Id);
+            if (agentBelief == null)
+            {
+                mandatoryCheck = 0;
+                requiredCheck = 0;
+                return;
+            }
+
+            mandatoryCheck = agentBelief.Check(taskBitIndexes.GetMandatory(), out mandatoryIndex, belief,
+                BeliefThreshHoldForReacting);
+            requiredCheck = agentBelief.Check(taskBitIndexes.GetRequired(), out requiredIndex, belief,
+                BeliefThreshHoldForReacting);
+        }
 
         /// <summary>
         ///     an agent ask for help, but he can choose different channels like email, phone, ...

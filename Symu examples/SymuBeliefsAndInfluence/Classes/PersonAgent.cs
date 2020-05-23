@@ -43,7 +43,7 @@ namespace SymuBeliefsAndInfluence.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
+            var task = new SymuTask(Schedule.Step)
             {
                 Weight = 1
             };

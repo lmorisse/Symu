@@ -81,7 +81,7 @@ namespace SymuTests.Classes.Agents
             Assert.AreEqual(AgentState.Starting, _agent.State);
             _agent.WaitingToStart();
             Assert.AreEqual(AgentState.Started, _agent.State);
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = false;
-            _agent.Environment.TimeStep.Step = 1;
+            _agent.Environment.Schedule.Step = 1;
             Assert.IsFalse(_agent.IsPerformingTask());
         }
 
@@ -156,7 +156,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Environment.TimeStep.Step = 1;
+            _agent.Environment.Schedule.Step = 1;
             Assert.IsTrue(_agent.IsPerformingTask());
         }
 
@@ -168,7 +168,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
-            _agent.Environment.TimeStep.Step = 5;
+            _agent.Environment.Schedule.Step = 5;
             Assert.IsFalse(_agent.IsPerformingTask());
         }
 
@@ -180,7 +180,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
-            _agent.Environment.TimeStep.Step = 5;
+            _agent.Environment.Schedule.Step = 5;
             Assert.IsTrue(_agent.IsPerformingTask());
         }
 
@@ -753,7 +753,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AskPreStepTest()
         {
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.MessageProcessor.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
@@ -856,7 +856,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void NonPassingHandleCapacityTest()
         {
-            _environment.TimeStep.Step = 5;
+            _environment.Schedule.Step = 5;
             _agent.HandleCapacity(true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
@@ -868,7 +868,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void PassingHandleCapacityTest1()
         {
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.HandleCapacity(true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
@@ -881,7 +881,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void NonPassingHandleCapacityTest2()
         {
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
             _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
@@ -896,7 +896,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleCapacityTest1()
         {
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.HandleCapacity(true);
@@ -910,7 +910,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleCapacityTest2()
         {
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.HandleCapacity(false);
@@ -927,7 +927,7 @@ namespace SymuTests.Classes.Agents
             var tasks = new List<SymuTask>();
             for (var i = 0; i < 3; i++)
             {
-                var task = new SymuTask(0, _environment.IterationResult.Blockers) {Weight = 0.1F};
+                var task = new SymuTask(0) {Weight = 0.1F};
                 tasks.Add(task);
             }
 
@@ -1136,7 +1136,7 @@ namespace SymuTests.Classes.Agents
         {
             _environment.IterationResult.Initialize();
             _organizationEntity.Murphies.MultipleBlockers = false;
-            var task = new SymuTask(0, _environment.IterationResult.Blockers);
+            var task = new SymuTask(0);
             task.Blockers.Add(Murphy.IncompleteBelief, 0);
             _agent.CheckNewBlockers(task);
             // We don't add another blocker

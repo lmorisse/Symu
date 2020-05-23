@@ -34,14 +34,25 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TimeStep = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.BlockersSearching = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.BlockersGuessing = new System.Windows.Forms.Label();
+            this.BlockersExternal = new System.Windows.Forms.Label();
+            this.BlockersInternal = new System.Windows.Forms.Label();
+            this.BlockersInDone = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.BlockersInProgress = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.TasksDone = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Capacity = new System.Windows.Forms.Label();
-            this.Blockers = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbWorkers = new System.Windows.Forms.TextBox();
@@ -133,7 +144,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // TimeStep
+            // Schedule
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -144,21 +155,149 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label5);
+            this.groupBox3.Controls.Add(this.BlockersSearching);
+            this.groupBox3.Controls.Add(this.label30);
+            this.groupBox3.Controls.Add(this.label33);
+            this.groupBox3.Controls.Add(this.label36);
+            this.groupBox3.Controls.Add(this.label39);
+            this.groupBox3.Controls.Add(this.label41);
+            this.groupBox3.Controls.Add(this.BlockersGuessing);
+            this.groupBox3.Controls.Add(this.BlockersExternal);
+            this.groupBox3.Controls.Add(this.BlockersInternal);
+            this.groupBox3.Controls.Add(this.BlockersInDone);
+            this.groupBox3.Controls.Add(this.label26);
+            this.groupBox3.Controls.Add(this.BlockersInProgress);
             this.groupBox3.Controls.Add(this.label28);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.TasksDone);
-            this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.Capacity);
-            this.groupBox3.Controls.Add(this.Blockers);
             this.groupBox3.Controls.Add(this.label8);
-            this.groupBox3.Location = new System.Drawing.Point(32, 128);
+            this.groupBox3.Location = new System.Drawing.Point(32, 106);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(316, 172);
+            this.groupBox3.Size = new System.Drawing.Size(316, 313);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Beliefs impacts ";
+            this.groupBox3.Text = "Results";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(222, 55);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(20, 17);
+            this.label5.TabIndex = 181;
+            this.label5.Text = "%";
+            // 
+            // BlockersSearching
+            // 
+            this.BlockersSearching.AutoSize = true;
+            this.BlockersSearching.Location = new System.Drawing.Point(177, 263);
+            this.BlockersSearching.Name = "BlockersSearching";
+            this.BlockersSearching.Size = new System.Drawing.Size(16, 17);
+            this.BlockersSearching.TabIndex = 180;
+            this.BlockersSearching.Text = "0";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(99, 263);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(72, 17);
+            this.label30.TabIndex = 179;
+            this.label30.Text = "Searching";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(99, 240);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(68, 17);
+            this.label33.TabIndex = 178;
+            this.label33.Text = "Guessing";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(102, 192);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(55, 17);
+            this.label36.TabIndex = 177;
+            this.label36.Text = "Internal";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(74, 165);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(67, 17);
+            this.label39.TabIndex = 176;
+            this.label39.Text = "Resolved";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(99, 217);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(59, 17);
+            this.label41.TabIndex = 175;
+            this.label41.Text = "External";
+            // 
+            // BlockersGuessing
+            // 
+            this.BlockersGuessing.AutoSize = true;
+            this.BlockersGuessing.Location = new System.Drawing.Point(179, 241);
+            this.BlockersGuessing.Name = "BlockersGuessing";
+            this.BlockersGuessing.Size = new System.Drawing.Size(16, 17);
+            this.BlockersGuessing.TabIndex = 44;
+            this.BlockersGuessing.Text = "0";
+            // 
+            // BlockersExternal
+            // 
+            this.BlockersExternal.AutoSize = true;
+            this.BlockersExternal.Location = new System.Drawing.Point(179, 217);
+            this.BlockersExternal.Name = "BlockersExternal";
+            this.BlockersExternal.Size = new System.Drawing.Size(16, 17);
+            this.BlockersExternal.TabIndex = 41;
+            this.BlockersExternal.Text = "0";
+            // 
+            // BlockersInternal
+            // 
+            this.BlockersInternal.AutoSize = true;
+            this.BlockersInternal.Location = new System.Drawing.Point(179, 193);
+            this.BlockersInternal.Name = "BlockersInternal";
+            this.BlockersInternal.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInternal.TabIndex = 38;
+            this.BlockersInternal.Text = "0";
+            // 
+            // BlockersInDone
+            // 
+            this.BlockersInDone.AutoSize = true;
+            this.BlockersInDone.Location = new System.Drawing.Point(179, 165);
+            this.BlockersInDone.Name = "BlockersInDone";
+            this.BlockersInDone.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInDone.TabIndex = 35;
+            this.BlockersInDone.Text = "0";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(58, 141);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(83, 17);
+            this.label26.TabIndex = 31;
+            this.label26.Text = "Still blocked";
+            // 
+            // BlockersInProgress
+            // 
+            this.BlockersInProgress.AutoSize = true;
+            this.BlockersInProgress.Location = new System.Drawing.Point(179, 141);
+            this.BlockersInProgress.Name = "BlockersInProgress";
+            this.BlockersInProgress.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInProgress.TabIndex = 32;
+            this.BlockersInProgress.Text = "0";
             // 
             // label28
             // 
@@ -172,7 +311,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(222, 116);
+            this.label3.Location = new System.Drawing.Point(222, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 17);
             this.label3.TabIndex = 23;
@@ -181,56 +320,38 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(26, 116);
+            this.label18.Location = new System.Drawing.Point(26, 85);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(82, 17);
+            this.label18.Size = new System.Drawing.Size(114, 17);
             this.label18.TabIndex = 21;
-            this.label18.Text = "Tasks done";
+            this.label18.Text = "Tasks done ratio";
             // 
             // TasksDone
             // 
             this.TasksDone.AutoSize = true;
-            this.TasksDone.Location = new System.Drawing.Point(179, 116);
+            this.TasksDone.Location = new System.Drawing.Point(179, 85);
             this.TasksDone.Name = "TasksDone";
             this.TasksDone.Size = new System.Drawing.Size(16, 17);
             this.TasksDone.TabIndex = 22;
             this.TasksDone.Text = "0";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(222, 85);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(20, 17);
-            this.label5.TabIndex = 19;
-            this.label5.Text = "%";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 85);
+            this.label4.Location = new System.Drawing.Point(26, 113);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(97, 17);
+            this.label4.Size = new System.Drawing.Size(62, 17);
             this.label4.TabIndex = 17;
-            this.label4.Text = "Total blockers";
+            this.label4.Text = "Blockers";
             // 
             // Capacity
             // 
             this.Capacity.AutoSize = true;
-            this.Capacity.Location = new System.Drawing.Point(179, 85);
+            this.Capacity.Location = new System.Drawing.Point(179, 55);
             this.Capacity.Name = "Capacity";
             this.Capacity.Size = new System.Drawing.Size(16, 17);
             this.Capacity.TabIndex = 18;
             this.Capacity.Text = "0";
-            // 
-            // Blockers
-            // 
-            this.Blockers.AutoSize = true;
-            this.Blockers.Location = new System.Drawing.Point(179, 55);
-            this.Blockers.Name = "Blockers";
-            this.Blockers.Size = new System.Drawing.Size(16, 17);
-            this.Blockers.TabIndex = 6;
-            this.Blockers.Text = "0";
             // 
             // label8
             // 
@@ -282,7 +403,7 @@
             // richTextBox2
             // 
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox2.Location = new System.Drawing.Point(457, 12);
             this.richTextBox2.Name = "richTextBox2";
@@ -293,7 +414,7 @@
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox1.Location = new System.Drawing.Point(4, 12);
             this.richTextBox1.Name = "richTextBox1";
@@ -695,9 +816,9 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(15, 86);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(329, 21);
+            this.label17.Size = new System.Drawing.Size(171, 17);
             this.label17.TabIndex = 133;
-            this.label17.Text = "Capacity threshold for unavailability [0;1]";
+            this.label17.Text = "Rate of unavailability [0;1]";
             // 
             // groupBox6
             // 
@@ -713,7 +834,7 @@
             this.groupBox6.Size = new System.Drawing.Size(374, 156);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Symu";
+            this.groupBox6.Text = "Simulation";
             // 
             // cbMultipleBlockers
             // 
@@ -785,76 +906,86 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
-
         }
 
-        #endregion
-
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label TimeStep;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbWorkers;
-        private System.Windows.Forms.Button btnResume;
-        private System.Windows.Forms.Button btnPause;
-        private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.TextBox tbSteps;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label Capacity;
-        private System.Windows.Forms.Label Blockers;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label TasksDone;
-        private System.Windows.Forms.TextBox tbKnowledge;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.GroupBox gbBelief;
-        private System.Windows.Forms.CheckBox cbLimitNumberOfTriesBelief;
-        private System.Windows.Forms.TextBox tbMaxNumberOfTriesBelief;
-        private System.Windows.Forms.TextBox tbBeliefResponseTime;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.TextBox tbBeliefRateAnswers;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox tbBeliefRateIncorrectGuess;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.GroupBox gbUncompleteKnowledge;
-        private System.Windows.Forms.TextBox tbMaxNumberOfTriesKnowledge;
-        private System.Windows.Forms.CheckBox cbLimitNumberOfTriesKnowledge;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.TextBox tbRequiredMandatoryRatio;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox tbLackDelayBeforeSearchingExternally;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox tbLackResponseTime;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox tbLackRateOfAnswers;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox tbLackRateOfIncorrectGuess;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox tbKnowledgeThreshHoldForDoing;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox tbUnavailabilityThreshhold;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.CheckBox cbMultipleBlockers;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.CheckBox BeliefsOn;
         private System.Windows.Forms.TextBox BeliefsRate;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.CheckBox UnavailabilityOn;
-        private System.Windows.Forms.TextBox UnavailabilityRate;
-        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label BlockersExternal;
+        private System.Windows.Forms.Label BlockersGuessing;
+        private System.Windows.Forms.Label BlockersInDone;
+        private System.Windows.Forms.Label BlockersInProgress;
+        private System.Windows.Forms.Label BlockersInternal;
+        private System.Windows.Forms.Label BlockersSearching;
+        private System.Windows.Forms.Button btnPause;
+        private System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.Label Capacity;
+        private System.Windows.Forms.CheckBox cbLimitNumberOfTriesBelief;
+        private System.Windows.Forms.CheckBox cbLimitNumberOfTriesKnowledge;
+        private System.Windows.Forms.CheckBox cbMultipleBlockers;
+        private System.Windows.Forms.GroupBox gbBelief;
+        private System.Windows.Forms.GroupBox gbUncompleteKnowledge;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckBox KnowledgeOn;
         private System.Windows.Forms.TextBox KnowledgeRate;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Label TasksDone;
+        private System.Windows.Forms.TextBox tbBeliefRateAnswers;
+        private System.Windows.Forms.TextBox tbBeliefRateIncorrectGuess;
+        private System.Windows.Forms.TextBox tbBeliefResponseTime;
+        private System.Windows.Forms.TextBox tbKnowledge;
+        private System.Windows.Forms.TextBox tbKnowledgeThreshHoldForDoing;
+        private System.Windows.Forms.TextBox tbLackDelayBeforeSearchingExternally;
+        private System.Windows.Forms.TextBox tbLackRateOfAnswers;
+        private System.Windows.Forms.TextBox tbLackRateOfIncorrectGuess;
+        private System.Windows.Forms.TextBox tbLackResponseTime;
+        private System.Windows.Forms.TextBox tbMaxNumberOfTriesBelief;
+        private System.Windows.Forms.TextBox tbMaxNumberOfTriesKnowledge;
+        private System.Windows.Forms.TextBox tbRequiredMandatoryRatio;
+        private System.Windows.Forms.TextBox tbSteps;
+        private System.Windows.Forms.TextBox tbUnavailabilityThreshhold;
+        private System.Windows.Forms.TextBox tbWorkers;
+        private System.Windows.Forms.Label TimeStep;
+        private System.Windows.Forms.CheckBox UnavailabilityOn;
+        private System.Windows.Forms.TextBox UnavailabilityRate;
+
+        #endregion
     }
 }

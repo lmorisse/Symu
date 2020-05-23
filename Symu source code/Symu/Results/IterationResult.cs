@@ -94,6 +94,7 @@ namespace Symu.Results
         public void PostStep()
         {
             Tasks.SetResults(_environment);
+            Blockers.SetResults(_environment);
         }
 
         #region todo : refactor in SpecificResults

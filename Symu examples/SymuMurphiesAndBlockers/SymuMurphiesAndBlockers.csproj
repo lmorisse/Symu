@@ -77,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ExampleEnvironment.cs" />
-    <Compile Include="Classes\InfluencerAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
     <Compile Include="Home.cs">
       <SubType>Form</SubType>

@@ -7,6 +7,7 @@ Main navigation
    Overview <index>
    models/models
    userguides/examples_guide
+   devguides/dev_guide
 
 Indices
 =======

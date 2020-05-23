@@ -16,8 +16,8 @@ using System.Threading;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
-using Symu.Messaging.Log;
 using Symu.Messaging.Messages;
+using Symu.Messaging.Tracker;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
 using Symu.Results;
@@ -62,13 +62,13 @@ namespace Symu.Environment
         /// <summary>
         ///     Manage interaction steps
         /// </summary>
-        public TimeStep TimeStep { get; set; } = new TimeStep();
+        public Schedule Schedule { get; set; } = new Schedule();
 
         /// <summary>
         ///     Use to log messages in the symu
         ///     to debug and manage TimeBased Step
         /// </summary>
-        public MessagesLog Messages { get; set; } = new MessagesLog();
+        public MessagesTracker Messages { get; set; } = new MessagesTracker();
 
         #region Start and Stop
 
@@ -106,7 +106,7 @@ namespace Symu.Environment
 
         public void SetTimeStepType(TimeStepType type)
         {
-            TimeStep.Type = type;
+            Schedule.Type = type;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Symu.Environment
         public virtual IterationResult SetIterationResult(ushort iterationNumber)
         {
             IterationResult.Iteration = iterationNumber;
-            IterationResult.Step = TimeStep.Step;
+            IterationResult.Step = Schedule.Step;
             var scenarii = GetAllStoppedScenarii();
             IterationResult.Success = scenarii.All(s => s.Success);
             //IterationResult.HasItemsNotDone = scenarii.Exists(s => s.IterationResult.HasItemsNotDone);
@@ -250,7 +250,7 @@ namespace Symu.Environment
 
         public void SendDelayedMessages()
         {
-            while (Messages.DelayedMessages.Dequeue(TimeStep.Step) is Message message)
+            while (Messages.DelayedMessages.Dequeue(Schedule.Step) is Message message)
             {
                 SendAgent(message);
             }
@@ -279,15 +279,15 @@ namespace Symu.Environment
         public void NextStep()
         {
             SendDelayedMessages();
-            if (TimeStep.Step == 0)
+            if (Schedule.Step == 0)
             {
                 SetInteractionSphere(true);
             }
 
             var agents = WhitePages.AllAgents().Shuffle();
-            if (TimeStep.Type <= TimeStepType.Daily)
+            if (Schedule.Type <= TimeStepType.Daily)
             {
-                if (TimeStep.IsWorkingDay)
+                if (Schedule.IsWorkingDay)
                 {
                     agents.ForEach(a => a.ActCadence());
                     agents.ForEach(a => a.ActWorkingDay());
@@ -298,38 +298,38 @@ namespace Symu.Environment
                 }
 
                 if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate <=
-                    TimeStepType.Daily && TimeStep.Step > 0)
+                    TimeStepType.Daily && Schedule.Step > 0)
                 {
                     SetInteractionSphere(false);
                 }
             }
 
-            if (TimeStep.Type <= TimeStepType.Weekly && TimeStep.IsEndOfWeek)
+            if (Schedule.Type <= TimeStepType.Weekly && Schedule.IsEndOfWeek)
             {
                 agents.ForEach(a => a.ActEndOfWeek());
                 if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Weekly && TimeStep.Step > 0)
+                    TimeStepType.Weekly && Schedule.Step > 0)
                 {
                     SetInteractionSphere(false);
                 }
             }
 
-            if (TimeStep.Type <= TimeStepType.Monthly && TimeStep.IsEndOfMonth)
+            if (Schedule.Type <= TimeStepType.Monthly && Schedule.IsEndOfMonth)
             {
                 SetMonthlyIterationResult();
                 agents.ForEach(a => a.ActEndOfMonth());
                 if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Monthly && TimeStep.Step > 0)
+                    TimeStepType.Monthly && Schedule.Step > 0)
                 {
                     SetInteractionSphere(false);
                 }
             }
 
-            if (TimeStep.IsEndOfYear)
+            if (Schedule.IsEndOfYear)
             {
                 agents.ForEach(a => a.ActEndOfYear());
                 if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Yearly && TimeStep.Step > 0)
+                    TimeStepType.Yearly && Schedule.Step > 0)
                 {
                     SetInteractionSphere(false);
                 }
@@ -352,9 +352,9 @@ namespace Symu.Environment
         public virtual void SetMonthlyIterationResult()
         {
             // Flexibility
-            IterationResult.OrganizationFlexibility.HandlePerformance(TimeStep.Step);
+            IterationResult.OrganizationFlexibility.HandlePerformance(Schedule.Step);
             // Knowledge
-            IterationResult.OrganizationKnowledgeAndBelief.HandlePerformance(TimeStep.Step);
+            IterationResult.OrganizationKnowledgeAndBelief.HandlePerformance(Schedule.Step);
         }
 
         /// <summary>
@@ -374,9 +374,9 @@ namespace Symu.Environment
         public void PostStep()
         {
             WhitePages.AllAgents().ToList().ForEach(a => a.PostStep());
-            Messages.ClearMessagesSent(TimeStep.Step);
+            Messages.ClearMessagesSent(Schedule.Step);
             IterationResult.PostStep();
-            TimeStep.Step++;
+            Schedule.Step++;
         }
 
         private bool WaitForStepEnd()

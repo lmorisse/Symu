@@ -44,15 +44,15 @@ namespace SymuMurphiesAndBlockers
             cbMultipleBlockers.Checked = OrganizationEntity.Murphies.MultipleBlockers;
 
             #region unavaibility
-            tbUnavailabilityThreshhold.Text = OrganizationEntity.Murphies.UnAvailability.Threshold.ToString();
-            BeliefsOn.Checked = OrganizationEntity.Murphies.IncompleteBelief.On;
-            BeliefsRate.Text = OrganizationEntity.Murphies.IncompleteBelief.RateOfAgentsOn.ToString();
+            tbUnavailabilityThreshhold.Text = OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability.ToString();
+            UnavailabilityOn.Checked = OrganizationEntity.Murphies.UnAvailability.On;
+            UnavailabilityRate.Text = OrganizationEntity.Murphies.UnAvailability.RateOfAgentsOn.ToString();
             #endregion
 
             #region incomplete knowledge murphy
 
             tbKnowledgeThreshHoldForDoing.Text =
-                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing.ToString(CultureInfo.InvariantCulture);
+                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing.ToString();
             tbLackRateOfIncorrectGuess.Text = OrganizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess.ToString();
             tbLackRateOfAnswers.Text = OrganizationEntity.Murphies.IncompleteKnowledge.RateOfAnswers.ToString();
             tbLackResponseTime.Text = OrganizationEntity.Murphies.IncompleteKnowledge.ResponseTime.ToString();
@@ -82,20 +82,27 @@ namespace SymuMurphiesAndBlockers
 
         protected override void UpdateSettings()
         {
+            if (!cbLimitNumberOfTriesBelief.Checked)
+            {
+                OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = -1;
+            }
+            else
+            {
+                OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = Convert.ToSByte(tbMaxNumberOfTriesKnowledge.Text);
+            }
             if (!cbLimitNumberOfTriesKnowledge.Checked)
             {
                 OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = -1;
             }
             else
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = Convert.ToSByte(tbMaxNumberOfTriesKnowledge.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = Convert.ToSByte(BeliefsRate.Text);
             }
             OrganizationEntity.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
             OrganizationEntity.Murphies.IncompleteBelief.On = BeliefsOn.Checked;
             OrganizationEntity.Murphies.UnAvailability.On = UnavailabilityOn.Checked;
             OrganizationEntity.Murphies.IncompleteKnowledge.On = KnowledgeOn.Checked;
 
-            SetDebug(false);
             TimeStepType = TimeStepType.Daily;
         }
 
@@ -126,28 +133,47 @@ namespace SymuMurphiesAndBlockers
         public override void Display()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.TimeStep.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
             UpdateAgents();
         }
 
         private void UpdateAgents()
         {
-            WriteTextSafe(Capacity,
-                _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density
+            var capacityRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
+                ? 0
+                : _environment.IterationResult.Capacity * 100 /
+                  (_environment.Schedule.Step * _environment.WorkersCount);
+            WriteTextSafe(Capacity, capacityRatio
                     .ToString("F1", CultureInfo.InvariantCulture));
-            WriteTextSafe(Blockers,
-                _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum
-                    .ToString("F1", CultureInfo.InvariantCulture));
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
-            if (_environment.TimeStep.Step == 1)
-            {
-            }
+                  (_environment.Schedule.Step * _environment.WorkersCount);
 
             WriteTextSafe(TasksDone, tasksDoneRatio
                 .ToString("F1", CultureInfo.InvariantCulture));
+
+            WriteTextSafe(BlockersInDone,
+                _environment.IterationResult.Blockers.TotalBlockersDone
+                    .ToString("F1", CultureInfo.InvariantCulture));
+
+            WriteTextSafe(BlockersInProgress,
+                _environment.IterationResult.Blockers.BlockersStillInProgress
+                    .ToString("F1", CultureInfo.InvariantCulture));
+
+            WriteTextSafe(BlockersExternal,
+                _environment.IterationResult.Blockers.TotalExternalHelp
+                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersInternal,
+                _environment.IterationResult.Blockers.TotalInternalHelp
+                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersGuessing,
+                _environment.IterationResult.Blockers.TotalGuesses
+                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersSearching,
+                _environment.IterationResult.Blockers.TotalSearches
+                    .ToString("F1", CultureInfo.InvariantCulture));
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -459,7 +485,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.UnAvailability.Threshold = float.Parse(tbUnavailabilityThreshhold.Text);
+                OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability = float.Parse(tbUnavailabilityThreshhold.Text);
                 tbUnavailabilityThreshhold.BackColor = SystemColors.Window;
             }
             catch (FormatException)

@@ -186,7 +186,7 @@ namespace SymuForm
             _environment = environment;
             _environment.SetOrganization(OrganizationEntity);
             UpdateSettings();
-            _environment.TimeStep.Step = 0;
+            _environment.Schedule.Step = 0;
             _environment.InitializeIteration();
             SetScenarii();
         }
@@ -246,7 +246,7 @@ namespace SymuForm
 
         public void PreIteration()
         {
-            _environment.TimeStep.Type = TimeStepType;
+            _environment.Schedule.Type = TimeStepType;
             _environment.Start();
             _environment.WaitingForStart();
             State = AgentState.Started;

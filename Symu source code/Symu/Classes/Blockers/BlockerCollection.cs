@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Results.Blocker;
@@ -22,14 +23,12 @@ namespace Symu.Classes.Blockers
     /// </summary>
     public class BlockerCollection
     {
-        private readonly BlockerResults _blockerResults;
+        /// <summary>
+        ///     Number of blockers In Progress
+        /// </summary>
+        public BlockerResult Result { get; set; } = new BlockerResult();
         public List<Blocker> List { get; } = new List<Blocker>();
         public bool IsBlocked => List.Any();
-
-        public BlockerCollection(BlockerResults blockerResults)
-        {
-            _blockerResults = blockerResults;
-        }
 
         /// <summary>
         ///     Add a blocker with two parameters
@@ -60,7 +59,7 @@ namespace Symu.Classes.Blockers
 
         private Blocker Add(ushort step, Blocker blocker)
         {
-            _blockerResults.AddBlockerInProgress(step);
+            SetBlockerInProgress();
             List.Add(blocker);
             return blocker;
         }
@@ -96,7 +95,7 @@ namespace Symu.Classes.Blockers
                 Remove(blocker);
             }
 
-            _blockerResults.BlockerDone(resolution, step);
+            SetBlockerDone(resolution);
         }
 
         /// <summary>
@@ -170,6 +169,34 @@ namespace Symu.Classes.Blockers
         public bool Contains(Blocker blocker)
         {
             return List.Contains(blocker);
+        }
+        public void SetBlockerInProgress()
+        {
+            Result.InProgress++;
+        }
+
+        public void SetBlockerDone(BlockerResolution resolution)
+        {
+            switch (resolution)
+            {
+                case BlockerResolution.Internal:
+                    Result.InternalHelp++;
+                    break;
+                case BlockerResolution.External:
+                    Result.ExternalHelp++;
+                    break;
+                case BlockerResolution.Guessing:
+                    Result.Guess++;
+                    break;
+                case BlockerResolution.Searching:
+                    Result.Search++;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(resolution), resolution, null);
+            }
+
+            Result.Done++;
+            Result.InProgress--;
         }
     }
 }

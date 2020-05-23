@@ -34,7 +34,7 @@ namespace Symu.Classes.Scenario
         public override void PreStep()
         {
             base.PreStep();
-            if (NumberOfSteps != NoLimit && TimeStep.Step == NumberOfSteps - 1)
+            if (NumberOfSteps != NoLimit && Schedule.Step == NumberOfSteps - 1)
             {
                 State = AgentState.Stopping;
             }

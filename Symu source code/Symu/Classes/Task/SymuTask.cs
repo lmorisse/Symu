@@ -15,7 +15,6 @@ using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Results.Blocker;
 using static SymuTools.Constants;
 
 #endregion
@@ -29,10 +28,9 @@ namespace Symu.Classes.Task
     {
         private float _weight;
 
-        public SymuTask(ushort step, BlockerResults blockerResults)
+        public SymuTask(ushort step)
         {
             Created = step;
-            Blockers = new BlockerCollection(blockerResults);
         }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace Symu.Classes.Task
         /// <summary>
         ///     Manage all the blockers that block the task
         /// </summary>
-        public BlockerCollection Blockers { get; }
+        public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         /// <summary>
         ///     Last step when a worker has worked on that task

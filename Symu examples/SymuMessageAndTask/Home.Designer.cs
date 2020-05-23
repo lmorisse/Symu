@@ -137,7 +137,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // TimeStep
+            // Schedule
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);

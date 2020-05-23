@@ -61,7 +61,7 @@ namespace SymuLearnAndForget.Classes
                 case MessageAction.Reply:
                     // Agent has already learned from the reply
                     // We need to store this information in the wiki
-                    Wiki.StoreKnowledge(Knowledge.Id, message.Attachments.KnowledgeBits, 1, TimeStep.Step);
+                    Wiki.StoreKnowledge(Knowledge.Id, message.Attachments.KnowledgeBits, 1, Schedule.Step);
                     break;
             }
         }

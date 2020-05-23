@@ -32,7 +32,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
     public class BeliefsModel
     {
         private readonly AgentId _agentId;
-        private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
         private readonly NetworkBeliefs _networkBeliefs;
@@ -66,7 +65,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             On = entity.IsAgentOn();
             _agentId = agentId;
             _networkBeliefs = network.NetworkBeliefs;
-            _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
         }
@@ -146,50 +144,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         public AgentBelief GetBelief(ushort beliefId)
         {
             return Beliefs.GetBelief(beliefId);
-        }
-
-        /// <summary>
-        ///     Check belief required by a task against the worker expertise
-        /// </summary>
-        /// <param name="beliefId"></param>
-        /// <param name="taskBitIndexes">KnowledgeBit indexes of the task that must be checked against agent's beliefs</param>
-        /// <param name="mandatoryCheck"></param>
-        /// <param name="requiredCheck"></param>
-        /// <param name="mandatoryIndex"></param>
-        /// <param name="requiredIndex"></param>
-        public void CheckBelief(ushort beliefId, TaskKnowledgeBits taskBitIndexes, ref float mandatoryCheck,
-            ref float requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex)
-        {
-            if (taskBitIndexes is null)
-            {
-                throw new ArgumentNullException(nameof(taskBitIndexes));
-            }
-
-            // model is off
-            // agent may don't have the belief at all
-            if (!On || Beliefs is null)
-            {
-                mandatoryCheck = 0;
-                requiredCheck = 0;
-                return;
-            }
-
-            var agentBelief = Beliefs.GetBelief(beliefId);
-            var belief = _networkBeliefs.GetBelief(beliefId);
-            if (belief is null)
-            {
-                throw new NullReferenceException(nameof(belief));
-            }
-
-            if (agentBelief == null)
-            {
-                return;
-            }
-
-            mandatoryCheck = agentBelief.Check(taskBitIndexes.GetMandatory(), out mandatoryIndex, belief,
-                _internalCharacteristics.BeliefThreshHoldForReacting);
-            requiredCheck = agentBelief.Check(taskBitIndexes.GetRequired(), out requiredIndex, belief,
-                _internalCharacteristics.BeliefThreshHoldForReacting);
         }
 
         /// <summary>

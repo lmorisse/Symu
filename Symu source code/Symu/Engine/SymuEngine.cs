@@ -206,7 +206,7 @@ namespace Symu.Engine
                 step0 = step0 == 0 ? clone.Day0 : Math.Min(step0, clone.Day0);
             }
 
-            Environment.TimeStep.Step = step0;
+            Environment.Schedule.Step = step0;
         }
 
         /// <summary>

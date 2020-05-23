@@ -12,6 +12,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using Symu.Environment;
+using Symu.Messaging.Messages;
+using Symu.Results.Task;
 
 #endregion
 
@@ -69,53 +72,30 @@ namespace Symu.Results.Blocker
         /// </summary>
         public int TotalSearches => _results.Values.Any() ? _results.Values.Sum(x => x.Search) : 0;
 
-        public void AddBlockerInProgress(ushort step)
+        public void SetResults(SymuEnvironment environment)
         {
             if (!_followBlockers)
             {
                 return;
             }
 
-            SetStep(step);
-            _results[step].InProgress++;
-        }
-
-        public void BlockerDone(BlockerResolution resolution, ushort step)
-        {
-            if (!_followBlockers)
+            if (environment == null)
             {
-                return;
+                throw new ArgumentNullException(nameof(environment));
             }
 
-            SetStep(step);
-            switch (resolution)
+            var result = new BlockerResult();
+            foreach (var blocker in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null).Select(x => x.Blockers))
             {
-                case BlockerResolution.Internal:
-                    _results[step].InternalHelp++;
-                    break;
-                case BlockerResolution.External:
-                    _results[step].ExternalHelp++;
-                    break;
-                case BlockerResolution.Guessing:
-                    _results[step].Guess++;
-                    break;
-                case BlockerResolution.Searching:
-                    _results[step].Search++;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(resolution), resolution, null);
+                result.InProgress += blocker.Result.InProgress;
+                result.Done += blocker.Result.Done;
+                result.ExternalHelp += blocker.Result.ExternalHelp;
+                result.Guess += blocker.Result.Guess;
+                result.InternalHelp += blocker.Result.InternalHelp;
+                result.Search += blocker.Result.Search;
             }
 
-            _results[step].Done++;
-            _results[step].InProgress--;
-        }
-
-        private void SetStep(ushort step)
-        {
-            if (!_results.ContainsKey(step))
-            {
-                _results.TryAdd(step, new BlockerResult());
-            }
+            _results.TryAdd(environment.Schedule.Step, result);
         }
     }
 }

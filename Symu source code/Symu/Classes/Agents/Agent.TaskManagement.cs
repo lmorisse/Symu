@@ -86,7 +86,7 @@ namespace Symu.Classes.Agents
             }
 
             float timeSpent;
-            if (TimeStep.Type == TimeStepType.Intraday)
+            if (Schedule.Type == TimeStepType.Intraday)
             {
                 timeSpent = Math.Min(Environment.Organization.Models.Intraday, Capacity.Actual);
             }
@@ -140,7 +140,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(task));
             }
 
-            task.Update(TimeStep.Step);
+            task.Update(Schedule.Step);
         }
         #endregion
 
@@ -197,7 +197,12 @@ namespace Symu.Classes.Agents
         /// <returns></returns>
         public virtual void MurphiesImpactsOnCapacity()
         {
-            Capacity.Initial = Environment.Organization.Murphies.UnAvailability.Next(Capacity.Initial);
+            // Unavailability
+            if (Environment.Organization.Murphies.UnAvailability.Next())
+            {
+                Capacity.Initial = 0;
+                Status = AgentStatus.Offline;
+            }
         }
 
         /// <summary>
@@ -399,9 +404,9 @@ namespace Symu.Classes.Agents
         /// <param name="task"></param>
         private void TryRecoverBlockedTask(SymuTask task)
         {
-            foreach (var blocker in task.Blockers.FilterBlockers(TimeStep.Step))
+            foreach (var blocker in task.Blockers.FilterBlockers(Schedule.Step))
             {
-                blocker.Update(TimeStep.Step);
+                blocker.Update(Schedule.Step);
                 TryRecoverBlocker(task, blocker);
             }
         }
@@ -532,11 +537,11 @@ namespace Symu.Classes.Agents
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(knowledgeId, taskBits, KnowledgeModel.Expertise, ref mandatoryOk, ref requiredOk,
-                ref mandatoryIndex, ref requiredIndex, TimeStep.Step);
+                ref mandatoryIndex, ref requiredIndex, Schedule.Step);
             if (!mandatoryOk)
             {
                 // mandatoryCheck is false => Task is blocked
-                var blocker = task.Blockers.Add(Murphy.IncompleteKnowledge, TimeStep.Step, knowledgeId, mandatoryIndex);
+                var blocker = task.Blockers.Add(Murphy.IncompleteKnowledge, Schedule.Step, knowledgeId, mandatoryIndex);
                 TryRecoverBlockerIncompleteKnowledge(task, blocker);
             }
             else if (!requiredOk)
@@ -571,7 +576,7 @@ namespace Symu.Classes.Agents
 
             task.Weight *= Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing;
             LearningModel.LearnByDoing(knowledgeId, knowledgeBit,
-                TimeStep.Step);
+                Schedule.Step);
             switch (blocker)
             {
                 // No blocker, it's a required knowledgeBit
@@ -579,7 +584,7 @@ namespace Symu.Classes.Agents
                     task.KnowledgesBits.RemoveFirstRequired(knowledgeId);
                     // Blockers Management - no blocker has been created
                     // We create a fake one to follow the impact of the murphy
-                    Environment.IterationResult.Blockers.AddBlockerInProgress(TimeStep.Step);
+                    task.Blockers.SetBlockerInProgress();
                     break;
                 // blocker, it's a mandatory knowledgeBit
                 default:
@@ -587,7 +592,7 @@ namespace Symu.Classes.Agents
                     break;
             }
 
-            task.Blockers.Recover(blocker, resolution, TimeStep.Step);
+            task.Blockers.Recover(blocker, resolution, Schedule.Step);
         }
 
         /// <summary>
@@ -630,7 +635,7 @@ namespace Symu.Classes.Agents
 
             var teammates = GetAgentIdsForInteractions(InteractionStrategy.Knowledge).ToList();
             if (teammates.Any() &&
-                Environment.Organization.Murphies.IncompleteKnowledge.AskInternally(TimeStep.Step, blocker.InitialStep))
+                Environment.Organization.Murphies.IncompleteKnowledge.AskInternally(Schedule.Step, blocker.InitialStep))
             {
                 var attachments = new MessageAttachments();
                 attachments.Add(blocker);
@@ -688,7 +693,7 @@ namespace Symu.Classes.Agents
             }
 
             task.KnowledgesBits.RemoveFirstMandatory((ushort)blocker.Parameter);
-            task.Blockers.Recover(blocker, internalHelp ? BlockerResolution.Internal : BlockerResolution.External, TimeStep.Step);
+            task.Blockers.Recover(blocker, internalHelp ? BlockerResolution.Internal : BlockerResolution.External, Schedule.Step);
 
             // Take some time to learn, allocate this time on KeyActivity
             ImpactOfTheCommunicationMediumOnTimeSpent(medium, false, task.KeyActivity);
@@ -727,7 +732,7 @@ namespace Symu.Classes.Agents
             else
             {
                 // TODO reply should take time and impact the day he will reply his initial or remaining capacity, and is part of the multitasking
-                ReplyDelayed(replyMessage, (ushort)(Environment.TimeStep.Step + isReplayingIn));
+                ReplyDelayed(replyMessage, (ushort)(Environment.Schedule.Step + isReplayingIn));
             }
         }
         #endregion
@@ -747,6 +752,11 @@ namespace Symu.Classes.Agents
             }
 
             if (task.Parent is Message)
+            {
+                return;
+            }
+
+            if (!Environment.Organization.Murphies.IncompleteBelief.On)
             {
                 return;
             }
@@ -774,7 +784,9 @@ namespace Symu.Classes.Agents
             float requiredScore = 0;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            BeliefsModel.CheckBelief(knowledgeId, taskBits, ref mandatoryScore, ref requiredScore,
+
+            var belief = Environment.WhitePages.Network.NetworkBeliefs.GetBelief(knowledgeId);
+            Environment.Organization.Murphies.IncompleteBelief.CheckBelief(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore, ref requiredScore,
                 ref mandatoryIndex, ref requiredIndex);
             CheckBlockerBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
         }
@@ -794,7 +806,7 @@ namespace Symu.Classes.Agents
 
             // Prevent the agent from acting on a particular belief
             // mandatoryScore is not enough => agent don't want to do the task, the task is blocked
-            var blocker = task.Blockers.Add(Murphy.IncompleteBelief, TimeStep.Step, knowledgeId, mandatoryIndex);
+            var blocker = task.Blockers.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
             TryRecoverBlockerIncompleteBelief(task, blocker);
         }
 
@@ -855,7 +867,7 @@ namespace Symu.Classes.Agents
 
             task.Weight += Environment.Organization.Murphies.IncompleteBelief.NextImpactOnTimeSpent();
             InfluenceModel.ReinforcementByDoing(beliefId, beliefBit, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
-            task.Blockers.Recover(blocker, BlockerResolution.Guessing, TimeStep.Step);
+            task.Blockers.Recover(blocker, BlockerResolution.Guessing, Schedule.Step);
         }
 
 
@@ -870,7 +882,7 @@ namespace Symu.Classes.Agents
             {
                 return;
             }
-            task.Blockers.Recover(blocker, BlockerResolution.Internal, TimeStep.Step);
+            task.Blockers.Recover(blocker, BlockerResolution.Internal, Schedule.Step);
         }
         /// <summary>
         ///     An agent have ask help on the beliefId, and the bit beliefBit
@@ -906,7 +918,7 @@ namespace Symu.Classes.Agents
             else
             {
                 // TODO reply should take time and impact the day he will reply his initial or remaining capacity, and is part of the multitasking
-                ReplyDelayed(replyMessage, (ushort)(Environment.TimeStep.Step + isReplayingIn));
+                ReplyDelayed(replyMessage, (ushort)(Environment.Schedule.Step + isReplayingIn));
             }
         }
         #endregion

@@ -53,7 +53,6 @@ namespace Symu.Classes.Agents
         protected Agent(AgentId agentId, SymuEnvironment environment)
         {
             CreateAgent(agentId, environment);
-            Blockers = new BlockerCollection(environment.IterationResult.Blockers);
         }
 
         /// <summary>
@@ -97,7 +96,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public CognitiveArchitecture Cognitive { get; set; }
 
-        protected TimeStep TimeStep => Environment.TimeStep;
+        protected Schedule Schedule => Environment.Schedule;
 
         /// <summary>
         ///     If agent has an email, get the email database of the agent
@@ -141,7 +140,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Manage every blocker of the agent
         /// </summary>
-        public BlockerCollection Blockers { get; }
+        public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
@@ -242,11 +241,11 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     This method is called right after Start, before any messages have been received. It is similar to the constructor
         ///     of the class, but it should be used for agent-related logic, e.g. for sending initial message(s).
-        ///     Send Delayed message to the TimeStep.STep to be sure the receiver exists and its started
+        ///     Send Delayed message to the Schedule.STep to be sure the receiver exists and its started
         /// </summary>
         public virtual void BeforeStart()
         {
-            KnowledgeModel.InitializeExpertise(TimeStep.Step);
+            KnowledgeModel.InitializeExpertise(Schedule.Step);
             BeliefsModel.InitializeBeliefs();
             // Messaging initializing
             while (MessageProcessor is null)
@@ -342,7 +341,7 @@ namespace Symu.Classes.Agents
                     if (Status == AgentStatus.Offline)
                     {
                         // If receiver is offline, the message is postponed until the next interaction
-                        PostAsADelayedMessage(message, (ushort) (TimeStep.Step + 1));
+                        PostAsADelayedMessage(message, (ushort) (Schedule.Step + 1));
                     }
                     else
                     {
@@ -373,7 +372,7 @@ namespace Symu.Classes.Agents
                         case AgentState.NotStarted:
                         case AgentState.Starting:
                             // If receiver is offline, the message is postponed until the next interaction
-                            PostAsADelayedMessage(message, (ushort) (TimeStep.Step + 1));
+                            PostAsADelayedMessage(message, (ushort) (Schedule.Step + 1));
                             break;
                         case AgentState.Stopped:
                             break;
@@ -545,11 +544,11 @@ namespace Symu.Classes.Agents
             var communication =
                 Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
             LearningModel.Learn(message.Attachments.KnowledgeId,
-                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, TimeStep.Step);
+                message.Attachments.KnowledgeBits, communication.MaxRateLearnable, Schedule.Step);
             if (message.Medium == CommunicationMediums.Email && HasEmail)
             {
                 Email.StoreKnowledge(message.Attachments.KnowledgeId, message.Attachments.KnowledgeBits,
-                    communication.MaxRateLearnable, TimeStep.Step);
+                    communication.MaxRateLearnable, Schedule.Step);
             }
         }
 
@@ -583,7 +582,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(e));
             }
 
-            Environment.Messages.EnQueueWaitingMessage(e.Message, TimeStep.Step);
+            Environment.Messages.EnQueueWaitingMessage(e.Message, Schedule.Step);
         }
 
         /// <summary>
@@ -591,7 +590,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public void PostDelayedMessages()
         {
-            while (MessageProcessor.NextDelayedMessages(TimeStep.Step) is Message message)
+            while (MessageProcessor.NextDelayedMessages(Schedule.Step) is Message message)
             {
                 PostMessage(message);
             }
@@ -770,7 +769,7 @@ namespace Symu.Classes.Agents
                 var communication =
                     Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
                 ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication,
-                    TimeStep.Step, out var knowledgeIndexToSend);
+                    Schedule.Step, out var knowledgeIndexToSend);
                 ma.BeliefBits = BeliefsModel.FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);
                 // The agent is asked for his knowledge, so he can't forget it
                 if (ma.KnowledgeBits != null)
@@ -981,7 +980,7 @@ namespace Symu.Classes.Agents
         public void Subscribe(AgentId agentId, byte subject)
         {
             var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
-            SendDelayed(message, TimeStep.Step);
+            SendDelayed(message, Schedule.Step);
         }
 
         /// <summary>

@@ -28,12 +28,11 @@ namespace SymuTests.Classes.Task.Manager
         private readonly TasksLimit _tasksLimit = new TasksLimit();
         private List<SymuTask> _tasks;
         private TasksManager _tasksManager;
-        private readonly BlockerResults _blockerResults = new BlockerResults(false);
-
+        
         [TestInitialize]
         public void Initialize()
         {
-            _task = new SymuTask(0, _blockerResults);
+            _task = new SymuTask(0);
             var tasksLimit = new TasksLimit();
             _tasksManager = new TasksManager(tasksLimit);
             _tasks = new List<SymuTask> {_task};
@@ -215,9 +214,9 @@ namespace SymuTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest()
         {
-            var task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.FaceToFace.ToString()};
+            var task = new SymuTask(0) {Type = CommunicationMediums.FaceToFace.ToString()};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.Email.ToString()};
+            task = new SymuTask(0) {Type = CommunicationMediums.Email.ToString()};
             _tasksManager.AddToDo(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, CommunicationMediums.FaceToFace.ToString());
@@ -230,9 +229,9 @@ namespace SymuTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest1()
         {
-            var task = new SymuTask(0, _blockerResults) {Type = CommunicationMediums.FaceToFace.ToString()};
+            var task = new SymuTask(0) {Type = CommunicationMediums.FaceToFace.ToString()};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0, _blockerResults);
+            task = new SymuTask(0);
             _tasksManager.AddInProgress(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, CommunicationMediums.FaceToFace.ToString());
@@ -244,9 +243,9 @@ namespace SymuTests.Classes.Task.Manager
         [TestMethod]
         public void SelectNextTaskTest2()
         {
-            var task = new SymuTask(0, _blockerResults) {Type = "todo"};
+            var task = new SymuTask(0) {Type = "todo"};
             _tasksManager.AddToDo(task);
-            task = new SymuTask(0, _blockerResults) {Type = "ip"};
+            task = new SymuTask(0) {Type = "ip"};
             _tasksManager.AddInProgress(task);
             var selectedTask = _tasksManager.SelectNextTask(0);
             Assert.AreEqual(selectedTask.Type, "ip");
@@ -261,8 +260,8 @@ namespace SymuTests.Classes.Task.Manager
             _tasksLimit.LimitSimultaneousTasks = true;
             _tasksLimit.MaximumSimultaneousTasks = 1;
             _tasksManager = new TasksManager(_tasksLimit);
-            _tasksManager.AddInProgress(new SymuTask(0, _blockerResults) {Type = "ip"});
-            _tasksManager.AddToDo(new SymuTask(0, _blockerResults) {Type = "todo"});
+            _tasksManager.AddInProgress(new SymuTask(0) {Type = "ip"});
+            _tasksManager.AddToDo(new SymuTask(0) {Type = "todo"});
             // without the limit, the task to do should be pushed in progress
             _tasksManager.SelectNextTask(0);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
@@ -270,14 +269,14 @@ namespace SymuTests.Classes.Task.Manager
 
         /// <summary>
         ///     HasReachedSimultaneousMaximumLimit false
-        ///     Finally in Todo
+        ///     Finally in To do
         /// </summary>
         [TestMethod]
         public void SelectNextTaskTest4()
         {
             _tasksLimit.LimitSimultaneousTasks = false;
             _tasksManager = new TasksManager(_tasksLimit);
-            var task = new SymuTask(0, _blockerResults) {Type = "todo"};
+            var task = new SymuTask(0) {Type = "todo"};
             _tasksManager.AddToDo(task);
             Assert.IsNotNull(_tasksManager.SelectNextTask(0));
             Assert.AreEqual(1, _tasksManager.InProgress.Count);

@@ -88,63 +88,6 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Non passing test
-        /// </summary>
-        [TestMethod]
-        public void NullCheckBeliefTest()
-        {
-            float mandatoryCheck = 0;
-            float requiredCheck = 0;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                _beliefsModel.CheckBelief(1, null, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                    ref requiredIndex));
-            // no belief
-            Assert.ThrowsException<NullReferenceException>(() => _beliefsModel.CheckBelief(2, _taskBits,
-                ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex, ref requiredIndex));
-        }
-
-        /// <summary>
-        ///     Model off
-        /// </summary>
-        [TestMethod]
-        public void CheckBeliefTest()
-        {
-            float mandatoryCheck = 0;
-            float requiredCheck = 0;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            _beliefsModel.On = false;
-            _beliefsModel.CheckBelief(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                ref requiredIndex);
-            Assert.AreEqual(0, mandatoryCheck);
-            Assert.AreEqual(0, requiredCheck);
-        }
-
-        /// <summary>
-        ///     Model on
-        /// </summary>
-        [TestMethod]
-        public void CheckBeliefTest1()
-        {
-            float mandatoryCheck = 0;
-            float requiredCheck = 0;
-            byte mandatoryIndex = 0;
-            byte requiredIndex = 0;
-            _beliefsModel.On = true;
-            _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _beliefsModel.InitializeBeliefs();
-            // Force beliefBits
-            _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 1);
-            _belief.Weights.SetBit(0, 1);
-            _beliefsModel.CheckBelief(1, _taskBits, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
-                ref requiredIndex);
-            Assert.AreEqual(1, mandatoryCheck);
-            Assert.AreEqual(1, requiredCheck);
-        }
-
-        /// <summary>
         ///     Don't have initial belief
         /// </summary>
         [TestMethod]

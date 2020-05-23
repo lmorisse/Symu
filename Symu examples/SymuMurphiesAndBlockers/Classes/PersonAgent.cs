@@ -33,50 +33,20 @@ namespace SymuMurphiesAndBlockers.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Template);
+            SetCognitive(Environment.Organization.Templates.Human);
         }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        private SimpleHumanTemplate Template => ((ExampleEnvironment) Environment).WorkerTemplate;
         public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
-        public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.Id);
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
+            var task = new SymuTask(Schedule.Step)
             {
                 Weight = 1
             };
             task.SetKnowledgesBits(Model, Knowledges, 1);
             Post(task);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="blocker"></param>
-        /// <returns></returns>
-        public override void TryRecoverBlockerIncompleteBelief(SymuTask task, Blocker blocker)
-        {
-            if (task is null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-
-            if (blocker is null)
-            {
-                throw new ArgumentNullException(nameof(blocker));
-            }
-
-            // RiskAversionThreshold has been exceeded =>
-            // Worker don't want to do the task, the task is blocked in base method
-            // Ask advice from influencers
-            var attachments = new MessageAttachments
-            {
-                KnowledgeId = (ushort) blocker.Parameter,
-                KnowledgeBit = (byte) blocker.Parameter2
-            };
-            SendToMany(Influencers, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
         }
     }
 }

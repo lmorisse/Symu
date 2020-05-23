@@ -146,7 +146,7 @@ namespace SymuBeliefsAndInfluence
         public override void Display()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.TimeStep.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
             UpdateAgents();
         }
 
@@ -164,11 +164,11 @@ namespace SymuBeliefsAndInfluence
             WriteTextSafe(InitialTotalBeliefs,
                 _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum
                     .ToString("F1", CultureInfo.InvariantCulture));
-            var tasksDoneRatio = _environment.TimeStep.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Total * 100 /
-                  (_environment.TimeStep.Step * _environment.WorkersCount);
-            if (_environment.TimeStep.Step == 1)
+                  (_environment.Schedule.Step * _environment.WorkersCount);
+            if (_environment.Schedule.Step == 1)
             {
                 _initialTasksDone = tasksDoneRatio;
             }

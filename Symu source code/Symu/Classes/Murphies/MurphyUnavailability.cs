@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using SymuTools.Math.ProbabilityDistributions;
 
 namespace Symu.Classes.Murphies
 {
@@ -18,46 +19,34 @@ namespace Symu.Classes.Murphies
     /// </summary>
     public class MurphyUnAvailability : Murphy
     {
-        private float _threshold = 0.1F;
+        private float _rateOfUnavailability = 0.1F;
 
         /// <summary>
-        ///     Unavailability Threshold is linked to worker's initial capacity.
-        ///     As capacity is already a stochastic function, we choose to fix the threshold
-        ///     When initial capacity is below this threshold,
-        ///     the worker is considered not available for the day
+        ///     Rate of unavailability:
+        ///     If rate = 0, everyone is available
+        ///     If rate = 1, no one is available
         /// </summary>
-        /// <example>
-        ///     UnavailabilityThreshold = 0.1 by default
-        ///     if initial capacity = 0.05, worker is not available today
-        /// </example>
-        public float Threshold
+        public float RateOfUnavailability
         {
-            get => _threshold;
+            get => _rateOfUnavailability;
             set
             {
                 if (value < 0 || value > 1)
                 {
-                    throw new ArgumentOutOfRangeException("Threshold should be between [0;1]");
+                    throw new ArgumentOutOfRangeException("RateOfUnavailability should be between [0;1]");
                 }
 
-                _threshold = value;
+                _rateOfUnavailability = value;
             }
         }
 
         /// <summary>
         ///     Unavailability has an impact on the daily availability or sub optimal work
         /// </summary>
-        /// <param name="capacity"></param>
-        /// <returns>0 if capacity is below Threshold, capacity if above</returns>
-        public float Next(float capacity)
+        /// <returns>true if unavailable</returns>
+        public bool Next()
         {
-            if (!IsAgentOn())
-            {
-                return capacity;
-            }
-
-            // Below a certain threshold, we can presume the agent is not available
-            return capacity < Threshold ? 0 : capacity;
+            return IsAgentOn() && Bernoulli.Sample(RateOfUnavailability);
         }
     }
 }

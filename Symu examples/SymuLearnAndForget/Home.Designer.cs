@@ -667,7 +667,7 @@
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(235, 17);
             this.label12.TabIndex = 4;
-            this.label12.Text = "knowledge Threshold for doing [0;1]";
+            this.label12.Text = "knowledge RateOfUnavailability for doing [0;1]";
             // 
             // cbHasKnowledge
             // 
@@ -1142,7 +1142,7 @@
             this.btnResume.UseVisualStyleBackColor = true;
             this.btnResume.Click += new System.EventHandler(this.button3_Click);
             // 
-            // TimeStep
+            // Schedule
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(277, 37);

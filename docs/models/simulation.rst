@@ -12,6 +12,8 @@ In this approach, properties can emerge of the system during the simulation. The
 
 Models and mechanisms
 *********************
+``Symu`` is a time-based.  It contains a discrete event schedule on which you can schedule various agents to be called at some specific time.
+But it is ont space-based, it has no 2D nor 3D features to localize agents in the space.
 Of course, Simulation is at the heart of this framework. It is based on two asynchronous models:
 
 * Messaging between agents

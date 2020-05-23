@@ -174,7 +174,7 @@ namespace SymuMessageAndTask
         public override void Display()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.TimeStep.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
             UpDateMessages();
             UpdateAgents();
         }

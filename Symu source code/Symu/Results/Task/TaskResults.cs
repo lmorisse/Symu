@@ -80,16 +80,16 @@ namespace Symu.Results.Task
             }
 
             var result = new TaskResult();
-            foreach (var agent in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null))
+            foreach (var tasksManager in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null).Select(x => x.TaskProcessor.TasksManager))
             {
-                result.ToDo += agent.TaskProcessor.TasksManager.ToDo.Count(x => !(x.Parent is Message));
-                result.InProgress += agent.TaskProcessor.TasksManager.InProgress.Count(x => !(x.Parent is Message));
-                result.Done += agent.TaskProcessor.TasksManager.Done.Count(x => !(x.Parent is Message));
-                result.TotalTasksNumber += agent.TaskProcessor.TasksManager.TotalTasksNumber;
-                result.WeightDone += agent.TaskProcessor.TasksManager.TotalWeightDone;
+                result.ToDo += tasksManager.ToDo.Count(x => !(x.Parent is Message));
+                result.InProgress += tasksManager.InProgress.Count(x => !(x.Parent is Message));
+                result.Done += tasksManager.Done.Count(x => !(x.Parent is Message));
+                result.TotalTasksNumber += tasksManager.TotalTasksNumber;
+                result.WeightDone += tasksManager.TotalWeightDone;
             }
 
-            _results.TryAdd(environment.TimeStep.Step, result);
+            _results.TryAdd(environment.Schedule.Step, result);
         }
     }
 }

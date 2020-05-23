@@ -145,7 +145,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // TimeStep
+            // Schedule
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -826,7 +826,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(192, 17);
             this.label9.TabIndex = 29;
-            this.label9.Text = "Threshold for new interaction";
+            this.label9.Text = "RateOfUnavailability for new interaction";
             // 
             // label10
             // 

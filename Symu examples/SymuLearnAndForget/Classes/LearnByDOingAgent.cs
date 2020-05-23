@@ -25,9 +25,9 @@ namespace SymuLearnAndForget.Classes
 
         public override void GetNewTasks()
         {
-            var task = new SymuTask(0, Environment.IterationResult.Blockers)
+            var task = new SymuTask(0)
             {
-                Parent = TimeStep.Step,
+                Parent = Schedule.Step,
                 // Cost impact of learning by doing
                 Weight = 1 * Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing
             };
@@ -46,15 +46,15 @@ namespace SymuLearnAndForget.Classes
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
-            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.Id, knowledgeBit, KnowledgeModel.Expertise, TimeStep.Step))
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.Id, knowledgeBit, KnowledgeModel.Expertise, Schedule.Step))
             {
                 return;
             }
 
             // Agent is learning
-            var realLearning = LearningModel.LearnByDoing(Knowledge.Id, knowledgeBit, TimeStep.Step);
+            var realLearning = LearningModel.LearnByDoing(Knowledge.Id, knowledgeBit, Schedule.Step);
             // the knowledge is stored in a wiki
-            Wiki.StoreKnowledge(Knowledge.Id, knowledgeBit, realLearning, TimeStep.Step);
+            Wiki.StoreKnowledge(Knowledge.Id, knowledgeBit, realLearning, Schedule.Step);
         }
     }
 }

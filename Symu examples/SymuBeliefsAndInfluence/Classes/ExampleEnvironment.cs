@@ -89,7 +89,6 @@ namespace SymuBeliefsAndInfluence.Classes
             #region Influencer
 
             InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
-            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             InfluencerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             InfluencerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
             InfluencerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
@@ -111,7 +110,6 @@ namespace SymuBeliefsAndInfluence.Classes
 
             #region worker
 
-            WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             WorkerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             WorkerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;

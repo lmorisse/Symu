@@ -41,11 +41,11 @@ namespace SymuLearnAndForget.Classes
             bits.SetBit(knowledgeBit, 1);
             LearningModel.Learn(Knowledge.Id, bits,
                 Environment.Organization.Templates.Email.MaxRateLearnable,
-                TimeStep.Step);
+                Schedule.Step);
             // the information learned is stored in a wiki
             // not the total knowledge of the agent, it is tacit knowledge for the agent
             // wiki will be filled quicker by a non expert 
-            Wiki.StoreKnowledge(Knowledge.Id, bits, 1, TimeStep.Step);
+            Wiki.StoreKnowledge(Knowledge.Id, bits, 1, Schedule.Step);
         }
     }
 }

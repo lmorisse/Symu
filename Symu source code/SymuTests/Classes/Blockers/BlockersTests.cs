@@ -20,13 +20,12 @@ namespace SymuTests.Classes.Blockers
     [TestClass]
     public class BlockersTests
     {
-        private BlockerCollection _blockers;
+        private readonly BlockerCollection _blockers = new BlockerCollection();
 
         [TestInitialize]
         public void Initialize()
         {
             var blockerResults = new BlockerResults(false);
-            _blockers = new BlockerCollection(blockerResults);
         }
 
         [TestMethod]

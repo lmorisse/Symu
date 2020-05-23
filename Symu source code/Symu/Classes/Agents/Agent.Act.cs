@@ -31,7 +31,7 @@ namespace Symu.Classes.Agents
     {
         /// <summary>
         ///     This is the method that is called when the agent receives a message and is activated.
-        ///     When TimeStep.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
+        ///     When Schedule.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
         /// </summary>
         /// <param name="message">The message that the agent has received and should respond to</param>
         public void Act(Message message)
@@ -46,7 +46,7 @@ namespace Symu.Classes.Agents
                 // Switch message into a task in the task manager
                 var communication =
                     Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                var task = new SymuTask(TimeStep.Step, Environment.IterationResult.Blockers)
+                var task = new SymuTask(Schedule.Step)
                 {
                     Type = message.Medium.ToString(),
                     TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
@@ -102,7 +102,7 @@ namespace Symu.Classes.Agents
             // Databases
             if (HasEmail)
             {
-                Email.ForgettingProcess(TimeStep.Step);
+                Email.ForgettingProcess(Schedule.Step);
             }
 
             _newInteractionCounter = 0;
@@ -121,11 +121,11 @@ namespace Symu.Classes.Agents
                 {
                     try
                     {
-                        var task = await TaskProcessor.Receive(TimeStep.Step).ConfigureAwait(false);
+                        var task = await TaskProcessor.Receive(Schedule.Step).ConfigureAwait(false);
                         switch (task.Parent)
                         {
                             case Message message:
-                                // When TimeStep.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
+                                // When Schedule.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
                                 // Once a message (as a task) is receive it is treated as a message
                                 if (task.IsToDo)
                                 {
@@ -170,7 +170,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public virtual void PostStep()
         {
-            ForgettingModel?.FinalizeForgettingProcess(TimeStep.Step);
+            ForgettingModel?.FinalizeForgettingProcess(Schedule.Step);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Symu.Classes.Agents
         public virtual void ActEndOfDay()
         {
             SendNewInteractions();
-            TaskProcessor?.TasksManager.TasksCheck(TimeStep.Step);
+            TaskProcessor?.TasksManager.TasksCheck(Schedule.Step);
         }
 
         /// <summary>
@@ -199,20 +199,6 @@ namespace Symu.Classes.Agents
             SendToMany(agents, MessageAction.Ask, SymuYellowPages.Actor, CommunicationMediums.FaceToFace);
         }
 
-        /// <summary>
-        ///     Start a weekend, by asking new tasks if agent perform tasks on weekends
-        /// </summary>
-        public virtual void ActWeekEnd()
-        {
-            if (!Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds ||
-                TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
-            {
-                return;
-            }
-
-            GetNewTasks();
-        }
-
         public virtual void ActCadence()
         {
         }
@@ -222,13 +208,33 @@ namespace Symu.Classes.Agents
         /// </summary>
         public virtual void ActWorkingDay()
         {
-            ImpactOfBlockersOnCapacity();
-
-            if (!Cognitive.TasksAndPerformance.CanPerformTask || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
+            // update ActWeekEnd to have the same behaviour
+            if (!Cognitive.TasksAndPerformance.CanPerformTask 
+                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit
+                || Status == AgentStatus.Offline)
             {
                 return;
             }
 
+            Status = AgentStatus.Busy;
+            ImpactOfBlockersOnCapacity();
+            GetNewTasks();
+        }
+
+        /// <summary>
+        ///     Start a weekend, by asking new tasks if agent perform tasks on weekends
+        /// </summary>
+        public virtual void ActWeekEnd()
+        {
+            // update ActWorkingDay to have the same behaviour
+            if (!Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds
+                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit
+                || Status == AgentStatus.Offline)
+            {
+                return;
+            }
+
+            ImpactOfBlockersOnCapacity();
             GetNewTasks();
         }
 
@@ -255,9 +261,9 @@ namespace Symu.Classes.Agents
         {
             // Agent can be temporary isolated
             var isPerformingTask = !Cognitive.InteractionPatterns.IsIsolated();
-            return isPerformingTask && (Cognitive.TasksAndPerformance.CanPerformTask && TimeStep.IsWorkingDay ||
+            return isPerformingTask && (Cognitive.TasksAndPerformance.CanPerformTask && Schedule.IsWorkingDay ||
                                         Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
-                                        !TimeStep.IsWorkingDay);
+                                        !Schedule.IsWorkingDay);
         }
 
         /// <summary>

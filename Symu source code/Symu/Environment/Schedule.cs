@@ -16,9 +16,11 @@ using System;
 namespace Symu.Environment
 {
     /// <summary>
-    ///     TimeStep is used to manage TimeStep depending on the TimeStepType
+    ///     The Schedule is your simulation’s representation of time.
+    ///     It is a discrete event Schedule.
+    ///     Schedule is used to manage time depending on the TimeStepType
     /// </summary>
-    public class TimeStep
+    public class Schedule
     {
         public const byte ConstWeek = 7;
         public const byte ConstMonth = 30;

@@ -20,8 +20,8 @@ namespace SymuTests.Environment.TimeStep
     //Ne pas passer en static
     public class TimeStepTests
     {
-        private readonly Symu.Environment.TimeStep _timeStep =
-            new Symu.Environment.TimeStep();
+        private readonly Symu.Environment.Schedule _schedule =
+            new Symu.Environment.Schedule();
 
         [TestMethod]
         [DataRow(0)]
@@ -32,8 +32,8 @@ namespace SymuTests.Environment.TimeStep
         public void IsWorkingDayTest(int workingDay)
         {
             // Start on monday
-            _timeStep.Step = Convert.ToUInt16(workingDay);
-            Assert.IsTrue(_timeStep.IsWorkingDay);
+            _schedule.Step = Convert.ToUInt16(workingDay);
+            Assert.IsTrue(_schedule.IsWorkingDay);
         }
 
         [TestMethod]
@@ -41,9 +41,9 @@ namespace SymuTests.Environment.TimeStep
         [DataRow(6)]
         public void IsNotWorkingDayTest(int workingDay)
         {
-            _timeStep.Step = Convert.ToUInt16(workingDay);
+            _schedule.Step = Convert.ToUInt16(workingDay);
             // Start on monday
-            Assert.IsFalse(_timeStep.IsWorkingDay);
+            Assert.IsFalse(_schedule.IsWorkingDay);
         }
 
         [TestMethod]
@@ -53,8 +53,8 @@ namespace SymuTests.Environment.TimeStep
         public void IsEndOfMonthTest(int workingDay)
         {
             // Start on monday
-            _timeStep.Step = Convert.ToUInt16(workingDay);
-            Assert.IsTrue(_timeStep.IsEndOfMonth);
+            _schedule.Step = Convert.ToUInt16(workingDay);
+            Assert.IsTrue(_schedule.IsEndOfMonth);
         }
 
         [TestMethod]
@@ -63,9 +63,9 @@ namespace SymuTests.Environment.TimeStep
         [DataRow(31)]
         public void IsNotEndOfMonthTest(int workingDay)
         {
-            _timeStep.Step = Convert.ToUInt16(workingDay);
+            _schedule.Step = Convert.ToUInt16(workingDay);
             // Start on monday
-            Assert.IsFalse(_timeStep.IsEndOfMonth);
+            Assert.IsFalse(_schedule.IsEndOfMonth);
         }
 
         [TestMethod]
@@ -75,8 +75,8 @@ namespace SymuTests.Environment.TimeStep
         public void IsEndOfQuarterTest(int workingDay)
         {
             // Start on monday
-            _timeStep.Step = Convert.ToUInt16(workingDay);
-            Assert.IsTrue(_timeStep.IsEndOfQuarter);
+            _schedule.Step = Convert.ToUInt16(workingDay);
+            Assert.IsTrue(_schedule.IsEndOfQuarter);
         }
 
         [TestMethod]
@@ -85,9 +85,9 @@ namespace SymuTests.Environment.TimeStep
         [DataRow(91)]
         public void IsNotEndOfQuarterTest(int workingDay)
         {
-            _timeStep.Step = Convert.ToUInt16(workingDay);
+            _schedule.Step = Convert.ToUInt16(workingDay);
             // Start on monday
-            Assert.IsFalse(_timeStep.IsEndOfQuarter);
+            Assert.IsFalse(_schedule.IsEndOfQuarter);
         }
 
         [TestMethod]
@@ -96,8 +96,8 @@ namespace SymuTests.Environment.TimeStep
         public void IsEndOfYearTest(int workingDay)
         {
             // Start on monday
-            _timeStep.Step = Convert.ToUInt16(workingDay);
-            Assert.IsTrue(_timeStep.IsEndOfYear);
+            _schedule.Step = Convert.ToUInt16(workingDay);
+            Assert.IsTrue(_schedule.IsEndOfYear);
         }
 
         [TestMethod]
@@ -106,9 +106,9 @@ namespace SymuTests.Environment.TimeStep
         [DataRow(91)]
         public void IsNotEndOfYearTest(int workingDay)
         {
-            _timeStep.Step = Convert.ToUInt16(workingDay);
+            _schedule.Step = Convert.ToUInt16(workingDay);
             // Start on monday
-            Assert.IsFalse(_timeStep.IsEndOfYear);
+            Assert.IsFalse(_schedule.IsEndOfYear);
         }
     }
 }

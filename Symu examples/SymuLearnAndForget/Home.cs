@@ -206,7 +206,7 @@ namespace SymuLearnAndForget
         public override void Display()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.TimeStep.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
             // 1st Agent
             WriteTextSafe(lblKnowledge1,
                 _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
@@ -262,7 +262,7 @@ namespace SymuLearnAndForget
             if (_fullKnowledge == 0 &&
                 Math.Abs(_environment.Wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < Tolerance)
             {
-                _fullKnowledge = _environment.TimeStep.Step;
+                _fullKnowledge = _environment.Schedule.Step;
             }
 
             WriteTextSafe(lblFullKnowledge, _fullKnowledge.ToString(CultureInfo.InvariantCulture));

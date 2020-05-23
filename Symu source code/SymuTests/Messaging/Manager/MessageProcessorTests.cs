@@ -90,7 +90,7 @@ namespace SymuTests.Messaging.Manager
             // Not system message
             _mailbox.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
             Assert.AreEqual(1, _mailbox.NumberMessagesPerPeriod);
-            // Excedd byte.MaxValue
+            // Exceed byte.MaxValue
             _mailbox.NumberMessagesPerPeriod = byte.MaxValue;
             _mailbox.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
             Assert.AreEqual(byte.MaxValue, _mailbox.NumberMessagesPerPeriod);
