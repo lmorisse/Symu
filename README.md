@@ -2,8 +2,11 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/lmorisse/symu?style=flat-square)](https://github.com/lmorisse/Symu/releases/latest)
 [![Documentation Status](https://readthedocs.org/projects/symu/badge/?version=latest)](https://symu.readthedocs.io/en/latest/?badge=latest)
 
-``Symu`` is a C# opensource framework for organization simulation. 
-You can develop your own application to run virtual experiments with organizations and capture their dynamic behaviors, their evolutions.<br>
+``Develop your own application to run virtual experiments with organizations`` and capture their dynamic behaviors, their evolutions.<br>
+``Symu`` is a core of discrete-event multiagent simulation library in C#. It is designed to be the foundation for custom-purpose ``human-centered organization simulation``. Symu implements agnostic organizations as social groups to target the most general use cases.
+
+## Organization as complex systems
+Symu models groups and organizations as complex systems. It captures the variability in human, technological and organizational factors through heterogeneity in information processing capabilities, but also in knowledge and resources. Also, the non-linearity of the model generates complex temporal behavior due to dynamic relationships among agents.
 Symu targets agnostic organizations as social groups and does not plan to implement functionality for specific types of organizations.<br>
 
 Some useful links:
@@ -37,27 +40,32 @@ organization theory, social networks, socio-cultural environment, information di
 With our **academic program**, we will first implement models that you want to use for you.
 
 ## Getting Started
-The main project is [SymuEngine](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuEngine). This is the framework you'll use to build your own application in batch or GUI mode.
-
-The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget). They allow you to discover, understand and configure each model, in this sense it is a good entry point.
+The main project is [Symu](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/Symu). This is the framework you'll use to build your own application in batch. You can use [SymuForm](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuForm) for a GUI mode.
 
 ### Installing
 
-### Built With
+Symu works only on Windows for the moment.
+
+### Building
 
 * [Math.net](https://www.math.net/)
 
+### Running
+
+As it is a core library, you can't run Symu as is. The sample projects are interesting to understand what the framework can do. They are divided into models, for example [learning and forgetting models](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuLearnAndForget). They allow you to discover, understand and configure each model, in this sense it is a good entry point.
+You can find executables files of those examples in the [latest release](https://github.com/lmorisse/Symu/releases/latest). 
+
 ## Contributors
 
-See the list of [CONTRIBUTORs.md](CONTRIBUTORs.md) who participated in this project.
+See the list of [CONTRIBUTORS](CONTRIBUTORS.md) who participated in this project.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute and the process for contributing.
+Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how you can contribute and the process for contributing.
 
 ## Code of conduct
 
-Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on our code of conduct if you want to contribute.
+Please read [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details on our code of conduct if you want to contribute.
 
 ## Versioning
 
@@ -65,7 +73,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE) file for details
 
 ## Integration
 
