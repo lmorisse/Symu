@@ -22,7 +22,7 @@ Organization simulation
 
 Symu models groups and organizations as complex systems. It captures the variability in human, technological and organizational factors through heterogeneity in information processing capabilities, but also in knowledge and resources. Also, the non-linearity of the model generates complex temporal behavior due to dynamic relationships among agents.
 
-Symu implements agnostic organizations as social groups to target the most general use cases.
+Symu implements agnostic organizations as social groups to target the most general use cases. Unlike other simulators, symu has cognitive models already implemented and completely configurable to adapt it to your scenarios. It also has advanced tasking and messaging management.
 
 How it works
 ============
