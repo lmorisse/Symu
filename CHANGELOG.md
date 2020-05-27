@@ -3,7 +3,7 @@
 ## Unreleased
 
 ## 0.6.0 [☰](https://github.com/lmorisse/symu/compare/v0.6.0..v0.5.0)
-* Add MurphyIncompleteInformation by [lmorisse]
+* Add MurphyIncompleteInformation by [https://github.com/lmorisse]
 * Renaming SimulationEngine (SymuEngine), TimeStep (Schedule) by [@lmorisse]
 * Refactoring Murphies by [@lmorisse]
 * Add Agent.TimeSpent by [@lmorisse]
