@@ -16,6 +16,7 @@ using System.Threading;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
+using Symu.Common;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
@@ -48,16 +49,15 @@ namespace Symu.Environment
         public IterationResult IterationResult { get; set; }
 
         /// <summary>
-        ///     State of the environment
-        /// </summary>
-        public EnvironmentState State { get; } = new EnvironmentState();
-
-        /// <summary>
         ///     Use to slow down or speed up the symu
         ///     Delay is in milliseconds
         /// </summary>
         /// <example>Delay = 1000</example>
         public int Delay { get; set; }
+        /// <summary>
+        /// Set the debug mode for additional information
+        /// </summary>
+        public bool Debug { get; set; } = true;
 
         /// <summary>
         ///     Manage interaction steps
@@ -83,9 +83,7 @@ namespace Symu.Environment
         /// </summary>
         public void WaitingForStart()
         {
-            while (!State.Started)
-            {
-            }
+            while(WhitePages.AllAgents().ToList().Exists(a => a.State != AgentState.Started)){}
         }
 
         public void SetRandomLevel(int value)
@@ -96,7 +94,7 @@ namespace Symu.Environment
         public void SetDebug(bool value)
         {
             Messages.Debug = value;
-            State.Debug = value;
+            Debug = value;
         }
 
         public void SetDelay(int value)
@@ -143,7 +141,6 @@ namespace Symu.Environment
         public virtual void InitializeIteration()
         {
             Messages.Clear();
-            State.Clear();
             WhitePages.Clear();
             WhitePages.Network.NetworkKnowledges.Model =
                 Organization.Models.Generator;
@@ -196,7 +193,6 @@ namespace Symu.Environment
             }
 
             WhitePages.Agents.Add(agent);
-            State.EnqueueStartingAgent(agent.Id);
         }
 
         /// <summary>
@@ -279,10 +275,6 @@ namespace Symu.Environment
         public void NextStep()
         {
             SendDelayedMessages();
-            if (Schedule.Step == 0)
-            {
-                SetInteractionSphere(true);
-            }
 
             var agents = WhitePages.AllAgents().Shuffle();
             if (Schedule.Type <= TimeStepType.Daily)

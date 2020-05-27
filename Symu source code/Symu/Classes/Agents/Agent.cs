@@ -195,7 +195,7 @@ namespace Symu.Classes.Agents
             }
 
             var agentIds = Environment.WhitePages.Network.InteractionSphere.GetAgentIdsForNewInteractions(Id,
-                Cognitive.InteractionPatterns.NextInteractionStrategy(), Cognitive.InteractionPatterns).ToList();
+                Cognitive.InteractionPatterns.NextInteractionStrategy()).ToList();
             return FilterAgentIdsToInteract(agentIds);
         }
 
@@ -289,7 +289,6 @@ namespace Symu.Classes.Agents
             {
                 BeforeStart();
                 State = AgentState.Started;
-                Environment.State.DequeueStartedAgent();
                 while (true)
                 {
                     var message = await mp.Receive().ConfigureAwait(false);
@@ -356,7 +355,7 @@ namespace Symu.Classes.Agents
                     if (Status == AgentStatus.Offline)
                     {
                         // message is Missed
-                        MessageProcessor.AddMissedMessage(message, Environment.State.Debug);
+                        MessageProcessor.AddMissedMessage(message, Environment.Debug);
                     }
                     else
                     {
@@ -417,12 +416,12 @@ namespace Symu.Classes.Agents
                 }
                 else
                 {
-                    MessageProcessor.AddNotAcceptedMessages(message, Environment.State.Debug);
+                    MessageProcessor.AddNotAcceptedMessages(message, Environment.Debug);
                 }
             }
             else
             {
-                MessageProcessor.AddMissedMessage(message, Environment.State.Debug);
+                MessageProcessor.AddMissedMessage(message, Environment.Debug);
             }
         }
 

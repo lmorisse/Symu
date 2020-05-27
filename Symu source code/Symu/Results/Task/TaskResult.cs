@@ -22,9 +22,14 @@ namespace Symu.Results.Task
         public int InProgress { get; set; }
 
         /// <summary>
-        ///     Number of tasks in AverageDone
+        ///     Number of tasks in Done
         /// </summary>
         public int Done { get; set; }
+
+        /// <summary>
+        ///     Number of tasks in Cancelled
+        /// </summary>
+        public int Cancelled { get; set; }
 
         /// <summary>
         ///     Number of tasks
@@ -35,5 +40,9 @@ namespace Symu.Results.Task
         ///     Total weight of tasks done
         /// </summary>
         public float WeightDone { get; set; }
+        /// <summary>
+        ///     Total impact of incorrectness
+        /// </summary>
+        public int Incorrectness { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace SymuTests.Classes.Task.Manager
         public void PushInProgressTest()
         {
             _tasksManager.AddToDo(_task);
-            _tasksManager.PushInProgress(_task);
+            _tasksManager.SetInProgress(_task);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
@@ -73,7 +73,7 @@ namespace SymuTests.Classes.Task.Manager
         {
             _task.WorkToDo = 1;
             _tasksManager.AddInProgress(_task);
-            _tasksManager.PushDone(_task);
+            _tasksManager.SetDone(_task);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(1, _tasksManager.Done.Count);
@@ -109,9 +109,9 @@ namespace SymuTests.Classes.Task.Manager
         {
             _tasksManager.AddToDo(_task);
             Assert.IsFalse(_tasksManager.IsDone(_task));
-            _tasksManager.PushInProgress(_task);
+            _tasksManager.SetInProgress(_task);
             Assert.IsFalse(_tasksManager.IsDone(_task));
-            _tasksManager.PushDone(_task);
+            _tasksManager.SetDone(_task);
             Assert.IsTrue(_tasksManager.IsDone(_task));
         }
 
@@ -120,9 +120,9 @@ namespace SymuTests.Classes.Task.Manager
         {
             _tasksManager.AddToDo(_task);
             Assert.IsFalse(_tasksManager.IsInProgress(_task));
-            _tasksManager.PushInProgress(_task);
+            _tasksManager.SetInProgress(_task);
             Assert.IsTrue(_tasksManager.IsInProgress(_task));
-            _tasksManager.PushDone(_task);
+            _tasksManager.SetDone(_task);
             Assert.IsFalse(_tasksManager.IsInProgress(_task));
         }
 
@@ -180,9 +180,9 @@ namespace SymuTests.Classes.Task.Manager
             _task.Weight = 1;
             _tasksManager.AddToDo(_task);
             Assert.AreEqual(0, _tasksManager.GetRaf(false));
-            _tasksManager.PushInProgress(_task);
+            _tasksManager.SetInProgress(_task);
             Assert.AreEqual(1, _tasksManager.GetRaf(false));
-            _tasksManager.PushDone(_task);
+            _tasksManager.SetDone(_task);
             Assert.AreEqual(0, _tasksManager.GetRaf(false));
         }
 
@@ -203,7 +203,7 @@ namespace SymuTests.Classes.Task.Manager
         public void ClearDoneTest()
         {
             _tasksManager.AddInProgress(_task);
-            _tasksManager.PushDone(_task);
+            _tasksManager.SetDone(_task);
             _tasksManager.ClearDone();
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }

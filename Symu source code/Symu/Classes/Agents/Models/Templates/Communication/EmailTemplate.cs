@@ -35,6 +35,7 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
             Cognitive.InternalCharacteristics.CanLearn = true;
             Cognitive.InternalCharacteristics.CanForget = false;
             Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = false;
+            Cognitive.TasksAndPerformance.LearningRate = 1;
         }
     }
 }

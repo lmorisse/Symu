@@ -60,6 +60,22 @@ namespace Symu.Classes.Task.Manager
         ///     Tasks done
         /// </summary>
         public List<SymuTask> Done { get; } = new List<SymuTask>();
+        /// <summary>
+        ///     Tasks cancelled
+        /// </summary>
+        public List<SymuTask> Cancelled { get; } = new List<SymuTask>();
+
+        public List<SymuTask> AllTasks {
+            get
+            {
+                var tasks = new List<SymuTask>();
+                tasks.AddRange(ToDo);
+                tasks.AddRange(InProgress);
+                tasks.AddRange(Done);
+                tasks.AddRange(Cancelled);
+                return tasks;
+            }
+    }
 
         /// <summary>
         ///     Manage the limits on the tasks
@@ -123,7 +139,7 @@ namespace Symu.Classes.Task.Manager
         ///     Push the task in progress
         /// </summary>
         /// <param name="task"></param>
-        public void PushInProgress(SymuTask task)
+        public void SetInProgress(SymuTask task)
         {
             if (task is null)
             {
@@ -139,7 +155,7 @@ namespace Symu.Classes.Task.Manager
         ///     Worker has finished a task, he push it to done in the TaskManager
         /// </summary>
         /// <param name="task"></param>
-        public void PushDone(SymuTask task)
+        public void SetDone(SymuTask task)
         {
             if (task is null)
             {
@@ -150,6 +166,23 @@ namespace Symu.Classes.Task.Manager
             InProgress.Remove(task);
             Done.Add(task);
             TotalWeightDone += task.Weight;
+        }
+        /// <summary>
+        /// Cancel a task : 
+        /// remove a task from either To do or in progress
+        /// </summary>
+        /// <param name="task"></param>
+        public void Cancel(SymuTask task)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            ToDo.Remove(task);
+            InProgress.Remove(task);
+            Cancelled.Add(task);
+            task.Cancel();
         }
 
         /// <summary>
@@ -207,13 +240,13 @@ namespace Symu.Classes.Task.Manager
         /// </summary>
         public void SetAllTasksDone()
         {
-            ToDo.ForEach(PushDone);
+            ToDo.ForEach(SetDone);
             ToDo.Clear();
             while (InProgress.Any())
             {
                 var task = InProgress.First();
                 task.Blockers.Clear();
-                PushDone(task);
+                SetDone(task);
             }
         }
 
@@ -291,7 +324,7 @@ namespace Symu.Classes.Task.Manager
             while (ToDo.Any() && !HasReachedSimultaneousMaximumLimit)
             {
                 var task = PrioritizeNextTask(ToDo);
-                PushInProgress(task);
+                SetInProgress(task);
             }
 
             // Then check tasks already in progress but non blocked today
@@ -303,7 +336,7 @@ namespace Symu.Classes.Task.Manager
             if (ToDo.Exists(t => t.Type == medium.ToString()))
             {
                 var task = ToDo.Find(t => t.Type == medium.ToString());
-                PushInProgress(task);
+                SetInProgress(task);
                 {
                     symuTask = task;
                     return true;
@@ -453,5 +486,6 @@ namespace Symu.Classes.Task.Manager
         }
 
         #endregion
+
     }
 }

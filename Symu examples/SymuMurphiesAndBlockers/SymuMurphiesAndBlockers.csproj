@@ -77,6 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ExampleEnvironment.cs" />
+    <Compile Include="Classes\GroupAgent.cs" />
+    <Compile Include="Classes\InternetAccessAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
     <Compile Include="Home.cs">
       <SubType>Form</SubType>

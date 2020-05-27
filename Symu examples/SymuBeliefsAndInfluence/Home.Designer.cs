@@ -82,6 +82,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
@@ -105,6 +106,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.TasksCancelled = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -143,7 +146,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // Schedule
+            // TimeStep
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -154,6 +157,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.TasksCancelled);
+            this.groupBox3.Controls.Add(this.label24);
             this.groupBox3.Controls.Add(this.label29);
             this.groupBox3.Controls.Add(this.label28);
             this.groupBox3.Controls.Add(this.label22);
@@ -171,7 +176,7 @@
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Location = new System.Drawing.Point(32, 128);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(365, 172);
+            this.groupBox3.Size = new System.Drawing.Size(365, 209);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Beliefs impacts ";
@@ -391,7 +396,7 @@
             this.groupBox5.Controls.Add(this.groupBox3);
             this.groupBox5.Location = new System.Drawing.Point(857, 203);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(423, 489);
+            this.groupBox5.Size = new System.Drawing.Size(423, 549);
             this.groupBox5.TabIndex = 20;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Run";
@@ -405,7 +410,7 @@
             this.groupBox4.Controls.Add(this.groupBox6);
             this.groupBox4.Location = new System.Drawing.Point(4, 203);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(847, 489);
+            this.groupBox4.Size = new System.Drawing.Size(847, 549);
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Settings";
@@ -511,7 +516,7 @@
             this.groupBox1.Controls.Add(this.MinimumBeliefToSendPerBit);
             this.groupBox1.Location = new System.Drawing.Point(438, 213);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(374, 259);
+            this.groupBox1.Size = new System.Drawing.Size(374, 330);
             this.groupBox1.TabIndex = 134;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Agent influencers";
@@ -653,6 +658,7 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.label19);
             this.groupBox9.Controls.Add(this.textBox1);
             this.groupBox9.Controls.Add(this.label33);
             this.groupBox9.Controls.Add(this.label32);
@@ -671,14 +677,24 @@
             this.groupBox9.Controls.Add(this.label21);
             this.groupBox9.Location = new System.Drawing.Point(29, 213);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(374, 259);
+            this.groupBox9.Size = new System.Drawing.Size(374, 330);
             this.groupBox9.TabIndex = 133;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Agent workers";
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(6, 259);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(219, 17);
+            this.label19.TabIndex = 153;
+            this.label19.Text = "Parameters that cancel tasks";
+            // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(293, 172);
+            this.textBox1.Location = new System.Drawing.Point(294, 176);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(54, 22);
             this.textBox1.TabIndex = 152;
@@ -687,24 +703,25 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(73, 174);
+            this.label33.Location = new System.Drawing.Point(46, 179);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(180, 17);
+            this.label33.Size = new System.Drawing.Size(159, 17);
             this.label33.TabIndex = 151;
-            this.label33.Text = "RateOfUnavailability for reacting [0;1]";
+            this.label33.Text = "Reacting threshold [0;1]";
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(31, 128);
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.Location = new System.Drawing.Point(6, 118);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(183, 17);
+            this.label32.Size = new System.Drawing.Size(210, 17);
             this.label32.TabIndex = 150;
             this.label32.Text = "Parameters that block tasks";
             // 
             // RiskAversion
             // 
-            this.RiskAversion.Location = new System.Drawing.Point(293, 196);
+            this.RiskAversion.Location = new System.Drawing.Point(285, 288);
             this.RiskAversion.Name = "RiskAversion";
             this.RiskAversion.Size = new System.Drawing.Size(54, 22);
             this.RiskAversion.TabIndex = 149;
@@ -714,7 +731,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(73, 198);
+            this.label31.Location = new System.Drawing.Point(37, 291);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(188, 17);
             this.label31.TabIndex = 148;
@@ -723,7 +740,7 @@
             // BeliefWeight
             // 
             this.BeliefWeight.FormattingEnabled = true;
-            this.BeliefWeight.Location = new System.Drawing.Point(209, 225);
+            this.BeliefWeight.Location = new System.Drawing.Point(209, 207);
             this.BeliefWeight.Name = "BeliefWeight";
             this.BeliefWeight.Size = new System.Drawing.Size(139, 24);
             this.BeliefWeight.TabIndex = 147;
@@ -731,7 +748,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(30, 228);
+            this.label27.Location = new System.Drawing.Point(30, 210);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(167, 17);
             this.label27.TabIndex = 146;
@@ -749,7 +766,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(141, 96);
+            this.label20.Location = new System.Drawing.Point(141, 88);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(34, 17);
             this.label20.TabIndex = 141;
@@ -757,7 +774,7 @@
             // 
             // InfluenceabilityMax
             // 
-            this.InfluenceabilityMax.Location = new System.Drawing.Point(295, 93);
+            this.InfluenceabilityMax.Location = new System.Drawing.Point(295, 85);
             this.InfluenceabilityMax.Name = "InfluenceabilityMax";
             this.InfluenceabilityMax.Size = new System.Drawing.Size(53, 22);
             this.InfluenceabilityMax.TabIndex = 139;
@@ -767,7 +784,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(252, 96);
+            this.label10.Location = new System.Drawing.Point(252, 88);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(37, 17);
             this.label10.TabIndex = 138;
@@ -785,7 +802,7 @@
             // 
             // InfluenceabilityMin
             // 
-            this.InfluenceabilityMin.Location = new System.Drawing.Point(182, 93);
+            this.InfluenceabilityMin.Location = new System.Drawing.Point(182, 85);
             this.InfluenceabilityMin.Name = "InfluenceabilityMin";
             this.InfluenceabilityMin.Size = new System.Drawing.Size(53, 22);
             this.InfluenceabilityMin.TabIndex = 137;
@@ -805,7 +822,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(31, 96);
+            this.label11.Location = new System.Drawing.Point(31, 88);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(101, 17);
             this.label11.TabIndex = 136;
@@ -814,7 +831,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(74, 150);
+            this.label21.Location = new System.Drawing.Point(46, 151);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(139, 17);
             this.label21.TabIndex = 47;
@@ -890,16 +907,35 @@
             this.label7.TabIndex = 42;
             this.label7.Text = "Number of steps";
             // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(29, 152);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(138, 21);
+            this.label24.TabIndex = 32;
+            this.label24.Text = "Tasks cancelled";
+            // 
+            // TasksCancelled
+            // 
+            this.TasksCancelled.AutoSize = true;
+            this.TasksCancelled.Location = new System.Drawing.Point(179, 152);
+            this.TasksCancelled.Name = "TasksCancelled";
+            this.TasksCancelled.Size = new System.Drawing.Size(16, 17);
+            this.TasksCancelled.TabIndex = 33;
+            this.TasksCancelled.Text = "0";
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1296, 708);
+            this.ClientSize = new System.Drawing.Size(1296, 764);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Home";
+            this.Text = "Symu : beliefs and influence models";
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -917,83 +953,87 @@
 
         }
 
-        #endregion
-
+        private System.Windows.Forms.CheckBox BeliefsModelOn;
+        private System.Windows.Forms.TextBox BeliefsRateOfAgentsOn;
+        private System.Windows.Forms.ComboBox BeliefWeight;
+        private System.Windows.Forms.Button btnPause;
+        private System.Windows.Forms.Button btnResume;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label TimeStep;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbWorkers;
-        private System.Windows.Forms.Button btnResume;
-        private System.Windows.Forms.Button btnPause;
-        private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.TextBox tbSteps;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label Triads;
-        private System.Windows.Forms.Label TotalBeliefs;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label TasksDone;
         private System.Windows.Forms.CheckBox CanReceiveBeliefs;
         private System.Windows.Forms.CheckBox CanSendBeliefs;
-        private System.Windows.Forms.CheckBox HasInitialBeliefs;
-        private System.Windows.Forms.CheckBox HasBeliefs;
-        private System.Windows.Forms.TextBox InfluentialnessMax;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox InfluentialnessMin;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox InfluenceabilityMax;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox InfluenceabilityMin;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox tbKnowledge;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox MinimumBeliefToSendPerBit;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox MaximumNumberOfBitsOfBeliefToSend;
-        private System.Windows.Forms.TextBox MinimumNumberOfBitsOfBeliefToSend;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox tbInfluencers;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox MandatoryRatio;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label InitialTasksDone;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label InitialTriads;
-        private System.Windows.Forms.Label InitialTotalBeliefs;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.ComboBox InfluencerBeliefLevel;
-        private System.Windows.Forms.ComboBox BeliefWeight;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.TextBox InfluenceRateOfAgentsOn;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.CheckBox HasBeliefs;
+        private System.Windows.Forms.CheckBox HasInitialBeliefs;
+        private System.Windows.Forms.TextBox InfluenceabilityMax;
+        private System.Windows.Forms.TextBox InfluenceabilityMin;
         private System.Windows.Forms.CheckBox InfluenceModelOn;
-        private System.Windows.Forms.TextBox RiskAversion;
+        private System.Windows.Forms.TextBox InfluenceRateOfAgentsOn;
+        private System.Windows.Forms.ComboBox InfluencerBeliefLevel;
+        private System.Windows.Forms.TextBox InfluentialnessMax;
+        private System.Windows.Forms.TextBox InfluentialnessMin;
+        private System.Windows.Forms.Label InitialTasksDone;
+        private System.Windows.Forms.Label InitialTotalBeliefs;
+        private System.Windows.Forms.Label InitialTriads;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.TextBox BeliefsRateOfAgentsOn;
-        private System.Windows.Forms.CheckBox BeliefsModelOn;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox MandatoryRatio;
+        private System.Windows.Forms.TextBox MaximumNumberOfBitsOfBeliefToSend;
+        private System.Windows.Forms.TextBox MinimumBeliefToSendPerBit;
+        private System.Windows.Forms.TextBox MinimumNumberOfBitsOfBeliefToSend;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.TextBox RiskAversion;
+        private System.Windows.Forms.Label TasksDone;
+        private System.Windows.Forms.TextBox tbInfluencers;
+        private System.Windows.Forms.TextBox tbKnowledge;
+        private System.Windows.Forms.TextBox tbSteps;
+        private System.Windows.Forms.TextBox tbWorkers;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label TimeStep;
+        private System.Windows.Forms.Label TotalBeliefs;
+        private System.Windows.Forms.Label Triads;
+
+        #endregion
+
+        private System.Windows.Forms.Label TasksCancelled;
+        private System.Windows.Forms.Label label24;
     }
 }

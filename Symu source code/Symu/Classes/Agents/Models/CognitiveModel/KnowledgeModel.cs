@@ -166,7 +166,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             }
 
             // If can't send knowledge or no knowledge asked
-            if (!On || !_messageContent.CanSendKnowledge || knowledgeId == 0 ||
+            if (!On || !_messageContent.CanSendKnowledge || //knowledgeId == 0 ||
                 Expertise == null)
             {
                 return null;

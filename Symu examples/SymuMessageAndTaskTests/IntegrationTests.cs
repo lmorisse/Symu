@@ -64,6 +64,7 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void TaskModelOnTest()
         {
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _symu.Process();
             var total = _environment.IterationResult.Tasks.Total;

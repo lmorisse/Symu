@@ -367,7 +367,7 @@ namespace Symu.Repository.Networks.Sphere
                 throw new ArgumentNullException(nameof(interactionPatterns));
             }
 
-            if (!_model.On || !_agentIndex.ContainsKey(agentId))
+            if (!_model.On || _agentIndex is null || !_agentIndex.ContainsKey(agentId))
             {
                 return new List<AgentId>();
             }
@@ -479,16 +479,14 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
-        /// <param name="interactionPatterns"></param>
         /// <returns></returns>
         public IEnumerable<AgentId> GetAgentIdsForNewInteractions(AgentId agentId,
-            InteractionStrategy interactionStrategy, InteractionPatterns interactionPatterns)
+            InteractionStrategy interactionStrategy)
         {
-            if (interactionPatterns == null)
+            if (_agentIndex is null)
             {
-                throw new ArgumentNullException(nameof(interactionPatterns));
+                throw new NullReferenceException("Sphere is not Setted"); 
             }
-
             if (!_model.On || !_model.SphereUpdateOverTime || !_agentIndex.ContainsKey(agentId))
             {
                 return new List<AgentId>();

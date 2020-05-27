@@ -15,6 +15,7 @@ namespace Symu.Common
         Micro = 1,
         Minor = 2,
         Major = 3,
-        Critical = 4
+        Critical = 4,
+        Blocked = 5
     }
 }

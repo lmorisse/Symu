@@ -40,5 +40,9 @@ namespace Symu.Results.Blocker
         ///     Blocker is resolved by searching in agent's databases
         /// </summary>
         public int Search { get; set; }
+        /// <summary>
+        ///     Blocker is resolved by cancelling the task
+        /// </summary>
+        public int Cancelled { get; set; }
     }
 }

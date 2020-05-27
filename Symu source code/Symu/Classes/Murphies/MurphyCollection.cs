@@ -32,6 +32,7 @@ namespace Symu.Classes.Murphies
     {
         public MurphyCollection()
         {
+            Add(IncompleteInformation);
             Add(IncompleteKnowledge);
             Add(IncompleteBelief);
             Add(UnAvailability);
@@ -46,6 +47,8 @@ namespace Symu.Classes.Murphies
         public MurphyIncompleteKnowledge IncompleteKnowledge { get; } = new MurphyIncompleteKnowledge();
 
         public MurphyIncompleteBelief IncompleteBelief { get; } = new MurphyIncompleteBelief();
+
+        public MurphyIncompleteInformation IncompleteInformation { get; } = new MurphyIncompleteInformation();
 
         public List<Murphy> Murphies { get; } = new List<Murphy>();
 

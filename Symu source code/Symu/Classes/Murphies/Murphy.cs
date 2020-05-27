@@ -30,5 +30,6 @@ namespace Symu.Classes.Murphies
         public const int IncompleteKnowledge = 1;
         public const int Unavailability = 2;
         public const int IncompleteBelief = 3;
+        public const int IncompleteInformation = 4;
     }
 }

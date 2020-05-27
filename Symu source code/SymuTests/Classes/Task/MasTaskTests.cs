@@ -26,7 +26,6 @@ namespace SymuTests.Classes.Task
         [TestInitialize]
         public void Initialize()
         {
-            var blockerResults = new BlockerResults(false);
             _task = new SymuTask(0);
         }
 
@@ -123,14 +122,14 @@ namespace SymuTests.Classes.Task
         ///     Weight = 0 by default, tasks is done by default
         /// </summary>
         [TestMethod]
-        public void IsNotStartedTest0()
+        public void IsToDoTest0()
         {
             Assert.IsTrue(_task.IsToDo);
             Assert.IsTrue(_task.IsNotDone);
         }
 
         [TestMethod]
-        public void IsNotStartedTest()
+        public void IsToDoTest()
         {
             _task.Weight = 1;
             Assert.IsTrue(_task.IsToDo);
@@ -140,7 +139,7 @@ namespace SymuTests.Classes.Task
         ///     Blocked > 0
         /// </summary>
         [TestMethod]
-        public void IsNotStartedTest1()
+        public void IsToDoTest1()
         {
             _task.Blockers.Add(1, 0);
             Assert.IsFalse(_task.IsToDo);
@@ -150,7 +149,7 @@ namespace SymuTests.Classes.Task
         ///     Progress > 0
         /// </summary>
         [TestMethod]
-        public void IsNotStartedTest2()
+        public void IsToDoTest2()
         {
             _task.Weight = 1;
             _task.WorkToDo = 0.5F;
@@ -162,7 +161,7 @@ namespace SymuTests.Classes.Task
         ///     Assigned task
         /// </summary>
         [TestMethod]
-        public void IsNotStartedTest3()
+        public void IsToDoTest3()
         {
             _task.Assigned = new AgentId(1, 1);
             Assert.IsFalse(_task.IsToDo);
@@ -177,6 +176,16 @@ namespace SymuTests.Classes.Task
             Assert.IsFalse(_task.IsAssigned);
             _task.Assigned = new AgentId(1, 1);
             Assert.IsTrue(_task.IsAssigned);
+        }
+
+        [TestMethod]
+        public void HasBeenCancelledBy()
+        {
+            var agentId = new AgentId(1,1);
+            _task.Assigned = agentId;
+            Assert.IsFalse(_task.IsCancelledBy(agentId));
+            _task.Cancel();
+            Assert.IsTrue(_task.IsCancelledBy(agentId));
         }
     }
 }

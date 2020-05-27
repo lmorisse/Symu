@@ -47,8 +47,8 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void NullCheckTest()
         {
             byte[] taskKnowledge = { };
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(null, out _, _belief1, 1));
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(taskKnowledge, out _, null, 1));
+            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(null, out _, _belief1, 1, true));
+            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(taskKnowledge, out _, null, 1, true));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void NotInitializedCheckTest()
         {
             byte[] taskKnowledge = { };
-            Assert.AreEqual(0, _agentBelief1.Check(taskKnowledge, out _, _belief1, 1));
+            Assert.AreEqual(0, _agentBelief1.Check(taskKnowledge, out _, _belief1, 1, true));
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             byte[] taskKnowledge = { };
             _network.InitializeAgentBelief(_agentBelief0, true);
-            Assert.AreEqual(0, _agentBelief0.Check(taskKnowledge, out _, _belief0, 1));
+            Assert.AreEqual(0, _agentBelief0.Check(taskKnowledge, out _, _belief0, 1, true));
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             byte[] taskKnowledge = {0};
             _network.InitializeAgentBelief(_agentBelief1, true);
-            var t = _agentBelief1.Check(taskKnowledge, out _, _belief1, 1);
+            var t = _agentBelief1.Check(taskKnowledge, out _, _belief1, 1, true);
             Assert.AreEqual(0, t);
         }
 
@@ -91,7 +91,7 @@ namespace SymuTests.Repository.Networks.Beliefs
             _belief1.Weights.SetBit(0, 1);
             _network.InitializeAgentBelief(_agentBelief1, true);
             _agentBelief1.BeliefBits.SetBit(0, 1);
-            var t = _agentBelief1.Check(taskIndexes, out var index, _belief1, 0);
+            var t = _agentBelief1.Check(taskIndexes, out var index, _belief1, 0, true);
             Assert.AreEqual(1, t);
             Assert.AreEqual(0, index);
         }

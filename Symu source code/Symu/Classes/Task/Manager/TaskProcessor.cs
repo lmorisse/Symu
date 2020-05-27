@@ -42,7 +42,7 @@ namespace Symu.Classes.Task.Manager
         #endregion
 
         /// <summary>
-        ///     EventHandler triggered after the event SetTaskDone
+        ///     EventHandler triggered after the event SetDone
         /// </summary>
         public event EventHandler<TaskEventArgs> OnAfterSetTaskDone;
 
@@ -50,6 +50,11 @@ namespace Symu.Classes.Task.Manager
         ///     EventHandler triggered after the event SetTaskInProgress
         /// </summary>
         public event EventHandler<TaskEventArgs> OnAfterSetTaskInProgress;
+
+        /// <summary>
+        ///     EventHandler triggered after the event CancelTask
+        /// </summary>
+        public event EventHandler<TaskEventArgs> OnAfterCancelTask;
 
         /// <summary>
         ///     EventHandler triggered after the event OnPrioritizeTasks
@@ -66,30 +71,24 @@ namespace Symu.Classes.Task.Manager
             TasksManager.Post(task);
         }
 
-        public void Post(IEnumerable<SymuTask> tasks)
-        {
-            if (tasks is null)
-            {
-                throw new ArgumentNullException(nameof(tasks));
-            }
-
-            foreach (var task in tasks)
-            {
-                TasksManager.Post(task);
-            }
-        }
-
         public Task<SymuTask> Receive(ushort step)
         {
             return TasksManager.Receive(step);
         }
 
-        public void PushDone(SymuTask task)
+        /// <summary>
+        /// Set a task done in TasksManager
+        /// </summary>
+        public void SetTaskDone(SymuTask task)
         {
-            TasksManager.PushDone(task);
+            TasksManager.SetDone(task);
             OnAfterSetTaskDone?.Invoke(this, new TaskEventArgs(task));
         }
-
+        /// <summary>
+        /// Set a task in Progress in TasksManager
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AfterSetTaskInProgress(object sender, TaskEventArgs e)
         {
             OnAfterSetTaskInProgress?.Invoke(this, new TaskEventArgs(e.Task));
@@ -98,6 +97,15 @@ namespace Symu.Classes.Task.Manager
         private void PrioritizeTasks(object sender, TasksEventArgs e)
         {
             OnPrioritizeTasks?.Invoke(this, new TasksEventArgs(e.Tasks));
+        }
+        /// <summary>
+        /// Cancel a task in the TasksManager
+        /// </summary>
+        /// <param name="task"></param>
+        public void Cancel(SymuTask task)
+        {
+            TasksManager.Cancel(task);
+            OnAfterCancelTask?.Invoke(this, new TaskEventArgs(task));
         }
     }
 }

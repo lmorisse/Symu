@@ -324,6 +324,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         ///     will never be able to make the corresponding decision.
         ///     RiskAversionThreshold == 0, full risk aversion
         ///     RiskAversionThreshold == 1, no risk aversion
+        /// 
+        ///     RiskAversionThreshold should be > Environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting
         ///     Range [0;1]
         /// </summary>
         public float RiskAversionThreshold

@@ -178,6 +178,7 @@ namespace Symu.Engine
             Iterations.UpdateIteration(_scenarii);
             Environment.Start();
             Environment.WaitingForStart();
+            Environment.SetInteractionSphere(true);
             State = AgentState.Started;
         }
 
@@ -193,20 +194,6 @@ namespace Symu.Engine
             Environment.InitializeIteration();
             // SetScenarii should stay after initialize
             SetScenariiAndTimeStep();
-        }
-
-        protected void SetScenariiAndTimeStep()
-        {
-            ushort step0 = 0;
-            foreach (var scenario in _scenarii.Where(sc => sc.IsActive))
-            {
-                var clone = scenario.Clone();
-                clone.SetUp();
-                // scenarii could have different Day0 (>0)
-                step0 = step0 == 0 ? clone.Day0 : Math.Min(step0, clone.Day0);
-            }
-
-            Environment.Schedule.Step = step0;
         }
 
         /// <summary>
@@ -228,6 +215,20 @@ namespace Symu.Engine
             InitializeIteration();
             environment.Start();
             environment.PreStep();
+        }
+
+        protected void SetScenariiAndTimeStep()
+        {
+            ushort step0 = 0;
+            foreach (var scenario in _scenarii.Where(sc => sc.IsActive))
+            {
+                var clone = scenario.Clone();
+                clone.SetUp();
+                // scenarii could have different Day0 (>0)
+                step0 = step0 == 0 ? clone.Day0 : Math.Min(step0, clone.Day0);
+            }
+
+            Environment.Schedule.Step = step0;
         }
         #endregion
 

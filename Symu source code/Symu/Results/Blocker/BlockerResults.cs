@@ -26,9 +26,9 @@ namespace Symu.Results.Blocker
     public class BlockerResults
     {
         /// <summary>
-        ///     If set to true, blockerResults will be filled with value
+        ///     If set to true, blockerResults will be filled with value and stored during the simulation
         /// </summary>
-        private readonly bool _followBlockers;
+        public bool On { get; set; }
 
         /// <summary>
         ///     Key => step
@@ -37,44 +37,44 @@ namespace Symu.Results.Blocker
         private readonly ConcurrentDictionary<ushort, BlockerResult> _results =
             new ConcurrentDictionary<ushort, BlockerResult>();
 
-        public BlockerResults(bool followBlockers)
-        {
-            _followBlockers = followBlockers;
-        }
-
         /// <summary>
-        ///     Total blockers done during the symu
+        ///     Total blockers done during the simulation
         /// </summary>
-        public int TotalBlockersDone => _results.Values.Any() ? _results.Values.Sum(x => x.Done) : 0;
+        public int TotalBlockersDone => _results.Values.Any() ? _results.Values.Last().Done : 0;
 
         /// <summary>
-        ///     Total blockers done during the symu
+        ///     Total blockers done during the simulation
         /// </summary>
         public int BlockersStillInProgress => _results.Values.Any() ? _results.Values.Last().InProgress : 0;
 
         /// <summary>
-        ///     Total blockers resolved by Internal Help during the symu
+        ///     Total blockers cancelled the task during the simulation
         /// </summary>
-        public int TotalInternalHelp => _results.Values.Any() ? _results.Values.Sum(x => x.InternalHelp) : 0;
+        public int TotalCancelled => _results.Values.Any() ? _results.Values.Last().Cancelled: 0;
 
         /// <summary>
-        ///     Total blockers resolved by External Help during the symu
+        ///     Total blockers resolved by Internal Help during the simulation
         /// </summary>
-        public int TotalExternalHelp => _results.Values.Any() ? _results.Values.Sum(x => x.ExternalHelp) : 0;
+        public int TotalInternalHelp => _results.Values.Any() ? _results.Values.Last().InternalHelp : 0;
 
         /// <summary>
-        ///     Total blockers resolved by guessing during the symu
+        ///     Total blockers resolved by External Help during the simulation
         /// </summary>
-        public int TotalGuesses => _results.Values.Any() ? _results.Values.Sum(x => x.Guess) : 0;
+        public int TotalExternalHelp => _results.Values.Any() ? _results.Values.Last().ExternalHelp : 0;
 
         /// <summary>
-        ///     Total blockers resolved by searching during the symu
+        ///     Total blockers resolved by guessing during the simulation
         /// </summary>
-        public int TotalSearches => _results.Values.Any() ? _results.Values.Sum(x => x.Search) : 0;
+        public int TotalGuesses => _results.Values.Any() ? _results.Values.Last().Guess : 0;
+
+        /// <summary>
+        ///     Total blockers cancelled by the agent during the simulation
+        /// </summary>
+        public int TotalSearches => _results.Values.Any() ? _results.Values.Last().Search : 0;
 
         public void SetResults(SymuEnvironment environment)
         {
-            if (!_followBlockers)
+            if (!On)
             {
                 return;
             }
@@ -85,17 +85,33 @@ namespace Symu.Results.Blocker
             }
 
             var result = new BlockerResult();
-            foreach (var blocker in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null).Select(x => x.Blockers))
+            // Blockers from agents
+            foreach (var agentResult in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null).Select(x => x.Blockers.Result))
             {
-                result.InProgress += blocker.Result.InProgress;
-                result.Done += blocker.Result.Done;
-                result.ExternalHelp += blocker.Result.ExternalHelp;
-                result.Guess += blocker.Result.Guess;
-                result.InternalHelp += blocker.Result.InternalHelp;
-                result.Search += blocker.Result.Search;
+                result.InProgress += agentResult.InProgress;
+                result.Done += agentResult.Done;
+                result.ExternalHelp += agentResult.ExternalHelp;
+                result.Guess += agentResult.Guess;
+                result.InternalHelp += agentResult.InternalHelp;
+                result.Search += agentResult.Search;
             }
-
+            //Blockers from tasks
+            foreach (var tasks in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null).Select(x => x.TaskProcessor.TasksManager.AllTasks))
+            {
+                result.InProgress += tasks.Sum(x => x.Blockers.Result.InProgress);
+                result.Done += tasks.Sum(x => x.Blockers.Result.Done);
+                result.ExternalHelp += tasks.Sum(x => x.Blockers.Result.ExternalHelp);
+                result.Guess += tasks.Sum(x => x.Blockers.Result.Guess);
+                result.InternalHelp += tasks.Sum(x => x.Blockers.Result.InternalHelp);
+                result.Search += tasks.Sum(x => x.Blockers.Result.Search);
+                result.Cancelled += tasks.Sum(x => x.Blockers.Result.Cancelled);
+            }
             _results.TryAdd(environment.Schedule.Step, result);
+        }
+
+        public void Clear()
+        {
+            _results.Clear();
         }
     }
 }

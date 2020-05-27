@@ -137,7 +137,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // Schedule
+            // TimeStep
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -810,6 +810,7 @@
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Home";
+            this.Text = "Symu : messageing and tasking models";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);

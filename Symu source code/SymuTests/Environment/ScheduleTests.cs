@@ -11,17 +11,17 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Symu.Environment;
 
 #endregion
 
-namespace SymuTests.Environment.TimeStep
+namespace SymuTests.Environment
 {
     [TestClass]
     //Ne pas passer en static
-    public class TimeStepTests
+    public class ScheduleTests
     {
-        private readonly Symu.Environment.Schedule _schedule =
-            new Symu.Environment.Schedule();
+        private readonly Schedule _schedule = new Schedule();
 
         [TestMethod]
         [DataRow(0)]

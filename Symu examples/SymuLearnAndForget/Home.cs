@@ -61,7 +61,7 @@ namespace SymuLearnAndForget
             cbHasKnowledge.Checked =
                 OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge;
             tbKnowledgeThreshold.Text =
-                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing
+                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting
                     .ToString(CultureInfo.InvariantCulture);
             tbTimeToLive.Text =
                 OrganizationEntity.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive.ToString(
@@ -73,7 +73,7 @@ namespace SymuLearnAndForget
                 OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate.ToString(
                     CultureInfo.InvariantCulture);
             tbTaskCostFactor.Text =
-                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing
+                OrganizationEntity.Murphies.IncompleteKnowledge.CostFactorOfGuessing
                     .ToString(CultureInfo.InvariantCulture);
             cbCanSendKnowledge.Checked =
                 OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanSendKnowledge;
@@ -374,7 +374,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.KnowledgeThresholdForDoing=
+                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting=
                     float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshold.BackColor = SystemColors.Window;
             }
@@ -431,7 +431,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing =
+                OrganizationEntity.Murphies.IncompleteKnowledge.CostFactorOfGuessing =
                     float.Parse(tbTaskCostFactor.Text, CultureInfo.InvariantCulture);
                 tbTaskCostFactor.BackColor = SystemColors.Window;
             }

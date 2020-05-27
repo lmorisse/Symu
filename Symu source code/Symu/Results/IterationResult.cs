@@ -58,12 +58,12 @@ namespace Symu.Results
         /// <summary>
         ///     Get the Task blockers metrics
         /// </summary>
-        public BlockerResults Blockers { get; private set; }
+        public BlockerResults Blockers { get;  } = new BlockerResults();
 
         /// <summary>
         ///     Get the Tasks model metrics
         /// </summary>
-        public TaskResults Tasks { get; private set; }
+        public TaskResults Tasks { get; } = new TaskResults();
 
         public float Capacity { get; set; }
 
@@ -75,8 +75,8 @@ namespace Symu.Results
             OrganizationFlexibility = new OrganizationFlexibility(_environment);
             OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
                 _environment.Organization.Models);
-            Blockers = new BlockerResults(_environment.Organization.Models.FollowBlockers);
-            Tasks = new TaskResults(_environment.Organization.Models.FollowTasks);
+            Blockers.Clear();
+            Tasks.Clear();
             Iteration = 0;
             Step = 0;
             Success = false;

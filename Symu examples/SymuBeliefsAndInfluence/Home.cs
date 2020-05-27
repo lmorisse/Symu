@@ -166,7 +166,7 @@ namespace SymuBeliefsAndInfluence
                     .ToString("F1", CultureInfo.InvariantCulture));
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
-                : _environment.IterationResult.Tasks.Total * 100 /
+                : _environment.IterationResult.Tasks.Done * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
             if (_environment.Schedule.Step == 1)
             {
@@ -177,6 +177,8 @@ namespace SymuBeliefsAndInfluence
                 .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(TasksDone, tasksDoneRatio
                 .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(TasksCancelled, _environment.IterationResult.Tasks.Cancelled
+                .ToString("F0", CultureInfo.InvariantCulture));
         }
 
         private void button4_Click(object sender, EventArgs e)

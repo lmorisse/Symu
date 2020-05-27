@@ -34,16 +34,6 @@ namespace SymuTests.Environment
         }
 
         [TestMethod]
-        public void EnvironmentStateTest()
-        {
-            var agent = new TestAgent(1, _environment);
-            Assert.IsFalse(_environment.State.Started);
-            agent.Start();
-            _environment.WaitingForStart();
-            Assert.IsTrue(_environment.State.Started);
-        }
-
-        [TestMethod]
         public void EnqueueMessageLostTest()
         {
             var agent1 = new TestAgent(1, _environment);

@@ -52,6 +52,7 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
             Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod = false;
             // Tasks and performance
             Cognitive.TasksAndPerformance.CanPerformTask = false; // For network.NetworkActivities.AddActivities
+            Cognitive.TasksAndPerformance.TaskModel.On = false;
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
             Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
             Cognitive.TasksAndPerformance.LearningRate = 0;

@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-* Renaming SimulationEngine (SymuEngine), TimeStep (Schedule)
+* Add MurphyIncompleteInformation by [@lmorisse]
+* Renaming SimulationEngine (SymuEngine), TimeStep (Schedule) by [@lmorisse]
 * Refactoring Murphies by [@lmorisse]
 * Add Agent.TimeSpent by [@lmorisse]
 * Add new project example: [SymuMurphiesAndBlockers](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMurphiesAndBlockers) by [@lmorisse]

@@ -34,5 +34,6 @@ namespace Symu.Classes.Agents.Models
         public MeetingTemplate Meeting { get; } = new MeetingTemplate();
         public PhoneTemplate Phone { get; } = new PhoneTemplate();
         public ViaPlatformTemplate Platform { get; } = new ViaPlatformTemplate();
+        public InternetAccessTemplate Internet { get; } = new InternetAccessTemplate();
     }
 }

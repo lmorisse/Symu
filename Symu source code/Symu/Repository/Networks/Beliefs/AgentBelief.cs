@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
@@ -54,10 +55,11 @@ namespace Symu.Repository.Networks.Beliefs
         /// <param name="taskKnowledgeIndexes"></param>
         /// <param name="index"></param>
         /// <param name="belief"></param>
-        /// <param name="beliefThreshHoldForReacting"></param>
+        /// <param name="threshold"></param>
+        /// <param name="abs">true if you want to check an absolute value, false if not</param>
         /// <returns>The normalized score of the agent belief [-1; 1]</returns>
         public float Check(byte[] taskKnowledgeIndexes, out byte index, Belief belief,
-            float beliefThreshHoldForReacting)
+            float threshold, bool abs)
         {
             if (taskKnowledgeIndexes is null)
             {
@@ -75,15 +77,27 @@ namespace Symu.Repository.Networks.Beliefs
                 return 0;
             }
 
-            for (byte i = 0; i < taskKnowledgeIndexes.Length; i++)
+            var indexes = taskKnowledgeIndexes.ToList().Distinct();
+            foreach (var taskKnowledgeIndex in indexes)
             {
-                index = taskKnowledgeIndexes[i];
+                index = taskKnowledgeIndex;
                 var score = belief.Weights.GetBit(index) * BeliefBits.GetBit(index);
 
-                if (Math.Abs(score) >= beliefThreshHoldForReacting)
+                if (abs)
                 {
-                    return score;
+                    if (Math.Abs(score) >= threshold)
+                    {
+                        return score;
+                    }
                 }
+                else
+                {
+                    if (score <= threshold)
+                    {
+                        return score;
+                    }
+                }
+
             }
 
             return 0;

@@ -29,7 +29,7 @@ namespace SymuLearnAndForget.Classes
             {
                 Parent = Schedule.Step,
                 // Cost impact of learning by doing
-                Weight = 1 * Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing
+                Weight = 1 * Environment.Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing
             };
             Post(task);
         }

@@ -102,6 +102,24 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             return Normal.Sample(InternalCharacteristics.ForgettingMean, forgettingStandardDeviation * _randomLevel);
         }
 
+        public void UpdateForgettingProcess(TaskKnowledgesBits knowledgesBits)
+        {
+            if (knowledgesBits is null)
+            {
+                throw new ArgumentNullException(nameof(knowledgesBits));
+            }
+
+            // Check if forgetting process is On
+            if (!_isAgentOnToday)
+            {
+                return;
+            }
+            foreach (var knowledgeId in knowledgesBits.KnowledgeIds)
+            {
+                UpdateForgettingProcess(knowledgeId, knowledgesBits.GetBits(knowledgeId));
+            }
+        }
+
         /// <summary>
         ///     Return the next forgetting rate
         ///     Use at the initialization of the agent

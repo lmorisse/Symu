@@ -32,19 +32,19 @@ namespace SymuBeliefsAndInfluenceTests
         private const int NumberOfSteps = 61; // 3 IterationResult computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private readonly OrganizationEntity _organization = new OrganizationEntity("1");
-        private readonly SymuEngine _symu = new SymuEngine();
+        private readonly SymuEngine _simulation = new SymuEngine();
 
         [TestInitialize]
         public void Initialize()
         {
             _environment.SetOrganization(_organization);
-            _symu.SetEnvironment(_environment);
+            _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
             var scenario = new TimeStepScenario(_environment)
             {
                 NumberOfSteps = NumberOfSteps
             };
-            _symu.AddScenario(scenario);
+            _simulation.AddScenario(scenario);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoBeliefTest()
         {
             _environment.KnowledgeCount = 0;
-            _symu.Process();
+            _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
@@ -67,7 +67,7 @@ namespace SymuBeliefsAndInfluenceTests
         {
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = false;
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = false;
-            _symu.Process();
+            _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
@@ -79,7 +79,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void InfluenceModelTest()
         {
             _environment.Organization.Models.Influence.On = false;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -90,7 +90,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void InfluenceModelTest1()
         {
             _environment.Organization.Models.Influence.RateOfAgentsOn = 0;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -101,7 +101,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoInfluencerTest()
         {
             _environment.InfluencersCount = 0;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -113,7 +113,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void CantSendBeliefsTest()
         {
             _environment.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = false;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -128,7 +128,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -143,7 +143,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -158,7 +158,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyAgree;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -170,7 +170,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void CantReceiveBeliefsTest()
         {
             _environment.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = false;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -182,7 +182,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoInfluentialnessTest()
         {
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 0;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -194,7 +194,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoInfluenceabilityTest()
         {
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = 0;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
 
@@ -210,7 +210,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoTaskBlockedTest()
         {
             _environment.Model.MandatoryRatio = 0;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
@@ -224,7 +224,7 @@ namespace SymuBeliefsAndInfluenceTests
         {
             _environment.Model.MandatoryRatio = 1;
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
@@ -238,7 +238,7 @@ namespace SymuBeliefsAndInfluenceTests
         {
             _environment.Model.MandatoryRatio = 1;
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
@@ -254,11 +254,11 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
                 0; // Full risk aversion
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
-                : _environment.IterationResult.Tasks.Total * 100 /
+                : _environment.IterationResult.Tasks.Done * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreNotEqual(100, tasksDoneRatio);
         }
@@ -272,12 +272,12 @@ namespace SymuBeliefsAndInfluenceTests
         public void StronglyDisagreeTest()
         {
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                0; // Full risk aversion
+                1; // no risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
-            _symu.Process();
+            _simulation.Process();
             Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum >
                           _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
             Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean >
@@ -295,12 +295,12 @@ namespace SymuBeliefsAndInfluenceTests
         public void StronglyAgreeTest()
         {
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                0; // Full risk aversion
+                1; // no risk aversion
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyAgree;
-            _symu.Process();
+            _simulation.Process();
             Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum <
                           _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
             Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean <
@@ -321,7 +321,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.NeitherAgreeNorDisagree;
-            _symu.Process();
+            _simulation.Process();
             CheckNoChange();
         }
     }

@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Classes.Agents;
 using Symu.Results.Blocker;
 
 #endregion
@@ -41,7 +42,7 @@ namespace Symu.Classes.Blockers
         public Blocker Add(int type, ushort step, object parameter1, object parameter2)
         {
             var blocker = new Blocker(type, step, parameter1, parameter2);
-            return Add(step, blocker);
+            return Add(blocker);
         }
 
         /// <summary>
@@ -54,10 +55,10 @@ namespace Symu.Classes.Blockers
         public Blocker Add(int type, ushort step, object parameter)
         {
             var blocker = new Blocker(type, step, parameter);
-            return Add(step, blocker);
+            return Add(blocker);
         }
 
-        private Blocker Add(ushort step, Blocker blocker)
+        private Blocker Add(Blocker blocker)
         {
             SetBlockerInProgress();
             List.Add(blocker);
@@ -73,7 +74,7 @@ namespace Symu.Classes.Blockers
         public Blocker Add(int type, ushort step)
         {
             var blocker = new Blocker(type, step);
-            return Add(step, blocker);
+            return Add(blocker);
         }
 
         /// <summary>
@@ -82,8 +83,7 @@ namespace Symu.Classes.Blockers
         /// </summary>
         /// <param name="blocker"></param>
         /// <param name="resolution"></param>
-        /// <param name="step"></param>
-        public void Recover(Blocker blocker, BlockerResolution resolution, ushort step)
+        public void Recover(Blocker blocker, BlockerResolution resolution)
         {
             if (!Contains(blocker))
             {
@@ -96,6 +96,26 @@ namespace Symu.Classes.Blockers
             }
 
             SetBlockerDone(resolution);
+        }
+
+        /// <summary>
+        ///     Cancel an existing blocker from a task
+        ///     And update IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="blocker"></param>
+        public void Cancel(Blocker blocker)
+        {
+            if (!Contains(blocker))
+            {
+                // Blocker may have been already cancelled
+                return;
+            }
+            if (blocker != null)
+            {
+                Remove(blocker);
+            }
+
+            SetBlockerCancelled();
         }
 
         /// <summary>
@@ -196,6 +216,11 @@ namespace Symu.Classes.Blockers
             }
 
             Result.Done++;
+            Result.InProgress--;
+        }
+        public void SetBlockerCancelled()
+        {
+            Result.Cancelled++;
             Result.InProgress--;
         }
     }

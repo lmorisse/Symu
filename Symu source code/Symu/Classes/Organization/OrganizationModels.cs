@@ -37,19 +37,6 @@ namespace Symu.Classes.Organization
         public bool FollowGroupKnowledge { get; set; }
 
         /// <summary>
-        ///     If set, the organizationEntity tasks metrics will be followed and stored during the symu
-        /// </summary>
-        //TODO should be with IterationResult as Results Settings with cadence of feeds
-        public bool FollowTasks { get; set; }
-
-        /// <summary>
-        ///     If set, the organizationEntity blockers metrics will be followed and stored during the symu
-        /// </summary>
-        //TODO should be with IterationResult as Results Settings with cadence of feeds
-        public bool FollowBlockers { get; set; }
-
-
-        /// <summary>
         ///     Agent knowledge learning model
         /// </summary>
         public ModelEntity Learning { get; set; } = new ModelEntity();

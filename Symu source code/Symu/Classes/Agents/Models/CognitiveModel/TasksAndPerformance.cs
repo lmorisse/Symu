@@ -43,7 +43,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
 
             tasksAndPerformance.LearningRate = LearningRate;
             tasksAndPerformance.LearningByDoingRate = LearningByDoingRate;
-            tasksAndPerformance.CostFactorOfLearningByDoing = CostFactorOfLearningByDoing;
             tasksAndPerformance.LearningStandardDeviation = LearningStandardDeviation;
             tasksAndPerformance.CanPerformTask = CanPerformTask;
             tasksAndPerformance.CanPerformTaskOnWeekEnds = CanPerformTaskOnWeekEnds;
@@ -102,26 +101,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
                 }
 
                 _learningByDoingRate = value;
-            }
-        }
-
-        private float _costFactorOfLearningByDoing = 1;
-
-        /// <summary>
-        ///     Learning by doing is costly. CostOfLearningByDoing define the factor to know the real cost of the task
-        /// </summary>
-        /// <example>if a task estimated cost = 1 and CostOfLearningByDoing = 2, then the real task cost = 1*2</example>
-        public float CostFactorOfLearningByDoing
-        {
-            get => _costFactorOfLearningByDoing;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("CostFactorOfLearningByDoing should be > 0 ");
-                }
-
-                _costFactorOfLearningByDoing = value;
             }
         }
 

@@ -28,7 +28,6 @@ namespace SymuTests.Classes.Task
         [TestInitialize]
         public void Initialize()
         {
-            var blockerResults = new BlockerResults(false);
             _task = new SymuTask(0);
 
             for (var i = 0; i < 2; i++)

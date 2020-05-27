@@ -65,7 +65,6 @@ namespace Symu.Classes.Agents.Models.Templates
             Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
             Cognitive.TasksAndPerformance.LearningRate = 0.05F;
             Cognitive.TasksAndPerformance.LearningByDoingRate = 0.1F;
-            Cognitive.TasksAndPerformance.CostFactorOfLearningByDoing = 1.2F;
             // Cognitive.InteractionPatterns
             Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             Cognitive.InteractionPatterns.AllowNewInteractions = true;

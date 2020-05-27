@@ -119,11 +119,11 @@
   </resheader>
   <data name="richTextBox2.Text" xml:space="preserve">
     <value>Scenario:
-* Workers performing tasks according to their beliefs, asking advice from influencers if necessary
-* Influencers with string beliefs trying to influence workers
-
-Beliefs and influence model have an impact on different parameters : 
-perform tasks, modify the sphere of interaction, agents beliefs.</value>
+* Agents performing tasks according to their availability, knowledge and beliefs
+* emails and internet access to search information.
+Because of the murphies, the agents are blocked. They have different strategies to unlock the blockers :
+They search for information from colleagues, in their emails, on the Internet, or try to guess the correct answer.
+They may find no strategy to unlock tasks, so they will not complete them or even cancel them.</value>
   </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>Goal:

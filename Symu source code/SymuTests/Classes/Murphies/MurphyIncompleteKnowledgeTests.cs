@@ -45,6 +45,37 @@ namespace SymuTests.Classes.Murphies
         }
 
         /// <summary>
+        ///     Model off
+        /// </summary>
+        [TestMethod]
+        public void CheckKnowledgeTest0()
+        {
+            _murphy.On = false;
+            var mandatoryCheck = false;
+            var requiredCheck = false;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+                ref requiredIndex, 0);
+            Assert.IsTrue(mandatoryCheck && requiredCheck);
+        }
+        /// <summary>
+        ///     Model on, RateOfAgentsOn = 0
+        /// </summary>
+        [TestMethod]
+        public void CheckKnowledgeTest01()
+        {
+            _murphy.On = true;
+            _murphy.RateOfAgentsOn = 0;
+            var mandatoryCheck = false;
+            var requiredCheck = false;
+            byte mandatoryIndex = 0;
+            byte requiredIndex = 0;
+            _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+                ref requiredIndex, 0);
+            Assert.IsTrue(mandatoryCheck && requiredCheck);
+        }
+        /// <summary>
         ///     Non passing test
         /// </summary>
         [TestMethod]
@@ -95,49 +126,6 @@ namespace SymuTests.Classes.Murphies
             Assert.IsTrue(mandatoryCheck && requiredCheck);
             Assert.AreEqual(0, mandatoryIndex);
             Assert.AreEqual(0, requiredIndex);
-        }
-
-
-        [TestMethod]
-        public void AskInternallyTest()
-        {
-            _murphy.DelayBeforeSearchingExternally = 3;
-            Assert.IsTrue(_murphy.AskInternally(2, 0));
-            Assert.IsFalse(_murphy.AskInternally(3, 0));
-        }
-
-        /// <summary>
-        ///     Model Off
-        /// </summary>
-        [TestMethod]
-        public void NextGuessTest()
-        {
-            _murphy.On = false;
-            Assert.AreEqual(ImpactLevel.None, _murphy.NextGuess());
-        }
-
-        /// <summary>
-        ///     Model On - RateOfIncorrectGuess = 0
-        /// </summary>
-        [TestMethod]
-        public void NextGuessTest1()
-        {
-            _murphy.On = true;
-            _murphy.RateOfAgentsOn = 1;
-            _murphy.RateOfIncorrectGuess = 0;
-            Assert.AreEqual(ImpactLevel.None, _murphy.NextGuess());
-        }
-
-        /// <summary>
-        ///     Model On - RateOfIncorrectGuess = 1
-        /// </summary>
-        [TestMethod]
-        public void NextGuessTest2()
-        {
-            _murphy.On = true;
-            _murphy.RateOfAgentsOn = 1;
-            _murphy.RateOfIncorrectGuess = 1;
-            Assert.AreNotEqual(ImpactLevel.None, _murphy.NextGuess());
         }
     }
 }

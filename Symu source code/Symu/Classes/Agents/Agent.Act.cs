@@ -54,7 +54,7 @@ namespace Symu.Classes.Agents
                     Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
                         Environment.Organization.Models.RandomLevelValue)
                 };
-                TaskProcessor.Post(task);
+                Post(task);
             }
             else
             {
@@ -127,7 +127,7 @@ namespace Symu.Classes.Agents
                             case Message message:
                                 // When Schedule.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
                                 // Once a message (as a task) is receive it is treated as a message
-                                if (task.IsToDo)
+                                if (!task.IsStarted)
                                 {
                                     ActMessage(message);
                                 }

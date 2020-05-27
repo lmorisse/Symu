@@ -75,7 +75,16 @@ namespace Symu.Classes.Task
         ///     AgentId that is assigned on the task and will performed it.
         ///     Only one agent can perform a task at the same time
         /// </summary>
-        public AgentId Assigned { get; set; }
+        public AgentId Assigned { get; set; }        
+        
+        /// <summary>
+        ///     The creator of the task
+        /// </summary>
+        public AgentId Creator { get; set; }
+        /// <summary>
+        /// If only one agent can perform a task at the same time, agent can cancel a task and another agent can take the task.
+        /// </summary>
+        public List<AgentId> HasBeenCancelledBy { get; } = new List<AgentId>();
 
         /// <summary>
         ///     The weight of the task
@@ -114,7 +123,7 @@ namespace Symu.Classes.Task
         public bool IsAssigned => Assigned.Key > 0;
 
         public bool IsStarted { get; private set; }
-        public bool IsToDo => !IsStarted && !IsAssigned && !IsBlocked;
+        public bool IsToDo => !IsStarted && !IsBlocked && !IsAssigned;
         public bool IsNotDone => !IsStarted || WorkToDo > Tolerance;
         public bool IsBlocked => Blockers.IsBlocked;
 
@@ -174,6 +183,19 @@ namespace Symu.Classes.Task
                 bit.SetMandatory(knowledge.GetTaskMandatoryBits(model, complexity));
                 KnowledgesBits.Add(bit);
             }
+        }
+        /// <summary>
+        /// Check if the task has been cancelled by agentId
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <returns>true if agentId has already cancelled the task</returns>
+        public bool IsCancelledBy(AgentId agentId) => HasBeenCancelledBy.Exists(x => x.Equals(agentId));
+        /// <summary>
+        /// Cancel a task
+        /// </summary>
+        public void Cancel()
+        {
+            HasBeenCancelledBy.Add(Assigned);
         }
     }
 }

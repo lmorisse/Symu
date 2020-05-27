@@ -29,25 +29,24 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Murphies", System.Windows.Forms.HorizontalAlignment.Center);
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Incomplete information");
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Changing Information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Incorrect information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Communication breakdowns"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("Agent unavailability");
+            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("Incomplete knowledge");
+            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("Incomplete belief");
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.TimeStep = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.Incorrectness = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.BlockersSearching = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.BlockersGuessing = new System.Windows.Forms.Label();
-            this.BlockersExternal = new System.Windows.Forms.Label();
-            this.BlockersInternal = new System.Windows.Forms.Label();
-            this.BlockersInDone = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.BlockersInProgress = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.TasksDone = new System.Windows.Forms.Label();
@@ -61,11 +60,66 @@
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.BlockersCancelled = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.BlockersSearching = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.BlockersGuessing = new System.Windows.Forms.Label();
+            this.BlockersExternal = new System.Windows.Forms.Label();
+            this.BlockersInternal = new System.Windows.Forms.Label();
+            this.BlockersInDone = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.BlockersInProgress = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gbInformation = new System.Windows.Forms.GroupBox();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.InformationThreshold = new System.Windows.Forms.TextBox();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.InformationRateAgentsOn = new System.Windows.Forms.TextBox();
+            this.label55 = new System.Windows.Forms.Label();
+            this.InformationLimitOfTries = new System.Windows.Forms.CheckBox();
+            this.InformationMaxOfTries = new System.Windows.Forms.TextBox();
+            this.InformationResponseTime = new System.Windows.Forms.TextBox();
+            this.label56 = new System.Windows.Forms.Label();
+            this.InformationRateOfAnswer = new System.Windows.Forms.TextBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.InformationRateOfIncorrectGuess = new System.Windows.Forms.TextBox();
+            this.label58 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.KnowledgeLevel = new System.Windows.Forms.ComboBox();
+            this.EmailComm = new System.Windows.Forms.RadioButton();
+            this.tbKnowledge = new System.Windows.Forms.TextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.Face2faceComm = new System.Windows.Forms.RadioButton();
+            this.tbSteps = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cbMultipleBlockers = new System.Windows.Forms.CheckBox();
+            this.lvMurphies = new System.Windows.Forms.ListView();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbUncompleteKnowledge = new System.Windows.Forms.GroupBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.EmailSearching = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
             this.tbMaxNumberOfTriesKnowledge = new System.Windows.Forms.TextBox();
-            this.KnowledgeOn = new System.Windows.Forms.CheckBox();
             this.KnowledgeRate = new System.Windows.Forms.TextBox();
             this.cbLimitNumberOfTriesKnowledge = new System.Windows.Forms.CheckBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -82,8 +136,14 @@
             this.tbKnowledgeThreshHoldForDoing = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.gbBelief = new System.Windows.Forms.GroupBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.BeliefsLevel = new System.Windows.Forms.ComboBox();
+            this.BeliefsRiskAversion = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.BeliefsOn = new System.Windows.Forms.CheckBox();
             this.BeliefsRate = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cbLimitNumberOfTriesBelief = new System.Windows.Forms.CheckBox();
@@ -94,25 +154,20 @@
             this.label24 = new System.Windows.Forms.Label();
             this.tbBeliefRateIncorrectGuess = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.gbUnavailabilities = new System.Windows.Forms.GroupBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.UnavailabilityOn = new System.Windows.Forms.CheckBox();
             this.UnavailabilityRate = new System.Windows.Forms.TextBox();
             this.tbUnavailabilityThreshhold = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.cbMultipleBlockers = new System.Windows.Forms.CheckBox();
-            this.tbKnowledge = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.tbSteps = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.gbInformation.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.gbUncompleteKnowledge.SuspendLayout();
             this.gbBelief.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            this.gbUnavailabilities.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -144,7 +199,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Steps";
             // 
-            // Schedule
+            // TimeStep
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(316, 40);
@@ -155,20 +210,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.Incorrectness);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.BlockersSearching);
-            this.groupBox3.Controls.Add(this.label30);
-            this.groupBox3.Controls.Add(this.label33);
-            this.groupBox3.Controls.Add(this.label36);
-            this.groupBox3.Controls.Add(this.label39);
-            this.groupBox3.Controls.Add(this.label41);
-            this.groupBox3.Controls.Add(this.BlockersGuessing);
-            this.groupBox3.Controls.Add(this.BlockersExternal);
-            this.groupBox3.Controls.Add(this.BlockersInternal);
-            this.groupBox3.Controls.Add(this.BlockersInDone);
-            this.groupBox3.Controls.Add(this.label26);
-            this.groupBox3.Controls.Add(this.BlockersInProgress);
-            this.groupBox3.Controls.Add(this.label28);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.TasksDone);
@@ -177,10 +220,19 @@
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Location = new System.Drawing.Point(32, 106);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(316, 313);
+            this.groupBox3.Size = new System.Drawing.Size(316, 152);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Results";
+            this.groupBox3.Text = "Tasks results";
+            // 
+            // Incorrectness
+            // 
+            this.Incorrectness.AutoSize = true;
+            this.Incorrectness.Location = new System.Drawing.Point(179, 113);
+            this.Incorrectness.Name = "Incorrectness";
+            this.Incorrectness.Size = new System.Drawing.Size(16, 17);
+            this.Incorrectness.TabIndex = 182;
+            this.Incorrectness.Text = "0";
             // 
             // label5
             // 
@@ -190,123 +242,6 @@
             this.label5.Size = new System.Drawing.Size(20, 17);
             this.label5.TabIndex = 181;
             this.label5.Text = "%";
-            // 
-            // BlockersSearching
-            // 
-            this.BlockersSearching.AutoSize = true;
-            this.BlockersSearching.Location = new System.Drawing.Point(177, 263);
-            this.BlockersSearching.Name = "BlockersSearching";
-            this.BlockersSearching.Size = new System.Drawing.Size(16, 17);
-            this.BlockersSearching.TabIndex = 180;
-            this.BlockersSearching.Text = "0";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(99, 263);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(72, 17);
-            this.label30.TabIndex = 179;
-            this.label30.Text = "Searching";
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(99, 240);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(68, 17);
-            this.label33.TabIndex = 178;
-            this.label33.Text = "Guessing";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(102, 192);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(55, 17);
-            this.label36.TabIndex = 177;
-            this.label36.Text = "Internal";
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(74, 165);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(67, 17);
-            this.label39.TabIndex = 176;
-            this.label39.Text = "Resolved";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(99, 217);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(59, 17);
-            this.label41.TabIndex = 175;
-            this.label41.Text = "External";
-            // 
-            // BlockersGuessing
-            // 
-            this.BlockersGuessing.AutoSize = true;
-            this.BlockersGuessing.Location = new System.Drawing.Point(179, 241);
-            this.BlockersGuessing.Name = "BlockersGuessing";
-            this.BlockersGuessing.Size = new System.Drawing.Size(16, 17);
-            this.BlockersGuessing.TabIndex = 44;
-            this.BlockersGuessing.Text = "0";
-            // 
-            // BlockersExternal
-            // 
-            this.BlockersExternal.AutoSize = true;
-            this.BlockersExternal.Location = new System.Drawing.Point(179, 217);
-            this.BlockersExternal.Name = "BlockersExternal";
-            this.BlockersExternal.Size = new System.Drawing.Size(16, 17);
-            this.BlockersExternal.TabIndex = 41;
-            this.BlockersExternal.Text = "0";
-            // 
-            // BlockersInternal
-            // 
-            this.BlockersInternal.AutoSize = true;
-            this.BlockersInternal.Location = new System.Drawing.Point(179, 193);
-            this.BlockersInternal.Name = "BlockersInternal";
-            this.BlockersInternal.Size = new System.Drawing.Size(16, 17);
-            this.BlockersInternal.TabIndex = 38;
-            this.BlockersInternal.Text = "0";
-            // 
-            // BlockersInDone
-            // 
-            this.BlockersInDone.AutoSize = true;
-            this.BlockersInDone.Location = new System.Drawing.Point(179, 165);
-            this.BlockersInDone.Name = "BlockersInDone";
-            this.BlockersInDone.Size = new System.Drawing.Size(16, 17);
-            this.BlockersInDone.TabIndex = 35;
-            this.BlockersInDone.Text = "0";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(58, 141);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(83, 17);
-            this.label26.TabIndex = 31;
-            this.label26.Text = "Still blocked";
-            // 
-            // BlockersInProgress
-            // 
-            this.BlockersInProgress.AutoSize = true;
-            this.BlockersInProgress.Location = new System.Drawing.Point(179, 141);
-            this.BlockersInProgress.Name = "BlockersInProgress";
-            this.BlockersInProgress.Size = new System.Drawing.Size(16, 17);
-            this.BlockersInProgress.TabIndex = 32;
-            this.BlockersInProgress.Text = "0";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(164, 24);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(47, 17);
-            this.label28.TabIndex = 30;
-            this.label28.Text = "Actual";
             // 
             // label3
             // 
@@ -338,11 +273,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 113);
+            this.label4.Location = new System.Drawing.Point(29, 113);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 17);
+            this.label4.Size = new System.Drawing.Size(93, 17);
             this.label4.TabIndex = 17;
-            this.label4.Text = "Blockers";
+            this.label4.Text = "Incorrectness";
             // 
             // Capacity
             // 
@@ -365,7 +300,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(25, 57);
+            this.label2.Location = new System.Drawing.Point(25, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(127, 17);
             this.label2.TabIndex = 7;
@@ -373,7 +308,7 @@
             // 
             // tbWorkers
             // 
-            this.tbWorkers.Location = new System.Drawing.Point(281, 55);
+            this.tbWorkers.Location = new System.Drawing.Point(161, 25);
             this.tbWorkers.Name = "tbWorkers";
             this.tbWorkers.Size = new System.Drawing.Size(63, 22);
             this.tbWorkers.TabIndex = 10;
@@ -403,18 +338,18 @@
             // richTextBox2
             // 
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox2.Location = new System.Drawing.Point(457, 12);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(823, 174);
+            this.richTextBox2.Size = new System.Drawing.Size(1071, 174);
             this.richTextBox2.TabIndex = 18;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox1.Location = new System.Drawing.Point(4, 12);
             this.richTextBox1.Name = "richTextBox1";
@@ -425,6 +360,7 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.groupBox5.Controls.Add(this.groupBox2);
             this.groupBox5.Controls.Add(this.btnResume);
             this.groupBox5.Controls.Add(this.btnPause);
             this.groupBox5.Controls.Add(this.TimeStep);
@@ -432,32 +368,572 @@
             this.groupBox5.Controls.Add(this.btnStop);
             this.groupBox5.Controls.Add(this.btnStart);
             this.groupBox5.Controls.Add(this.groupBox3);
-            this.groupBox5.Location = new System.Drawing.Point(857, 203);
+            this.groupBox5.Location = new System.Drawing.Point(1146, 203);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(423, 441);
+            this.groupBox5.Size = new System.Drawing.Size(382, 646);
             this.groupBox5.TabIndex = 20;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Run";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.BlockersCancelled);
+            this.groupBox2.Controls.Add(this.label40);
+            this.groupBox2.Controls.Add(this.label34);
+            this.groupBox2.Controls.Add(this.label32);
+            this.groupBox2.Controls.Add(this.label31);
+            this.groupBox2.Controls.Add(this.label29);
+            this.groupBox2.Controls.Add(this.BlockersSearching);
+            this.groupBox2.Controls.Add(this.label30);
+            this.groupBox2.Controls.Add(this.label33);
+            this.groupBox2.Controls.Add(this.label36);
+            this.groupBox2.Controls.Add(this.label39);
+            this.groupBox2.Controls.Add(this.label41);
+            this.groupBox2.Controls.Add(this.BlockersGuessing);
+            this.groupBox2.Controls.Add(this.BlockersExternal);
+            this.groupBox2.Controls.Add(this.BlockersInternal);
+            this.groupBox2.Controls.Add(this.BlockersInDone);
+            this.groupBox2.Controls.Add(this.label26);
+            this.groupBox2.Controls.Add(this.BlockersInProgress);
+            this.groupBox2.Location = new System.Drawing.Point(32, 271);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(316, 229);
+            this.groupBox2.TabIndex = 186;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Bockers results";
+            // 
+            // BlockersCancelled
+            // 
+            this.BlockersCancelled.AutoSize = true;
+            this.BlockersCancelled.Location = new System.Drawing.Point(147, 174);
+            this.BlockersCancelled.Name = "BlockersCancelled";
+            this.BlockersCancelled.Size = new System.Drawing.Size(16, 17);
+            this.BlockersCancelled.TabIndex = 203;
+            this.BlockersCancelled.Text = "0";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(44, 177);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(70, 17);
+            this.label40.TabIndex = 202;
+            this.label40.Text = "Cancel";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(192, 102);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(20, 17);
+            this.label34.TabIndex = 201;
+            this.label34.Text = "%";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(192, 129);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(20, 17);
+            this.label32.TabIndex = 200;
+            this.label32.Text = "%";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(192, 150);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(20, 17);
+            this.label31.TabIndex = 199;
+            this.label31.Text = "%";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(192, 80);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(20, 17);
+            this.label29.TabIndex = 198;
+            this.label29.Text = "%";
+            // 
+            // BlockersSearching
+            // 
+            this.BlockersSearching.AutoSize = true;
+            this.BlockersSearching.Location = new System.Drawing.Point(147, 150);
+            this.BlockersSearching.Name = "BlockersSearching";
+            this.BlockersSearching.Size = new System.Drawing.Size(16, 17);
+            this.BlockersSearching.TabIndex = 197;
+            this.BlockersSearching.Text = "0";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(69, 150);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(53, 17);
+            this.label30.TabIndex = 196;
+            this.label30.Text = "Search";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(69, 127);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(49, 17);
+            this.label33.TabIndex = 195;
+            this.label33.Text = "Guess";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(72, 79);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(55, 17);
+            this.label36.TabIndex = 194;
+            this.label36.Text = "Internal";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(44, 52);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(67, 17);
+            this.label39.TabIndex = 193;
+            this.label39.Text = "Resolved";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(69, 104);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(59, 17);
+            this.label41.TabIndex = 192;
+            this.label41.Text = "External";
+            // 
+            // BlockersGuessing
+            // 
+            this.BlockersGuessing.AutoSize = true;
+            this.BlockersGuessing.Location = new System.Drawing.Point(149, 128);
+            this.BlockersGuessing.Name = "BlockersGuessing";
+            this.BlockersGuessing.Size = new System.Drawing.Size(16, 17);
+            this.BlockersGuessing.TabIndex = 191;
+            this.BlockersGuessing.Text = "0";
+            // 
+            // BlockersExternal
+            // 
+            this.BlockersExternal.AutoSize = true;
+            this.BlockersExternal.Location = new System.Drawing.Point(149, 104);
+            this.BlockersExternal.Name = "BlockersExternal";
+            this.BlockersExternal.Size = new System.Drawing.Size(16, 17);
+            this.BlockersExternal.TabIndex = 190;
+            this.BlockersExternal.Text = "0";
+            // 
+            // BlockersInternal
+            // 
+            this.BlockersInternal.AutoSize = true;
+            this.BlockersInternal.Location = new System.Drawing.Point(149, 80);
+            this.BlockersInternal.Name = "BlockersInternal";
+            this.BlockersInternal.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInternal.TabIndex = 189;
+            this.BlockersInternal.Text = "0";
+            // 
+            // BlockersInDone
+            // 
+            this.BlockersInDone.AutoSize = true;
+            this.BlockersInDone.Location = new System.Drawing.Point(149, 52);
+            this.BlockersInDone.Name = "BlockersInDone";
+            this.BlockersInDone.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInDone.TabIndex = 188;
+            this.BlockersInDone.Text = "0";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(28, 28);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(83, 17);
+            this.label26.TabIndex = 186;
+            this.label26.Text = "Still blocked";
+            // 
+            // BlockersInProgress
+            // 
+            this.BlockersInProgress.AutoSize = true;
+            this.BlockersInProgress.Location = new System.Drawing.Point(149, 28);
+            this.BlockersInProgress.Name = "BlockersInProgress";
+            this.BlockersInProgress.Size = new System.Drawing.Size(16, 17);
+            this.BlockersInProgress.TabIndex = 187;
+            this.BlockersInProgress.Text = "0";
+            // 
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBox4.Controls.Add(this.gbInformation);
+            this.groupBox4.Controls.Add(this.groupBox6);
+            this.groupBox4.Controls.Add(this.lvMurphies);
             this.groupBox4.Controls.Add(this.gbUncompleteKnowledge);
             this.groupBox4.Controls.Add(this.gbBelief);
-            this.groupBox4.Controls.Add(this.groupBox7);
-            this.groupBox4.Controls.Add(this.groupBox6);
+            this.groupBox4.Controls.Add(this.gbUnavailabilities);
             this.groupBox4.Location = new System.Drawing.Point(4, 203);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(847, 574);
+            this.groupBox4.Size = new System.Drawing.Size(1119, 646);
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Settings";
             // 
+            // gbInformation
+            // 
+            this.gbInformation.BackColor = System.Drawing.Color.LightBlue;
+            this.gbInformation.Controls.Add(this.label49);
+            this.gbInformation.Controls.Add(this.label50);
+            this.gbInformation.Controls.Add(this.label51);
+            this.gbInformation.Controls.Add(this.InformationThreshold);
+            this.gbInformation.Controls.Add(this.label53);
+            this.gbInformation.Controls.Add(this.label54);
+            this.gbInformation.Controls.Add(this.InformationRateAgentsOn);
+            this.gbInformation.Controls.Add(this.label55);
+            this.gbInformation.Controls.Add(this.InformationLimitOfTries);
+            this.gbInformation.Controls.Add(this.InformationMaxOfTries);
+            this.gbInformation.Controls.Add(this.InformationResponseTime);
+            this.gbInformation.Controls.Add(this.label56);
+            this.gbInformation.Controls.Add(this.InformationRateOfAnswer);
+            this.gbInformation.Controls.Add(this.label57);
+            this.gbInformation.Controls.Add(this.InformationRateOfIncorrectGuess);
+            this.gbInformation.Controls.Add(this.label58);
+            this.gbInformation.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.gbInformation.Location = new System.Drawing.Point(708, 351);
+            this.gbInformation.Name = "gbInformation";
+            this.gbInformation.Size = new System.Drawing.Size(392, 288);
+            this.gbInformation.TabIndex = 186;
+            this.gbInformation.TabStop = false;
+            this.gbInformation.Text = "Incomplete information";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label49.Location = new System.Drawing.Point(16, 174);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(54, 17);
+            this.label49.TabIndex = 185;
+            this.label49.Text = "Guess";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label50.Location = new System.Drawing.Point(16, 96);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(63, 17);
+            this.label50.TabIndex = 185;
+            this.label50.Text = "Internal";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label51.Location = new System.Drawing.Point(14, 18);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(70, 17);
+            this.label51.TabIndex = 185;
+            this.label51.Text = "Blockers";
+            // 
+            // InformationThreshold
+            // 
+            this.InformationThreshold.Location = new System.Drawing.Point(291, 72);
+            this.InformationThreshold.Name = "InformationThreshold";
+            this.InformationThreshold.Size = new System.Drawing.Size(63, 22);
+            this.InformationThreshold.TabIndex = 174;
+            this.InformationThreshold.TextChanged += new System.EventHandler(this.InformationThreshold_TextChanged);
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(53, 74);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(198, 17);
+            this.label53.TabIndex = 173;
+            this.label53.Text = "Belief threshold for doing [0;1]";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(53, 47);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(121, 17);
+            this.label54.TabIndex = 172;
+            this.label54.Text = "Rate of agents on";
+            // 
+            // InformationRateAgentsOn
+            // 
+            this.InformationRateAgentsOn.Location = new System.Drawing.Point(290, 44);
+            this.InformationRateAgentsOn.Name = "InformationRateAgentsOn";
+            this.InformationRateAgentsOn.Size = new System.Drawing.Size(63, 22);
+            this.InformationRateAgentsOn.TabIndex = 170;
+            this.InformationRateAgentsOn.TextChanged += new System.EventHandler(this.InformationRateAgentsOn_TextChanged);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(89, 227);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(136, 17);
+            this.label55.TabIndex = 169;
+            this.label55.Text = "Max. number of tries";
+            // 
+            // InformationLimitOfTries
+            // 
+            this.InformationLimitOfTries.AutoSize = true;
+            this.InformationLimitOfTries.Location = new System.Drawing.Point(55, 195);
+            this.InformationLimitOfTries.Name = "InformationLimitOfTries";
+            this.InformationLimitOfTries.Size = new System.Drawing.Size(319, 21);
+            this.InformationLimitOfTries.TabIndex = 166;
+            this.InformationLimitOfTries.Text = "Limit number of internal tries  before guessing";
+            this.InformationLimitOfTries.UseVisualStyleBackColor = true;
+            this.InformationLimitOfTries.CheckedChanged += new System.EventHandler(this.InformationLimitOfTries_CheckedChanged);
+            // 
+            // InformationMaxOfTries
+            // 
+            this.InformationMaxOfTries.Enabled = false;
+            this.InformationMaxOfTries.Location = new System.Drawing.Point(291, 222);
+            this.InformationMaxOfTries.Name = "InformationMaxOfTries";
+            this.InformationMaxOfTries.Size = new System.Drawing.Size(63, 22);
+            this.InformationMaxOfTries.TabIndex = 165;
+            this.InformationMaxOfTries.TextChanged += new System.EventHandler(this.InformationMaxOfTries_TextChanged);
+            // 
+            // InformationResponseTime
+            // 
+            this.InformationResponseTime.Location = new System.Drawing.Point(290, 152);
+            this.InformationResponseTime.Name = "InformationResponseTime";
+            this.InformationResponseTime.Size = new System.Drawing.Size(63, 22);
+            this.InformationResponseTime.TabIndex = 158;
+            this.InformationResponseTime.TextChanged += new System.EventHandler(this.InformationResponseTime_TextChanged);
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(53, 152);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(146, 17);
+            this.label56.TabIndex = 157;
+            this.label56.Text = "Response time (days)";
+            // 
+            // InformationRateOfAnswer
+            // 
+            this.InformationRateOfAnswer.Location = new System.Drawing.Point(291, 120);
+            this.InformationRateOfAnswer.Name = "InformationRateOfAnswer";
+            this.InformationRateOfAnswer.Size = new System.Drawing.Size(63, 22);
+            this.InformationRateOfAnswer.TabIndex = 156;
+            this.InformationRateOfAnswer.TextChanged += new System.EventHandler(this.InformationRateOfAnswer_TextChanged);
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(53, 125);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(110, 17);
+            this.label57.TabIndex = 155;
+            this.label57.Text = "Rate of answers";
+            // 
+            // InformationRateOfIncorrectGuess
+            // 
+            this.InformationRateOfIncorrectGuess.Location = new System.Drawing.Point(292, 252);
+            this.InformationRateOfIncorrectGuess.Name = "InformationRateOfIncorrectGuess";
+            this.InformationRateOfIncorrectGuess.Size = new System.Drawing.Size(63, 22);
+            this.InformationRateOfIncorrectGuess.TabIndex = 154;
+            this.InformationRateOfIncorrectGuess.TextChanged += new System.EventHandler(this.InformationRateOfIncorrectGuess_TextChanged);
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(53, 255);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(187, 17);
+            this.label58.TabIndex = 153;
+            this.label58.Text = "Rate of incorrect guess [0;1]";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label16);
+            this.groupBox6.Controls.Add(this.label48);
+            this.groupBox6.Controls.Add(this.KnowledgeLevel);
+            this.groupBox6.Controls.Add(this.EmailComm);
+            this.groupBox6.Controls.Add(this.tbKnowledge);
+            this.groupBox6.Controls.Add(this.label35);
+            this.groupBox6.Controls.Add(this.label12);
+            this.groupBox6.Controls.Add(this.Face2faceComm);
+            this.groupBox6.Controls.Add(this.tbWorkers);
+            this.groupBox6.Controls.Add(this.label2);
+            this.groupBox6.Controls.Add(this.tbSteps);
+            this.groupBox6.Controls.Add(this.label7);
+            this.groupBox6.Controls.Add(this.cbMultipleBlockers);
+            this.groupBox6.Location = new System.Drawing.Point(17, 26);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(261, 314);
+            this.groupBox6.TabIndex = 18;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Simulation";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(48, 279);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(42, 17);
+            this.label16.TabIndex = 153;
+            this.label16.Text = "Level";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(25, 220);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(77, 17);
+            this.label48.TabIndex = 159;
+            this.label48.Text = "Knowledge";
+            // 
+            // KnowledgeLevel
+            // 
+            this.KnowledgeLevel.FormattingEnabled = true;
+            this.KnowledgeLevel.Location = new System.Drawing.Point(92, 275);
+            this.KnowledgeLevel.Name = "KnowledgeLevel";
+            this.KnowledgeLevel.Size = new System.Drawing.Size(131, 24);
+            this.KnowledgeLevel.TabIndex = 152;
+            // 
+            // EmailComm
+            // 
+            this.EmailComm.AutoSize = true;
+            this.EmailComm.Location = new System.Drawing.Point(75, 191);
+            this.EmailComm.Name = "EmailComm";
+            this.EmailComm.Size = new System.Drawing.Size(63, 21);
+            this.EmailComm.TabIndex = 157;
+            this.EmailComm.TabStop = true;
+            this.EmailComm.Text = "Email";
+            this.EmailComm.UseVisualStyleBackColor = true;
+            // 
+            // tbKnowledge
+            // 
+            this.tbKnowledge.Location = new System.Drawing.Point(160, 247);
+            this.tbKnowledge.Name = "tbKnowledge";
+            this.tbKnowledge.Size = new System.Drawing.Size(63, 22);
+            this.tbKnowledge.TabIndex = 44;
+            this.tbKnowledge.Text = "5";
+            this.tbKnowledge.TextChanged += new System.EventHandler(this.tbKnowledge_TextChanged);
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(25, 135);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(157, 17);
+            this.label35.TabIndex = 158;
+            this.label35.Text = "Communication medium";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(48, 250);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(58, 17);
+            this.label12.TabIndex = 43;
+            this.label12.Text = "Number";
+            // 
+            // Face2faceComm
+            // 
+            this.Face2faceComm.AutoSize = true;
+            this.Face2faceComm.Location = new System.Drawing.Point(75, 159);
+            this.Face2faceComm.Name = "Face2faceComm";
+            this.Face2faceComm.Size = new System.Drawing.Size(107, 21);
+            this.Face2faceComm.TabIndex = 156;
+            this.Face2faceComm.TabStop = true;
+            this.Face2faceComm.Text = "Face to face";
+            this.Face2faceComm.UseVisualStyleBackColor = true;
+            // 
+            // tbSteps
+            // 
+            this.tbSteps.Location = new System.Drawing.Point(161, 53);
+            this.tbSteps.Name = "tbSteps";
+            this.tbSteps.Size = new System.Drawing.Size(63, 22);
+            this.tbSteps.TabIndex = 39;
+            this.tbSteps.Text = "200";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(25, 56);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 17);
+            this.label7.TabIndex = 42;
+            this.label7.Text = "Number of steps";
+            // 
+            // cbMultipleBlockers
+            // 
+            this.cbMultipleBlockers.AutoSize = true;
+            this.cbMultipleBlockers.Location = new System.Drawing.Point(28, 97);
+            this.cbMultipleBlockers.Name = "cbMultipleBlockers";
+            this.cbMultipleBlockers.Size = new System.Drawing.Size(171, 21);
+            this.cbMultipleBlockers.TabIndex = 151;
+            this.cbMultipleBlockers.Text = "Allow multiple blockers";
+            this.cbMultipleBlockers.UseVisualStyleBackColor = true;
+            // 
+            // lvMurphies
+            // 
+            this.lvMurphies.CheckBoxes = true;
+            this.lvMurphies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader3});
+            listViewGroup2.Header = "Murphies";
+            listViewGroup2.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+            listViewGroup2.Name = "Murphies";
+            this.lvMurphies.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup2});
+            this.lvMurphies.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.lvMurphies.HideSelection = false;
+            listViewItem8.Group = listViewGroup2;
+            listViewItem8.StateImageIndex = 0;
+            listViewItem9.Group = listViewGroup2;
+            listViewItem9.StateImageIndex = 0;
+            listViewItem10.Group = listViewGroup2;
+            listViewItem10.StateImageIndex = 0;
+            listViewItem11.Group = listViewGroup2;
+            listViewItem11.StateImageIndex = 0;
+            listViewItem12.Group = listViewGroup2;
+            listViewItem12.StateImageIndex = 0;
+            listViewItem13.Group = listViewGroup2;
+            listViewItem13.StateImageIndex = 0;
+            listViewItem13.ToolTipText = "to complete task";
+            listViewItem14.Group = listViewGroup2;
+            listViewItem14.StateImageIndex = 0;
+            this.lvMurphies.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem8,
+            listViewItem9,
+            listViewItem10,
+            listViewItem11,
+            listViewItem12,
+            listViewItem13,
+            listViewItem14});
+            this.lvMurphies.Location = new System.Drawing.Point(17, 350);
+            this.lvMurphies.Name = "lvMurphies";
+            this.lvMurphies.Scrollable = false;
+            this.lvMurphies.Size = new System.Drawing.Size(261, 216);
+            this.lvMurphies.TabIndex = 185;
+            this.lvMurphies.UseCompatibleStateImageBehavior = false;
+            this.lvMurphies.View = System.Windows.Forms.View.Details;
+            this.lvMurphies.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvMurphies_ItemChecked);
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Width = 200;
+            // 
             // gbUncompleteKnowledge
             // 
+            this.gbUncompleteKnowledge.BackColor = System.Drawing.Color.LightBlue;
+            this.gbUncompleteKnowledge.Controls.Add(this.label44);
+            this.gbUncompleteKnowledge.Controls.Add(this.label43);
+            this.gbUncompleteKnowledge.Controls.Add(this.label42);
+            this.gbUncompleteKnowledge.Controls.Add(this.label38);
+            this.gbUncompleteKnowledge.Controls.Add(this.label37);
+            this.gbUncompleteKnowledge.Controls.Add(this.EmailSearching);
             this.gbUncompleteKnowledge.Controls.Add(this.label21);
             this.gbUncompleteKnowledge.Controls.Add(this.tbMaxNumberOfTriesKnowledge);
-            this.gbUncompleteKnowledge.Controls.Add(this.KnowledgeOn);
             this.gbUncompleteKnowledge.Controls.Add(this.KnowledgeRate);
             this.gbUncompleteKnowledge.Controls.Add(this.cbLimitNumberOfTriesKnowledge);
             this.gbUncompleteKnowledge.Controls.Add(this.label22);
@@ -473,17 +949,79 @@
             this.gbUncompleteKnowledge.Controls.Add(this.label11);
             this.gbUncompleteKnowledge.Controls.Add(this.tbKnowledgeThreshHoldForDoing);
             this.gbUncompleteKnowledge.Controls.Add(this.label9);
-            this.gbUncompleteKnowledge.Location = new System.Drawing.Point(21, 169);
+            this.gbUncompleteKnowledge.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.812F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbUncompleteKnowledge.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.gbUncompleteKnowledge.Location = new System.Drawing.Point(284, 167);
             this.gbUncompleteKnowledge.Name = "gbUncompleteKnowledge";
-            this.gbUncompleteKnowledge.Size = new System.Drawing.Size(407, 342);
+            this.gbUncompleteKnowledge.Size = new System.Drawing.Size(407, 399);
             this.gbUncompleteKnowledge.TabIndex = 158;
             this.gbUncompleteKnowledge.TabStop = false;
-            this.gbUncompleteKnowledge.Text = "Incomplete knowledge murphy";
+            this.gbUncompleteKnowledge.Text = "Incomplete knowledge";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label44.Location = new System.Drawing.Point(9, 30);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(70, 17);
+            this.label44.TabIndex = 184;
+            this.label44.Text = "Blockers";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label43.Location = new System.Drawing.Point(8, 129);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(63, 17);
+            this.label43.TabIndex = 183;
+            this.label43.Text = "Internal";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label42.Location = new System.Drawing.Point(8, 234);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(54, 17);
+            this.label42.TabIndex = 182;
+            this.label42.Text = "Guess";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label38.Location = new System.Drawing.Point(9, 339);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(67, 17);
+            this.label38.TabIndex = 181;
+            this.label38.Text = "External";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(8, 191);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(59, 17);
+            this.label37.TabIndex = 180;
+            this.label37.Text = "Search";
+            // 
+            // EmailSearching
+            // 
+            this.EmailSearching.AutoSize = true;
+            this.EmailSearching.Location = new System.Drawing.Point(52, 207);
+            this.EmailSearching.Name = "EmailSearching";
+            this.EmailSearching.Size = new System.Drawing.Size(224, 21);
+            this.EmailSearching.TabIndex = 179;
+            this.EmailSearching.Text = "Searching knowledge in emails";
+            this.EmailSearching.UseVisualStyleBackColor = true;
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(82, 55);
+            this.label21.Location = new System.Drawing.Point(48, 55);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(121, 17);
             this.label21.TabIndex = 178;
@@ -491,44 +1029,36 @@
             // 
             // tbMaxNumberOfTriesKnowledge
             // 
-            this.tbMaxNumberOfTriesKnowledge.Location = new System.Drawing.Point(306, 229);
+            this.tbMaxNumberOfTriesKnowledge.Enabled = false;
+            this.tbMaxNumberOfTriesKnowledge.Location = new System.Drawing.Point(306, 287);
             this.tbMaxNumberOfTriesKnowledge.Name = "tbMaxNumberOfTriesKnowledge";
-            this.tbMaxNumberOfTriesKnowledge.Size = new System.Drawing.Size(59, 22);
+            this.tbMaxNumberOfTriesKnowledge.Size = new System.Drawing.Size(93, 22);
             this.tbMaxNumberOfTriesKnowledge.TabIndex = 167;
             this.tbMaxNumberOfTriesKnowledge.TextChanged += new System.EventHandler(this.tbMaxNumberOfTriesKnowledge_TextChanged);
-            // 
-            // KnowledgeOn
-            // 
-            this.KnowledgeOn.AutoSize = true;
-            this.KnowledgeOn.Location = new System.Drawing.Point(11, 31);
-            this.KnowledgeOn.Name = "KnowledgeOn";
-            this.KnowledgeOn.Size = new System.Drawing.Size(97, 21);
-            this.KnowledgeOn.TabIndex = 177;
-            this.KnowledgeOn.Text = "Murphy on";
-            this.KnowledgeOn.UseVisualStyleBackColor = true;
             // 
             // KnowledgeRate
             // 
             this.KnowledgeRate.Location = new System.Drawing.Point(306, 50);
             this.KnowledgeRate.Name = "KnowledgeRate";
-            this.KnowledgeRate.Size = new System.Drawing.Size(59, 22);
+            this.KnowledgeRate.Size = new System.Drawing.Size(93, 22);
             this.KnowledgeRate.TabIndex = 176;
             this.KnowledgeRate.TextChanged += new System.EventHandler(this.KnowledgeRate_TextChanged);
             // 
             // cbLimitNumberOfTriesKnowledge
             // 
             this.cbLimitNumberOfTriesKnowledge.AutoSize = true;
-            this.cbLimitNumberOfTriesKnowledge.Location = new System.Drawing.Point(10, 202);
+            this.cbLimitNumberOfTriesKnowledge.Location = new System.Drawing.Point(51, 250);
             this.cbLimitNumberOfTriesKnowledge.Name = "cbLimitNumberOfTriesKnowledge";
-            this.cbLimitNumberOfTriesKnowledge.Size = new System.Drawing.Size(394, 21);
+            this.cbLimitNumberOfTriesKnowledge.Size = new System.Drawing.Size(315, 21);
             this.cbLimitNumberOfTriesKnowledge.TabIndex = 168;
-            this.cbLimitNumberOfTriesKnowledge.Text = "Limit number of tries (to have an answer before guessing)";
+            this.cbLimitNumberOfTriesKnowledge.Text = "Limit number of internal tries before guessing";
             this.cbLimitNumberOfTriesKnowledge.UseVisualStyleBackColor = true;
+            this.cbLimitNumberOfTriesKnowledge.CheckedChanged += new System.EventHandler(this.cbLimitNumberOfTriesKnowledge_CheckedChanged);
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(75, 233);
+            this.label22.Location = new System.Drawing.Point(122, 287);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(136, 17);
             this.label22.TabIndex = 167;
@@ -536,50 +1066,50 @@
             // 
             // tbRequiredMandatoryRatio
             // 
-            this.tbRequiredMandatoryRatio.Location = new System.Drawing.Point(306, 299);
+            this.tbRequiredMandatoryRatio.Location = new System.Drawing.Point(306, 76);
             this.tbRequiredMandatoryRatio.Name = "tbRequiredMandatoryRatio";
-            this.tbRequiredMandatoryRatio.Size = new System.Drawing.Size(59, 22);
+            this.tbRequiredMandatoryRatio.Size = new System.Drawing.Size(93, 22);
             this.tbRequiredMandatoryRatio.TabIndex = 162;
             this.tbRequiredMandatoryRatio.TextChanged += new System.EventHandler(this.tbRequiredMandatoryRatio_TextChanged);
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(5, 300);
+            this.label15.Location = new System.Drawing.Point(48, 79);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(169, 17);
+            this.label15.Size = new System.Drawing.Size(107, 17);
             this.label15.TabIndex = 161;
-            this.label15.Text = "Required mandatory ratio";
+            this.label15.Text = "Mandatory ratio";
             // 
             // tbLackDelayBeforeSearchingExternally
             // 
-            this.tbLackDelayBeforeSearchingExternally.Location = new System.Drawing.Point(306, 271);
+            this.tbLackDelayBeforeSearchingExternally.Location = new System.Drawing.Point(306, 363);
             this.tbLackDelayBeforeSearchingExternally.Name = "tbLackDelayBeforeSearchingExternally";
-            this.tbLackDelayBeforeSearchingExternally.Size = new System.Drawing.Size(59, 22);
+            this.tbLackDelayBeforeSearchingExternally.Size = new System.Drawing.Size(93, 22);
             this.tbLackDelayBeforeSearchingExternally.TabIndex = 160;
             this.tbLackDelayBeforeSearchingExternally.TextChanged += new System.EventHandler(this.tbLackDelayBeforeSearchingExternally_TextChanged);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(5, 272);
+            this.label14.Location = new System.Drawing.Point(48, 368);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(263, 17);
+            this.label14.Size = new System.Drawing.Size(219, 17);
             this.label14.TabIndex = 159;
-            this.label14.Text = "Delay before searching externally (days)";
+            this.label14.Text = "Delay before searching externally";
             // 
             // tbLackResponseTime
             // 
-            this.tbLackResponseTime.Location = new System.Drawing.Point(306, 174);
+            this.tbLackResponseTime.Location = new System.Drawing.Point(306, 169);
             this.tbLackResponseTime.Name = "tbLackResponseTime";
-            this.tbLackResponseTime.Size = new System.Drawing.Size(59, 22);
+            this.tbLackResponseTime.Size = new System.Drawing.Size(93, 22);
             this.tbLackResponseTime.TabIndex = 158;
             this.tbLackResponseTime.TextChanged += new System.EventHandler(this.tbLackResponseTime_TextChanged);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(5, 175);
+            this.label13.Location = new System.Drawing.Point(51, 171);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(146, 17);
             this.label13.TabIndex = 157;
@@ -587,16 +1117,16 @@
             // 
             // tbLackRateOfAnswers
             // 
-            this.tbLackRateOfAnswers.Location = new System.Drawing.Point(306, 147);
+            this.tbLackRateOfAnswers.Location = new System.Drawing.Point(306, 144);
             this.tbLackRateOfAnswers.Name = "tbLackRateOfAnswers";
-            this.tbLackRateOfAnswers.Size = new System.Drawing.Size(59, 22);
+            this.tbLackRateOfAnswers.Size = new System.Drawing.Size(93, 22);
             this.tbLackRateOfAnswers.TabIndex = 156;
             this.tbLackRateOfAnswers.TextChanged += new System.EventHandler(this.tbLackRateOfAnswers_TextChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(5, 148);
+            this.label10.Location = new System.Drawing.Point(49, 145);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(110, 17);
             this.label10.TabIndex = 155;
@@ -604,16 +1134,16 @@
             // 
             // tbLackRateOfIncorrectGuess
             // 
-            this.tbLackRateOfIncorrectGuess.Location = new System.Drawing.Point(306, 118);
+            this.tbLackRateOfIncorrectGuess.Location = new System.Drawing.Point(306, 315);
             this.tbLackRateOfIncorrectGuess.Name = "tbLackRateOfIncorrectGuess";
-            this.tbLackRateOfIncorrectGuess.Size = new System.Drawing.Size(59, 22);
+            this.tbLackRateOfIncorrectGuess.Size = new System.Drawing.Size(93, 22);
             this.tbLackRateOfIncorrectGuess.TabIndex = 154;
             this.tbLackRateOfIncorrectGuess.TextChanged += new System.EventHandler(this.tbLackRateOfIncorrectGuess_TextChanged);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(5, 119);
+            this.label11.Location = new System.Drawing.Point(48, 315);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(187, 17);
             this.label11.TabIndex = 153;
@@ -621,25 +1151,32 @@
             // 
             // tbKnowledgeThreshHoldForDoing
             // 
-            this.tbKnowledgeThreshHoldForDoing.Location = new System.Drawing.Point(306, 87);
+            this.tbKnowledgeThreshHoldForDoing.Location = new System.Drawing.Point(306, 103);
             this.tbKnowledgeThreshHoldForDoing.Name = "tbKnowledgeThreshHoldForDoing";
-            this.tbKnowledgeThreshHoldForDoing.Size = new System.Drawing.Size(59, 22);
+            this.tbKnowledgeThreshHoldForDoing.Size = new System.Drawing.Size(93, 22);
             this.tbKnowledgeThreshHoldForDoing.TabIndex = 3;
             this.tbKnowledgeThreshHoldForDoing.TextChanged += new System.EventHandler(this.tbKnowledgeThreshHoldForDoing_TextChanged);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(5, 88);
+            this.label9.Location = new System.Drawing.Point(48, 103);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(242, 17);
+            this.label9.Size = new System.Drawing.Size(243, 17);
             this.label9.TabIndex = 2;
-            this.label9.Text = "Knowledge threshHold for doing [0;1]";
+            this.label9.Text = "Knowledge threshold for blocker [0;1]";
             // 
             // gbBelief
             // 
+            this.gbBelief.BackColor = System.Drawing.Color.LightBlue;
+            this.gbBelief.Controls.Add(this.label47);
+            this.gbBelief.Controls.Add(this.label46);
+            this.gbBelief.Controls.Add(this.label45);
+            this.gbBelief.Controls.Add(this.label27);
+            this.gbBelief.Controls.Add(this.BeliefsLevel);
+            this.gbBelief.Controls.Add(this.BeliefsRiskAversion);
+            this.gbBelief.Controls.Add(this.label28);
             this.gbBelief.Controls.Add(this.label19);
-            this.gbBelief.Controls.Add(this.BeliefsOn);
             this.gbBelief.Controls.Add(this.BeliefsRate);
             this.gbBelief.Controls.Add(this.label6);
             this.gbBelief.Controls.Add(this.cbLimitNumberOfTriesBelief);
@@ -650,35 +1187,90 @@
             this.gbBelief.Controls.Add(this.label24);
             this.gbBelief.Controls.Add(this.tbBeliefRateIncorrectGuess);
             this.gbBelief.Controls.Add(this.label25);
-            this.gbBelief.Location = new System.Drawing.Point(434, 191);
+            this.gbBelief.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.gbBelief.Location = new System.Drawing.Point(708, 28);
             this.gbBelief.Name = "gbBelief";
-            this.gbBelief.Size = new System.Drawing.Size(407, 239);
+            this.gbBelief.Size = new System.Drawing.Size(392, 312);
             this.gbBelief.TabIndex = 166;
             this.gbBelief.TabStop = false;
-            this.gbBelief.Text = "Incomplete belief murphy";
+            this.gbBelief.Text = "Incomplete belief";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label47.Location = new System.Drawing.Point(16, 206);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(54, 17);
+            this.label47.TabIndex = 185;
+            this.label47.Text = "Guess";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label46.Location = new System.Drawing.Point(16, 128);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(63, 17);
+            this.label46.TabIndex = 185;
+            this.label46.Text = "Internal";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label45.Location = new System.Drawing.Point(14, 50);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(70, 17);
+            this.label45.TabIndex = 185;
+            this.label45.Text = "Blockers";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(14, 26);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(103, 17);
+            this.label27.TabIndex = 155;
+            this.label27.Text = "Level of beliefs";
+            // 
+            // BeliefsLevel
+            // 
+            this.BeliefsLevel.FormattingEnabled = true;
+            this.BeliefsLevel.Location = new System.Drawing.Point(201, 23);
+            this.BeliefsLevel.Name = "BeliefsLevel";
+            this.BeliefsLevel.Size = new System.Drawing.Size(152, 24);
+            this.BeliefsLevel.TabIndex = 154;
+            // 
+            // BeliefsRiskAversion
+            // 
+            this.BeliefsRiskAversion.Location = new System.Drawing.Point(291, 104);
+            this.BeliefsRiskAversion.Name = "BeliefsRiskAversion";
+            this.BeliefsRiskAversion.Size = new System.Drawing.Size(63, 22);
+            this.BeliefsRiskAversion.TabIndex = 174;
+            this.BeliefsRiskAversion.TextChanged += new System.EventHandler(this.BeliefsRiskAversion_TextChanged);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(53, 106);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(198, 17);
+            this.label28.TabIndex = 173;
+            this.label28.Text = "Belief threshold for doing [0;1]";
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(83, 55);
+            this.label19.Location = new System.Drawing.Point(53, 79);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(121, 17);
             this.label19.TabIndex = 172;
             this.label19.Text = "Rate of agents on";
             // 
-            // BeliefsOn
-            // 
-            this.BeliefsOn.AutoSize = true;
-            this.BeliefsOn.Location = new System.Drawing.Point(12, 22);
-            this.BeliefsOn.Name = "BeliefsOn";
-            this.BeliefsOn.Size = new System.Drawing.Size(97, 21);
-            this.BeliefsOn.TabIndex = 171;
-            this.BeliefsOn.Text = "Murphy on";
-            this.BeliefsOn.UseVisualStyleBackColor = true;
-            // 
             // BeliefsRate
             // 
-            this.BeliefsRate.Location = new System.Drawing.Point(285, 50);
+            this.BeliefsRate.Location = new System.Drawing.Point(290, 76);
             this.BeliefsRate.Name = "BeliefsRate";
             this.BeliefsRate.Size = new System.Drawing.Size(63, 22);
             this.BeliefsRate.TabIndex = 170;
@@ -687,7 +1279,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(85, 195);
+            this.label6.Location = new System.Drawing.Point(89, 259);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(136, 17);
             this.label6.TabIndex = 169;
@@ -696,16 +1288,18 @@
             // cbLimitNumberOfTriesBelief
             // 
             this.cbLimitNumberOfTriesBelief.AutoSize = true;
-            this.cbLimitNumberOfTriesBelief.Location = new System.Drawing.Point(14, 162);
+            this.cbLimitNumberOfTriesBelief.Location = new System.Drawing.Point(55, 227);
             this.cbLimitNumberOfTriesBelief.Name = "cbLimitNumberOfTriesBelief";
-            this.cbLimitNumberOfTriesBelief.Size = new System.Drawing.Size(394, 21);
+            this.cbLimitNumberOfTriesBelief.Size = new System.Drawing.Size(319, 21);
             this.cbLimitNumberOfTriesBelief.TabIndex = 166;
-            this.cbLimitNumberOfTriesBelief.Text = "Limit number of tries (to have an answer before guessing)";
+            this.cbLimitNumberOfTriesBelief.Text = "Limit number of internal tries  before guessing";
             this.cbLimitNumberOfTriesBelief.UseVisualStyleBackColor = true;
+            this.cbLimitNumberOfTriesBelief.CheckedChanged += new System.EventHandler(this.cbLimitNumberOfTriesBelief_CheckedChanged);
             // 
             // tbMaxNumberOfTriesBelief
             // 
-            this.tbMaxNumberOfTriesBelief.Location = new System.Drawing.Point(287, 190);
+            this.tbMaxNumberOfTriesBelief.Enabled = false;
+            this.tbMaxNumberOfTriesBelief.Location = new System.Drawing.Point(291, 254);
             this.tbMaxNumberOfTriesBelief.Name = "tbMaxNumberOfTriesBelief";
             this.tbMaxNumberOfTriesBelief.Size = new System.Drawing.Size(63, 22);
             this.tbMaxNumberOfTriesBelief.TabIndex = 165;
@@ -713,7 +1307,7 @@
             // 
             // tbBeliefResponseTime
             // 
-            this.tbBeliefResponseTime.Location = new System.Drawing.Point(285, 135);
+            this.tbBeliefResponseTime.Location = new System.Drawing.Point(290, 184);
             this.tbBeliefResponseTime.Name = "tbBeliefResponseTime";
             this.tbBeliefResponseTime.Size = new System.Drawing.Size(63, 22);
             this.tbBeliefResponseTime.TabIndex = 158;
@@ -722,7 +1316,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(9, 136);
+            this.label23.Location = new System.Drawing.Point(53, 184);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(146, 17);
             this.label23.TabIndex = 157;
@@ -730,7 +1324,7 @@
             // 
             // tbBeliefRateAnswers
             // 
-            this.tbBeliefRateAnswers.Location = new System.Drawing.Point(285, 108);
+            this.tbBeliefRateAnswers.Location = new System.Drawing.Point(291, 152);
             this.tbBeliefRateAnswers.Name = "tbBeliefRateAnswers";
             this.tbBeliefRateAnswers.Size = new System.Drawing.Size(63, 22);
             this.tbBeliefRateAnswers.TabIndex = 156;
@@ -739,7 +1333,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(9, 109);
+            this.label24.Location = new System.Drawing.Point(53, 157);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(110, 17);
             this.label24.TabIndex = 155;
@@ -747,7 +1341,7 @@
             // 
             // tbBeliefRateIncorrectGuess
             // 
-            this.tbBeliefRateIncorrectGuess.Location = new System.Drawing.Point(285, 79);
+            this.tbBeliefRateIncorrectGuess.Location = new System.Drawing.Point(292, 284);
             this.tbBeliefRateIncorrectGuess.Name = "tbBeliefRateIncorrectGuess";
             this.tbBeliefRateIncorrectGuess.Size = new System.Drawing.Size(63, 22);
             this.tbBeliefRateIncorrectGuess.TabIndex = 154;
@@ -756,48 +1350,39 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(9, 80);
+            this.label25.Location = new System.Drawing.Point(53, 287);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(187, 17);
             this.label25.TabIndex = 153;
             this.label25.Text = "Rate of incorrect guess [0;1]";
             // 
-            // groupBox7
+            // gbUnavailabilities
             // 
-            this.groupBox7.Controls.Add(this.label20);
-            this.groupBox7.Controls.Add(this.UnavailabilityOn);
-            this.groupBox7.Controls.Add(this.UnavailabilityRate);
-            this.groupBox7.Controls.Add(this.tbUnavailabilityThreshhold);
-            this.groupBox7.Controls.Add(this.label17);
-            this.groupBox7.Location = new System.Drawing.Point(21, 29);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(404, 134);
-            this.groupBox7.TabIndex = 51;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Unavailability murphy";
+            this.gbUnavailabilities.BackColor = System.Drawing.Color.LightBlue;
+            this.gbUnavailabilities.Controls.Add(this.label20);
+            this.gbUnavailabilities.Controls.Add(this.UnavailabilityRate);
+            this.gbUnavailabilities.Controls.Add(this.tbUnavailabilityThreshhold);
+            this.gbUnavailabilities.Controls.Add(this.label17);
+            this.gbUnavailabilities.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.gbUnavailabilities.Location = new System.Drawing.Point(284, 26);
+            this.gbUnavailabilities.Name = "gbUnavailabilities";
+            this.gbUnavailabilities.Size = new System.Drawing.Size(404, 100);
+            this.gbUnavailabilities.TabIndex = 51;
+            this.gbUnavailabilities.TabStop = false;
+            this.gbUnavailabilities.Text = "Unavailability";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(89, 57);
+            this.label20.Location = new System.Drawing.Point(15, 29);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(121, 17);
             this.label20.TabIndex = 175;
             this.label20.Text = "Rate of agents on";
             // 
-            // UnavailabilityOn
-            // 
-            this.UnavailabilityOn.AutoSize = true;
-            this.UnavailabilityOn.Location = new System.Drawing.Point(18, 33);
-            this.UnavailabilityOn.Name = "UnavailabilityOn";
-            this.UnavailabilityOn.Size = new System.Drawing.Size(97, 21);
-            this.UnavailabilityOn.TabIndex = 174;
-            this.UnavailabilityOn.Text = "Murphy on";
-            this.UnavailabilityOn.UseVisualStyleBackColor = true;
-            // 
             // UnavailabilityRate
             // 
-            this.UnavailabilityRate.Location = new System.Drawing.Point(306, 52);
+            this.UnavailabilityRate.Location = new System.Drawing.Point(306, 26);
             this.UnavailabilityRate.Name = "UnavailabilityRate";
             this.UnavailabilityRate.Size = new System.Drawing.Size(59, 22);
             this.UnavailabilityRate.TabIndex = 173;
@@ -805,7 +1390,7 @@
             // 
             // tbUnavailabilityThreshhold
             // 
-            this.tbUnavailabilityThreshhold.Location = new System.Drawing.Point(306, 85);
+            this.tbUnavailabilityThreshhold.Location = new System.Drawing.Point(306, 59);
             this.tbUnavailabilityThreshhold.Name = "tbUnavailabilityThreshhold";
             this.tbUnavailabilityThreshhold.Size = new System.Drawing.Size(59, 22);
             this.tbUnavailabilityThreshhold.TabIndex = 134;
@@ -814,78 +1399,17 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(15, 86);
+            this.label17.Location = new System.Drawing.Point(15, 60);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(171, 17);
             this.label17.TabIndex = 133;
             this.label17.Text = "Rate of unavailability [0;1]";
             // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.cbMultipleBlockers);
-            this.groupBox6.Controls.Add(this.tbKnowledge);
-            this.groupBox6.Controls.Add(this.label12);
-            this.groupBox6.Controls.Add(this.tbWorkers);
-            this.groupBox6.Controls.Add(this.label2);
-            this.groupBox6.Controls.Add(this.tbSteps);
-            this.groupBox6.Controls.Add(this.label7);
-            this.groupBox6.Location = new System.Drawing.Point(438, 29);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(374, 156);
-            this.groupBox6.TabIndex = 18;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Simulation";
-            // 
-            // cbMultipleBlockers
-            // 
-            this.cbMultipleBlockers.AutoSize = true;
-            this.cbMultipleBlockers.Location = new System.Drawing.Point(28, 82);
-            this.cbMultipleBlockers.Name = "cbMultipleBlockers";
-            this.cbMultipleBlockers.Size = new System.Drawing.Size(171, 21);
-            this.cbMultipleBlockers.TabIndex = 151;
-            this.cbMultipleBlockers.Text = "Allow multiple blockers";
-            this.cbMultipleBlockers.UseVisualStyleBackColor = true;
-            // 
-            // tbKnowledge
-            // 
-            this.tbKnowledge.Location = new System.Drawing.Point(281, 22);
-            this.tbKnowledge.Name = "tbKnowledge";
-            this.tbKnowledge.Size = new System.Drawing.Size(63, 22);
-            this.tbKnowledge.TabIndex = 44;
-            this.tbKnowledge.Text = "5";
-            this.tbKnowledge.TextChanged += new System.EventHandler(this.tbKnowledge_TextChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(25, 27);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(145, 17);
-            this.label12.TabIndex = 43;
-            this.label12.Text = "Number of knowledge";
-            // 
-            // tbSteps
-            // 
-            this.tbSteps.Location = new System.Drawing.Point(281, 115);
-            this.tbSteps.Name = "tbSteps";
-            this.tbSteps.Size = new System.Drawing.Size(63, 22);
-            this.tbSteps.TabIndex = 39;
-            this.tbSteps.Text = "200";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(25, 117);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(112, 17);
-            this.label7.TabIndex = 42;
-            this.label7.Text = "Number of steps";
-            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1296, 789);
+            this.ClientSize = new System.Drawing.Size(1549, 860);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.richTextBox2);
@@ -896,20 +1420,26 @@
             this.groupBox3.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.gbInformation.ResumeLayout(false);
+            this.gbInformation.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.gbUncompleteKnowledge.ResumeLayout(false);
             this.gbUncompleteKnowledge.PerformLayout();
             this.gbBelief.ResumeLayout(false);
             this.gbBelief.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
+            this.gbUnavailabilities.ResumeLayout(false);
+            this.gbUnavailabilities.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
-        private System.Windows.Forms.CheckBox BeliefsOn;
+        private System.Windows.Forms.ComboBox BeliefsLevel;
         private System.Windows.Forms.TextBox BeliefsRate;
+        private System.Windows.Forms.TextBox BeliefsRiskAversion;
         private System.Windows.Forms.Label BlockersExternal;
         private System.Windows.Forms.Label BlockersGuessing;
         private System.Windows.Forms.Label BlockersInDone;
@@ -924,14 +1454,19 @@
         private System.Windows.Forms.CheckBox cbLimitNumberOfTriesBelief;
         private System.Windows.Forms.CheckBox cbLimitNumberOfTriesKnowledge;
         private System.Windows.Forms.CheckBox cbMultipleBlockers;
+        private System.Windows.Forms.RadioButton EmailComm;
+        private System.Windows.Forms.CheckBox EmailSearching;
+        private System.Windows.Forms.RadioButton Face2faceComm;
         private System.Windows.Forms.GroupBox gbBelief;
         private System.Windows.Forms.GroupBox gbUncompleteKnowledge;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.CheckBox KnowledgeOn;
+        private System.Windows.Forms.GroupBox gbUnavailabilities;
+        private System.Windows.Forms.Label Incorrectness;
+        private System.Windows.Forms.ComboBox KnowledgeLevel;
         private System.Windows.Forms.TextBox KnowledgeRate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label10;
@@ -940,6 +1475,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
@@ -951,10 +1487,16 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Label label4;
@@ -983,9 +1525,38 @@
         private System.Windows.Forms.TextBox tbUnavailabilityThreshhold;
         private System.Windows.Forms.TextBox tbWorkers;
         private System.Windows.Forms.Label TimeStep;
-        private System.Windows.Forms.CheckBox UnavailabilityOn;
         private System.Windows.Forms.TextBox UnavailabilityRate;
 
         #endregion
+        private System.Windows.Forms.Label BlockersCancelled;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.ListView lvMurphies;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.GroupBox gbInformation;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.TextBox InformationThreshold;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.TextBox InformationRateAgentsOn;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.CheckBox InformationLimitOfTries;
+        private System.Windows.Forms.TextBox InformationMaxOfTries;
+        private System.Windows.Forms.TextBox InformationResponseTime;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.TextBox InformationRateOfAnswer;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.TextBox InformationRateOfIncorrectGuess;
+        private System.Windows.Forms.Label label58;
     }
 }

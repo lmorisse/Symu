@@ -11,6 +11,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using Symu.Classes.Organization;
 using Symu.Common;
@@ -249,6 +250,7 @@ namespace SymuForm
             _environment.Schedule.Type = TimeStepType;
             _environment.Start();
             _environment.WaitingForStart();
+            _environment.SetInteractionSphere(true);
             State = AgentState.Started;
         }
 
