@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -209,7 +209,7 @@ namespace Symu.Classes.Agents
         public virtual void ActWorkingDay()
         {
             // update ActWeekEnd to have the same behaviour
-            if (!Cognitive.TasksAndPerformance.CanPerformTask 
+            if (!Cognitive.TasksAndPerformance.CanPerformTask
                 || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit
                 || Status == AgentStatus.Offline)
             {

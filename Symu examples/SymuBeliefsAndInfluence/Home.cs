@@ -93,7 +93,6 @@ namespace SymuBeliefsAndInfluence
 
         protected override void UpdateSettings()
         {
-
             OrganizationEntity.Models.Influence.On = InfluenceModelOn.Checked;
             OrganizationEntity.Models.Beliefs.On = BeliefsModelOn.Checked;
 

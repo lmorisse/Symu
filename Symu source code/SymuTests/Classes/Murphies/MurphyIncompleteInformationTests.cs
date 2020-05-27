@@ -1,7 +1,7 @@
 ﻿#region Licence
 
-// Description: Symu - ModelingTests
-// Website: Website:     https://symu.org
+// Description: Symu - SymuTests
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -11,7 +11,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Murphies;
-using Symu.Common;
 
 #endregion
 

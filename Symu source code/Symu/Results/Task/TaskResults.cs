@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -25,16 +25,16 @@ namespace Symu.Results.Task
     public class TaskResults
     {
         /// <summary>
-        ///     If set to true, TaskResults will be filled with value and stored during the simulation
-        /// </summary>
-        public bool On { get; set; }
-
-        /// <summary>
         ///     Key => step
         ///     Value => TaskResult for the step
         /// </summary>
         private readonly ConcurrentDictionary<ushort, TaskResult> _results =
             new ConcurrentDictionary<ushort, TaskResult>();
+
+        /// <summary>
+        ///     If set to true, TaskResults will be filled with value and stored during the simulation
+        /// </summary>
+        public bool On { get; set; }
 
         /// <summary>
         ///     Total tasks still in to do
@@ -61,12 +61,14 @@ namespace Symu.Results.Task
         ///     Total tasks done during the simulation
         /// </summary>
         public int Done => _results.Values.Any() ? _results.Values.Last().Done : 0;
+
         /// <summary>
         ///     Total tasks cancelled during the simulation
         /// </summary>
-        public int Cancelled => _results.Values.Any() ? _results.Values.Last().Cancelled: 0;
+        public int Cancelled => _results.Values.Any() ? _results.Values.Last().Cancelled : 0;
+
         /// <summary>
-        ///     Total impact of incorrectness 
+        ///     Total impact of incorrectness
         /// </summary>
         public int Incorrectness => _results.Values.Any() ? _results.Values.Last().Incorrectness : 0;
 
@@ -88,7 +90,8 @@ namespace Symu.Results.Task
             }
 
             var result = new TaskResult();
-            foreach (var tasksManager in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null).Select(x => x.TaskProcessor.TasksManager))
+            foreach (var tasksManager in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager))
             {
                 result.ToDo += tasksManager.ToDo.Count(x => !(x.Parent is Message));
                 result.InProgress += tasksManager.InProgress.Count(x => !(x.Parent is Message));
@@ -96,7 +99,7 @@ namespace Symu.Results.Task
                 result.Cancelled += tasksManager.Cancelled.Count(x => !(x.Parent is Message));
                 result.TotalTasksNumber += tasksManager.TotalTasksNumber;
                 result.WeightDone += tasksManager.TotalWeightDone;
-                result.Incorrectness += tasksManager.AllTasks.Sum(x => (int)x.Incorrect);
+                result.Incorrectness += tasksManager.AllTasks.Sum(x => (int) x.Incorrect);
             }
 
             _results.TryAdd(environment.Schedule.Step, result);

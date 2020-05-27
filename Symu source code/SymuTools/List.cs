@@ -78,7 +78,7 @@ namespace SymuTools
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return type.Equals(typeof(TType));
+            return type == typeof(TType);
         }
 
         public static byte Average(this List<byte> values)

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -21,7 +21,6 @@ using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using static SymuTools.Constants;
 
@@ -37,6 +36,7 @@ namespace Symu.Classes.Agents
     public abstract partial class Agent
     {
         #region Work on task
+
         /// <summary>
         ///     Override this method to specify how an agent will get new tasks to complete
         ///     By default, if worker can't perform task or has reached the maximum number of tasks,
@@ -140,6 +140,7 @@ namespace Symu.Classes.Agents
 
             task.Update(Schedule.Step);
         }
+
         #endregion
 
         #region Capacity
@@ -209,9 +210,11 @@ namespace Symu.Classes.Agents
         public virtual void SwitchingContextModel()
         {
         }
+
         #endregion
 
         #region TimeSpent
+
         /// <summary>
         ///     Daily Track of the TimeSPent for each keyActivity
         ///     Key => step
@@ -226,7 +229,8 @@ namespace Symu.Classes.Agents
         /// <param name="medium"></param>
         /// <param name="keyActivity">the keyActivity activity of the task, to track TimeSpent</param>
         /// <param name="send">If set, it is an ask help task, otherwise it is a reply help task</param>
-        public void ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums medium, bool send, ushort keyActivity)
+        public void ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums medium, bool send,
+            ushort keyActivity)
         {
             if (keyActivity == 0)
             {
@@ -253,6 +257,7 @@ namespace Symu.Classes.Agents
 
             TimeSpent[keyActivity] += timeSpent;
         }
+
         #endregion
 
         #region Post task
@@ -268,10 +273,12 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
-            if (!Cognitive.TasksAndPerformance.CanPerformTask || task.IsCancelledBy(Id))//|| task.IsBlocked)
+
+            if (!Cognitive.TasksAndPerformance.CanPerformTask || task.IsCancelledBy(Id)) //|| task.IsBlocked)
             {
                 return;
             }
+
             OnBeforePostTask(task);
             TaskProcessor.Post(task);
             OnAfterPostTask(task);
@@ -288,11 +295,13 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(tasks));
             }
+
             if (!Cognitive.TasksAndPerformance.CanPerformTask)
             {
                 return;
             }
-            foreach (var task in tasks.Where(x => !x.IsCancelledBy(Id)))//.Where(x => !x.IsBlocked))
+
+            foreach (var task in tasks.Where(x => !x.IsCancelledBy(Id))) //.Where(x => !x.IsBlocked))
             {
                 OnBeforePostTask(task);
                 TaskProcessor.Post(task);
@@ -310,6 +319,7 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             task.Assigned = Id;
         }
 
@@ -324,6 +334,7 @@ namespace Symu.Classes.Agents
         #endregion
 
         #region Common Blocker
+
         private void ActHelp(Message message)
         {
             switch (message.Action)
@@ -336,6 +347,7 @@ namespace Symu.Classes.Agents
                     break;
             }
         }
+
         /// <summary>
         ///     A teammate ask help because of a murphy
         /// </summary>
@@ -355,16 +367,19 @@ namespace Symu.Classes.Agents
             switch (blocker.Type)
             {
                 case Murphy.IncompleteKnowledge:
-                    AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteKnowledge.DelayToReplyToHelp());
+                    AskHelpIncomplete(message,
+                        Environment.Organization.Murphies.IncompleteKnowledge.DelayToReplyToHelp());
                     break;
                 case Murphy.IncompleteBelief:
                     AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
                     break;
                 case Murphy.IncompleteInformation:
-                    AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteInformation.DelayToReplyToHelp());
+                    AskHelpIncomplete(message,
+                        Environment.Organization.Murphies.IncompleteInformation.DelayToReplyToHelp());
                     break;
             }
         }
+
         public void AskHelpIncomplete(Message message, sbyte replyToHelp)
         {
             if (message is null)
@@ -383,7 +398,7 @@ namespace Symu.Classes.Agents
             // TODO reply should take time and impact today or the day he will reply his initial or remaining capacity, and is part of the multitasking
             // Not done for the moment
             if (replyToHelp == 0)
-            {                
+            {
                 // Receive the question
                 if (replyMessage.Attachments.Second is SymuTask task)
                 {
@@ -391,13 +406,15 @@ namespace Symu.Classes.Agents
                     // Send the answer
                     ImpactOfTheCommunicationMediumOnTimeSpent(message.Medium, true, task.KeyActivity);
                 }
+
                 Reply(replyMessage);
             }
             else
             {
-                ReplyDelayed(replyMessage, (ushort)(Schedule.Step + replyToHelp));
+                ReplyDelayed(replyMessage, (ushort) (Schedule.Step + replyToHelp));
             }
         }
+
         /// <summary>
         ///     After asking for help, an agent help finally the worker.
         ///     Task can be unlocked
@@ -423,7 +440,7 @@ namespace Symu.Classes.Agents
 
             // Remove blocker
             // TODO should use blockerId but for the moment blocker is not in the message.Parameter and blocker don't have Id
-            var blocker = (Blocker)message.Attachments.First;
+            var blocker = (Blocker) message.Attachments.First;
             switch (blocker.Type)
             {
                 case Murphy.IncompleteKnowledge:
@@ -431,14 +448,17 @@ namespace Symu.Classes.Agents
                     {
                         return;
                     }
+
                     break;
                 case Murphy.IncompleteBelief:
                     if (message.Attachments.BeliefBits == null)
                     {
                         return;
                     }
+
                     break;
             }
+
             ReplyHelpIncomplete(task, blocker, message.Medium, message.Sender.ClassKey == SymuYellowPages.Actor);
             // specifics behaviour
             switch (blocker.Type)
@@ -448,8 +468,9 @@ namespace Symu.Classes.Agents
                     break;
             }
         }
+
         /// <summary>
-        /// Common method to reply help for Murphy type MurphyIncomplete (Knowledge, Information, Beliefs)
+        ///     Common method to reply help for Murphy type MurphyIncomplete (Knowledge, Information, Beliefs)
         /// </summary>
         /// <param name="task"></param>
         /// <param name="blocker"></param>
@@ -463,7 +484,7 @@ namespace Symu.Classes.Agents
             }
 
             // Take some time to learn, allocate this time on KeyActivity
-            ImpactOfTheCommunicationMediumOnTimeSpent(medium, false, task.KeyActivity); 
+            ImpactOfTheCommunicationMediumOnTimeSpent(medium, false, task.KeyActivity);
             task.Blockers.Recover(blocker, internalHelp ? BlockerResolution.Internal : BlockerResolution.External);
         }
 
@@ -515,7 +536,8 @@ namespace Symu.Classes.Agents
         /// <param name="blocker"></param>
         /// <param name="murphy"></param>
         /// <param name="resolution"></param>
-        public void RecoverBlockerIncompleteByGuessing(SymuTask task, Blocker blocker, MurphyIncomplete murphy, BlockerResolution resolution)
+        public void RecoverBlockerIncompleteByGuessing(SymuTask task, Blocker blocker, MurphyIncomplete murphy,
+            BlockerResolution resolution)
         {
             if (task is null)
             {
@@ -543,11 +565,12 @@ namespace Symu.Classes.Agents
             {
                 task.Weight *= murphy.NextImpactOnTimeSpent();
                 if (blocker != null)
-                { 
+                {
                     task.Blockers.Recover(blocker, resolution);
                 }
             }
         }
+
         /// <summary>
         ///     Check if there are  blockers today on the task
         /// </summary>
@@ -621,6 +644,7 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
             {
                 CheckBlockerIncompleteKnowledge(task, knowledgeId);
@@ -658,7 +682,8 @@ namespace Symu.Classes.Agents
             var requiredOk = taskBits.GetRequired().Length == 0;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(knowledgeId, taskBits, KnowledgeModel.Expertise, ref mandatoryOk, ref requiredOk,
+            Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(knowledgeId, taskBits,
+                KnowledgeModel.Expertise, ref mandatoryOk, ref requiredOk,
                 ref mandatoryIndex, ref requiredIndex, Schedule.Step);
             if (!mandatoryOk)
             {
@@ -668,7 +693,8 @@ namespace Symu.Classes.Agents
             }
             else if (!requiredOk)
             {
-                RecoverBlockerIncompleteKnowledgeByGuessing(task, null, knowledgeId, requiredIndex, BlockerResolution.Guessing);
+                RecoverBlockerIncompleteKnowledgeByGuessing(task, null, knowledgeId, requiredIndex,
+                    BlockerResolution.Guessing);
             }
         }
 
@@ -690,13 +716,14 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(task));
             }
 
-            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteKnowledge, resolution);
+            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteKnowledge,
+                resolution);
             if (task.Incorrect == ImpactLevel.Blocked)
             {
                 return;
             }
 
-            LearningModel.LearnByDoing(knowledgeId, knowledgeBit, Schedule.Step); 
+            LearningModel.LearnByDoing(knowledgeId, knowledgeBit, Schedule.Step);
             switch (blocker)
             {
                 // No blocker, it's a required knowledgeBit
@@ -714,10 +741,10 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Try different strategy to unblocked the blocker from incomplete knowledge
         ///     Default strategies:
-        ///         search in its databases the information
-        ///         ask internally of the organization if other agents have the adequate knowledge
-        ///         Do the by itself, with the risk of performing incorrectly the task
-        ///         asking externally of the organization (to override)
+        ///     search in its databases the information
+        ///     ask internally of the organization if other agents have the adequate knowledge
+        ///     Do the by itself, with the risk of performing incorrectly the task
+        ///     asking externally of the organization (to override)
         /// </summary>
         /// <param name="task"></param>
         /// <param name="blocker"></param>
@@ -738,15 +765,18 @@ namespace Symu.Classes.Agents
             // Check if he has the right to receive knowledge from others agents
             if (!Cognitive.MessageContent.CanReceiveKnowledge)
             {
-                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Guessing);
+                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
+                    BlockerResolution.Guessing);
                 return;
             }
+
             // He has the right
             // first search in the databases of the actor
             if (HasEmail && Email.SearchKnowledge(knowledgeId, knowledgeBit,
                 Cognitive.TasksAndPerformance.LearningRate))
             {
-                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Searching);
+                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
+                    BlockerResolution.Searching);
                 return;
             }
 
@@ -773,7 +803,8 @@ namespace Symu.Classes.Agents
             else
             {
                 // blocker must be unblocked in a way or another
-                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Guessing);
+                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
+                    BlockerResolution.Guessing);
             }
         }
 
@@ -786,10 +817,12 @@ namespace Symu.Classes.Agents
         /// <param name="blocker"></param>
         /// <param name="knowledgeId"></param>
         /// <param name="knowledgeBit"></param>
-        public virtual void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker, ushort knowledgeId,
+        public virtual void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker,
+            ushort knowledgeId,
             byte knowledgeBit)
         {
-            RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit, BlockerResolution.Guessing);
+            RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
+                BlockerResolution.Guessing);
         }
 
         public void ReplyHelpIncompleteKnowledge(SymuTask task, Blocker blocker)
@@ -804,9 +837,9 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(blocker));
             }
 
-            task.KnowledgesBits.RemoveFirstMandatory((ushort)blocker.Parameter);
+            task.KnowledgesBits.RemoveFirstMandatory((ushort) blocker.Parameter);
         }
-       
+
         #endregion
 
         #region Incomplete beliefs
@@ -822,6 +855,7 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             if (task.Parent is Message)
             {
                 return;
@@ -837,7 +871,6 @@ namespace Symu.Classes.Agents
 
                 CheckBlockerIncompleteBelief(task, knowledgeId);
                 CheckRiskAversion(task, knowledgeId);
-
             }
         }
 
@@ -852,10 +885,12 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
-            if (!Environment.Organization.Murphies.IncompleteBelief.On) 
+
+            if (!Environment.Organization.Murphies.IncompleteBelief.On)
             {
                 return;
             }
+
             var taskBits = task.KnowledgesBits.GetBits(knowledgeId);
             float mandatoryScore = 0;
             float requiredScore = 0;
@@ -863,21 +898,25 @@ namespace Symu.Classes.Agents
             byte requiredIndex = 0;
 
             var belief = Environment.WhitePages.Network.NetworkBeliefs.GetBelief(knowledgeId);
-            Environment.Organization.Murphies.IncompleteBelief.CheckBelief(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore, ref requiredScore,
+            Environment.Organization.Murphies.IncompleteBelief.CheckBelief(belief, taskBits, BeliefsModel.Beliefs,
+                ref mandatoryScore, ref requiredScore,
                 ref mandatoryIndex, ref requiredIndex);
             if (Math.Abs(mandatoryScore + requiredScore) < Tolerance)
             {
                 // Check belief is ok
                 return;
             }
-            CheckBlockerIncompleteBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex, requiredIndex);
+
+            CheckBlockerIncompleteBelief(task, knowledgeId, mandatoryScore, requiredScore, mandatoryIndex,
+                requiredIndex);
         }
+
         /// <summary>
         ///     Agent has checked its beliefs against the task.
         ///     Now the agent must define its answer given the mandatory and required scores
         ///     By default, mandatoryScore is checked against MurphyIncompleteBeliefs.ThresholdForReacting
         ///     The task is blocked if necessary.
-        ///     Override this method to implement your own answer 
+        ///     Override this method to implement your own answer
         /// </summary>
         /// <param name="task"></param>
         /// <param name="knowledgeId"></param>
@@ -904,7 +943,7 @@ namespace Symu.Classes.Agents
             var blocker1 = task.Blockers.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
             TryRecoverBlockerIncompleteBelief(task, blocker1);
         }
-        
+
 
         /// <summary>
         ///     Check a particular beliefId from Task.BeliefBits against Agent.Beliefs
@@ -917,12 +956,13 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             var taskBits = task.KnowledgesBits.GetBits(knowledgeId);
             float mandatoryScore = 0;
             byte mandatoryIndex = 0;
 
             var belief = Environment.WhitePages.Network.NetworkBeliefs.GetBelief(knowledgeId);
-            MurphyIncompleteBelief.CheckRiskAversion(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore, 
+            MurphyIncompleteBelief.CheckRiskAversion(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore,
                 ref mandatoryIndex, -Cognitive.InternalCharacteristics.RiskAversionThreshold);
             if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionThreshold))
             {
@@ -933,8 +973,8 @@ namespace Symu.Classes.Agents
             var blocker = task.Blockers.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
             TaskProcessor.Cancel(task);
             task.Blockers.Cancel(blocker);
-
         }
+
         /// <summary>
         ///     Ask Help to teammates about it belief
         ///     when task is blocked because of a lack of belief
@@ -963,8 +1003,8 @@ namespace Symu.Classes.Agents
             }
 
             var murphy = Environment.Organization.Murphies.IncompleteBelief;
-            var knowledgeId = (ushort)blocker.Parameter;
-            var knowledgeBit = (byte)blocker.Parameter2;
+            var knowledgeId = (ushort) blocker.Parameter;
+            var knowledgeBit = (byte) blocker.Parameter2;
 
             var teammates = GetAgentIdsForInteractions(InteractionStrategy.Beliefs).ToList();
             var askInternally = murphy.AskInternally(Schedule.Step,
@@ -1024,15 +1064,18 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(blocker));
             }
 
-            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteBelief, BlockerResolution.Guessing);
+            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteBelief,
+                BlockerResolution.Guessing);
             if (task.Incorrect == ImpactLevel.Blocked)
             {
                 return;
             }
+
             var beliefId = (ushort) blocker.Parameter;
             var beliefBit = (byte) blocker.Parameter2;
             InfluenceModel.ReinforcementByDoing(beliefId, beliefBit, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
         }
+
         #endregion
 
         #region Incomplete information
@@ -1046,10 +1089,11 @@ namespace Symu.Classes.Agents
         /// <returns>true if the task is blocked</returns>
         public bool CheckBlockerIncompleteInformation(SymuTask task)
         {
-            if (task is null )
+            if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
             var murphy = Environment.Organization.Murphies.IncompleteInformation;
 
             if (!murphy.On ||
@@ -1066,7 +1110,7 @@ namespace Symu.Classes.Agents
                 return false;
             }
 
-            var blocker = task.Blockers.Add(Murphy.IncompleteInformation, Schedule.Step); 
+            var blocker = task.Blockers.Add(Murphy.IncompleteInformation, Schedule.Step);
             TryRecoverBlocker(task, blocker);
 
             return true;
@@ -1089,6 +1133,7 @@ namespace Symu.Classes.Agents
             {
                 throw new ArgumentNullException(nameof(blocker));
             }
+
             var murphy = Environment.Organization.Murphies.IncompleteInformation;
             var askInternally = Environment.Organization.Murphies.IncompleteKnowledge.AskInternally(Schedule.Step,
                 blocker.InitialStep);
@@ -1106,7 +1151,6 @@ namespace Symu.Classes.Agents
                 {
                     Send(task.Creator, MessageAction.Ask, SymuYellowPages.Help, parameterF, messageType);
                 }
-
             }
             else if (!askInternally)
             {
@@ -1114,7 +1158,8 @@ namespace Symu.Classes.Agents
             }
             else
             {
-                RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteInformation, BlockerResolution.Guessing);
+                RecoverBlockerIncompleteByGuessing(task, blocker,
+                    Environment.Organization.Murphies.IncompleteInformation, BlockerResolution.Guessing);
             }
         }
 
@@ -1127,10 +1172,10 @@ namespace Symu.Classes.Agents
         /// <param name="blocker"></param>
         public virtual void TryRecoverBlockerIncompleteInformationExternally(SymuTask task, Blocker blocker)
         {
-            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteInformation, BlockerResolution.Guessing);
+            RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteInformation,
+                BlockerResolution.Guessing);
         }
 
         #endregion
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ namespace Symu.Repository.Networks.Sphere
         ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
         ///     the actor i knows the fact k or not
         /// </summary>
-        /// <param name="interactionMatrix"></param>
+        /// <param name="network"></param>
         /// <returns></returns>
         public static DerivedParameter GetAverageInteractionMatrix(DerivedParameter[,] network)
         {

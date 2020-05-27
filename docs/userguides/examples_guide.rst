@@ -14,3 +14,4 @@ So that you will be able to configure models for your own use cases.
    symugroupandinteraction
    symulearnandforget
    symumessageandtask
+   symumurphiesandblockers

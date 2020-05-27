@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -311,7 +311,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         #endregion
 
         #region Risk aversion
-        
+
         private float _riskAversionThreshold;
 
         /// <summary>
@@ -324,7 +324,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         ///     will never be able to make the corresponding decision.
         ///     RiskAversionThreshold == 0, full risk aversion
         ///     RiskAversionThreshold == 1, no risk aversion
-        /// 
         ///     RiskAversionThreshold should be > Environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting
         ///     Range [0;1]
         /// </summary>

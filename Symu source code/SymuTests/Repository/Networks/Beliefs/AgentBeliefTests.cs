@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -48,7 +48,8 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             byte[] taskKnowledge = { };
             Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(null, out _, _belief1, 1, true));
-            Assert.ThrowsException<ArgumentNullException>(() => _agentBelief1.Check(taskKnowledge, out _, null, 1, true));
+            Assert.ThrowsException<ArgumentNullException>(
+                () => _agentBelief1.Check(taskKnowledge, out _, null, 1, true));
         }
 
         /// <summary>

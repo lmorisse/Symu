@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,7 +13,6 @@ using System;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Messaging.Messages;
-using Symu.Repository.Networks.Knowledges;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
@@ -28,6 +27,9 @@ namespace Symu.Classes.Murphies
     /// </summary>
     public class MurphyIncomplete : MurphyTask
     {
+        private float _rateOfAnswers = 0.5F;
+
+        private float _rateOfIncorrectGuess = 0.3F;
         private float _thresholdForReacting = 0.1F;
 
         /// <summary>
@@ -47,8 +49,6 @@ namespace Symu.Classes.Murphies
                 _thresholdForReacting = value;
             }
         }
-
-        private float _rateOfIncorrectGuess = 0.3F;
 
         /// <summary>
         ///     Rate of incorrect task
@@ -70,8 +70,6 @@ namespace Symu.Classes.Murphies
                 _rateOfIncorrectGuess = value;
             }
         }
-
-        private float _rateOfAnswers = 0.5F;
 
         /// <summary>
         ///     Rate of answers
@@ -164,7 +162,7 @@ namespace Symu.Classes.Murphies
             if (Bernoulli.Sample(RateOfAnswers))
             {
                 // Teammate want to answer with a responseTime
-                reply = (sbyte)DiscreteUniform.SampleToByte(ResponseTime);
+                reply = (sbyte) DiscreteUniform.SampleToByte(ResponseTime);
             }
 
             return reply;
@@ -208,7 +206,6 @@ namespace Symu.Classes.Murphies
 
         /// <summary>
         ///     Check if agent should guess or try to recover the blocker
-        /// 
         /// </summary>
         /// <param name="numberOfTries">number of tries of recovery other than guessing</param>
         /// <returns>true if the agent should guess the answer</returns>
@@ -229,6 +226,7 @@ namespace Symu.Classes.Murphies
             {
                 return 1;
             }
+
             //todo 0.1F should be a parameter : standardDeviation
             return Normal.Sample(CostFactorOfGuessing, 0.1F);
         }

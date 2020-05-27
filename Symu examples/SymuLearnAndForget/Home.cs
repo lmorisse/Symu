@@ -269,7 +269,7 @@ namespace SymuLearnAndForget
 
             // Global Knowledge - using iteration result
 
-            lock(_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges)
+            lock (_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges)
             {
                 if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Any())
                 {
@@ -374,7 +374,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting=
+                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting =
                     float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshold.BackColor = SystemColors.Window;
             }
@@ -604,7 +604,7 @@ namespace SymuLearnAndForget
             }
         }
 
-        private void tbMinimRemainningLevel_TextChanged(object sender, EventArgs e)
+        private void tbMinimRemainingLevel_TextChanged(object sender, EventArgs e)
         {
             try
             {

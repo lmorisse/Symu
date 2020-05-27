@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ namespace Symu.Results.Task
         ///     Total weight of tasks done
         /// </summary>
         public float WeightDone { get; set; }
+
         /// <summary>
         ///     Total impact of incorrectness
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ namespace Symu.Results.Organization
             Knowledges.Add(knowledge);
         }
 
-        private static KnowledgeAndBeliefStruct SetStructKnowledgeAndBeliefStruct(ushort step, List<float> sumKnowledge)
+        private static KnowledgeAndBeliefStruct SetStructKnowledgeAndBeliefStruct(ushort step, IReadOnlyList<float> sumKnowledge)
         {
             float sum;
             float mean;

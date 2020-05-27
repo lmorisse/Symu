@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: Symu - SymuMurphiesAndBlockers
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,9 +10,9 @@
 #region using directives
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
@@ -48,34 +48,44 @@ namespace SymuMurphiesAndBlockers
             KnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
             KnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_environment.KnowledgeLevel);
             BeliefsLevel.Items.AddRange(BeliefLevelService.GetNames());
-            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive
+                .KnowledgeAndBeliefs.DefaultBeliefLevel);
             EmailComm.Checked = true;
 
             #region unavaibility
-            tbUnavailabilityThreshhold.Text = OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability.ToString();
+
+            tbUnavailabilityThreshold.Text =
+                OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability.ToString();
             UnavailabilityRate.Text = OrganizationEntity.Murphies.UnAvailability.RateOfAgentsOn.ToString();
+
             #endregion
 
             #region incomplete knowledge murphy
 
             tbKnowledgeThreshHoldForDoing.Text =
                 OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting.ToString();
-            tbLackRateOfIncorrectGuess.Text = OrganizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess.ToString();
+            tbLackRateOfIncorrectGuess.Text =
+                OrganizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess.ToString();
             tbLackRateOfAnswers.Text = OrganizationEntity.Murphies.IncompleteKnowledge.RateOfAnswers.ToString();
             tbLackResponseTime.Text = OrganizationEntity.Murphies.IncompleteKnowledge.ResponseTime.ToString();
-            cbLimitNumberOfTriesKnowledge.Checked = OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries != -1;
-            tbMaxNumberOfTriesKnowledge.Text = OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries.ToString();
-            tbLackDelayBeforeSearchingExternally.Text = OrganizationEntity.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally.ToString();
+            cbLimitNumberOfTriesKnowledge.Checked =
+                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries != -1;
+            tbMaxNumberOfTriesKnowledge.Text =
+                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries.ToString();
+            tbLackDelayBeforeSearchingExternally.Text = OrganizationEntity.Murphies.IncompleteKnowledge
+                .DelayBeforeSearchingExternally.ToString();
             tbRequiredMandatoryRatio.Text = OrganizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio.ToString();
 
-            KnowledgeRate.Text =  OrganizationEntity.Murphies.IncompleteKnowledge.RateOfAgentsOn.ToString();
+            KnowledgeRate.Text = OrganizationEntity.Murphies.IncompleteKnowledge.RateOfAgentsOn.ToString();
             EmailSearching.Checked = OrganizationEntity.Models.Learning.On;
+
             #endregion
 
             #region incomplete belief murphy
 
             BeliefsRate.Text = OrganizationEntity.Murphies.IncompleteBelief.RateOfAgentsOn.ToString();
-            tbBeliefRateIncorrectGuess.Text = OrganizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess.ToString();
+            tbBeliefRateIncorrectGuess.Text =
+                OrganizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess.ToString();
             tbBeliefRateAnswers.Text = OrganizationEntity.Murphies.IncompleteBelief.RateOfAnswers.ToString();
             tbBeliefResponseTime.Text = OrganizationEntity.Murphies.IncompleteBelief.ResponseTime.ToString();
             cbLimitNumberOfTriesBelief.Checked = OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries != -1;
@@ -87,11 +97,14 @@ namespace SymuMurphiesAndBlockers
             #region incomplete information murphy
 
             InformationRateAgentsOn.Text = OrganizationEntity.Murphies.IncompleteInformation.RateOfAgentsOn.ToString();
-            InformationRateOfIncorrectGuess.Text = OrganizationEntity.Murphies.IncompleteInformation.RateOfIncorrectGuess.ToString();
+            InformationRateOfIncorrectGuess.Text =
+                OrganizationEntity.Murphies.IncompleteInformation.RateOfIncorrectGuess.ToString();
             InformationRateOfAnswer.Text = OrganizationEntity.Murphies.IncompleteInformation.RateOfAnswers.ToString();
             InformationResponseTime.Text = OrganizationEntity.Murphies.IncompleteInformation.ResponseTime.ToString();
-            InformationLimitOfTries.Checked = OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries != -1;
-            InformationMaxOfTries.Text = OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries.ToString();
+            InformationLimitOfTries.Checked =
+                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries != -1;
+            InformationMaxOfTries.Text =
+                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries.ToString();
             InformationThreshold.Text =
                 OrganizationEntity.Murphies.IncompleteInformation.ThresholdForReacting.ToString();
 
@@ -140,40 +153,36 @@ namespace SymuMurphiesAndBlockers
             {
                 OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = Convert.ToSByte(BeliefsRate.Text);
             }
+
             if (!cbLimitNumberOfTriesKnowledge.Checked)
             {
                 OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = -1;
             }
             else
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = Convert.ToSByte(tbMaxNumberOfTriesKnowledge.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries =
+                    Convert.ToSByte(tbMaxNumberOfTriesKnowledge.Text);
             }
+
             if (!InformationLimitOfTries.Checked)
             {
                 OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries = -1;
             }
             else
             {
-                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries = Convert.ToSByte(InformationMaxOfTries.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries =
+                    Convert.ToSByte(InformationMaxOfTries.Text);
             }
+
             OrganizationEntity.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
             _environment.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(KnowledgeLevel.SelectedItem.ToString());
-            OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel=
+            OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(BeliefsLevel.SelectedItem.ToString());
 
             OrganizationEntity.Models.Learning.On = EmailSearching.Checked;
 
-            if (EmailComm.Checked)
-            {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                    CommunicationMediums.Email;
-            }
-            else
-            {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                    CommunicationMediums.FaceToFace;
-            }
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
             TimeStepType = TimeStepType.Daily;
         }
@@ -216,8 +225,8 @@ namespace SymuMurphiesAndBlockers
                 : _environment.IterationResult.Capacity * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
             WriteTextSafe(Capacity, capacityRatio
-                    .ToString("F1", CultureInfo.InvariantCulture));
-            
+                .ToString("F1", CultureInfo.InvariantCulture));
+
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Done * 100 /
@@ -243,26 +252,26 @@ namespace SymuMurphiesAndBlockers
                   _environment.IterationResult.Blockers.TotalBlockersDone;
 
             WriteTextSafe(BlockersExternal, totalExternalHelp
-                    .ToString("F1", CultureInfo.InvariantCulture));
+                .ToString("F1", CultureInfo.InvariantCulture));
 
             var totalInternalHelp = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalInternalHelp * 100 /
                   _environment.IterationResult.Blockers.TotalBlockersDone;
-            WriteTextSafe(BlockersInternal,totalInternalHelp
-                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersInternal, totalInternalHelp
+                .ToString("F1", CultureInfo.InvariantCulture));
             var totalGuesses = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalGuesses * 100 /
                   _environment.IterationResult.Blockers.TotalBlockersDone;
-            WriteTextSafe(BlockersGuessing,totalGuesses
-                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersGuessing, totalGuesses
+                .ToString("F1", CultureInfo.InvariantCulture));
             var totalSearches = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalSearches * 100 /
                   _environment.IterationResult.Blockers.TotalBlockersDone;
-            WriteTextSafe(BlockersSearching,totalSearches
-                    .ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(BlockersSearching, totalSearches
+                .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(BlockersCancelled, _environment.IterationResult.Blockers.TotalCancelled
                 .ToString("F0", CultureInfo.InvariantCulture));
         }
@@ -366,19 +375,12 @@ namespace SymuMurphiesAndBlockers
             }
         }
 
-       
-
-        #region Nested type: SafeCallButtonDelegate
-
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
-
-        #endregion
-
         private void tbKnowledgeThreshHoldForDoing_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting = float.Parse(tbKnowledgeThreshHoldForDoing.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.ThresholdForReacting =
+                    float.Parse(tbKnowledgeThreshHoldForDoing.Text);
                 tbKnowledgeThreshHoldForDoing.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -396,7 +398,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = float.Parse(tbLackRateOfIncorrectGuess.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess =
+                    float.Parse(tbLackRateOfIncorrectGuess.Text);
                 tbLackRateOfIncorrectGuess.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -450,7 +453,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries = sbyte.Parse(tbMaxNumberOfTriesKnowledge.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.LimitNumberOfTries =
+                    sbyte.Parse(tbMaxNumberOfTriesKnowledge.Text);
                 tbMaxNumberOfTriesKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -468,7 +472,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = byte.Parse(tbLackDelayBeforeSearchingExternally.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally =
+                    byte.Parse(tbLackDelayBeforeSearchingExternally.Text);
                 tbLackDelayBeforeSearchingExternally.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -486,7 +491,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio = float.Parse(tbRequiredMandatoryRatio.Text);
+                OrganizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio =
+                    float.Parse(tbRequiredMandatoryRatio.Text);
                 tbRequiredMandatoryRatio.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -504,7 +510,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess= float.Parse(tbBeliefRateIncorrectGuess.Text);
+                OrganizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess =
+                    float.Parse(tbBeliefRateIncorrectGuess.Text);
                 tbBeliefRateIncorrectGuess.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -522,7 +529,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteBelief.RateOfAnswers= float.Parse(tbBeliefRateAnswers.Text);
+                OrganizationEntity.Murphies.IncompleteBelief.RateOfAnswers = float.Parse(tbBeliefRateAnswers.Text);
                 tbBeliefRateAnswers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -558,7 +565,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = sbyte.Parse(tbMaxNumberOfTriesBelief.Text);
+                OrganizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries =
+                    sbyte.Parse(tbMaxNumberOfTriesBelief.Text);
                 tbMaxNumberOfTriesBelief.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -572,20 +580,21 @@ namespace SymuMurphiesAndBlockers
             }
         }
 
-        private void tbUnavailabilityThreshhold_TextChanged(object sender, EventArgs e)
+        private void tbUnavailabilityThreshold_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability = float.Parse(tbUnavailabilityThreshhold.Text);
-                tbUnavailabilityThreshhold.BackColor = SystemColors.Window;
+                OrganizationEntity.Murphies.UnAvailability.RateOfUnavailability =
+                    float.Parse(tbUnavailabilityThreshold.Text);
+                tbUnavailabilityThreshold.BackColor = SystemColors.Window;
             }
             catch (FormatException)
             {
-                tbUnavailabilityThreshhold.BackColor = Color.Red;
+                tbUnavailabilityThreshold.BackColor = Color.Red;
             }
             catch (ArgumentOutOfRangeException exception)
             {
-                tbUnavailabilityThreshhold.BackColor = Color.Red;
+                tbUnavailabilityThreshold.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }
@@ -648,7 +657,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting = float.Parse(BeliefsRiskAversion.Text);
+                OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting =
+                    float.Parse(BeliefsRiskAversion.Text);
                 BeliefsRiskAversion.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -695,7 +705,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.RateOfAgentsOn = float.Parse(InformationRateAgentsOn.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.RateOfAgentsOn =
+                    float.Parse(InformationRateAgentsOn.Text);
                 InformationRateAgentsOn.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -713,7 +724,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = float.Parse(InformationThreshold.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.ThresholdForReacting =
+                    float.Parse(InformationThreshold.Text);
                 InformationThreshold.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -731,7 +743,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.RateOfAnswers = float.Parse(InformationRateOfAnswer.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.RateOfAnswers =
+                    float.Parse(InformationRateOfAnswer.Text);
                 InformationRateOfAnswer.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -749,7 +762,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.ResponseTime = byte.Parse(InformationResponseTime.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.ResponseTime =
+                    byte.Parse(InformationResponseTime.Text);
                 InformationResponseTime.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -767,7 +781,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries = sbyte.Parse(InformationMaxOfTries.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries =
+                    sbyte.Parse(InformationMaxOfTries.Text);
                 InformationMaxOfTries.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -785,7 +800,8 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteInformation.RateOfIncorrectGuess = float.Parse(InformationRateOfIncorrectGuess.Text);
+                OrganizationEntity.Murphies.IncompleteInformation.RateOfIncorrectGuess =
+                    float.Parse(InformationRateOfIncorrectGuess.Text);
                 InformationRateOfIncorrectGuess.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -840,5 +856,31 @@ namespace SymuMurphiesAndBlockers
                 InformationMaxOfTries.Enabled = true;
             }
         }
+
+        private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://symu.org");
+        }
+
+        private void documentationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://docs.symu.org/");
+        }
+
+        private void sourceCodeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/");
+        }
+
+        private void issuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/issues");
+        }
+
+        #region Nested type: SafeCallButtonDelegate
+
+        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
+
+        #endregion
     }
 }

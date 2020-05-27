@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Results.Blocker;
 
 #endregion
 
@@ -23,7 +22,8 @@ namespace SymuTests.Classes.Task
     public class SymuTaskTests
     {
         private readonly List<Knowledge> _knowledges = new List<Knowledge>();
-        private readonly MurphyTask _model = new MurphyTask(); private SymuTask _task;
+        private readonly MurphyTask _model = new MurphyTask();
+        private SymuTask _task;
 
         [TestInitialize]
         public void Initialize()

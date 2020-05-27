@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ namespace Symu.Results
         /// <summary>
         ///     Get the Task blockers metrics
         /// </summary>
-        public BlockerResults Blockers { get;  } = new BlockerResults();
+        public BlockerResults Blockers { get; } = new BlockerResults();
 
         /// <summary>
         ///     Get the Tasks model metrics

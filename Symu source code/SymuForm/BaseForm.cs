@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - SymuForm
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,7 +11,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Threading;
 using System.Windows.Forms;
 using Symu.Classes.Organization;
 using Symu.Common;
@@ -25,7 +24,7 @@ namespace SymuForm
     ///     Symu Engine to use in GUI mode
     ///     Use SymuEngine in batch mode
     /// </summary>
-    public partial class BaseForm : System.Windows.Forms.Form
+    public partial class BaseForm : Form
     {
         private SymuEnvironment _environment;
         private bool _pauseWorker;
@@ -193,8 +192,8 @@ namespace SymuForm
         }
 
         /// <summary>
-        /// Update settings of the environment and the organization via the form
-        /// Use SetOrganization to initialize organization 
+        ///     Update settings of the environment and the organization via the form
+        ///     Use SetOrganization to initialize organization
         /// </summary>
         protected virtual void UpdateSettings()
         {

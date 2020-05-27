@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Murphies", System.Windows.Forms.HorizontalAlignment.Center);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Incomplete information");
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Murphies", System.Windows.Forms.HorizontalAlignment.Center);
+            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem("Incomplete information");
+            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
             "Changing Information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
             "Incorrect information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
             "Communication breakdowns"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("Agent unavailability");
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("Incomplete knowledge");
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("Incomplete belief");
+            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem("Agent unavailability");
+            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem("Incomplete knowledge");
+            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem("Incomplete belief");
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -157,8 +157,14 @@
             this.gbUnavailabilities = new System.Windows.Forms.GroupBox();
             this.label20 = new System.Windows.Forms.Label();
             this.UnavailabilityRate = new System.Windows.Forms.TextBox();
-            this.tbUnavailabilityThreshhold = new System.Windows.Forms.TextBox();
+            this.tbUnavailabilityThreshold = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.symuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.symuorgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -168,6 +174,7 @@
             this.gbUncompleteKnowledge.SuspendLayout();
             this.gbBelief.SuspendLayout();
             this.gbUnavailabilities.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -340,9 +347,9 @@
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(457, 12);
+            this.richTextBox2.Location = new System.Drawing.Point(457, 32);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(1071, 174);
+            this.richTextBox2.Size = new System.Drawing.Size(1071, 153);
             this.richTextBox2.TabIndex = 18;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
@@ -351,9 +358,9 @@
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox1.Location = new System.Drawing.Point(4, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(4, 32);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(428, 174);
+            this.richTextBox1.Size = new System.Drawing.Size(428, 153);
             this.richTextBox1.TabIndex = 17;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
@@ -416,7 +423,7 @@
             this.label40.AutoSize = true;
             this.label40.Location = new System.Drawing.Point(44, 177);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(70, 17);
+            this.label40.Size = new System.Drawing.Size(51, 17);
             this.label40.TabIndex = 202;
             this.label40.Text = "Cancel";
             // 
@@ -880,36 +887,36 @@
             this.lvMurphies.CheckBoxes = true;
             this.lvMurphies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3});
-            listViewGroup2.Header = "Murphies";
-            listViewGroup2.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-            listViewGroup2.Name = "Murphies";
+            listViewGroup4.Header = "Murphies";
+            listViewGroup4.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+            listViewGroup4.Name = "Murphies";
             this.lvMurphies.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup2});
+            listViewGroup4});
             this.lvMurphies.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lvMurphies.HideSelection = false;
-            listViewItem8.Group = listViewGroup2;
-            listViewItem8.StateImageIndex = 0;
-            listViewItem9.Group = listViewGroup2;
-            listViewItem9.StateImageIndex = 0;
-            listViewItem10.Group = listViewGroup2;
-            listViewItem10.StateImageIndex = 0;
-            listViewItem11.Group = listViewGroup2;
-            listViewItem11.StateImageIndex = 0;
-            listViewItem12.Group = listViewGroup2;
-            listViewItem12.StateImageIndex = 0;
-            listViewItem13.Group = listViewGroup2;
-            listViewItem13.StateImageIndex = 0;
-            listViewItem13.ToolTipText = "to complete task";
-            listViewItem14.Group = listViewGroup2;
-            listViewItem14.StateImageIndex = 0;
+            listViewItem22.Group = listViewGroup4;
+            listViewItem22.StateImageIndex = 0;
+            listViewItem23.Group = listViewGroup4;
+            listViewItem23.StateImageIndex = 0;
+            listViewItem24.Group = listViewGroup4;
+            listViewItem24.StateImageIndex = 0;
+            listViewItem25.Group = listViewGroup4;
+            listViewItem25.StateImageIndex = 0;
+            listViewItem26.Group = listViewGroup4;
+            listViewItem26.StateImageIndex = 0;
+            listViewItem27.Group = listViewGroup4;
+            listViewItem27.StateImageIndex = 0;
+            listViewItem27.ToolTipText = "to complete task";
+            listViewItem28.Group = listViewGroup4;
+            listViewItem28.StateImageIndex = 0;
             this.lvMurphies.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem8,
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12,
-            listViewItem13,
-            listViewItem14});
+            listViewItem22,
+            listViewItem23,
+            listViewItem24,
+            listViewItem25,
+            listViewItem26,
+            listViewItem27,
+            listViewItem28});
             this.lvMurphies.Location = new System.Drawing.Point(17, 350);
             this.lvMurphies.Name = "lvMurphies";
             this.lvMurphies.Scrollable = false;
@@ -1361,7 +1368,7 @@
             this.gbUnavailabilities.BackColor = System.Drawing.Color.LightBlue;
             this.gbUnavailabilities.Controls.Add(this.label20);
             this.gbUnavailabilities.Controls.Add(this.UnavailabilityRate);
-            this.gbUnavailabilities.Controls.Add(this.tbUnavailabilityThreshhold);
+            this.gbUnavailabilities.Controls.Add(this.tbUnavailabilityThreshold);
             this.gbUnavailabilities.Controls.Add(this.label17);
             this.gbUnavailabilities.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.gbUnavailabilities.Location = new System.Drawing.Point(284, 26);
@@ -1388,13 +1395,13 @@
             this.UnavailabilityRate.TabIndex = 173;
             this.UnavailabilityRate.TextChanged += new System.EventHandler(this.UnavailabilityRate_TextChanged);
             // 
-            // tbUnavailabilityThreshhold
+            // tbUnavailabilityThreshold
             // 
-            this.tbUnavailabilityThreshhold.Location = new System.Drawing.Point(306, 59);
-            this.tbUnavailabilityThreshhold.Name = "tbUnavailabilityThreshhold";
-            this.tbUnavailabilityThreshhold.Size = new System.Drawing.Size(59, 22);
-            this.tbUnavailabilityThreshhold.TabIndex = 134;
-            this.tbUnavailabilityThreshhold.TextChanged += new System.EventHandler(this.tbUnavailabilityThreshhold_TextChanged);
+            this.tbUnavailabilityThreshold.Location = new System.Drawing.Point(306, 59);
+            this.tbUnavailabilityThreshold.Name = "tbUnavailabilityThreshold";
+            this.tbUnavailabilityThreshold.Size = new System.Drawing.Size(59, 22);
+            this.tbUnavailabilityThreshold.TabIndex = 134;
+            this.tbUnavailabilityThreshold.TextChanged += new System.EventHandler(this.tbUnavailabilityThreshold_TextChanged);
             // 
             // label17
             // 
@@ -1405,6 +1412,56 @@
             this.label17.TabIndex = 133;
             this.label17.Text = "Rate of unavailability [0;1]";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1549, 28);
+            this.menuStrip1.TabIndex = 22;
+            this.menuStrip1.Text = "Symu";
+            // 
+            // symuToolStripMenuItem
+            // 
+            this.symuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuorgToolStripMenuItem,
+            this.documentationToolStripMenuItem1,
+            this.sourceCodeToolStripMenuItem1,
+            this.issuesToolStripMenuItem});
+            this.symuToolStripMenuItem.Name = "symuToolStripMenuItem";
+            this.symuToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.symuToolStripMenuItem.Text = "Symu";
+            // 
+            // symuorgToolStripMenuItem
+            // 
+            this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Text = "Symu.org";
+            this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem1
+            // 
+            this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Text = "Documentation";
+            this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
+            // 
+            // sourceCodeToolStripMenuItem1
+            // 
+            this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Text = "Source code";
+            this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
+            // 
+            // issuesToolStripMenuItem
+            // 
+            this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Text = "Issues";
+            this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1414,6 +1471,8 @@
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Home";
             this.Text = "Murphies and blockers models";
             this.groupBox3.ResumeLayout(false);
@@ -1433,7 +1492,10 @@
             this.gbBelief.PerformLayout();
             this.gbUnavailabilities.ResumeLayout(false);
             this.gbUnavailabilities.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1522,7 +1584,7 @@
         private System.Windows.Forms.TextBox tbMaxNumberOfTriesKnowledge;
         private System.Windows.Forms.TextBox tbRequiredMandatoryRatio;
         private System.Windows.Forms.TextBox tbSteps;
-        private System.Windows.Forms.TextBox tbUnavailabilityThreshhold;
+        private System.Windows.Forms.TextBox tbUnavailabilityThreshold;
         private System.Windows.Forms.TextBox tbWorkers;
         private System.Windows.Forms.Label TimeStep;
         private System.Windows.Forms.TextBox UnavailabilityRate;
@@ -1558,5 +1620,11 @@
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.TextBox InformationRateOfIncorrectGuess;
         private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem symuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem symuorgToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
     }
 }

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ namespace Symu.Classes.Murphies
         ///     If false, will check new blockers only if there is no blocker
         /// </summary>
         public bool MultipleBlockers { get; set; }
+
         public MurphyUnAvailability UnAvailability { get; } = new MurphyUnAvailability();
         public MurphyIncompleteKnowledge IncompleteKnowledge { get; } = new MurphyIncompleteKnowledge();
 
@@ -53,10 +54,10 @@ namespace Symu.Classes.Murphies
         public List<Murphy> Murphies { get; } = new List<Murphy>();
 
         /// <summary>
-        /// Set all murphies on
+        ///     Set all murphies on
         /// </summary>
         /// <param name="rate"></param>
-        public void On( float rate)
+        public void On(float rate)
         {
             foreach (var murphy in Murphies.Where(x => x != null))
             {
@@ -66,7 +67,7 @@ namespace Symu.Classes.Murphies
         }
 
         /// <summary>
-        /// Set all murphies off
+        ///     Set all murphies off
         /// </summary>
         public void Off()
         {

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -137,6 +137,7 @@ namespace Symu.Classes.Agents
         ///     Define how agent will manage its knowledge during the symu based on its cognitive architecture
         /// </summary>
         public ActivityModel ActivityModel { get; set; }
+
         /// <summary>
         ///     Manage every blocker of the agent
         /// </summary>

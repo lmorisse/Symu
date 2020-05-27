@@ -98,6 +98,7 @@ namespace SymuMessageAndTask.Classes
                 _switchingContextCost = value;
             }
         }
+
         public override void SetOrganization(OrganizationEntity organization)
         {
             if (organization == null)

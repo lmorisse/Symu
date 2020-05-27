@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -54,8 +54,9 @@ namespace Symu.Environment
         /// </summary>
         /// <example>Delay = 1000</example>
         public int Delay { get; set; }
+
         /// <summary>
-        /// Set the debug mode for additional information
+        ///     Set the debug mode for additional information
         /// </summary>
         public bool Debug { get; set; } = true;
 
@@ -83,7 +84,9 @@ namespace Symu.Environment
         /// </summary>
         public void WaitingForStart()
         {
-            while(WhitePages.AllAgents().ToList().Exists(a => a.State != AgentState.Started)){}
+            while (WhitePages.AllAgents().ToList().Exists(a => a.State != AgentState.Started))
+            {
+            }
         }
 
         public void SetRandomLevel(int value)

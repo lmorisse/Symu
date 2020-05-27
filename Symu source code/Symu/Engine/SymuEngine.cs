@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -197,8 +197,8 @@ namespace Symu.Engine
         }
 
         /// <summary>
-        /// Initialize the engine, environment ready to launch the first step
-        /// Used in unit tests
+        ///     Initialize the engine, environment ready to launch the first step
+        ///     Used in unit tests
         /// </summary>
         /// <param name="environment"></param>
         /// <param name="organization"></param>
@@ -230,7 +230,7 @@ namespace Symu.Engine
 
             Environment.Schedule.Step = step0;
         }
-        #endregion
 
+        #endregion
     }
 }

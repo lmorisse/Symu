@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ namespace Symu.Results.Blocker
         ///     Blocker is resolved by searching in agent's databases
         /// </summary>
         public int Search { get; set; }
+
         /// <summary>
         ///     Blocker is resolved by cancelling the task
         /// </summary>

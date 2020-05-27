@@ -1,6 +1,6 @@
 #region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 #endregion
@@ -77,15 +76,16 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        /// Set a task done in TasksManager
+        ///     Set a task done in TasksManager
         /// </summary>
         public void SetTaskDone(SymuTask task)
         {
             TasksManager.SetDone(task);
             OnAfterSetTaskDone?.Invoke(this, new TaskEventArgs(task));
         }
+
         /// <summary>
-        /// Set a task in Progress in TasksManager
+        ///     Set a task in Progress in TasksManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -98,8 +98,9 @@ namespace Symu.Classes.Task.Manager
         {
             OnPrioritizeTasks?.Invoke(this, new TasksEventArgs(e.Tasks));
         }
+
         /// <summary>
-        /// Cancel a task in the TasksManager
+        ///     Cancel a task in the TasksManager
         /// </summary>
         /// <param name="task"></param>
         public void Cancel(SymuTask task)

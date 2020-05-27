@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -15,7 +15,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Messaging.Messages;
-using Symu.Results.Blocker;
 
 #endregion
 
@@ -24,11 +23,11 @@ namespace SymuTests.Classes.Task.Manager
     [TestClass]
     public class TasksManagerTests
     {
-        private SymuTask _task ;
         private readonly TasksLimit _tasksLimit = new TasksLimit();
+        private SymuTask _task;
         private List<SymuTask> _tasks;
         private TasksManager _tasksManager;
-        
+
         [TestInitialize]
         public void Initialize()
         {

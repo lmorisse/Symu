@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -485,8 +485,9 @@ namespace Symu.Repository.Networks.Sphere
         {
             if (_agentIndex is null)
             {
-                throw new NullReferenceException("Sphere is not Setted"); 
+                throw new NullReferenceException("Sphere is not Setted");
             }
+
             if (!_model.On || !_model.SphereUpdateOverTime || !_agentIndex.ContainsKey(agentId))
             {
                 return new List<AgentId>();

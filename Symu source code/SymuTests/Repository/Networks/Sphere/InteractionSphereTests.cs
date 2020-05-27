@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -76,7 +76,8 @@ namespace SymuTests.Repository.Networks.Sphere
         public void GeAgentIdsForNewInteractionsTest()
         {
             InteractionSphere.SetSphere(true, _agents, _network);
-            Assert.AreEqual(0, InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
+            Assert.AreEqual(0,
+                InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
 
         /// <summary>
@@ -87,7 +88,8 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             _model.InteractionSphere.SphereUpdateOverTime = true;
             InteractionSphere.SetSphere(true, _agents, _network);
-            Assert.AreEqual(1, InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
+            Assert.AreEqual(1,
+                InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
 
         /// <summary>
@@ -99,7 +101,8 @@ namespace SymuTests.Repository.Networks.Sphere
             _model.InteractionSphere.SphereUpdateOverTime = true;
             AddLink();
             InteractionSphere.SetSphere(true, _agents, _network);
-            Assert.AreEqual(0, InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
+            Assert.AreEqual(0,
+                InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
 
         /// <summary>

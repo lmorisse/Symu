@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -29,7 +29,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
     public class KnowledgeModel
     {
         private readonly AgentId _agentId;
-        private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
         private readonly NetworkKnowledges _networkKnowledges;
@@ -65,7 +64,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             _networkKnowledges = network.NetworkKnowledges;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
-            _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
         }
 
         public bool On { get; set; }

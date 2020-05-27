@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: Symu - SymuMurphiesAndBlockers
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.Templates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task;
 using Symu.Environment;
@@ -29,7 +28,6 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class PersonAgent : Agent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
-        public AgentId GroupId { get; set; }
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
             new AgentId(agentKey, ClassKey),
@@ -38,9 +36,11 @@ namespace SymuMurphiesAndBlockers.Classes
             SetCognitive(Environment.Organization.Templates.Human);
         }
 
+        public AgentId GroupId { get; set; }
+
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public List<Knowledge> Knowledges => ((ExampleEnvironment)Environment).Knowledges;
-        public InternetAccessAgent Internet => ((ExampleEnvironment)Environment).Internet;
+        public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public InternetAccessAgent Internet => ((ExampleEnvironment) Environment).Internet;
 
         public override void GetNewTasks()
         {
@@ -53,7 +53,9 @@ namespace SymuMurphiesAndBlockers.Classes
             task.SetKnowledgesBits(Model, Knowledges, 1);
             Post(task);
         }
-        public override void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker, ushort knowledgeId,
+
+        public override void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker,
+            ushort knowledgeId,
             byte knowledgeBit)
         {
             if (blocker == null)
@@ -68,7 +70,6 @@ namespace SymuMurphiesAndBlockers.Classes
             attachments.KnowledgeBit = knowledgeBit;
             Send(Internet.Id, MessageAction.Ask, SymuYellowPages.Help, attachments,
                 CommunicationMediums.ViaAPlatform);
-
         }
     }
 }

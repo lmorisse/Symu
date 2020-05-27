@@ -1,7 +1,7 @@
 ﻿#region Licence
 
-// Description: Symu - Modeling
-// Website: Website:     https://symu.org
+// Description: Symu - Symu
+// Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
@@ -9,9 +9,6 @@
 
 #region using directives
 
-using System;
-using Symu.Common;
-using Symu.Messaging.Messages;
 using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
@@ -24,7 +21,6 @@ namespace Symu.Classes.Murphies
     /// </summary>
     public class MurphyIncompleteInformation : MurphyIncomplete
     {
-
         /// <summary>
         ///     Return the new Type of missing information of the task
         /// </summary>

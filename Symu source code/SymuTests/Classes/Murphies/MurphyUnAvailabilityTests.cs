@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -28,8 +28,9 @@ namespace SymuTests.Classes.Murphies
             _murphy.RateOfUnavailability = 1;
             Assert.IsFalse(_murphy.Next());
         }
+
         /// <summary>
-        /// RateOfUnavailability = 0
+        ///     RateOfUnavailability = 0
         /// </summary>
         [TestMethod]
         public void PassingNextTest()
@@ -39,8 +40,9 @@ namespace SymuTests.Classes.Murphies
             _murphy.RateOfUnavailability = 0;
             Assert.IsFalse(_murphy.Next());
         }
+
         /// <summary>
-        /// RateOfUnavailability = 1
+        ///     RateOfUnavailability = 1
         /// </summary>
         [TestMethod]
         public void PassingNextTest1()

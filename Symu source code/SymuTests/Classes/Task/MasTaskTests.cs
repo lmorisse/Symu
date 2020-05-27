@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -12,7 +12,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Task;
-using Symu.Results.Blocker;
 
 #endregion
 
@@ -181,7 +180,7 @@ namespace SymuTests.Classes.Task
         [TestMethod]
         public void HasBeenCancelledBy()
         {
-            var agentId = new AgentId(1,1);
+            var agentId = new AgentId(1, 1);
             _task.Assigned = agentId;
             Assert.IsFalse(_task.IsCancelledBy(agentId));
             _task.Cancel();

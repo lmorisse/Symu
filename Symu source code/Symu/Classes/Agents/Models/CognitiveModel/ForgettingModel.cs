@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -114,6 +114,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             {
                 return;
             }
+
             foreach (var knowledgeId in knowledgesBits.KnowledgeIds)
             {
                 UpdateForgettingProcess(knowledgeId, knowledgesBits.GetBits(knowledgeId));

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: Symu - SymuMurphiesAndBlockers
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,16 +11,13 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.Templates;
 using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -49,7 +46,7 @@ namespace SymuMurphiesAndBlockers.Classes
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief= true;
+            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
             organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
@@ -57,7 +54,7 @@ namespace SymuMurphiesAndBlockers.Classes
             organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            
+
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
             // For email knowledge storing

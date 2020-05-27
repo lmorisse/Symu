@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -60,12 +60,14 @@ namespace Symu.Classes.Task.Manager
         ///     Tasks done
         /// </summary>
         public List<SymuTask> Done { get; } = new List<SymuTask>();
+
         /// <summary>
         ///     Tasks cancelled
         /// </summary>
         public List<SymuTask> Cancelled { get; } = new List<SymuTask>();
 
-        public List<SymuTask> AllTasks {
+        public List<SymuTask> AllTasks
+        {
             get
             {
                 var tasks = new List<SymuTask>();
@@ -75,7 +77,7 @@ namespace Symu.Classes.Task.Manager
                 tasks.AddRange(Cancelled);
                 return tasks;
             }
-    }
+        }
 
         /// <summary>
         ///     Manage the limits on the tasks
@@ -167,9 +169,10 @@ namespace Symu.Classes.Task.Manager
             Done.Add(task);
             TotalWeightDone += task.Weight;
         }
+
         /// <summary>
-        /// Cancel a task : 
-        /// remove a task from either To do or in progress
+        ///     Cancel a task :
+        ///     remove a task from either To do or in progress
         /// </summary>
         /// <param name="task"></param>
         public void Cancel(SymuTask task)
@@ -486,6 +489,5 @@ namespace Symu.Classes.Task.Manager
         }
 
         #endregion
-
     }
 }

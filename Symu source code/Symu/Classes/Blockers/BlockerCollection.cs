@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Results.Blocker;
 
 #endregion
@@ -28,6 +27,7 @@ namespace Symu.Classes.Blockers
         ///     Number of blockers In Progress
         /// </summary>
         public BlockerResult Result { get; set; } = new BlockerResult();
+
         public List<Blocker> List { get; } = new List<Blocker>();
         public bool IsBlocked => List.Any();
 
@@ -90,6 +90,7 @@ namespace Symu.Classes.Blockers
                 // Blocker may have been already resolved
                 return;
             }
+
             if (blocker != null)
             {
                 Remove(blocker);
@@ -110,6 +111,7 @@ namespace Symu.Classes.Blockers
                 // Blocker may have been already cancelled
                 return;
             }
+
             if (blocker != null)
             {
                 Remove(blocker);
@@ -190,6 +192,7 @@ namespace Symu.Classes.Blockers
         {
             return List.Contains(blocker);
         }
+
         public void SetBlockerInProgress()
         {
             Result.InProgress++;
@@ -218,6 +221,7 @@ namespace Symu.Classes.Blockers
             Result.Done++;
             Result.InProgress--;
         }
+
         public void SetBlockerCancelled()
         {
             Result.Cancelled++;

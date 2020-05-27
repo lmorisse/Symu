@@ -1,21 +1,26 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
 #endregion
 
+#region using directives
+
 using System;
 using SymuTools.Math.ProbabilityDistributions;
+
+#endregion
 
 namespace Symu.Classes.Murphies
 {
     /// <summary>
-    /// This murphy defines unplanned :index:`unavailability` of agent such as illness, ...
-    /// This murphy has an impact on the agent's initial capacity.
-    /// It should not be confused with Agent.Cognitive.InteractionPatterns.AgentCanBeIsolated which deals with plannable unavailability(even if it can be randomly generated, such as holidays).
+    ///     This murphy defines unplanned :index:`unavailability` of agent such as illness, ...
+    ///     This murphy has an impact on the agent's initial capacity.
+    ///     It should not be confused with Agent.Cognitive.InteractionPatterns.AgentCanBeIsolated which deals with plannable
+    ///     unavailability(even if it can be randomly generated, such as holidays).
     /// </summary>
     public class MurphyUnAvailability : Murphy
     {

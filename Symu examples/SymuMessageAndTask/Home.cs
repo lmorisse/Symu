@@ -101,7 +101,6 @@ namespace SymuMessageAndTask
 
         protected override void UpdateSettings()
         {
-
             #region Task model
 
             OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask =

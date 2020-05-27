@@ -131,4 +131,7 @@ An organization is designed to work in an optimal system. Murphies is a way to r
 As Symu is task-based, murphies often results in blockers in tasks.
 The objective of this example is to show how to use, configure and see the impacts of those models on agents.</value>
   </data>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

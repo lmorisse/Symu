@@ -353,7 +353,7 @@
             this.tbMinimRemainningLevel.Name = "tbMinimRemainningLevel";
             this.tbMinimRemainningLevel.Size = new System.Drawing.Size(86, 22);
             this.tbMinimRemainningLevel.TabIndex = 33;
-            this.tbMinimRemainningLevel.TextChanged += new System.EventHandler(this.tbMinimRemainningLevel_TextChanged);
+            this.tbMinimRemainningLevel.TextChanged += new System.EventHandler(this.tbMinimRemainingLevel_TextChanged);
             // 
             // label34
             // 

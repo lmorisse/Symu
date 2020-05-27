@@ -108,7 +108,7 @@ namespace SymuLearnAndForgetTests
             _organization.Models.Learning.RateOfAgentsOn = 1;
             _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _organization.Models.Generator = RandomGenerator.RandomBinary;
-            _organization.Murphies.IncompleteKnowledge.ThresholdForReacting= 0;
+            _organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 0;
             _environment.KnowledgeLevel = KnowledgeLevel.BasicKnowledge;
             _symu.Process();
             // Should be > 0 because Knowledge threshold for doing is == 0, agent has the knowledge or not but he can't learn

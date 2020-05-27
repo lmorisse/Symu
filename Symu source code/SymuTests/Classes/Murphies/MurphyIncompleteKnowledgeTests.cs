@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngineTests
+// Description: Symu - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -15,7 +15,6 @@ using Symu.Classes.Agents.Models;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
-using Symu.Common;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 
@@ -26,9 +25,9 @@ namespace SymuTests.Classes.Murphies
     [TestClass]
     public class MurphyIncompleteKnowledgeTests
     {
-        private readonly MurphyIncompleteKnowledge _murphy = new MurphyIncompleteKnowledge();
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
+        private readonly MurphyIncompleteKnowledge _murphy = new MurphyIncompleteKnowledge();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private Knowledge _knowledge;
         private Network _network;
@@ -59,6 +58,7 @@ namespace SymuTests.Classes.Murphies
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);
         }
+
         /// <summary>
         ///     Model on, RateOfAgentsOn = 0
         /// </summary>
@@ -75,6 +75,7 @@ namespace SymuTests.Classes.Murphies
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);
         }
+
         /// <summary>
         ///     Non passing test
         /// </summary>
@@ -100,7 +101,7 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
@@ -118,7 +119,7 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 1 }, 0, -1, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,

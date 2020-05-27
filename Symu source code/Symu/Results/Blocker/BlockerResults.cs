@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,8 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using Symu.Environment;
-using Symu.Messaging.Messages;
-using Symu.Results.Task;
 
 #endregion
 
@@ -26,16 +24,16 @@ namespace Symu.Results.Blocker
     public class BlockerResults
     {
         /// <summary>
-        ///     If set to true, blockerResults will be filled with value and stored during the simulation
-        /// </summary>
-        public bool On { get; set; }
-
-        /// <summary>
         ///     Key => step
         ///     Value => BlockerResult for the step
         /// </summary>
         private readonly ConcurrentDictionary<ushort, BlockerResult> _results =
             new ConcurrentDictionary<ushort, BlockerResult>();
+
+        /// <summary>
+        ///     If set to true, blockerResults will be filled with value and stored during the simulation
+        /// </summary>
+        public bool On { get; set; }
 
         /// <summary>
         ///     Total blockers done during the simulation
@@ -50,7 +48,7 @@ namespace Symu.Results.Blocker
         /// <summary>
         ///     Total blockers cancelled the task during the simulation
         /// </summary>
-        public int TotalCancelled => _results.Values.Any() ? _results.Values.Last().Cancelled: 0;
+        public int TotalCancelled => _results.Values.Any() ? _results.Values.Last().Cancelled : 0;
 
         /// <summary>
         ///     Total blockers resolved by Internal Help during the simulation
@@ -86,7 +84,8 @@ namespace Symu.Results.Blocker
 
             var result = new BlockerResult();
             // Blockers from agents
-            foreach (var agentResult in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null).Select(x => x.Blockers.Result))
+            foreach (var agentResult in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null)
+                .Select(x => x.Blockers.Result))
             {
                 result.InProgress += agentResult.InProgress;
                 result.Done += agentResult.Done;
@@ -95,8 +94,10 @@ namespace Symu.Results.Blocker
                 result.InternalHelp += agentResult.InternalHelp;
                 result.Search += agentResult.Search;
             }
+
             //Blockers from tasks
-            foreach (var tasks in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null).Select(x => x.TaskProcessor.TasksManager.AllTasks))
+            foreach (var tasks in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.AllTasks))
             {
                 result.InProgress += tasks.Sum(x => x.Blockers.Result.InProgress);
                 result.Done += tasks.Sum(x => x.Blockers.Result.Done);
@@ -106,6 +107,7 @@ namespace Symu.Results.Blocker
                 result.Search += tasks.Sum(x => x.Blockers.Result.Search);
                 result.Cancelled += tasks.Sum(x => x.Blockers.Result.Cancelled);
             }
+
             _results.TryAdd(environment.Schedule.Step, result);
         }
 

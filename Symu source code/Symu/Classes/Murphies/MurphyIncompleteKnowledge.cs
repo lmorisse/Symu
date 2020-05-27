@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuEngine
+// Description: Symu - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,10 +11,7 @@
 
 using System;
 using Symu.Classes.Task;
-using Symu.Common;
-using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -26,7 +23,6 @@ namespace Symu.Classes.Murphies
     /// </summary>
     public class MurphyIncompleteKnowledge : MurphyIncomplete
     {
-
         /// <summary>
         ///     Check Knowledge required by a task against the worker expertise
         /// </summary>
@@ -38,13 +34,15 @@ namespace Symu.Classes.Murphies
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <param name="step"></param>
-        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, AgentExpertise expertise, ref bool mandatoryCheck,
+        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, AgentExpertise expertise,
+            ref bool mandatoryCheck,
             ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
         {
             if (taskBitIndexes is null)
             {
                 throw new ArgumentNullException(nameof(taskBitIndexes));
             }
+
             // model is off
             if (!IsAgentOn())
             {
@@ -87,7 +85,5 @@ namespace Symu.Classes.Murphies
                    workerKnowledge.KnowsEnough(knowledgeBit, ThresholdForReacting,
                        step);
         }
-
-
     }
 }

@@ -1,7 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#region Licence
+
+// Description: Symu - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Murphies;
 using Symu.Common;
 using Symu.Messaging.Messages;
+
+#endregion
 
 namespace SymuTests.Classes.Murphies
 {
@@ -67,7 +80,7 @@ namespace SymuTests.Classes.Murphies
         }
 
         /// <summary>
-        /// No limit
+        ///     No limit
         ///     Limit -1
         /// </summary>
         [TestMethod]
@@ -76,8 +89,9 @@ namespace SymuTests.Classes.Murphies
             _murphy.LimitNumberOfTries = -1;
             Assert.IsFalse(_murphy.ShouldGuess(0));
         }
+
         /// <summary>
-        /// Limit of 0
+        ///     Limit of 0
         /// </summary>
         [TestMethod]
         public void ShouldGuessTest1()
@@ -87,7 +101,7 @@ namespace SymuTests.Classes.Murphies
         }
 
         /// <summary>
-        /// Limit of 1
+        ///     Limit of 1
         /// </summary>
         [TestMethod]
         public void ShouldGuessTest2()
