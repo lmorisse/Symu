@@ -173,7 +173,7 @@
             // richTextBox2
             // 
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.richTextBox2.Location = new System.Drawing.Point(457, 32);
             this.richTextBox2.Name = "richTextBox2";
@@ -592,6 +592,8 @@
             // MurphiesOn
             // 
             this.MurphiesOn.AutoSize = true;
+            this.MurphiesOn.Checked = true;
+            this.MurphiesOn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MurphiesOn.Location = new System.Drawing.Point(28, 148);
             this.MurphiesOn.Name = "MurphiesOn";
             this.MurphiesOn.Size = new System.Drawing.Size(128, 21);
@@ -602,6 +604,8 @@
             // ModelsOn
             // 
             this.ModelsOn.AutoSize = true;
+            this.ModelsOn.Checked = true;
+            this.ModelsOn.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ModelsOn.Location = new System.Drawing.Point(28, 121);
             this.ModelsOn.Name = "ModelsOn";
             this.ModelsOn.Size = new System.Drawing.Size(115, 21);
@@ -647,9 +651,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(25, 56);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(129, 17);
+            this.label3.Size = new System.Drawing.Size(136, 17);
             this.label3.TabIndex = 44;
-            this.label3.Text = "Number of iteration";
+            this.label3.Text = "Number of iterations";
             // 
             // menuStrip1
             // 

@@ -30,29 +30,29 @@ namespace Symu.Forms
     ///     Symu Engine to use in GUI mode
     ///     Use Symu in batch mode
     /// </summary>
-    public partial class MultipleIterationsForm : System.Windows.Forms.Form
+    public partial class SymuForm : Form
     {
-        private readonly List<SimulationScenario> _scenarii = new List<SimulationScenario>();
-        private SymuEnvironment _environment;
         private bool _pauseWorker;
+        private readonly SymuEngine _engine = new SymuEngine();
 
-        public MultipleIterationsForm()
+        public SymuForm()
         {
             InitializeComponent();
         }
 
         protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
-        protected AgentState State { get; private set; } = AgentState.NotStarted;
+        
         /// <summary>
         ///     Manage the multiple iterations of the simulation
         ///     A interaction is a number of interaction steps
         ///     Multiple iterations are used to replay a simulation for MonteCarlo process or to vary parameters
         /// </summary>
-        public Iterations Iterations { get; set; } = new Iterations();
+        public Iterations Iterations => _engine.Iterations;
+
         /// <summary>
         ///     Store the results of each iteration
         /// </summary>
-        public SimulationResults SimulationResults { get; set; } = new SimulationResults();
+        public SimulationResults SimulationResults => _engine.SimulationResults;
 
         #region Display
         public virtual void DisplayStep()
@@ -81,7 +81,7 @@ namespace Symu.Forms
         }
         protected void DisplayButtons(Button btnStart, Button btnStop, Button btnPause, Button btnResume)
         {
-            switch (State)
+            switch (_engine.State)
             {
                 case AgentState.Stopped:
                 case AgentState.NotStarted:
@@ -139,8 +139,7 @@ namespace Symu.Forms
         /// </summary>
         public virtual void OnNextStep()
         {
-            _environment.OnNextStep();
-            _environment.ManageAgentsToStop();
+            _engine.OnNextStep();
             DisplayStep();
         }
 
@@ -154,7 +153,7 @@ namespace Symu.Forms
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            State = AgentState.Starting;
+            _engine.State = AgentState.Starting;
             SetUp(environment);
             PreProcess();
             if (backgroundWorker1.IsBusy != true)
@@ -235,7 +234,7 @@ namespace Symu.Forms
         /// </summary>
         protected virtual void OnStopped()
         {
-            State = AgentState.Stopped;
+            _engine.State = AgentState.Stopped;
         }
 
         private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -250,7 +249,7 @@ namespace Symu.Forms
 
         protected void Cancel()
         {
-            State = AgentState.Stopping;
+            _engine.State = AgentState.Stopping;
             if (backgroundWorker1.WorkerSupportsCancellation)
                 // Cancel the asynchronous operation.
             {
@@ -261,13 +260,13 @@ namespace Symu.Forms
         protected void Pause()
         {
             _pauseWorker = true;
-            State = AgentState.Paused;
+            _engine.State = AgentState.Paused;
         }
 
         protected void Resume()
         {
             _pauseWorker = false;
-            State = AgentState.Started;
+            _engine.State = AgentState.Started;
         }
         #endregion
 
@@ -283,22 +282,19 @@ namespace Symu.Forms
         private void SetUp(SymuEnvironment environment)
         {
             OrganizationEntity.Clear();
-            _environment = environment;
-            _environment.SetOrganization(OrganizationEntity);
+            _engine.SetEnvironment(environment);
+            _engine.Environment.SetOrganization(OrganizationEntity);
             UpdateSettings();
         }
 
         public void AddScenario(SimulationScenario scenario)
         {
-            if (!_scenarii.Exists(s => s.Id.Equals(scenario.Id)))
-            {
-                _scenarii.Add(scenario);
-            }
+            _engine.AddScenario(scenario);
         }
 
         protected void AddEvent(SymuEvent symuEvent)
         {
-            _environment.AddEvent(symuEvent);
+            _engine.AddEvent(symuEvent);
         }
 
         /// <summary>
@@ -307,69 +303,36 @@ namespace Symu.Forms
         /// </summary>
         protected virtual void UpdateSettings()
         {
-            _scenarii.Clear();
+            _engine.Scenarii.Clear();
         }
 
         protected void SetDebug(bool value)
         {
-            _environment.SetDebug(value);
+            _engine.Environment.SetDebug(value);
         }
 
         protected void SetDelay(int value)
         {
-            _environment.SetDelay(value);
+            _engine.Environment.SetDelay(value);
         }
 
         protected void SetRandomLevel(int value)
         {
-            _environment.SetRandomLevel(value);
+            _engine.Environment.SetRandomLevel(value);
         }
 
         protected void SetTimeStepType(TimeStepType type)
         {
-            _environment.SetTimeStepType(type);
+            _engine.Environment.SetTimeStepType(type);
         }
 
         #endregion
 
         #region Iteration level
 
-        public void PreIteration()
+        protected virtual void PreIteration()
         {
-            State = AgentState.Starting;
-            _environment.InitializeIteration();
-            // AddScenario should stay after initialize
-            SetScenariiAndTimeStep();
-            // AddScenario should stay after initialize
-            _environment.Schedule.Step = 0;
-            Iterations.UpdateIteration(_scenarii);
-            _environment.Start();
-            _environment.WaitingForStart();
-            _environment.SetInteractionSphere(true);
-            State = AgentState.Started;
-        }
-        protected void SetScenariiAndTimeStep()
-        {
-            ushort step0 = 0;
-            foreach (var scenario in _scenarii.Where(sc => sc.IsActive))
-            {
-                var clone = scenario.Clone();
-                clone.SetUp();
-                // scenarii could have different Day0 (>0)
-                step0 = step0 == 0 ? clone.Day0 : Math.Min(step0, clone.Day0);
-            }
-
-            _environment.Schedule.Step = step0;
-        }
-
-        public void Iteration()
-        {
-            PreIteration();
-            while (!StopIteration())
-            {
-                OnNextStep();
-            }
-            PostIteration();
+            _engine.PreIteration();
         }
 
         /// <summary>
@@ -377,57 +340,33 @@ namespace Symu.Forms
         ///     You can add custom control 
         /// </summary>
         /// <returns></returns>
-        public virtual bool StopIteration()
+        protected virtual bool StopIteration()
         {
-            return _environment.StopIteration();
+            return _engine.StopIteration();
         }
 
-        private void PostIteration()
+        protected virtual void PostIteration()
         {
-            SimulationResults.List.Add(_environment.SetIterationResult(Iterations.Number));
-            if (_environment.IterationResult.Success)
-            {
-                AnalyzeIteration();
-            }
-            State = AgentState.Stopped;
+            _engine.PostIteration();
             DisplayIteration();
-        }
-
-        protected virtual void AnalyzeIteration()
-        {
-            if (!_environment.IterationResult.Success)
-            {
-            }
         }
 
         #endregion
 
         #region Process level
 
-        public void PreProcess()
+        protected virtual void PreProcess()
         {
-            SimulationResults.Clear();
-            Iterations.SetUp();
-        }
-
-        public virtual void Process()
-        {
-            State = AgentState.Starting;
-            PreProcess();
-            while (!StopProcess())
-            {
-                Iteration();
-            }
-            PostProcess();
+            _engine.PreProcess();
         }
 
         protected virtual void PostProcess()
         {
+            _engine.PostProcess();
         }
-
-        protected bool StopProcess()
+        protected virtual bool StopProcess()
         {
-            return Iterations.Stop();
+            return _engine.StopProcess();
         }
 
         #endregion

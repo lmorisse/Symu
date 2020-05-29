@@ -130,6 +130,12 @@
             this.TimeStep = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.symuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.symuorgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -139,16 +145,17 @@
             this.groupBox10.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox2
             // 
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
-            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(465, 12);
+            this.richTextBox2.Location = new System.Drawing.Point(465, 31);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(937, 151);
+            this.richTextBox2.Size = new System.Drawing.Size(937, 132);
             this.richTextBox2.TabIndex = 16;
             this.richTextBox2.Text = "Scenario:\n* 1st agent learn from a learning source\n* 2nd agent learn from doing\n*" +
     " 3rd agent learn by asking to an expert agent, via email\n* 4th agent doesn\'t lea" +
@@ -515,7 +522,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(25, 149);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(251, 21);
+            this.label19.Size = new System.Drawing.Size(201, 17);
             this.label19.TabIndex = 10;
             this.label19.Text = "Max. bits of knowledge to send";
             // 
@@ -532,7 +539,7 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(25, 120);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(248, 21);
+            this.label20.Size = new System.Drawing.Size(198, 17);
             this.label20.TabIndex = 8;
             this.label20.Text = "Min. bits of knowledge to send";
             // 
@@ -631,7 +638,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(27, 150);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(164, 17);
+            this.label10.Size = new System.Drawing.Size(209, 17);
             this.label10.TabIndex = 24;
             this.label10.Text = "BeInfluenced by doing rate [0;1]";
             // 
@@ -648,7 +655,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(27, 123);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(106, 17);
+            this.label15.Size = new System.Drawing.Size(151, 17);
             this.label15.TabIndex = 22;
             this.label15.Text = "BeInfluenced rate [0;1]";
             // 
@@ -665,7 +672,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(28, 94);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(235, 17);
+            this.label12.Size = new System.Drawing.Size(299, 17);
             this.label12.TabIndex = 4;
             this.label12.Text = "knowledge RateOfUnavailability for doing [0;1]";
             // 
@@ -1035,7 +1042,7 @@
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(8, 189);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(103, 17);
+            this.label24.Size = new System.Drawing.Size(148, 17);
             this.label24.TabIndex = 21;
             this.label24.Text = "BeInfluenced by doing";
             // 
@@ -1142,7 +1149,7 @@
             this.btnResume.UseVisualStyleBackColor = true;
             this.btnResume.Click += new System.EventHandler(this.button3_Click);
             // 
-            // Schedule
+            // TimeStep
             // 
             this.TimeStep.AutoSize = true;
             this.TimeStep.Location = new System.Drawing.Point(277, 37);
@@ -1165,19 +1172,70 @@
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox1.Location = new System.Drawing.Point(12, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 31);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(428, 151);
+            this.richTextBox1.Size = new System.Drawing.Size(428, 132);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "Goal:\nLearning and forgetting models are implemented in Symu.\nThe objective of th" +
     "is example is to show how to use, configure and see the impacts of learning and " +
     "forgetting models on agents.";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1412, 28);
+            this.menuStrip1.TabIndex = 24;
+            this.menuStrip1.Text = "Symu";
+            // 
+            // symuToolStripMenuItem
+            // 
+            this.symuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuorgToolStripMenuItem,
+            this.documentationToolStripMenuItem1,
+            this.sourceCodeToolStripMenuItem1,
+            this.issuesToolStripMenuItem});
+            this.symuToolStripMenuItem.Name = "symuToolStripMenuItem";
+            this.symuToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.symuToolStripMenuItem.Text = "Symu";
+            // 
+            // symuorgToolStripMenuItem
+            // 
+            this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Text = "Symu.org";
+            this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem1
+            // 
+            this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Text = "Documentation";
+            this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
+            // 
+            // sourceCodeToolStripMenuItem1
+            // 
+            this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Text = "Source code";
+            this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
+            // 
+            // issuesToolStripMenuItem
+            // 
+            this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Text = "Issues";
+            this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1412, 840);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox5);
@@ -1201,7 +1259,10 @@
             this.groupBox8.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1309,5 +1370,11 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem symuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem symuorgToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
     }
 }

@@ -97,6 +97,12 @@
             this.maxNumberTasks = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.CanPerformTask = new System.Windows.Forms.CheckBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.symuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.symuorgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -106,6 +112,7 @@
             this.groupBox10.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -347,9 +354,9 @@
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(457, 12);
+            this.richTextBox2.Location = new System.Drawing.Point(457, 29);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(823, 151);
+            this.richTextBox2.Size = new System.Drawing.Size(823, 134);
             this.richTextBox2.TabIndex = 18;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
@@ -358,9 +365,9 @@
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox1.Location = new System.Drawing.Point(4, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(4, 29);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(428, 151);
+            this.richTextBox1.Size = new System.Drawing.Size(428, 134);
             this.richTextBox1.TabIndex = 17;
             this.richTextBox1.Text = "Goal:\nMessaging and tasking models are implemented in Symu.\nThe objective of this" +
     " example is to show how to use, configure and see the impacts of those models on" +
@@ -800,14 +807,65 @@
             this.CanPerformTask.Text = "Can perform task";
             this.CanPerformTask.UseVisualStyleBackColor = true;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1298, 28);
+            this.menuStrip1.TabIndex = 23;
+            this.menuStrip1.Text = "Symu";
+            // 
+            // symuToolStripMenuItem
+            // 
+            this.symuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuorgToolStripMenuItem,
+            this.documentationToolStripMenuItem1,
+            this.sourceCodeToolStripMenuItem1,
+            this.issuesToolStripMenuItem});
+            this.symuToolStripMenuItem.Name = "symuToolStripMenuItem";
+            this.symuToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.symuToolStripMenuItem.Text = "Symu";
+            // 
+            // symuorgToolStripMenuItem
+            // 
+            this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Text = "Symu.org";
+            this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem1
+            // 
+            this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Text = "Documentation";
+            this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
+            // 
+            // sourceCodeToolStripMenuItem1
+            // 
+            this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Text = "Source code";
+            this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
+            // 
+            // issuesToolStripMenuItem
+            // 
+            this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Text = "Issues";
+            this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1298, 724);
+            this.Controls.Add(this.richTextBox2);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Home";
             this.Text = "Symu : messageing and tasking models";
@@ -827,7 +885,10 @@
             this.groupBox7.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -901,5 +962,11 @@
         private System.Windows.Forms.CheckBox CanPerformTasksOnWeekends;
         private System.Windows.Forms.TextBox SwitchingContextCost;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem symuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem symuorgToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
     }
 }

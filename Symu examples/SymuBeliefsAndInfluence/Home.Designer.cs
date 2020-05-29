@@ -34,6 +34,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TimeStep = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.TasksCancelled = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
@@ -106,8 +108,12 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.TasksCancelled = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.symuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.symuorgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -115,6 +121,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -180,6 +187,24 @@
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Beliefs impacts ";
+            // 
+            // TasksCancelled
+            // 
+            this.TasksCancelled.AutoSize = true;
+            this.TasksCancelled.Location = new System.Drawing.Point(179, 152);
+            this.TasksCancelled.Name = "TasksCancelled";
+            this.TasksCancelled.Size = new System.Drawing.Size(16, 17);
+            this.TasksCancelled.TabIndex = 33;
+            this.TasksCancelled.Text = "0";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(29, 152);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(110, 17);
+            this.label24.TabIndex = 32;
+            this.label24.Text = "Tasks cancelled";
             // 
             // label29
             // 
@@ -365,9 +390,9 @@
             this.richTextBox2.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox2.Location = new System.Drawing.Point(457, 12);
+            this.richTextBox2.Location = new System.Drawing.Point(457, 31);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(823, 174);
+            this.richTextBox2.Size = new System.Drawing.Size(823, 155);
             this.richTextBox2.TabIndex = 18;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
@@ -376,9 +401,9 @@
             this.richTextBox1.BackColor = System.Drawing.Color.AliceBlue;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox1.Location = new System.Drawing.Point(4, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(4, 31);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(428, 174);
+            this.richTextBox1.Size = new System.Drawing.Size(428, 155);
             this.richTextBox1.TabIndex = 17;
             this.richTextBox1.Text = "Goal:\nBeliefs and influence models are implemented in Symu.\nThe objective of this" +
     " example is to show how to use, configure and see the impacts of those models on" +
@@ -907,29 +932,62 @@
             this.label7.TabIndex = 42;
             this.label7.Text = "Number of steps";
             // 
-            // label24
+            // menuStrip1
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(29, 152);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(138, 21);
-            this.label24.TabIndex = 32;
-            this.label24.Text = "Tasks cancelled";
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1296, 28);
+            this.menuStrip1.TabIndex = 26;
+            this.menuStrip1.Text = "Symu";
             // 
-            // TasksCancelled
+            // symuToolStripMenuItem
             // 
-            this.TasksCancelled.AutoSize = true;
-            this.TasksCancelled.Location = new System.Drawing.Point(179, 152);
-            this.TasksCancelled.Name = "TasksCancelled";
-            this.TasksCancelled.Size = new System.Drawing.Size(16, 17);
-            this.TasksCancelled.TabIndex = 33;
-            this.TasksCancelled.Text = "0";
+            this.symuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.symuorgToolStripMenuItem,
+            this.documentationToolStripMenuItem1,
+            this.sourceCodeToolStripMenuItem1,
+            this.issuesToolStripMenuItem});
+            this.symuToolStripMenuItem.Name = "symuToolStripMenuItem";
+            this.symuToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.symuToolStripMenuItem.Text = "Symu";
+            // 
+            // symuorgToolStripMenuItem
+            // 
+            this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Text = "Symu.org";
+            this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
+            // 
+            // documentationToolStripMenuItem1
+            // 
+            this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Text = "Documentation";
+            this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
+            // 
+            // sourceCodeToolStripMenuItem1
+            // 
+            this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Text = "Source code";
+            this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
+            // 
+            // issuesToolStripMenuItem
+            // 
+            this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Text = "Issues";
+            this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1296, 764);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.richTextBox2);
@@ -949,7 +1007,10 @@
             this.groupBox9.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1035,5 +1096,11 @@
 
         private System.Windows.Forms.Label TasksCancelled;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem symuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem symuorgToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
     }
 }

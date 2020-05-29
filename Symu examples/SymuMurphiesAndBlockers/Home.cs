@@ -28,7 +28,7 @@ using SymuMurphiesAndBlockers.Classes;
 
 namespace SymuMurphiesAndBlockers
 {
-    public partial class Home : BaseForm
+    public partial class Home : SymuForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 
@@ -184,15 +184,15 @@ namespace SymuMurphiesAndBlockers
 
             OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
-            SetTimeStepType(TimeStepType.Daily);
-        }
 
-        protected override void SetScenarii()
-        {
-            _ = new TimeBasedScenario(_environment)
+            var scenario = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = ushort.Parse(tbSteps.Text)
             };
+
+            AddScenario(scenario);
+
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         protected override void OnStopped()
@@ -211,7 +211,7 @@ namespace SymuMurphiesAndBlockers
             Cancel();
         }
 
-        public override void Display()
+        public override void DisplayStep()
         {
             DisplayButtons();
             WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
@@ -288,55 +288,7 @@ namespace SymuMurphiesAndBlockers
 
         private void DisplayButtons()
         {
-            switch (State)
-            {
-                case AgentState.Stopped:
-                case AgentState.NotStarted:
-                    WriteButtonSafe(btnStart, true);
-                    WriteButtonSafe(btnStop, false);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Stopping:
-                case AgentState.Starting:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, false);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Started:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, true);
-                    WriteButtonSafe(btnPause, true);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Paused:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, true);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        protected void WriteButtonSafe(Button button, bool enabled)
-        {
-            if (button is null)
-            {
-                throw new ArgumentNullException(nameof(button));
-            }
-
-            if (button.InvokeRequired)
-            {
-                var d = new SafeCallButtonDelegate(WriteButtonSafe);
-                button.Invoke(d, button, enabled);
-            }
-            else
-            {
-                button.Enabled = enabled;
-            }
+            DisplayButtons(btnStart, btnStop, btnPause, btnResume);
         }
 
         private void tbWorkers_TextChanged(object sender, EventArgs e)
@@ -857,6 +809,7 @@ namespace SymuMurphiesAndBlockers
             }
         }
 
+        #region Menu
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -876,11 +829,6 @@ namespace SymuMurphiesAndBlockers
         {
             Process.Start("http://github.symu.org/issues");
         }
-
-        #region Nested type: SafeCallButtonDelegate
-
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
-
         #endregion
     }
 }

@@ -29,7 +29,7 @@ using EventType = SymuScenariosAndEvents.Classes.EventType;
 
 namespace SymuScenariosAndEvents
 {
-    public partial class Home : MultipleIterationsForm
+    public partial class Home : SymuForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 
@@ -44,8 +44,8 @@ namespace SymuScenariosAndEvents
             DisplayButtons();
             chartControl1.Series[0].PrepareStyle += Form1_PrepareStyle;
             chartControl2.Series[0].PrepareStyle += Form1_PrepareStyle;
-            #region Legend Customization
 
+            #region Legend Customization
             chartControl1.PrimaryXAxis.Title = "Step";
             //chartControl1.PrimaryYAxis.Title = "Tasks";
             chartControl1.Legend.Visible = true;
@@ -55,7 +55,7 @@ namespace SymuScenariosAndEvents
             chartControl2.Legend.Visible = true;
             chartControl2.Title.Text = "Simulation (Monte Carlo)";
             chartControl2.Title.Visible = true;
-
+            chartControl2.DropSeriesPoints = true;
             #endregion
 
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
@@ -322,23 +322,29 @@ namespace SymuScenariosAndEvents
         {
             WriteTextSafe(Iteration, Iterations.Number.ToString());
 
-            var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done/5).GroupBy(x => x).OrderBy(x => x.Key);
-            var seriesTasks = new ChartSeries {Name = "Tasks"};
+            var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done).ToList();
+            var capacityResults = SimulationResults.List.Select(x => x.Capacity).ToList();
+            var seriesTasks = new ChartSeries("tasks", ChartSeriesType.Histogram) ;
+            var count = Math.Max(tasksResults.Count, capacityResults.Count);
             foreach (var tasksResult in tasksResults)
             {
-                seriesTasks.Points.Add(tasksResult.Key*5, tasksResult.Count());
+                seriesTasks.Points.Add(tasksResult, count);
             }
-            seriesTasks.Type = ChartSeriesType.Column;
             seriesTasks.Text = seriesTasks.Name;
-            var capacityResults = SimulationResults.List.Select(x => x.Capacity/5).GroupBy(x => x).OrderBy(x => x.Key);
-            var seriesCapacity = new ChartSeries { Name = "Capacity" };
+            seriesTasks.ConfigItems.HistogramItem.NumberOfIntervals = 10;
+            //seriesTasks.ConfigItems.HistogramItem.ShowNormalDistribution = true;
+            //seriesTasks.ConfigItems.HistogramItem.ShowDataPoints = true;
+
+            var seriesCapacity = new ChartSeries("capacity", ChartSeriesType.Histogram);
             foreach (var capacityResult in capacityResults)
             {
-                seriesCapacity.Points.Add(capacityResult.Key * 5, capacityResult.Count());
+                seriesCapacity.Points.Add(capacityResult, count);
             }
-            seriesCapacity.Type = ChartSeriesType.Column;
             seriesCapacity.Text = seriesCapacity.Name;
-            WriteChartSafe(chartControl2, new [] {seriesTasks, seriesCapacity});
+            seriesCapacity.ConfigItems.HistogramItem.NumberOfIntervals = 10;
+            //seriesCapacity.ConfigItems.HistogramItem.ShowNormalDistribution = true;
+            //seriesCapacity.ConfigItems.HistogramItem.ShowDataPoints = true;
+            WriteChartSafe(chartControl2, new[] { seriesTasks, seriesCapacity });
 
         }
         protected void WriteChartSafe(ChartControl chartControl, ChartSeries[] chartSeries)

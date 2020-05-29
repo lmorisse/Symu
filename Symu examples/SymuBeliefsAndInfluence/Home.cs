@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -19,14 +20,14 @@ using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Tools;
 using SymuBeliefsAndInfluence.Classes;
+using static Symu.Tools.Constants;
 
 #endregion
 
 namespace SymuBeliefsAndInfluence
 {
-    public partial class Home : BaseForm
+    public partial class Home : SymuForm
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private int _initialTasksDone;
@@ -115,15 +116,14 @@ namespace SymuBeliefsAndInfluence
 
             #endregion
 
-            SetTimeStepType(TimeStepType.Daily);
-        }
-
-        protected override void SetScenarii()
-        {
-            _ = new TimeBasedScenario(_environment)
+            var scenario = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = ushort.Parse(tbSteps.Text)
             };
+
+            AddScenario(scenario);
+
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         protected override void OnStopped()
@@ -142,7 +142,7 @@ namespace SymuBeliefsAndInfluence
             Cancel();
         }
 
-        public override void Display()
+        public override void DisplayStep()
         {
             DisplayButtons();
             WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
@@ -163,7 +163,7 @@ namespace SymuBeliefsAndInfluence
             WriteTextSafe(InitialTotalBeliefs,
                 _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum
                     .ToString("F1", CultureInfo.InvariantCulture));
-            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Done * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
@@ -192,55 +192,7 @@ namespace SymuBeliefsAndInfluence
 
         private void DisplayButtons()
         {
-            switch (State)
-            {
-                case AgentState.Stopped:
-                case AgentState.NotStarted:
-                    WriteButtonSafe(btnStart, true);
-                    WriteButtonSafe(btnStop, false);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Stopping:
-                case AgentState.Starting:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, false);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Started:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, true);
-                    WriteButtonSafe(btnPause, true);
-                    WriteButtonSafe(btnResume, false);
-                    break;
-                case AgentState.Paused:
-                    WriteButtonSafe(btnStart, false);
-                    WriteButtonSafe(btnStop, true);
-                    WriteButtonSafe(btnPause, false);
-                    WriteButtonSafe(btnResume, true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        protected void WriteButtonSafe(Button button, bool enabled)
-        {
-            if (button is null)
-            {
-                throw new ArgumentNullException(nameof(button));
-            }
-
-            if (button.InvokeRequired)
-            {
-                var d = new SafeCallButtonDelegate(WriteButtonSafe);
-                button.Invoke(d, button, enabled);
-            }
-            else
-            {
-                button.Enabled = enabled;
-            }
+            DisplayButtons(btnStart, btnStop, btnPause, btnResume);
         }
 
         private void tbWorkers_TextChanged(object sender, EventArgs e)
@@ -502,11 +454,26 @@ namespace SymuBeliefsAndInfluence
                 MessageBox.Show(exception.Message);
             }
         }
+        #region Menu
+        private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://symu.org");
+        }
 
-        #region Nested type: SafeCallButtonDelegate
+        private void documentationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://docs.symu.org/");
+        }
 
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
+        private void sourceCodeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/");
+        }
 
+        private void issuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/issues");
+        }
         #endregion
     }
 }

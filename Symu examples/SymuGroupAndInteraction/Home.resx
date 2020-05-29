@@ -127,4 +127,7 @@ Those parameters has an impact on the way people are interacting every day in th
 Play with the interaction strategy to see the impact on the organization flexibility, defined by the capacity of creating triads.
 Try to increase triads with the creation of new interactions.</value>
   </data>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

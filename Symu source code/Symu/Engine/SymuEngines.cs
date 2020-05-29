@@ -39,13 +39,5 @@ namespace Symu.Engine
 
             SimulationResults.Clear();
         }
-
-        protected override void PostProcess()
-        {
-        }
-
-        protected override void AnalyzeIteration()
-        {
-        }
     }
 }

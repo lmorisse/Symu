@@ -116,13 +116,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\SymuOrg\Github\Symu source code\SymuTools\SymuTools.csproj">
-      <Project>{28ca606e-49d3-4136-ad3f-6b46eab9be75}</Project>
-      <Name>SymuTools</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\SymuForm\SymuForm.csproj">
       <Project>{fb0a9519-923e-4a4f-a6ac-dab4c7a03f63}</Project>
       <Name>SymuForm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj">
+      <Project>{28ca606e-49d3-4136-ad3f-6b46eab9be75}</Project>
+      <Name>SymuTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj">
       <Project>{bd01bccd-7194-4bd1-8e62-9be1343af2ce}</Project>

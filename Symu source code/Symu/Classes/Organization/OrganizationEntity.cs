@@ -94,11 +94,14 @@ namespace Symu.Classes.Organization
                 Knowledges.Add(knowledge);
             }
         }
-
+        /// <summary>
+        /// Clear organization for multiple iterations simulation
+        /// </summary>
         public void Clear()
         {
             Databases.Clear();
             Knowledges.Clear();
+            EntityIndex = 1;
         }
     }
 }

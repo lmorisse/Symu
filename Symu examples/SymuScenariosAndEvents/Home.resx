@@ -120,16 +120,17 @@
   <data name="richTextBox2.Text" xml:space="preserve">
     <value>Scenario:
 * Agents performing tasks according to their availability, knowledge and beliefs
-* emails and internet access to search information.
-Because of the murphies, the agents are blocked. They have different strategies to unlock the blockers :
-They search for information from colleagues, in their emails, on the Internet, or try to guess the correct answer.
-They may find no strategy to unlock tasks, so they will not complete them or even cancel them.</value>
+* Random process to assign the weight of tasks
+
+Due to models and murphies, capacity may diverge from the number of tasks performed because of the blockers or unavailability of the agents.
+Adding events such as new person needing to learn existing knowledge, or new knowledge for all the persons will also have an impact on the results.
+In a Monte Carlo approach, you perform a number of iterations with the same configuration and analyse the results with a histogram chart of a frequency distribution in which the height of the bars are proportional to the result frequencies.</value>
   </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>Goal:
-An organization is designed to work in an optimal system. Murphies is a way to run a system in a sub-optimal way and see the impacts.
-As Symu is task-based, murphies often results in blockers in tasks.
-The objective of this example is to show how to use, configure and see the impacts of those models on agents.</value>
+As the simulation has random processes to simulate variability, a Monte Carlo approach is a good way to analyze the organization behaviour.
+To add variability, you can activate / deactivate models and murphies; you can also schedule specifics events during the simulation.
+The objective of this example is to show how to use, configure and see the impacts of this approach on results.</value>
   </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

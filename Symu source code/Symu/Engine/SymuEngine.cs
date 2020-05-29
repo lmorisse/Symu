@@ -30,16 +30,16 @@ namespace Symu.Engine
     /// </summary>
     public class SymuEngine
     {
-        private readonly List<SimulationScenario> _scenarii = new List<SimulationScenario>();
+        public List<SimulationScenario> Scenarii { get; }= new List<SimulationScenario>();
 
         /// <summary>
         ///     Environment of the simulation
         /// </summary>
-        protected SymuEnvironment Environment { get; set; }
+        public SymuEnvironment Environment { get; set; }
         /// <summary>
         ///     The state of the SymuEngine
         /// </summary>
-        public AgentState State { get; private set; } = AgentState.Stopped;
+        public AgentState State { get; set; } = AgentState.Stopped;
         /// <summary>
         ///     Manage the multiple iterations of the simulation
         ///     A interaction is a number of interaction steps
@@ -68,12 +68,12 @@ namespace Symu.Engine
 
         public void AddScenario(SimulationScenario scenario)
         {
-            if (!_scenarii.Exists(s => s.Id.Equals(scenario.Id)))
+            if (!Scenarii.Exists(s => s.Id.Equals(scenario.Id)))
             {
-                _scenarii.Add(scenario);
+                Scenarii.Add(scenario);
             }
         }
-        protected void AddEvent(SymuEvent symuEvent)
+        public void AddEvent(SymuEvent symuEvent)
         {
             Environment.AddEvent(symuEvent);
         }
@@ -126,11 +126,11 @@ namespace Symu.Engine
             PostProcess();
         }
 
-        protected virtual void PostProcess()
+        public virtual void PostProcess()
         {
         }
 
-        protected bool StopProcess()
+        public bool StopProcess()
         {
             return Iterations.Stop();
         }
@@ -143,7 +143,7 @@ namespace Symu.Engine
         {
             State = AgentState.Starting;
             InitializeIteration();
-            Iterations.UpdateIteration(_scenarii);
+            Iterations.UpdateIteration(Scenarii);
             Environment.Start();
             Environment.WaitingForStart();
             Environment.SetInteractionSphere(true);
@@ -170,7 +170,7 @@ namespace Symu.Engine
             return Environment.StopIteration();
         }
 
-        private void PostIteration()
+        public void PostIteration()
         {
             SimulationResults.List.Add(Environment.SetIterationResult(Iterations.Number));
             if (Environment.IterationResult.Success)
@@ -224,7 +224,7 @@ namespace Symu.Engine
         protected void SetScenariiAndTimeStep()
         {
             ushort step0 = 0;
-            foreach (var scenario in _scenarii.Where(sc => sc.IsActive))
+            foreach (var scenario in Scenarii.Where(sc => sc.IsActive))
             {
                 var clone = scenario.Clone();
                 clone.SetUp();
