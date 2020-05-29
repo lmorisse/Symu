@@ -25,18 +25,6 @@ namespace Symu.Classes.Organization
     public class OrganizationModels
     {
         /// <summary>
-        ///     If set, the organizationEntity flexibility performance will be followed and stored during the symu
-        /// </summary>
-        //TODO should be with IterationResult as Results Settings with cadence of feeds
-        public bool FollowGroupFlexibility { get; set; }
-
-        /// <summary>
-        ///     If set, the organizationEntity knowledge and belief performance will be followed and stored during the symu
-        /// </summary>
-        //TODO should be with IterationResult as Results Settings with cadence of feeds
-        public bool FollowGroupKnowledge { get; set; }
-
-        /// <summary>
         ///     Agent knowledge learning model
         /// </summary>
         public ModelEntity Learning { get; set; } = new ModelEntity();
@@ -116,8 +104,6 @@ namespace Symu.Classes.Organization
             Influence.CopyTo(entity.Influence);
             Beliefs.CopyTo(entity.Beliefs);
             InteractionSphere.CopyTo(entity.InteractionSphere);
-            entity.FollowGroupFlexibility = FollowGroupFlexibility;
-            entity.FollowGroupKnowledge = FollowGroupKnowledge;
             entity.Generator = Generator;
             entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
         }

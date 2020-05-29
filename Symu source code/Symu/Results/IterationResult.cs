@@ -22,11 +22,13 @@ namespace Symu.Results
 {
     public class IterationResult
     {
-        private readonly SymuEnvironment _environment;
+        protected readonly SymuEnvironment _environment;
 
         public IterationResult(SymuEnvironment environment)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            OrganizationFlexibility = new OrganizationFlexibility(_environment);
+            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment);
         }
 
         /// <summary>
@@ -49,12 +51,12 @@ namespace Symu.Results
         ///     Focus on the time at which stability is reached
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical)
         /// </summary>
-        public OrganizationFlexibility OrganizationFlexibility { get; private set; } 
+        public OrganizationFlexibility OrganizationFlexibility { get;  } 
 
         /// <summary>
         ///     Get the knowledge and Belief performance for the group
         /// </summary>
-        public OrganizationKnowledgeAndBelief OrganizationKnowledgeAndBelief { get; private set; }
+        public OrganizationKnowledgeAndBelief OrganizationKnowledgeAndBelief { get; }
 
         /// <summary>
         ///     Get the Task blockers metrics
@@ -73,25 +75,8 @@ namespace Symu.Results
 
         public virtual void Initialize()
         {
-            if (OrganizationFlexibility is null)
-            {
-                OrganizationFlexibility = new OrganizationFlexibility(_environment);
-            }
-            else
-            {
-                OrganizationFlexibility.Clear();
-            }
-
-            if (OrganizationKnowledgeAndBelief is null)
-            {
-                OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
-                    _environment.Organization.Models);
-            }
-            else
-            {
-                OrganizationKnowledgeAndBelief.Clear();
-            }
-
+            OrganizationFlexibility.Clear();
+            OrganizationKnowledgeAndBelief.Clear();
             Blockers.Clear();
             Tasks.Clear();
             SpecificResults.Clear();
@@ -148,6 +133,26 @@ namespace Symu.Results
             //NotFinishedInTime = false;
             //NumberOfItemsNotDone = 0;
             return clone;
+        }
+        /// <summary>
+        /// Set all results to On
+        /// </summary>
+        public void On()
+        {
+            OrganizationFlexibility.On = true;
+            OrganizationKnowledgeAndBelief.On = true;
+            Tasks.On = true;
+            Blockers.On = true;
+        }
+        /// <summary>
+        /// Set all results to Off
+        /// </summary>
+        public void Off()
+        {
+            OrganizationFlexibility.On = false;
+            OrganizationKnowledgeAndBelief.On = false;
+            Tasks.On = false;
+            Blockers.On = false;
         }
     }
 }

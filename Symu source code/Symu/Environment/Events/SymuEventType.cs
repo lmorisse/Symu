@@ -7,9 +7,12 @@
 
 #endregion
 
-namespace SymuScenariosAndEvents.Classes
+namespace Symu.Environment.Events
 {
-    public enum EventType
+    /// <summary>
+    /// Type of SymuEvent used to schedule event during the simulation
+    /// </summary>
+    public enum SymuEventType
     {
         NoEvent = 0,
         OneShot = 1,

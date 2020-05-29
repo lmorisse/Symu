@@ -298,7 +298,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void InitializeKnowledgeTest()
         {
-            Assert.Fail();
+            _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _knowledgeModel.InitializeKnowledge(_knowledge.Id, 0);
+            Assert.IsTrue(_network.NetworkKnowledges.Exists(_agentId, _knowledge.Id));
+            var agentKnowledge=_network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id);
+            Assert.AreEqual(1, agentKnowledge.KnowledgeBits.GetBit(0));
         }
     }
 }

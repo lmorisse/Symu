@@ -23,7 +23,6 @@ using Symu.Messaging.Messages;
 using SymuScenariosAndEvents.Classes;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
-using EventType = SymuScenariosAndEvents.Classes.EventType;
 
 #endregion
 
@@ -154,20 +153,20 @@ namespace SymuScenariosAndEvents
 
         private void SetEvents()
         {
-            var eventType = EventType.NoEvent;
+            var eventType = SymuEventType.NoEvent;
             if (rbAtStep.Checked)
             {
-                eventType = EventType.OneShot;
+                eventType = SymuEventType.OneShot;
             }
 
             if (rbCyclical.Checked)
             {
-                eventType = EventType.Cyclical;
+                eventType = SymuEventType.Cyclical;
             }
 
             if (rbRandom.Checked)
             {
-                eventType = EventType.Random;
+                eventType = SymuEventType.Random;
             }
 
             var eventStep = SetEventStep();
@@ -181,15 +180,15 @@ namespace SymuScenariosAndEvents
                 SymuEvent symuEvent = null;
                 switch (eventType)
                 {
-                    case EventType.NoEvent:
+                    case SymuEventType.NoEvent:
                         break;
-                    case EventType.OneShot:
+                    case SymuEventType.OneShot:
                         symuEvent = new SymuEvent {Step = eventStep};
                         break;
-                    case EventType.Cyclical:
+                    case SymuEventType.Cyclical:
                         symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
                         break;
-                    case EventType.Random:
+                    case SymuEventType.Random:
                         symuEvent = new RandomEvent {Ratio = randomRatio};
                         break;
                     default:
@@ -208,15 +207,15 @@ namespace SymuScenariosAndEvents
                 SymuEvent symuEvent = null;
                 switch (eventType)
                 {
-                    case EventType.NoEvent:
+                    case SymuEventType.NoEvent:
                         break;
-                    case EventType.OneShot:
+                    case SymuEventType.OneShot:
                         symuEvent = new SymuEvent {Step = eventStep};
                         break;
-                    case EventType.Cyclical:
+                    case SymuEventType.Cyclical:
                         symuEvent = new CyclicalEvent {EveryStep = cyclicalStep };
                         break;
-                    case EventType.Random:
+                    case SymuEventType.Random:
                         symuEvent = new RandomEvent {Ratio = randomRatio };
                         break;
                     default:

@@ -41,11 +41,10 @@ namespace SymuGroupAndInteraction.Classes
 
             Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             Organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            Organization.Models.FollowGroupFlexibility = true;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.On = true;
             Organization.Models.Generator = RandomGenerator.RandomUniform;
-
+            IterationResult.OrganizationFlexibility.On = true;
             SetDebug(false);
         }
 

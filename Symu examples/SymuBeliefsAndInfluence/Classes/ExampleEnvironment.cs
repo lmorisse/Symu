@@ -49,12 +49,13 @@ namespace SymuBeliefsAndInfluence.Classes
             organization.Models.Beliefs.On = true;
             organization.Models.Beliefs.RateOfAgentsOn = 1;
             organization.Models.Generator = RandomGenerator.RandomUniform;
-            organization.Models.FollowGroupKnowledge = true;
-            organization.Models.FollowGroupFlexibility = true;
             organization.Murphies.Off();
             organization.Murphies.IncompleteBelief.On = true;
             organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             IterationResult.Tasks.On = true;
+            IterationResult.OrganizationKnowledgeAndBelief.On = true;
+            IterationResult.OrganizationFlexibility.On = true;
+
             organization.Models.InteractionSphere.On = true;
             organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;

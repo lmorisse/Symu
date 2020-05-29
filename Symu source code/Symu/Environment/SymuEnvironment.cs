@@ -72,7 +72,7 @@ namespace Symu.Environment
         /// </summary>
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
 
-        public List<SymuEvent> Events { get; set; } = new List<SymuEvent>();
+        public List<SymuEvent> Events { get; } = new List<SymuEvent>();
 
         #region Start and Stop
 

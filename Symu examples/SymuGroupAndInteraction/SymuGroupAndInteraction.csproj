@@ -134,7 +134,7 @@
       <Name>SymuForm</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj">
-      <Project>{5475a2e5-e10f-46ef-b24e-450d717af7cf}</Project>
+      <Project>{28ca606e-49d3-4136-ad3f-6b46eab9be75}</Project>
       <Name>SymuTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj">

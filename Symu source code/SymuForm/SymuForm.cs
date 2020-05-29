@@ -33,7 +33,7 @@ namespace Symu.Forms
     public partial class SymuForm : Form
     {
         private bool _pauseWorker;
-        private readonly SymuEngine _engine = new SymuEngine();
+        public SymuEngine Engine { get; }= new SymuEngine();
 
         public SymuForm()
         {
@@ -47,12 +47,12 @@ namespace Symu.Forms
         ///     A interaction is a number of interaction steps
         ///     Multiple iterations are used to replay a simulation for MonteCarlo process or to vary parameters
         /// </summary>
-        public Iterations Iterations => _engine.Iterations;
+        public Iterations Iterations => Engine.Iterations;
 
         /// <summary>
         ///     Store the results of each iteration
         /// </summary>
-        public SimulationResults SimulationResults => _engine.SimulationResults;
+        public SimulationResults SimulationResults => Engine.SimulationResults;
 
         #region Display
         public virtual void DisplayStep()
@@ -81,7 +81,7 @@ namespace Symu.Forms
         }
         protected void DisplayButtons(Button btnStart, Button btnStop, Button btnPause, Button btnResume)
         {
-            switch (_engine.State)
+            switch (Engine.State)
             {
                 case AgentState.Stopped:
                 case AgentState.NotStarted:
@@ -139,7 +139,7 @@ namespace Symu.Forms
         /// </summary>
         public virtual void OnNextStep()
         {
-            _engine.OnNextStep();
+            Engine.OnNextStep();
             DisplayStep();
         }
 
@@ -153,7 +153,7 @@ namespace Symu.Forms
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            _engine.State = AgentState.Starting;
+            Engine.State = AgentState.Starting;
             SetUp(environment);
             PreProcess();
             if (backgroundWorker1.IsBusy != true)
@@ -234,7 +234,7 @@ namespace Symu.Forms
         /// </summary>
         protected virtual void OnStopped()
         {
-            _engine.State = AgentState.Stopped;
+            Engine.State = AgentState.Stopped;
         }
 
         private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -249,7 +249,7 @@ namespace Symu.Forms
 
         protected void Cancel()
         {
-            _engine.State = AgentState.Stopping;
+            Engine.State = AgentState.Stopping;
             if (backgroundWorker1.WorkerSupportsCancellation)
                 // Cancel the asynchronous operation.
             {
@@ -260,13 +260,13 @@ namespace Symu.Forms
         protected void Pause()
         {
             _pauseWorker = true;
-            _engine.State = AgentState.Paused;
+            Engine.State = AgentState.Paused;
         }
 
         protected void Resume()
         {
             _pauseWorker = false;
-            _engine.State = AgentState.Started;
+            Engine.State = AgentState.Started;
         }
         #endregion
 
@@ -282,19 +282,19 @@ namespace Symu.Forms
         private void SetUp(SymuEnvironment environment)
         {
             OrganizationEntity.Clear();
-            _engine.SetEnvironment(environment);
-            _engine.Environment.SetOrganization(OrganizationEntity);
+            Engine.SetEnvironment(environment);
+            Engine.Environment.SetOrganization(OrganizationEntity);
             UpdateSettings();
         }
 
         public void AddScenario(SimulationScenario scenario)
         {
-            _engine.AddScenario(scenario);
+            Engine.AddScenario(scenario);
         }
 
         protected void AddEvent(SymuEvent symuEvent)
         {
-            _engine.AddEvent(symuEvent);
+            Engine.AddEvent(symuEvent);
         }
 
         /// <summary>
@@ -303,27 +303,27 @@ namespace Symu.Forms
         /// </summary>
         protected virtual void UpdateSettings()
         {
-            _engine.Scenarii.Clear();
+            Engine.Scenarii.Clear();
         }
 
         protected void SetDebug(bool value)
         {
-            _engine.Environment.SetDebug(value);
+            Engine.Environment.SetDebug(value);
         }
 
         protected void SetDelay(int value)
         {
-            _engine.Environment.SetDelay(value);
+            Engine.Environment.SetDelay(value);
         }
 
         protected void SetRandomLevel(int value)
         {
-            _engine.Environment.SetRandomLevel(value);
+            Engine.Environment.SetRandomLevel(value);
         }
 
         protected void SetTimeStepType(TimeStepType type)
         {
-            _engine.Environment.SetTimeStepType(type);
+            Engine.Environment.SetTimeStepType(type);
         }
 
         #endregion
@@ -332,7 +332,7 @@ namespace Symu.Forms
 
         protected virtual void PreIteration()
         {
-            _engine.PreIteration();
+            Engine.PreIteration();
         }
 
         /// <summary>
@@ -342,12 +342,12 @@ namespace Symu.Forms
         /// <returns></returns>
         protected virtual bool StopIteration()
         {
-            return _engine.StopIteration();
+            return Engine.StopIteration();
         }
 
         protected virtual void PostIteration()
         {
-            _engine.PostIteration();
+            Engine.PostIteration();
             DisplayIteration();
         }
 
@@ -357,16 +357,16 @@ namespace Symu.Forms
 
         protected virtual void PreProcess()
         {
-            _engine.PreProcess();
+            Engine.PreProcess();
         }
 
         protected virtual void PostProcess()
         {
-            _engine.PostProcess();
+            Engine.PostProcess();
         }
         protected virtual bool StopProcess()
         {
-            return _engine.StopProcess();
+            return Engine.StopProcess();
         }
 
         #endregion

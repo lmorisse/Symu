@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
-using Symu.Classes.Organization;
+using Symu.Environment;
 using Symu.Repository.Networks;
 
 #endregion
@@ -25,18 +25,18 @@ namespace Symu.Results.Organization
     /// </summary>
     public class OrganizationKnowledgeAndBelief
     {
-        private readonly OrganizationModels _models;
+
+        private readonly SymuEnvironment _environment;
+
+        public OrganizationKnowledgeAndBelief(SymuEnvironment environment)
+        {
+            _environment = environment;
+        }
 
         /// <summary>
-        ///     Network of the symu
+        ///     If set to true, OrganizationKnowledgeAndBelief will be filled with value and stored during the simulation
         /// </summary>
-        private readonly Network _network;
-
-        public OrganizationKnowledgeAndBelief(Network network, OrganizationModels models)
-        {
-            _network = network;
-            _models = models;
-        }
+        public bool On { get; set; }
 
         /// <summary>
         ///     List of knowledge performance per step
@@ -81,7 +81,7 @@ namespace Symu.Results.Organization
         /// <param name="step"></param>
         public void HandlePerformance(ushort step)
         {
-            if (!_models.FollowGroupKnowledge)
+            if (!On)
             {
                 return;
             }
@@ -95,28 +95,28 @@ namespace Symu.Results.Organization
 
         public void HandleLearning(ushort step)
         {
-            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning).ToList();
+            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning).ToList();
             var learning = SetStructKnowledgeAndBeliefStruct(step, sum);
             Learning.Add(learning);
         }
 
         public void HandleForgetting(ushort step)
         {
-            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Forgetting).ToList();
+            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Forgetting).ToList();
             var forgetting = SetStructKnowledgeAndBeliefStruct(step, sum);
             Forgetting.Add(forgetting);
         }
 
         public void HandleKnowledgeObsolescence(ushort step)
         {
-            var sum = _network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Obsolescence).ToList();
+            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Obsolescence).ToList();
             var obsolescence = SetStructKnowledgeAndBeliefStruct(step, sum);
             KnowledgeObsolescence.Add(obsolescence);
         }
 
         public void HandleKnowledge(ushort step)
         {
-            var sumKnowledge = _network.NetworkKnowledges.AgentsRepository.Values
+            var sumKnowledge = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(expertise => expertise.GetKnowledgesSum()).ToList();
             var knowledge = SetStructKnowledgeAndBeliefStruct(step, sumKnowledge);
             Knowledge.Add(knowledge);
@@ -152,7 +152,7 @@ namespace Symu.Results.Organization
 
         public void HandleBelief(ushort step)
         {
-            var sum = _network.NetworkBeliefs.AgentsRepository.Values.Select(beliefs => beliefs.GetBeliefsSum())
+            var sum = _environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values.Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
             var belief = SetStructKnowledgeAndBeliefStruct(step, sum);
             Beliefs.Add(belief);

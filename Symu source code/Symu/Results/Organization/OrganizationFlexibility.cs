@@ -35,6 +35,10 @@ namespace Symu.Results.Organization
         {
             _environment = environment;
         }
+        /// <summary>
+        ///     If set to true, OrganizationFlexibility will be filled with value and stored during the simulation
+        /// </summary>
+        public bool On { get; set; }
 
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
@@ -103,7 +107,7 @@ namespace Symu.Results.Organization
 
         public void HandlePerformance(ushort step)
         {
-            if (!_environment.Organization.Models.FollowGroupFlexibility)
+            if (!On)
             {
                 return;
             }

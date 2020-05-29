@@ -82,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartAppearance.cs" />
-    <Compile Include="Classes\EventType.cs" />
     <Compile Include="Classes\ExampleEnvironment.cs" />
     <Compile Include="Classes\GroupAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
