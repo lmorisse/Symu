@@ -176,7 +176,7 @@ namespace SymuLearnAndForget
             _fullKnowledge = 0;
 
             SetRandomLevel(cbRandomLevel.SelectedIndex);
-            TimeStepType = TimeStepType.Daily;
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         protected override void SetScenarii()
