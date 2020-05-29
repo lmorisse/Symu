@@ -549,7 +549,7 @@
             this.groupBox6.Size = new System.Drawing.Size(374, 136);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Symu";
+            this.groupBox6.Text = "Simulation";
             // 
             // label22
             // 

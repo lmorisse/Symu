@@ -40,7 +40,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
-            var scenario = new TimeStepScenario(_environment)
+            var scenario = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = NumberOfSteps
             };

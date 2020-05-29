@@ -80,7 +80,7 @@ namespace Symu.Messaging.Tracker
         public bool Debug { get; set; } = true;
 
         /// <summary>
-        ///     Last messages sent during the last NumberOfSteps
+        ///     Last messages sent during the last NumberOfMessages
         /// </summary>
         public TimeStampedMessages LastSentMessages { get; } = new TimeStampedMessages();
 
@@ -98,7 +98,7 @@ namespace Symu.Messaging.Tracker
         ///     number of steps to retain the MessagesSent
         ///     to optimize performance memory usage
         ///     By default 7 = a week
-        ///     NumberOfSteps = -1 => Don't clear messages / debug mode
+        ///     NumberOfMessages = -1 => Don't clear messages / debug mode
         /// </summary>
         public sbyte NumberOfSteps { get; set; } = 7;
 

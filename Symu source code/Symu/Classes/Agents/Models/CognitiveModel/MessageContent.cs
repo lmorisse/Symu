@@ -19,7 +19,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
     /// <summary>
     ///     Message content from Construct Software
     ///     Send & receive :
-    ///     Knowledges
+    ///     Knowledge
     ///     Beliefs
     ///     with transactive memory
     ///     Referral

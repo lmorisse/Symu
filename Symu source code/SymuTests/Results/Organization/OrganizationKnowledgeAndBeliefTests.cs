@@ -52,7 +52,7 @@ namespace SymuTests.Results.Organization
         public void HandleKnowledge0Test()
         {
             _result.HandleKnowledge(0);
-            Assert.AreEqual(0, _result.Knowledges[0].Mean);
+            Assert.AreEqual(0, _result.Knowledge[0].Mean);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SymuTests.Results.Organization
             _network.NetworkKnowledges.InitializeExpertise(_agentId, false, 0);
 
             _result.HandleKnowledge(0);
-            Assert.AreEqual(1, _result.Knowledges[0].Mean);
+            Assert.AreEqual(1, _result.Knowledge[0].Mean);
         }
 
         /// <summary>
@@ -83,9 +83,9 @@ namespace SymuTests.Results.Organization
             _network.NetworkKnowledges.InitializeExpertise(_agentId2, false, 0);
 
             _result.HandleKnowledge(0);
-            Assert.AreEqual(2, _result.Knowledges[0].Mean);
-            Assert.AreEqual(0, _result.Knowledges[0].StandardDeviation);
-            Assert.AreEqual(4, _result.Knowledges[0].Sum);
+            Assert.AreEqual(2, _result.Knowledge[0].Mean);
+            Assert.AreEqual(0, _result.Knowledge[0].StandardDeviation);
+            Assert.AreEqual(4, _result.Knowledge[0].Sum);
         }
 
         #endregion

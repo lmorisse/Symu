@@ -59,7 +59,7 @@ namespace Symu.Repository.Networks.Knowledges
             AgentsRepository.Clear();
         }
 
-        #region Knowledges repository
+        #region Knowledge repository
 
         public Knowledge GetKnowledge(ushort knowledgeId)
         {
@@ -81,7 +81,7 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     Add a set of Knowledges to the repository
+        ///     Add a set of Knowledge to the repository
         /// </summary>
         public void AddKnowledges(IEnumerable<Knowledge> knowledges)
         {
@@ -98,7 +98,7 @@ namespace Symu.Repository.Networks.Knowledges
 
         #endregion
 
-        #region Agent Knowledges
+        #region Agent Knowledge
 
         public bool Exists(AgentId agentId, ushort knowledgeId)
         {

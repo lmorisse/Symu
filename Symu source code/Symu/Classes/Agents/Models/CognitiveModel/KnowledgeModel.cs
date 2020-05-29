@@ -78,7 +78,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         ///     Initialize the expertise of the agent based on the knowledge network
         /// </summary>
         /// <param name="step"></param>
-        /// <returns></returns>
         public void InitializeExpertise(ushort step)
         {
             if (!On || !_knowledgeAndBeliefs.HasKnowledge)
@@ -93,6 +92,17 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             }
 
             _networkKnowledges.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
+        }
+
+        /// <summary>
+        ///     Initialize the knowledge of the agent based on the knowledge network
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="step"></param>
+        public void InitializeKnowledge(ushort knowledgeId, ushort step)
+        {
+            _networkKnowledges.InitializeAgentKnowledge(GetKnowledge(knowledgeId),
+                !_knowledgeAndBeliefs.HasInitialKnowledge, step);
         }
 
         /// <summary>
@@ -221,5 +231,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         {
             return Expertise.GetKnowledge(knowledgeId);
         }
+
     }
 }

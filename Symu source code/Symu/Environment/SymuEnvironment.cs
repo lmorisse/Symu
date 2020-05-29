@@ -17,6 +17,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Environment.Events;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
@@ -71,6 +72,8 @@ namespace Symu.Environment
         /// </summary>
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
 
+        public List<SymuEvent> Events { get; set; } = new List<SymuEvent>();
+
         #region Start and Stop
 
         public virtual void SetOrganization(OrganizationEntity organization)
@@ -122,7 +125,7 @@ namespace Symu.Environment
             //IterationResult.HasItemsNotDone = scenarii.Exists(s => s.IterationResult.HasItemsNotDone);
             //IterationResult.NotFinishedInTime = scenarii.Exists(s => s.IterationResult.NotFinishedInTime);
             //IterationResult.SeemsToBeBlocked = scenarii.Exists(s => s.IterationResult.SeemsToBeBlocked);
-            return IterationResult;
+            return IterationResult.Clone();
         }
 
         /// <summary>
@@ -277,6 +280,8 @@ namespace Symu.Environment
 
         public void NextStep()
         {
+            ScheduleEvents();
+
             SendDelayedMessages();
 
             var agents = WhitePages.AllAgents().Shuffle();
@@ -400,7 +405,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Set repository of Knowledges network
+        ///     Set repository of Knowledge network
         /// </summary>
         public virtual void SetKnowledges()
         {
@@ -422,6 +427,29 @@ namespace Symu.Environment
             }
         }
 
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Schedule Events from the list Events
+        /// </summary>
+        public void ScheduleEvents()
+        {
+            foreach (var symuEvent in Events)
+            {
+                symuEvent.Schedule(Schedule.Step);
+            }
+        }
+
+        public void AddEvent(SymuEvent symuEvent)
+        {
+            if (symuEvent == null)
+            {
+                throw new ArgumentNullException(nameof(symuEvent));
+            }
+
+            Events.Add(symuEvent);
+        }
         #endregion
     }
 }

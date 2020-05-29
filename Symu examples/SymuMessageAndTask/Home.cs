@@ -143,12 +143,12 @@ namespace SymuMessageAndTask
             #endregion
 
             SetRandomLevel(cbRandomLevel.SelectedIndex);
-            TimeStepType = TimeStepType.Daily;
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         protected override void SetScenarii()
         {
-            _ = new TimeStepScenario(_environment)
+            _ = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = ushort.Parse(tbSteps.Text)
             };

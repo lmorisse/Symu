@@ -16,10 +16,11 @@ using Symu.Environment;
 
 namespace Symu.Classes.Scenario
 {
-    public class TimeStepScenario : SimulationScenario
+    public class TaskBasedScenario : SimulationScenario
     {
-        public TimeStepScenario(SymuEnvironment environment) : base(null, environment)
+        public TaskBasedScenario(SymuEnvironment environment) : base(null, environment)
         {
+            Environment.IterationResult.Tasks.On = true;
         }
 
         /// <summary>
@@ -27,14 +28,14 @@ namespace Symu.Classes.Scenario
         ///     In the same unit of TimeStepType
         ///     Use NoLimit for a scenario with no end
         /// </summary>
-        public ushort NumberOfSteps { get; set; }
+        public ushort NumberOfTasks { get; set; }
 
         public static sbyte NoLimit { get; } = -1;
 
         public override void PreStep()
         {
             base.PreStep();
-            if (NumberOfSteps != NoLimit && Schedule.Step == NumberOfSteps - 1)
+            if (NumberOfTasks != NoLimit && Environment.IterationResult.Tasks.Done >= NumberOfTasks - 1)
             {
                 State = AgentState.Stopping;
             }
@@ -42,9 +43,9 @@ namespace Symu.Classes.Scenario
 
         public override SimulationScenario Clone()
         {
-            var clone = new TimeStepScenario(Environment)
+            var clone = new TaskBasedScenario(Environment)
             {
-                NumberOfSteps = NumberOfSteps
+                NumberOfTasks = NumberOfTasks
             };
             return clone;
         }

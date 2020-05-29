@@ -76,7 +76,7 @@ namespace Symu.Messaging.Messages
 
         #endregion
 
-        #region Knowledges
+        #region Knowledge
 
         /// <summary>
         ///     The knowledge Id that is sent

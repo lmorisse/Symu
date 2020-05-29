@@ -331,7 +331,7 @@ namespace Symu.Repository.Networks
         }
 
         /// <summary>
-        ///     Add a set of Knowledges to the repository
+        ///     Add a set of Knowledge to the repository
         /// </summary>
         public void AddKnowledges(IEnumerable<Knowledge> knowledge)
         {

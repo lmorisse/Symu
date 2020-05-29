@@ -294,5 +294,11 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNull(bits);
         }
+
+        [TestMethod]
+        public void InitializeKnowledgeTest()
+        {
+            Assert.Fail();
+        }
     }
 }

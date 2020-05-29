@@ -635,7 +635,7 @@ namespace Symu.Classes.Agents
         /// <param name="task"></param>
         public void CheckBlockerIncompleteKnowledge(SymuTask task)
         {
-            if (!Environment.Organization.Murphies.IncompleteKnowledge.On)
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.On || !Environment.Organization.Models.Knowledge.On)
             {
                 return;
             }
@@ -886,7 +886,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(task));
             }
 
-            if (!Environment.Organization.Murphies.IncompleteBelief.On)
+            if (!Environment.Organization.Murphies.IncompleteBelief.On || !Environment.Organization.Models.Beliefs.On)
             {
                 return;
             }
@@ -955,6 +955,11 @@ namespace Symu.Classes.Agents
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
+            }
+
+            if (!BeliefsModel.On)
+            {
+                return;
             }
 
             var taskBits = task.KnowledgesBits.GetBits(knowledgeId);

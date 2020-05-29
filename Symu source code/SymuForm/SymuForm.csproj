@@ -30,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="MultipleIterationsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>

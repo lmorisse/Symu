@@ -121,5 +121,34 @@ namespace Symu.Classes.Organization
             entity.Generator = Generator;
             entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
         }
+        /// <summary>
+        ///     Set all models on
+        /// </summary>
+        /// <param name="rate"></param>
+        public void On(float rate)
+        {
+            Learning.On = true;
+            Learning.RateOfAgentsOn = rate;
+            Forgetting.On = true;
+            Forgetting.RateOfAgentsOn = rate;
+            Influence.On = true;
+            Influence.RateOfAgentsOn = rate;
+            Beliefs.On = true;
+            Beliefs.RateOfAgentsOn = rate;
+            InteractionSphere.On = true;
+            InteractionSphere.RateOfAgentsOn = rate;
+        }
+
+        /// <summary>
+        ///     Set all models off
+        /// </summary>
+        public void Off()
+        {
+            Learning.On = false;
+            Forgetting.On = false;
+            Influence.On = false;
+            Beliefs.On = false;
+            InteractionSphere.On = false;
+        }
     }
 }

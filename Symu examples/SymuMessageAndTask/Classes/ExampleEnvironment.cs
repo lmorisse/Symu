@@ -64,7 +64,7 @@ namespace SymuMessageAndTask.Classes
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("NumberOfTasks should be >= 0");
+                    throw new ArgumentOutOfRangeException("NumberOfMessages should be >= 0");
                 }
 
                 _numberOfTasks = value;

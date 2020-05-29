@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* Update SymuForm, IterationResult for multiple iterations by [lmorisse](https://github.com/lmorisse)
+* Add new project example: [SymuScenariosAndMonteCarlo](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndMonteCarlo) by [lmorisse](https://github.com/lmorisse)
+* Add new project example: [SymuScenariosAndMonteCarloTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndMonteCarloTests) by [lmorisse](https://github.com/lmorisse)
+
+
 ## 0.6.0 [☰](https://github.com/lmorisse/symu/compare/v0.6.0..v0.5.0)
 * Add MurphyIncompleteInformation by [lmorisse](https://github.com/lmorisse)
 * Renaming SimulationEngine (SymuEngine), TimeStep (Schedule) by [lmorisse](https://github.com/lmorisse)

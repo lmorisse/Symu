@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Environment.Events;
 
 #endregion
 
@@ -22,7 +23,7 @@ namespace SymuForm
 {
     /// <summary>
     ///     Symu Engine to use in GUI mode
-    ///     Use SymuEngine in batch mode
+    ///     Use Symu in batch mode
     /// </summary>
     public partial class BaseForm : Form
     {
@@ -35,8 +36,36 @@ namespace SymuForm
         }
 
         protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
-        protected TimeStepType TimeStepType { get; set; } = TimeStepType.Daily;
+        //private TimeStepType TimeStepType { get; set; } = TimeStepType.Daily;
         protected AgentState State { get; private set; } = AgentState.NotStarted;
+
+        #region DisplayStep
+        /// <summary>
+        /// Called at the end of each new step.
+        /// Used this method to display the state of the new step
+        /// </summary>
+        public virtual void Display()
+        {
+        }
+
+        protected void WriteTextSafe(Label label, string text)
+        {
+            if (label is null)
+            {
+                throw new ArgumentNullException(nameof(label));
+            }
+
+            if (label.InvokeRequired)
+            {
+                var d = new SafeCallTextDelegate(WriteTextSafe);
+                label.Invoke(d, label, text);
+            }
+            else
+            {
+                label.Text = text;
+            }
+        }
+        #endregion
 
         /// <summary>
         ///     Used when Event OnNextDay is triggered by this class
@@ -45,7 +74,6 @@ namespace SymuForm
         {
             _environment.OnNextStep();
             _environment.ManageAgentsToStop();
-            // For Form Update
             Display();
         }
 
@@ -69,31 +97,8 @@ namespace SymuForm
             }
         }
 
-        public virtual void Display()
-        {
-        }
-
-        protected void WriteTextSafe(Label label, string text)
-        {
-            if (label is null)
-            {
-                throw new ArgumentNullException(nameof(label));
-            }
-
-            if (label.InvokeRequired)
-            {
-                var d = new SafeCallTextDelegate(WriteTextSafe);
-                label.Invoke(d, label, text);
-            }
-            else
-            {
-                label.Text = text;
-            }
-        }
-
         private void BackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            var i = 0;
             if (!(sender is BackgroundWorker worker))
             {
                 throw new ArgumentNullException(nameof(worker));
@@ -119,7 +124,6 @@ namespace SymuForm
                 }
                 else
                 {
-                    i++;
                     if (worker.CancellationPending)
                     {
                         e.Cancel = true;
@@ -127,13 +131,14 @@ namespace SymuForm
                     }
 
                     OnNextStep();
-                    worker.ReportProgress(i);
                 }
             }
 
             OnStopped();
         }
-
+        /// <summary>
+        /// Trigger after the event Stopped
+        /// </summary>
         protected virtual void OnStopped()
         {
             State = AgentState.Stopped;
@@ -142,11 +147,6 @@ namespace SymuForm
         private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             PostIteration();
-        }
-
-        private void BackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Display();
         }
 
         protected void Cancel()
@@ -162,7 +162,6 @@ namespace SymuForm
         protected void Pause()
         {
             _pauseWorker = true;
-
             State = AgentState.Paused;
         }
 
@@ -202,6 +201,10 @@ namespace SymuForm
         protected virtual void SetScenarii()
         {
         }
+        protected void AddEvent(SymuEvent symuEvent)
+        {
+            _environment.AddEvent(symuEvent);
+        }
 
         protected void SetDebug(bool value)
         {
@@ -228,8 +231,8 @@ namespace SymuForm
         #region Iteration level
 
         /// <summary>
-        ///     When to stop Timer event
-        ///     Call each Environment StopIteration
+        ///     When to stop the iteration based on the scenario agents.
+        ///     You can add custom control 
         /// </summary>
         /// <returns></returns>
         public virtual bool StopIteration()
@@ -246,7 +249,7 @@ namespace SymuForm
 
         public void PreIteration()
         {
-            _environment.Schedule.Type = TimeStepType;
+            //_environment.Schedule.Type = TimeStepType;
             _environment.Start();
             _environment.WaitingForStart();
             _environment.SetInteractionSphere(true);

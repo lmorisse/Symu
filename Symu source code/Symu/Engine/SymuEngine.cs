@@ -17,6 +17,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Environment.Events;
 using Symu.Results;
 
 #endregion
@@ -32,34 +33,27 @@ namespace Symu.Engine
         private readonly List<SimulationScenario> _scenarii = new List<SimulationScenario>();
 
         /// <summary>
-        ///     Manage the multiple iterations of the symu
-        ///     A interaction is a number of interaction steps
-        ///     Multiple iterations are used to replay a symu for MonteCarlo process or to vary parameters
-        /// </summary>
-        public Iterations Iterations { get; set; } = new Iterations();
-
-        public SimulationResults SimulationResults { get; set; } = new SimulationResults();
-        public AgentState State { get; private set; } = AgentState.Stopped;
-
-        /// <summary>
-        ///     Environment of the symu
+        ///     Environment of the simulation
         /// </summary>
         protected SymuEnvironment Environment { get; set; }
-
-        public IterationResult IterationResult => Environment.IterationResult;
-
-        #region Step level
-
         /// <summary>
-        ///     Used when Event OnNextDay is triggered by this class
+        ///     The state of the SymuEngine
         /// </summary>
-        public virtual void OnNextStep()
-        {
-            Environment.OnNextStep();
-            Environment.ManageAgentsToStop();
-        }
-
-        #endregion
+        public AgentState State { get; private set; } = AgentState.Stopped;
+        /// <summary>
+        ///     Manage the multiple iterations of the simulation
+        ///     A interaction is a number of interaction steps
+        ///     Multiple iterations are used to replay a simulation for MonteCarlo process or to vary parameters
+        /// </summary>
+        public Iterations Iterations { get; set; } = new Iterations();
+        /// <summary>
+        ///     Store the results of each iteration
+        /// </summary>
+        public SimulationResults SimulationResults { get; set; } = new SimulationResults();
+        /// <summary>
+        ///     The result of the actual iteration
+        /// </summary>
+        public IterationResult IterationResult => Environment.IterationResult;
 
         #region Initialize / set
 
@@ -72,12 +66,6 @@ namespace Symu.Engine
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
-        public void PreProcess()
-        {
-            SimulationResults.Clear();
-            Iterations.SetUp();
-        }
-
         public void AddScenario(SimulationScenario scenario)
         {
             if (!_scenarii.Exists(s => s.Id.Equals(scenario.Id)))
@@ -85,31 +73,9 @@ namespace Symu.Engine
                 _scenarii.Add(scenario);
             }
         }
-
-        #endregion
-
-        #region Process level
-
-        public virtual SimulationResults Process()
+        protected void AddEvent(SymuEvent symuEvent)
         {
-            State = AgentState.Starting;
-            PreProcess();
-            while (!StopProcess())
-            {
-                Iteration();
-            }
-
-            PostProcess();
-            return SimulationResults;
-        }
-
-        protected virtual void PostProcess()
-        {
-        }
-
-        protected bool StopProcess()
-        {
-            return Iterations.Stop();
+            Environment.AddEvent(symuEvent);
         }
 
         #endregion
@@ -141,7 +107,48 @@ namespace Symu.Engine
 
         #endregion
 
+        #region Process level
+
+        public void PreProcess()
+        {
+            SimulationResults.Clear();
+            Iterations.SetUp();
+        }
+
+        public virtual void Process()
+        {
+            State = AgentState.Starting;
+            PreProcess();
+            while (!StopProcess())
+            {
+                Iteration();
+            }
+            PostProcess();
+        }
+
+        protected virtual void PostProcess()
+        {
+        }
+
+        protected bool StopProcess()
+        {
+            return Iterations.Stop();
+        }
+
+        #endregion
+
         #region Iteration level
+
+        public void PreIteration()
+        {
+            State = AgentState.Starting;
+            InitializeIteration();
+            Iterations.UpdateIteration(_scenarii);
+            Environment.Start();
+            Environment.WaitingForStart();
+            Environment.SetInteractionSphere(true);
+            State = AgentState.Started;
+        }
 
         public void Iteration()
         {
@@ -150,7 +157,6 @@ namespace Symu.Engine
             {
                 OnNextStep();
             }
-
             PostIteration();
         }
 
@@ -167,28 +173,26 @@ namespace Symu.Engine
         private void PostIteration()
         {
             SimulationResults.List.Add(Environment.SetIterationResult(Iterations.Number));
-            AnalyzeIteration();
+            if (Environment.IterationResult.Success)
+            {
+                AnalyzeIteration();
+            }
             State = AgentState.Stopped;
         }
 
-        public void PreIteration()
-        {
-            State = AgentState.Starting;
-            InitializeIteration();
-            Iterations.UpdateIteration(_scenarii);
-            Environment.Start();
-            Environment.WaitingForStart();
-            Environment.SetInteractionSphere(true);
-            State = AgentState.Started;
-        }
-
+        /// <summary>
+        /// Called during the PostIteration if the iteration is a success
+        /// Override this method to analyze specifics results of the iteration
+        /// </summary>
         protected virtual void AnalyzeIteration()
         {
-            if (!Environment.IterationResult.Success)
-            {
-            }
+
         }
 
+        /// <summary>
+        /// Called during the PreIteration
+        /// Override this method if you need to initialize specifics iteration's objects
+        /// </summary>
         public virtual void InitializeIteration()
         {
             Environment.InitializeIteration();
@@ -229,6 +233,19 @@ namespace Symu.Engine
             }
 
             Environment.Schedule.Step = step0;
+        }
+
+        #endregion
+
+        #region Step level
+
+        /// <summary>
+        ///     Used when Event OnNextDay is triggered by this class
+        /// </summary>
+        public virtual void OnNextStep()
+        {
+            Environment.OnNextStep();
+            Environment.ManageAgentsToStop();
         }
 
         #endregion

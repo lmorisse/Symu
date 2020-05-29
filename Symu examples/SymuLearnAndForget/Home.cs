@@ -181,7 +181,7 @@ namespace SymuLearnAndForget
 
         protected override void SetScenarii()
         {
-            _ = new TimeStepScenario(_environment)
+            _ = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = ushort.Parse(tbSteps.Text)
             };
@@ -269,16 +269,16 @@ namespace SymuLearnAndForget
 
             // Global Knowledge - using iteration result
 
-            lock (_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges)
+            lock (_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge)
             {
-                if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Any())
+                if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge.Any())
                 {
                     return;
                 }
             }
 
 
-            var knowledge = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledges.Last();
+            var knowledge = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge.Last();
             WriteTextSafe(lblGlobalKnowledge, knowledge.Sum.ToString("F1", CultureInfo.InvariantCulture));
             var obsolescence = _environment.IterationResult.OrganizationKnowledgeAndBelief.KnowledgeObsolescence.Last();
             WriteTextSafe(lblGlobalObsolescence, obsolescence.Sum.ToString("F1", CultureInfo.InvariantCulture));

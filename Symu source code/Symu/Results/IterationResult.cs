@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using Symu.Environment;
 using Symu.Results.Blocker;
@@ -25,7 +26,7 @@ namespace Symu.Results
 
         public IterationResult(SymuEnvironment environment)
         {
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Symu.Results
         ///     Focus on the time at which stability is reached
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical)
         /// </summary>
-        public OrganizationFlexibility OrganizationFlexibility { get; private set; }
+        public OrganizationFlexibility OrganizationFlexibility { get; private set; } 
 
         /// <summary>
         ///     Get the knowledge and Belief performance for the group
@@ -72,19 +73,36 @@ namespace Symu.Results
 
         public virtual void Initialize()
         {
-            OrganizationFlexibility = new OrganizationFlexibility(_environment);
-            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
-                _environment.Organization.Models);
+            if (OrganizationFlexibility is null)
+            {
+                OrganizationFlexibility = new OrganizationFlexibility(_environment);
+            }
+            else
+            {
+                OrganizationFlexibility.Clear();
+            }
+
+            if (OrganizationKnowledgeAndBelief is null)
+            {
+                OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment.WhitePages.Network,
+                    _environment.Organization.Models);
+            }
+            else
+            {
+                OrganizationKnowledgeAndBelief.Clear();
+            }
+
             Blockers.Clear();
             Tasks.Clear();
+            SpecificResults.Clear();
             Iteration = 0;
             Step = 0;
-            Success = false;
-            HasItemsNotDone = false;
-            SeemsToBeBlocked = false;
-            NotFinishedInTime = false;
-            NumberOfItemsNotDone = 0;
             Capacity = 0;
+            Success = false;
+            //HasItemsNotDone = false;
+            //SeemsToBeBlocked = false;
+            //NotFinishedInTime = false;
+            //NumberOfItemsNotDone = 0;
         }
 
         /// <summary>
@@ -111,5 +129,25 @@ namespace Symu.Results
         public ushort NumberOfItemsNotDone { get; set; }
 
         #endregion
+
+        public IterationResult Clone()
+        {
+            var clone = new IterationResult(_environment);
+            clone.Initialize();
+            OrganizationFlexibility.CopyTo(clone.OrganizationFlexibility);
+            OrganizationKnowledgeAndBelief.CopyTo(clone.OrganizationKnowledgeAndBelief);
+            Blockers.CopyTo(clone.Blockers);
+            Tasks.CopyTo(clone.Tasks);
+            clone.Iteration = Iteration;
+            clone.Step = Step;
+            clone.Success = Success;
+            clone.Capacity = Capacity;
+            //SpecificResults.CopyTo(clone.SpecificResults);
+            //HasItemsNotDone = false;
+            //SeemsToBeBlocked = false;
+            //NotFinishedInTime = false;
+            //NumberOfItemsNotDone = 0;
+            return clone;
+        }
     }
 }

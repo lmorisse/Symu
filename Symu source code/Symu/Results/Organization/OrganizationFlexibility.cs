@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using Symu.Environment;
 using Symu.Repository;
@@ -44,18 +45,18 @@ namespace Symu.Results.Organization
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical
         ///     value)
         /// </summary>
-        public List<GroupDensityStruct> Triads { get; } = new List<GroupDensityStruct>();
+        public List<GroupDensityStruct> Triads { get; private set; } = new List<GroupDensityStruct>();
 
         /// <summary>
         ///     The number of connections between agents
         /// </summary>
-        public List<GroupDensityStruct> Links { get; } = new List<GroupDensityStruct>();
+        public List<GroupDensityStruct> Links { get; private set; } = new List<GroupDensityStruct>();
 
         /// <summary>
         ///     Sphere of interaction is the weight of the network in the symu
         /// </summary>
 
-        public List<GroupDensityStruct> Sphere { get; } = new List<GroupDensityStruct>();
+        public List<GroupDensityStruct> Sphere { get; private set; } = new List<GroupDensityStruct>();
 
         public void Clear()
         {
@@ -111,6 +112,29 @@ namespace Symu.Results.Organization
             HandleTriads(actorCount, step);
             HandleLinks(actorCount, step);
             HandleSphere(step);
+        }
+
+        public void CopyTo(OrganizationFlexibility cloneOrganizationFlexibility)
+        {
+            if (cloneOrganizationFlexibility == null)
+            {
+                throw new ArgumentNullException(nameof(cloneOrganizationFlexibility));
+            }
+            cloneOrganizationFlexibility.Links = new List<GroupDensityStruct>();
+            foreach (var result in Links)
+            {
+                cloneOrganizationFlexibility.Links.Add(result);
+            }
+            cloneOrganizationFlexibility.Sphere = new List<GroupDensityStruct>();
+            foreach (var result in Sphere)
+            {
+                cloneOrganizationFlexibility.Sphere.Add(result);
+            }
+            cloneOrganizationFlexibility.Triads = new List<GroupDensityStruct>();
+            foreach (var result in Triads)
+            {
+                cloneOrganizationFlexibility.Triads.Add(result);
+            }
         }
     }
 }

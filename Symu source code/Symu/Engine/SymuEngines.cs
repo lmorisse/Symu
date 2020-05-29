@@ -20,15 +20,14 @@ namespace Symu.Engine
     {
         public List<SymuEngine> List { get; } = new List<SymuEngine>();
 
-        public override SimulationResults Process()
+        public override void Process()
         {
             foreach (var simulation in List)
             {
                 simulation.SetEnvironment(Environment);
-                SimulationResults.AddRange(simulation.Process());
+                simulation.Process();
+                SimulationResults.AddRange(simulation.SimulationResults);
             }
-
-            return SimulationResults;
         }
 
         public override void InitializeIteration()

@@ -522,7 +522,7 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     Learning Knowledges from posted message
+        ///     Learning Knowledge from posted message
         ///     Agent learn about knowledgeId from other agent with KnowledgeBits
         ///     Number of KnowledgeBits is defined by Cognitive.MessageContent.MaximumBitsOfKnowledge
         ///     If Agent must learn only the blocked KnowledgeBit set MaximumBitsOfKnowledge to 1

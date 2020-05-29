@@ -20,7 +20,7 @@ namespace Symu.Repository.Networks.Sphere
 {
     /// <summary>
     ///     Knowledge matrix
-    ///     use to compute metrics based on Knowledges and NetworkKnowledges
+    ///     use to compute metrics based on Knowledge and NetworkKnowledges
     /// </summary>
     /// <example></example>
     public static class InteractionMatrix

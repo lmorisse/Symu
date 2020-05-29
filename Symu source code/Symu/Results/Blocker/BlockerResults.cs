@@ -27,7 +27,7 @@ namespace Symu.Results.Blocker
         ///     Key => step
         ///     Value => BlockerResult for the step
         /// </summary>
-        private readonly ConcurrentDictionary<ushort, BlockerResult> _results =
+        public ConcurrentDictionary<ushort, BlockerResult> Results { get; private set; } =
             new ConcurrentDictionary<ushort, BlockerResult>();
 
         /// <summary>
@@ -38,37 +38,37 @@ namespace Symu.Results.Blocker
         /// <summary>
         ///     Total blockers done during the simulation
         /// </summary>
-        public int TotalBlockersDone => _results.Values.Any() ? _results.Values.Last().Done : 0;
+        public int TotalBlockersDone => Results.Values.Any() ? Results.Values.Last().Done : 0;
 
         /// <summary>
         ///     Total blockers done during the simulation
         /// </summary>
-        public int BlockersStillInProgress => _results.Values.Any() ? _results.Values.Last().InProgress : 0;
+        public int BlockersStillInProgress => Results.Values.Any() ? Results.Values.Last().InProgress : 0;
 
         /// <summary>
         ///     Total blockers cancelled the task during the simulation
         /// </summary>
-        public int TotalCancelled => _results.Values.Any() ? _results.Values.Last().Cancelled : 0;
+        public int TotalCancelled => Results.Values.Any() ? Results.Values.Last().Cancelled : 0;
 
         /// <summary>
         ///     Total blockers resolved by Internal Help during the simulation
         /// </summary>
-        public int TotalInternalHelp => _results.Values.Any() ? _results.Values.Last().InternalHelp : 0;
+        public int TotalInternalHelp => Results.Values.Any() ? Results.Values.Last().InternalHelp : 0;
 
         /// <summary>
         ///     Total blockers resolved by External Help during the simulation
         /// </summary>
-        public int TotalExternalHelp => _results.Values.Any() ? _results.Values.Last().ExternalHelp : 0;
+        public int TotalExternalHelp => Results.Values.Any() ? Results.Values.Last().ExternalHelp : 0;
 
         /// <summary>
         ///     Total blockers resolved by guessing during the simulation
         /// </summary>
-        public int TotalGuesses => _results.Values.Any() ? _results.Values.Last().Guess : 0;
+        public int TotalGuesses => Results.Values.Any() ? Results.Values.Last().Guess : 0;
 
         /// <summary>
         ///     Total blockers cancelled by the agent during the simulation
         /// </summary>
-        public int TotalSearches => _results.Values.Any() ? _results.Values.Last().Search : 0;
+        public int TotalSearches => Results.Values.Any() ? Results.Values.Last().Search : 0;
 
         public void SetResults(SymuEnvironment environment)
         {
@@ -108,12 +108,26 @@ namespace Symu.Results.Blocker
                 result.Cancelled += tasks.Sum(x => x.Blockers.Result.Cancelled);
             }
 
-            _results.TryAdd(environment.Schedule.Step, result);
+            Results.TryAdd(environment.Schedule.Step, result);
         }
 
         public void Clear()
         {
-            _results.Clear();
+            Results.Clear();
+        }
+
+        public void CopyTo(BlockerResults cloneBlockers)
+        {
+            if (cloneBlockers == null)
+            {
+                throw new ArgumentNullException(nameof(cloneBlockers));
+            }
+
+            cloneBlockers.Results = new ConcurrentDictionary<ushort, BlockerResult>();
+            foreach (var result in Results)
+            {
+                cloneBlockers.Results.TryAdd(result.Key, result.Value);
+            }
         }
     }
 }
