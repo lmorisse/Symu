@@ -22,8 +22,8 @@ using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
-using SymuTools;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

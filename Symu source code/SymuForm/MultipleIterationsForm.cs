@@ -24,13 +24,13 @@ using Symu.Results;
 
 #endregion
 
-namespace SymuForm
+namespace Symu.Forms
 {
     /// <summary>
     ///     Symu Engine to use in GUI mode
     ///     Use Symu in batch mode
     /// </summary>
-    public partial class MultipleIterationsForm : Form
+    public partial class MultipleIterationsForm : System.Windows.Forms.Form
     {
         private readonly List<SimulationScenario> _scenarii = new List<SimulationScenario>();
         private SymuEnvironment _environment;

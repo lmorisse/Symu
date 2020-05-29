@@ -19,8 +19,8 @@ using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
-using SymuTools;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

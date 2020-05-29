@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Networks.Sphere;
-using SymuTools.Math;
+using Symu.Tools.Math;
 
 #endregion
 

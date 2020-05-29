@@ -17,7 +17,7 @@ using System;
 
 #endregion
 
-namespace SymuTools.Math
+namespace Symu.Tools.Math
 {
     public static class Combinatorics
     {

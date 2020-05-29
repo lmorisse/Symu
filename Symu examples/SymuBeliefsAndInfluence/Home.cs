@@ -17,10 +17,10 @@ using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Forms;
 using Symu.Repository.Networks.Beliefs;
+using Symu.Tools;
 using SymuBeliefsAndInfluence.Classes;
-using SymuForm;
-using SymuTools;
 
 #endregion
 

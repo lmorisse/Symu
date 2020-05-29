@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuTools.Math.ProbabilityDistributions
+namespace Symu.Tools.Math.ProbabilityDistributions
 {
     /// <summary>
     ///     the discrete uniform distribution is a symmetric probability distribution wherein a finite number of values are

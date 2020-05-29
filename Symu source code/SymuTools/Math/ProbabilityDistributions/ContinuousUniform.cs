@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuTools.Math.ProbabilityDistributions
+namespace Symu.Tools.Math.ProbabilityDistributions
 {
     /// <summary>
     ///     The distribution describes an experiment where there is an arbitrary outcome that lies between certain bounds.

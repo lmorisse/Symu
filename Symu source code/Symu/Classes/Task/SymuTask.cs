@@ -15,7 +15,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
-using static SymuTools.Constants;
+using static Symu.Tools.Constants;
 
 #endregion
 

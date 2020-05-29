@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Renaming namespaces by [lmorisse](https://github.com/lmorisse)
 * Update SymuForm, IterationResult for multiple iterations by [lmorisse](https://github.com/lmorisse)
 * Add new project example: [SymuScenariosAndMonteCarlo](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndMonteCarlo) by [lmorisse](https://github.com/lmorisse)
 * Add new project example: [SymuScenariosAndMonteCarloTests](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndMonteCarloTests) by [lmorisse](https://github.com/lmorisse)

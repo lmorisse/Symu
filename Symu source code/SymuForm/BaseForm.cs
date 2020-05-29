@@ -19,13 +19,13 @@ using Symu.Environment.Events;
 
 #endregion
 
-namespace SymuForm
+namespace Symu.Forms
 {
     /// <summary>
     ///     Symu Engine to use in GUI mode
     ///     Use Symu in batch mode
     /// </summary>
-    public partial class BaseForm : Form
+    public partial class BaseForm : System.Windows.Forms.Form
     {
         private SymuEnvironment _environment;
         private bool _pauseWorker;

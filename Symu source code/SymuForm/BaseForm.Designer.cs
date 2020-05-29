@@ -1,4 +1,4 @@
-﻿namespace SymuForm
+﻿namespace Symu.Forms
 {
     partial class BaseForm
     {

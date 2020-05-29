@@ -18,8 +18,8 @@ using Symu.Classes.Agents.Models.CognitiveModel;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Forms;
 using Symu.Repository.Networks.Knowledges;
-using SymuForm;
 using SymuGroupAndInteraction.Classes;
 
 #endregion

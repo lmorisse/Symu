@@ -11,8 +11,8 @@
 
 using System;
 using Symu.Classes.Agents.Models.CognitiveModel;
-using SymuTools;
-using SymuTools.Math;
+using Symu.Tools;
+using Symu.Tools.Math;
 
 #endregion
 

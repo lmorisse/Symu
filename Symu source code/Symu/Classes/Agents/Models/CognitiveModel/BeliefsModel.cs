@@ -15,8 +15,8 @@ using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
-using static SymuTools.Constants;
+using Symu.Tools.Math.ProbabilityDistributions;
+using static Symu.Tools.Constants;
 
 #endregion
 

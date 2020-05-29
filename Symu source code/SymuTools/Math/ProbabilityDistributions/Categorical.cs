@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace SymuTools.Math.ProbabilityDistributions
+namespace Symu.Tools.Math.ProbabilityDistributions
 {
     /// <summary>
     ///     a categorical distribution (also called a generalized Bernoulli distribution, multinoulli distribution[1]) is a

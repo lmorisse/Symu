@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>SymuForm</AssemblyName>
-    <RootNamespace>SymuForm</RootNamespace>
+    <AssemblyName>Symu.Forms</AssemblyName>
+    <RootNamespace>Symu.Forms</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

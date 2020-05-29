@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using static SymuTools.Constants;
+using static Symu.Tools.Constants;
 
 #endregion
 

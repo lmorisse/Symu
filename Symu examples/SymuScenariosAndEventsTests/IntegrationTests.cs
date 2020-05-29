@@ -17,7 +17,7 @@ using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using SymuScenariosAndEvents.Classes;
-using SymuTools;
+using Symu.Tools;
 
 #endregion
 

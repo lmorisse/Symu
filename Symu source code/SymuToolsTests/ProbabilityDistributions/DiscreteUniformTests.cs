@@ -11,8 +11,8 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuTools;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

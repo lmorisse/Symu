@@ -14,7 +14,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

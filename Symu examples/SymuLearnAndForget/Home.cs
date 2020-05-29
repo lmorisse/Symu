@@ -18,10 +18,10 @@ using Symu.Classes.Agents.Models.CognitiveModel;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Forms;
 using Symu.Repository.Networks.Knowledges;
-using SymuForm;
 using SymuLearnAndForget.Classes;
-using static SymuTools.Constants;
+using static Symu.Tools.Constants;
 
 #endregion
 

@@ -8,7 +8,7 @@
 #endregion
 
 using System;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 namespace Symu.Environment.Events
 {

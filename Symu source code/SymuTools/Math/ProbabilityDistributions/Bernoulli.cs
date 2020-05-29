@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace SymuTools.Math.ProbabilityDistributions
+namespace Symu.Tools.Math.ProbabilityDistributions
 {
     /// <summary>
     ///     the discrete probability distribution of a random variable which takes the value 1 with probability p

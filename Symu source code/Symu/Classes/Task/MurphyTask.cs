@@ -11,7 +11,7 @@
 
 using System;
 using Symu.Classes.Murphies;
-using static SymuTools.Constants;
+using static Symu.Tools.Constants;
 
 #endregion
 

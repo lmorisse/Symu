@@ -13,7 +13,7 @@ using System;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Messaging.Messages;
-using SymuTools.Math.ProbabilityDistributions;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

@@ -11,7 +11,7 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SymuTools.Math.MachineLearning;
+using Symu.Tools.Math.MachineLearning;
 
 #endregion
 
