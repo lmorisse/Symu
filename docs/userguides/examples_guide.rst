@@ -15,3 +15,5 @@ So that you will be able to configure models for your own use cases.
    symulearnandforget
    symumessageandtask
    symumurphiesandblockers
+   symubeliefsandinfluence
+   symuscenariosandevents

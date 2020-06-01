@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockers
+// Description: Symu - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -39,13 +39,13 @@ namespace SymuScenariosAndEvents.Classes
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
         public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
-        
+
         public override void GetNewTasks()
         {
             var task = new SymuTask(Schedule.Step)
             {
                 // Weight is randomly distributed around 1, but has a minimum of 0
-                Weight = Math.Max(0,Normal.Sample(1,0.1F*Environment.Organization.Models.RandomLevelValue)),
+                Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.Organization.Models.RandomLevelValue)),
                 // Creator is randomly  a person of the group - for the incomplete information murphy
                 Creator = Environment.WhitePages.FilteredAgentIdsByClassKey(ClassKey).Shuffle().First()
             };

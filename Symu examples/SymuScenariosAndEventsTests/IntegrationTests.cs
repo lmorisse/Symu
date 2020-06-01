@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockersTests
+// Description: Symu - SymuScenariosAndEventsTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -53,17 +53,19 @@ namespace SymuMurphiesAndBlockersTests
             {
                 var result = _simulation.SimulationResults[i];
                 Assert.IsTrue(result.Success);
-                Assert.IsTrue(result.Tasks.Done>0);
+                Assert.IsTrue(result.Tasks.Done > 0);
                 Assert.AreEqual(i + 1, result.Iteration);
             }
         }
+
         [TestMethod]
         public void SuccessTest0()
         {
             SuccessTest();
         }
+
         /// <summary>
-        /// Iteration = 0
+        ///     Iteration = 0
         /// </summary>
         [TestMethod]
         public void SuccessTest1()
@@ -73,7 +75,7 @@ namespace SymuMurphiesAndBlockersTests
         }
 
         /// <summary>
-        /// Workers = 0
+        ///     Workers = 0
         /// </summary>
         [TestMethod]
         public void SuccessTest2()
@@ -92,7 +94,7 @@ namespace SymuMurphiesAndBlockersTests
         }
 
         /// <summary>
-        /// Models On
+        ///     Models On
         /// </summary>
         [TestMethod]
         public void SuccessTest3()
@@ -101,8 +103,9 @@ namespace SymuMurphiesAndBlockersTests
             _organization.Models.Generator = RandomGenerator.RandomUniform;
             SuccessTest();
         }
+
         /// <summary>
-        /// Murphies On
+        ///     Murphies On
         /// </summary>
         [TestMethod]
         public void SuccessTest4()
@@ -110,8 +113,9 @@ namespace SymuMurphiesAndBlockersTests
             _organization.Murphies.On(1);
             SuccessTest();
         }
+
         /// <summary>
-        /// Murphies/Models On
+        ///     Murphies/Models On
         /// </summary>
         [TestMethod]
         public void SuccessTest5()
@@ -121,13 +125,14 @@ namespace SymuMurphiesAndBlockersTests
             _organization.Models.Generator = RandomGenerator.RandomUniform;
             SuccessTest();
         }
+
         /// <summary>
-        /// No scenarios
+        ///     No scenarios
         /// </summary>
         [TestMethod]
         public void SuccessTest6()
         {
-            _simulation.Scenarii.Clear(); 
+            _simulation.Scenarii.Clear();
             _simulation.Process();
             for (var i = 0; i < _simulation.SimulationResults.List.Count; i++)
             {
@@ -137,8 +142,9 @@ namespace SymuMurphiesAndBlockersTests
                 Assert.AreEqual(i + 1, result.Iteration);
             }
         }
+
         /// <summary>
-        /// All scenarios
+        ///     All scenarios
         /// </summary>
         [TestMethod]
         public void SuccessTest7()
@@ -162,73 +168,81 @@ namespace SymuMurphiesAndBlockersTests
             _simulation.AddScenario(scenario2);
             SuccessTest();
         }
+
         #region Events
+
         /// <summary>
-        /// Event worker one shot
+        ///     Event worker one shot
         /// </summary>
         [TestMethod]
         public void EventWorkerTest()
         {
-            var symuEvent = new SymuEvent { Step = 10 };
+            var symuEvent = new SymuEvent {Step = 10};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         /// <summary>
-        /// Event worker cyclical
+        ///     Event worker cyclical
         /// </summary>
         [TestMethod]
         public void EventWorkerTest1()
         {
-            var symuEvent = new CyclicalEvent { EveryStep = 5 };
+            var symuEvent = new CyclicalEvent {EveryStep = 5};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         /// <summary>
-        /// Event worker random
+        ///     Event worker random
         /// </summary>
         [TestMethod]
         public void EventWorkerTest2()
         {
-            var symuEvent = new RandomEvent { Ratio= 0.1F };
+            var symuEvent = new RandomEvent {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         /// <summary>
-        /// Event knowledge one shot
+        ///     Event knowledge one shot
         /// </summary>
         [TestMethod]
         public void EventKnowledgeTest()
         {
-            var symuEvent = new SymuEvent { Step = 10 };
+            var symuEvent = new SymuEvent {Step = 10};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         /// <summary>
-        /// Event knowledge cyclical
+        ///     Event knowledge cyclical
         /// </summary>
         [TestMethod]
         public void EventKnowledgeTest1()
         {
-            var symuEvent = new CyclicalEvent { EveryStep = 5 };
+            var symuEvent = new CyclicalEvent {EveryStep = 5};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         /// <summary>
-        /// Event knowledge random
+        ///     Event knowledge random
         /// </summary>
         [TestMethod]
         public void EventKnowledgeTest2()
         {
-            var symuEvent = new RandomEvent { Ratio = 0.1F };
+            var symuEvent = new RandomEvent {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
         }
+
         #endregion
     }
 }

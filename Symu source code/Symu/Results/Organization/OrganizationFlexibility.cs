@@ -35,6 +35,7 @@ namespace Symu.Results.Organization
         {
             _environment = environment;
         }
+
         /// <summary>
         ///     If set to true, OrganizationFlexibility will be filled with value and stored during the simulation
         /// </summary>
@@ -124,16 +125,19 @@ namespace Symu.Results.Organization
             {
                 throw new ArgumentNullException(nameof(cloneOrganizationFlexibility));
             }
+
             cloneOrganizationFlexibility.Links = new List<GroupDensityStruct>();
             foreach (var result in Links)
             {
                 cloneOrganizationFlexibility.Links.Add(result);
             }
+
             cloneOrganizationFlexibility.Sphere = new List<GroupDensityStruct>();
             foreach (var result in Sphere)
             {
                 cloneOrganizationFlexibility.Sphere.Add(result);
             }
+
             cloneOrganizationFlexibility.Triads = new List<GroupDensityStruct>();
             foreach (var result in Triads)
             {

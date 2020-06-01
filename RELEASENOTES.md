@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.7.0
+This release contains a new project example:  [SymuScenariosAndEvents](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndEvents).
+
 ## 0.6.0
 This release contains a new project example:  [SymuMurphiesAndBlockers](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuMurphiesAndBlockers).
 

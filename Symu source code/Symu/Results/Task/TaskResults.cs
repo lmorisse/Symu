@@ -28,7 +28,7 @@ namespace Symu.Results.Task
         ///     Key => step
         ///     Value => TaskResult for the step
         /// </summary>
-        public ConcurrentDictionary<ushort, TaskResult> Results { get; private set; }  =
+        public ConcurrentDictionary<ushort, TaskResult> Results { get; private set; } =
             new ConcurrentDictionary<ushort, TaskResult>();
 
         /// <summary>

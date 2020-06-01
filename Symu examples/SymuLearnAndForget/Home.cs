@@ -299,7 +299,6 @@ namespace SymuLearnAndForget
 
         private void DisplayButtons()
         {
-
             DisplayButtons(btnStart, btnStop, btnPause, btnResume);
         }
 
@@ -618,6 +617,7 @@ namespace SymuLearnAndForget
         }
 
         #region Menu
+
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -637,6 +637,7 @@ namespace SymuLearnAndForget
         {
             Process.Start("http://github.symu.org/issues");
         }
+
         #endregion
     }
 }

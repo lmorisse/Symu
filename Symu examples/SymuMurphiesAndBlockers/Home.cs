@@ -15,7 +15,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Messaging.Messages;
@@ -182,7 +181,8 @@ namespace SymuMurphiesAndBlockers
 
             OrganizationEntity.Models.Learning.On = EmailSearching.Checked;
 
-            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+                EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
 
             var scenario = new TimeBasedScenario(_environment)
@@ -810,6 +810,7 @@ namespace SymuMurphiesAndBlockers
         }
 
         #region Menu
+
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -829,6 +830,7 @@ namespace SymuMurphiesAndBlockers
         {
             Process.Start("http://github.symu.org/issues");
         }
+
         #endregion
     }
 }

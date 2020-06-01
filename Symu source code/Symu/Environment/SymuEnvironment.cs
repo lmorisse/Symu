@@ -430,8 +430,9 @@ namespace Symu.Environment
         #endregion
 
         #region Events
+
         /// <summary>
-        /// Schedule Events from the list Events
+        ///     Schedule Events from the list Events
         /// </summary>
         public void ScheduleEvents()
         {
@@ -450,6 +451,7 @@ namespace Symu.Environment
 
             Events.Add(symuEvent);
         }
+
         #endregion
     }
 }

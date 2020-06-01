@@ -10,7 +10,6 @@
 #region using directives
 
 using System.Collections.Generic;
-using Symu.Results;
 
 #endregion
 

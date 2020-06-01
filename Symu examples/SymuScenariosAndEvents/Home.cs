@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockers
+// Description: Symu - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace SymuScenariosAndEvents
             chartControl2.Series[0].PrepareStyle += Form1_PrepareStyle;
 
             #region Legend Customization
+
             chartControl1.PrimaryXAxis.Title = "Step";
             //chartControl1.PrimaryYAxis.Title = "Tasks";
             chartControl1.Legend.Visible = true;
@@ -55,12 +57,13 @@ namespace SymuScenariosAndEvents
             chartControl2.Title.Text = "Simulation (Monte Carlo)";
             chartControl2.Title.Visible = true;
             chartControl2.DropSeriesPoints = true;
+
             #endregion
 
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
-            
         }
-        void Form1_PrepareStyle(object sender, ChartPrepareStyleInfoEventArgs args)
+
+        private void Form1_PrepareStyle(object sender, ChartPrepareStyleInfoEventArgs args)
         {
             var series = chartControl1.Series[0];
             if (series == null)
@@ -91,6 +94,7 @@ namespace SymuScenariosAndEvents
                 };
                 AddScenario(scenario);
             }
+
             if (TaskBased.Checked)
             {
                 var scenario = new TaskBasedScenario(_environment)
@@ -99,6 +103,7 @@ namespace SymuScenariosAndEvents
                 };
                 AddScenario(scenario);
             }
+
             if (MessageBased.Checked)
             {
                 var scenario = new MessageBasedScenario(_environment)
@@ -107,6 +112,7 @@ namespace SymuScenariosAndEvents
                 };
                 AddScenario(scenario);
             }
+
             cbIterations.Items.Clear();
             for (var i = 0; i < Iterations.Max; i++)
             {
@@ -213,10 +219,10 @@ namespace SymuScenariosAndEvents
                         symuEvent = new SymuEvent {Step = eventStep};
                         break;
                     case SymuEventType.Cyclical:
-                        symuEvent = new CyclicalEvent {EveryStep = cyclicalStep };
+                        symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
                         break;
                     case SymuEventType.Random:
-                        symuEvent = new RandomEvent {Ratio = randomRatio };
+                        symuEvent = new RandomEvent {Ratio = randomRatio};
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -253,7 +259,7 @@ namespace SymuScenariosAndEvents
 
         private float SetRandomRatio()
         {
-            float randomRatio=0;
+            float randomRatio = 0;
             try
             {
                 randomRatio = float.Parse(RandomRatio.Text);
@@ -323,12 +329,13 @@ namespace SymuScenariosAndEvents
 
             var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done).ToList();
             var capacityResults = SimulationResults.List.Select(x => x.Capacity).ToList();
-            var seriesTasks = new ChartSeries("tasks", ChartSeriesType.Histogram) ;
+            var seriesTasks = new ChartSeries("tasks", ChartSeriesType.Histogram);
             var count = Math.Max(tasksResults.Count, capacityResults.Count);
             foreach (var tasksResult in tasksResults)
             {
                 seriesTasks.Points.Add(tasksResult, count);
             }
+
             seriesTasks.Text = seriesTasks.Name;
             seriesTasks.ConfigItems.HistogramItem.NumberOfIntervals = 10;
             //seriesTasks.ConfigItems.HistogramItem.ShowNormalDistribution = true;
@@ -339,13 +346,14 @@ namespace SymuScenariosAndEvents
             {
                 seriesCapacity.Points.Add(capacityResult, count);
             }
+
             seriesCapacity.Text = seriesCapacity.Name;
             seriesCapacity.ConfigItems.HistogramItem.NumberOfIntervals = 10;
             //seriesCapacity.ConfigItems.HistogramItem.ShowNormalDistribution = true;
             //seriesCapacity.ConfigItems.HistogramItem.ShowDataPoints = true;
-            WriteChartSafe(chartControl2, new[] { seriesTasks, seriesCapacity });
-
+            WriteChartSafe(chartControl2, new[] {seriesTasks, seriesCapacity});
         }
+
         protected void WriteChartSafe(ChartControl chartControl, ChartSeries[] chartSeries)
         {
             if (chartControl is null)
@@ -370,6 +378,7 @@ namespace SymuScenariosAndEvents
                 {
                     chartControl.Series.Add(chartSerie);
                 }
+
                 ChartAppearance.ApplyChartStyles(chartControl);
             }
         }
@@ -386,7 +395,7 @@ namespace SymuScenariosAndEvents
 
         private void DisplayButtons()
         {
-            DisplayButtons(btnStart,btnStop, btnPause, btnResume);
+            DisplayButtons(btnStart, btnStop, btnPause, btnResume);
         }
 
         protected override void PostProcess()
@@ -419,58 +428,61 @@ namespace SymuScenariosAndEvents
             }
         }
 
-        #region Menu
-
-        private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cbIterations_SelectedIndexChanged(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://symu.org");
+            var index = (int) cbIterations.SelectedItem;
+            var seriesTasks = new ChartSeries {Name = "Tasks"};
+            if (SimulationResults.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var tasksResult in SimulationResults[index].Tasks.Results)
+            {
+                seriesTasks.Points.Add(tasksResult.Key, tasksResult.Value.Done);
+            }
+
+            seriesTasks.Type = ChartSeriesType.Column;
+            seriesTasks.Text = seriesTasks.Name;
+            var seriesBlockers = new ChartSeries {Name = "Blockers"};
+            foreach (var blockerResults in SimulationResults[index].Blockers.Results)
+            {
+                seriesBlockers.Points.Add(blockerResults.Key, blockerResults.Value.Done);
+            }
+
+            seriesBlockers.Type = ChartSeriesType.Column;
+            seriesBlockers.Text = seriesBlockers.Name;
+            WriteChartSafe(chartControl1, new[] {seriesTasks, seriesBlockers});
         }
 
-        private void documentationToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://docs.symu.org/");
-        }
-
-        private void sourceCodeToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://github.symu.org/");
-        }
-
-        private void issuesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://github.symu.org/issues");
-        }
-
-        #endregion
-
-        #region Nested type: SafeCallButtonDelegate
+        #region Nested type: SafeCallChartDelegate
 
         protected delegate void SafeCallChartDelegate(ChartControl chartControl, ChartSeries[] chartSeries);
 
         #endregion
 
-        private void cbIterations_SelectedIndexChanged(object sender, EventArgs e)
+        #region Menu
+
+        private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var index = (int)cbIterations.SelectedItem;
-            var seriesTasks = new ChartSeries { Name = "Tasks" };
-            if (SimulationResults.Count == 0)
-            {
-                return;
-            }
-            foreach (var tasksResult in SimulationResults[index].Tasks.Results)
-            {
-                seriesTasks.Points.Add(tasksResult.Key, tasksResult.Value.Done);
-            }
-            seriesTasks.Type = ChartSeriesType.Column;
-            seriesTasks.Text = seriesTasks.Name;
-            var seriesBlockers = new ChartSeries { Name = "Blockers" };
-            foreach (var blockerResults in SimulationResults[index].Blockers.Results)
-            {
-                seriesBlockers.Points.Add(blockerResults.Key, blockerResults.Value.Done);
-            }
-            seriesBlockers.Type = ChartSeriesType.Column;
-            seriesBlockers.Text = seriesBlockers.Name;
-            WriteChartSafe(chartControl1, new[] { seriesTasks, seriesBlockers });
+            Process.Start("https://symu.org");
         }
+
+        private void documentationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://docs.symu.org/");
+        }
+
+        private void sourceCodeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/");
+        }
+
+        private void issuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://github.symu.org/issues");
+        }
+
+        #endregion
     }
 }

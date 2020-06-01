@@ -17,7 +17,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Agents.Models.CognitiveModel;
 using Symu.Classes.Scenario;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Knowledges;
@@ -489,7 +488,9 @@ namespace SymuGroupAndInteraction
             InteractionKnowledge.Text = "0";
             InteractionSocialDemographics.Text = "0";
         }
+
         #region Menu
+
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -509,6 +510,7 @@ namespace SymuGroupAndInteraction
         {
             Process.Start("http://github.symu.org/issues");
         }
+
         #endregion
     }
 }

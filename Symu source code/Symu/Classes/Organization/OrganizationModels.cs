@@ -107,6 +107,7 @@ namespace Symu.Classes.Organization
             entity.Generator = Generator;
             entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
         }
+
         /// <summary>
         ///     Set all models on
         /// </summary>

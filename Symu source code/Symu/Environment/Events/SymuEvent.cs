@@ -11,8 +11,11 @@
 
 #endregion
 
+#region using directives
+
 using System;
-using Symu.Classes.Task.Manager;
+
+#endregion
 
 namespace Symu.Environment.Events
 {
@@ -30,6 +33,7 @@ namespace Symu.Environment.Events
                 OnExecute?.Invoke(this, null);
             }
         }
+
         /// <summary>
         ///     EventHandler triggered after the event SetTaskInProgress
         /// </summary>

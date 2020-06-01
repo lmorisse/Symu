@@ -16,7 +16,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Beliefs;
@@ -454,7 +453,9 @@ namespace SymuBeliefsAndInfluence
                 MessageBox.Show(exception.Message);
             }
         }
+
         #region Menu
+
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -474,6 +475,7 @@ namespace SymuBeliefsAndInfluence
         {
             Process.Start("http://github.symu.org/issues");
         }
+
         #endregion
     }
 }

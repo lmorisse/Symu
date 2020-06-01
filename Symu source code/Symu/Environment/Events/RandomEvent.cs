@@ -7,8 +7,12 @@
 
 #endregion
 
+#region using directives
+
 using System;
 using Symu.Tools.Math.ProbabilityDistributions;
+
+#endregion
 
 namespace Symu.Environment.Events
 {
@@ -32,6 +36,7 @@ namespace Symu.Environment.Events
                 _ratio = value;
             }
         }
+
         public override bool Trigger(ushort step)
         {
             return Bernoulli.Sample(_ratio);

@@ -51,7 +51,7 @@ namespace Symu.Results
         ///     Focus on the time at which stability is reached
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical)
         /// </summary>
-        public OrganizationFlexibility OrganizationFlexibility { get;  } 
+        public OrganizationFlexibility OrganizationFlexibility { get; }
 
         /// <summary>
         ///     Get the knowledge and Belief performance for the group
@@ -100,21 +100,6 @@ namespace Symu.Results
             Blockers.SetResults(_environment);
         }
 
-        #region todo : refactor in SpecificResults
-
-        /// <summary>
-        ///     Symu has been stopped SpecificResults
-        /// </summary>
-        public bool HasItemsNotDone { get; set; }
-
-        public bool SeemsToBeBlocked { get; set; }
-
-        //public bool NotFastEnoughAtHalfReplay;
-        public bool NotFinishedInTime { get; set; }
-        public ushort NumberOfItemsNotDone { get; set; }
-
-        #endregion
-
         public IterationResult Clone()
         {
             var clone = new IterationResult(_environment);
@@ -134,8 +119,9 @@ namespace Symu.Results
             //NumberOfItemsNotDone = 0;
             return clone;
         }
+
         /// <summary>
-        /// Set all results to On
+        ///     Set all results to On
         /// </summary>
         public void On()
         {
@@ -144,8 +130,9 @@ namespace Symu.Results
             Tasks.On = true;
             Blockers.On = true;
         }
+
         /// <summary>
-        /// Set all results to Off
+        ///     Set all results to Off
         /// </summary>
         public void Off()
         {
@@ -154,5 +141,20 @@ namespace Symu.Results
             Tasks.On = false;
             Blockers.On = false;
         }
+
+        #region todo : refactor in SpecificResults
+
+        /// <summary>
+        ///     Symu has been stopped SpecificResults
+        /// </summary>
+        public bool HasItemsNotDone { get; set; }
+
+        public bool SeemsToBeBlocked { get; set; }
+
+        //public bool NotFastEnoughAtHalfReplay;
+        public bool NotFinishedInTime { get; set; }
+        public ushort NumberOfItemsNotDone { get; set; }
+
+        #endregion
     }
 }

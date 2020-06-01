@@ -210,7 +210,6 @@ namespace SymuMessageAndTask
 
         private void DisplayButtons()
         {
-
             DisplayButtons(btnStart, btnStop, btnPause, btnResume);
         }
 
@@ -391,6 +390,7 @@ namespace SymuMessageAndTask
 
 
         #region Menu
+
         private void symuorgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://symu.org");
@@ -410,6 +410,7 @@ namespace SymuMessageAndTask
         {
             Process.Start("http://github.symu.org/issues");
         }
+
         #endregion
     }
 }

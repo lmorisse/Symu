@@ -94,8 +94,9 @@ namespace Symu.Classes.Organization
                 Knowledges.Add(knowledge);
             }
         }
+
         /// <summary>
-        /// Clear organization for multiple iterations simulation
+        ///     Clear organization for multiple iterations simulation
         /// </summary>
         public void Clear()
         {

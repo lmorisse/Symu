@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockers
+// Description: Symu - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,15 +11,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Environment;
-using Symu.Environment.Events;
-using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -34,7 +31,7 @@ namespace SymuScenariosAndEvents.Classes
 
         public List<Knowledge> Knowledges { get; private set; }
         public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
-        
+
         public override void SetOrganization(OrganizationEntity organization)
         {
             if (organization == null)
@@ -45,6 +42,7 @@ namespace SymuScenariosAndEvents.Classes
             base.SetOrganization(organization);
 
             #region Template
+
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
@@ -56,11 +54,14 @@ namespace SymuScenariosAndEvents.Classes
             organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+
             #endregion
 
             #region Results
+
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
+
             #endregion
 
             SetDebug(false);
@@ -99,6 +100,7 @@ namespace SymuScenariosAndEvents.Classes
                 actor.BeliefsModel.AddBelief(knowledges[i].Id);
             }
         }
+
         private PersonAgent AddPersonAgent()
         {
             var actor = new PersonAgent(Organization.NextEntityIndex(), this)

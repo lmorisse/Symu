@@ -231,6 +231,5 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         {
             return Expertise.GetKnowledge(knowledgeId);
         }
-
     }
 }

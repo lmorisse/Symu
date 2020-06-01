@@ -10,8 +10,23 @@ In this approach, properties can emerge of the system during the simulation. The
 
 .. seealso:: :doc:`agent`
 
-Models and mechanisms
-*********************
+Engine
+******
+The engine of this simulator offers the possibility to performe or multiple iterations. Multiple iterations is useful in a Monte Carlo approach.
+This method is aiming to calculate an approximate numerical value using random methods.
+
+Events
+******
+To add variability, you can schedule events during the simulation. You will find by design one shot, cyclical and random events.
+
+.. topic:: Examples
+
+    You can add a new agent every 100 steps, or randomly add an event that affect the beliefs of the agents.
+
+.. seealso:: :doc:`../userguides/symuscenariosandevents`  
+
+Models
+******
 ``Symu`` is a time-based.  It contains a discrete event schedule on which you can schedule various agents to be called at some specific time.
 But it is ont space-based, it has no 2D nor 3D features to localize agents in the space.
 Of course, Simulation is at the heart of this framework. It is based on two asynchronous models:

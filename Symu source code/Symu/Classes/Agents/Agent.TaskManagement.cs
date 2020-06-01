@@ -635,7 +635,8 @@ namespace Symu.Classes.Agents
         /// <param name="task"></param>
         public void CheckBlockerIncompleteKnowledge(SymuTask task)
         {
-            if (!Environment.Organization.Murphies.IncompleteKnowledge.On || !Environment.Organization.Models.Knowledge.On)
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.On ||
+                !Environment.Organization.Models.Knowledge.On)
             {
                 return;
             }

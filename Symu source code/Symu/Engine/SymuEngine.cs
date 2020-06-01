@@ -30,30 +30,47 @@ namespace Symu.Engine
     /// </summary>
     public class SymuEngine
     {
-        public List<SimulationScenario> Scenarii { get; }= new List<SimulationScenario>();
+        public List<SimulationScenario> Scenarii { get; } = new List<SimulationScenario>();
 
         /// <summary>
         ///     Environment of the simulation
         /// </summary>
         public SymuEnvironment Environment { get; set; }
+
         /// <summary>
         ///     The state of the SymuEngine
         /// </summary>
         public AgentState State { get; set; } = AgentState.Stopped;
+
         /// <summary>
         ///     Manage the multiple iterations of the simulation
         ///     A interaction is a number of interaction steps
         ///     Multiple iterations are used to replay a simulation for MonteCarlo process or to vary parameters
         /// </summary>
         public Iterations Iterations { get; set; } = new Iterations();
+
         /// <summary>
         ///     Store the results of each iteration
         /// </summary>
         public SimulationResults SimulationResults { get; set; } = new SimulationResults();
+
         /// <summary>
         ///     The result of the actual iteration
         /// </summary>
         public IterationResult IterationResult => Environment.IterationResult;
+
+        #region Step level
+
+        /// <summary>
+        ///     Used when Event OnNextDay is triggered by this class
+        /// </summary>
+        public virtual void OnNextStep()
+        {
+            Environment.OnNextStep();
+            Environment.ManageAgentsToStop();
+        }
+
+        #endregion
 
         #region Initialize / set
 
@@ -73,6 +90,7 @@ namespace Symu.Engine
                 Scenarii.Add(scenario);
             }
         }
+
         public void AddEvent(SymuEvent symuEvent)
         {
             Environment.AddEvent(symuEvent);
@@ -123,6 +141,7 @@ namespace Symu.Engine
             {
                 Iteration();
             }
+
             PostProcess();
         }
 
@@ -157,6 +176,7 @@ namespace Symu.Engine
             {
                 OnNextStep();
             }
+
             PostIteration();
         }
 
@@ -177,21 +197,21 @@ namespace Symu.Engine
             {
                 AnalyzeIteration();
             }
+
             State = AgentState.Stopped;
         }
 
         /// <summary>
-        /// Called during the PostIteration if the iteration is a success
-        /// Override this method to analyze specifics results of the iteration
+        ///     Called during the PostIteration if the iteration is a success
+        ///     Override this method to analyze specifics results of the iteration
         /// </summary>
         protected virtual void AnalyzeIteration()
         {
-
         }
 
         /// <summary>
-        /// Called during the PreIteration
-        /// Override this method if you need to initialize specifics iteration's objects
+        ///     Called during the PreIteration
+        ///     Override this method if you need to initialize specifics iteration's objects
         /// </summary>
         public virtual void InitializeIteration()
         {
@@ -233,19 +253,6 @@ namespace Symu.Engine
             }
 
             Environment.Schedule.Step = step0;
-        }
-
-        #endregion
-
-        #region Step level
-
-        /// <summary>
-        ///     Used when Event OnNextDay is triggered by this class
-        /// </summary>
-        public virtual void OnNextStep()
-        {
-            Environment.OnNextStep();
-            Environment.ManageAgentsToStop();
         }
 
         #endregion

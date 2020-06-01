@@ -10,9 +10,7 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
@@ -33,15 +31,16 @@ namespace Symu.Forms
     public partial class SymuForm : Form
     {
         private bool _pauseWorker;
-        public SymuEngine Engine { get; }= new SymuEngine();
 
         public SymuForm()
         {
             InitializeComponent();
         }
 
+        public SymuEngine Engine { get; } = new SymuEngine();
+
         protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
-        
+
         /// <summary>
         ///     Manage the multiple iterations of the simulation
         ///     A interaction is a number of interaction steps
@@ -54,10 +53,24 @@ namespace Symu.Forms
         /// </summary>
         public SimulationResults SimulationResults => Engine.SimulationResults;
 
+        #region Nested type: SafeCallButtonDelegate
+
+        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
+
+        #endregion
+
+        #region Nested type: SafeCallTextDelegate
+
+        protected delegate void SafeCallTextDelegate(Label label, string text);
+
+        #endregion
+
         #region Display
+
         public virtual void DisplayStep()
         {
         }
+
         public virtual void DisplayIteration()
         {
         }
@@ -79,6 +92,7 @@ namespace Symu.Forms
                 label.Text = text;
             }
         }
+
         protected void DisplayButtons(Button btnStart, Button btnStop, Button btnPause, Button btnResume)
         {
             switch (Engine.State)
@@ -113,6 +127,7 @@ namespace Symu.Forms
                     throw new ArgumentOutOfRangeException();
             }
         }
+
         protected void WriteButtonSafe(Button button, bool enabled)
         {
             if (button is null)
@@ -130,6 +145,7 @@ namespace Symu.Forms
                 button.Enabled = enabled;
             }
         }
+
         #endregion
 
         #region Engine
@@ -223,14 +239,16 @@ namespace Symu.Forms
                             worker.ReportProgress(i);
                         }
                     }
+
                     PostIteration();
                 }
             }
 
             OnStopped();
         }
+
         /// <summary>
-        /// Trigger after the event Stopped
+        ///     Trigger after the event Stopped
         /// </summary>
         protected virtual void OnStopped()
         {
@@ -268,12 +286,6 @@ namespace Symu.Forms
             _pauseWorker = false;
             Engine.State = AgentState.Started;
         }
-        #endregion
-
-        #region Nested type: SafeCallDelegate
-
-        protected delegate void SafeCallTextDelegate(Label label, string text);
-        protected delegate void SafeCallButtonDelegate(Button button, bool enabled);
 
         #endregion
 
@@ -337,7 +349,7 @@ namespace Symu.Forms
 
         /// <summary>
         ///     When to stop the iteration based on the scenario agents.
-        ///     You can add custom control 
+        ///     You can add custom control
         /// </summary>
         /// <returns></returns>
         protected virtual bool StopIteration()
@@ -364,6 +376,7 @@ namespace Symu.Forms
         {
             Engine.PostProcess();
         }
+
         protected virtual bool StopProcess()
         {
             return Engine.StopProcess();
