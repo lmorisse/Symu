@@ -49,6 +49,7 @@ Symu works only on Windows for the moment.
 ### Building
 
 * [Math.net](https://www.math.net/)
+* Some examples are using [SyncFusion](https://www.syncfusion.com/)
 
 ### Running
 
