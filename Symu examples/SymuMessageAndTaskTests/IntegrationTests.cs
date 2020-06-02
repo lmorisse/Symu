@@ -271,7 +271,6 @@ namespace SymuMessageAndTaskTests
             _symu.Process();
             Assert.IsTrue(_environment.IterationResult.Capacity > _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.AverageDone);
-            Assert.AreEqual(_environment.IterationResult.Tasks.Weight, _environment.IterationResult.Tasks.Total);
         }
 
         #endregion

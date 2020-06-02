@@ -90,16 +90,16 @@ namespace Symu.Results.Task
             }
 
             var result = new TaskResult();
-            foreach (var tasksManager in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager))
+            foreach (var taskResult in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.TaskResult))
             {
-                result.ToDo += tasksManager.ToDo.Count(x => !(x.Parent is Message));
-                result.InProgress += tasksManager.InProgress.Count(x => !(x.Parent is Message));
-                result.Done += tasksManager.Done.Count(x => !(x.Parent is Message));
-                result.Cancelled += tasksManager.Cancelled.Count(x => !(x.Parent is Message));
-                result.TotalTasksNumber += tasksManager.TotalTasksNumber;
-                result.WeightDone += tasksManager.TotalWeightDone;
-                result.Incorrectness += tasksManager.AllTasks.Sum(x => (int) x.Incorrect);
+                result.ToDo += taskResult.ToDo;
+                result.InProgress += taskResult.InProgress;
+                result.Done += taskResult.Done;
+                result.Cancelled += taskResult.Cancelled;
+                result.TotalTasksNumber += taskResult.TotalTasksNumber;
+                result.WeightDone += taskResult.WeightDone;
+                result.Incorrectness += taskResult.Incorrectness;
             }
 
             Results.TryAdd(environment.Schedule.Step, result);

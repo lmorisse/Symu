@@ -13,8 +13,10 @@ using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
+using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Results.Blocker;
 using static Symu.Tools.Constants;
 
 #endregion
@@ -27,10 +29,18 @@ namespace Symu.Classes.Task
     public class SymuTask
     {
         private float _weight;
+        private TasksManager _tasksManager;
 
         public SymuTask(ushort step)
         {
             Created = step;
+        }
+        public void SetTasksManager(TasksManager tasksManager)
+        {
+            if (tasksManager != null)
+            {
+                _tasksManager = tasksManager;
+            }
         }
 
         /// <summary>
@@ -69,7 +79,7 @@ namespace Symu.Classes.Task
         /// <summary>
         ///     The task may be complete but with some level of rightness
         /// </summary>
-        public ImpactLevel Incorrect { get; set; } = ImpactLevel.None;
+        public ImpactLevel Incorrectness { get; set; } = ImpactLevel.None;
 
         /// <summary>
         ///     AgentId that is assigned on the task and will performed it.
@@ -197,11 +207,139 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     Cancel a task
+        ///     CancelBlocker a task
         /// </summary>
         public void Cancel()
         {
             HasBeenCancelledBy.Add(Assigned);
+        }
+
+        #region blockers
+        /// <summary>
+        ///     Add a blocker with two parameters
+        ///     And follow it in the IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="type">type of the blocker</param>
+        /// <param name="step">step of creation of the blocker</param>
+        /// <param name="parameter1"></param>
+        /// <param name="parameter2"></param>
+        public Blocker Add(int type, ushort step, object parameter1, object parameter2)
+        {
+            var blocker = new Blocker(type, step, parameter1, parameter2);
+            return Add(blocker);
+        }
+
+        /// <summary>
+        ///     Add a blocker with one parameter
+        ///     And follow it in the IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="type">type of the blocker</param>
+        /// <param name="step">step of creation of the blocker</param>
+        /// <param name="parameter"></param>
+        public Blocker Add(int type, ushort step, object parameter)
+        {
+            var blocker = new Blocker(type, step, parameter);
+            return Add(blocker);
+        }
+        /// <summary>
+        ///     Add a blocker without parameter
+        ///     And follow it in the IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="type">type of the blocker</param>
+        /// <param name="step">step of creation of the blocker</param>
+        public Blocker Add(int type, ushort step)
+        {
+            var blocker = new Blocker(type, step);
+            return Add(blocker);
+        }
+
+        public Blocker Add(Blocker blocker)
+        {
+            SetBlockerInProgress();
+            return Blockers.Add(blocker);
+        }
+        /// <summary>
+        ///     Remove an existing blocker from a task
+        ///     And update IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="blocker"></param>
+        /// <param name="resolution"></param>
+        public void Recover(Blocker blocker, BlockerResolution resolution)
+        {
+            Blockers.Recover(blocker);
+
+            SetBlockerDone(resolution);
+        }
+
+
+        /// <summary>
+        ///     CancelBlocker an existing blocker from a task
+        ///     And update IterationResult if FollowBlocker is true
+        /// </summary>
+        /// <param name="blocker"></param>
+        public void CancelBlocker(Blocker blocker)
+        {
+            if (Blockers.Cancel(blocker))
+            {
+                SetBlockerCancelled();
+            }
+        }
+
+        public void SetBlockerInProgress()
+        {
+            if (_tasksManager != null)
+            {
+                _tasksManager.BlockerResult.InProgress++;
+            }
+        }
+
+        public void SetBlockerDone(BlockerResolution resolution)
+        {
+            if (_tasksManager == null)
+            {
+                return;
+            }
+            var blockerResult =
+                _tasksManager.BlockerResult;
+            switch (resolution)
+            {
+                case BlockerResolution.Internal:
+                    blockerResult.InternalHelp++;
+                    break;
+                case BlockerResolution.External:
+                    blockerResult.ExternalHelp++;
+                    break;
+                case BlockerResolution.Guessing:
+                    blockerResult.Guess++;
+                    break;
+                case BlockerResolution.Searching:
+                    blockerResult.Search++;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(resolution), resolution, null);
+            }
+
+            blockerResult.Done++;
+            blockerResult.InProgress--;
+        }
+
+        public void SetBlockerCancelled()
+        {
+            if (_tasksManager == null)
+            {
+                return;
+            }
+            var blockerResult =
+                _tasksManager.BlockerResult;
+            blockerResult.Cancelled++;
+            blockerResult.InProgress--;
+        }
+        #endregion
+
+        public void ClearBlockers()
+        {
+            SetBlockerDone(BlockerResolution.Internal);
+            Blockers.Clear();
         }
     }
 }

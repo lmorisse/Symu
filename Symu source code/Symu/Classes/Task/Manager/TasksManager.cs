@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Symu.Messaging.Messages;
+using Symu.Results.Blocker;
+using Symu.Results.Task;
 using static Symu.Tools.Constants;
 
 #endregion
@@ -22,29 +24,33 @@ namespace Symu.Classes.Task.Manager
 {
     /// <summary>
     ///     Async tasks manager for agent
-    ///     Tasks have 3 states : To Do, In progress, AverageDone
+    ///     Tasks have 4 states : To Do, In progress, Done, Cancelled
     ///     Tasks limits are managed
     /// </summary>
     public class TasksManager
     {
+        private readonly bool _debug;
+
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="tasksLimit">Agent.Cognitive.TasksAndPerformance.TasksLimit</param>
-        public TasksManager(TasksLimit tasksLimit)
+        /// <param name="debug">Environment.Debug</param>
+        public TasksManager(TasksLimit tasksLimit, bool debug)
         {
             TasksLimit = tasksLimit;
+            _debug = debug;
         }
 
         /// <summary>
-        ///     Total tasks done by the agent during the symu
+        ///     BlockerResult of the agent the agent during the simulation
         /// </summary>
-        public ushort TotalTasksNumber { get; private set; }
+        public BlockerResult BlockerResult { get; } = new BlockerResult();
 
         /// <summary>
-        ///     Total weight of tasks done by the agent during the symu
+        ///     TaskResult of the agent the agent during the simulation
         /// </summary>
-        public float TotalWeightDone { get; private set; }
+        public TaskResult TaskResult{ get; } = new TaskResult();
 
         /// <summary>
         ///     Tasks to do
@@ -65,19 +71,6 @@ namespace Symu.Classes.Task.Manager
         ///     Tasks cancelled
         /// </summary>
         public List<SymuTask> Cancelled { get; } = new List<SymuTask>();
-
-        public List<SymuTask> AllTasks
-        {
-            get
-            {
-                var tasks = new List<SymuTask>();
-                tasks.AddRange(ToDo);
-                tasks.AddRange(InProgress);
-                tasks.AddRange(Done);
-                tasks.AddRange(Cancelled);
-                return tasks;
-            }
-        }
 
         /// <summary>
         ///     Manage the limits on the tasks
@@ -108,18 +101,14 @@ namespace Symu.Classes.Task.Manager
             }
 
             ToDo.Add(task);
-            TrackTotalTasksNumber(task);
-        }
-
-        private void TrackTotalTasksNumber(SymuTask task)
-        {
             // We don't want to track message as Task
             if (task.Parent is Message)
             {
                 return;
             }
-
-            TotalTasksNumber += 1;
+            TaskResult.TotalTasksNumber++;
+            TaskResult.ToDo++;
+            task.SetTasksManager(this);
         }
 
         /// <summary>
@@ -134,7 +123,14 @@ namespace Symu.Classes.Task.Manager
             }
 
             InProgress.Add(task);
-            TrackTotalTasksNumber(task);
+            // We don't want to track message as Task
+            if (task.Parent is Message)
+            {
+                return;
+            }
+            TaskResult.TotalTasksNumber++;
+            TaskResult.InProgress++;
+            task.SetTasksManager(this);
         }
 
         /// <summary>
@@ -151,6 +147,14 @@ namespace Symu.Classes.Task.Manager
             ToDo.Remove(task);
             InProgress.Add(task);
             OnAfterSetTaskInProgress?.Invoke(this, new TaskEventArgs(task));
+            // We don't want to track message as Task
+            if (task.Parent is Message)
+            {
+                return;
+            }
+            TaskResult.ToDo--;
+            TaskResult.InProgress++;
+
         }
 
         /// <summary>
@@ -164,14 +168,41 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
+            if (ToDo.Contains(task))
+            {
+                ToDo.Remove(task);
+            }
+            else
+            {
+                InProgress.Remove(task);
+            }
             task.SetDone();
-            InProgress.Remove(task);
-            Done.Add(task);
-            TotalWeightDone += task.Weight;
+            if (_debug)
+            {
+                Done.Add(task);
+            }
+
+            // We don't want to track message as Task
+            if (task.Parent is Message)
+            {
+                return;
+            }
+            if (ToDo.Contains(task))
+            {
+                TaskResult.ToDo--;
+            }
+            else
+            {
+                TaskResult.InProgress--;
+            }
+            TaskResult.Done++;
+            TaskResult.WeightDone += task.Weight;
+            TaskResult.Incorrectness += (int)task.Incorrectness;
+
         }
 
         /// <summary>
-        ///     Cancel a task :
+        ///     CancelBlocker a task :
         ///     remove a task from either To do or in progress
         /// </summary>
         /// <param name="task"></param>
@@ -182,10 +213,34 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
-            ToDo.Remove(task);
-            InProgress.Remove(task);
-            Cancelled.Add(task);
+            if (ToDo.Contains(task))
+            {
+                ToDo.Remove(task);
+            }
+            else
+            {
+                InProgress.Remove(task);
+            }
+
             task.Cancel();
+            if (_debug)
+            {
+                Cancelled.Add(task);
+            }
+            // We don't want to track message as Task
+            if (task.Parent is Message)
+            {
+                return;
+            }
+            if (ToDo.Contains(task))
+            {
+                TaskResult.ToDo--;
+            }
+            else
+            {
+                TaskResult.InProgress--;
+            }
+            TaskResult.Cancelled++;
         }
 
         /// <summary>
@@ -209,24 +264,35 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentException("Task is blocked in INPROGRESS column");
             }
 
-            RemoveExpiredTasks(step);
+            CancelExpiredTasks(step);
         }
 
         /// <summary>
-        ///     Remove tasks that have expired based on TimeToLive
+        ///     Cancel tasks that have expired based on TimeToLive
         /// </summary>
         /// <param name="step"></param>
-        public void RemoveExpiredTasks(ushort step)
+        public void CancelExpiredTasks(ushort step)
         {
             bool Match(SymuTask t)
             {
                 return t.TimeToLive != -1 && step >= t.Created + t.TimeToLive;
             }
 
-            ToDo.RemoveAll(Match);
-            InProgress.RemoveAll(Match);
+            foreach (var task in ToDo.FindAll(Match))
+            {
+                Cancel(task);
+            }
+            foreach (var task in InProgress.FindAll(Match))
+            {
+                Cancel(task);
+            }
         }
-
+        /// <summary>
+        /// Checks that Done contains the task
+        /// Debug should be set to true
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         public bool IsDone(SymuTask task)
         {
             return Done.Contains(task);
@@ -239,7 +305,8 @@ namespace Symu.Classes.Task.Manager
 
         /// <summary>
         ///     agent stop working and must finished properly the tasks
-        ///     All tasks in the task manager are set done
+        ///     All tasks in the task manager are set done,
+        ///     Blockers are cleared
         /// </summary>
         public void SetAllTasksDone()
         {
@@ -248,7 +315,7 @@ namespace Symu.Classes.Task.Manager
             while (InProgress.Any())
             {
                 var task = InProgress.First();
-                task.Blockers.Clear();
+                task.ClearBlockers();
                 SetDone(task);
             }
         }
@@ -274,14 +341,6 @@ namespace Symu.Classes.Task.Manager
             return takeBlockerIntoAccount
                 ? InProgress.Sum(i => i.WorkToDo)
                 : InProgress.FindAll(i => !i.IsBlocked).Sum(i => i.WorkToDo);
-        }
-
-        /// <summary>
-        ///     Trigger weekly events
-        /// </summary>
-        public void ClearDone()
-        {
-            Done.Clear();
         }
 
         /// <summary>
@@ -381,7 +440,7 @@ namespace Symu.Classes.Task.Manager
         ///     Check if Worker has reached the maximum number of tasks he can do during the symu
         /// </summary>
         /// <returns>true if worker has not reached yet the maximum number of tasks</returns>
-        public bool HasReachedTotalMaximumLimit => TasksLimit.HasReachedTotalMaximumLimit(TotalTasksNumber);
+        public bool HasReachedTotalMaximumLimit => TasksLimit.HasReachedTotalMaximumLimit(TaskResult.TotalTasksNumber);
 
         /// <summary>
         ///     Check if Worker has reached the maximum number of tasks he can do during the symu

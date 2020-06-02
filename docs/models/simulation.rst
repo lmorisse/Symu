@@ -15,6 +15,16 @@ Engine
 The engine of this simulator offers the possibility to performe or multiple iterations. Multiple iterations is useful in a Monte Carlo approach.
 This method is aiming to calculate an approximate numerical value using random methods.
 
+Scenarios
+*********
+To run a simulation, you must at least define one scenario. it will basically allow to define which parameter allows to stop the simulation and for which value.
+The pre-defined scenarios are:
+* Time based
+* Tasks based
+* Messages based
+You can overload your own scenario.
+A simulation may be define with multiple scenarios. In that case, the simulation will stop when all the scenarios will be stopped.
+
 Events
 ******
 To add variability, you can schedule events during the simulation. You will find by design one shot, cyclical and random events.
@@ -22,6 +32,10 @@ To add variability, you can schedule events during the simulation. You will find
 .. topic:: Examples
 
     You can add a new agent every 100 steps, or randomly add an event that affect the beliefs of the agents.
+
+You can only use scenarios if you choose. But the scenarios and the events are different by design. The scenario is an agent, has its own life cycle, interacts with other agents via asynchronous messages; where events is a simple class that can be used directly by the agent via an EventHandler.
+
+At least one scenario is required to run a simulation, then you choose what best suits your needs for variability between scenarios and events.
 
 .. seealso:: :doc:`../userguides/symuscenariosandevents`  
 

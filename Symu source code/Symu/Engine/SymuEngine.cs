@@ -57,7 +57,7 @@ namespace Symu.Engine
         /// <summary>
         ///     The result of the actual iteration
         /// </summary>
-        public IterationResult IterationResult => Environment.IterationResult;
+        public IterationResult IterationResult => Environment?.IterationResult;
 
         #region Step level
 

@@ -303,7 +303,7 @@ namespace Symu.Classes.Agents
                 return;
             }
 
-            TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit);
+            TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit, Environment.Debug);
             OnAfterTaskProcessorStart();
         }
 

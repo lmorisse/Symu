@@ -23,7 +23,7 @@ using Symu.Messaging.Subscription;
 
 namespace Symu.Messaging.Manager
 {
-    public class MessageProcessor : IDisposable
+    public sealed class MessageProcessor : IDisposable
     {
         private readonly Func<MessageProcessor, Task> _body;
         private readonly CancellationToken _cancellationToken;

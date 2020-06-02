@@ -830,7 +830,9 @@ namespace SymuTests.Classes.Agents
             var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
             expertise.Add(agentKnowledge);
             _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
-            _agent.PreStep();
+            _environment.PreStep();
+            // To initialize interaction sphere
+            _environment.NextStep();
             Assert.AreEqual(1, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
 
@@ -1157,7 +1159,7 @@ namespace SymuTests.Classes.Agents
             _environment.IterationResult.Initialize();
             _organizationEntity.Murphies.MultipleBlockers = false;
             var task = new SymuTask(0);
-            task.Blockers.Add(Murphy.IncompleteBelief, 0);
+            task.Add(Murphy.IncompleteBelief, 0);
             _agent.CheckNewBlockers(task);
             // We don't add another blocker
             Assert.AreEqual(1, task.Blockers.List.Count);
@@ -1229,7 +1231,7 @@ namespace SymuTests.Classes.Agents
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.CheckBlockerIncompleteBeliefs(task);
-            Assert.AreEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteBelief, 0));
         }
 
@@ -1246,7 +1248,7 @@ namespace SymuTests.Classes.Agents
                 MurphyTask.NoRequiredBits);
             _organizationEntity.Murphies.IncompleteBelief.On = true;
             _agent.CheckBlockerIncompleteBeliefs(task);
-            Assert.AreEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteBelief, 0));
         }
 
@@ -1381,8 +1383,8 @@ namespace SymuTests.Classes.Agents
             var blocker = new Blocker(1, 0) {Parameter = _knowledge.Id, Parameter2 = (byte) 0};
 
             _agent.RecoverBlockerIncompleteBeliefByGuessing(task, blocker);
-            Assert.AreNotEqual(ImpactLevel.None, task.Incorrect);
-            if (task.Incorrect == ImpactLevel.Blocked)
+            Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
+            if (task.Incorrectness == ImpactLevel.Blocked)
             {
                 return;
             }
@@ -1398,7 +1400,7 @@ namespace SymuTests.Classes.Agents
         public void ReplyHelpTest()
         {
             var task = new SymuTask(0);
-            var blocker = task.Blockers.Add(Murphy.IncompleteBelief, 0);
+            var blocker = task.Add(Murphy.IncompleteBelief, 0);
             var message = new Message
             {
                 Medium = CommunicationMediums.Email,
@@ -1557,7 +1559,7 @@ namespace SymuTests.Classes.Agents
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            Assert.AreEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteKnowledge, 0));
         }
 
@@ -1574,7 +1576,7 @@ namespace SymuTests.Classes.Agents
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.NoRequiredBits);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            Assert.AreEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteKnowledge, 0));
         }
 
@@ -1587,11 +1589,13 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteKnowledge.On = true;
             var task = new SymuTask(0) {Weight = 1};
+            task.SetTasksManager(_agent.TaskProcessor.TasksManager);
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            Assert.IsTrue(task.Blockers.Result.Cancelled == 1 || task.Blockers.Result.Done == 1);
+            
+            Assert.IsTrue(_agent.TaskProcessor.TasksManager.BlockerResult.Cancelled == 1 || _agent.TaskProcessor.TasksManager.BlockerResult.Done == 1);
         }
 
         /// <summary>
@@ -1611,7 +1615,7 @@ namespace SymuTests.Classes.Agents
             _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            Assert.AreNotEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
         }
 
 
@@ -1630,7 +1634,7 @@ namespace SymuTests.Classes.Agents
                 MurphyTask.FullRequiredBits);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            Assert.AreEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteKnowledge, 0));
         }
 
@@ -1650,7 +1654,7 @@ namespace SymuTests.Classes.Agents
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             _agent.RecoverBlockerIncompleteKnowledgeByGuessing(task, null, _knowledge.Id, 0,
                 BlockerResolution.Guessing);
-            Assert.AreNotEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
             if (task.HasBeenCancelledBy.Any())
             {
                 return;
@@ -1752,7 +1756,7 @@ namespace SymuTests.Classes.Agents
             _agent.TryRecoverBlockerIncompleteBelief(task, blocker);
 
             // Blocker must be unblocked in a way or another
-            Assert.AreNotEqual(ImpactLevel.None, task.Incorrect);
+            Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsTrue(task.Weight > 0);
             Assert.IsFalse(task.Blockers.IsBlocked);
         }

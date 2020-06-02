@@ -178,7 +178,7 @@ namespace Symu.Repository.Networks.Sphere
                                 new DerivedParameter(_model, value, value, value, value);
                         }
 
-                        Sphere[j, i] = Sphere[i, j];
+                        tempSphere[j, i] = tempSphere[i, j];
                     }
                 }
                 else
@@ -191,7 +191,7 @@ namespace Symu.Repository.Networks.Sphere
                         tempSphere[i, j] =
                             new DerivedParameter(_model, value, value,
                                 value, value);
-                        Sphere[j, i] = Sphere[i, j];
+                        tempSphere[j, i] = tempSphere[i, j];
                     }
                 }
             }

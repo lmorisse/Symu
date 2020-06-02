@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Results.Blocker;
 
 #endregion
 
@@ -26,51 +25,24 @@ namespace Symu.Classes.Blockers
         /// <summary>
         ///     Number of blockers In Progress
         /// </summary>
-        public BlockerResult Result { get; set; } = new BlockerResult();
+        //public BlockerResult Result { get; set; } = new BlockerResult();
 
         public List<Blocker> List { get; } = new List<Blocker>();
         public bool IsBlocked => List.Any();
 
-        /// <summary>
-        ///     Add a blocker with two parameters
-        ///     And follow it in the IterationResult if FollowBlocker is true
-        /// </summary>
-        /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
-        /// <param name="parameter1"></param>
-        /// <param name="parameter2"></param>
-        public Blocker Add(int type, ushort step, object parameter1, object parameter2)
+        public Blocker Add(Blocker blocker)
         {
-            var blocker = new Blocker(type, step, parameter1, parameter2);
-            return Add(blocker);
+            List.Add(blocker);
+            return blocker;
         }
-
-        /// <summary>
-        ///     Add a blocker with one parameter
-        ///     And follow it in the IterationResult if FollowBlocker is true
-        /// </summary>
-        /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
-        /// <param name="parameter"></param>
+        [Obsolete]
         public Blocker Add(int type, ushort step, object parameter)
         {
             var blocker = new Blocker(type, step, parameter);
             return Add(blocker);
         }
 
-        private Blocker Add(Blocker blocker)
-        {
-            SetBlockerInProgress();
-            List.Add(blocker);
-            return blocker;
-        }
-
-        /// <summary>
-        ///     Add a blocker without parameter
-        ///     And follow it in the IterationResult if FollowBlocker is true
-        /// </summary>
-        /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
+        [Obsolete]
         public Blocker Add(int type, ushort step)
         {
             var blocker = new Blocker(type, step);
@@ -82,8 +54,7 @@ namespace Symu.Classes.Blockers
         ///     And update IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="blocker"></param>
-        /// <param name="resolution"></param>
-        public void Recover(Blocker blocker, BlockerResolution resolution)
+        public void Recover(Blocker blocker)
         {
             if (!Contains(blocker))
             {
@@ -95,29 +66,24 @@ namespace Symu.Classes.Blockers
             {
                 Remove(blocker);
             }
-
-            SetBlockerDone(resolution);
         }
 
         /// <summary>
-        ///     Cancel an existing blocker from a task
+        ///     CancelBlocker an existing blocker from a task
         ///     And update IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="blocker"></param>
-        public void Cancel(Blocker blocker)
+        /// <returns>true if blocker has been removed</returns>
+        public bool Cancel(Blocker blocker)
         {
-            if (!Contains(blocker))
+            if (blocker == null || !Contains(blocker))
             {
                 // Blocker may have been already cancelled
-                return;
+                return false;
             }
 
-            if (blocker != null)
-            {
-                Remove(blocker);
-            }
-
-            SetBlockerCancelled();
+            Remove(blocker);
+            return true;
         }
 
         /// <summary>
@@ -191,41 +157,6 @@ namespace Symu.Classes.Blockers
         public bool Contains(Blocker blocker)
         {
             return List.Contains(blocker);
-        }
-
-        public void SetBlockerInProgress()
-        {
-            Result.InProgress++;
-        }
-
-        public void SetBlockerDone(BlockerResolution resolution)
-        {
-            switch (resolution)
-            {
-                case BlockerResolution.Internal:
-                    Result.InternalHelp++;
-                    break;
-                case BlockerResolution.External:
-                    Result.ExternalHelp++;
-                    break;
-                case BlockerResolution.Guessing:
-                    Result.Guess++;
-                    break;
-                case BlockerResolution.Searching:
-                    Result.Search++;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(resolution), resolution, null);
-            }
-
-            Result.Done++;
-            Result.InProgress--;
-        }
-
-        public void SetBlockerCancelled()
-        {
-            Result.Cancelled++;
-            Result.InProgress--;
         }
     }
 }

@@ -269,7 +269,7 @@ namespace Symu.Forms
         {
             Engine.State = AgentState.Stopping;
             if (backgroundWorker1.WorkerSupportsCancellation)
-                // Cancel the asynchronous operation.
+                // CancelBlocker the asynchronous operation.
             {
                 backgroundWorker1.CancelAsync();
             }
@@ -312,6 +312,7 @@ namespace Symu.Forms
         /// <summary>
         ///     Update settings of the environment and the organization via the form
         ///     Use SetOrganization to initialize organization
+        ///     Add scenarios after calling base.UpdateSettings
         /// </summary>
         protected virtual void UpdateSettings()
         {

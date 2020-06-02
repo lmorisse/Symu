@@ -120,7 +120,7 @@ namespace SymuMurphiesAndBlockers
                     case "Changing Information":
                         //item.Checked = murphies.ChangingInformation.On;
                         break;
-                    case "Incorrect information":
+                    case "Incorrectness information":
                         //item.Checked = murphies.IncorrectInformation.On;
                         break;
                     case "Communication breakdowns":
@@ -634,7 +634,7 @@ namespace SymuMurphiesAndBlockers
                     break;
                 case "Changing Information":
                     break;
-                case "Incorrect information":
+                case "Incorrectness information":
                     break;
                 case "Communication breakdowns":
                     break;

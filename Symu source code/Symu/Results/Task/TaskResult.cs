@@ -14,27 +14,27 @@ namespace Symu.Results.Task
         /// <summary>
         ///     Number of tasks in To Do
         /// </summary>
-        public int ToDo { get; set; }
+        public ushort ToDo { get; set; }
 
         /// <summary>
         ///     Number of tasks In Progress
         /// </summary>
-        public int InProgress { get; set; }
+        public ushort InProgress { get; set; }
 
         /// <summary>
         ///     Number of tasks in Done
         /// </summary>
-        public int Done { get; set; }
+        public ushort Done { get; set; }
 
         /// <summary>
         ///     Number of tasks in Cancelled
         /// </summary>
-        public int Cancelled { get; set; }
+        public ushort Cancelled { get; set; }
 
         /// <summary>
         ///     Number of tasks
         /// </summary>
-        public int TotalTasksNumber { get; set; }
+        public ushort TotalTasksNumber { get; set; }
 
         /// <summary>
         ///     Total weight of tasks done

@@ -485,7 +485,7 @@ namespace Symu.Classes.Agents
 
             // Take some time to learn, allocate this time on KeyActivity
             ImpactOfTheCommunicationMediumOnTimeSpent(medium, false, task.KeyActivity);
-            task.Blockers.Recover(blocker, internalHelp ? BlockerResolution.Internal : BlockerResolution.External);
+            task.Recover(blocker, internalHelp ? BlockerResolution.Internal : BlockerResolution.External);
         }
 
         /// <summary>
@@ -550,23 +550,23 @@ namespace Symu.Classes.Agents
             }
 
             var impact = murphy.NextGuess();
-            if (impact > task.Incorrect)
+            if (impact > task.Incorrectness)
             {
-                task.Incorrect = impact;
+                task.Incorrectness = impact;
             }
 
-            if (task.Incorrect == ImpactLevel.Blocked)
+            if (task.Incorrectness == ImpactLevel.Blocked)
             {
                 //Agent decide to cancel the task
                 TaskProcessor.Cancel(task);
-                task.Blockers.Cancel(blocker);
+                task.CancelBlocker(blocker);
             }
             else
             {
                 task.Weight *= murphy.NextImpactOnTimeSpent();
                 if (blocker != null)
                 {
-                    task.Blockers.Recover(blocker, resolution);
+                    task.Recover(blocker, resolution);
                 }
             }
         }
@@ -689,7 +689,7 @@ namespace Symu.Classes.Agents
             if (!mandatoryOk)
             {
                 // mandatoryCheck is false => Task is blocked
-                var blocker = task.Blockers.Add(Murphy.IncompleteKnowledge, Schedule.Step, knowledgeId, mandatoryIndex);
+                var blocker = task.Add(Murphy.IncompleteKnowledge, Schedule.Step, knowledgeId, mandatoryIndex);
                 TryRecoverBlockerIncompleteKnowledge(task, blocker);
             }
             else if (!requiredOk)
@@ -719,7 +719,7 @@ namespace Symu.Classes.Agents
 
             RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteKnowledge,
                 resolution);
-            if (task.Incorrect == ImpactLevel.Blocked)
+            if (task.Incorrectness == ImpactLevel.Blocked)
             {
                 return;
             }
@@ -941,7 +941,7 @@ namespace Symu.Classes.Agents
             }
 
             // mandatoryScore is not enough => agent don't want to do the task, the task is blocked
-            var blocker1 = task.Blockers.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
+            var blocker1 = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
             TryRecoverBlockerIncompleteBelief(task, blocker1);
         }
 
@@ -976,9 +976,9 @@ namespace Symu.Classes.Agents
             }
 
             // Prevent the agent from acting on a particular belief
-            var blocker = task.Blockers.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
+            var blocker = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
             TaskProcessor.Cancel(task);
-            task.Blockers.Cancel(blocker);
+            task.CancelBlocker(blocker);
         }
 
         /// <summary>
@@ -1072,7 +1072,7 @@ namespace Symu.Classes.Agents
 
             RecoverBlockerIncompleteByGuessing(task, blocker, Environment.Organization.Murphies.IncompleteBelief,
                 BlockerResolution.Guessing);
-            if (task.Incorrect == ImpactLevel.Blocked)
+            if (task.Incorrectness == ImpactLevel.Blocked)
             {
                 return;
             }
@@ -1116,7 +1116,7 @@ namespace Symu.Classes.Agents
                 return false;
             }
 
-            var blocker = task.Blockers.Add(Murphy.IncompleteInformation, Schedule.Step);
+            var blocker = task.Add(Murphy.IncompleteInformation, Schedule.Step);
             TryRecoverBlocker(task, blocker);
 
             return true;

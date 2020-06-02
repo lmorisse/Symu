@@ -12,6 +12,7 @@
 using System;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -39,6 +40,15 @@ namespace Symu.Classes.Agents
             if (message is null)
             {
                 throw new ArgumentNullException(nameof(message));
+            }
+
+            // agent ask Environment to be in a SplitStep mode
+            // message is managed directly 
+            if (message.Subject == SymuYellowPages.SplitStep)
+            {
+                var splitStep = message.Attachments.First as SplitStep;
+                splitStep?.Step();
+                return;
             }
 
             if (Cognitive.TasksAndPerformance.CanPerformTask && message.Medium != CommunicationMediums.System)

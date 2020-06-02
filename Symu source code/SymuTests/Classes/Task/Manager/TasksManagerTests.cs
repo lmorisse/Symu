@@ -33,7 +33,7 @@ namespace SymuTests.Classes.Task.Manager
         {
             _task = new SymuTask(0);
             var tasksLimit = new TasksLimit();
-            _tasksManager = new TasksManager(tasksLimit);
+            _tasksManager = new TasksManager(tasksLimit, true);
             _tasks = new List<SymuTask> {_task};
         }
 
@@ -41,7 +41,7 @@ namespace SymuTests.Classes.Task.Manager
         public void AddToDoTest()
         {
             _tasksManager.AddToDo(_task);
-            Assert.AreEqual(1, _tasksManager.TotalTasksNumber);
+            Assert.AreEqual(1, _tasksManager.TaskResult.TotalTasksNumber);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
@@ -51,7 +51,7 @@ namespace SymuTests.Classes.Task.Manager
         public void AddInProgressTest()
         {
             _tasksManager.AddInProgress(_task);
-            Assert.AreEqual(1, _tasksManager.TotalTasksNumber);
+            Assert.AreEqual(1, _tasksManager.TaskResult.TotalTasksNumber);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
@@ -166,7 +166,7 @@ namespace SymuTests.Classes.Task.Manager
         {
             Assert.AreEqual(0, _tasksManager.GetTasksInProgress(1).Count);
             _tasksManager.AddInProgress(_task);
-            _task.Blockers.Add(1, 1);
+            _task.Add(1, 1);
             Assert.AreEqual(0, _tasksManager.GetTasksInProgress(1).Count);
         }
 
@@ -192,19 +192,10 @@ namespace SymuTests.Classes.Task.Manager
         public void GetRafTest1()
         {
             _task.Weight = 1;
-            _task.Blockers.Add(1, 0);
+            _task.Add(1, 0);
             _tasksManager.AddInProgress(_task);
             Assert.AreEqual(1, _tasksManager.GetRaf(true));
             Assert.AreEqual(0, _tasksManager.GetRaf(false));
-        }
-
-        [TestMethod]
-        public void ClearDoneTest()
-        {
-            _tasksManager.AddInProgress(_task);
-            _tasksManager.SetDone(_task);
-            _tasksManager.ClearDone();
-            Assert.AreEqual(0, _tasksManager.Done.Count);
         }
 
         /// <summary>
@@ -258,7 +249,7 @@ namespace SymuTests.Classes.Task.Manager
         {
             _tasksLimit.LimitSimultaneousTasks = true;
             _tasksLimit.MaximumSimultaneousTasks = 1;
-            _tasksManager = new TasksManager(_tasksLimit);
+            _tasksManager = new TasksManager(_tasksLimit, true);
             _tasksManager.AddInProgress(new SymuTask(0) {Type = "ip"});
             _tasksManager.AddToDo(new SymuTask(0) {Type = "todo"});
             // without the limit, the task to do should be pushed in progress
@@ -274,7 +265,7 @@ namespace SymuTests.Classes.Task.Manager
         public void SelectNextTaskTest4()
         {
             _tasksLimit.LimitSimultaneousTasks = false;
-            _tasksManager = new TasksManager(_tasksLimit);
+            _tasksManager = new TasksManager(_tasksLimit, true);
             var task = new SymuTask(0) {Type = "todo"};
             _tasksManager.AddToDo(task);
             Assert.IsNotNull(_tasksManager.SelectNextTask(0));
@@ -324,7 +315,7 @@ namespace SymuTests.Classes.Task.Manager
         public void PostTest1()
         {
             _tasksManager.Post(_task);
-            Assert.AreEqual(1, _tasksManager.TotalTasksNumber);
+            Assert.AreEqual(1, _tasksManager.TaskResult.TotalTasksNumber);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
@@ -349,7 +340,7 @@ namespace SymuTests.Classes.Task.Manager
         {
             _task.TimeToLive = -1;
             _tasksManager.AddToDo(_task);
-            _tasksManager.RemoveExpiredTasks(1);
+            _tasksManager.CancelExpiredTasks(1);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
         }
 
@@ -361,10 +352,28 @@ namespace SymuTests.Classes.Task.Manager
         {
             _task.TimeToLive = 1;
             _tasksManager.AddToDo(_task);
-            _tasksManager.RemoveExpiredTasks(0);
+            _tasksManager.CancelExpiredTasks(0);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
-            _tasksManager.RemoveExpiredTasks(1);
+            _tasksManager.CancelExpiredTasks(1);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
         }
+
+        #region Blockers management
+        [TestMethod]
+        public void AddTest()
+        {
+            Assert.IsFalse(_task.Blockers.Exists(1, 1));
+            _task.Add(1, 1);
+            Assert.IsTrue(_task.Blockers.Exists(1, 1));
+        }
+
+        [TestMethod]
+        public void AddTest1()
+        {
+            Assert.IsFalse(_task.Blockers.Exists(1, 1));
+            _task.Add(1, 1, 1);
+            Assert.IsTrue(_task.Blockers.Exists(1, 1));
+        }
+        #endregion
     }
 }

@@ -13,7 +13,7 @@ Interaction model
 *****************
 
 Symu is a multi-agent system for the co-evolution of agents and socio-cultural environments with an interaction model between agents.
-Find more information about the interaction model :
+Find more information about the interaction model.
 
 .. seealso:: :doc:`../models/cognitivearchitecture/interactionpatterns`
 

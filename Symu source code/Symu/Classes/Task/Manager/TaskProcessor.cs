@@ -21,10 +21,15 @@ namespace Symu.Classes.Task.Manager
     ///     It propose events trigger by the tasksManager to customize the behaviour of the manager
     /// </summary>
     public class TaskProcessor : IDisposable
-    {
-        public TaskProcessor(TasksLimit tasksLimit)
+    {       
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="tasksLimit">Agent.Cognitive.TasksAndPerformance.TasksLimit</param>
+        /// <param name="debug">Environment.Debug</param>
+        public TaskProcessor(TasksLimit tasksLimit, bool debug)
         {
-            TasksManager = new TasksManager(tasksLimit);
+            TasksManager = new TasksManager(tasksLimit, debug);
             TasksManager.OnAfterSetTaskInProgress += AfterSetTaskInProgress;
             TasksManager.OnPrioritizeTasks += PrioritizeTasks;
         }
@@ -100,7 +105,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     Cancel a task in the TasksManager
+        ///     CancelBlocker a task in the TasksManager
         /// </summary>
         /// <param name="task"></param>
         public void Cancel(SymuTask task)

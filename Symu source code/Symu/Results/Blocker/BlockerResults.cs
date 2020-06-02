@@ -84,28 +84,29 @@ namespace Symu.Results.Blocker
 
             var result = new BlockerResult();
             // Blockers from agents
-            foreach (var agentResult in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null)
-                .Select(x => x.Blockers.Result))
-            {
-                result.InProgress += agentResult.InProgress;
-                result.Done += agentResult.Done;
-                result.ExternalHelp += agentResult.ExternalHelp;
-                result.Guess += agentResult.Guess;
-                result.InternalHelp += agentResult.InternalHelp;
-                result.Search += agentResult.Search;
-            }
+            //foreach (var blockerResult in environment.WhitePages.AllAgents().Where(agent => agent.Blockers != null)
+            //    .Select(x => x.Blockers.Result))
+            //{
+            //    result.InProgress += blockerResult.InProgress;
+            //    result.Done += blockerResult.Done;
+            //    result.ExternalHelp += blockerResult.ExternalHelp;
+            //    result.Guess += blockerResult.Guess;
+            //    result.InternalHelp += blockerResult.InternalHelp;
+            //    result.Search += blockerResult.Search;
+            //    result.Cancelled += blockerResult.Cancelled;
+            //}
 
             //Blockers from tasks
-            foreach (var tasks in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager.AllTasks))
+            foreach (var blockerResult in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.BlockerResult))
             {
-                result.InProgress += tasks.Sum(x => x.Blockers.Result.InProgress);
-                result.Done += tasks.Sum(x => x.Blockers.Result.Done);
-                result.ExternalHelp += tasks.Sum(x => x.Blockers.Result.ExternalHelp);
-                result.Guess += tasks.Sum(x => x.Blockers.Result.Guess);
-                result.InternalHelp += tasks.Sum(x => x.Blockers.Result.InternalHelp);
-                result.Search += tasks.Sum(x => x.Blockers.Result.Search);
-                result.Cancelled += tasks.Sum(x => x.Blockers.Result.Cancelled);
+                result.InProgress += blockerResult.InProgress;
+                result.Done += blockerResult.Done;
+                result.ExternalHelp += blockerResult.ExternalHelp;
+                result.Guess += blockerResult.Guess;
+                result.InternalHelp += blockerResult.InternalHelp;
+                result.Search += blockerResult.Search;
+                result.Cancelled += blockerResult.Cancelled;
             }
 
             Results.TryAdd(environment.Schedule.Step, result);

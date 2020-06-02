@@ -44,5 +44,6 @@ namespace Symu.Repository
         public const byte Actor = 12;
         public const byte Tasks = 13;
         public const byte Help = 14;
+        public const byte SplitStep = 15;
     }
 }

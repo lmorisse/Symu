@@ -34,7 +34,7 @@
             System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
             "Changing Information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Incorrect information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
+            "Incorrectness information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
             "Communication breakdowns"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem("Agent unavailability");
@@ -425,7 +425,7 @@
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(51, 17);
             this.label40.TabIndex = 202;
-            this.label40.Text = "Cancel";
+            this.label40.Text = "CancelBlocker";
             // 
             // label34
             // 
