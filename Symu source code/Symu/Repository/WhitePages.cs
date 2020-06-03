@@ -44,12 +44,9 @@ namespace Symu.Repository
         public ConcurrentAgents<Agent> Agents { get; } = new ConcurrentAgents<Agent>();
 
         /// <summary>
-        ///     Stopped keep a trace of all the agents stopped during the iteration
-        ///     It is active when Debug is On
-        ///     Key => Environment.Id
-        ///     Value => list of agent Id of the stopped Agents>
+        ///     Stopped keep a trace of all the agentIds stopped during the iteration
         /// </summary>
-        public List<AgentId> StoppedAgents { get; } = new List<AgentId>();
+        public List<Agent> StoppedAgents { get; } = new List<Agent>();
 
         public Network Network { get; }
 
@@ -81,12 +78,12 @@ namespace Symu.Repository
         ///     factor.
         ///     Don't call it directly, use WhitePages.RemoveAgent
         /// </summary>
-        /// <param name="agentId">The name of the agent to be removed</param>
-        public void RemoveAgent(AgentId agentId)
+        /// <param name="agent">The agent to be removed</param>
+        public void RemoveAgent(Agent agent)
         {
-            Network.RemoveAgent(agentId);
-            Agents.Remove(agentId);
-            StoppedAgents.Add(agentId);
+            Network.RemoveAgent(agent.Id);
+            Agents.Remove(agent.Id);
+            StoppedAgents.Add(agent);
         }
 
         #endregion
@@ -211,7 +208,7 @@ namespace Symu.Repository
             {
                 var agent = AllAgents().First(a => a.State == AgentState.Stopping);
                 agent.BeforeStop();
-                RemoveAgent(agent.Id);
+                RemoveAgent(agent);
                 agent.Dispose();
             }
         }
@@ -222,7 +219,7 @@ namespace Symu.Repository
         /// <returns>The name fragment that the agent names should contain</returns>
         public ushort FilteredStoppedAgentsByClassKeyCount(byte classKey)
         {
-            return (ushort) StoppedAgents.Count(a => a.ClassKey == classKey);
+            return (ushort) StoppedAgents.Count(a => a.Id.ClassKey == classKey);
         }
 
         #endregion

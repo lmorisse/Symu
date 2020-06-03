@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Symu.Environment;
 using Symu.Messaging.Messages;
@@ -90,8 +91,18 @@ namespace Symu.Results.Task
             }
 
             var result = new TaskResult();
-            foreach (var taskResult in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager.TaskResult))
+            // alive agents
+            SetResults(environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
+            // stopped agents
+            SetResults(environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
+            Results.TryAdd(environment.Schedule.Step, result);
+        }
+
+        private static void SetResults(IEnumerable<TaskResult> taskResults, TaskResult result)
+        {
+            foreach (var taskResult in taskResults)
             {
                 result.ToDo += taskResult.ToDo;
                 result.InProgress += taskResult.InProgress;
@@ -101,8 +112,6 @@ namespace Symu.Results.Task
                 result.WeightDone += taskResult.WeightDone;
                 result.Incorrectness += taskResult.Incorrectness;
             }
-
-            Results.TryAdd(environment.Schedule.Step, result);
         }
 
         public void Clear()

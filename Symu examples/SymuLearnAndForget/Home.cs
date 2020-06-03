@@ -129,6 +129,7 @@ namespace SymuLearnAndForget
 
         protected override void UpdateSettings()
         {
+            base.UpdateSettings();
             #region Knowledge
 
             OrganizationEntity.Models.Generator = cbBinaryKnowledge.Checked
@@ -177,7 +178,7 @@ namespace SymuLearnAndForget
             _fullKnowledge = 0;
             var scenario = new TimeBasedScenario(_environment)
             {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
+                NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture)
             };
 
             AddScenario(scenario);
@@ -205,7 +206,7 @@ namespace SymuLearnAndForget
         public override void DisplayStep()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
             // 1st Agent
             WriteTextSafe(lblKnowledge1,
                 _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
@@ -578,7 +579,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                var value = byte.Parse(tbKnowledgeLength.Text);
+                var value = byte.Parse(tbKnowledgeLength.Text, CultureInfo.InvariantCulture);
                 if (value > Bits.MaxBits)
                 {
                     throw new ArgumentOutOfRangeException("Knowledge should be < " + Bits.MaxBits);
@@ -602,7 +603,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                byte.Parse(tbSteps.Text);
+                byte.Parse(tbSteps.Text, CultureInfo.InvariantCulture);
                 tbSteps.BackColor = SystemColors.Window;
             }
             catch (FormatException)

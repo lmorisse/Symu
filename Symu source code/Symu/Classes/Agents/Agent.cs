@@ -141,6 +141,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Manage every blocker of the agent
         /// </summary>
+        [Obsolete]
         public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)

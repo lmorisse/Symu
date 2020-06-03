@@ -111,7 +111,7 @@ namespace SymuTests.Repository
         [TestMethod]
         public void RemoveASingleAgentTests()
         {
-            _environment.WhitePages.RemoveAgent(_agent.Id);
+            _environment.WhitePages.RemoveAgent(_agent);
 
             Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.Id.ClassKey));
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);

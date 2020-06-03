@@ -85,7 +85,7 @@ namespace SymuScenariosAndEvents
         protected override void UpdateSettings()
         {
             base.UpdateSettings();
-            Iterations.Max = ushort.Parse(NumberOfIterations.Text);
+            Iterations.Max = ushort.Parse(NumberOfIterations.Text, CultureInfo.InvariantCulture);
             if (TimeBased.Checked)
             {
                 var scenario = new TimeBasedScenario(_environment)
@@ -99,7 +99,7 @@ namespace SymuScenariosAndEvents
             {
                 var scenario = new TaskBasedScenario(_environment)
                 {
-                    NumberOfTasks = ushort.Parse(NumberOfTasks.Text)
+                    NumberOfTasks = ushort.Parse(NumberOfTasks.Text, CultureInfo.InvariantCulture)
                 };
                 AddScenario(scenario);
             }
@@ -108,7 +108,7 @@ namespace SymuScenariosAndEvents
             {
                 var scenario = new MessageBasedScenario(_environment)
                 {
-                    NumberOfMessages = ushort.Parse(NumberOfMessages.Text)
+                    NumberOfMessages = ushort.Parse(NumberOfMessages.Text, CultureInfo.InvariantCulture)
                 };
                 AddScenario(scenario);
             }
@@ -241,7 +241,7 @@ namespace SymuScenariosAndEvents
             ushort cyclicalStep = 0;
             try
             {
-                cyclicalStep = ushort.Parse(CyclicalStep.Text);
+                cyclicalStep = ushort.Parse(CyclicalStep.Text, CultureInfo.InvariantCulture);
                 CyclicalStep.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -262,7 +262,7 @@ namespace SymuScenariosAndEvents
             float randomRatio = 0;
             try
             {
-                randomRatio = float.Parse(RandomRatio.Text);
+                randomRatio = float.Parse(RandomRatio.Text, CultureInfo.InvariantCulture);
                 RandomRatio.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -283,7 +283,7 @@ namespace SymuScenariosAndEvents
             ushort eventStep = 0;
             try
             {
-                eventStep = ushort.Parse(EventStep.Text);
+                eventStep = ushort.Parse(EventStep.Text, CultureInfo.InvariantCulture);
                 EventStep.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -318,14 +318,14 @@ namespace SymuScenariosAndEvents
         public override void DisplayStep()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
-            WriteTextSafe(TasksDone, _environment.IterationResult.Tasks.Done.ToString());
-            WriteTextSafe(MessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(TasksDone, _environment.IterationResult.Tasks.Done.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(MessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void DisplayIteration()
         {
-            WriteTextSafe(Iteration, Iterations.Number.ToString());
+            WriteTextSafe(Iteration, Iterations.Number.ToString(CultureInfo.InvariantCulture));
 
             var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done).ToList();
             var capacityResults = SimulationResults.List.Select(x => x.Capacity).ToList();
@@ -338,8 +338,6 @@ namespace SymuScenariosAndEvents
 
             seriesTasks.Text = seriesTasks.Name;
             seriesTasks.ConfigItems.HistogramItem.NumberOfIntervals = 10;
-            //seriesTasks.ConfigItems.HistogramItem.ShowNormalDistribution = true;
-            //seriesTasks.ConfigItems.HistogramItem.ShowDataPoints = true;
 
             var seriesCapacity = new ChartSeries("capacity", ChartSeriesType.Histogram);
             foreach (var capacityResult in capacityResults)
@@ -349,8 +347,6 @@ namespace SymuScenariosAndEvents
 
             seriesCapacity.Text = seriesCapacity.Name;
             seriesCapacity.ConfigItems.HistogramItem.NumberOfIntervals = 10;
-            //seriesCapacity.ConfigItems.HistogramItem.ShowNormalDistribution = true;
-            //seriesCapacity.ConfigItems.HistogramItem.ShowDataPoints = true;
             WriteChartSafe(chartControl2, new[] {seriesTasks, seriesCapacity});
         }
 
@@ -414,7 +410,7 @@ namespace SymuScenariosAndEvents
         {
             try
             {
-                _environment.WorkersCount = byte.Parse(tbWorkers.Text);
+                _environment.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)

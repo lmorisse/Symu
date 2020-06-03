@@ -171,7 +171,7 @@ namespace Symu.Environment
 
         public List<SimulationScenario> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.ClassKey == SymuYellowPages.Scenario);
+            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.Id.ClassKey == SymuYellowPages.Scenario).Select(x => x.Id);
 
             return scenarioIds.Select(scenarioId => WhitePages.GetAgent<SimulationScenario>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
@@ -199,19 +199,6 @@ namespace Symu.Environment
             }
 
             WhitePages.Agents.Add(agent);
-        }
-
-        /// <summary>
-        ///     Stops the execution of the agent identified by name and removes it from the environment. Use the Remove method
-        ///     instead of Agent.Stop
-        ///     when the decision to stop an agent does not belong to the agent itself, but to some other agent or to an external
-        ///     factor.
-        ///     Don't call it directly, use WhitePages.RemoveAgent
-        /// </summary>
-        /// <param name="agentId">The name of the agent to be removed</param>
-        public void RemoveAgent(AgentId agentId)
-        {
-            WhitePages.RemoveAgent(agentId);
         }
 
         #endregion

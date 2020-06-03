@@ -52,13 +52,13 @@ namespace SymuGroupAndInteraction
             RadomlyGenerated.Checked = true;
             AllowNewInteractions.Checked = true;
             MaxSphereDensity.Text =
-                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity.ToString();
+                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity.ToString(CultureInfo.InvariantCulture);
             MinSphereDensity.Text =
-                OrganizationEntity.Models.InteractionSphere.MinSphereDensity.ToString();
-            WeightKnowledge.Text = OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight.ToString();
-            WeightActivities.Text = OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight.ToString();
-            WeightBeliefs.Text = OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight.ToString();
-            WeightGroups.Text = OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight.ToString();
+                OrganizationEntity.Models.InteractionSphere.MinSphereDensity.ToString(CultureInfo.InvariantCulture);
+            WeightKnowledge.Text = OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight.ToString(CultureInfo.InvariantCulture);
+            WeightActivities.Text = OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight.ToString(CultureInfo.InvariantCulture);
+            WeightBeliefs.Text = OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight.ToString(CultureInfo.InvariantCulture);
+            WeightGroups.Text = OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight.ToString(CultureInfo.InvariantCulture);
 
             #endregion
 
@@ -68,7 +68,7 @@ namespace SymuGroupAndInteraction
             OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
             OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0.1F;
             ThresholdFornewInteraction.Text = OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns
-                .ThresholdForNewInteraction.ToString();
+                .ThresholdForNewInteraction.ToString(CultureInfo.InvariantCulture);
             MaxDailyInteractions.Text = "2";
 
             Homophily.Checked = true;
@@ -92,6 +92,7 @@ namespace SymuGroupAndInteraction
 
         protected override void UpdateSettings()
         {
+            base.UpdateSettings();
             #region Knowledge
 
             if (KnowledgeSame.Checked)
@@ -148,7 +149,7 @@ namespace SymuGroupAndInteraction
 
             var scenario = new TimeBasedScenario(_environment)
             {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
+                NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture)
             };
 
             AddScenario(scenario);
@@ -175,17 +176,17 @@ namespace SymuGroupAndInteraction
         public override void DisplayStep()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
             UpDateMessages();
             UpdateAgents();
         }
 
         private void UpDateMessages()
         {
-            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
+            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
             var notAcceptedMessages = _environment.WhitePages.AllAgents()
                 .Sum(agent => agent.MessageProcessor.NotAcceptedMessages.Count);
-            WriteTextSafe(NotAcceptedMessages, notAcceptedMessages.ToString());
+            WriteTextSafe(NotAcceptedMessages, notAcceptedMessages.ToString(CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
@@ -220,7 +221,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                _environment.WorkersCount = byte.Parse(tbWorkers.Text);
+                _environment.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -238,7 +239,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                _environment.GroupsCount = byte.Parse(GroupsCount.Text);
+                _environment.GroupsCount = byte.Parse(GroupsCount.Text, CultureInfo.InvariantCulture);
                 GroupsCount.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -257,7 +258,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnActivities =
-                    float.Parse(InteractionActivities.Text);
+                    float.Parse(InteractionActivities.Text, CultureInfo.InvariantCulture);
                 InteractionActivities.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -276,7 +277,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnKnowledge =
-                    float.Parse(InteractionKnowledge.Text);
+                    float.Parse(InteractionKnowledge.Text, CultureInfo.InvariantCulture);
                 InteractionKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -295,7 +296,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction =
-                    float.Parse(ThresholdFornewInteraction.Text);
+                    float.Parse(ThresholdFornewInteraction.Text, CultureInfo.InvariantCulture);
                 ThresholdFornewInteraction.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -314,7 +315,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
-                    byte.Parse(MaxDailyInteractions.Text);
+                    byte.Parse(MaxDailyInteractions.Text, CultureInfo.InvariantCulture);
                 MaxDailyInteractions.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -333,7 +334,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnSocialDemographics =
-                    float.Parse(InteractionSocialDemographics.Text);
+                    float.Parse(InteractionSocialDemographics.Text, CultureInfo.InvariantCulture);
                 InteractionSocialDemographics.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -352,7 +353,7 @@ namespace SymuGroupAndInteraction
             try
             {
                 OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnBeliefs =
-                    float.Parse(InteractionBeliefs.Text);
+                    float.Parse(InteractionBeliefs.Text, CultureInfo.InvariantCulture);
                 InteractionBeliefs.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -370,7 +371,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MinSphereDensity = float.Parse(MinSphereDensity.Text);
+                OrganizationEntity.Models.InteractionSphere.MinSphereDensity = float.Parse(MinSphereDensity.Text, CultureInfo.InvariantCulture);
                 MinSphereDensity.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -388,7 +389,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity = float.Parse(MaxSphereDensity.Text);
+                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity = float.Parse(MaxSphereDensity.Text, CultureInfo.InvariantCulture);
                 MaxSphereDensity.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -406,7 +407,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight = float.Parse(WeightKnowledge.Text);
+                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight = float.Parse(WeightKnowledge.Text, CultureInfo.InvariantCulture);
                 WeightKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -424,7 +425,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight = float.Parse(WeightActivities.Text);
+                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight = float.Parse(WeightActivities.Text, CultureInfo.InvariantCulture);
                 WeightActivities.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -442,7 +443,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight = float.Parse(WeightGroups.Text);
+                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight = float.Parse(WeightGroups.Text, CultureInfo.InvariantCulture);
                 WeightGroups.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -460,7 +461,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight = float.Parse(WeightBeliefs.Text);
+                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight = float.Parse(WeightBeliefs.Text, CultureInfo.InvariantCulture);
                 WeightBeliefs.BackColor = SystemColors.Window;
             }
             catch (FormatException)

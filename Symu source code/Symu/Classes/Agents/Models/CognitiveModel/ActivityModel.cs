@@ -21,7 +21,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will perform task
-    ///     Entity enable or not this mechanism for all the agents during the symu
+    ///     Entity enable or not this mechanism for all the agents during the simulation
     ///     The ActivityModel initialize the real value of the agent's activity parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
@@ -29,7 +29,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
     {
         private readonly AgentId _agentId;
         private readonly NetworkActivities _networkActivities;
-        private readonly TasksAndPerformance _tasksAndPerformance;
 
         /// <summary>
         ///     Initialize influence model :
@@ -52,7 +51,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
 
             _agentId = agentId;
             _networkActivities = network.NetworkActivities;
-            _tasksAndPerformance = cognitiveArchitecture.TasksAndPerformance;
         }
 
         /// <summary>
@@ -66,11 +64,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         /// <param name="activities"></param>
         public void AddActivities(IEnumerable<Activity> activities)
         {
-            if (!_tasksAndPerformance.CanPerformTask)
-            {
-                return;
-            }
-
             _networkActivities.AddActivities(activities, _agentId);
         }
 
@@ -89,11 +82,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         /// <param name="groupId"></param>
         public void AddActivities(AgentId groupId, IEnumerable<string> activities)
         {
-            if (!_tasksAndPerformance.CanPerformTask)
-            {
-                return;
-            }
-
             _networkActivities.AddActivities(_agentId, groupId, activities);
         }
 

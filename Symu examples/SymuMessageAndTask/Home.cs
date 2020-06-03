@@ -102,6 +102,7 @@ namespace SymuMessageAndTask
 
         protected override void UpdateSettings()
         {
+            base.UpdateSettings();
             #region Task model
 
             OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask =
@@ -145,7 +146,7 @@ namespace SymuMessageAndTask
 
             var scenario = new TimeBasedScenario(_environment)
             {
-                NumberOfSteps = ushort.Parse(tbSteps.Text)
+                NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture)
             };
 
             AddScenario(scenario);
@@ -173,14 +174,14 @@ namespace SymuMessageAndTask
         public override void DisplayStep()
         {
             DisplayButtons();
-            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
+            WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
             UpDateMessages();
             UpdateAgents();
         }
 
         private void UpDateMessages()
         {
-            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
+            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
@@ -320,7 +321,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                _environment.NumberOfTasks = int.Parse(numberTasksSent.Text);
+                _environment.NumberOfTasks = int.Parse(numberTasksSent.Text, CultureInfo.InvariantCulture);
                 numberTasksSent.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -338,7 +339,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                _environment.CostOfTask = float.Parse(costOfTask.Text);
+                _environment.CostOfTask = float.Parse(costOfTask.Text, CultureInfo.InvariantCulture);
                 costOfTask.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -356,7 +357,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                _environment.SwitchingContextCost = float.Parse(SwitchingContextCost.Text);
+                _environment.SwitchingContextCost = float.Parse(SwitchingContextCost.Text, CultureInfo.InvariantCulture);
                 SwitchingContextCost.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -374,7 +375,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                _environment.WorkersCount = int.Parse(tbWorkers.Text);
+                _environment.WorkersCount = int.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)

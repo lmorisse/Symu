@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Symu.Environment;
 
@@ -96,9 +97,18 @@ namespace Symu.Results.Blocker
             //    result.Cancelled += blockerResult.Cancelled;
             //}
 
-            //Blockers from tasks
-            foreach (var blockerResult in environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager.BlockerResult))
+            // alive agents
+            SetResults(environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
+            // stopped agents
+            SetResults(environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
+            Results.TryAdd(environment.Schedule.Step, result);
+        }
+
+        private static void SetResults(IEnumerable<BlockerResult> blockerResults, BlockerResult result)
+        {
+            foreach (var blockerResult in blockerResults)
             {
                 result.InProgress += blockerResult.InProgress;
                 result.Done += blockerResult.Done;
@@ -108,8 +118,6 @@ namespace Symu.Results.Blocker
                 result.Search += blockerResult.Search;
                 result.Cancelled += blockerResult.Cancelled;
             }
-
-            Results.TryAdd(environment.Schedule.Step, result);
         }
 
         public void Clear()
