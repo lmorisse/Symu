@@ -25,6 +25,7 @@ namespace SymuTests.Classes.Task.Manager
     {
         private readonly TasksLimit _tasksLimit = new TasksLimit();
         private SymuTask _task;
+        private SymuTask _message;
         private List<SymuTask> _tasks;
         private TasksManager _tasksManager;
 
@@ -32,53 +33,193 @@ namespace SymuTests.Classes.Task.Manager
         public void Initialize()
         {
             _task = new SymuTask(0);
+            _message = new SymuTask(0) {Parent = new Message()};
             var tasksLimit = new TasksLimit();
             _tasksManager = new TasksManager(tasksLimit, true);
             _tasks = new List<SymuTask> {_task};
         }
-
+        /// <summary>
+        /// with a Task 
+        /// </summary>
         [TestMethod]
         public void AddToDoTest()
         {
             _tasksManager.AddToDo(_task);
             Assert.AreEqual(1, _tasksManager.TaskResult.TotalTasksNumber);
+            Assert.AreEqual(1, _tasksManager.TaskResult.ToDo);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
-
+        /// <summary>
+        /// with a message 
+        /// </summary>
+        [TestMethod]
+        public void AddToDoTest1()
+        {
+            _tasksManager.AddToDo(_message);
+            Assert.AreEqual(0, _tasksManager.TaskResult.TotalTasksNumber);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(1, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(0, _tasksManager.Done.Count);
+        }
+        /// <summary>
+        /// with a task
+        /// </summary>
         [TestMethod]
         public void AddInProgressTest()
         {
             _tasksManager.AddInProgress(_task);
             Assert.AreEqual(1, _tasksManager.TaskResult.TotalTasksNumber);
+            Assert.AreEqual(1, _tasksManager.TaskResult.InProgress);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
-
+        /// <summary>
+        /// with a message
+        /// </summary>
         [TestMethod]
-        public void PushInProgressTest()
+        public void AddInProgressTest1()
+        {
+            _tasksManager.AddInProgress(_message);
+            Assert.AreEqual(0, _tasksManager.TaskResult.TotalTasksNumber);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(1, _tasksManager.InProgress.Count);
+            Assert.AreEqual(0, _tasksManager.Done.Count);
+        }
+        /// <summary>
+        /// With a task
+        /// </summary>
+        [TestMethod]
+        public void SetInProgressTest()
         {
             _tasksManager.AddToDo(_task);
             _tasksManager.SetInProgress(_task);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(1, _tasksManager.TaskResult.InProgress);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
-
+        /// <summary>
+        /// With a message
+        /// </summary>
+        [TestMethod]
+        public void SetInProgressTest1()
+        {
+            _tasksManager.AddToDo(_message);
+            _tasksManager.SetInProgress(_message);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(1, _tasksManager.InProgress.Count);
+            Assert.AreEqual(0, _tasksManager.Done.Count);
+        }
+        /// <summary>
+        /// With a task, from inprogress
+        /// </summary>
         [TestMethod]
         public void SetTaskDoneTest()
         {
+            _task.Weight = 1;
             _task.WorkToDo = 1;
             _tasksManager.AddInProgress(_task);
             _tasksManager.SetDone(_task);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(1, _tasksManager.TaskResult.Done);
+            Assert.AreEqual(1, _tasksManager.TaskResult.WeightDone);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(1, _tasksManager.Done.Count);
+            Assert.AreEqual(0, _task.WorkToDo);
+        }        
+        /// <summary>
+        /// With a task, from to do
+        /// </summary>
+        [TestMethod]
+        public void SetTaskDoneTest1()
+        {
+            _task.Weight = 1;
+            _task.WorkToDo = 1;
+            _tasksManager.AddToDo(_task);
+            _tasksManager.SetDone(_task);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(1, _tasksManager.TaskResult.Done);
+            Assert.AreEqual(1, _tasksManager.TaskResult.WeightDone);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(1, _tasksManager.Done.Count);
             Assert.AreEqual(0, _task.WorkToDo);
         }
-
+        /// <summary>
+        /// With a message, from inprogress
+        /// </summary>
+        [TestMethod]
+        public void SetTaskDoneTest2()
+        {
+            _message.Weight = 1;
+            _message.WorkToDo = 1;
+            _tasksManager.AddInProgress(_message);
+            _tasksManager.SetDone(_message);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(0, _tasksManager.TaskResult.Done);
+            Assert.AreEqual(0, _tasksManager.TaskResult.WeightDone);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(1, _tasksManager.Done.Count);
+            Assert.AreEqual(0, _task.WorkToDo);
+        }
+        /// <summary>
+        /// With a task, from inprogress
+        /// </summary>
+        [TestMethod]
+        public void SetTaskCancelTest()
+        {
+            _task.Weight = 1;
+            _task.WorkToDo = 1;
+            _tasksManager.AddInProgress(_task);
+            _tasksManager.Cancel(_task);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(1, _tasksManager.TaskResult.Cancelled);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(1, _tasksManager.Cancelled.Count);
+            Assert.AreEqual(1, _task.WorkToDo);
+        }
+        /// <summary>
+        /// With a task, from to do
+        /// </summary>
+        [TestMethod]
+        public void SetTaskCancelTest1()
+        {
+            _task.Weight = 1;
+            _task.WorkToDo = 1;
+            _tasksManager.AddToDo(_task);
+            _tasksManager.Cancel(_task);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(1, _tasksManager.TaskResult.Cancelled);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(1, _tasksManager.Cancelled.Count);
+            Assert.AreEqual(1, _task.WorkToDo);
+        }
+        /// <summary>
+        /// With a message, from inprogress
+        /// </summary>
+        [TestMethod]
+        public void SetTaskCancelTest2()
+        {
+            _tasksManager.AddInProgress(_message);
+            _tasksManager.Cancel(_message);
+            Assert.AreEqual(0, _tasksManager.TaskResult.InProgress);
+            Assert.AreEqual(0, _tasksManager.TaskResult.Cancelled);
+            Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(0, _tasksManager.InProgress.Count);
+            Assert.AreEqual(1, _tasksManager.Cancelled.Count);
+        }
         /// <summary>
         ///     TasksCHeck AverageToDo
         /// </summary>
@@ -336,26 +477,33 @@ namespace SymuTests.Classes.Task.Manager
         ///     TimeToLive = -1
         /// </summary>
         [TestMethod]
-        public void RemoveExpiredTasksTest()
+        public void CancelExpiredTasksTest()
         {
             _task.TimeToLive = -1;
             _tasksManager.AddToDo(_task);
             _tasksManager.CancelExpiredTasks(1);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
+            Assert.AreEqual(1, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(0, _tasksManager.TaskResult.Cancelled);
         }
 
         /// <summary>
         ///     TimeToLive != -1
         /// </summary>
         [TestMethod]
-        public void RemoveExpiredTasksTest1()
+        public void CancelExpiredTasksTest1()
         {
             _task.TimeToLive = 1;
             _tasksManager.AddToDo(_task);
             _tasksManager.CancelExpiredTasks(0);
             Assert.AreEqual(1, _tasksManager.ToDo.Count);
+            Assert.AreEqual(1, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(0, _tasksManager.TaskResult.Cancelled);
             _tasksManager.CancelExpiredTasks(1);
             Assert.AreEqual(0, _tasksManager.ToDo.Count);
+            Assert.AreEqual(1, _tasksManager.Cancelled.Count);
+            Assert.AreEqual(0, _tasksManager.TaskResult.ToDo);
+            Assert.AreEqual(1, _tasksManager.TaskResult.Cancelled);
         }
 
         #region Blockers management

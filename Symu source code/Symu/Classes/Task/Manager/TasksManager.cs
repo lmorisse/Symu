@@ -168,7 +168,8 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
-            if (ToDo.Contains(task))
+            var todo = ToDo.Contains(task);
+            if (todo)
             {
                 ToDo.Remove(task);
             }
@@ -187,7 +188,7 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
-            if (ToDo.Contains(task))
+            if (todo)
             {
                 TaskResult.ToDo--;
             }
@@ -213,7 +214,8 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
-            if (ToDo.Contains(task))
+            var todo = ToDo.Contains(task);
+            if (todo)
             {
                 ToDo.Remove(task);
             }
@@ -232,7 +234,7 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
-            if (ToDo.Contains(task))
+            if (todo)
             {
                 TaskResult.ToDo--;
             }
@@ -310,8 +312,10 @@ namespace Symu.Classes.Task.Manager
         /// </summary>
         public void SetAllTasksDone()
         {
-            ToDo.ForEach(SetDone);
-            ToDo.Clear();
+            while (ToDo.Any())
+            {
+                SetDone(ToDo.First());
+            }
             while (InProgress.Any())
             {
                 var task = InProgress.First();

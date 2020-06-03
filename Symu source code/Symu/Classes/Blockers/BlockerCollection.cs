@@ -35,19 +35,6 @@ namespace Symu.Classes.Blockers
             List.Add(blocker);
             return blocker;
         }
-        [Obsolete]
-        public Blocker Add(int type, ushort step, object parameter)
-        {
-            var blocker = new Blocker(type, step, parameter);
-            return Add(blocker);
-        }
-
-        [Obsolete]
-        public Blocker Add(int type, ushort step)
-        {
-            var blocker = new Blocker(type, step);
-            return Add(blocker);
-        }
 
         /// <summary>
         ///     Remove an existing blocker from a task

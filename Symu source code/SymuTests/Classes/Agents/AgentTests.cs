@@ -1420,7 +1420,7 @@ namespace SymuTests.Classes.Agents
         public void ReplyHelpTest1()
         {
             var task = new SymuTask(0);
-            var blocker = task.Blockers.Add(Murphy.IncompleteBelief, 0);
+            var blocker = task.Add(Murphy.IncompleteBelief, 0);
             var message = new Message
             {
                 Medium = CommunicationMediums.Email,
@@ -1678,11 +1678,11 @@ namespace SymuTests.Classes.Agents
                 Weight = 1,
                 Creator = _agent.Id
             };
-            var blocker = _agent.Blockers.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
+            var blocker = task.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.Id.ClassKey, _agent.Id.ClassKey));
-            Assert.IsTrue(_agent.Blockers.IsBlocked);
+            Assert.IsTrue(task.IsBlocked);
         }
 
         /// <summary>
@@ -1694,12 +1694,12 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Murphies.IncompleteInformation.On = true;
             _organizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries = 1;
             var task = new SymuTask(0) {Weight = 1};
-            var blocker = _agent.Blockers.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
+            var blocker = task.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
             blocker.NumberOfTries = 2;
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
             Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.Id.ClassKey, _agent.Id.ClassKey));
-            Assert.IsFalse(task.Blockers.IsBlocked);
+            Assert.IsFalse(task.IsBlocked);
         }
 
         /// <summary>
