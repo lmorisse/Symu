@@ -45,7 +45,7 @@ namespace SymuTests.Environment
             Assert.AreEqual(MessageState.Created, message.State);
             _environment.SendAgent(message);
             Assert.AreEqual(MessageState.Lost, message.State);
-            Assert.AreEqual(1, _environment.Messages.LostMessagesCount);
+            Assert.AreEqual(1, _environment.Messages.Result.LostMessagesCount);
         }
     }
 }

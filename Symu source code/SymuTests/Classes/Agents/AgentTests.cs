@@ -232,11 +232,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
             message.Medium = CommunicationMediums.Email;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(2, _environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -252,11 +252,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
             message.Medium = CommunicationMediums.Email;
             _agent.Post(message);
             Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -272,11 +272,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
             //TODO test Missed messages
         }
 
@@ -293,11 +293,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(2, _environment.Messages.Result.SentMessagesCount);
             //TODO test Missed messages
         }
 
@@ -308,12 +308,12 @@ namespace SymuTests.Classes.Agents
             // Post as a delayed message
             _agent.PostAsADelayedMessage(message, 0);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
             // Post Delayed messages
             _agent.PostDelayedMessages();
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
         }
 
@@ -329,7 +329,7 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
-            Assert.AreEqual<uint>(1, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(1, _environment.Messages.LastSentMessages.Count);
             Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerPeriod);
         }
@@ -347,7 +347,7 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0, _environment.Messages.LastSentMessages.Count);
             Assert.AreEqual(1, _agent.MessageProcessor.MissedMessages.Count);
             Assert.AreEqual(0, _agent.MessageProcessor.NumberReceivedPerPeriod);
@@ -451,7 +451,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message();
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -464,12 +464,12 @@ namespace SymuTests.Classes.Agents
             var message = new Message();
             _agent.Post(message);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
 
             _agent.State = AgentState.Starting;
             _agent.Post(message);
             Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -482,12 +482,12 @@ namespace SymuTests.Classes.Agents
             var message = new Message();
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual((uint) 1, _environment.Messages.Result.SentMessagesCount);
 
             _agent.State = AgentState.Stopping;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 2, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual((uint) 2, _environment.Messages.Result.SentMessagesCount);
         }
 
         #endregion

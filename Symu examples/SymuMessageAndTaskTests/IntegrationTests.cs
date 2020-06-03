@@ -202,7 +202,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
             _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
             _symu.Process();
-            Assert.AreEqual(0, (int) _environment.Messages.SentMessagesCount);
+            Assert.AreEqual(0, (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
         }
 
@@ -217,7 +217,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             _symu.Process();
-            Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, (int) _environment.Messages.SentMessagesCount);
+            Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
         }
 
@@ -236,7 +236,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _symu.Process();
             Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
-                (int) _environment.Messages.SentMessagesCount);
+                (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
         }
 
@@ -257,7 +257,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Email.CostToSendLevel = GenericLevel.None;
             _symu.Process();
             Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
-                (int) _environment.Messages.SentMessagesCount);
+                (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
         }
 

@@ -182,7 +182,7 @@ namespace SymuGroupAndInteraction
 
         private void UpDateMessages()
         {
-            WriteTextSafe(lblMessagesSent, _environment.Messages.SentMessagesCount.ToString());
+            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
             var notAcceptedMessages = _environment.WhitePages.AllAgents()
                 .Sum(agent => agent.MessageProcessor.NotAcceptedMessages.Count);
             WriteTextSafe(NotAcceptedMessages, notAcceptedMessages.ToString());

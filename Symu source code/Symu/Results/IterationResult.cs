@@ -67,6 +67,10 @@ namespace Symu.Results
         ///     Get the Tasks model metrics
         /// </summary>
         public TaskResults Tasks { get; } = new TaskResults();
+        /// <summary>
+        ///     Get the message model metrics
+        /// </summary>
+        public MessageResults Messages { get; } = new MessageResults();
 
         public float Capacity { get; set; }
 
@@ -79,6 +83,7 @@ namespace Symu.Results
             OrganizationKnowledgeAndBelief.Clear();
             Blockers.Clear();
             Tasks.Clear();
+            Messages.Clear();
             SpecificResults.Clear();
             Iteration = 0;
             Step = 0;
@@ -98,6 +103,7 @@ namespace Symu.Results
         {
             Tasks.SetResults(_environment);
             Blockers.SetResults(_environment);
+            Messages.SetResults(_environment);
         }
 
         public IterationResult Clone()
@@ -108,6 +114,7 @@ namespace Symu.Results
             OrganizationKnowledgeAndBelief.CopyTo(clone.OrganizationKnowledgeAndBelief);
             Blockers.CopyTo(clone.Blockers);
             Tasks.CopyTo(clone.Tasks);
+            Messages.CopyTo(clone.Messages);
             clone.Iteration = Iteration;
             clone.Step = Step;
             clone.Success = Success;

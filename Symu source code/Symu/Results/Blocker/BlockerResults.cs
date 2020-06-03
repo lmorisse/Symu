@@ -19,7 +19,7 @@ using Symu.Environment;
 namespace Symu.Results.Blocker
 {
     /// <summary>
-    ///     Manage the task blockers metrics for the symu
+    ///     Manage the task blockers results for the simulation
     /// </summary>
     public class BlockerResults
     {

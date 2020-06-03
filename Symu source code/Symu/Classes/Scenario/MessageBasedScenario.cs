@@ -34,7 +34,7 @@ namespace Symu.Classes.Scenario
         public override void PreStep()
         {
             base.PreStep();
-            if (NumberOfMessages != NoLimit && Environment.Messages.SentMessagesCount >= NumberOfMessages - 1)
+            if (NumberOfMessages != NoLimit && Environment.Messages.Result.SentMessagesCount >= NumberOfMessages - 1)
             {
                 State = AgentState.Stopping;
             }

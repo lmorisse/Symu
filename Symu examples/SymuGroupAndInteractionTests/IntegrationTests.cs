@@ -99,7 +99,7 @@ namespace SymuGroupAndInteractionTests
             _environment.WorkersCount = (byte) agentCount;
             _symu.Process();
             Assert.AreEqual(0F, GetNotAcceptedMessages());
-            Assert.AreEqual(0F, _environment.Messages.SentMessagesCount);
+            Assert.AreEqual(0F, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);

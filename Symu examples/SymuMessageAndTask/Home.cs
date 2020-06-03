@@ -180,7 +180,7 @@ namespace SymuMessageAndTask
 
         private void UpDateMessages()
         {
-            WriteTextSafe(lblMessagesSent, _environment.Messages.SentMessagesCount.ToString());
+            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
         }
 
         private void UpdateAgents()

@@ -320,7 +320,7 @@ namespace SymuScenariosAndEvents
             DisplayButtons();
             WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString());
             WriteTextSafe(TasksDone, _environment.IterationResult.Tasks.Done.ToString());
-            WriteTextSafe(MessagesSent, _environment.Messages.SentMessagesCount.ToString());
+            WriteTextSafe(MessagesSent, _environment.Messages.Result.SentMessagesCount.ToString());
         }
 
         public override void DisplayIteration()

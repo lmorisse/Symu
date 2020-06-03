@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Messaging.Delayed;
 using Symu.Messaging.Messages;
+using Symu.Results.Blocker;
 
 #endregion
 
@@ -37,45 +38,7 @@ namespace Symu.Messaging.Tracker
         /// </summary>
         public DelayedMessages DelayedMessages { get; } = new DelayedMessages();
 
-        /// <summary>
-        ///     Give the count of the messages sent including lost messages
-        /// </summary>
-        public uint SentMessagesCount { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by email
-        /// </summary>
-        public uint SentMessagesByEmail { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by platform
-        /// </summary>
-        public uint SentMessagesByPlatform { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by IRC
-        /// </summary>
-        public uint SentMessagesByIrc { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by Meeting
-        /// </summary>
-        public uint SentMessagesByMeeting { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by face2Face
-        /// </summary>
-        public uint SentMessagesByFaceToFace { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages sent by phone
-        /// </summary>
-        public uint SentMessagesByPhone { get; private set; }
-
-        /// <summary>
-        ///     Give the count of the messages with the state Lost
-        /// </summary>
-        public ushort LostMessagesCount { get; set; }
+        public MessageResult Result { get; } = new MessageResult();
 
         public bool Debug { get; set; } = true;
 
@@ -106,7 +69,7 @@ namespace Symu.Messaging.Tracker
         ///     Check that there is no lost messages and no waiting messages
         /// </summary>
         /// <returns></returns>
-        public bool CheckMessages => LostMessagesCount == 0 && _waitingMessagesCount == 0;
+        public bool CheckMessages => Result.LostMessagesCount == 0 && _waitingMessagesCount == 0;
 
         #region Lost MessagesManager
 
@@ -122,7 +85,7 @@ namespace Symu.Messaging.Tracker
             }
 
             message.State = MessageState.Lost;
-            LostMessagesCount++;
+            Result.LostMessagesCount++;
             if (Debug)
             {
                 LostMessages.Add(message);
@@ -165,14 +128,7 @@ namespace Symu.Messaging.Tracker
             LastSentMessages.Clear();
             DelayedMessages.Clear();
             _waitingMessagesCount = 0;
-            SentMessagesCount = 0;
-            SentMessagesByEmail = 0;
-            SentMessagesByPlatform = 0;
-            SentMessagesByIrc = 0;
-            SentMessagesByMeeting = 0;
-            SentMessagesByFaceToFace = 0;
-            SentMessagesByPhone = 0;
-            LostMessagesCount = 0;
+            Result.Clear();
             LostMessages.Clear();
             WaitingMessages.Clear();
         }
@@ -204,26 +160,26 @@ namespace Symu.Messaging.Tracker
             }
 
             _waitingMessagesCount++;
-            SentMessagesCount++;
+            Result.SentMessagesCount++;
             switch (message.Medium)
             {
                 case CommunicationMediums.Irc:
-                    SentMessagesByIrc++;
+                    Result.SentMessagesByIrc++;
                     break;
                 case CommunicationMediums.Email:
-                    SentMessagesByEmail++;
+                    Result.SentMessagesByEmail++;
                     break;
                 case CommunicationMediums.Phone:
-                    SentMessagesByPhone++;
+                    Result.SentMessagesByPhone++;
                     break;
                 case CommunicationMediums.Meeting:
-                    SentMessagesByMeeting++;
+                    Result.SentMessagesByMeeting++;
                     break;
                 case CommunicationMediums.FaceToFace:
-                    SentMessagesByFaceToFace++;
+                    Result.SentMessagesByFaceToFace++;
                     break;
                 case CommunicationMediums.ViaAPlatform:
-                    SentMessagesByPlatform++;
+                    Result.SentMessagesByPlatform++;
                     break;
                 case CommunicationMediums.System:
                     break;
