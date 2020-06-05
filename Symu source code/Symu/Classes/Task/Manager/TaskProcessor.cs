@@ -81,7 +81,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     Set a task done in TasksManager
+        ///     CopyTo a task done in TasksManager
         /// </summary>
         public void SetTaskDone(SymuTask task)
         {
@@ -90,7 +90,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     Set a task in Progress in TasksManager
+        ///     CopyTo a task in Progress in TasksManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

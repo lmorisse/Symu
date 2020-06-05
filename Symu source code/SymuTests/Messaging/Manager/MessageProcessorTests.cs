@@ -83,17 +83,17 @@ namespace SymuTests.Messaging.Manager
         [TestMethod]
         public void IncrementMessagesPerPeriodTest()
         {
-            Assert.AreEqual(0, _mailbox.NumberMessagesPerPeriod);
+            Assert.AreEqual(0, _mailbox.NumberMessagesPerStep);
             // System message
             _mailbox.IncrementMessagesPerPeriod(CommunicationMediums.System, true);
-            Assert.AreEqual(0, _mailbox.NumberMessagesPerPeriod);
+            Assert.AreEqual(0, _mailbox.NumberMessagesPerStep);
             // Not system message
             _mailbox.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
-            Assert.AreEqual(1, _mailbox.NumberMessagesPerPeriod);
+            Assert.AreEqual(1, _mailbox.NumberMessagesPerStep);
             // Exceed byte.MaxValue
-            _mailbox.NumberMessagesPerPeriod = byte.MaxValue;
+            _mailbox.NumberMessagesPerStep = ushort.MaxValue;
             _mailbox.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
-            Assert.AreEqual(byte.MaxValue, _mailbox.NumberMessagesPerPeriod);
+            Assert.AreEqual(ushort.MaxValue, _mailbox.NumberMessagesPerStep);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace SymuTests.Messaging.Manager
             };
             _mailbox.Post(message);
 
-            Assert.AreEqual(1, _mailbox.NumberMessagesPerPeriod);
+            Assert.AreEqual(1, _mailbox.NumberMessagesPerStep);
         }
     }
 }

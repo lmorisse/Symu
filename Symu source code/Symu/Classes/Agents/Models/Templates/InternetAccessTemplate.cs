@@ -17,7 +17,7 @@ using Symu.Messaging.Messages;
 namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the InternetAccessTemplate
+    ///     CopyTo all the CognitiveArchitecture parameters for the InternetAccessTemplate
     /// </summary>
     public class InternetAccessTemplate : CognitiveArchitectureTemplate
     {

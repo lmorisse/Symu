@@ -31,9 +31,9 @@ namespace SymuBeliefsAndInfluence.Classes
         public byte KnowledgeCount { get; set; } = 2;
         public List<Knowledge> Knowledges { get; private set; }
         public List<InfluencerAgent> Influencers { get; } = new List<InfluencerAgent>();
-        public SimpleHumanTemplate InfluencerTemplate { get; } = new SimpleHumanTemplate();
+        public PromoterTemplate InfluencerTemplate { get; } = new PromoterTemplate();
         public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
-        public MurphyTask Model { get; } = new MurphyTask();
+        //public MurphyTask Model { get; } = new MurphyTask();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -92,14 +92,11 @@ namespace SymuBeliefsAndInfluence.Classes
 
             #region Influencer
 
-            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             InfluencerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             InfluencerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
             InfluencerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 CommunicationMediums.Email;
-            InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
-            InfluencerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin = 0;
-            InfluencerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax = 0;
 
             for (var j = 0; j < InfluencersCount; j++)
             {
@@ -114,7 +111,7 @@ namespace SymuBeliefsAndInfluence.Classes
 
             #region worker
 
-            WorkerTemplate.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            WorkerTemplate.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             WorkerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             WorkerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
             WorkerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =

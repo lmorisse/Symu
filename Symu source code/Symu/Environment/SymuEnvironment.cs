@@ -57,7 +57,7 @@ namespace Symu.Environment
         public int Delay { get; set; }
 
         /// <summary>
-        ///     Set the debug mode for additional information
+        ///     CopyTo the debug mode for additional information
         /// </summary>
         public bool Debug { get; set; } = true;
 
@@ -324,7 +324,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Set Sphere for the InteractionSphere
+        ///     CopyTo Sphere for the InteractionSphere
         /// </summary>
         public void SetInteractionSphere(bool initialization)
         {
@@ -334,7 +334,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Set monthly iterationResult
+        ///     CopyTo monthly iterationResult
         /// </summary>
         public virtual void SetMonthlyIterationResult()
         {
@@ -380,7 +380,7 @@ namespace Symu.Environment
 
         #endregion
 
-        #region Set model
+        #region CopyTo model
 
         /// <summary>
         ///     Transform organization into agents
@@ -392,7 +392,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Set repository of Knowledge network
+        ///     CopyTo repository of Knowledge network
         /// </summary>
         public virtual void SetKnowledges()
         {
@@ -403,7 +403,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Set repository of Databases network
+        ///     CopyTo repository of Databases network
         /// </summary>
         public virtual void SetDatabases()
         {

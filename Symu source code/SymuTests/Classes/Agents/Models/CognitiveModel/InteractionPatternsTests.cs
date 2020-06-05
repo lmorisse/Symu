@@ -32,17 +32,59 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         public void NonPassingNextIsolationTest()
         {
             _interaction.AgentCanBeIsolated = Frequency.Never;
-            Assert.IsFalse(_interaction.IsIsolated());
+            Assert.IsFalse(_interaction.IsIsolated(0));
         }
-
+        /// <summary>
+        /// Random isolation - always 
+        /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest()
         {
-            _interaction.IsolationIsRandom = true;
+            _interaction.IsolationCyclicity = Cyclicity.Random;
             _interaction.AgentCanBeIsolated = Frequency.Always;
-            Assert.IsTrue(_interaction.IsIsolated());
+            Assert.IsTrue(_interaction.IsIsolated(0));
+        }
+        /// <summary>
+        /// Random isolation - never
+        /// </summary>
+        [TestMethod]
+        public void PassingNextIsolationTest1()
+        {
+            _interaction.IsolationCyclicity = Cyclicity.Random;
             _interaction.AgentCanBeIsolated = Frequency.Never;
-            Assert.IsFalse(_interaction.IsIsolated());
+            Assert.IsFalse(_interaction.IsIsolated(0));
+        }
+        /// <summary>
+        /// Random cyclical - always 
+        /// </summary>
+        [TestMethod]
+        public void PassingNextIsolationTest2()
+        {
+            _interaction.IsolationCyclicity = Cyclicity.Cyclical;
+            _interaction.AgentCanBeIsolated = Frequency.Always;
+            Assert.IsTrue(_interaction.IsIsolated(0));
+        }
+        /// <summary>
+        /// Random isolation - never
+        /// </summary>
+        [TestMethod]
+        public void PassingNextIsolationTest3()
+        {
+            _interaction.IsolationCyclicity = Cyclicity.Cyclical;
+            _interaction.AgentCanBeIsolated = Frequency.Never;
+            Assert.IsFalse(_interaction.IsIsolated(0));
+        }
+        /// <summary>
+        /// Random isolation - never
+        /// </summary>
+        [TestMethod]
+        public void PassingNextIsolationTest4()
+        {
+            _interaction.IsolationCyclicity = Cyclicity.Cyclical;
+            _interaction.AgentCanBeIsolated = Frequency.VeryRarely;
+            Assert.IsTrue(_interaction.IsIsolated(0));
+            Assert.IsFalse(_interaction.IsIsolated(1)); 
+            Assert.IsFalse(_interaction.IsIsolated(2));
         }
 
         [TestMethod]

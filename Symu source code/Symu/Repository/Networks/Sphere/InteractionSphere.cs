@@ -88,7 +88,7 @@ namespace Symu.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     Set sphere randomly based on InteractionPatterns
+        ///     CopyTo sphere randomly based on InteractionPatterns
         /// </summary>
         /// <param name="agentIds"></param>
         public void SetSphereRandomly(IReadOnlyList<AgentId> agentIds)

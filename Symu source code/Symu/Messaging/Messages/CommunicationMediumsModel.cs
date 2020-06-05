@@ -70,7 +70,7 @@ namespace Symu.Messaging.Messages
         ///     an agent ask for help, but he can choose different mediums like email, phone, ...
         /// </summary>
         /// <returns></returns>
-        public static CommunicationMediums AskOnWhichChannel(CommunicationMediums mediums)
+        public static CommunicationMediums NextMedium(CommunicationMediums mediums)
         {
             var count = Count(mediums);
             if (count == 0)

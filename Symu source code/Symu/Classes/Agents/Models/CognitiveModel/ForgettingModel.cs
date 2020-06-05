@@ -166,7 +166,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Set the knowledges of the day that the worker can forget if he don't work on it
+        ///     CopyTo the knowledges of the day that the worker can forget if he don't work on it
         ///     Called at the beginning of the day
         /// </summary>
         public void InitializeForgettingProcess()
@@ -236,7 +236,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Set the KnowledgeBits of the day that the worker can forget if he don't work on it
+        ///     CopyTo the KnowledgeBits of the day that the worker can forget if he don't work on it
         ///     Called at the beginning of the step
         /// </summary>
         public AgentKnowledge InitializeForgettingKnowledge(AgentKnowledge knowledge)

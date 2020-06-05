@@ -39,9 +39,10 @@ namespace Symu.Messaging.Manager
         }
 
         /// <summary>
+        ///     Actual number of messages of the step
         ///     As it is a send and receive parameter, it can be in MailBox
         /// </summary>
-        public byte NumberMessagesPerPeriod { get; set; }
+        public ushort NumberMessagesPerStep { get; set; }
 
         #region Waiting replies
 
@@ -95,11 +96,15 @@ namespace Symu.Messaging.Manager
             }, _cancellationToken);
         }
 
-        #region Post message
+        #region Post / receive message
 
         /// <summary>
         /// </summary>
         public byte NumberSentPerPeriod { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public byte NumberReceivedPerPeriod { get; set; }
 
         /// <summary>
         ///     EventHandler use to update the form after each step
@@ -126,17 +131,12 @@ namespace Symu.Messaging.Manager
         /// <param name="sentMessage">if set message is a posted message, otherwise it's a received message</param>
         public void IncrementMessagesPerPeriod(CommunicationMediums messageType, bool sentMessage)
         {
-            if (messageType == CommunicationMediums.System)
+            if (messageType == CommunicationMediums.System || NumberMessagesPerStep >= ushort.MaxValue)
             {
                 return;
             }
 
-            if (NumberMessagesPerPeriod >= byte.MaxValue)
-            {
-                return;
-            }
-
-            NumberMessagesPerPeriod++;
+            NumberMessagesPerStep++;
             if (sentMessage)
             {
                 NumberSentPerPeriod++;
@@ -152,18 +152,10 @@ namespace Symu.Messaging.Manager
         /// </summary>
         public void ClearMessagesPerPeriod()
         {
-            NumberMessagesPerPeriod = 0;
+            NumberMessagesPerStep = 0;
             NumberSentPerPeriod = 0;
             NumberReceivedPerPeriod = 0;
         }
-
-        #endregion
-
-        #region Receive message
-
-        /// <summary>
-        /// </summary>
-        public byte NumberReceivedPerPeriod { get; set; }
 
         public Task<Message> Receive()
         {
@@ -201,7 +193,7 @@ namespace Symu.Messaging.Manager
         /// <summary>
         ///     An sender agent has send a message of type phone, or meeting, ... but the receiver was offline, so he missed the
         ///     message
-        ///     Missed messages trace those missed message in debug
+        ///     Missed messages trace those missed messages in debug mode
         /// </summary>
         public List<Message> MissedMessages { get; } = new List<Message>();
 

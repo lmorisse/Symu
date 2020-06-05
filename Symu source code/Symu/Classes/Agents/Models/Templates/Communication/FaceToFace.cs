@@ -17,7 +17,7 @@ using Symu.Messaging.Messages;
 namespace Symu.Classes.Agents.Models.Templates.Communication
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the Email
+    ///     CopyTo all the CognitiveArchitecture parameters for the Email
     /// </summary>
     public class FaceToFaceTemplate : CommunicationTemplate
     {
@@ -25,12 +25,11 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
         {
             CostToSendLevel = GenericLevel.Low;
             CostToReceiveLevel = GenericLevel.Low;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
-            Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.FaceToFace;
-            Cognitive.InternalCharacteristics.TimeToLive = 0;
+            MinimumNumberOfBitsOfKnowledgeToSend = 1;
+            MaximumNumberOfBitsOfKnowledgeToSend = 2;
+            MinimumNumberOfBitsOfBeliefToSend = 1;
+            MaximumNumberOfBitsOfBeliefToSend = 2;
+            TimeToLive = 0;
         }
     }
 }

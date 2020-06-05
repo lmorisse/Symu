@@ -255,8 +255,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.MaximumNumberOfBitsOfBeliefToSend = 0;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
@@ -272,9 +272,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
-            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
+            _emailTemplate.MinimumBeliefToSendPerBit = 1;
+            _emailTemplate.MaximumNumberOfBitsOfBeliefToSend = 1;
+            _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 1;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
             _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 0.5F);
@@ -293,9 +293,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 2;
-            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 1;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 2;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 2;
+            _emailTemplate.MinimumBeliefToSendPerBit = 1;
+            _emailTemplate.MaximumNumberOfBitsOfBeliefToSend = 2;
+            _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 2;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
             _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
@@ -314,9 +314,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0.4F;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 4;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 4;
-            _emailTemplate.Cognitive.MessageContent.MinimumBeliefToSendPerBit = 0.4F;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 4;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 4;
+            _emailTemplate.MinimumBeliefToSendPerBit = 0.4F;
+            _emailTemplate.MaximumNumberOfBitsOfBeliefToSend = 4;
+            _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 4;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
             _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
@@ -347,8 +347,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             sum = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum();
             Assert.AreEqual(1, sum);
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 0;
+            _emailTemplate.MaximumNumberOfBitsOfBeliefToSend = 0;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 

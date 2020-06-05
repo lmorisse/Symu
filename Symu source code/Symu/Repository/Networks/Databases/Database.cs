@@ -40,6 +40,11 @@ namespace Symu.Repository.Networks.Databases
         public Database(DataBaseEntity entity, OrganizationModels organizationModels,
             NetworkKnowledges networkKnowledges)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             if (organizationModels is null)
             {
                 throw new ArgumentNullException(nameof(organizationModels));

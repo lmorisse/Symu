@@ -15,6 +15,7 @@ using Symu.Classes.Agents;
 using Symu.Messaging.Delayed;
 using Symu.Messaging.Messages;
 using Symu.Results.Blocker;
+using Symu.Results.Messaging;
 
 #endregion
 
@@ -160,6 +161,16 @@ namespace Symu.Messaging.Tracker
             }
 
             _waitingMessagesCount++;
+            message.State = MessageState.Sent;
+        }
+
+        public void TrackMessageSent(Message message, float cost)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             Result.SentMessagesCount++;
             switch (message.Medium)
             {
@@ -186,8 +197,7 @@ namespace Symu.Messaging.Tracker
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            message.State = MessageState.Sent;
+            Result.SentMessagesCost += cost;
         }
 
         public void DeQueueWaitingMessage(Message message)
@@ -206,6 +216,7 @@ namespace Symu.Messaging.Tracker
             }
 
             _waitingMessagesCount--;
+            Result.ReceivedMessagesCount++;
             message.State = MessageState.Received;
         }
 

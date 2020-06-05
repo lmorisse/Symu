@@ -49,7 +49,7 @@ namespace Symu.Classes.Organization
         ///     Use to set attributes of those templates
         ///     and to set agent with templates
         /// </summary>
-        public AgentTemplates Templates { get; } = new AgentTemplates();
+        public AgentTemplates Templates { get; set; } = new AgentTemplates();
 
         /// <summary>
         ///     List of all databases accessible to everyone

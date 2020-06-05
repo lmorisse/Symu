@@ -90,7 +90,7 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     Set bit with a deltaValue at a specified index
+        ///     CopyTo bit with a deltaValue at a specified index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
@@ -125,8 +125,8 @@ namespace Symu.Repository.Networks.Knowledges
 
         /// <summary>
         ///     Update lastTouched
-        ///     Set to step if LastTouched > 0
-        ///     Set to 0 if LastTouched == 0
+        ///     CopyTo to step if LastTouched > 0
+        ///     CopyTo to 0 if LastTouched == 0
         /// </summary>
         /// <param name="index"></param>
         /// <param name="step"></param>

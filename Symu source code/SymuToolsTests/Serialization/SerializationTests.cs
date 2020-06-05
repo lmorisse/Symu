@@ -35,7 +35,7 @@ namespace SymuToolsTests.Serialization
     public class SerializationTests
     {
         private readonly string filename =
-            @"C:\Users\laure\Dropbox\Symu\SymuBiz\Repository\Symu Source code\Ressources\Serialization\test.txt";
+            @"C:\Users\laure\Dropbox\Symu\SymuOrg\Github\Symu source code\Resources\Serialization\test.txt";
 
 
         [TestMethod]

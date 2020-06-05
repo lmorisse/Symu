@@ -125,7 +125,7 @@ namespace Symu.Classes.Organization
         }
 
         /// <summary>
-        ///     Set binary interaction pattern based on InteractionStrategy
+        ///     CopyTo binary interaction pattern based on InteractionStrategy
         /// </summary>
         /// <param name="strategy"></param>
         public void SetInteractionPatterns(InteractionStrategy strategy)

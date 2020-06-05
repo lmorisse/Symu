@@ -28,6 +28,7 @@ namespace Symu.Classes.Agents.Models
     {
         public StandardAgentTemplate Standard { get; } = new StandardAgentTemplate();
         public SimpleHumanTemplate Human { get; } = new SimpleHumanTemplate();
+        public PromoterTemplate Promoter { get; } = new PromoterTemplate();
         public EmailTemplate Email { get; } = new EmailTemplate();
         public FaceToFaceTemplate FaceToFace { get; } = new FaceToFaceTemplate();
         public IrcTemplate Irc { get; } = new IrcTemplate();

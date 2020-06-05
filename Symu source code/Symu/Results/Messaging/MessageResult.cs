@@ -7,14 +7,18 @@
 
 #endregion
 
-namespace Symu.Results.Blocker
+namespace Symu.Results.Messaging
 {
     public class MessageResult
     {
         /// <summary>
-        ///     Give the count of the messages sent including lost messages
+        ///     Give the count of the messages sent including lost/missed messages
         /// </summary>
         public uint SentMessagesCount { get; set; }
+        /// <summary>
+        ///     Give the count of the messages received
+        /// </summary>
+        public uint ReceivedMessagesCount { get; set; }
 
         /// <summary>
         ///     Give the count of the messages sent by email
@@ -52,11 +56,25 @@ namespace Symu.Results.Blocker
         public ushort LostMessagesCount { get; set; }
 
         /// <summary>
+        ///     Give the total weight of the sent messages 
+        /// </summary>
+        public float SentMessagesCost { get; set; }
+        /// <summary>
+        ///     Give the total weight of the receive messages 
+        /// </summary>
+        public float ReceivedMessagesCost { get; set; }
+        /// <summary>
+        ///     Give the count of the messages with the state Missed
+        /// </summary>
+        public uint MissedMessagesCount { get; set; }
+
+
+        /// <summary>
         ///     Initialize properties
         /// </summary>
         public void Clear()
         {
-
+            ReceivedMessagesCount = 0;
             SentMessagesCount = 0;
             SentMessagesByEmail = 0;
             SentMessagesByPlatform = 0;
@@ -65,6 +83,9 @@ namespace Symu.Results.Blocker
             SentMessagesByFaceToFace = 0;
             SentMessagesByPhone = 0;
             LostMessagesCount = 0;
+            SentMessagesCost = 0;
+            ReceivedMessagesCost = 0;
+            MissedMessagesCount = 0;
         }
     }
 }

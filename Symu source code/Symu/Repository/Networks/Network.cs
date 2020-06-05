@@ -380,7 +380,8 @@ namespace Symu.Repository.Networks
                 throw new ArgumentNullException(nameof(communication));
             }
 
-            var entity = new DataBaseEntity(agentId, communication.Cognitive);
+
+            var entity = new DataBaseEntity(agentId, communication);
 
             var email = new Database(entity, _models, NetworkKnowledges);
             NetworkDatabases.Add(agentId, email);

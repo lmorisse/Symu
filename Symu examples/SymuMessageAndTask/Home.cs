@@ -13,12 +13,15 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using SymuMessageAndTask.Classes;
+using Syncfusion.Drawing;
+using Syncfusion.Windows.Forms.Chart;
 
 #endregion
 
@@ -103,6 +106,8 @@ namespace SymuMessageAndTask
         protected override void UpdateSettings()
         {
             base.UpdateSettings();
+            Iterations.Max = ushort.Parse(NumberOfIterations.Text, CultureInfo.InvariantCulture);
+
             #region Task model
 
             OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask =
@@ -182,6 +187,11 @@ namespace SymuMessageAndTask
         private void UpDateMessages()
         {
             WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(ReceivedMessages, _environment.Messages.Result.ReceivedMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(LostMessages, _environment.Messages.Result.LostMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(MissedMessages, _environment.Messages.Result.MissedMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(SentCost, _environment.Messages.Result.SentMessagesCost.ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(ReceivedCost, _environment.Messages.Result.ReceivedMessagesCost.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
@@ -198,6 +208,57 @@ namespace SymuMessageAndTask
             WriteTextSafe(TasksWeight,
                 _environment.IterationResult.Tasks.Weight.ToString("F1", CultureInfo.InvariantCulture));
         }
+        public override void DisplayIteration()
+        {
+            WriteTextSafe(Iteration, Iterations.Number.ToString(CultureInfo.InvariantCulture));
+            
+            var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done).ToList();
+            var seriesTasks = new ChartSeries("tasks", ChartSeriesType.Histogram);
+            foreach (var tasksResult in tasksResults)
+            {
+                seriesTasks.Points.Add(tasksResult, tasksResults.Count);
+            }
+            seriesTasks.Text = seriesTasks.Name;
+            seriesTasks.ConfigItems.HistogramItem.NumberOfIntervals = 10;
+            WriteChartSafe(chartControl1, new[] { seriesTasks});
+
+
+        }
+
+        protected void WriteChartSafe(ChartControl chartControl, ChartSeries[] chartSeries)
+        {
+            if (chartControl is null)
+            {
+                throw new ArgumentNullException(nameof(chartControl));
+            }
+
+            if (chartSeries == null)
+            {
+                throw new ArgumentNullException(nameof(chartSeries));
+            }
+
+            if (chartControl.InvokeRequired)
+            {
+                var d = new SafeCallChartDelegate(WriteChartSafe);
+                chartControl.Invoke(d, chartControl, chartSeries);
+            }
+            else
+            {
+                chartControl.Series.Clear();
+                foreach (var chartSerie in chartSeries)
+                {
+                    chartControl.Series.Add(chartSerie);
+                }
+
+                ChartAppearance.ApplyChartStyles(chartControl);
+            }
+        }
+
+        #region Nested type: SafeCallChartDelegate
+
+        protected delegate void SafeCallChartDelegate(ChartControl chartControl, ChartSeries[] chartSeries);
+
+        #endregion
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -413,5 +474,6 @@ namespace SymuMessageAndTask
         }
 
         #endregion
+
     }
 }

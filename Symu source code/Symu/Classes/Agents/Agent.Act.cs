@@ -12,7 +12,6 @@
 using System;
 using System.Linq;
 using System.Runtime.ExceptionServices;
-using System.Threading;
 using System.Threading.Tasks;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -53,23 +52,35 @@ namespace Symu.Classes.Agents
 
             if (Cognitive.TasksAndPerformance.CanPerformTask && message.Medium != CommunicationMediums.System)
             {
-                // Switch message into a task in the task manager
-                var communication =
-                    Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
-                var task = new SymuTask(Schedule.Step)
-                {
-                    Type = message.Medium.ToString(),
-                    TimeToLive = communication.Cognitive.InternalCharacteristics.TimeToLive,
-                    Parent = message,
-                    Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
-                        Environment.Organization.Models.RandomLevelValue)
-                };
+                var task = ConvertMessageIntoTask(message);
                 Post(task);
             }
             else
             {
                 ActMessage(message);
             }
+        }
+        /// <summary>
+        ///     Convert message into a task to be perform in the task manager
+        ///     MessageResult.ReceivedMessagesCost is also updated 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private SymuTask ConvertMessageIntoTask(Message message)
+        {
+            var communication =
+                Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
+            var task = new SymuTask(Schedule.Step)
+            {
+                Type = message.Medium.ToString(),
+                TimeToLive = communication.TimeToLive,
+                Parent = message,
+                Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
+                    Environment.Organization.Models.RandomLevelValue)
+            };
+
+            Environment.Messages.Result.ReceivedMessagesCost += task.Weight;
+            return task;
         }
 
         /// <summary>
@@ -116,9 +127,11 @@ namespace Symu.Classes.Agents
             }
 
             _newInteractionCounter = 0;
-            HandleStatus();
+
+            var isolated = Cognitive.InteractionPatterns.IsIsolated(Schedule.Step);
+            HandleStatus(isolated);
             // intentionally after Status
-            HandleCapacity(true);
+            HandleCapacity(isolated, true);
             // Task manager
             if (!Cognitive.TasksAndPerformance.CanPerformTask)
             {
@@ -267,21 +280,20 @@ namespace Symu.Classes.Agents
         ///     Check if agent is performing task today depending on its settings or if agent is active
         /// </summary>
         /// <returns>true if agent is performing task, false if agent is not</returns>
-        public bool IsPerformingTask()
+        public bool IsPerformingTask(bool isolated)
         {
             // Agent can be temporary isolated
-            var isPerformingTask = !Cognitive.InteractionPatterns.IsIsolated();
-            return isPerformingTask && (Cognitive.TasksAndPerformance.CanPerformTask && Schedule.IsWorkingDay ||
+            return !isolated && (Cognitive.TasksAndPerformance.CanPerformTask && Schedule.IsWorkingDay ||
                                         Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
                                         !Schedule.IsWorkingDay);
         }
 
         /// <summary>
-        ///     Set the Status to available if agent as InitialCapacity, Offline otherwise
+        ///     CopyTo the Status to available if agent as InitialCapacity, Offline otherwise
         /// </summary>
-        public virtual void HandleStatus()
+        public virtual void HandleStatus(bool isolated)
         {
-            Status = !Cognitive.InteractionPatterns.IsIsolated() ? AgentStatus.Available : AgentStatus.Offline;
+            Status = !isolated ? AgentStatus.Available : AgentStatus.Offline;
             if (Status != AgentStatus.Offline)
                 // Open the agent mailbox with all the waiting messages
             {

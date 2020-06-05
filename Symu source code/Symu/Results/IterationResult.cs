@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Environment;
 using Symu.Results.Blocker;
+using Symu.Results.Messaging;
 using Symu.Results.Organization;
 using Symu.Results.Task;
 
@@ -22,13 +23,13 @@ namespace Symu.Results
 {
     public class IterationResult
     {
-        protected readonly SymuEnvironment _environment;
+        protected readonly SymuEnvironment Environment;
 
         public IterationResult(SymuEnvironment environment)
         {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            OrganizationFlexibility = new OrganizationFlexibility(_environment);
-            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(_environment);
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            OrganizationFlexibility = new OrganizationFlexibility(Environment);
+            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(Environment);
         }
 
         /// <summary>
@@ -101,14 +102,14 @@ namespace Symu.Results
         /// </summary>
         public void PostStep()
         {
-            Tasks.SetResults(_environment);
-            Blockers.SetResults(_environment);
-            Messages.SetResults(_environment);
+            Tasks.SetResults(Environment);
+            Blockers.SetResults(Environment);
+            Messages.SetResults(Environment);
         }
 
         public IterationResult Clone()
         {
-            var clone = new IterationResult(_environment);
+            var clone = new IterationResult(Environment);
             clone.Initialize();
             OrganizationFlexibility.CopyTo(clone.OrganizationFlexibility);
             OrganizationKnowledgeAndBelief.CopyTo(clone.OrganizationKnowledgeAndBelief);
@@ -128,7 +129,7 @@ namespace Symu.Results
         }
 
         /// <summary>
-        ///     Set all results to On
+        ///     CopyTo all results to On
         /// </summary>
         public void On()
         {
@@ -136,10 +137,11 @@ namespace Symu.Results
             OrganizationKnowledgeAndBelief.On = true;
             Tasks.On = true;
             Blockers.On = true;
+            Messages.On = true;
         }
 
         /// <summary>
-        ///     Set all results to Off
+        ///     CopyTo all results to Off
         /// </summary>
         public void Off()
         {
@@ -147,6 +149,7 @@ namespace Symu.Results
             OrganizationKnowledgeAndBelief.On = false;
             Tasks.On = false;
             Blockers.On = false;
+            Messages.On = false;
         }
 
         #region todo : refactor in SpecificResults

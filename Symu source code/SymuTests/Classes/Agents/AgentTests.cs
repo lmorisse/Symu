@@ -162,9 +162,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void IsActiveTest()
         {
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
-            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
-            Assert.IsFalse(_agent.IsPerformingTask());
+            Assert.IsFalse(_agent.IsPerformingTask(true));
         }
 
         /// <summary>
@@ -173,10 +171,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void IsActiveTest1()
         {
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = false;
             _agent.Environment.Schedule.Step = 1;
-            Assert.IsFalse(_agent.IsPerformingTask());
+            Assert.IsFalse(_agent.IsPerformingTask(false));
         }
 
         /// <summary>
@@ -185,10 +182,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void IsActiveTest2()
         {
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Environment.Schedule.Step = 1;
-            Assert.IsTrue(_agent.IsPerformingTask());
+            Assert.IsTrue(_agent.IsPerformingTask(false));
         }
 
         /// <summary>
@@ -197,10 +193,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void IsActiveTest3()
         {
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
             _agent.Environment.Schedule.Step = 5;
-            Assert.IsFalse(_agent.IsPerformingTask());
+            Assert.IsFalse(_agent.IsPerformingTask(false));
         }
 
         /// <summary>
@@ -209,10 +204,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void IsActiveTest4()
         {
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             _agent.Environment.Schedule.Step = 5;
-            Assert.IsTrue(_agent.IsPerformingTask());
+            Assert.IsTrue(_agent.IsPerformingTask(false));
         }
 
         #endregion
@@ -232,11 +226,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Email;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
         }
 
         /// <summary>
@@ -272,11 +266,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
             //TODO test Missed messages
         }
 
@@ -293,11 +287,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
             //TODO test Missed messages
         }
 
@@ -308,12 +302,12 @@ namespace SymuTests.Classes.Agents
             // Post as a delayed message
             _agent.PostAsADelayedMessage(message, 0);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
             Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
             // Post Delayed messages
             _agent.PostDelayedMessages();
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
             Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
         }
 
@@ -329,9 +323,9 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
             Assert.AreEqual(1, _environment.Messages.LastSentMessages.Count);
-            Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerPeriod);
+            Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerStep);
         }
 
         /// <summary>
@@ -473,21 +467,29 @@ namespace SymuTests.Classes.Agents
         }
 
         /// <summary>
-        ///     OnLine Agent with Started/stopping agent
+        ///     OnLine Agent with Started agent
         /// </summary>
         [TestMethod]
         public void PostTest5()
         {
             _agent.State = AgentState.Started;
-            var message = new Message();
+            var message = new Message {Medium = CommunicationMediums.Email};
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
+        }
 
+        /// <summary>
+        ///     OnLine Agent with stopping agent
+        /// </summary>
+        [TestMethod]
+        public void PostTest6()
+        {
             _agent.State = AgentState.Stopping;
+            var message = new Message { Medium = CommunicationMediums.Email };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 2, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual((uint)1, _environment.Messages.Result.ReceivedMessagesCount);
         }
 
         #endregion
@@ -502,11 +504,11 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
-            _agent.MessageProcessor.NumberMessagesPerPeriod = 1;
+            _agent.MessageProcessor.NumberMessagesPerStep = 1;
             Assert.IsTrue(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.Email));
             Assert.IsTrue(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.System));
             // Can't exceed byte max value
-            _agent.MessageProcessor.NumberMessagesPerPeriod = byte.MaxValue;
+            _agent.MessageProcessor.NumberMessagesPerStep = ushort.MaxValue;
             Assert.IsFalse(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.Email));
         }
 
@@ -518,7 +520,7 @@ namespace SymuTests.Classes.Agents
         public void IsMessagesPerPeriodAboveLimitTest1()
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _agent.MessageProcessor.NumberMessagesPerPeriod = 1;
+            _agent.MessageProcessor.NumberMessagesPerStep = 1;
             Assert.IsFalse(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.Email));
         }
 
@@ -530,7 +532,7 @@ namespace SymuTests.Classes.Agents
         public void IsMessagesPerPeriodAboveLimitTest2()
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _agent.MessageProcessor.NumberMessagesPerPeriod = 1;
+            _agent.MessageProcessor.NumberMessagesPerStep = 1;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 1;
             Assert.IsFalse(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.Email));
         }
@@ -543,7 +545,7 @@ namespace SymuTests.Classes.Agents
         public void IsMessagesPerPeriodAboveLimitTest3()
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
-            _agent.MessageProcessor.NumberMessagesPerPeriod = 1;
+            _agent.MessageProcessor.NumberMessagesPerStep = 1;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 2;
             Assert.IsTrue(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.Email));
             Assert.IsTrue(_agent.IsMessagesPerPeriodBelowLimit(CommunicationMediums.System));
@@ -681,7 +683,7 @@ namespace SymuTests.Classes.Agents
             Assert.IsTrue(_environment.Messages.MessagesSentByAgent(0, _agent.Id).Any());
             Assert.IsTrue(_environment.Messages.LastSentMessages.Any);
             // Agent1
-            Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerPeriod);
+            Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerStep);
         }
 
         /// <summary>
@@ -706,7 +708,7 @@ namespace SymuTests.Classes.Agents
             Assert.IsNull(_environment.Messages.MessagesSentByAgent(0, _agent.Id));
             Assert.IsFalse(_environment.Messages.LastSentMessages.Any);
             // Agent1
-            Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerPeriod);
+            Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerStep);
         }
 
         #endregion
@@ -736,6 +738,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
             _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, belief.Id).BeliefBits.SetBit(0, 1);
+
             _agent.Reply(message);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
@@ -787,7 +790,7 @@ namespace SymuTests.Classes.Agents
             _environment.Schedule.Step = 0;
             _environment.Organization.Murphies.UnAvailability.On = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            _agent.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             _agent.MessageProcessor.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
 
@@ -797,7 +800,7 @@ namespace SymuTests.Classes.Agents
             // Capacity test
             Assert.AreEqual(1, _agent.Capacity.Initial);
             // ClearMessagesPerPeriod test
-            Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerPeriod);
+            Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerStep);
             Assert.AreEqual(0, _agent.MessageProcessor.NumberSentPerPeriod);
         }
 
@@ -892,7 +895,7 @@ namespace SymuTests.Classes.Agents
         public void NonPassingHandleCapacityTest()
         {
             _environment.Schedule.Step = 5;
-            _agent.HandleCapacity(true);
+            _agent.HandleCapacity(false,true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
@@ -906,7 +909,7 @@ namespace SymuTests.Classes.Agents
             _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _environment.Organization.Murphies.UnAvailability.On = false;
-            _agent.HandleCapacity(true);
+            _agent.HandleCapacity(false,true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(1, _agent.Capacity.Actual);
         }
@@ -919,10 +922,9 @@ namespace SymuTests.Classes.Agents
         {
             _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
             _environment.Organization.Murphies.UnAvailability.On = false;
             _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
-            _agent.HandleCapacity(true);
+            _agent.HandleCapacity(true,true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
@@ -935,9 +937,8 @@ namespace SymuTests.Classes.Agents
         {
             _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _environment.Organization.Murphies.UnAvailability.On = false;
-            _agent.HandleCapacity(true);
+            _agent.HandleCapacity(false, true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(1, _agent.Capacity.Actual);
         }
@@ -950,9 +951,8 @@ namespace SymuTests.Classes.Agents
         {
             _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
             _environment.Organization.Murphies.UnAvailability.On = false;
-            _agent.HandleCapacity(false);
+            _agent.HandleCapacity(false, false);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
@@ -967,9 +967,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleStatusTest()
         {
-            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = true;
-            _agent.HandleStatus();
+            _agent.HandleStatus(true);
             Assert.AreEqual(AgentStatus.Offline, _agent.Status);
         }
 
@@ -979,9 +977,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleStatusTest1()
         {
-            _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            _agent.Cognitive.InteractionPatterns.IsolationIsRandom = false;
-            _agent.HandleStatus();
+            _agent.HandleStatus(false);
             Assert.AreEqual(AgentStatus.Available, _agent.Status);
         }
 
@@ -999,7 +995,7 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.System
             };
             _agent.MessageProcessor.DelayedMessages.Enqueue(message, 0);
-            _agent.HandleStatus();
+            _agent.HandleStatus(false);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Count >= 1);
             //Assert.IsTrue(_environment.Messages.CheckMessages);
         }

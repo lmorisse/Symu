@@ -159,20 +159,20 @@ namespace SymuScenariosAndEvents
 
         private void SetEvents()
         {
-            var eventType = SymuEventType.NoEvent;
+            var eventType = Cyclicity.None;
             if (rbAtStep.Checked)
             {
-                eventType = SymuEventType.OneShot;
+                eventType = Cyclicity.OneShot;
             }
 
             if (rbCyclical.Checked)
             {
-                eventType = SymuEventType.Cyclical;
+                eventType = Cyclicity.Cyclical;
             }
 
             if (rbRandom.Checked)
             {
-                eventType = SymuEventType.Random;
+                eventType = Cyclicity.Random;
             }
 
             var eventStep = SetEventStep();
@@ -186,15 +186,15 @@ namespace SymuScenariosAndEvents
                 SymuEvent symuEvent = null;
                 switch (eventType)
                 {
-                    case SymuEventType.NoEvent:
+                    case Cyclicity.None:
                         break;
-                    case SymuEventType.OneShot:
+                    case Cyclicity.OneShot:
                         symuEvent = new SymuEvent {Step = eventStep};
                         break;
-                    case SymuEventType.Cyclical:
+                    case Cyclicity.Cyclical:
                         symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
                         break;
-                    case SymuEventType.Random:
+                    case Cyclicity.Random:
                         symuEvent = new RandomEvent {Ratio = randomRatio};
                         break;
                     default:
@@ -213,15 +213,15 @@ namespace SymuScenariosAndEvents
                 SymuEvent symuEvent = null;
                 switch (eventType)
                 {
-                    case SymuEventType.NoEvent:
+                    case Cyclicity.None:
                         break;
-                    case SymuEventType.OneShot:
+                    case Cyclicity.OneShot:
                         symuEvent = new SymuEvent {Step = eventStep};
                         break;
-                    case SymuEventType.Cyclical:
+                    case Cyclicity.Cyclical:
                         symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
                         break;
-                    case SymuEventType.Random:
+                    case Cyclicity.Random:
                         symuEvent = new RandomEvent {Ratio = randomRatio};
                         break;
                     default:

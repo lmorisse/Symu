@@ -17,7 +17,7 @@ using Symu.Messaging.Messages;
 namespace Symu.Classes.Agents.Models.Templates.Communication
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the Email
+    ///     CopyTo all the CognitiveArchitecture parameters for the Email
     /// </summary>
     public class PhoneTemplate : CommunicationTemplate
     {
@@ -25,12 +25,11 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
         {
             CostToSendLevel = GenericLevel.Low;
             CostToReceiveLevel = GenericLevel.Low;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
-            Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Phone;
-            Cognitive.InternalCharacteristics.TimeToLive = 0;
+            MinimumNumberOfBitsOfKnowledgeToSend = 1;
+            MaximumNumberOfBitsOfKnowledgeToSend = 1;
+            MinimumNumberOfBitsOfBeliefToSend = 1;
+            MaximumNumberOfBitsOfBeliefToSend = 1;
+            TimeToLive = 0;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         public bool On { get; set; }
 
         /// <summary>
-        ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
+        ///     CopyTo the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
         ///     InfluentialnessRateMax]
         /// </summary>
         /// <returns></returns>
@@ -94,7 +94,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Set the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
+        ///     CopyTo the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
         ///     InfluentialnessRateMax]
         /// </summary>
         /// <returns></returns>

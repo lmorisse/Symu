@@ -153,7 +153,7 @@ namespace Symu.Classes.Task
         public short TimeToLive { get; set; } = -1;
 
         /// <summary>
-        ///     Set the task done
+        ///     CopyTo the task done
         /// </summary>
         public void SetDone()
         {
@@ -172,7 +172,7 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     Set RequiredKnowledges && MandatoryKnowledges based on the task complexity
+        ///     CopyTo RequiredKnowledges && MandatoryKnowledges based on the task complexity
         /// </summary>
         /// <param name="model"></param>
         /// <param name="knowledges"></param>

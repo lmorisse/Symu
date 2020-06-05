@@ -12,6 +12,7 @@
 using System;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.Templates.Communication;
 
 #endregion
 
@@ -32,6 +33,29 @@ namespace Symu.Repository.Networks.Databases
             AgentId = agentId;
             CognitiveArchitecture = new CognitiveArchitecture();
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
+        }
+        public DataBaseEntity(AgentId agentId, CommunicationTemplate medium)
+        {
+            if (medium == null)
+            {
+                throw new ArgumentNullException(nameof(medium));
+            }
+
+            AgentId = agentId;
+            CognitiveArchitecture = new CognitiveArchitecture();
+            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend =
+                medium.MaximumNumberOfBitsOfBeliefToSend;
+            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend=
+                medium.MaximumNumberOfBitsOfKnowledgeToSend;
+            CognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit=
+                medium.MinimumBeliefToSendPerBit;
+            CognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit=
+                medium.MinimumKnowledgeToSendPerBit;
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend=
+                medium.MinimumNumberOfBitsOfBeliefToSend;
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend=
+                medium.MinimumNumberOfBitsOfKnowledgeToSend;
+            CognitiveArchitecture.InternalCharacteristics.TimeToLive = medium.TimeToLive;
         }
 
         /// <summary>

@@ -188,11 +188,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
 
             // Filter the belief to send, via the good communication channel// Filtering via the good channel
             var minBits = Math.Max(_messageContent.MinimumNumberOfBitsOfBeliefToSend,
-                medium.Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend);
+                medium.MinimumNumberOfBitsOfBeliefToSend);
             var maxBits = Math.Min(_messageContent.MaximumNumberOfBitsOfBeliefToSend,
-                medium.Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend);
+                medium.MaximumNumberOfBitsOfBeliefToSend);
             var minKnowledge = Math.Max(_messageContent.MinimumBeliefToSendPerBit,
-                medium.Cognitive.MessageContent.MinimumBeliefToSendPerBit);
+                medium.MinimumBeliefToSendPerBit);
             // Random knowledgeBits to send
             if (minBits > maxBits)
             {

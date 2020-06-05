@@ -54,7 +54,7 @@ namespace Symu.Classes.Murphies
         public List<Murphy> Murphies { get; } = new List<Murphy>();
 
         /// <summary>
-        ///     Set all murphies on
+        ///     CopyTo all murphies on
         /// </summary>
         /// <param name="rate"></param>
         public void On(float rate)
@@ -67,7 +67,7 @@ namespace Symu.Classes.Murphies
         }
 
         /// <summary>
-        ///     Set all murphies off
+        ///     CopyTo all murphies off
         /// </summary>
         public void Off()
         {

@@ -216,8 +216,12 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 1;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _symu.Process();
-            Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, (int) _environment.Messages.Result.SentMessagesCount);
+            var count = _environment.WorkersCount * NumberOfSteps;
+            Assert.AreEqual(2*count, (int) _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual(count , _environment.IterationResult.Messages.SentMessages, _environment.IterationResult.Messages.MissedMessagesCount);
+            Assert.AreEqual((uint)count, _environment.IterationResult.Messages.ReceivedMessages);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
         }
 
@@ -238,6 +242,8 @@ namespace SymuMessageAndTaskTests
             Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
                 (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(0, _environment.IterationResult.Messages.ReceivedMessagesCost);
+            Assert.AreEqual(0, _environment.IterationResult.Messages.SentMessagesCost);
         }
 
         /// <summary>
@@ -259,6 +265,8 @@ namespace SymuMessageAndTaskTests
             Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
                 (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(0, _environment.IterationResult.Messages.ReceivedMessagesCost);
+            Assert.AreEqual(0, _environment.IterationResult.Messages.SentMessagesCost);
         }
 
         [TestMethod]
@@ -271,6 +279,7 @@ namespace SymuMessageAndTaskTests
             _symu.Process();
             Assert.IsTrue(_environment.IterationResult.Capacity > _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.AverageDone);
+            Assert.AreEqual(_environment.IterationResult.Capacity, _environment.IterationResult.Messages.ReceivedMessagesCost);
         }
 
         #endregion

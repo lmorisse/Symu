@@ -107,7 +107,7 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     Set bit with a value at a specified index
+        ///     CopyTo bit with a value at a specified index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>

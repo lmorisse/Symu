@@ -119,7 +119,7 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     Set the task done in task manager
+        ///     CopyTo the task done in task manager
         /// </summary>
         /// <param name="task"></param>
         public void SetTaskDone(SymuTask task)
@@ -151,16 +151,16 @@ namespace Symu.Classes.Agents
         public AgentCapacity Capacity { get; } = new AgentCapacity();
 
         /// <summary>
-        ///     Set the initial capacity for the new step based on SetInitialCapacity, working day,
+        ///     CopyTo the initial capacity for the new step based on SetInitialCapacity, working day,
         ///     By default = Initial capacity if it's a working day, 0 otherwise
         ///     If resetRemainingCapacity set to true, Remaining capacity is reset to Initial Capacity value
         /// </summary>
-        public void HandleCapacity(bool resetRemainingCapacity)
+        public void HandleCapacity(bool isolated, bool resetRemainingCapacity)
         {
             // Intentionally no test on Agent that must be able to perform tasks
             // && Cognitive.TasksAndPerformance.CanPerformTask
             // Example : internet access don't perform task, but is online
-            if (IsPerformingTask())
+            if (IsPerformingTask(isolated))
             {
                 SetInitialCapacity();
                 // Intentionally after SetInitialCapacity
@@ -223,12 +223,13 @@ namespace Symu.Classes.Agents
         public Dictionary<ushort, float> TimeSpent { get; } = new Dictionary<ushort, float>();
 
         /// <summary>
-        ///     Impact of the Communication channels on the remaining capacity
+        ///     Impact of the Communication channels on the time spent
         ///     Allocate this time on the keyActivity
         /// </summary>
         /// <param name="medium"></param>
         /// <param name="keyActivity">the keyActivity activity of the task, to track TimeSpent</param>
         /// <param name="send">If set, it is an ask help task, otherwise it is a reply help task</param>
+        /// <remarks>Impact on capacity is done in OnBeforeSendMessage and OnAfterPostMessage</remarks>
         public void ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums medium, bool send,
             ushort keyActivity)
         {

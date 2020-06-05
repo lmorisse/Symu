@@ -89,7 +89,7 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     Set agent taskLimits from this global model TasksLimit
+        ///     CopyTo agent taskLimits from this global model TasksLimit
         /// </summary>
         /// <param name="agentTasksLimit">taskLimit to set</param>
         public void SetAgentTasksLimit(TasksLimit agentTasksLimit)

@@ -39,7 +39,7 @@ namespace SymuGroupAndInteraction.Classes
 
             base.SetOrganization(organization);
 
-            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             Organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.On = true;

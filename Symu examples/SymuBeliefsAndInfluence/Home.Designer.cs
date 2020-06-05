@@ -85,7 +85,7 @@
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ThresholdForReacting = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.RiskAversion = new System.Windows.Forms.TextBox();
@@ -684,7 +684,7 @@
             // groupBox9
             // 
             this.groupBox9.Controls.Add(this.label19);
-            this.groupBox9.Controls.Add(this.textBox1);
+            this.groupBox9.Controls.Add(this.ThresholdForReacting);
             this.groupBox9.Controls.Add(this.label33);
             this.groupBox9.Controls.Add(this.label32);
             this.groupBox9.Controls.Add(this.RiskAversion);
@@ -717,13 +717,14 @@
             this.label19.TabIndex = 153;
             this.label19.Text = "Parameters that cancel tasks";
             // 
-            // textBox1
+            // ThresholdForReacting
             // 
-            this.textBox1.Location = new System.Drawing.Point(294, 176);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(54, 22);
-            this.textBox1.TabIndex = 152;
-            this.textBox1.Text = "5";
+            this.ThresholdForReacting.Location = new System.Drawing.Point(294, 176);
+            this.ThresholdForReacting.Name = "ThresholdForReacting";
+            this.ThresholdForReacting.Size = new System.Drawing.Size(54, 22);
+            this.ThresholdForReacting.TabIndex = 152;
+            this.ThresholdForReacting.Text = "5";
+            this.ThresholdForReacting.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label33
             // 
@@ -957,28 +958,28 @@
             // symuorgToolStripMenuItem
             // 
             this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
-            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.symuorgToolStripMenuItem.Text = "Symu.org";
             this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem1
             // 
             this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.documentationToolStripMenuItem1.Text = "Documentation";
             this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
             // 
             // sourceCodeToolStripMenuItem1
             // 
             this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
-            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.sourceCodeToolStripMenuItem1.Text = "Source code";
             this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
             // 
             // issuesToolStripMenuItem
             // 
             this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
-            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
@@ -1087,7 +1088,7 @@
         private System.Windows.Forms.TextBox tbKnowledge;
         private System.Windows.Forms.TextBox tbSteps;
         private System.Windows.Forms.TextBox tbWorkers;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox ThresholdForReacting;
         private System.Windows.Forms.Label TimeStep;
         private System.Windows.Forms.Label TotalBeliefs;
         private System.Windows.Forms.Label Triads;

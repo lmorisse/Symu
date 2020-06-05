@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* Refactoring CommunicationTemplates
+* Add CyclicalIsolation by [lmorisse](https://github.com/lmorisse)
+* Add PromoterTemplate by [lmorisse](https://github.com/lmorisse)
+* Add Iterations and Charts in SymuMessageAndTask example by [lmorisse](https://github.com/lmorisse)
 * Refactoring BlockerCollection, BlockerResults and TasksResults by [lmorisse](https://github.com/lmorisse)
 * Add MessageResults by [lmorisse](https://github.com/lmorisse)
 

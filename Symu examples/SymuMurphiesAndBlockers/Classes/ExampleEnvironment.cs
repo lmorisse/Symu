@@ -51,7 +51,7 @@ namespace SymuMurphiesAndBlockers.Classes
             organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
-            organization.Templates.Human.Cognitive.InteractionPatterns.IsolationIsRandom = false;
+            organization.Templates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
 

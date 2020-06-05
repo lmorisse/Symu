@@ -133,7 +133,7 @@ namespace Symu.Classes.Murphies
         public CommunicationMediums AskOnWhichChannel(CommunicationMediums preferredMediums)
         {
             var intersectMediums = preferredMediums & CommunicationMediums;
-            return CommunicationMediumsModel.AskOnWhichChannel(intersectMediums);
+            return CommunicationMediumsModel.NextMedium(intersectMediums);
         }
 
         /// <summary>

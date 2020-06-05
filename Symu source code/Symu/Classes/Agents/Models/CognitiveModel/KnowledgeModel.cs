@@ -196,11 +196,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             knowledgeIndexToSend = null;
             // Filtering via the good channel
             var minBits = Math.Max(_messageContent.MinimumNumberOfBitsOfKnowledgeToSend,
-                medium.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend);
+                medium.MinimumNumberOfBitsOfKnowledgeToSend);
             var maxBits = Math.Min(_messageContent.MaximumNumberOfBitsOfKnowledgeToSend,
-                medium.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend);
+                medium.MaximumNumberOfBitsOfKnowledgeToSend);
             var minKnowledge = Math.Max(_messageContent.MinimumKnowledgeToSendPerBit,
-                medium.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit);
+                medium.MinimumKnowledgeToSendPerBit);
             // Random knowledgeBits to send
             var lengthToSend = DiscreteUniform.SampleToByte(Math.Min(minBits, maxBits), Math.Max(minBits, maxBits));
             if (lengthToSend == 0)

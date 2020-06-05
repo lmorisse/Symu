@@ -36,7 +36,6 @@ namespace SymuBeliefsAndInfluence.Classes
             SetCognitive(Template);
         }
 
-        private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
         private SimpleHumanTemplate Template => ((ExampleEnvironment) Environment).WorkerTemplate;
         public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
         public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.Id);
@@ -47,7 +46,7 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 Weight = 1
             };
-            task.SetKnowledgesBits(Model, Knowledges, 1);
+            task.SetKnowledgesBits(Environment.Organization.Murphies.IncompleteBelief, Knowledges, 1);
             Post(task);
         }
 

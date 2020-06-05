@@ -10,7 +10,9 @@
 #region using directives
 
 using System;
+using Symu.Classes.Agents.Models.CognitiveModel;
 using Symu.Common;
+using Symu.Repository.Networks.Knowledges;
 using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
@@ -18,63 +20,12 @@ using Symu.Tools.Math.ProbabilityDistributions;
 namespace Symu.Classes.Agents.Models.Templates.Communication
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the CommunicationChannels
+    ///     CopyTo all the CognitiveArchitecture parameters for the CommunicationChannels
     ///     base class for all the communication channels
     /// </summary>
-    public class CommunicationTemplate : CognitiveArchitectureTemplate
+    public class CommunicationTemplate //: CognitiveArchitectureTemplate
     {
-        private float _maxRateLearnable = 1;
-
-        public CommunicationTemplate()
-        {
-            // Knowledge & Beliefs
-            Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = false;
-            Cognitive.KnowledgeAndBeliefs.HasBelief = false;
-            Cognitive.KnowledgeAndBeliefs.HasInitialBelief = false;
-            // Message content
-            Cognitive.MessageContent.CanSendKnowledge = true;
-            Cognitive.MessageContent.CanReceiveKnowledge = false;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 1;
-            Cognitive.MessageContent.CanSendBeliefs = true;
-            Cognitive.MessageContent.CanReceiveBeliefs = false;
-            Cognitive.MessageContent.MinimumNumberOfBitsOfBeliefToSend = 1;
-            Cognitive.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 1;
-            // Internal Characteristics
-            Cognitive.InternalCharacteristics.CanLearn = false;
-            Cognitive.InternalCharacteristics.CanForget = false;
-            Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = true;
-            // Interaction Characteristics
-            Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
-            Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = true;
-            Cognitive.InteractionCharacteristics.MaximumMessagesSentPerPeriod = 0;
-            Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod = false;
-            // Tasks and performance
-            Cognitive.TasksAndPerformance.CanPerformTask = false; // For network.NetworkActivities.AddActivities
-            Cognitive.TasksAndPerformance.TaskModel.On = false;
-            Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
-            Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
-            Cognitive.TasksAndPerformance.LearningRate = 0;
-            Cognitive.TasksAndPerformance.LearningByDoingRate = 0;
-            // Cognitive.InteractionPatterns
-            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.VeryRarely;
-        }
-
-        /// <summary>
-        ///     Cost : time spent to send an message
-        ///     Range [0;1]
-        /// </summary>
-        /// <example>time spent to write an email</example>
-        public GenericLevel CostToSendLevel { get; set; } = GenericLevel.Medium;
-
-        /// <summary>
-        ///     Cost : time spent to read an message
-        ///     Range [0;1]
-        /// </summary>
-        /// <example>time spent to read an email</example>
-        public GenericLevel CostToReceiveLevel { get; set; } = GenericLevel.Medium;
-
+        private float _maxRateLearnable = 1;        
         /// <summary>
         ///     Maximum rate learnable the message can be
         ///     Range [0;1]
@@ -95,6 +46,134 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
                 _maxRateLearnable = value;
             }
         }
+
+        private short _timeToLive = -1;
+
+        /// <summary>
+        ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
+        ///     -1 for unlimited time to live
+        /// </summary>
+        public short TimeToLive
+        {
+            get => _timeToLive;
+            set
+            {
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException("TimeToLive should be >= -1");
+                }
+
+                _timeToLive = value;
+            }
+        }
+        public bool CanReceiveBeliefs { get; set; }
+
+        private float _minimumBeliefToSendPerBit = 0.35F;
+
+        /// <summary>
+        ///     To send beliefs, an agent must have enough beliefs per KnowledgeBits
+        ///     [0 - 1]
+        /// </summary>
+        /// <example>if KnowledgeThreshHoldForAnswer = 0.5 and agent BeliefId[index] = 0.6 => he can answer to the question</example>
+        /// <remarks>Default value = Min value of the level Foundational</remarks>
+        public float MinimumBeliefToSendPerBit
+        {
+            get => _minimumBeliefToSendPerBit;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MinimumBeliefToSendPerBit should be between 0 and 1");
+                }
+
+                _minimumBeliefToSendPerBit = value;
+            }
+        }
+
+        /// <summary>
+        ///     The minimum number of non zero Bits of Knowledge to send back during an interaction (message)
+        /// </summary>
+        public byte MinimumNumberOfBitsOfBeliefToSend { get; set; } = 1;
+
+        /// <summary>
+        ///     The maximum number of non zero Bits of Knowledge to send back during an interaction (message)
+        /// </summary>
+        public byte MaximumNumberOfBitsOfBeliefToSend { get; set; } = 1;
+        private float _minimumKnowledgeToSendPerBit = 0.35F;
+
+        /// <summary>
+        ///     To send Knowledge, an agent must have enough knowledge per KnowledgeBits
+        ///     [0 - 1]
+        /// </summary>
+        /// <remarks>Default value = Min value of the level foundational</remarks>
+        /// <example>if KnowledgeThreshHoldForAnswer = 0.5 and agent KnowledgeId[index] = 0.6 => he can answer to the question</example>
+        public float MinimumKnowledgeToSendPerBit
+        {
+            get => _minimumKnowledgeToSendPerBit;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("MinimumKnowledgeToSendPerBit should be between 0 and 1");
+                }
+
+                _minimumKnowledgeToSendPerBit = value;
+            }
+        }
+
+        private byte _minimumNumberOfBitsOfKnowledgeToSend = 1;
+
+        /// <summary>
+        ///     The minimum number of non zero Bits of Knowledge to send back during an interaction (message)
+        /// </summary>
+        public byte MinimumNumberOfBitsOfKnowledgeToSend
+        {
+            get => _minimumNumberOfBitsOfKnowledgeToSend;
+            set
+            {
+                if (value > Bits.MaxBits)
+                {
+                    throw new ArgumentOutOfRangeException("MinimumNumberOfBitsOfKnowledgeToSend should be <= " +
+                                                          Bits.MaxBits);
+                }
+
+                _minimumNumberOfBitsOfKnowledgeToSend = value;
+            }
+        }
+
+        private byte _maximumNumberOfBitsOfKnowledgeToSend = 1;
+
+        /// <summary>
+        ///     The maximum number of non zero Bits of Knowledge to send back during an interaction (message)
+        /// </summary>
+        public byte MaximumNumberOfBitsOfKnowledgeToSend
+        {
+            get => _maximumNumberOfBitsOfKnowledgeToSend;
+            set
+            {
+                if (value > Bits.MaxBits)
+                {
+                    throw new ArgumentOutOfRangeException("MaximumNumberOfBitsOfKnowledgeToSend should be <= " +
+                                                          Bits.MaxBits);
+                }
+
+                _maximumNumberOfBitsOfKnowledgeToSend = value;
+            }
+        }
+
+        /// <summary>
+        ///     Cost : time spent to send an message
+        ///     Range [0;1]
+        /// </summary>
+        /// <example>time spent to write an email</example>
+        public GenericLevel CostToSendLevel { get; set; } = GenericLevel.Medium;
+
+        /// <summary>
+        ///     Cost : time spent to read an message
+        ///     Range [0;1]
+        /// </summary>
+        /// <example>time spent to read an email</example>
+        public GenericLevel CostToReceiveLevel { get; set; } = GenericLevel.Medium;
 
         public float CostToSend(byte random)
         {
@@ -137,6 +216,25 @@ namespace Symu.Classes.Agents.Models.Templates.Communication
 
             cost = Normal.Sample(cost, 0.05F * random);
             return cost < 0 ? 0 : cost;
+        }
+
+        public void CopyTo(CommunicationTemplate medium)
+        {
+            if (medium == null)
+            {
+                throw new ArgumentNullException(nameof(medium));
+            }
+
+            medium.CostToSendLevel = CostToSendLevel;
+            medium.CostToReceiveLevel = CostToReceiveLevel;
+            medium.MaxRateLearnable = MaxRateLearnable;
+            medium.TimeToLive= TimeToLive;
+            medium.MinimumBeliefToSendPerBit = MinimumBeliefToSendPerBit;
+            medium.MinimumNumberOfBitsOfBeliefToSend = MinimumNumberOfBitsOfBeliefToSend;
+            medium.MaximumNumberOfBitsOfBeliefToSend = MaximumNumberOfBitsOfBeliefToSend;
+            medium.MaximumNumberOfBitsOfKnowledgeToSend = MaximumNumberOfBitsOfKnowledgeToSend;
+            medium.MinimumNumberOfBitsOfKnowledgeToSend = MinimumNumberOfBitsOfKnowledgeToSend;
+            medium.MinimumKnowledgeToSendPerBit = MinimumKnowledgeToSendPerBit;
         }
     }
 }

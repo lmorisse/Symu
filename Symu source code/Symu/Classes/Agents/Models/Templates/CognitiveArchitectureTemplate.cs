@@ -17,7 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveModel;
 namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the AgentTemplate
+    ///     CopyTo all the CognitiveArchitecture parameters for the AgentTemplate
     /// </summary>
     public class CognitiveArchitectureTemplate
     {

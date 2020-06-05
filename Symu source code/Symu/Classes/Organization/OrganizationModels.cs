@@ -109,7 +109,7 @@ namespace Symu.Classes.Organization
         }
 
         /// <summary>
-        ///     Set all models on
+        ///     CopyTo all models on
         /// </summary>
         /// <param name="rate"></param>
         public void On(float rate)
@@ -127,7 +127,7 @@ namespace Symu.Classes.Organization
         }
 
         /// <summary>
-        ///     Set all models off
+        ///     CopyTo all models off
         /// </summary>
         public void Off()
         {

@@ -207,8 +207,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.CanSendKnowledge = true;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
+            _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 0;
+            _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
             _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
@@ -228,9 +228,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit = 1;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 2;
-            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 1;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 2;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 2;
+            _emailTemplate.MinimumKnowledgeToSendPerBit = 1;
+            _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 2;
+            _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 2;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
             _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
@@ -251,9 +251,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit = 0.4F;
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 4;
             _cognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
-            _emailTemplate.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit = 0.4F;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 4;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 4;
+            _emailTemplate.MinimumKnowledgeToSendPerBit = 0.4F;
+            _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 4;
+            _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
             _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
@@ -289,8 +289,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             Assert.IsNotNull(bits);
             Assert.AreEqual(1F, bits.GetSum());
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend = 0;
-            _emailTemplate.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 0;
+            _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 0;
+            _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNull(bits);
         }

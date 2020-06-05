@@ -41,7 +41,7 @@ namespace Symu.Repository.Networks.Communication
         public PhoneTemplate Phone => _agentTemplates.Phone;
         public MeetingTemplate Meeting => _agentTemplates.Meeting;
         public FaceToFaceTemplate FaceToFace => _agentTemplates.FaceToFace;
-        public ViaPlatformTemplate ViaPlatform => _agentTemplates.Platform;
+        public ViaPlatformTemplate Platform => _agentTemplates.Platform;
 
         #region repository
 
@@ -60,7 +60,7 @@ namespace Symu.Repository.Networks.Communication
                 case CommunicationMediums.FaceToFace:
                     return FaceToFace;
                 case CommunicationMediums.ViaAPlatform:
-                    return ViaPlatform;
+                    return Platform;
                 case CommunicationMediums.System:
                     return null;
                 default:
@@ -84,8 +84,8 @@ namespace Symu.Repository.Networks.Communication
                     return send ? FaceToFace.CostToSend(randomLevelValue) : FaceToFace.CostToReceive(randomLevelValue);
                 case CommunicationMediums.ViaAPlatform:
                     return send
-                        ? ViaPlatform.CostToSend(randomLevelValue)
-                        : ViaPlatform.CostToReceive(randomLevelValue);
+                        ? Platform.CostToSend(randomLevelValue)
+                        : Platform.CostToReceive(randomLevelValue);
                 case CommunicationMediums.System:
                     return 0;
                 default:

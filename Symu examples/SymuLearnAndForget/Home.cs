@@ -152,12 +152,6 @@ namespace SymuLearnAndForget
                 cbCanSendKnowledge.Checked;
             OrganizationEntity.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge =
                 cbCanReceiveKnowledge.Checked;
-            // In this example:
-            // we use email, but we can use other communications medium
-            // we set the email template with the same values of Human Template, but it could be different
-            OrganizationEntity.Templates.Email.Cognitive.MessageContent.CanSendKnowledge = cbCanSendKnowledge.Checked;
-            OrganizationEntity.Templates.Email.Cognitive.MessageContent.CanReceiveKnowledge =
-                cbCanReceiveKnowledge.Checked;
 
             #endregion
 
@@ -404,7 +398,7 @@ namespace SymuLearnAndForget
             {
                 OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
-                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
+                OrganizationEntity.Templates.Email.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMinKnowledge.BackColor = SystemColors.Window;
             }
@@ -425,7 +419,7 @@ namespace SymuLearnAndForget
             {
                 OrganizationEntity.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
-                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
+                OrganizationEntity.Templates.Email.MinimumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMinBitsKnowledge.BackColor = SystemColors.Window;
             }
@@ -446,7 +440,7 @@ namespace SymuLearnAndForget
             {
                 OrganizationEntity.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
-                OrganizationEntity.Templates.Email.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
+                OrganizationEntity.Templates.Email.MaximumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMaxBitsKnowledge.BackColor = SystemColors.Window;
             }

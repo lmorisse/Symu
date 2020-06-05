@@ -7,16 +7,18 @@
 
 #endregion
 
-namespace Symu.Environment.Events
+namespace Symu.Common
 {
     /// <summary>
-    ///     Type of SymuEvent used to schedule event during the simulation
+    ///     Cyclicity used in Symu
+    ///     like SymuEvent : to schedule event during the simulation
     /// </summary>
-    public enum SymuEventType
+    public enum Cyclicity
     {
-        NoEvent = 0,
+        None = 0,
         OneShot = 1,
         Cyclical = 2,
-        Random = 3
+        Random = 3,
+        Always
     }
 }

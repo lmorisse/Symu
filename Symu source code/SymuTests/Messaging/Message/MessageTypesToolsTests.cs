@@ -52,7 +52,7 @@ namespace SymuTests.Messaging.Message
         public void AskOnWhichChannelTest()
         {
             const CommunicationMediums mediums = new CommunicationMediums();
-            Assert.AreEqual(CommunicationMediums.System, CommunicationMediumsModel.AskOnWhichChannel(mediums));
+            Assert.AreEqual(CommunicationMediums.System, CommunicationMediumsModel.NextMedium(mediums));
         }
 
         [TestMethod]
@@ -60,10 +60,10 @@ namespace SymuTests.Messaging.Message
         {
             var mediums = new CommunicationMediums();
             mediums |= CommunicationMediums.ViaAPlatform;
-            var medium = CommunicationMediumsModel.AskOnWhichChannel(mediums);
+            var medium = CommunicationMediumsModel.NextMedium(mediums);
             Assert.IsTrue(medium == CommunicationMediums.ViaAPlatform);
             mediums |= CommunicationMediums.Email;
-            medium = CommunicationMediumsModel.AskOnWhichChannel(mediums);
+            medium = CommunicationMediumsModel.NextMedium(mediums);
             Assert.IsTrue(medium == CommunicationMediums.Email || medium == CommunicationMediums.ViaAPlatform);
         }
 

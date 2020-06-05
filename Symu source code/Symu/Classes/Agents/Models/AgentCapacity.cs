@@ -56,7 +56,7 @@ namespace Symu.Classes.Agents.Models
         }
 
         /// <summary>
-        ///     Set the actual capacity
+        ///     CopyTo the actual capacity
         /// </summary>
         /// <param name="value"></param>
         public void Set(float value)

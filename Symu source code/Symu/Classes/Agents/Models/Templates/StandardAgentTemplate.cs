@@ -10,7 +10,7 @@
 namespace Symu.Classes.Agents.Models.Templates
 {
     /// <summary>
-    ///     Set all the CognitiveArchitecture parameters for the standardAgent
+    ///     CopyTo all the CognitiveArchitecture parameters for the standardAgent
     /// </summary>
     public class StandardAgentTemplate : CognitiveArchitectureTemplate
     {

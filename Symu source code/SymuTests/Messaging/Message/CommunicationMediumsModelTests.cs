@@ -26,7 +26,7 @@ namespace SymuTests.Messaging.Message
         public void AskOnWhichChannelTest0()
         {
             Assert.AreEqual(CommunicationMediums.System,
-                CommunicationMediumsModel.AskOnWhichChannel(new CommunicationMediums()));
+                CommunicationMediumsModel.NextMedium(new CommunicationMediums()));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SymuTests.Messaging.Message
         public void AskOnWhichChannelTest()
         {
             Assert.AreEqual(CommunicationMediums.Email,
-                CommunicationMediumsModel.AskOnWhichChannel(CommunicationMediums.Email));
+                CommunicationMediumsModel.NextMedium(CommunicationMediums.Email));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SymuTests.Messaging.Message
         public void AskOnWhichChannelTest1()
         {
             const CommunicationMediums mediums = CommunicationMediums.Email | CommunicationMediums.FaceToFace;
-            var result = CommunicationMediumsModel.AskOnWhichChannel(mediums);
+            var result = CommunicationMediumsModel.NextMedium(mediums);
             Assert.IsTrue(result == CommunicationMediums.Email || result == CommunicationMediums.FaceToFace);
         }
 
@@ -58,7 +58,7 @@ namespace SymuTests.Messaging.Message
         {
             const CommunicationMediums mediums =
                 CommunicationMediums.Email | CommunicationMediums.FaceToFace | CommunicationMediums.Irc;
-            var result = CommunicationMediumsModel.AskOnWhichChannel(mediums);
+            var result = CommunicationMediumsModel.NextMedium(mediums);
             Assert.IsTrue(result == CommunicationMediums.Email || result == CommunicationMediums.FaceToFace ||
                           result == CommunicationMediums.Irc);
         }

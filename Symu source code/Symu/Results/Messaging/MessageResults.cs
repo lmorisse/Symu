@@ -16,7 +16,7 @@ using Symu.Environment;
 
 #endregion
 
-namespace Symu.Results.Blocker
+namespace Symu.Results.Messaging
 {
     /// <summary>
     ///     Manage the message metrics for the simulation
@@ -67,6 +67,23 @@ namespace Symu.Results.Blocker
         ///     Total Sent Messages during the simulation
         /// </summary>
         public uint SentMessages => Results.Values.Any() ? Results.Values.Last().SentMessagesCount : 0;
+        /// <summary>
+        ///     Total Received Messages during the simulation
+        /// </summary>
+        public uint ReceivedMessages => Results.Values.Any() ? Results.Values.Last().ReceivedMessagesCount: 0;
+
+        /// <summary>
+        ///     Give the total weight of the sent messages 
+        /// </summary>
+        public float SentMessagesCost => Results.Values.Any() ? Results.Values.Last().SentMessagesCost : 0;
+        /// <summary>
+        ///     Give the total weight of the receive messages 
+        /// </summary>
+        public float ReceivedMessagesCost => Results.Values.Any() ? Results.Values.Last().ReceivedMessagesCost : 0;
+        /// <summary>
+        ///     Give the total weight of the receive messages 
+        /// </summary>
+        public uint MissedMessagesCount => Results.Values.Any() ? Results.Values.Last().MissedMessagesCount : 0;
 
         public void SetResults(SymuEnvironment environment)
         {

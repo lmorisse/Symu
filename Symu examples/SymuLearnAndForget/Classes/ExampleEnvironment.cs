@@ -41,7 +41,7 @@ namespace SymuLearnAndForget.Classes
 
             base.SetOrganization(organization);
 
-            var wiki = new DataBaseEntity(organization.Id, organization.Templates.Email.Cognitive);
+            var wiki = new DataBaseEntity(organization.Id, organization.Templates.Email);
             organization.AddDatabase(wiki);
             IterationResult.OrganizationKnowledgeAndBelief.On = true;
 
@@ -72,7 +72,7 @@ namespace SymuLearnAndForget.Classes
             ExpertAgent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             ExpertAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel.Expert,
                 Organization.Templates.Human.Cognitive.InternalCharacteristics);
-            // Set active link between expert and LearnByAskingAgent to be able to exchange information
+            // CopyTo active link between expert and LearnByAskingAgent to be able to exchange information
             WhitePages.Network.NetworkLinks.AddLink(LearnByAskingAgent.Id, ExpertAgent.Id);
         }
     }

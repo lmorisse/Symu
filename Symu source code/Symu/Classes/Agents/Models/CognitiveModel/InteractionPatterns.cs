@@ -39,8 +39,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             }
 
             interactionPatterns.AgentCanBeIsolated = AgentCanBeIsolated;
-            interactionPatterns.IsolationIsCyclical = IsolationIsCyclical;
-            interactionPatterns.IsolationIsRandom = IsolationIsRandom;
+            interactionPatterns.IsolationCyclicity = IsolationCyclicity;
             interactionPatterns.InteractionsBasedOnKnowledge = InteractionsBasedOnKnowledge;
             interactionPatterns.InteractionsBasedOnHomophily = InteractionsBasedOnHomophily;
             interactionPatterns.InteractionsBasedOnActivities = InteractionsBasedOnActivities;
@@ -60,20 +59,37 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         /// </summary>
         public Frequency AgentCanBeIsolated { get; set; }
 
-        public bool IsolationIsCyclical { get; set; }
-        public bool IsolationIsRandom { get; set; }
+        //public bool IsolationIsCyclical { get; set; }
+        /// <summary>
+        /// Isolation can be random, cylclic, ...
+        /// </summary>
+        public Cyclicity IsolationCyclicity { get; set; }
 
         /// <summary>
-        ///     Impact of isolation parameter on the capacity to work of the agent
+        ///     Check if Agent is Isolated at this step based on IsolationCyclicity or IsolationIsCyclical
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns>true if agent is isolated, false otherwise</returns>
+        public bool IsIsolated(ushort step)
+        {
+            switch (IsolationCyclicity)
+            {
+                case Cyclicity.Cyclical:
+                    return IsCyclicallyIsolated(step);
+                case Cyclicity.Random:
+                    return IsRandomlyIsolated();
+                case Cyclicity.Always:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        /// <summary>
+        ///     Check if Agent is randomly Isolated 
         /// </summary>
         /// <returns>true if agent is isolated, false otherwise</returns>
-        public bool IsIsolated()
+        private bool IsRandomlyIsolated()
         {
-            if (!IsolationIsRandom)
-            {
-                return false;
-            }
-
             float isolationThreshold;
             switch (AgentCanBeIsolated)
             {
@@ -103,6 +119,33 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
             }
 
             return Bernoulli.Sample(isolationThreshold);
+        }
+        /// <summary>
+        ///     Check if Agent is cyclically Isolated at this step 
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns>true if agent is isolated, false otherwise</returns>
+        public bool IsCyclicallyIsolated(ushort step)
+        {
+            switch (AgentCanBeIsolated)
+            {
+                case Frequency.Never:
+                    return false;
+                case Frequency.VeryRarely:
+                    return step % 6 == 0;
+                case Frequency.Rarely:
+                    return step % 5 == 0;
+                case Frequency.Medium:
+                    return step % 4 == 0;
+                case Frequency.Often:
+                    return step % 3 == 0;
+                case Frequency.VeryOften:
+                    return step % 2 == 0;
+                case Frequency.Always:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #endregion
@@ -244,7 +287,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Set binary interaction pattern based on InteractionStrategy
+        ///     CopyTo binary interaction pattern based on InteractionStrategy
         /// </summary>
         /// <param name="strategy"></param>
         public void SetInteractionPatterns(InteractionStrategy strategy)

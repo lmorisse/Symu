@@ -209,7 +209,7 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void NoTaskBlockedTest()
         {
-            _environment.Model.MandatoryRatio = 0;
+            _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 0;
             _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
@@ -222,8 +222,9 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void NoRiskAversionTest()
         {
-            _environment.Model.MandatoryRatio = 1;
+            _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
             _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
@@ -236,7 +237,7 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void NoWeightTest()
         {
-            _environment.Model.MandatoryRatio = 1;
+            _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
             _simulation.Process();
             CheckNoChange();
@@ -246,13 +247,16 @@ namespace SymuBeliefsAndInfluenceTests
                   (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
-
+        /// <summary>
+        /// Full risk aversion
+        /// </summary>
         [TestMethod]
         public void FullWeightTest()
         {
-            _environment.Model.MandatoryRatio = 1;
+            _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                0; // Full risk aversion
+                0;
+            _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
             CheckNoChange();
@@ -260,7 +264,27 @@ namespace SymuBeliefsAndInfluenceTests
                 ? 0
                 : _environment.IterationResult.Tasks.Done * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
-            Assert.AreNotEqual(100, tasksDoneRatio);
+            Assert.AreEqual(0, tasksDoneRatio);
+            Assert.AreEqual(_environment.Schedule.Step * _environment.WorkersCount, _environment.IterationResult.Tasks.Cancelled);
+        }
+        /// <summary>
+        /// No risk aversion
+        /// </summary>
+        [TestMethod]
+        public void FullWeightTest1()
+        {
+            _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
+                1;
+            _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
+            _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
+            _simulation.Process();
+            CheckNoChange();
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
+                ? 0
+                : _environment.IterationResult.Tasks.Done * 100 /
+                  (_environment.Schedule.Step * _environment.WorkersCount);
+            Assert.AreEqual(100, tasksDoneRatio);
         }
 
         /// <summary>
