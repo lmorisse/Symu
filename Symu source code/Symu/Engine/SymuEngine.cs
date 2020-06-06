@@ -225,15 +225,12 @@ namespace Symu.Engine
         ///     Used in unit tests
         /// </summary>
         /// <param name="environment"></param>
-        /// <param name="organization"></param>
-        public void Initialize(SymuEnvironment environment, OrganizationEntity organization)
+        public void Initialize(SymuEnvironment environment)
         {
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-
-            environment.SetOrganization(organization);
             SetEnvironment(environment);
             PreIteration();
             InitializeIteration();

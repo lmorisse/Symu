@@ -76,12 +76,19 @@ namespace Symu.Classes.Murphies
                 murphy.On = false;
             }
         }
-
+        /// <summary>
+        /// Add a murphy to the collection
+        /// </summary>
+        /// <param name="murphy"></param>
         public void Add(Murphy murphy)
         {
             Murphies.Add(murphy);
         }
-
+        /// <summary>
+        /// Get a murphy from the collection by its type
+        /// </summary>
+        /// <typeparam name="TMurphy"></typeparam>
+        /// <returns></returns>
         public TMurphy Get<TMurphy>() where TMurphy : Murphy
         {
             return Murphies.Find(x => x is TMurphy) as TMurphy;
