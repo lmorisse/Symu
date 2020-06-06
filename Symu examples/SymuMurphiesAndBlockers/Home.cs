@@ -47,7 +47,7 @@ namespace SymuMurphiesAndBlockers
             KnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
             KnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_environment.KnowledgeLevel);
             BeliefsLevel.Items.AddRange(BeliefLevelService.GetNames());
-            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive
+            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.AgentTemplates.Human.Cognitive
                 .KnowledgeAndBeliefs.DefaultBeliefLevel);
             EmailComm.Checked = true;
 
@@ -177,12 +177,12 @@ namespace SymuMurphiesAndBlockers
             OrganizationEntity.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
             _environment.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(KnowledgeLevel.SelectedItem.ToString());
-            OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            OrganizationEntity.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(BeliefsLevel.SelectedItem.ToString());
 
             OrganizationEntity.Models.Learning.On = EmailSearching.Checked;
 
-            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
 

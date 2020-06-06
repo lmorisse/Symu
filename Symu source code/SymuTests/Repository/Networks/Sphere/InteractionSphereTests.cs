@@ -14,7 +14,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Repository.Networks;
@@ -50,7 +51,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void Initialize()
         {
             _model.InteractionSphere.On = true;
-            _network = new Network(_templates, _model);
+            _network = new Network(_model);
             _agents.Add(_agentId1);
             _agents.Add(_agentId2);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);

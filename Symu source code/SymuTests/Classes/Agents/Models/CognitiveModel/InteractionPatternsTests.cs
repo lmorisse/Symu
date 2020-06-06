@@ -10,7 +10,7 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
 
 #endregion

@@ -29,7 +29,7 @@ namespace SymuMessageAndTask.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Standard);
+            SetCognitive(Environment.Organization.AgentTemplates.Standard);
         }
 
         public override void ActMessage(Message message)

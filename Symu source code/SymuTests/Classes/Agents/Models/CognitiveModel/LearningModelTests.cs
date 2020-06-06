@@ -11,8 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Engine;
@@ -29,7 +28,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly Network _network = new Network(new AgentTemplates(), new OrganizationModels());
+        private readonly Network _network = new Network(new OrganizationModels());
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private CognitiveArchitecture _cognitiveArchitecture;
         private LearningModel _learningModel;

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Blockers;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;

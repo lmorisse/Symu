@@ -13,7 +13,8 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
@@ -50,7 +51,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             _templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(InteractionStrategy.Knowledge);
             var organizationModels = new OrganizationModels {InteractionSphere = {On = true}};
-            _network = new Network(_templates, organizationModels);
+            _network = new Network(organizationModels);
             _networkKnowledge = _network.NetworkKnowledges;
         }
 

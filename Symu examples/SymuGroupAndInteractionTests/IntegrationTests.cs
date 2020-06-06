@@ -11,7 +11,7 @@
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Engine;
@@ -46,13 +46,13 @@ namespace SymuGroupAndInteractionTests
                 NumberOfSteps = NumberOfSteps
             };
             _symu.AddScenario(scenario);
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
         }
 
         public void SetInteractionPatterns(InteractionStrategy strategy)
         {
             _organization.Models.InteractionSphere.SetInteractionPatterns(strategy);
-            _organization.Templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(strategy);
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(strategy);
         }
 
         private int GetNotAcceptedMessages()
@@ -75,8 +75,8 @@ namespace SymuGroupAndInteractionTests
             SetInteractionPatterns(InteractionStrategy.Knowledge);
             _environment.GroupsCount = (byte) groupsCount;
             _environment.WorkersCount = 10;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 1;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 1;
             _environment.Knowledge = 1;
             _symu.Process();
             var links = _environment.WhitePages.Network.NetworkLinks.Count;
@@ -116,7 +116,7 @@ namespace SymuGroupAndInteractionTests
         {
             _environment.GroupsCount = 0;
             _environment.WorkersCount = (byte) agentCount;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _symu.Process();
             Assert.AreEqual(0F, GetNotAcceptedMessages());
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
@@ -237,8 +237,8 @@ namespace SymuGroupAndInteractionTests
             _environment.GroupsCount = 2;
             _environment.WorkersCount = 1;
             _environment.Knowledge = 1;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
             _symu.Process();
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
@@ -257,8 +257,8 @@ namespace SymuGroupAndInteractionTests
             _environment.WorkersCount = 1;
             _environment.Knowledge = 1;
             _organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Daily;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             _symu.Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
@@ -360,9 +360,9 @@ namespace SymuGroupAndInteractionTests
         {
             _environment.GroupsCount = 2;
             _environment.WorkersCount = 3;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
                 (byte) interactions;
             _symu.Process();
             Assert.AreEqual(40F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
@@ -378,9 +378,9 @@ namespace SymuGroupAndInteractionTests
         {
             _environment.GroupsCount = 2;
             _environment.WorkersCount = 3;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
-            _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 5;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            _organization.AgentTemplates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 5;
             _symu.Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0, GetNotAcceptedMessages());

@@ -12,7 +12,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Repository.Networks;
@@ -38,7 +38,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            var network = new Network(new AgentTemplates(), new OrganizationModels());
+            var network = new Network(new OrganizationModels());
             _networkKnowledges = network.NetworkKnowledges;
             _networkKnowledges.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});

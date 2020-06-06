@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Repository.Networks;
@@ -35,7 +36,7 @@ namespace Symu.Repository
     {
         public WhitePages(AgentTemplates agentTemplates, OrganizationModels models)
         {
-            Network = new Network(agentTemplates, models);
+            Network = new Network(models);
         }
 
         /// <summary>

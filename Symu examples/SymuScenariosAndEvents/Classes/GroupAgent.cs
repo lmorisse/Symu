@@ -24,7 +24,7 @@ namespace SymuScenariosAndEvents.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Standard);
+            SetCognitive(Environment.Organization.AgentTemplates.Standard);
         }
     }
 }

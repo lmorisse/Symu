@@ -13,11 +13,11 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
-using Symu.Classes.Agents.Models.Templates.Communication;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
@@ -42,7 +42,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new OrganizationModels());
+            _network = new Network(new OrganizationModels());
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

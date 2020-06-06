@@ -29,7 +29,7 @@ namespace SymuMurphiesAndBlockers.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Internet);
+            SetCognitive(Environment.Organization.AgentTemplates.Internet);
         }
 
         /// <summary>

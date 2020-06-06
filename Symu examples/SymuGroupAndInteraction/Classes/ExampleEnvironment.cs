@@ -39,8 +39,8 @@ namespace SymuGroupAndInteraction.Classes
 
             base.SetOrganization(organization);
 
-            Organization.Templates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            Organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            Organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            Organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.On = true;
             Organization.Models.Generator = RandomGenerator.RandomUniform;
@@ -89,21 +89,21 @@ namespace SymuGroupAndInteraction.Classes
                     // same Knowledge for all
                     actor.KnowledgeModel.AddKnowledge(knowledges[0].Id,
                         KnowledgeLevel,
-                        Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
 
                     break;
                 case 1:
                     // Knowledge is by group
                     actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                         KnowledgeLevel,
-                        Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
                     actor.KnowledgeModel.AddKnowledge(knowledges[index].Id,
                         KnowledgeLevel,
-                        Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
                     break;
             }
         }

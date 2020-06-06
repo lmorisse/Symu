@@ -79,7 +79,7 @@ namespace Symu.Environment
         public virtual void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Templates, Organization.Models);
+            WhitePages = new WhitePages(Organization.AgentTemplates, Organization.Models);
         }
 
         /// <summary>

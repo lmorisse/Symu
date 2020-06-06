@@ -32,7 +32,7 @@ namespace SymuScenariosAndEvents.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Human);
+            SetCognitive(Environment.Organization.AgentTemplates.Human);
         }
 
         public AgentId GroupId { get; set; }

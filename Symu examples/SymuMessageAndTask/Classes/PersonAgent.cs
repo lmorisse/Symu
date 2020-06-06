@@ -30,7 +30,7 @@ namespace SymuMessageAndTask.Classes
             new AgentId(agentKey, ClassKey),
             environment)
         {
-            SetCognitive(Environment.Organization.Templates.Human);
+            SetCognitive(Environment.Organization.AgentTemplates.Human);
             // Communication medium
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 CommunicationMediums.Email;

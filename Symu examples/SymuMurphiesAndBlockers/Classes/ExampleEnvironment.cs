@@ -12,12 +12,12 @@
 using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
+using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -43,17 +43,17 @@ namespace SymuMurphiesAndBlockers.Classes
             }
 
             base.SetOrganization(organization);
-            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
-            organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
-            organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
-            organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
-            organization.Templates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
+            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
+            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
+            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
+            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
+            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
 
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
@@ -108,7 +108,7 @@ namespace SymuMurphiesAndBlockers.Classes
             {
                 actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                     KnowledgeLevel,
-                    Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                    Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
                 actor.BeliefsModel.AddBelief(knowledges[i].Id);
             }
         }

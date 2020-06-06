@@ -12,7 +12,9 @@
 using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
+using Symu.Messaging.Templates;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Knowledges;
@@ -49,7 +51,12 @@ namespace Symu.Classes.Organization
         ///     Use to set attributes of those templates
         ///     and to set agent with templates
         /// </summary>
-        public AgentTemplates Templates { get; set; } = new AgentTemplates();
+        public AgentTemplates AgentTemplates { get; set; } = new AgentTemplates();
+        /// <summary>
+        ///     List of the communication templates that are available
+        ///     Use to set attributes of those templates
+        /// </summary>
+        public CommunicationTemplates Communication { get; set; } = new CommunicationTemplates();
 
         /// <summary>
         ///     List of all databases accessible to everyone

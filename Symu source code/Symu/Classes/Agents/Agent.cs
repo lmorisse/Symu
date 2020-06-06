@@ -12,8 +12,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveModel;
-using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;

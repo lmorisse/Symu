@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Repository.Networks.Knowledges;
 

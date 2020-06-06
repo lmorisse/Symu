@@ -69,13 +69,13 @@ namespace Symu.Classes.Agents
         private SymuTask ConvertMessageIntoTask(Message message)
         {
             var communication =
-                Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
+                Environment.Organization.Communication.TemplateFromChannel(message.Medium);
             var task = new SymuTask(Schedule.Step)
             {
                 Type = message.Medium.ToString(),
                 TimeToLive = communication.TimeToLive,
                 Parent = message,
-                Weight = Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, false,
+                Weight = Environment.Organization.Communication.TimeSpent(message.Medium, false,
                     Environment.Organization.Models.RandomLevelValue)
             };
 

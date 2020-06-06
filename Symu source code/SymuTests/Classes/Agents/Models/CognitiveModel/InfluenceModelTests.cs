@@ -12,7 +12,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Repository.Networks;
@@ -34,7 +34,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new OrganizationModels());
+            _network = new Network(new OrganizationModels());
             var entity = new ModelEntity();
             _influenceModel = new InfluenceModel(_agentId, entity, _internalCharacteristics, _network);
         }

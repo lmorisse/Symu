@@ -13,7 +13,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
@@ -40,7 +40,7 @@ namespace SymuTests.Classes.Murphies
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new OrganizationModels());
+            _network = new Network(new OrganizationModels());
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

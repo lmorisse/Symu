@@ -10,10 +10,10 @@
 #region using directives
 
 using System;
-using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Environment;
+using Symu.Messaging.Templates;
 
 #endregion
 
@@ -109,7 +109,7 @@ namespace SymuMessageAndTask.Classes
 
             base.SetOrganization(organization);
 
-            organization.Templates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.Random;
+            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.Random;
             IterationResult.Off();
             IterationResult.Tasks.On = true;
             IterationResult.Messages.On = true;

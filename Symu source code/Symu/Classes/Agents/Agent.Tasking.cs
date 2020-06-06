@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Blockers;
 using Symu.Classes.Murphies;
 using Symu.Classes.Task;
@@ -239,7 +239,7 @@ namespace Symu.Classes.Agents
             }
 
             var impact =
-                Environment.WhitePages.Network.NetworkCommunications.TimeSpent(medium, send,
+                Environment.Organization.Communication.TimeSpent(medium, send,
                     Environment.Organization.Models.RandomLevelValue);
             AddTimeSpent(keyActivity, impact);
         }

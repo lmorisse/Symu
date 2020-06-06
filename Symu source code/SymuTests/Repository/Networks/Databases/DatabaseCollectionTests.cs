@@ -12,7 +12,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModel;
+using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Databases;
@@ -35,7 +36,7 @@ namespace SymuTests.Repository.Networks.Databases
             var agentId = new AgentId(1, 1);
             var agentTemplates = new AgentTemplates();
             var models = new OrganizationModels();
-            var network = new Network(agentTemplates, models);
+            var network = new Network(models);
             var cognitive = new CognitiveArchitecture();
             var databaseEntity = new DataBaseEntity(agentId, cognitive);
             _database = new Database(databaseEntity, models, network.NetworkKnowledges);

@@ -13,13 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.Templates.Communication;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Communication;
 using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Group;
@@ -41,10 +39,9 @@ namespace Symu.Repository.Networks
     {
         private readonly OrganizationModels _models;
 
-        public Network(AgentTemplates agentTemplates, OrganizationModels models)
+        public Network(OrganizationModels models)
         {
             _models = models ?? throw new ArgumentNullException(nameof(models));
-            NetworkCommunications = new NetworkCommunications(agentTemplates);
             InteractionSphere = new InteractionSphere(models.InteractionSphere);
             NetworkBeliefs = new NetworkBeliefs(models.ImpactOfBeliefOnTask);
         }
@@ -102,11 +99,6 @@ namespace Symu.Repository.Networks
         ///     Agent enculturation level network
         /// </summary>
         public NetworkInfluences NetworkInfluences { get; } = new NetworkInfluences();
-
-        /// <summary>
-        ///     Communication network
-        /// </summary>
-        public NetworkCommunications NetworkCommunications { get; }
 
         /// <summary>
         ///     Communication network

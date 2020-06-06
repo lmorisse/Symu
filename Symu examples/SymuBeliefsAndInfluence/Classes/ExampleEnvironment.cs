@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -138,7 +138,7 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
                     KnowledgeLevel.FullKnowledge,
-                    Organization.Templates.Human.Cognitive.InternalCharacteristics);
+                    Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
                 actor.BeliefsModel.AddBelief(knowledges[i].Id);
             }
         }

@@ -10,7 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.Templates;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Environment;
 using Symu.Repository;
 

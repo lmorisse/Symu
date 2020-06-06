@@ -12,8 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveModel;
-using Symu.Classes.Agents.Models.Templates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
@@ -242,7 +240,7 @@ namespace Symu.Classes.Agents
             MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
             // Impact of the Communication channels on the remaining capacity
             var cost =
-                Environment.WhitePages.Network.NetworkCommunications.TimeSpent(message.Medium, true,
+                Environment.Organization.Communication.TimeSpent(message.Medium, true,
                     Environment.Organization.Models.RandomLevelValue);
             Capacity.Decrement(cost);
             Environment.Messages.TrackMessageSent(message, cost);
@@ -285,7 +283,7 @@ namespace Symu.Classes.Agents
             }
 
             var communication =
-                Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
+                Environment.Organization.Communication.TemplateFromChannel(message.Medium);
             LearningModel.Learn(message.Attachments.KnowledgeId,
                 message.Attachments.KnowledgeBits, communication.MaxRateLearnable, Schedule.Step);
             if (message.Medium == CommunicationMediums.Email && HasEmail)
@@ -509,7 +507,7 @@ namespace Symu.Classes.Agents
             {
                 var ma = message.Attachments;
                 var communication =
-                    Environment.WhitePages.Network.NetworkCommunications.TemplateFromChannel(message.Medium);
+                    Environment.Organization.Communication.TemplateFromChannel(message.Medium);
                 ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication,
                     Schedule.Step, out var knowledgeIndexToSend);
                 ma.BeliefBits = BeliefsModel.FilterBeliefToSend(ma.KnowledgeId, ma.KnowledgeBit, communication);

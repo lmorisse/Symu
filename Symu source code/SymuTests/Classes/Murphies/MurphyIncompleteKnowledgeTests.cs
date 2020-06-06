@@ -11,7 +11,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
@@ -35,7 +34,7 @@ namespace SymuTests.Classes.Murphies
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new AgentTemplates(), new OrganizationModels());
+            _network = new Network(new OrganizationModels());
             _knowledge = new Knowledge(1, "1", 1);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
