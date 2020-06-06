@@ -236,6 +236,7 @@ namespace Symu.Engine
             InitializeIteration();
             environment.Start();
             environment.PreStep();
+            environment.Messages.WaitingToClearAllMessages();
         }
 
         protected void SetScenariiAndTimeStep()
