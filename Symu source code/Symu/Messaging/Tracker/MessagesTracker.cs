@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Messaging.Delayed;
 using Symu.Messaging.Messages;
-using Symu.Results.Blocker;
 using Symu.Results.Messaging;
 
 #endregion
@@ -197,6 +196,7 @@ namespace Symu.Messaging.Tracker
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             Result.SentMessagesCost += cost;
         }
 

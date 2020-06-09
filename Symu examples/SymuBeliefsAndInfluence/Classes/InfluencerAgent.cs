@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: SymuBiz - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -26,12 +26,14 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class InfluencerAgent : Agent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
-        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment)Environment).Knowledges;
 
-        public InfluencerAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        public InfluencerAgent(ushort agentKey, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(
             new AgentId(agentKey, ClassKey), environment, template)
         {
         }
+
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -56,7 +58,8 @@ namespace SymuBeliefsAndInfluence.Classes
             base.SetModels();
             foreach (var knowledge in Knowledges)
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge, Cognitive.InternalCharacteristics);
+                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge,
+                    Cognitive.InternalCharacteristics);
                 BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }
         }

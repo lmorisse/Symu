@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,12 +9,10 @@
 
 #region using directives
 
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Environment;
-using Symu.Messaging.Messages;
 
 #endregion
 
@@ -23,84 +21,86 @@ namespace Symu.Results.Task
     /// <summary>
     ///     Manage the task metrics for the simulation
     /// </summary>
-    public class TaskResults
+    public sealed class TaskResults : SymuResults
     {
+        public TaskResults(SymuEnvironment environment) : base(environment)
+        {
+            Frequency = TimeStepType.Daily;
+        }
+
         /// <summary>
         ///     Key => step
         ///     Value => TaskResult for the step
         /// </summary>
-        public ConcurrentDictionary<ushort, TaskResult> Results { get; private set; } =
+        public ConcurrentDictionary<ushort, TaskResult> Tasks { get; private set; } =
             new ConcurrentDictionary<ushort, TaskResult>();
 
         /// <summary>
-        ///     If set to true, TaskResults will be filled with value and stored during the simulation
+        ///     The number of connections between agents
         /// </summary>
-        public bool On { get; set; }
+        public List<DensityStruct> Capacity { get; private set; } = new List<DensityStruct>();
 
         /// <summary>
-        ///     Total tasks still in to do
+        ///     The number of connections between agents
         /// </summary>
-        public float AverageToDo => Results.Values.Any() ? (float) Results.Values.Average(x => x.ToDo) : 0F;
+        public List<float> SumCapacity { get; private set; } = new List<float>();
 
-        /// <summary>
-        ///     Total tasks still in progress
-        /// </summary>
-        public float AverageInProgress =>
-            Results.Values.Any() ? (float) Results.Values.Average(x => x.InProgress) : 0F;
-
-        /// <summary>
-        ///     Total tasks still in done
-        /// </summary>
-        public float AverageDone => Results.Values.Any() ? (float) Results.Values.Average(x => x.Done) : 0F;
-
-        /// <summary>
-        ///     Total tasks done during the simulation
-        /// </summary>
-        public int Total => Results.Values.Any() ? Results.Values.Last().TotalTasksNumber : 0;
-
-        /// <summary>
-        ///     Total tasks done during the simulation
-        /// </summary>
-        public int Done => Results.Values.Any() ? Results.Values.Last().Done : 0;
-
-        /// <summary>
-        ///     Total tasks cancelled during the simulation
-        /// </summary>
-        public int Cancelled => Results.Values.Any() ? Results.Values.Last().Cancelled : 0;
-
-        /// <summary>
-        ///     Total impact of incorrectness
-        /// </summary>
-        public int Incorrectness => Results.Values.Any() ? Results.Values.Last().Incorrectness : 0;
-
-        /// <summary>
-        ///     Total weight of tasks done during the simulation
-        /// </summary>
-        public float Weight => Results.Values.Any() ? Results.Values.Last().WeightDone : 0;
-
-        public void SetResults(SymuEnvironment environment)
+        protected override void HandleResults()
         {
-            if (!On)
+            HandleTasks();
+            HandleCapacity();
+        }
+
+        private void HandleCapacity()
+        {
+            float sum;
+            float max;
+            if (!Environment.WhitePages.Any())
             {
                 return;
             }
 
-            if (environment == null)
+            if (Environment.Schedule.IsWorkingDay)
             {
-                throw new ArgumentNullException(nameof(environment));
+                max = Environment.WhitePages.AllAgents()
+                    .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask);
+                sum = Environment.WhitePages.AllAgents()
+                    .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask)
+                    .Select(x => x.Capacity.Initial).Sum();
+            }
+            else
+            {
+                max = Environment.WhitePages.AllAgents()
+                    .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds);
+                sum = Environment.WhitePages.AllAgents()
+                    .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds)
+                    .Select(x => x.Capacity.Initial).Sum();
             }
 
-            var result = new TaskResult();
-            // alive agents
-            SetResults(environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
-            // stopped agents
-            SetResults(environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
-                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
-            Results.TryAdd(environment.Schedule.Step, result);
+            var density = new DensityStruct(sum, max, Environment.Schedule.Step);
+            Capacity.Add(density);
+
+            SumCapacity.Add(Capacity.Sum(x => x.ActualNumber));
         }
 
-        private static void SetResults(IEnumerable<TaskResult> taskResults, TaskResult result)
+        private void HandleTasks()
+        {
+            var result = new TaskResult();
+            if (!Environment.WhitePages.Any())
+            {
+                return;
+            }
+
+            // alive agents
+            HandleResults(Environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
+            // stopped agents
+            HandleResults(Environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+                .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
+            Tasks.TryAdd(Environment.Schedule.Step, result);
+        }
+
+        private static void HandleResults(IEnumerable<TaskResult> taskResults, TaskResult result)
         {
             foreach (var taskResult in taskResults)
             {
@@ -114,23 +114,83 @@ namespace Symu.Results.Task
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
-            Results.Clear();
+            Tasks.Clear();
+            Capacity.Clear();
+            SumCapacity.Clear();
         }
 
-        public void CopyTo(TaskResults cloneTasks)
+        public override void CopyTo(object clone)
         {
-            if (cloneTasks == null)
+            if (!(clone is TaskResults cloneTasks))
             {
-                throw new ArgumentNullException(nameof(cloneTasks));
+                return;
             }
 
-            cloneTasks.Results = new ConcurrentDictionary<ushort, TaskResult>();
-            foreach (var result in Results)
+
+            cloneTasks.Tasks = new ConcurrentDictionary<ushort, TaskResult>();
+            foreach (var result in Tasks)
             {
-                cloneTasks.Results.TryAdd(result.Key, result.Value);
+                cloneTasks.Tasks.TryAdd(result.Key, result.Value);
             }
+
+            cloneTasks.Capacity = new List<DensityStruct>();
+            cloneTasks.Capacity.AddRange(Capacity);
+            cloneTasks.SumCapacity = new List<float>();
+            cloneTasks.SumCapacity.AddRange(SumCapacity);
         }
+
+        public override SymuResults Clone()
+        {
+            var clone = new TaskResults(Environment);
+            CopyTo(clone);
+            return clone;
+        }
+
+        #region Shortcuts to tasks result
+
+        /// <summary>
+        ///     Total tasks still in to do
+        /// </summary>
+        public float AverageToDo => Tasks.Values.Any() ? (float) Tasks.Values.Average(x => x.ToDo) : 0F;
+
+        /// <summary>
+        ///     Total tasks still in progress
+        /// </summary>
+        public float AverageInProgress =>
+            Tasks.Values.Any() ? (float) Tasks.Values.Average(x => x.InProgress) : 0F;
+
+        /// <summary>
+        ///     Total tasks still in done
+        /// </summary>
+        public float AverageDone => Tasks.Values.Any() ? (float) Tasks.Values.Average(x => x.Done) : 0F;
+
+        /// <summary>
+        ///     Total tasks done during the simulation
+        /// </summary>
+        public int Total => Tasks.Values.Any() ? Tasks.Values.Last().TotalTasksNumber : 0;
+
+        /// <summary>
+        ///     Total tasks done during the simulation
+        /// </summary>
+        public int Done => Tasks.Values.Any() ? Tasks.Values.Last().Done : 0;
+
+        /// <summary>
+        ///     Total tasks cancelled during the simulation
+        /// </summary>
+        public int Cancelled => Tasks.Values.Any() ? Tasks.Values.Last().Cancelled : 0;
+
+        /// <summary>
+        ///     Total impact of incorrectness
+        /// </summary>
+        public int Incorrectness => Tasks.Values.Any() ? Tasks.Values.Last().Incorrectness : 0;
+
+        /// <summary>
+        ///     Total weight of tasks done during the simulation
+        /// </summary>
+        public float Weight => Tasks.Values.Any() ? Tasks.Values.Last().WeightDone : 0;
+
+        #endregion
     }
 }

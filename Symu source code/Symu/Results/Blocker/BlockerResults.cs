@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,7 +9,6 @@
 
 #region using directives
 
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +21,19 @@ namespace Symu.Results.Blocker
     /// <summary>
     ///     Manage the task blockers results for the simulation
     /// </summary>
-    public class BlockerResults
+    public sealed class BlockerResults : SymuResults
     {
+        public BlockerResults(SymuEnvironment environment) : base(environment)
+        {
+            Frequency = TimeStepType.Daily;
+        }
+
         /// <summary>
         ///     Key => step
         ///     Value => BlockerResult for the step
         /// </summary>
         public ConcurrentDictionary<ushort, BlockerResult> Results { get; private set; } =
             new ConcurrentDictionary<ushort, BlockerResult>();
-
-        /// <summary>
-        ///     If set to true, blockerResults will be filled with value and stored during the simulation
-        /// </summary>
-        public bool On { get; set; }
 
         /// <summary>
         ///     Total blockers done during the simulation
@@ -71,16 +70,11 @@ namespace Symu.Results.Blocker
         /// </summary>
         public int TotalSearches => Results.Values.Any() ? Results.Values.Last().Search : 0;
 
-        public void SetResults(SymuEnvironment environment)
+        protected override void HandleResults()
         {
-            if (!On)
+            if (!Environment.WhitePages.Any())
             {
                 return;
-            }
-
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
             }
 
             var result = new BlockerResult();
@@ -98,15 +92,15 @@ namespace Symu.Results.Blocker
             //}
 
             // alive agents
-            SetResults(environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             // stopped agents
-            SetResults(environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
-            Results.TryAdd(environment.Schedule.Step, result);
+            Results.TryAdd(Environment.Schedule.Step, result);
         }
 
-        private static void SetResults(IEnumerable<BlockerResult> blockerResults, BlockerResult result)
+        private static void HandleResults(IEnumerable<BlockerResult> blockerResults, BlockerResult result)
         {
             foreach (var blockerResult in blockerResults)
             {
@@ -120,16 +114,16 @@ namespace Symu.Results.Blocker
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
             Results.Clear();
         }
 
-        public void CopyTo(BlockerResults cloneBlockers)
+        public override void CopyTo(object clone)
         {
-            if (cloneBlockers == null)
+            if (!(clone is BlockerResults cloneBlockers))
             {
-                throw new ArgumentNullException(nameof(cloneBlockers));
+                return;
             }
 
             cloneBlockers.Results = new ConcurrentDictionary<ushort, BlockerResult>();
@@ -137,6 +131,13 @@ namespace Symu.Results.Blocker
             {
                 cloneBlockers.Results.TryAdd(result.Key, result.Value);
             }
+        }
+
+        public override SymuResults Clone()
+        {
+            var clone = new BlockerResults(Environment);
+            CopyTo(clone);
+            return clone;
         }
     }
 }

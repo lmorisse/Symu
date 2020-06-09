@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteraction
+// Description: SymuBiz - SymuGroupAndInteraction
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,15 +10,12 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -34,6 +31,11 @@ namespace SymuGroupAndInteraction.Classes
         }
 
         /// <summary>
+        ///     Agent is member of a group
+        /// </summary>
+        public AgentId GroupId { get; set; }
+
+        /// <summary>
         ///     Customize the cognitive architecture of the agent
         ///     After setting the Agent template
         /// </summary>
@@ -46,11 +48,6 @@ namespace SymuGroupAndInteraction.Classes
             Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
         }
-
-        /// <summary>
-        ///     Agent is member of a group
-        /// </summary>
-        public AgentId GroupId { get; set; }
 
 
         public override void ActMessage(Message message)

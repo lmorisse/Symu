@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuLearnAndForget
+// Description: SymuBiz - SymuLearnAndForget
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -56,9 +56,12 @@ namespace SymuLearnAndForget.Classes
             WhitePages.Network.AddKnowledge(Knowledge);
             Wiki.InitializeKnowledge(Knowledge, 0);
 
-            LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
-            LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
-            LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            LearnFromSourceAgent =
+                new LearnFromSourceAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            LearnByDoingAgent =
+                new LearnByDoingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            LearnByAskingAgent =
+                new LearnByAskingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
             DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
             ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information

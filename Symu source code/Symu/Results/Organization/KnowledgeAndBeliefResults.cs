@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,11 +9,9 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
-using Symu.Common;
 using Symu.Environment;
 
 #endregion
@@ -23,52 +21,42 @@ namespace Symu.Results.Organization
     /// <summary>
     ///     Get the knowledge and Belief performance for the group
     /// </summary>
-    public class KnowledgeAndBeliefResults
+    public sealed class KnowledgeAndBeliefResults : SymuResults
     {
-        private readonly SymuEnvironment _environment;
-
-        public KnowledgeAndBeliefResults(SymuEnvironment environment)
+        public KnowledgeAndBeliefResults(SymuEnvironment environment) : base(environment)
         {
-            _environment = environment;
         }
-
-        /// <summary>
-        ///     If set to true, KnowledgeAndBeliefResults will be filled with value and stored during the simulation
-        /// </summary>
-        public bool On { get; set; }
-
-        public TimeStepType Frequency { get; set; } = TimeStepType.Monthly;
 
         /// <summary>
         ///     List of knowledge performance per step
         /// </summary>
-        public List<KnowledgeAndBeliefStruct> Knowledge { get; private set; } = new List<KnowledgeAndBeliefStruct>();
+        public List<StatisticalResultStruct> Knowledge { get; private set; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of belief performance per step
         /// </summary>
-        public List<KnowledgeAndBeliefStruct> Beliefs { get; private set; } = new List<KnowledgeAndBeliefStruct>();
+        public List<StatisticalResultStruct> Beliefs { get; private set; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of learning performance per step
         /// </summary>
-        public List<KnowledgeAndBeliefStruct> Learning { get; private set; } = new List<KnowledgeAndBeliefStruct>();
+        public List<StatisticalResultStruct> Learning { get; private set; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of forgetting performance per step
         /// </summary>
-        public List<KnowledgeAndBeliefStruct> Forgetting { get; private set; } = new List<KnowledgeAndBeliefStruct>();
+        public List<StatisticalResultStruct> Forgetting { get; private set; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of Global Knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public List<KnowledgeAndBeliefStruct> KnowledgeObsolescence { get; private set; } =
-            new List<KnowledgeAndBeliefStruct>();
+        public List<StatisticalResultStruct> KnowledgeObsolescence { get; private set; } =
+            new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     Initialize of results
         /// </summary>
-        public void Clear()
+        public override void Clear()
         {
             Knowledge.Clear();
             Beliefs.Clear();
@@ -80,83 +68,48 @@ namespace Symu.Results.Organization
         /// <summary>
         ///     Handle the performance around knowledge and beliefs
         /// </summary>
-        /// <param name="schedule"></param>
-        public void SetResults(Schedule schedule)
+        protected override void HandleResults()
         {
-            if (schedule == null)
-            {
-                throw new ArgumentNullException(nameof(schedule));
-            }
-
-            if (!On)
-            {
-                return;
-            }
-
-            bool handle;
-            switch (Frequency)
-            {
-                case TimeStepType.Intraday:
-                case TimeStepType.Daily:
-                    handle = true;
-                    break;
-                case TimeStepType.Weekly:
-                    handle = schedule.IsEndOfWeek;
-                    break;
-                case TimeStepType.Monthly:
-                    handle = schedule.IsEndOfMonth;
-                    break;
-                case TimeStepType.Yearly:
-                    handle = schedule.IsEndOfYear;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (!handle)
-            {
-                return;
-            }
-            HandleBelief(schedule.Step);
-            HandleKnowledge(schedule.Step);
-            HandleLearning(schedule.Step);
-            HandleForgetting(schedule.Step);
-            HandleKnowledgeObsolescence(schedule.Step);
+            HandleBelief();
+            HandleKnowledge();
+            HandleLearning();
+            HandleForgetting();
+            HandleKnowledgeObsolescence();
         }
 
-        public void HandleLearning(ushort step)
+        public void HandleLearning()
         {
-            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning)
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning)
                 .ToList();
-            var learning = SetStructKnowledgeAndBeliefStruct(step, sum);
+            var learning = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
             Learning.Add(learning);
         }
 
-        public void HandleForgetting(ushort step)
+        public void HandleForgetting()
         {
-            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(e => e.Forgetting).ToList();
-            var forgetting = SetStructKnowledgeAndBeliefStruct(step, sum);
+            var forgetting = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
             Forgetting.Add(forgetting);
         }
 
-        public void HandleKnowledgeObsolescence(ushort step)
+        public void HandleKnowledgeObsolescence()
         {
-            var sum = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(e => e.Obsolescence).ToList();
-            var obsolescence = SetStructKnowledgeAndBeliefStruct(step, sum);
+            var obsolescence = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
             KnowledgeObsolescence.Add(obsolescence);
         }
 
-        public void HandleKnowledge(ushort step)
+        public void HandleKnowledge()
         {
-            var sumKnowledge = _environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+            var sumKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(expertise => expertise.GetKnowledgesSum()).ToList();
-            var knowledge = SetStructKnowledgeAndBeliefStruct(step, sumKnowledge);
+            var knowledge = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sumKnowledge);
             Knowledge.Add(knowledge);
         }
 
-        private static KnowledgeAndBeliefStruct SetStructKnowledgeAndBeliefStruct(ushort step,
+        private static StatisticalResultStruct SetStructKnowledgeAndBeliefStruct(ushort step,
             IReadOnlyList<float> sumKnowledge)
         {
             float sum;
@@ -181,55 +134,62 @@ namespace Symu.Results.Organization
                     break;
             }
 
-            var knowledge = new KnowledgeAndBeliefStruct(sum, mean, stdDev, step);
+            var knowledge = new StatisticalResultStruct(sum, mean, stdDev, step);
             return knowledge;
         }
 
-        public void HandleBelief(ushort step)
+        public void HandleBelief()
         {
-            var sum = _environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
+            var sum = Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
                 .Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
-            var belief = SetStructKnowledgeAndBeliefStruct(step, sum);
+            var belief = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
             Beliefs.Add(belief);
         }
 
-        public void CopyTo(KnowledgeAndBeliefResults cloneKnowledgeAndBeliefResults)
+        public override void CopyTo(object clone)
         {
-            if (cloneKnowledgeAndBeliefResults == null)
+            if (!(clone is KnowledgeAndBeliefResults cloneKnowledgeAndBeliefResults))
             {
-                throw new ArgumentNullException(nameof(cloneKnowledgeAndBeliefResults));
+                return;
             }
 
-            cloneKnowledgeAndBeliefResults.Knowledge = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Knowledge = new List<StatisticalResultStruct>();
             foreach (var result in Knowledge)
             {
                 cloneKnowledgeAndBeliefResults.Knowledge.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Beliefs = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Beliefs = new List<StatisticalResultStruct>();
             foreach (var result in Beliefs)
             {
                 cloneKnowledgeAndBeliefResults.Beliefs.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Learning = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Learning = new List<StatisticalResultStruct>();
             foreach (var result in Learning)
             {
                 cloneKnowledgeAndBeliefResults.Learning.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Forgetting = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Forgetting = new List<StatisticalResultStruct>();
             foreach (var result in Forgetting)
             {
                 cloneKnowledgeAndBeliefResults.Forgetting.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.KnowledgeObsolescence = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.KnowledgeObsolescence = new List<StatisticalResultStruct>();
             foreach (var result in KnowledgeObsolescence)
             {
                 cloneKnowledgeAndBeliefResults.KnowledgeObsolescence.Add(result);
             }
+        }
+
+        public override SymuResults Clone()
+        {
+            var clone = new KnowledgeAndBeliefResults(Environment);
+            CopyTo(clone);
+            return clone;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ namespace Symu.Repository.Networks.Databases
             CognitiveArchitecture = new CognitiveArchitecture();
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
+
         public DataBaseEntity(AgentId agentId, CommunicationTemplate medium)
         {
             if (medium == null)
@@ -45,15 +46,15 @@ namespace Symu.Repository.Networks.Databases
             CognitiveArchitecture = new CognitiveArchitecture();
             CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend =
                 medium.MaximumNumberOfBitsOfBeliefToSend;
-            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend=
+            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
                 medium.MaximumNumberOfBitsOfKnowledgeToSend;
-            CognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit=
+            CognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit =
                 medium.MinimumBeliefToSendPerBit;
-            CognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit=
+            CognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit =
                 medium.MinimumKnowledgeToSendPerBit;
-            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend=
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend =
                 medium.MinimumNumberOfBitsOfBeliefToSend;
-            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend=
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
                 medium.MinimumNumberOfBitsOfKnowledgeToSend;
             CognitiveArchitecture.InternalCharacteristics.TimeToLive = medium.TimeToLive;
         }

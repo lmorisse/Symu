@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuLearnAndForget
+// Description: SymuBiz - SymuLearnAndForget
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -49,7 +49,8 @@ namespace SymuLearnAndForget.Classes
         protected override void SetModels()
         {
             base.SetModels();
-            KnowledgeModel.AddKnowledge(((ExampleEnvironment)Environment).Knowledge.Id, KnowledgeLevel.Expert, Cognitive.InternalCharacteristics);
+            KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).Knowledge.Id, KnowledgeLevel.Expert,
+                Cognitive.InternalCharacteristics);
         }
 
         public override void ActMessage(Message message)

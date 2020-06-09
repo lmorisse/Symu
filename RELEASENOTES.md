@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.8.0
+This release contains refactoring and minor bug fixes
+
 ## 0.7.0
 This release contains a new project example:  [SymuScenariosAndEvents](https://github.com/lmorisse/Symu/tree/master/Symu%20examples/SymuScenariosAndEvents).
 

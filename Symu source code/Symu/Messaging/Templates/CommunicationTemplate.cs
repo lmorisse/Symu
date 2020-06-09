@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -19,12 +19,21 @@ using Symu.Tools.Math.ProbabilityDistributions;
 namespace Symu.Messaging.Templates
 {
     /// <summary>
-    ///     CopyTo all the CognitiveArchitecture parameters for the CommunicationChannels
+    ///     Clone all the CognitiveArchitecture parameters for the CommunicationChannels
     ///     base class for all the communication channels
     /// </summary>
     public class CommunicationTemplate //: CognitiveArchitectureTemplate
     {
-        private float _maxRateLearnable = 1;        
+        private byte _maximumNumberOfBitsOfKnowledgeToSend = 1;
+        private float _maxRateLearnable = 1;
+
+        private float _minimumBeliefToSendPerBit = 0.35F;
+        private float _minimumKnowledgeToSendPerBit = 0.35F;
+
+        private byte _minimumNumberOfBitsOfKnowledgeToSend = 1;
+
+        private short _timeToLive = -1;
+
         /// <summary>
         ///     Maximum rate learnable the message can be
         ///     Range [0;1]
@@ -46,8 +55,6 @@ namespace Symu.Messaging.Templates
             }
         }
 
-        private short _timeToLive = -1;
-
         /// <summary>
         ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
         ///     -1 for unlimited time to live
@@ -65,9 +72,8 @@ namespace Symu.Messaging.Templates
                 _timeToLive = value;
             }
         }
-        public bool CanReceiveBeliefs { get; set; }
 
-        private float _minimumBeliefToSendPerBit = 0.35F;
+        public bool CanReceiveBeliefs { get; set; }
 
         /// <summary>
         ///     To send beliefs, an agent must have enough beliefs per KnowledgeBits
@@ -98,7 +104,6 @@ namespace Symu.Messaging.Templates
         ///     The maximum number of non zero Bits of Knowledge to send back during an interaction (message)
         /// </summary>
         public byte MaximumNumberOfBitsOfBeliefToSend { get; set; } = 1;
-        private float _minimumKnowledgeToSendPerBit = 0.35F;
 
         /// <summary>
         ///     To send Knowledge, an agent must have enough knowledge per KnowledgeBits
@@ -120,8 +125,6 @@ namespace Symu.Messaging.Templates
             }
         }
 
-        private byte _minimumNumberOfBitsOfKnowledgeToSend = 1;
-
         /// <summary>
         ///     The minimum number of non zero Bits of Knowledge to send back during an interaction (message)
         /// </summary>
@@ -139,8 +142,6 @@ namespace Symu.Messaging.Templates
                 _minimumNumberOfBitsOfKnowledgeToSend = value;
             }
         }
-
-        private byte _maximumNumberOfBitsOfKnowledgeToSend = 1;
 
         /// <summary>
         ///     The maximum number of non zero Bits of Knowledge to send back during an interaction (message)
@@ -227,7 +228,7 @@ namespace Symu.Messaging.Templates
             medium.CostToSendLevel = CostToSendLevel;
             medium.CostToReceiveLevel = CostToReceiveLevel;
             medium.MaxRateLearnable = MaxRateLearnable;
-            medium.TimeToLive= TimeToLive;
+            medium.TimeToLive = TimeToLive;
             medium.MinimumBeliefToSendPerBit = MinimumBeliefToSendPerBit;
             medium.MinimumNumberOfBitsOfBeliefToSend = MinimumNumberOfBitsOfBeliefToSend;
             medium.MaximumNumberOfBitsOfBeliefToSend = MaximumNumberOfBitsOfBeliefToSend;

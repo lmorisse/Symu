@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockersTests
+// Description: SymuBiz - SymuMurphiesAndBlockersTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
@@ -59,10 +60,12 @@ namespace SymuMurphiesAndBlockersTests
 
         private float CapacityRatio()
         {
-            return _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
-                ? 0
-                : _environment.IterationResult.Capacity * 100 /
-                  (_environment.Schedule.Step * _environment.WorkersCount);
+            //return _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
+            //    ? 0
+            //    : _environment.IterationResult.Capacity * 100 /
+            //      (_environment.Schedule.Step * _environment.WorkersCount);
+
+            return _environment.IterationResult.Tasks.Capacity.Last().Density;
         }
 
         [DataRow(0)]

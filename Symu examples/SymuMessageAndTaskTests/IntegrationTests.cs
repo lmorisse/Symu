@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMessageAndTaskTests
+// Description: SymuBiz - SymuMessageAndTaskTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
@@ -84,7 +85,8 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
             Assert.AreEqual(_environment.IterationResult.Tasks.Total, _environment.IterationResult.Tasks.Weight);
-            Assert.AreEqual(_environment.IterationResult.Capacity, _environment.IterationResult.Tasks.Weight);
+            Assert.AreEqual(_environment.IterationResult.Tasks.SumCapacity.Last(),
+                _environment.IterationResult.Tasks.Weight);
         }
 
         /// <summary>
@@ -99,7 +101,8 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _environment.CostOfTask = 0;
             _simulation.Process();
-            Assert.AreEqual(_environment.IterationResult.Tasks.Total, _environment.IterationResult.Capacity);
+            Assert.AreEqual(_environment.IterationResult.Tasks.Total,
+                _environment.IterationResult.Tasks.SumCapacity.Last());
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Weight);
         }
 
@@ -159,7 +162,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
-            Assert.AreEqual(0, _environment.IterationResult.Capacity);
+            Assert.AreEqual(0, _environment.IterationResult.Tasks.SumCapacity.Last());
         }
 
         [TestMethod]
@@ -171,7 +174,8 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _environment.SetRandomLevel(3);
             _simulation.Process();
-            Assert.AreEqual(_environment.IterationResult.Capacity, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(_environment.IterationResult.Tasks.SumCapacity.Last(),
+                _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(_environment.IterationResult.Tasks.Weight, _environment.IterationResult.Tasks.Total);
         }
 
@@ -186,7 +190,8 @@ namespace SymuMessageAndTaskTests
             _environment.CostOfTask = 0.5F;
             _environment.NumberOfTasks = 2;
             _simulation.Process();
-            Assert.AreEqual(_environment.IterationResult.Capacity, 2 * _environment.IterationResult.Tasks.Weight);
+            Assert.AreEqual(_environment.IterationResult.Tasks.SumCapacity.Last(),
+                2 * _environment.IterationResult.Tasks.Weight);
         }
 
         #endregion
@@ -219,9 +224,10 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _simulation.Process();
             var count = _environment.WorkersCount * NumberOfSteps;
-            Assert.AreEqual(2*count, (int) _environment.Messages.Result.SentMessagesCount);
-            Assert.AreEqual(count , _environment.IterationResult.Messages.SentMessages, _environment.IterationResult.Messages.MissedMessagesCount);
-            Assert.AreEqual((uint)count, _environment.IterationResult.Messages.ReceivedMessages);
+            Assert.AreEqual(2 * count, (int) _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual(count, _environment.IterationResult.Messages.SentMessages,
+                _environment.IterationResult.Messages.MissedMessagesCount);
+            Assert.AreEqual((uint) count, _environment.IterationResult.Messages.ReceivedMessages);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Total);
         }
 
@@ -277,9 +283,11 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.Complete;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.Complete;
             _simulation.Process();
-            Assert.IsTrue(_environment.IterationResult.Capacity > _environment.IterationResult.Tasks.Total);
+            Assert.IsTrue(_environment.IterationResult.Tasks.SumCapacity.Last() >
+                          _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Tasks.AverageDone);
-            Assert.AreEqual(_environment.IterationResult.Capacity, _environment.IterationResult.Messages.ReceivedMessagesCost);
+            Assert.AreEqual(_environment.IterationResult.Tasks.SumCapacity.Last(),
+                _environment.IterationResult.Messages.ReceivedMessagesCost);
         }
 
         #endregion

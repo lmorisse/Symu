@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,7 +11,6 @@
 
 using System.Collections.Generic;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
 using Symu.Messaging.Templates;
@@ -52,6 +51,7 @@ namespace Symu.Classes.Organization
         ///     and to set agent with templates
         /// </summary>
         public AgentTemplates Templates { get; set; } = new AgentTemplates();
+
         /// <summary>
         ///     List of the communication templates that are available
         ///     Use to set attributes of those templates

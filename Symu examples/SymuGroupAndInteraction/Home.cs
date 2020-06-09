@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteraction
+// Description: SymuBiz - SymuGroupAndInteraction
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -55,10 +55,17 @@ namespace SymuGroupAndInteraction
                 OrganizationEntity.Models.InteractionSphere.MaxSphereDensity.ToString(CultureInfo.InvariantCulture);
             MinSphereDensity.Text =
                 OrganizationEntity.Models.InteractionSphere.MinSphereDensity.ToString(CultureInfo.InvariantCulture);
-            WeightKnowledge.Text = OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight.ToString(CultureInfo.InvariantCulture);
-            WeightActivities.Text = OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight.ToString(CultureInfo.InvariantCulture);
-            WeightBeliefs.Text = OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight.ToString(CultureInfo.InvariantCulture);
-            WeightGroups.Text = OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight.ToString(CultureInfo.InvariantCulture);
+            WeightKnowledge.Text =
+                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight.ToString(CultureInfo
+                    .InvariantCulture);
+            WeightActivities.Text =
+                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight.ToString(
+                    CultureInfo.InvariantCulture);
+            WeightBeliefs.Text =
+                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight.ToString(CultureInfo.InvariantCulture);
+            WeightGroups.Text =
+                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight.ToString(CultureInfo
+                    .InvariantCulture);
 
             #endregion
 
@@ -184,8 +191,10 @@ namespace SymuGroupAndInteraction
 
         private void UpDateMessages()
         {
-            WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
-            WriteTextSafe(NotAcceptedMessages, _environment.Messages.Result.NotAcceptedMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(lblMessagesSent,
+                _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(NotAcceptedMessages,
+                _environment.Messages.Result.NotAcceptedMessagesCount.ToString(CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
@@ -370,7 +379,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MinSphereDensity = float.Parse(MinSphereDensity.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.MinSphereDensity =
+                    float.Parse(MinSphereDensity.Text, CultureInfo.InvariantCulture);
                 MinSphereDensity.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -388,7 +398,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity = float.Parse(MaxSphereDensity.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity =
+                    float.Parse(MaxSphereDensity.Text, CultureInfo.InvariantCulture);
                 MaxSphereDensity.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -406,7 +417,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight = float.Parse(WeightKnowledge.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight =
+                    float.Parse(WeightKnowledge.Text, CultureInfo.InvariantCulture);
                 WeightKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -424,7 +436,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight = float.Parse(WeightActivities.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight =
+                    float.Parse(WeightActivities.Text, CultureInfo.InvariantCulture);
                 WeightActivities.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -442,7 +455,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight = float.Parse(WeightGroups.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight =
+                    float.Parse(WeightGroups.Text, CultureInfo.InvariantCulture);
                 WeightGroups.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -460,7 +474,8 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight = float.Parse(WeightBeliefs.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight =
+                    float.Parse(WeightBeliefs.Text, CultureInfo.InvariantCulture);
                 WeightBeliefs.BackColor = SystemColors.Window;
             }
             catch (FormatException)

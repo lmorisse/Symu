@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -31,7 +31,8 @@ namespace Symu.Repository.Networks.Activities
         /// <summary>
         ///     List of all GroupIds and their activities
         /// </summary>
-        private readonly ConcurrentDictionary<AgentId, List<Activity>> _repository = new ConcurrentDictionary<AgentId, List<Activity>>();
+        private readonly ConcurrentDictionary<AgentId, List<Activity>> _repository =
+            new ConcurrentDictionary<AgentId, List<Activity>>();
 
         /// <summary>
         ///     Key => GroupId

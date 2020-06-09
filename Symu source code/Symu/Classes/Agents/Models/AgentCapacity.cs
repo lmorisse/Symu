@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ namespace Symu.Classes.Agents.Models
         }
 
         /// <summary>
-        ///     CopyTo the actual capacity
+        ///     Clone the actual capacity
         /// </summary>
         /// <param name="value"></param>
         public void Set(float value)

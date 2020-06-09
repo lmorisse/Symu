@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -28,19 +28,12 @@ namespace Symu.Classes.Task
     /// </summary>
     public class SymuTask
     {
-        private float _weight;
         private TasksManager _tasksManager;
+        private float _weight;
 
         public SymuTask(ushort step)
         {
             Created = step;
-        }
-        public void SetTasksManager(TasksManager tasksManager)
-        {
-            if (tasksManager != null)
-            {
-                _tasksManager = tasksManager;
-            }
         }
 
         /// <summary>
@@ -152,8 +145,16 @@ namespace Symu.Classes.Task
         /// <example>Slack offer a limited history, some messaging system have a limited storage capacity</example>
         public short TimeToLive { get; set; } = -1;
 
+        public void SetTasksManager(TasksManager tasksManager)
+        {
+            if (tasksManager != null)
+            {
+                _tasksManager = tasksManager;
+            }
+        }
+
         /// <summary>
-        ///     CopyTo the task done
+        ///     Clone the task done
         /// </summary>
         public void SetDone()
         {
@@ -172,7 +173,7 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     CopyTo RequiredKnowledges && MandatoryKnowledges based on the task complexity
+        ///     Clone RequiredKnowledges && MandatoryKnowledges based on the task complexity
         /// </summary>
         /// <param name="model"></param>
         /// <param name="knowledges"></param>
@@ -214,7 +215,14 @@ namespace Symu.Classes.Task
             HasBeenCancelledBy.Add(Assigned);
         }
 
+        public void ClearBlockers()
+        {
+            SetBlockerDone(BlockerResolution.Internal);
+            Blockers.Clear();
+        }
+
         #region blockers
+
         /// <summary>
         ///     Add a blocker with two parameters
         ///     And follow it in the IterationResult if FollowBlocker is true
@@ -241,6 +249,7 @@ namespace Symu.Classes.Task
             var blocker = new Blocker(type, step, parameter);
             return Add(blocker);
         }
+
         /// <summary>
         ///     Add a blocker without parameter
         ///     And follow it in the IterationResult if FollowBlocker is true
@@ -258,6 +267,7 @@ namespace Symu.Classes.Task
             SetBlockerInProgress();
             return Blockers.Add(blocker);
         }
+
         /// <summary>
         ///     Remove an existing blocker from a task
         ///     And update IterationResult if FollowBlocker is true
@@ -299,6 +309,7 @@ namespace Symu.Classes.Task
             {
                 return;
             }
+
             var blockerResult =
                 _tasksManager.BlockerResult;
             switch (resolution)
@@ -329,17 +340,13 @@ namespace Symu.Classes.Task
             {
                 return;
             }
+
             var blockerResult =
                 _tasksManager.BlockerResult;
             blockerResult.Cancelled++;
             blockerResult.InProgress--;
         }
-        #endregion
 
-        public void ClearBlockers()
-        {
-            SetBlockerDone(BlockerResolution.Internal);
-            Blockers.Clear();
-        }
+        #endregion
     }
 }

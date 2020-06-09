@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ namespace Symu.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     CopyTo sphere randomly based on InteractionPatterns
+        ///     Clone sphere randomly based on InteractionPatterns
         /// </summary>
         /// <param name="agentIds"></param>
         public void SetSphereRandomly(IReadOnlyList<AgentId> agentIds)

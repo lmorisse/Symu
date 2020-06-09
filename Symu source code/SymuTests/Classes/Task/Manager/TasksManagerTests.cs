@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuTests
+// Description: SymuBiz - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -24,8 +24,8 @@ namespace SymuTests.Classes.Task.Manager
     public class TasksManagerTests
     {
         private readonly TasksLimit _tasksLimit = new TasksLimit();
-        private SymuTask _task;
         private SymuTask _message;
+        private SymuTask _task;
         private List<SymuTask> _tasks;
         private TasksManager _tasksManager;
 
@@ -38,8 +38,9 @@ namespace SymuTests.Classes.Task.Manager
             _tasksManager = new TasksManager(tasksLimit, true);
             _tasks = new List<SymuTask> {_task};
         }
+
         /// <summary>
-        /// with a Task 
+        ///     with a Task
         /// </summary>
         [TestMethod]
         public void AddToDoTest()
@@ -51,8 +52,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// with a message 
+        ///     with a message
         /// </summary>
         [TestMethod]
         public void AddToDoTest1()
@@ -64,8 +66,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// with a task
+        ///     with a task
         /// </summary>
         [TestMethod]
         public void AddInProgressTest()
@@ -77,8 +80,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// with a message
+        ///     with a message
         /// </summary>
         [TestMethod]
         public void AddInProgressTest1()
@@ -90,8 +94,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// With a task
+        ///     With a task
         /// </summary>
         [TestMethod]
         public void SetInProgressTest()
@@ -104,8 +109,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// With a message
+        ///     With a message
         /// </summary>
         [TestMethod]
         public void SetInProgressTest1()
@@ -118,8 +124,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.InProgress.Count);
             Assert.AreEqual(0, _tasksManager.Done.Count);
         }
+
         /// <summary>
-        /// With a task, from inprogress
+        ///     With a task, from inprogress
         /// </summary>
         [TestMethod]
         public void SetTaskDoneTest()
@@ -135,9 +142,10 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(1, _tasksManager.Done.Count);
             Assert.AreEqual(0, _task.WorkToDo);
-        }        
+        }
+
         /// <summary>
-        /// With a task, from to do
+        ///     With a task, from to do
         /// </summary>
         [TestMethod]
         public void SetTaskDoneTest1()
@@ -154,8 +162,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.Done.Count);
             Assert.AreEqual(0, _task.WorkToDo);
         }
+
         /// <summary>
-        /// With a message, from inprogress
+        ///     With a message, from inprogress
         /// </summary>
         [TestMethod]
         public void SetTaskDoneTest2()
@@ -172,8 +181,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.Done.Count);
             Assert.AreEqual(0, _task.WorkToDo);
         }
+
         /// <summary>
-        /// With a task, from inprogress
+        ///     With a task, from inprogress
         /// </summary>
         [TestMethod]
         public void SetTaskCancelTest()
@@ -189,8 +199,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.Cancelled.Count);
             Assert.AreEqual(1, _task.WorkToDo);
         }
+
         /// <summary>
-        /// With a task, from to do
+        ///     With a task, from to do
         /// </summary>
         [TestMethod]
         public void SetTaskCancelTest1()
@@ -206,8 +217,9 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(1, _tasksManager.Cancelled.Count);
             Assert.AreEqual(1, _task.WorkToDo);
         }
+
         /// <summary>
-        /// With a message, from inprogress
+        ///     With a message, from inprogress
         /// </summary>
         [TestMethod]
         public void SetTaskCancelTest2()
@@ -220,6 +232,7 @@ namespace SymuTests.Classes.Task.Manager
             Assert.AreEqual(0, _tasksManager.InProgress.Count);
             Assert.AreEqual(1, _tasksManager.Cancelled.Count);
         }
+
         /// <summary>
         ///     TasksCHeck AverageToDo
         /// </summary>
@@ -507,6 +520,7 @@ namespace SymuTests.Classes.Task.Manager
         }
 
         #region Blockers management
+
         [TestMethod]
         public void AddTest()
         {
@@ -522,6 +536,7 @@ namespace SymuTests.Classes.Task.Manager
             _task.Add(1, 1, 1);
             Assert.IsTrue(_task.Blockers.Exists(1, 1));
         }
+
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMurphiesAndBlockers
+// Description: SymuBiz - SymuMurphiesAndBlockers
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -27,12 +27,15 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class InternetAccessAgent : Agent
     {
         public const byte ClassKey = 1;
-        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment)Environment).Knowledges;
 
-        public InternetAccessAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        public InternetAccessAgent(ushort agentKey, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(
             new AgentId(agentKey, ClassKey), environment, template)
         {
         }
+
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+
         /// <summary>
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
@@ -42,9 +45,11 @@ namespace SymuMurphiesAndBlockers.Classes
             base.SetModels();
             foreach (var knowledge in Knowledges)
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment)Environment).KnowledgeLevel, Cognitive.InternalCharacteristics);
+                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment) Environment).KnowledgeLevel,
+                    Cognitive.InternalCharacteristics);
             }
         }
+
         /// <summary>
         ///     Ask Help from PersonAgent when blocked
         /// </summary>

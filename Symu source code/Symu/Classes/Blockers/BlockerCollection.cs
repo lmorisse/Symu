@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,7 +9,6 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +27,7 @@ namespace Symu.Classes.Blockers
         //public BlockerResult Result { get; set; } = new BlockerResult();
 
         public List<Blocker> List { get; } = new List<Blocker>();
+
         public bool IsBlocked => List.Any();
 
         public Blocker Add(Blocker blocker)

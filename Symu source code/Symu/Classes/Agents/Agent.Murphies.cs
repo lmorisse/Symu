@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -10,15 +10,12 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Blockers;
 using Symu.Classes.Murphies;
 using Symu.Classes.Task;
 using Symu.Common;
-using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Results.Blocker;

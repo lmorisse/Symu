@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         public bool On { get; set; }
 
         /// <summary>
-        ///     CopyTo the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
+        ///     Clone the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
         ///     InfluentialnessRateMax]
         /// </summary>
         /// <returns></returns>
@@ -94,7 +94,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         }
 
         /// <summary>
-        ///     CopyTo the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
+        ///     Clone the Influentialness for a specific agent with a random value between [InfluentialnessRateMin,
         ///     InfluentialnessRateMax]
         /// </summary>
         /// <returns></returns>

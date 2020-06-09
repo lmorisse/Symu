@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMessageAndTask
+// Description: SymuBiz - SymuMessageAndTask
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,7 +11,6 @@
 
 using System;
 using Symu.Classes.Organization;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Templates;
 

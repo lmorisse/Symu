@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -34,7 +34,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly byte _randomLevel;
         private bool _isAgentOnToday;
 
-        public ForgettingModel(ModelEntity entity, bool knowledgeModelOn, CognitiveArchitecture cognitive, byte randomLevel) :
+        public ForgettingModel(ModelEntity entity, bool knowledgeModelOn, CognitiveArchitecture cognitive,
+            byte randomLevel) :
             base(entity)
         {
             if (entity is null)
@@ -164,13 +165,13 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         }
 
         /// <summary>
-        ///     CopyTo the knowledges of the day that the worker can forget if he don't work on it
+        ///     Clone the knowledges of the day that the worker can forget if he don't work on it
         ///     Called at the beginning of the day
         /// </summary>
         public void InitializeForgettingProcess()
         {
             // Check if forgetting process is On
-            _isAgentOnToday = IsAgentOn() ;
+            _isAgentOnToday = IsAgentOn();
             if (!_isAgentOnToday)
             {
                 return;
@@ -234,7 +235,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         }
 
         /// <summary>
-        ///     CopyTo the KnowledgeBits of the day that the worker can forget if he don't work on it
+        ///     Clone the KnowledgeBits of the day that the worker can forget if he don't work on it
         ///     Called at the beginning of the step
         /// </summary>
         public AgentKnowledge InitializeForgettingKnowledge(AgentKnowledge knowledge)

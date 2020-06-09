@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ namespace Symu.Classes.Murphies
         public List<Murphy> Murphies { get; } = new List<Murphy>();
 
         /// <summary>
-        ///     CopyTo all murphies on
+        ///     Clone all murphies on
         /// </summary>
         /// <param name="rate"></param>
         public void On(float rate)
@@ -67,7 +67,7 @@ namespace Symu.Classes.Murphies
         }
 
         /// <summary>
-        ///     CopyTo all murphies off
+        ///     Clone all murphies off
         /// </summary>
         public void Off()
         {
@@ -76,16 +76,18 @@ namespace Symu.Classes.Murphies
                 murphy.On = false;
             }
         }
+
         /// <summary>
-        /// Add a murphy to the collection
+        ///     Add a murphy to the collection
         /// </summary>
         /// <param name="murphy"></param>
         public void Add(Murphy murphy)
         {
             Murphies.Add(murphy);
         }
+
         /// <summary>
-        /// Get a murphy from the collection by its type
+        ///     Get a murphy from the collection by its type
         /// </summary>
         /// <typeparam name="TMurphy"></typeparam>
         /// <returns></returns>

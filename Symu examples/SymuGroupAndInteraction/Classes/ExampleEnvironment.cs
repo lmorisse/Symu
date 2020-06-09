@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteraction
+// Description: SymuBiz - SymuGroupAndInteraction
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ namespace SymuGroupAndInteraction.Classes
         public byte Knowledge { get; set; } = 0;
         public byte Activities { get; set; } = 0;
         public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
-        public List<Knowledge> Knowledges { get; }= new List<Knowledge>();
+        public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -65,7 +65,7 @@ namespace SymuGroupAndInteraction.Classes
             for (var i = 0; i < GroupsCount; i++)
             {
                 var group = new GroupAgent(Organization.NextEntityIndex(), this);
-                
+
                 for (var j = 0; j < WorkersCount; j++)
                 {
                     var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
@@ -86,16 +86,19 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[0].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[0].Id, KnowledgeLevel,
+                        actor.Cognitive.InternalCharacteristics);
                     break;
                 case 1:
                     // Knowledge is by group
-                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[i].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[i].Id, KnowledgeLevel,
+                        actor.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[index].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[index].Id, KnowledgeLevel,
+                        actor.Cognitive.InternalCharacteristics);
                     break;
             }
         }

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -15,6 +15,7 @@ namespace Symu.Results.Messaging
         ///     Give the count of the messages sent including lost/missed messages
         /// </summary>
         public uint SentMessagesCount { get; set; }
+
         /// <summary>
         ///     Give the count of the messages received
         /// </summary>
@@ -56,21 +57,24 @@ namespace Symu.Results.Messaging
         public ushort LostMessagesCount { get; set; }
 
         /// <summary>
-        ///     Give the total weight of the sent messages 
+        ///     Give the total weight of the sent messages
         /// </summary>
         public float SentMessagesCost { get; set; }
+
         /// <summary>
-        ///     Give the total weight of the receive messages 
+        ///     Give the total weight of the receive messages
         /// </summary>
         public float ReceivedMessagesCost { get; set; }
+
         /// <summary>
         ///     Give the count of the messages with the state Missed
         /// </summary>
         public uint MissedMessagesCount { get; set; }
+
         /// <summary>
         ///     An sender agent has send a message but the sender was not in the interaction sphere
         ///     of the receiver and did not accept the message.
-        ///     NotAcceptedMessagesCount represents the rejected new interactions 
+        ///     NotAcceptedMessagesCount represents the rejected new interactions
         /// </summary>
         public uint NotAcceptedMessagesCount { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -22,8 +22,6 @@ using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
-using Symu.Tools;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -145,6 +143,7 @@ namespace Symu.Classes.Agents
         public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         #region Initialization
+
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
             if (environment == null)
@@ -155,7 +154,8 @@ namespace Symu.Classes.Agents
             CreateAgent(agentId, environment, environment.Organization.Templates.Standard);
         }
 
-        protected void CreateAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate agentTemplate)
+        protected void CreateAgent(AgentId agentId, SymuEnvironment environment,
+            CognitiveArchitectureTemplate agentTemplate)
         {
             Id = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -165,13 +165,14 @@ namespace Symu.Classes.Agents
             {
                 environment.WhitePages.Network.AddDatabase(Id, database.AgentId.Key);
             }
+
             SetTemplate(agentTemplate);
             SetCognitive();
             // for testability SetDefaultModels should stay here
         }
 
         /// <summary>
-        ///     CopyTo the cognitive architecture of the agent
+        ///     Clone the cognitive architecture of the agent
         ///     Applying AgentTemplate
         /// </summary>
         /// <param name="agentTemplate"></param>
@@ -181,6 +182,7 @@ namespace Symu.Classes.Agents
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
         }
+
         /// <summary>
         ///     Customize the cognitive architecture of the agent
         ///     After setting the Agent template
@@ -266,6 +268,7 @@ namespace Symu.Classes.Agents
 
             MessageProcessor.OnBeforePostEvent += MessageOnBeforePost;
         }
+
         /// <summary>
         ///     Initialize all the agent's models
         ///     Should be called after SetTemplate and after having customized the cognitive parameters
@@ -293,6 +296,7 @@ namespace Symu.Classes.Agents
         protected virtual void SetModels()
         {
         }
+
         /// <summary>
         ///     Finalize all the agent's models
         /// </summary>

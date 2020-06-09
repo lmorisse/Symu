@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -60,9 +60,10 @@ namespace Symu.Classes.Agents
                 ActMessage(message);
             }
         }
+
         /// <summary>
         ///     Convert message into a task to be perform in the task manager
-        ///     MessageResult.ReceivedMessagesCost is also updated 
+        ///     MessageResult.ReceivedMessagesCost is also updated
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
@@ -281,12 +282,12 @@ namespace Symu.Classes.Agents
         {
             // Agent can be temporary isolated
             return !isolated && (Cognitive.TasksAndPerformance.CanPerformTask && Schedule.IsWorkingDay ||
-                                        Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
-                                        !Schedule.IsWorkingDay);
+                                 Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
+                                 !Schedule.IsWorkingDay);
         }
 
         /// <summary>
-        ///     CopyTo the Status to available if agent as InitialCapacity, Offline otherwise
+        ///     Clone the Status to available if agent as InitialCapacity, Offline otherwise
         /// </summary>
         public virtual void HandleStatus(bool isolated)
         {

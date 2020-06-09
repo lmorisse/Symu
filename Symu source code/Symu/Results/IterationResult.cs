@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -23,14 +23,23 @@ namespace Symu.Results
 {
     public class IterationResult
     {
-        protected SymuEnvironment Environment { get; }
-
         public IterationResult(SymuEnvironment environment)
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             OrganizationFlexibility = new OrganizationFlexibility(Environment);
             KnowledgeAndBeliefResults = new KnowledgeAndBeliefResults(Environment);
+            Blockers = new BlockerResults(Environment);
+            Tasks = new TaskResults(Environment);
+            Messages = new MessageResults(Environment);
+
+            Results.Add(OrganizationFlexibility);
+            Results.Add(KnowledgeAndBeliefResults);
+            Results.Add(Blockers);
+            Results.Add(Tasks);
+            Results.Add(Messages);
         }
+
+        protected SymuEnvironment Environment { get; }
 
         /// <summary>
         ///     Number of iterations
@@ -43,6 +52,15 @@ namespace Symu.Results
         public ushort Step { get; set; }
 
         public bool Success { get; set; }
+
+        /// <summary>
+        ///     Symu has been stopped Results
+        /// </summary>
+        public bool HasItemsNotDone { get; set; }
+
+        public bool SeemsToBeBlocked { get; set; }
+        public bool NotFinishedInTime { get; set; }
+        public ushort NumberOfItemsNotDone { get; set; }
 
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
@@ -62,38 +80,35 @@ namespace Symu.Results
         /// <summary>
         ///     Get the Task blockers metrics
         /// </summary>
-        public BlockerResults Blockers { get; } = new BlockerResults();
+        public BlockerResults Blockers { get; }
 
         /// <summary>
         ///     Get the Tasks model metrics
         /// </summary>
-        public TaskResults Tasks { get; } = new TaskResults();
+        public TaskResults Tasks { get; }
+
         /// <summary>
         ///     Get the message model metrics
         /// </summary>
-        public MessageResults Messages { get; } = new MessageResults();
-
-        public float Capacity { get; set; }
+        public MessageResults Messages { get; }
 
         //Specific results
-        public List<PostProcessResult> SpecificResults { get; } = new List<PostProcessResult>();
+        public List<SymuResults> Results { get; } = new List<SymuResults>();
 
         public virtual void Initialize()
         {
-            OrganizationFlexibility.Clear();
-            KnowledgeAndBeliefResults.Clear();
-            Blockers.Clear();
-            Tasks.Clear();
-            Messages.Clear();
-            SpecificResults.Clear();
+            foreach (var result in Results)
+            {
+                result.Clear();
+            }
+
             Iteration = 0;
             Step = 0;
-            Capacity = 0;
             Success = false;
-            //HasItemsNotDone = false;
-            //SeemsToBeBlocked = false;
-            //NotFinishedInTime = false;
-            //NumberOfItemsNotDone = 0;
+            HasItemsNotDone = false;
+            SeemsToBeBlocked = false;
+            NotFinishedInTime = false;
+            NumberOfItemsNotDone = 0;
         }
 
         /// <summary>
@@ -102,31 +117,38 @@ namespace Symu.Results
         /// </summary>
         public void SetResults()
         {
-            Tasks.SetResults(Environment);
-            Blockers.SetResults(Environment);
-            Messages.SetResults(Environment);
-            KnowledgeAndBeliefResults.SetResults(Environment.Schedule);
-            OrganizationFlexibility.SetResults(Environment.Schedule);
+            foreach (var result in Results)
+            {
+                result.SetResults();
+            }
         }
 
         public IterationResult Clone()
         {
             var clone = new IterationResult(Environment);
-            clone.Initialize();
-            OrganizationFlexibility.CopyTo(clone.OrganizationFlexibility);
-            KnowledgeAndBeliefResults.CopyTo(clone.KnowledgeAndBeliefResults);
-            Blockers.CopyTo(clone.Blockers);
-            Tasks.CopyTo(clone.Tasks);
-            Messages.CopyTo(clone.Messages);
+
+            foreach (var result in Results)
+            {
+                var cloneResult = clone.Get(result.GetType());
+                if (cloneResult == null)
+                {
+                    // specific results
+                    clone.Add(result.Clone());
+                }
+                else
+                {
+                    // default results
+                    result.CopyTo(cloneResult);
+                }
+            }
+
             clone.Iteration = Iteration;
             clone.Step = Step;
             clone.Success = Success;
-            clone.Capacity = Capacity;
-            //SpecificResults.CopyTo(clone.SpecificResults);
-            //HasItemsNotDone = false;
-            //SeemsToBeBlocked = false;
-            //NotFinishedInTime = false;
-            //NumberOfItemsNotDone = 0;
+            HasItemsNotDone = false;
+            SeemsToBeBlocked = false;
+            NotFinishedInTime = false;
+            NumberOfItemsNotDone = 0;
             return clone;
         }
 
@@ -135,11 +157,10 @@ namespace Symu.Results
         /// </summary>
         public virtual void On()
         {
-            OrganizationFlexibility.On = true;
-            KnowledgeAndBeliefResults.On = true;
-            Tasks.On = true;
-            Blockers.On = true;
-            Messages.On = true;
+            foreach (var result in Results)
+            {
+                result.On = true;
+            }
         }
 
         /// <summary>
@@ -147,26 +168,46 @@ namespace Symu.Results
         /// </summary>
         public virtual void Off()
         {
-            OrganizationFlexibility.On = false;
-            KnowledgeAndBeliefResults.On = false;
-            Tasks.On = false;
-            Blockers.On = false;
-            Messages.On = false;
+            foreach (var result in Results)
+            {
+                result.On = false;
+            }
         }
 
-        #region todo : refactor in SpecificResults
+        /// <summary>
+        ///     Add a results to the collection
+        /// </summary>
+        /// <param name="result"></param>
+        public void Add(SymuResults result)
+        {
+            Results.Add(result);
+        }
 
         /// <summary>
-        ///     Symu has been stopped SpecificResults
+        ///     Get a result from the collection by its type
         /// </summary>
-        public bool HasItemsNotDone { get; set; }
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public TResult Get<TResult>() where TResult : SymuResults
+        {
+            return Results.Find(x => x is TResult) as TResult;
+        }
 
-        public bool SeemsToBeBlocked { get; set; }
+        /// <summary>
+        ///     Get a result from the collection by its type
+        /// </summary>
+        /// <returns></returns>
+        public SymuResults Get(Type type)
+        {
+            return Results.Find(x => x.GetType() == type);
+        }
 
-        //public bool NotFastEnoughAtHalfReplay;
-        public bool NotFinishedInTime { get; set; }
-        public ushort NumberOfItemsNotDone { get; set; }
-
-        #endregion
+        public void SetFrequency(TimeStepType frequency)
+        {
+            foreach (var result in Results)
+            {
+                result.Frequency = frequency;
+            }
+        }
     }
 }

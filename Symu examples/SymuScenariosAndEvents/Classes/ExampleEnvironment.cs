@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuScenariosAndEvents
+// Description: SymuBiz - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -12,10 +12,8 @@
 using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Knowledges;

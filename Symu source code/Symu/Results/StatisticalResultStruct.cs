@@ -1,20 +1,20 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
 
 #endregion
 
-namespace Symu.Results.Organization
+namespace Symu.Results
 {
     /// <summary>
-    ///     Structure to store group knowledge information
+    ///     Structure to store result with a sum, a mean, a standard deviation
     /// </summary>
-    public class KnowledgeAndBeliefStruct
+    public class StatisticalResultStruct
     {
-        public KnowledgeAndBeliefStruct(float sum, float mean, float standardDeviation, ushort step)
+        public StatisticalResultStruct(float sum, float mean, float standardDeviation, ushort step)
         {
             Sum = sum;
             Mean = mean;

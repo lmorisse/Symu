@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuScenariosAndEvents
+// Description: SymuBiz - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -320,7 +320,8 @@ namespace SymuScenariosAndEvents
             DisplayButtons();
             WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
             WriteTextSafe(TasksDone, _environment.IterationResult.Tasks.Done.ToString(CultureInfo.InvariantCulture));
-            WriteTextSafe(MessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(MessagesSent,
+                _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void DisplayIteration()
@@ -328,21 +329,20 @@ namespace SymuScenariosAndEvents
             WriteTextSafe(Iteration, Iterations.Number.ToString(CultureInfo.InvariantCulture));
 
             var tasksResults = SimulationResults.List.Select(x => x.Tasks.Done).ToList();
-            var capacityResults = SimulationResults.List.Select(x => x.Capacity).ToList();
             var seriesTasks = new ChartSeries("tasks", ChartSeriesType.Histogram);
-            var count = Math.Max(tasksResults.Count, capacityResults.Count);
             foreach (var tasksResult in tasksResults)
             {
-                seriesTasks.Points.Add(tasksResult, count);
+                seriesTasks.Points.Add(tasksResult, tasksResults.Count);
             }
 
             seriesTasks.Text = seriesTasks.Name;
             seriesTasks.ConfigItems.HistogramItem.NumberOfIntervals = 10;
 
-            var seriesCapacity = new ChartSeries("capacity", ChartSeriesType.Histogram);
+            var seriesCapacity = new ChartSeries("Ratio capacity", ChartSeriesType.Histogram);
+            var capacityResults = SimulationResults.List.Select(x => x.Tasks.Capacity).ToList();
             foreach (var capacityResult in capacityResults)
             {
-                seriesCapacity.Points.Add(capacityResult, count);
+                seriesCapacity.Points.Add(capacityResult.Last().Density, tasksResults.Count);
             }
 
             seriesCapacity.Text = seriesCapacity.Name;
@@ -433,7 +433,7 @@ namespace SymuScenariosAndEvents
                 return;
             }
 
-            foreach (var tasksResult in SimulationResults[index].Tasks.Results)
+            foreach (var tasksResult in SimulationResults[index].Tasks.Tasks)
             {
                 seriesTasks.Points.Add(tasksResult.Key, tasksResult.Value.Done);
             }

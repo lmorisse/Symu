@@ -1,6 +1,6 @@
 #region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -21,7 +21,7 @@ namespace Symu.Classes.Task.Manager
     ///     It propose events trigger by the tasksManager to customize the behaviour of the manager
     /// </summary>
     public class TaskProcessor : IDisposable
-    {       
+    {
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -81,7 +81,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     CopyTo a task done in TasksManager
+        ///     Clone a task done in TasksManager
         /// </summary>
         public void SetTaskDone(SymuTask task)
         {
@@ -90,7 +90,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     CopyTo a task in Progress in TasksManager
+        ///     Clone a task in Progress in TasksManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,11 +9,9 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Environment;
-using Symu.Repository;
 using Symu.Repository.Networks.Sphere;
 using Symu.Tools.Math;
 
@@ -25,24 +23,11 @@ namespace Symu.Results.Organization
     ///     The ability of an organizationEntity to respond rapidly to the changing environment
     ///     Mainly center on the continual construction and reconstruction of groups
     /// </summary>
-    public class OrganizationFlexibility
+    public sealed class OrganizationFlexibility : SymuResults
     {
-        /// <summary>
-        ///     Network of the simulation
-        /// </summary>
-        private readonly SymuEnvironment _environment;
-
-        public OrganizationFlexibility(SymuEnvironment environment)
+        public OrganizationFlexibility(SymuEnvironment environment) : base(environment)
         {
-            _environment = environment;
         }
-
-        /// <summary>
-        ///     If set to true, OrganizationFlexibility will be filled with value and stored during the simulation
-        /// </summary>
-        public bool On { get; set; }
-
-        public TimeStepType Frequency { get; set; } = TimeStepType.Monthly;
 
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
@@ -53,20 +38,20 @@ namespace Symu.Results.Organization
         ///     In nonlinear stochastics systems with noise, a standard measure is the 90 % point (90% of its final theoretical
         ///     value)
         /// </summary>
-        public List<GroupDensityStruct> Triads { get; private set; } = new List<GroupDensityStruct>();
+        public List<DensityStruct> Triads { get; private set; } = new List<DensityStruct>();
 
         /// <summary>
         ///     The number of connections between agents
         /// </summary>
-        public List<GroupDensityStruct> Links { get; private set; } = new List<GroupDensityStruct>();
+        public List<DensityStruct> Links { get; private set; } = new List<DensityStruct>();
 
         /// <summary>
         ///     Sphere of interaction is the weight of the network in the simulation
         /// </summary>
 
-        public List<GroupDensityStruct> Sphere { get; private set; } = new List<GroupDensityStruct>();
+        public List<DensityStruct> Sphere { get; private set; } = new List<DensityStruct>();
 
-        public void Clear()
+        public override void Clear()
         {
             Triads.Clear();
             Links.Clear();
@@ -78,100 +63,78 @@ namespace Symu.Results.Organization
         ///     Rapid formation and reformation of triads is one key aspect of flexibility
         ///     For flexibility, Triads numbers are normalized with maximum potential triads
         /// </summary>
-        public void HandleTriads(ushort agentsCount, ushort step)
+        public void HandleTriads(ushort agentsCount)
         {
             var numberOfTriads =
-                InteractionMatrix.NumberOfTriads(_environment.WhitePages.Network.InteractionSphere.Sphere);
+                InteractionMatrix.NumberOfTriads(Environment.WhitePages.Network.InteractionSphere.Sphere);
             var maxTriads = InteractionMatrix.MaxTriads(agentsCount);
-            var triads = new GroupDensityStruct(numberOfTriads, maxTriads, step);
+            var triads = new DensityStruct(numberOfTriads, maxTriads, Environment.Schedule.Step);
             Triads.Add(triads);
         }
 
         /// <summary>
         ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
         /// </summary>
-        public void HandleLinks(ushort agentsCount, ushort step)
+        public void HandleLinks(ushort agentsCount)
         {
-            var actualLinks = _environment.WhitePages.Network.NetworkLinks.Count;
+            var actualLinks = Environment.WhitePages.Network.NetworkLinks.Count;
             var maxLinks = Combinatorics.Combinations(agentsCount, 2);
-            var sphere = new GroupDensityStruct(actualLinks, maxLinks, step);
+            var sphere = new DensityStruct(actualLinks, maxLinks, Environment.Schedule.Step);
             Links.Add(sphere);
         }
 
         /// <summary>
         ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
         /// </summary>
-        public void HandleSphere(ushort step)
+        public void HandleSphere()
         {
-            var actualSphereWeight = _environment.WhitePages.Network.InteractionSphere.GetSphereWeight();
-            var maxSphereWeight = _environment.WhitePages.Network.InteractionSphere.GetMaxSphereWeight();
-            var sphere = new GroupDensityStruct(actualSphereWeight, maxSphereWeight, step);
+            var actualSphereWeight = Environment.WhitePages.Network.InteractionSphere.GetSphereWeight();
+            var maxSphereWeight = Environment.WhitePages.Network.InteractionSphere.GetMaxSphereWeight();
+            var sphere = new DensityStruct(actualSphereWeight, maxSphereWeight, Environment.Schedule.Step);
             Sphere.Add(sphere);
         }
 
-        public void SetResults(Schedule schedule)
+        protected override void HandleResults()
         {
-            if (!On)
-            {
-                return;
-            }
-            bool handle;
-            switch (Frequency)
-            {
-                case TimeStepType.Intraday:
-                case TimeStepType.Daily:
-                    handle = true;
-                    break;
-                case TimeStepType.Weekly:
-                    handle = schedule.IsEndOfWeek;
-                    break;
-                case TimeStepType.Monthly:
-                    handle = schedule.IsEndOfMonth;
-                    break;
-                case TimeStepType.Yearly:
-                    handle = schedule.IsEndOfYear;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (!handle)
-            {
-                return;
-            }
-
-            var actorCount =(ushort) _environment.WhitePages.AllAgents()
+            var actorCount = (ushort) Environment.WhitePages.AllAgents()
                 .Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
 
-            HandleTriads(actorCount, schedule.Step);
-            HandleLinks(actorCount, schedule.Step);
-            HandleSphere(schedule.Step);
+            HandleTriads(actorCount);
+            HandleLinks(actorCount);
+            HandleSphere();
         }
 
-        public void CopyTo(OrganizationFlexibility cloneOrganizationFlexibility)
+        public override void CopyTo(object clone)
         {
-            if (cloneOrganizationFlexibility == null)
+            if (!(clone is OrganizationFlexibility cloneOrganizationFlexibility))
             {
-                throw new ArgumentNullException(nameof(cloneOrganizationFlexibility));
+                return;
             }
 
-            cloneOrganizationFlexibility.Links = new List<GroupDensityStruct>();
+            cloneOrganizationFlexibility.Links = new List<DensityStruct>();
             foreach (var result in Links)
             {
                 cloneOrganizationFlexibility.Links.Add(result);
             }
 
-            cloneOrganizationFlexibility.Sphere = new List<GroupDensityStruct>();
+            cloneOrganizationFlexibility.Sphere = new List<DensityStruct>();
             foreach (var result in Sphere)
             {
                 cloneOrganizationFlexibility.Sphere.Add(result);
             }
 
-            cloneOrganizationFlexibility.Triads = new List<GroupDensityStruct>();
+            cloneOrganizationFlexibility.Triads = new List<DensityStruct>();
             foreach (var result in Triads)
             {
                 cloneOrganizationFlexibility.Triads.Add(result);
             }
+        }
+
+        public override SymuResults Clone()
+        {
+            var clone = new OrganizationFlexibility(Environment);
+            CopyTo(clone);
+            return clone;
         }
     }
 }

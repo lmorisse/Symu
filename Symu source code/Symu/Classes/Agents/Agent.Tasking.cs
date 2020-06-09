@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,15 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents.Models;
-using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Blockers;
-using Symu.Classes.Murphies;
 using Symu.Classes.Task;
-using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Repository;
-using Symu.Results.Blocker;
 using static Symu.Tools.Constants;
 
 #endregion
@@ -120,7 +114,7 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     CopyTo the task done in task manager
+        ///     Clone the task done in task manager
         /// </summary>
         /// <param name="task"></param>
         public void SetTaskDone(SymuTask task)
@@ -152,7 +146,7 @@ namespace Symu.Classes.Agents
         public AgentCapacity Capacity { get; } = new AgentCapacity();
 
         /// <summary>
-        ///     CopyTo the initial capacity for the new step based on SetInitialCapacity, working day,
+        ///     Clone the initial capacity for the new step based on SetInitialCapacity, working day,
         ///     By default = Initial capacity if it's a working day, 0 otherwise
         ///     If resetRemainingCapacity set to true, Remaining capacity is reset to Initial Capacity value
         /// </summary>
@@ -166,10 +160,6 @@ namespace Symu.Classes.Agents
                 SetInitialCapacity();
                 // Intentionally after SetInitialCapacity
                 MurphiesImpactsOnCapacity();
-                if (Cognitive.TasksAndPerformance.CanPerformTask)
-                {
-                    Environment.IterationResult.Capacity += Capacity.Initial;
-                }
             }
             else
             {

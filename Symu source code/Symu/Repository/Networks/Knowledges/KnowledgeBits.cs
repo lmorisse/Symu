@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     CopyTo bit with a deltaValue at a specified index
+        ///     Clone bit with a deltaValue at a specified index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
@@ -125,8 +125,8 @@ namespace Symu.Repository.Networks.Knowledges
 
         /// <summary>
         ///     Update lastTouched
-        ///     CopyTo to step if LastTouched > 0
-        ///     CopyTo to 0 if LastTouched == 0
+        ///     Clone to step if LastTouched > 0
+        ///     Clone to 0 if LastTouched == 0
         /// </summary>
         /// <param name="index"></param>
         /// <param name="step"></param>

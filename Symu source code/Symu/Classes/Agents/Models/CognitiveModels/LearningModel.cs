@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -34,27 +34,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         private readonly byte _randomLevel;
 
-        public TasksAndPerformance TasksAndPerformance { get; set; }
-
-        private AgentExpertise Expertise
-        {
-            get
-            {
-                if (!_networkKnowledges.Exists(_id))
-                {
-                    return null;
-                }
-
-                var expertise = _networkKnowledges.GetAgentExpertise(_id);
-                expertise.OnAfterLearning += AfterLearning;
-                return expertise;
-            }
-        }
-        /// <summary>
-        ///     EventHandler triggered after learning a new information
-        /// </summary>
-        public event EventHandler<LearningEventArgs> OnAfterLearning;
-
         public LearningModel(AgentId agentId, OrganizationModels models, NetworkKnowledges networkKnowledges,
             CognitiveArchitecture cognitiveArchitecture)
         {
@@ -80,6 +59,28 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 On = false;
             }
         }
+
+        public TasksAndPerformance TasksAndPerformance { get; set; }
+
+        private AgentExpertise Expertise
+        {
+            get
+            {
+                if (!_networkKnowledges.Exists(_id))
+                {
+                    return null;
+                }
+
+                var expertise = _networkKnowledges.GetAgentExpertise(_id);
+                expertise.OnAfterLearning += AfterLearning;
+                return expertise;
+            }
+        }
+
+        /// <summary>
+        ///     EventHandler triggered after learning a new information
+        /// </summary>
+        public event EventHandler<LearningEventArgs> OnAfterLearning;
 
 
         /// <summary>

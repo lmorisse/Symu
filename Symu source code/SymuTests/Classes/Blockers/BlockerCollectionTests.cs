@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuTests
+// Description: SymuBiz - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -19,9 +19,9 @@ namespace SymuTests.Classes.Blockers
     [TestClass]
     public class BlockerCollectionTests
     {
-        private readonly BlockerCollection _blockers = new BlockerCollection();
         private readonly Blocker _blocker1 = new Blocker(1, 1);
         private readonly Blocker _blocker2 = new Blocker(1, 2);
+        private readonly BlockerCollection _blockers = new BlockerCollection();
 
         [TestMethod]
         public void AddBlockerTest()

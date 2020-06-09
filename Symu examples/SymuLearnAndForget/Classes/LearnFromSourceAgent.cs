@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuLearnAndForget
+// Description: SymuBiz - SymuLearnAndForget
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -20,7 +20,8 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnFromSourceAgent : LearnAgent
     {
-        public LearnFromSourceAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentKey, environment, template)
+        public LearnFromSourceAgent(ushort agentKey, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(agentKey, environment, template)
         {
         }
 

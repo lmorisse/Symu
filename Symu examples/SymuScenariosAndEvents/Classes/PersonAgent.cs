@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuScenariosAndEvents
+// Description: SymuBiz - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ namespace SymuScenariosAndEvents.Classes
             Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Cognitive.InteractionPatterns.AllowNewInteractions = true;
         }
+
         /// <summary>
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
@@ -68,7 +69,8 @@ namespace SymuScenariosAndEvents.Classes
             base.SetModels();
             foreach (var knowledge in Knowledges)
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.Intermediate, Cognitive.InternalCharacteristics);
+                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.Intermediate,
+                    Cognitive.InternalCharacteristics);
                 //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
                 BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }

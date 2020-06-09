@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     CopyTo agent taskLimits from this global model TasksLimit
+        ///     Clone agent taskLimits from this global model TasksLimit
         /// </summary>
         /// <param name="agentTasksLimit">taskLimit to set</param>
         public void SetAgentTasksLimit(TasksLimit agentTasksLimit)

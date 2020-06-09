@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: SymuBiz - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -14,10 +14,8 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
-using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Environment;
-using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -32,6 +30,7 @@ namespace SymuBeliefsAndInfluence.Classes
         public List<Knowledge> Knowledges { get; private set; }
         public List<InfluencerAgent> Influencers { get; } = new List<InfluencerAgent>();
         public PromoterTemplate InfluencerTemplate { get; } = new PromoterTemplate();
+
         public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
         //public MurphyTask Model { get; } = new MurphyTask();
 

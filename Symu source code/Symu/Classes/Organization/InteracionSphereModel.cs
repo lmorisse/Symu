@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ namespace Symu.Classes.Organization
         }
 
         /// <summary>
-        ///     CopyTo binary interaction pattern based on InteractionStrategy
+        ///     Clone binary interaction pattern based on InteractionStrategy
         /// </summary>
         /// <param name="strategy"></param>
         public void SetInteractionPatterns(InteractionStrategy strategy)

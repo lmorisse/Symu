@@ -7,7 +7,11 @@
 
 #endregion
 
+#region using directives
+
 using System;
+
+#endregion
 
 namespace Symu.Repository.Networks.Knowledges
 {
@@ -26,6 +30,6 @@ namespace Symu.Repository.Networks.Knowledges
 
         public ushort KnowledgeId { get; set; }
         public byte KnowledgeBit { get; set; }
-        public float Learning{ get; set; }
+        public float Learning { get; set; }
     }
 }

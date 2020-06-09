@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuGroupAndInteractionTests
+// Description: SymuBiz - SymuGroupAndInteractionTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -152,10 +152,11 @@ namespace SymuGroupAndInteractionTests
             _organization.Models.InteractionSphere.MinSphereDensity = 0;
             _organization.Models.InteractionSphere.MaxSphereDensity = 0;
             _simulation.Process();
-            Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
+            Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
+
         /// <summary>
-        /// knowledge by group
+        ///     knowledge by group
         /// </summary>
         [TestMethod]
         public void CoworkersCountTest()

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuMessageAndTask
+// Description: SymuBiz - SymuMessageAndTask
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -33,6 +33,8 @@ namespace SymuMessageAndTask.Classes
         {
         }
 
+        public AgentId GroupId { get; set; }
+
         /// <summary>
         ///     Customize the cognitive architecture of the agent
         ///     After setting the Agent template
@@ -45,8 +47,6 @@ namespace SymuMessageAndTask.Classes
                 CommunicationMediums.Email;
             Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.Random;
         }
-
-        public AgentId GroupId { get; set; }
 
         public override void OnAfterTaskProcessorStart()
         {
@@ -77,6 +77,7 @@ namespace SymuMessageAndTask.Classes
         {
             Capacity.Initial = ((ExampleEnvironment) Environment).InitialCapacity;
         }
+
         public override void ActMessage(Message message)
         {
             if (message is null)

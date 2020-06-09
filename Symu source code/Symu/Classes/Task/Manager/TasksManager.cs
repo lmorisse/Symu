@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ namespace Symu.Classes.Task.Manager
         /// <summary>
         ///     TaskResult of the agent the agent during the simulation
         /// </summary>
-        public TaskResult TaskResult{ get; } = new TaskResult();
+        public TaskResult TaskResult { get; } = new TaskResult();
 
         /// <summary>
         ///     Tasks to do
@@ -106,6 +106,7 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
+
             TaskResult.TotalTasksNumber++;
             TaskResult.ToDo++;
             task.SetTasksManager(this);
@@ -128,6 +129,7 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
+
             TaskResult.TotalTasksNumber++;
             TaskResult.InProgress++;
             task.SetTasksManager(this);
@@ -152,9 +154,9 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
+
             TaskResult.ToDo--;
             TaskResult.InProgress++;
-
         }
 
         /// <summary>
@@ -177,6 +179,7 @@ namespace Symu.Classes.Task.Manager
             {
                 InProgress.Remove(task);
             }
+
             task.SetDone();
             if (_debug)
             {
@@ -188,6 +191,7 @@ namespace Symu.Classes.Task.Manager
             {
                 return;
             }
+
             if (todo)
             {
                 TaskResult.ToDo--;
@@ -196,10 +200,10 @@ namespace Symu.Classes.Task.Manager
             {
                 TaskResult.InProgress--;
             }
+
             TaskResult.Done++;
             TaskResult.WeightDone += task.Weight;
-            TaskResult.Incorrectness += (int)task.Incorrectness;
-
+            TaskResult.Incorrectness += (int) task.Incorrectness;
         }
 
         /// <summary>
@@ -229,11 +233,13 @@ namespace Symu.Classes.Task.Manager
             {
                 Cancelled.Add(task);
             }
+
             // We don't want to track message as Task
             if (task.Parent is Message)
             {
                 return;
             }
+
             if (todo)
             {
                 TaskResult.ToDo--;
@@ -242,6 +248,7 @@ namespace Symu.Classes.Task.Manager
             {
                 TaskResult.InProgress--;
             }
+
             TaskResult.Cancelled++;
         }
 
@@ -284,14 +291,16 @@ namespace Symu.Classes.Task.Manager
             {
                 Cancel(task);
             }
+
             foreach (var task in InProgress.FindAll(Match))
             {
                 Cancel(task);
             }
         }
+
         /// <summary>
-        /// Checks that Done contains the task
-        /// Debug should be set to true
+        ///     Checks that Done contains the task
+        ///     Debug should be set to true
         /// </summary>
         /// <param name="task"></param>
         /// <returns></returns>
@@ -316,6 +325,7 @@ namespace Symu.Classes.Task.Manager
             {
                 SetDone(ToDo.First());
             }
+
             while (InProgress.Any())
             {
                 var task = InProgress.First();

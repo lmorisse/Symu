@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -43,12 +43,13 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
         public float Obsolescence => List.Any() ? List.Average(t => t.Obsolescence) : 0;
+
+        public int Count => List.Count;
+
         /// <summary>
         ///     EventHandler triggered after learning a new information
         /// </summary>
         public event EventHandler<LearningEventArgs> OnAfterLearning;
-
-        public int Count => List.Count;
 
         /// <summary>
         ///     Get the sum of all the knowledges
@@ -155,6 +156,7 @@ namespace Symu.Repository.Networks.Knowledges
         {
             List.ForEach(x => x.ForgettingProcess(forgettingRate, step));
         }
+
         /// <summary>
         ///     OnAfterLearning event is triggered if learning occurs,
         ///     you can subscribe to this event to treat the new learning

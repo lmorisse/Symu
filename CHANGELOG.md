@@ -2,14 +2,15 @@
 
 ## Unreleased
 
+## 0.8.0 [☰](https://github.com/lmorisse/symu/compare/v0.8.0..v0.7.0) by [lmorisse](https://github.com/lmorisse)
+* Refactoring IterationResult
 * Add LearningModel.OnAfterLearning event
 * Refactoring Agent constructor and CommunicationTemplates
-* Add CyclicalIsolation by [lmorisse](https://github.com/lmorisse)
-* Add PromoterTemplate by [lmorisse](https://github.com/lmorisse)
-* Add Iterations and Charts in SymuMessageAndTask example by [lmorisse](https://github.com/lmorisse)
-* Refactoring BlockerCollection, BlockerResults and TasksResults by [lmorisse](https://github.com/lmorisse)
-* Add MessageResults by [lmorisse](https://github.com/lmorisse)
-
+* Add CyclicalIsolation)
+* Add PromoterTemplate
+* Add Iterations and Charts in SymuMessageAndTask example 
+* Refactoring BlockerCollection, BlockerResults and TasksResults 
+* Add MessageResults
 
 ## 0.7.0 [☰](https://github.com/lmorisse/symu/compare/v0.7.0..v0.6.0) by [lmorisse](https://github.com/lmorisse)
 * Renaming namespaces 

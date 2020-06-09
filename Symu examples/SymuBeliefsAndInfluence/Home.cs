@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: SymuBiz - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -42,17 +42,21 @@ namespace SymuBeliefsAndInfluence
             DisplayButtons();
 
             InfluenceModelOn.Checked = OrganizationEntity.Models.Influence.On;
-            InfluenceRateOfAgentsOn.Text = OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+            InfluenceRateOfAgentsOn.Text =
+                OrganizationEntity.Models.Influence.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
 
             BeliefsModelOn.Checked = OrganizationEntity.Models.Beliefs.On;
-            BeliefsRateOfAgentsOn.Text = OrganizationEntity.Models.Beliefs.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+            BeliefsRateOfAgentsOn.Text =
+                OrganizationEntity.Models.Beliefs.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
 
             tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
             tbInfluencers.Text = _environment.InfluencersCount.ToString(CultureInfo.InvariantCulture);
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
 
             HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
-            ThresholdForReacting.Text = OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting.ToString(CultureInfo.InvariantCulture);
+            ThresholdForReacting.Text =
+                OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting
+                    .ToString(CultureInfo.InvariantCulture);
 
             #region Influencer
 
@@ -75,7 +79,8 @@ namespace SymuBeliefsAndInfluence
 
             #region Worker
 
-            MandatoryRatio.Text = OrganizationEntity.Murphies.IncompleteBelief.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
+            MandatoryRatio.Text =
+                OrganizationEntity.Murphies.IncompleteBelief.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
             RiskAversion.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold
                 .ToString(CultureInfo.InvariantCulture);
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
@@ -313,7 +318,8 @@ namespace SymuBeliefsAndInfluence
             try
             {
                 _environment.InfluencerTemplate.Cognitive.MessageContent
-                    .MinimumBeliefToSendPerBit = float.Parse(MinimumBeliefToSendPerBit.Text, CultureInfo.InvariantCulture);
+                        .MinimumBeliefToSendPerBit =
+                    float.Parse(MinimumBeliefToSendPerBit.Text, CultureInfo.InvariantCulture);
                 MinimumBeliefToSendPerBit.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -332,7 +338,8 @@ namespace SymuBeliefsAndInfluence
             try
             {
                 _environment.InfluencerTemplate.Cognitive.MessageContent
-                    .MinimumNumberOfBitsOfBeliefToSend = byte.Parse(MinimumNumberOfBitsOfBeliefToSend.Text, CultureInfo.InvariantCulture);
+                    .MinimumNumberOfBitsOfBeliefToSend = byte.Parse(MinimumNumberOfBitsOfBeliefToSend.Text,
+                    CultureInfo.InvariantCulture);
                 MinimumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -351,7 +358,8 @@ namespace SymuBeliefsAndInfluence
             try
             {
                 _environment.InfluencerTemplate.Cognitive.MessageContent
-                    .MaximumNumberOfBitsOfBeliefToSend = byte.Parse(MaximumNumberOfBitsOfBeliefToSend.Text, CultureInfo.InvariantCulture);
+                    .MaximumNumberOfBitsOfBeliefToSend = byte.Parse(MaximumNumberOfBitsOfBeliefToSend.Text,
+                    CultureInfo.InvariantCulture);
                 MaximumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -387,7 +395,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Murphies.IncompleteBelief.MandatoryRatio = float.Parse(MandatoryRatio.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Murphies.IncompleteBelief.MandatoryRatio =
+                    float.Parse(MandatoryRatio.Text, CultureInfo.InvariantCulture);
                 MandatoryRatio.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -405,7 +414,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Models.Influence.RateOfAgentsOn = float.Parse(InfluenceRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.Influence.RateOfAgentsOn =
+                    float.Parse(InfluenceRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
                 InfluenceRateOfAgentsOn.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -442,7 +452,8 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                OrganizationEntity.Models.Beliefs.RateOfAgentsOn = float.Parse(BeliefsRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
+                OrganizationEntity.Models.Beliefs.RateOfAgentsOn =
+                    float.Parse(BeliefsRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
                 BeliefsRateOfAgentsOn.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -452,6 +463,25 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 BeliefsRateOfAgentsOn.BackColor = Color.Red;
+                MessageBox.Show(exception.Message);
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting =
+                    float.Parse(ThresholdForReacting.Text, CultureInfo.InvariantCulture);
+                ThresholdForReacting.BackColor = SystemColors.Window;
+            }
+            catch (FormatException)
+            {
+                ThresholdForReacting.BackColor = Color.Red;
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                ThresholdForReacting.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }
@@ -479,23 +509,5 @@ namespace SymuBeliefsAndInfluence
         }
 
         #endregion
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting = float.Parse(ThresholdForReacting.Text, CultureInfo.InvariantCulture);
-                ThresholdForReacting.BackColor = SystemColors.Window;
-            }
-            catch (FormatException)
-            {
-                ThresholdForReacting.BackColor = Color.Red;
-            }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                ThresholdForReacting.BackColor = Color.Red;
-                MessageBox.Show(exception.Message);
-            }
-        }
     }
 }

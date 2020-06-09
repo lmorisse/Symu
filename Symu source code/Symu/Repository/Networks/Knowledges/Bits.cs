@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -107,7 +107,7 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     CopyTo bit with a value at a specified index
+        ///     Clone bit with a value at a specified index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -14,16 +14,15 @@ using Symu.Tools;
 
 #endregion
 
-namespace Symu.Results.Organization
+namespace Symu.Results
 {
     /// <summary>
-    ///     Group density is used to store information about group density per step : number of groups, max potential number of
-    ///     groups, density
+    ///     Density is used to store result which has an actual and a max number,
+    ///     and a computed ratio (density) = 100* actual / max
     /// </summary>
-    /// <remarks>Dynamics of organizations, page 75</remarks>
-    public readonly struct GroupDensityStruct
+    public readonly struct DensityStruct
     {
-        public GroupDensityStruct(float actualNumber, float maxNumber, ushort step)
+        public DensityStruct(float actualNumber, float maxNumber, ushort step)
         {
             ActualNumber = actualNumber;
             MaxNumber = maxNumber;

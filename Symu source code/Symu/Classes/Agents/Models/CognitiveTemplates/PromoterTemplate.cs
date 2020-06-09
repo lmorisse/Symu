@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -18,12 +18,13 @@ using Symu.Repository.Networks.Beliefs;
 namespace Symu.Classes.Agents.Models.CognitiveTemplates
 {
     /// <summary>
-    ///     CopyTo all the CognitiveArchitecture parameters for the Simple human template
+    ///     Clone all the CognitiveArchitecture parameters for the Simple human template
     /// </summary>
     public class PromoterTemplate : CognitiveArchitectureTemplate
     {
         /// <summary>
-        /// A promoter agent is designed to sway beliefs and encourage or discourage participation, and as such will have a 100% chance of knowing each fact.
+        ///     A promoter agent is designed to sway beliefs and encourage or discourage participation, and as such will have a
+        ///     100% chance of knowing each fact.
         /// </summary>
         public PromoterTemplate()
         {

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuTests
+// Description: SymuBiz - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -34,8 +34,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.AgentCanBeIsolated = Frequency.Never;
             Assert.IsFalse(_interaction.IsIsolated(0));
         }
+
         /// <summary>
-        /// Random isolation - always 
+        ///     Random isolation - always
         /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest()
@@ -44,8 +45,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.AgentCanBeIsolated = Frequency.Always;
             Assert.IsTrue(_interaction.IsIsolated(0));
         }
+
         /// <summary>
-        /// Random isolation - never
+        ///     Random isolation - never
         /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest1()
@@ -54,8 +56,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.AgentCanBeIsolated = Frequency.Never;
             Assert.IsFalse(_interaction.IsIsolated(0));
         }
+
         /// <summary>
-        /// Random cyclical - always 
+        ///     Random cyclical - always
         /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest2()
@@ -64,8 +67,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.AgentCanBeIsolated = Frequency.Always;
             Assert.IsTrue(_interaction.IsIsolated(0));
         }
+
         /// <summary>
-        /// Random isolation - never
+        ///     Random isolation - never
         /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest3()
@@ -74,8 +78,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.AgentCanBeIsolated = Frequency.Never;
             Assert.IsFalse(_interaction.IsIsolated(0));
         }
+
         /// <summary>
-        /// Random isolation - never
+        ///     Random isolation - never
         /// </summary>
         [TestMethod]
         public void PassingNextIsolationTest4()
@@ -83,7 +88,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _interaction.IsolationCyclicity = Cyclicity.Cyclical;
             _interaction.AgentCanBeIsolated = Frequency.VeryRarely;
             Assert.IsTrue(_interaction.IsIsolated(0));
-            Assert.IsFalse(_interaction.IsIsolated(1)); 
+            Assert.IsFalse(_interaction.IsIsolated(1));
             Assert.IsFalse(_interaction.IsIsolated(2));
         }
 

@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         //public bool IsolationIsCyclical { get; set; }
         /// <summary>
-        /// Isolation can be random, cylclic, ...
+        ///     Isolation can be random, cylclic, ...
         /// </summary>
         public Cyclicity IsolationCyclicity { get; set; }
 
@@ -84,8 +84,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                     return false;
             }
         }
+
         /// <summary>
-        ///     Check if Agent is randomly Isolated 
+        ///     Check if Agent is randomly Isolated
         /// </summary>
         /// <returns>true if agent is isolated, false otherwise</returns>
         private bool IsRandomlyIsolated()
@@ -120,8 +121,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             return Bernoulli.Sample(isolationThreshold);
         }
+
         /// <summary>
-        ///     Check if Agent is cyclically Isolated at this step 
+        ///     Check if Agent is cyclically Isolated at this step
         /// </summary>
         /// <param name="step"></param>
         /// <returns>true if agent is isolated, false otherwise</returns>
@@ -287,7 +289,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         }
 
         /// <summary>
-        ///     CopyTo binary interaction pattern based on InteractionStrategy
+        ///     Clone binary interaction pattern based on InteractionStrategy
         /// </summary>
         /// <param name="strategy"></param>
         public void SetInteractionPatterns(InteractionStrategy strategy)

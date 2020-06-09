@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluence
+// Description: SymuBiz - SymuBeliefsAndInfluence
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -65,7 +65,8 @@ namespace SymuBeliefsAndInfluence.Classes
             base.SetModels();
             foreach (var knowledge in Knowledges)
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge, Cognitive.InternalCharacteristics);
+                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge,
+                    Cognitive.InternalCharacteristics);
                 //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
                 BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }

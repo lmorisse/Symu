@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuBeliefsAndInfluenceTests
+// Description: SymuBiz - SymuBeliefsAndInfluenceTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -13,7 +13,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
-using Symu.Common;
 using Symu.Engine;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Tools;
@@ -248,8 +247,9 @@ namespace SymuBeliefsAndInfluenceTests
                   (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(100, tasksDoneRatio);
         }
+
         /// <summary>
-        /// Full risk aversion
+        ///     Full risk aversion
         /// </summary>
         [TestMethod]
         public void FullWeightTest()
@@ -266,10 +266,12 @@ namespace SymuBeliefsAndInfluenceTests
                 : _environment.IterationResult.Tasks.Done * 100 /
                   (_environment.Schedule.Step * _environment.WorkersCount);
             Assert.AreEqual(0, tasksDoneRatio);
-            Assert.AreEqual(_environment.Schedule.Step * _environment.WorkersCount, _environment.IterationResult.Tasks.Cancelled);
+            Assert.AreEqual(_environment.Schedule.Step * _environment.WorkersCount,
+                _environment.IterationResult.Tasks.Cancelled);
         }
+
         /// <summary>
-        /// No risk aversion
+        ///     No risk aversion
         /// </summary>
         [TestMethod]
         public void FullWeightTest1()

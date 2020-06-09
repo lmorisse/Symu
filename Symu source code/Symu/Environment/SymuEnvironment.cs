@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Symu
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ namespace Symu.Environment
         public int Delay { get; set; }
 
         /// <summary>
-        ///     CopyTo the debug mode for additional information
+        ///     Clone the debug mode for additional information
         /// </summary>
         public bool Debug { get; set; } = true;
 
@@ -73,6 +73,30 @@ namespace Symu.Environment
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
 
         public List<SymuEvent> Events { get; } = new List<SymuEvent>();
+
+        #region Add / remove agent
+
+        /// <summary>
+        ///     Adds an agent to the environment. The agent should already have a name and its name should be unique.
+        /// </summary>
+        /// <param name="agent">The concurrent agent that will be added</param>
+        public void AddAgent(Agent agent)
+        {
+            if (agent is null)
+            {
+                throw new ArgumentNullException(nameof(agent));
+            }
+
+            if (WhitePages.Agents.Exists(agent.Id))
+            {
+                throw new ArgumentException("Trying to add an agent " + agent.Id.ClassKey + " with an existing key: " +
+                                            agent.Id.Key);
+            }
+
+            WhitePages.Agents.Add(agent);
+        }
+
+        #endregion
 
         #region Start and Stop
 
@@ -171,34 +195,11 @@ namespace Symu.Environment
 
         public List<SimulationScenario> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.Id.ClassKey == SymuYellowPages.Scenario).Select(x => x.Id);
+            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.Id.ClassKey == SymuYellowPages.Scenario)
+                .Select(x => x.Id);
 
             return scenarioIds.Select(scenarioId => WhitePages.GetAgent<SimulationScenario>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
-        }
-
-        #endregion
-
-        #region Add / remove agent
-
-        /// <summary>
-        ///     Adds an agent to the environment. The agent should already have a name and its name should be unique.
-        /// </summary>
-        /// <param name="agent">The concurrent agent that will be added</param>
-        public void AddAgent(Agent agent)
-        {
-            if (agent is null)
-            {
-                throw new ArgumentNullException(nameof(agent));
-            }
-
-            if (WhitePages.Agents.Exists(agent.Id))
-            {
-                throw new ArgumentException("Trying to add an agent " + agent.Id.ClassKey + " with an existing key: " +
-                                            agent.Id.Key);
-            }
-
-            WhitePages.Agents.Add(agent);
         }
 
         #endregion
@@ -323,7 +324,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     CopyTo Sphere for the InteractionSphere
+        ///     Clone Sphere for the InteractionSphere
         /// </summary>
         public void SetInteractionSphere(bool initialization)
         {
@@ -368,7 +369,7 @@ namespace Symu.Environment
 
         #endregion
 
-        #region CopyTo model
+        #region Clone model
 
         /// <summary>
         ///     Transform organization into agents
@@ -380,7 +381,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     CopyTo repository of Knowledge network
+        ///     Clone repository of Knowledge network
         /// </summary>
         public virtual void SetKnowledges()
         {
@@ -391,7 +392,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     CopyTo repository of Databases network
+        ///     Clone repository of Databases network
         /// </summary>
         public virtual void SetDatabases()
         {

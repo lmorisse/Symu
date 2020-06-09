@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - SymuTests
+// Description: SymuBiz - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Blockers;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
@@ -64,7 +63,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
 
-             var expertise = new AgentExpertise();
+            var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
             _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(_knowledge);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_knowledge);
@@ -97,6 +96,7 @@ namespace SymuTests.Classes.Agents
             Assert.AreNotEqual(0, _environment.WhitePages.Network.NetworkInfluences.GetInfluentialness(_agent.Id));
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
+
         private TestAgent AddTeammate()
         {
             var teammate = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
@@ -219,7 +219,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
-                Sender= _agent.Id,
+                Sender = _agent.Id,
                 Medium = CommunicationMediums.Irc
             };
             _agent.Post(message);
@@ -478,7 +478,6 @@ namespace SymuTests.Classes.Agents
             {
                 Sender = _agent.Id,
                 Medium = CommunicationMediums.Email
-
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
@@ -499,7 +498,7 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint)1, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
         }
 
         #endregion
@@ -900,7 +899,7 @@ namespace SymuTests.Classes.Agents
         public void NonPassingHandleCapacityTest()
         {
             _environment.Schedule.Step = 5;
-            _agent.HandleCapacity(false,true);
+            _agent.HandleCapacity(false, true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
@@ -914,7 +913,7 @@ namespace SymuTests.Classes.Agents
             _environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _environment.Organization.Murphies.UnAvailability.On = false;
-            _agent.HandleCapacity(false,true);
+            _agent.HandleCapacity(false, true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(1, _agent.Capacity.Actual);
         }
@@ -929,7 +928,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _environment.Organization.Murphies.UnAvailability.On = false;
             _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
-            _agent.HandleCapacity(true,true);
+            _agent.HandleCapacity(true, true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
@@ -1048,7 +1047,7 @@ namespace SymuTests.Classes.Agents
             }
 
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
-            _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions= 5;
+            _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 5;
             Assert.AreEqual(3, _agent.FilterAgentIdsToInteract(agentIds).Count());
         }
 
@@ -1595,8 +1594,9 @@ namespace SymuTests.Classes.Agents
                 MurphyTask.FullRequiredBits);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
-            
-            Assert.IsTrue(_agent.TaskProcessor.TasksManager.BlockerResult.Cancelled == 1 || _agent.TaskProcessor.TasksManager.BlockerResult.Done == 1);
+
+            Assert.IsTrue(_agent.TaskProcessor.TasksManager.BlockerResult.Cancelled == 1 ||
+                          _agent.TaskProcessor.TasksManager.BlockerResult.Done == 1);
         }
 
         /// <summary>
@@ -1735,7 +1735,6 @@ namespace SymuTests.Classes.Agents
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
         }
 
-       
 
         /// <summary>
         ///     With DynamicEnvironment Off and no teammate with knowledge
