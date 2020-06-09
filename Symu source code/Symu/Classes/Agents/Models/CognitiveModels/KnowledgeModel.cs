@@ -22,7 +22,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will manage its knowledge
-    ///     Entity enable or not this mechanism for all the agents during the symu
+    ///     Entity enable or not this mechanism for all the agents during the simulation
     ///     The KnowledgeModels initialize the real value of the agent's knowledge parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>

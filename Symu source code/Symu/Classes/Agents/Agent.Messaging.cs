@@ -142,23 +142,32 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(message));
             }
 
-            // The agent may have received too much messages for the step
-            if (IsMessagesPerPeriodBelowLimit(message.Medium) && IsMessagesReceivedPerPeriodBelowLimit(message.Medium))
+            switch (message.Medium)
             {
-                if (AcceptNewInteraction(message.Sender))
-                {
-                    OnBeforePostMessage(message);
+                case CommunicationMediums.System:
                     MessageProcessor.Post(message);
-                    OnAfterPostMessage(message);
-                }
-                else
-                {
-                    MessageProcessor.AddNotAcceptedMessages(message, Environment.Debug);
-                }
-            }
-            else
-            {
-                TrackMissedMessages(message);
+                    break;
+                default:
+                    // The agent may have received too much messages for the step
+                    if (IsMessagesPerPeriodBelowLimit(message.Medium) && IsMessagesReceivedPerPeriodBelowLimit(message.Medium))
+                    {
+                        if (AcceptNewInteraction(message.Sender))
+                        {
+                            OnBeforePostMessage(message);
+                            MessageProcessor.Post(message);
+                            OnAfterPostMessage(message);
+                        }
+                        else
+                        {
+                            Environment.Messages.Result.NotAcceptedMessagesCount++;
+                            MessageProcessor.AddNotAcceptedMessages(message, Environment.Debug);
+                        }
+                    }
+                    else
+                    {
+                        TrackMissedMessages(message);
+                    }
+                    break;
             }
         }
 
@@ -227,6 +236,8 @@ namespace Symu.Classes.Agents
 
         /// <summary>
         ///     Triggered before message send in the mailbox
+        ///     Use to track message (non system)
+        ///     and impact the cost of the message on the agent capacity and TimeSpent
         /// </summary>
         /// <param name="message"></param>
         /// <remarks>Impact on TimeSpent is done in Agent.TaskManagement</remarks>
@@ -394,17 +405,26 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (message.Medium != CommunicationMediums.System 
-                && (Status == AgentStatus.Offline ||
-                    !IsMessagesPerPeriodBelowLimit(message.Medium) ||
-                    !IsMessagesSendPerPeriodBelowLimit(message.Medium)))
+            switch (message.Medium)
             {
-                return;
-            }
+                case CommunicationMediums.System:
+                    Environment.SendAgent(message);
+                    break;
+                default:
+                {
+                    if (Status == AgentStatus.Offline ||
+                        !IsMessagesPerPeriodBelowLimit(message.Medium) ||
+                        !IsMessagesSendPerPeriodBelowLimit(message.Medium))
+                    {
+                        return;
+                    }
 
-            OnBeforeSendMessage(message);
-            Environment.SendAgent(message);
-            OnAfterSendMessage(message);
+                    OnBeforeSendMessage(message);
+                    Environment.SendAgent(message);
+                    OnAfterSendMessage(message);
+                    break;
+                }
+            }
         }
 
         /// <summary>

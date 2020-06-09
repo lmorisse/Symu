@@ -831,9 +831,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(64, 207);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(256, 17);
+            this.label9.Size = new System.Drawing.Size(198, 21);
             this.label9.TabIndex = 29;
-            this.label9.Text = "RateOfUnavailability for new interaction";
+            this.label9.Text = "Rate for new interaction";
             // 
             // label10
             // 
@@ -857,7 +857,7 @@
             this.groupBox6.Size = new System.Drawing.Size(374, 123);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Symu";
+            this.groupBox6.Text = "Simulation";
             // 
             // GroupsCount
             // 
@@ -919,28 +919,28 @@
             // symuorgToolStripMenuItem
             // 
             this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
-            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.symuorgToolStripMenuItem.Text = "Symu.org";
             this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem1
             // 
             this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.documentationToolStripMenuItem1.Text = "Documentation";
             this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
             // 
             // sourceCodeToolStripMenuItem1
             // 
             this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
-            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.sourceCodeToolStripMenuItem1.Text = "Source code";
             this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
             // 
             // issuesToolStripMenuItem
             // 
             this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
-            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
@@ -955,6 +955,7 @@
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Home";
+            this.Text = "Symu groups and interaction models";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);

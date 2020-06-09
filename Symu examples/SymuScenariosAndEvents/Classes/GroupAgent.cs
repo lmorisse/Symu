@@ -21,10 +21,8 @@ namespace SymuScenariosAndEvents.Classes
         public const byte ClassKey = 1;
 
         public GroupAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+            new AgentId(agentKey, ClassKey), environment)
         {
-            SetCognitive(Environment.Organization.AgentTemplates.Standard);
         }
     }
 }

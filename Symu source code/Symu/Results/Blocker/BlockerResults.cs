@@ -39,7 +39,7 @@ namespace Symu.Results.Blocker
         /// <summary>
         ///     Total blockers done during the simulation
         /// </summary>
-        public int TotalBlockersDone => Results.Values.Any() ? Results.Values.Last().Done : 0;
+        public int Done => Results.Values.Any() ? Results.Values.Last().Done : 0;
 
         /// <summary>
         ///     Total blockers done during the simulation

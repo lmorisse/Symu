@@ -23,7 +23,7 @@ namespace Symu.Results
 {
     public class IterationResult
     {
-        protected readonly SymuEnvironment Environment;
+        protected SymuEnvironment Environment { get; }
 
         public IterationResult(SymuEnvironment environment)
         {
@@ -129,9 +129,9 @@ namespace Symu.Results
         }
 
         /// <summary>
-        ///     CopyTo all results to On
+        ///     Set all results to On
         /// </summary>
-        public void On()
+        public virtual void On()
         {
             OrganizationFlexibility.On = true;
             OrganizationKnowledgeAndBelief.On = true;
@@ -141,9 +141,9 @@ namespace Symu.Results
         }
 
         /// <summary>
-        ///     CopyTo all results to Off
+        ///     Set all results to Off
         /// </summary>
-        public void Off()
+        public virtual void Off()
         {
             OrganizationFlexibility.On = false;
             OrganizationKnowledgeAndBelief.On = false;

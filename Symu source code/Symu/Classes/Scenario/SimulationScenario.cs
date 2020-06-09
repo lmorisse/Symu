@@ -30,7 +30,8 @@ namespace Symu.Classes.Scenario
 
             Entity = new ScenarioEntity(Id.Key);
             Parent = parent;
-            SetCognitive(new StandardAgentTemplate());
+            SetTemplate(new StandardAgentTemplate());
+            SetDefaultModels();
         }
 
         public bool Success { get; set; }

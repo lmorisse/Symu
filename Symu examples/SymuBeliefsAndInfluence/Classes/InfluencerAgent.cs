@@ -10,10 +10,14 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -22,12 +26,39 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class InfluencerAgent : Agent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment)Environment).Knowledges;
 
-        public InfluencerAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public InfluencerAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(((ExampleEnvironment) Environment).InfluencerTemplate);
+        }
+
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected override void SetCognitive()
+        {
+            base.SetCognitive();
+            Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+                CommunicationMediums.Email;
+        }
+
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected override void SetModels()
+        {
+            base.SetModels();
+            foreach (var knowledge in Knowledges)
+            {
+                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge, Cognitive.InternalCharacteristics);
+                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            }
         }
 
         /// <summary>

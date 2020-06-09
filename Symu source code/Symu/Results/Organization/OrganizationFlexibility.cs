@@ -27,7 +27,7 @@ namespace Symu.Results.Organization
     public class OrganizationFlexibility
     {
         /// <summary>
-        ///     Network of the symu
+        ///     Network of the simulation
         /// </summary>
         private readonly SymuEnvironment _environment;
 
@@ -58,7 +58,7 @@ namespace Symu.Results.Organization
         public List<GroupDensityStruct> Links { get; private set; } = new List<GroupDensityStruct>();
 
         /// <summary>
-        ///     Sphere of interaction is the weight of the network in the symu
+        ///     Sphere of interaction is the weight of the network in the simulation
         /// </summary>
 
         public List<GroupDensityStruct> Sphere { get; private set; } = new List<GroupDensityStruct>();
@@ -85,7 +85,7 @@ namespace Symu.Results.Organization
         }
 
         /// <summary>
-        ///     Sphere of interaction is the length of the network in the symu, the number of connections between agents
+        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
         /// </summary>
         public void HandleLinks(ushort agentsCount, ushort step)
         {
@@ -96,7 +96,7 @@ namespace Symu.Results.Organization
         }
 
         /// <summary>
-        ///     Sphere of interaction is the length of the network in the symu, the number of connections between agents
+        ///     Sphere of interaction is the length of the network in the simulation, the number of connections between agents
         /// </summary>
         public void HandleSphere(ushort step)
         {

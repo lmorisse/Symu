@@ -49,34 +49,22 @@ namespace SymuTests.Classes.Agents
         {
             _environment.SetOrganization(_organizationEntity);
             _symu.SetEnvironment(_environment);
-            _organizationEntity.Models.Influence.On = true;
-            _organizationEntity.Models.Influence.RateOfAgentsOn = 1;
-            _organizationEntity.Models.Learning.On = true;
-            _organizationEntity.Models.Learning.RateOfAgentsOn = 1;
-            _organizationEntity.Models.Forgetting.On = true;
-            _organizationEntity.Models.Forgetting.RateOfAgentsOn = 1;
-            _organizationEntity.Models.Beliefs.On = true;
-            _organizationEntity.Models.Beliefs.RateOfAgentsOn = 1;
-            _organizationEntity.Models.Knowledge.On = true;
-            _organizationEntity.Models.Knowledge.RateOfAgentsOn = 1;
-            _environment.IterationResult.Blockers.On = true;
+            _organizationEntity.Models.On(1);
+            _environment.IterationResult.On();
 
-            _agent = new TestAgent(_organizationEntity.NextEntityIndex(), _environment)
-            {
-                Cognitive = new CognitiveArchitecture
-                {
-                    KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
-                    MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
-                    InternalCharacteristics =
-                    {
-                        CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true
-                    },
-                    TasksAndPerformance = {CanPerformTask = true},
-                    InteractionCharacteristics = {PreferredCommunicationMediums = CommunicationMediums.Email}
-                }
-            };
+            _agent = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+            _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
+            _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
+            _agent.Cognitive.MessageContent.CanReceiveBeliefs = true;
+            _agent.Cognitive.MessageContent.CanReceiveKnowledge = true;
+            _agent.Cognitive.InternalCharacteristics.CanLearn = true;
+            _agent.Cognitive.InternalCharacteristics.CanForget = true;
+            _agent.Cognitive.InternalCharacteristics.CanInfluenceOrBeInfluence = true;
+            _agent.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Email;
+            _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
 
-            var expertise = new AgentExpertise();
+             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
             _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(_knowledge);
             _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_knowledge);
@@ -88,7 +76,6 @@ namespace SymuTests.Classes.Agents
 
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
             _agent.Start();
-            Assert.AreEqual(AgentState.Starting, _agent.State);
             _agent.WaitingToStart();
             Assert.AreEqual(AgentState.Started, _agent.State);
             _environment.Schedule.Step = 0;
@@ -105,9 +92,19 @@ namespace SymuTests.Classes.Agents
             Assert.AreEqual(1, _agent.Id.Key);
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
+            Assert.AreNotEqual(0, _agent.KnowledgeModel.Expertise.Count);
             Assert.AreNotEqual(0, _environment.WhitePages.Network.NetworkInfluences.GetInfluenceability(_agent.Id));
             Assert.AreNotEqual(0, _environment.WhitePages.Network.NetworkInfluences.GetInfluentialness(_agent.Id));
             Assert.AreEqual(AgentState.Started, _agent.State);
+        }
+        private TestAgent AddTeammate()
+        {
+            var teammate = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+            teammate.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
+            teammate.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            teammate.Start();
+            teammate.WaitingToStart();
+            return teammate;
         }
 
         #region message
@@ -222,6 +219,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
+                Sender= _agent.Id,
                 Medium = CommunicationMediums.Irc
             };
             _agent.Post(message);
@@ -262,6 +260,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Offline;
             var message = new Message
             {
+                Sender = _agent.Id,
                 Medium = CommunicationMediums.Phone
             };
             _agent.Post(message);
@@ -283,6 +282,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
+                Sender = _agent.Id,
                 Medium = CommunicationMediums.Phone
             };
             _agent.Post(message);
@@ -320,6 +320,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
             var message = new Message
             {
+                Sender = _agent.Id,
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
@@ -473,7 +474,12 @@ namespace SymuTests.Classes.Agents
         public void PostTest5()
         {
             _agent.State = AgentState.Started;
-            var message = new Message {Medium = CommunicationMediums.Email};
+            var message = new Message
+            {
+                Sender = _agent.Id,
+                Medium = CommunicationMediums.Email
+
+            };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
             Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
@@ -486,7 +492,11 @@ namespace SymuTests.Classes.Agents
         public void PostTest6()
         {
             _agent.State = AgentState.Stopping;
-            var message = new Message { Medium = CommunicationMediums.Email };
+            var message = new Message
+            {
+                Sender = _agent.Id,
+                Medium = CommunicationMediums.Email
+            };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
             Assert.AreEqual((uint)1, _environment.Messages.Result.ReceivedMessagesCount);
@@ -669,11 +679,10 @@ namespace SymuTests.Classes.Agents
         public void SendAMessageTests()
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
-            var agent2 = new TestAgent(2, _environment);
-            agent2.Start();
-            agent2.WaitingToStart();
+            var agent2 = AddTeammate();
             var message = new Message(_agent.Id, agent2.Id, MessageAction.Add, 0)
             {
+                Sender = _agent.Id,
                 Medium = CommunicationMediums.Email
             };
             _agent.Send(message);
@@ -812,11 +821,10 @@ namespace SymuTests.Classes.Agents
         public void AskPreStepTest1()
         {
             _agent.ForgettingModel.On = false;
-            var expertise = new AgentExpertise();
-            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
-            expertise.Add(agentKnowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
-            _agent.PreStep();
+            _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.InitializeExpertise(0);
+            _environment.SetInteractionSphere(true);
+            _environment.PreStep();
             Assert.AreEqual(0, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
 
@@ -829,13 +837,10 @@ namespace SymuTests.Classes.Agents
         {
             _agent.ForgettingModel.On = true;
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            var expertise = new AgentExpertise();
-            var agentKnowledge = new AgentKnowledge(1, new float[] {1}, 0, -1, 0);
-            expertise.Add(agentKnowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
+            _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.InitializeExpertise(0);
+            _environment.SetInteractionSphere(true);
             _environment.PreStep();
-            // To initialize interaction sphere
-            _environment.NextStep();
             Assert.AreEqual(1, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
 
@@ -1043,6 +1048,7 @@ namespace SymuTests.Classes.Agents
             }
 
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
+            _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions= 5;
             Assert.AreEqual(3, _agent.FilterAgentIdsToInteract(agentIds).Count());
         }
 
@@ -1059,6 +1065,7 @@ namespace SymuTests.Classes.Agents
             }
 
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
+            _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 5;
             Assert.AreEqual(5, _agent.FilterAgentIdsToInteract(agentIds).Count());
         }
 
@@ -1386,7 +1393,7 @@ namespace SymuTests.Classes.Agents
             }
 
             Assert.AreNotEqual(0, agentBelief.BeliefBits.GetBit(0));
-            Assert.IsTrue(1 < task.Weight);
+            Assert.AreNotEqual(1, task.Weight);
         }
 
         /// <summary>
@@ -1514,15 +1521,13 @@ namespace SymuTests.Classes.Agents
         public void TryRecoverBlockerIncompleteKnowledgeTest()
         {
             // Add teammates with knowledge
-            var teammate = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+            var teammate = AddTeammate();
             var group = new TestAgent(_organizationEntity.NextEntityIndex(), 2, _environment);
+            group.Start();
             _environment.WhitePages.Network.AddMemberToGroup(_agent.Id, 100, group.Id);
             _environment.WhitePages.Network.AddMemberToGroup(teammate.Id, 100, group.Id);
-            var expertise = new AgentExpertise();
-            expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            teammate.KnowledgeModel.AddExpertise(expertise);
-            teammate.Start();
-            teammate.WaitingToStart();
+            teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             _environment.WhitePages.Network.InteractionSphere.SetSphere(true,
                 _environment.WhitePages.AllAgentIds().ToList(), _environment.WhitePages.Network);
@@ -1705,11 +1710,9 @@ namespace SymuTests.Classes.Agents
         public void TryRecoverBlockerIncompleteBeliefTest()
         {
             // Add teammates with knowledge
-            var teammate = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+            var teammate = AddTeammate();
             teammate.BeliefsModel.AddBelief(_knowledge.Id, BeliefLevel.StronglyAgree);
             teammate.BeliefsModel.InitializeBeliefs();
-            teammate.Start();
-            teammate.WaitingToStart();
             _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
             teammate.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
             _environment.WhitePages.Network.InteractionSphere.SetSphere(true,
@@ -1731,6 +1734,8 @@ namespace SymuTests.Classes.Agents
             Assert.IsTrue(_agent.Capacity.Actual < 1);
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
         }
+
+       
 
         /// <summary>
         ///     With DynamicEnvironment Off and no teammate with knowledge

@@ -62,7 +62,7 @@ namespace Symu.Classes.Organization
         public RandomGenerator Generator { get; set; } = RandomGenerator.RandomUniform;
 
         /// <summary>
-        ///     Define level of random for the symu.
+        ///     Define level of random for the simulation.
         /// </summary>
         public RandomLevel RandomLevel { get; set; } = RandomLevel.NoRandom;
 

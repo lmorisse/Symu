@@ -22,7 +22,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will influence or be influenced
-    ///     Entity enable or not this mechanism for all the agents during the symu
+    ///     Entity enable or not this mechanism for all the agents during the simulation
     ///     The InfluenceModel initialize the real value of the agent's influence parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>

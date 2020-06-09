@@ -81,9 +81,13 @@ namespace Symu.Results.Messaging
         /// </summary>
         public float ReceivedMessagesCost => Results.Values.Any() ? Results.Values.Last().ReceivedMessagesCost : 0;
         /// <summary>
-        ///     Give the total weight of the receive messages 
+        ///     Give the total missed messages by offline agents
         /// </summary>
         public uint MissedMessagesCount => Results.Values.Any() ? Results.Values.Last().MissedMessagesCount : 0;
+        /// <summary>
+        ///     Give the total rejected new interactions messages
+        /// </summary>
+        public uint NotAcceptedMessagesCount => Results.Values.Any() ? Results.Values.Last().NotAcceptedMessagesCount : 0;
 
         public void SetResults(SymuEnvironment environment)
         {

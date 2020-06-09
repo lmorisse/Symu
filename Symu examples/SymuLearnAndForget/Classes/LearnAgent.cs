@@ -11,6 +11,7 @@
 
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
@@ -27,16 +28,33 @@ namespace SymuLearnAndForget.Classes
     {
         public const byte ClassKey = 2;
 
-        public LearnAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public LearnAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(Environment.Organization.AgentTemplates.Human);
+            Wiki = Environment.WhitePages.Network.NetworkDatabases.Repository.List.First();
+            Knowledge = GetKnowledge();
+        }
+
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected override void SetCognitive()
+        {
+            base.SetCognitive();
             Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.ViaAPlatform;
-            Wiki = Environment.WhitePages.Network.NetworkDatabases.Repository.List.First();
-            Knowledge = GetKnowledge();
+        }
+
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected override void SetModels()
+        {
+            base.SetModels();
+            KnowledgeModel.AddKnowledge(((ExampleEnvironment)Environment).Knowledge.Id, ((ExampleEnvironment)Environment).KnowledgeLevel, Cognitive.InternalCharacteristics);
         }
 
         protected Database Wiki { get; }

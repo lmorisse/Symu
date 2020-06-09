@@ -21,7 +21,7 @@ using Symu.Messaging.Messages;
 namespace Symu.Results.Task
 {
     /// <summary>
-    ///     Manage the task metrics for the symu
+    ///     Manage the task metrics for the simulation
     /// </summary>
     public class TaskResults
     {

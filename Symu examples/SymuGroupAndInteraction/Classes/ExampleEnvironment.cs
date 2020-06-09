@@ -29,6 +29,7 @@ namespace SymuGroupAndInteraction.Classes
         public byte Knowledge { get; set; } = 0;
         public byte Activities { get; set; } = 0;
         public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
+        public List<Knowledge> Knowledges { get; }= new List<Knowledge>();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -39,8 +40,6 @@ namespace SymuGroupAndInteraction.Classes
 
             base.SetOrganization(organization);
 
-            Organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            Organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             Organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             Organization.Models.InteractionSphere.On = true;
             Organization.Models.Generator = RandomGenerator.RandomUniform;
@@ -48,17 +47,17 @@ namespace SymuGroupAndInteraction.Classes
             SetDebug(false);
         }
 
-        public override void SetModelForAgents()
+        public override void SetAgents()
         {
-            base.SetModelForAgents();
-            var knowledges = new List<Knowledge>();
+            base.SetAgents();
             var activities = new List<string>();
+            Knowledges.Clear();
             for (var i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
                 var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 WhitePages.Network.AddKnowledge(knowledge);
-                knowledges.Add(knowledge);
+                Knowledges.Add(knowledge);
                 activities.Add(i.ToString());
                 //Beliefs are created based on knowledge
             }
@@ -66,16 +65,16 @@ namespace SymuGroupAndInteraction.Classes
             for (var i = 0; i < GroupsCount; i++)
             {
                 var group = new GroupAgent(Organization.NextEntityIndex(), this);
-
+                
                 for (var j = 0; j < WorkersCount; j++)
                 {
-                    var actor = new PersonAgent(Organization.NextEntityIndex(), this)
+                    var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
                     {
                         GroupId = group.Id
                     };
                     WhitePages.Network.AddMemberToGroup(actor.Id, 100, group.Id);
                     //Beliefs are added with knowledge
-                    SetKnowledge(actor, knowledges, i);
+                    SetKnowledge(actor, Knowledges, i);
                     SetActivity(actor.Id, activities, i, group.Id);
                 }
             }
@@ -87,23 +86,16 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    actor.KnowledgeModel.AddKnowledge(knowledges[0].Id,
-                        KnowledgeLevel,
-                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[0].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
                     break;
                 case 1:
                     // Knowledge is by group
-                    actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
-                        KnowledgeLevel,
-                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[i].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    actor.KnowledgeModel.AddKnowledge(knowledges[index].Id,
-                        KnowledgeLevel,
-                        Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
+                    WhitePages.Network.NetworkKnowledges.Add(actor.Id, knowledges[index].Id, KnowledgeLevel, actor.Cognitive.InternalCharacteristics);
                     break;
             }
         }

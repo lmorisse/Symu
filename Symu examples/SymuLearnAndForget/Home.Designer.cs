@@ -186,7 +186,7 @@
             this.groupBox2.Size = new System.Drawing.Size(421, 93);
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Symu";
+            this.groupBox2.Text = "Simulation";
             // 
             // label22
             // 
@@ -1042,9 +1042,9 @@
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(8, 189);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(148, 17);
+            this.label24.Size = new System.Drawing.Size(122, 17);
             this.label24.TabIndex = 21;
-            this.label24.Text = "BeInfluenced by doing";
+            this.label24.Text = "Learning by doing";
             // 
             // lblKnowledge1
             // 
@@ -1205,28 +1205,28 @@
             // symuorgToolStripMenuItem
             // 
             this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
-            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.symuorgToolStripMenuItem.Text = "Symu.org";
             this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem1
             // 
             this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.documentationToolStripMenuItem1.Text = "Documentation";
             this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
             // 
             // sourceCodeToolStripMenuItem1
             // 
             this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
-            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.sourceCodeToolStripMenuItem1.Text = "Source code";
             this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
             // 
             // issuesToolStripMenuItem
             // 
             this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
-            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 

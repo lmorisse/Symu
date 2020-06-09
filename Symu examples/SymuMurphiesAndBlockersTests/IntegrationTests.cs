@@ -33,19 +33,19 @@ namespace SymuMurphiesAndBlockersTests
         private const int NumberOfSteps = 61; // 3 IterationResult computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private readonly OrganizationEntity _organization = new OrganizationEntity("1");
-        private readonly SymuEngine _symu = new SymuEngine();
+        private readonly SymuEngine _simulation = new SymuEngine();
 
         [TestInitialize]
         public void Initialize()
         {
             _environment.SetOrganization(_organization);
-            _symu.SetEnvironment(_environment);
+            _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
             var scenario = new TimeBasedScenario(_environment)
             {
                 NumberOfSteps = NumberOfSteps
             };
-            _symu.AddScenario(scenario);
+            _simulation.AddScenario(scenario);
         }
 
         private int TasksRatio()
@@ -75,13 +75,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.On = false;
             _environment.Organization.Murphies.UnAvailability.On = false;
             _environment.Organization.Murphies.IncompleteInformation.On = false;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
         }
 
         #region Only Unavailability
@@ -97,13 +97,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.UnAvailability.On = true;
             _environment.Organization.Murphies.UnAvailability.RateOfAgentsOn = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
         }
 
         /// <summary>
@@ -118,9 +118,9 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.UnAvailability.On = true;
             _environment.Organization.Murphies.UnAvailability.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.UnAvailability.RateOfUnavailability = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
@@ -139,7 +139,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.UnAvailability.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.UnAvailability.RateOfUnavailability = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(0, CapacityRatio());
             Assert.AreEqual(0, TasksRatio());
@@ -160,13 +160,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
@@ -184,13 +184,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             // they may have some tasks cancelled
             Assert.IsTrue(95 < TasksRatio());
 
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
@@ -209,13 +209,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
@@ -233,11 +233,11 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreNotEqual(100, TasksRatio());
-            Assert.IsTrue(_environment.IterationResult.Blockers.TotalBlockersDone > 0);
+            Assert.IsTrue(_environment.IterationResult.Blockers.Done > 0);
             Assert.IsTrue(_environment.IterationResult.Blockers.BlockersStillInProgress > 0);
         }
 
@@ -254,14 +254,14 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
             _environment.KnowledgeLevel = KnowledgeLevel.FullKnowledge;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.BlockersStillInProgress);
         }
 
@@ -280,7 +280,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.LimitNumberOfTries = 0;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(TasksRatio() < 100);
@@ -303,11 +303,11 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.LimitNumberOfTries = 0;
             _environment.Organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = 200;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+            _environment.Organization.Templates.Human.Cognitive.InteractionCharacteristics
                     .PreferredCommunicationMediums =
                 CommunicationMediums.FaceToFace;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(TasksRatio() < 100);
@@ -333,11 +333,11 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.LimitNumberOfTries = -1;
             _environment.Organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = 200;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAnswers = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+            _environment.Organization.Templates.Human.Cognitive.InteractionCharacteristics
                     .PreferredCommunicationMediums =
                 CommunicationMediums.FaceToFace;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(TasksRatio() < 100);
@@ -362,7 +362,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = 0;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(TasksRatio() < 100);
@@ -389,7 +389,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = 200;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 0;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(0, _environment.IterationResult.Tasks.Incorrectness);
         }
@@ -400,9 +400,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest10()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -411,9 +409,15 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally = 200;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
 
-            _symu.Process();
-
-            Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Incorrectness);
+            _simulation.Process();
+            if (_environment.IterationResult.Tasks.Done > 0)
+            {
+                Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Incorrectness);
+            }
+            else
+            {
+                Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Cancelled);
+            }
         }
 
         #endregion
@@ -431,13 +435,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
         }
 
         /// <summary>
@@ -452,14 +456,14 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
-            _environment.Organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            _environment.Organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyAgree;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
         }
 
         /// <summary>
@@ -475,13 +479,13 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.AreEqual(100, TasksRatio());
-            Assert.IsTrue(0 <= _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.IsTrue(0 <= _environment.IterationResult.Blockers.Done);
         }
 
         /// <summary>
@@ -497,15 +501,15 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
-            _environment.Organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
+            _environment.Organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(0 <= TasksRatio());
-            Assert.IsTrue(0 <= _environment.IterationResult.Blockers.TotalBlockersDone);
+            Assert.IsTrue(0 <= _environment.IterationResult.Blockers.Done);
             Assert.IsTrue(0 <= _environment.IterationResult.Blockers.TotalInternalHelp);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalExternalHelp);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalSearches);
@@ -524,12 +528,12 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
-            //_environment.Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
+            //_environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAnswers = 0;
             _environment.Organization.Murphies.IncompleteBelief.RateOfIncorrectGuess = 0;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(0 <= TasksRatio());
@@ -557,7 +561,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.RateOfAnswers = 0;
             _environment.Organization.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(0 <= TasksRatio());
@@ -583,10 +587,10 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAnswers = 1;
-            _environment.Organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            _environment.Organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
 
-            _symu.Process();
+            _simulation.Process();
 
             Assert.AreEqual(100, CapacityRatio());
             Assert.IsTrue(TasksRatio() < 100);

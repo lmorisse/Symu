@@ -28,7 +28,7 @@ namespace Symu.Repository.Networks.Databases
     public class NetworkDatabases
     {
         /// <summary>
-        ///     Repository of all the Databases used during the symu
+        ///     Repository of all the Databases used during the simulation
         /// </summary>
         public DatabaseCollection Repository { get; } = new DatabaseCollection();
 

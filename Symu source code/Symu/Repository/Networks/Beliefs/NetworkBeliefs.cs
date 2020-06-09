@@ -43,7 +43,7 @@ namespace Symu.Repository.Networks.Beliefs
         public RandomGenerator Model { get; set; } = new RandomGenerator();
 
         /// <summary>
-        ///     Repository of all the Beliefs used during the symu
+        ///     Repository of all the Beliefs used during the simulation
         /// </summary>
         public BeliefCollection Repository { get; } = new BeliefCollection();
 

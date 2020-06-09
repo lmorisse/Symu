@@ -109,7 +109,6 @@ namespace SymuMessageAndTask.Classes
 
             base.SetOrganization(organization);
 
-            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.Random;
             IterationResult.Off();
             IterationResult.Tasks.On = true;
             IterationResult.Messages.On = true;
@@ -118,13 +117,13 @@ namespace SymuMessageAndTask.Classes
             SetDebug(false);
         }
 
-        public override void SetModelForAgents()
+        public override void SetAgents()
         {
-            base.SetModelForAgents();
+            base.SetAgents();
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             for (var i = 0; i < WorkersCount; i++)
             {
-                var actor = new PersonAgent(Organization.NextEntityIndex(), this)
+                var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
                 {
                     GroupId = group.Id
                 };

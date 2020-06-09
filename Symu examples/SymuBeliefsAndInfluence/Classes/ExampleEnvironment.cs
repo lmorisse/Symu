@@ -56,22 +56,25 @@ namespace SymuBeliefsAndInfluence.Classes
             IterationResult.OrganizationKnowledgeAndBelief.On = true;
             IterationResult.OrganizationFlexibility.On = true;
 
+            // Interaction sphere setup
             organization.Models.InteractionSphere.On = true;
             organization.Models.InteractionSphere.SphereUpdateOverTime = true;
             organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;
             organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
-            // Interaction sphere setup
             organization.Models.InteractionSphere.RelativeBeliefWeight = 0.5F;
             organization.Models.InteractionSphere.RelativeActivityWeight = 0;
             organization.Models.InteractionSphere.RelativeKnowledgeWeight = 0.25F;
             organization.Models.InteractionSphere.SocialDemographicWeight = 0.25F;
 
+            Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
+            Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
+
             SetDebug(false);
         }
 
-        public override void SetModelForAgents()
+        public override void SetAgents()
         {
-            base.SetModelForAgents();
+            base.SetAgents();
 
             #region Common
 
@@ -90,57 +93,24 @@ namespace SymuBeliefsAndInfluence.Classes
 
             var agentIds = new List<AgentId>();
 
-            #region Influencer
-
-            InfluencerTemplate.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            InfluencerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            InfluencerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            InfluencerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                CommunicationMediums.Email;
+            #region Agents
 
             for (var j = 0; j < InfluencersCount; j++)
             {
-                var actor = new InfluencerAgent(Organization.NextEntityIndex(), this);
-                //Beliefs are added with knowledge based on DefaultBeliefLevel of the influencer cognitive template
-                SetKnowledge(actor, Knowledges);
+                var actor = new InfluencerAgent(Organization.NextEntityIndex(), this, InfluencerTemplate);
                 Influencers.Add(actor);
                 agentIds.Add(actor.Id);
             }
 
-            #endregion
-
-            #region worker
-
-            WorkerTemplate.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            WorkerTemplate.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            WorkerTemplate.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            WorkerTemplate.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
-                CommunicationMediums.Email;
-            WorkerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
-            WorkerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 0F;
-            WorkerTemplate.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             for (var j = 0; j < WorkersCount; j++)
             {
-                var actor = new PersonAgent(Organization.NextEntityIndex(), this);
-                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
-                SetKnowledge(actor, Knowledges);
+                var actor = new PersonAgent(Organization.NextEntityIndex(), this, WorkerTemplate);
                 agentIds.Add(actor.Id);
             }
 
             #endregion
 
             WhitePages.Network.NetworkLinks.AddLinks(agentIds);
-        }
-
-        private void SetKnowledge(Agent actor, IReadOnlyList<Knowledge> knowledges)
-        {
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
-                    KnowledgeLevel.FullKnowledge,
-                    Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-                actor.BeliefsModel.AddBelief(knowledges[i].Id);
-            }
         }
     }
 }

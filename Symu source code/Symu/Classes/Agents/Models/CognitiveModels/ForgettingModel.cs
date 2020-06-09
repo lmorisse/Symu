@@ -22,7 +22,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will forget
-    ///     ForgettingEntity enable or not this mechanism for all the agents during the symu
+    ///     ForgettingEntity enable or not this mechanism for all the agents during the simulation
     ///     The ForgettingModel initialize the real value of the agent's forgetting parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
@@ -35,7 +35,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly byte _randomLevel;
         private bool _isAgentOnToday;
 
-        public ForgettingModel(ModelEntity entity, CognitiveArchitecture cognitive, byte randomLevel) :
+        public ForgettingModel(ModelEntity entity, bool knowledgeModelOn, CognitiveArchitecture cognitive, byte randomLevel) :
             base(entity)
         {
             if (entity is null)
@@ -51,8 +51,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             InternalCharacteristics = cognitive.InternalCharacteristics;
             _knowledgeAndBeliefs = cognitive.KnowledgeAndBeliefs;
             _randomLevel = randomLevel;
-            if (!InternalCharacteristics.CanForget)
+            if (!knowledgeModelOn || !_knowledgeAndBeliefs.HasKnowledge || !InternalCharacteristics.CanForget)
             {
+                // If KnowledgeModel Off or has no knowledge, there is no knowledge to forget
                 // Agent is not concerned by this model
                 On = false;
             }
@@ -60,7 +61,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public ForgettingModel(ModelEntity entity, CognitiveArchitecture cognitive, byte randomLevel,
             NetworkKnowledges network, AgentId id) :
-            this(entity, cognitive, randomLevel)
+            this(entity, true, cognitive, randomLevel)
         {
             _network = network;
             _id = id;
@@ -68,7 +69,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public ForgettingModel(AgentId agentId, OrganizationModels models, CognitiveArchitecture cognitive,
             NetworkKnowledges network) :
-            this(models.Forgetting, cognitive, models.RandomLevelValue)
+            this(models.Forgetting, models.Knowledge.On, cognitive, models.RandomLevelValue)
         {
             _network = network;
             _id = agentId;
@@ -91,8 +92,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(InternalCharacteristics));
             }
 
-            // IsAgentOn is tested at each learning: it is not binary, sometimes you forget, sometimes not
-            if (!IsAgentOn())
+            if (!_isAgentOnToday)
             {
                 return 0;
             }
@@ -134,7 +134,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(InternalCharacteristics));
             }
 
-            if (!IsAgentOn())
+            if (!_isAgentOnToday)
             {
                 return 0;
             }
@@ -172,7 +172,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         public void InitializeForgettingProcess()
         {
             // Check if forgetting process is On
-            _isAgentOnToday = IsAgentOn() && _knowledgeAndBeliefs.HasKnowledge;
+            _isAgentOnToday = IsAgentOn() ;
             if (!_isAgentOnToday)
             {
                 return;

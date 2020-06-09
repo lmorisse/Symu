@@ -83,7 +83,7 @@ namespace Symu.Repository.Networks.Knowledges
 
         /// <summary>
         ///     If agent has a knowledgeBit, and the forgetting model is on
-        ///     Minimum knowledge is the minimum the agent can't forget during the symu for this KnowledgeBit.
+        ///     Minimum knowledge is the minimum the agent can't forget during the simulation for this KnowledgeBit.
         ///     Range[0;1]
         /// </summary>
         public float MinimumKnowledge { get; set; }
@@ -95,12 +95,12 @@ namespace Symu.Repository.Networks.Knowledges
         public short TimeToLive { get; set; }
 
         /// <summary>
-        ///     Accumulates all learning of the agent for this knowledge during the symu
+        ///     Accumulates all learning of the agent for this knowledge during the simulation
         /// </summary>
         public float Learning { get; private set; }
 
         /// <summary>
-        ///     Accumulates all forgetting of the agent for this knowledge during the symu
+        ///     Accumulates all forgetting of the agent for this knowledge during the simulation
         /// </summary>
         public float Forgetting { get; private set; }
 
@@ -110,6 +110,11 @@ namespace Symu.Repository.Networks.Knowledges
         public float Obsolescence => KnowledgeBits.Obsolescence;
 
         public byte Length => KnowledgeBits?.Length ?? 0;
+
+        /// <summary>
+        ///     EventHandler triggered after learning a new information
+        /// </summary>
+        public event EventHandler<LearningEventArgs> OnAfterLearning;
 
         /// <summary>
         ///     Initialize KnowledgeBits with a array filled of 0
@@ -260,7 +265,8 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     Agent learn _knowledgeBits at a learningRate coming from MicroLearningModel
+        ///     Agent learn _knowledgeBits at a learningRate
+        ///     OnAfterLearning event is triggered if learning occurs, you can subscribe to this event to treat the new learning
         /// </summary>
         /// <param name="index"></param>
         /// <param name="learningRate"></param>
@@ -275,6 +281,12 @@ namespace Symu.Repository.Networks.Knowledges
 
             var realLearning = KnowledgeBits.UpdateBit(index, learningRate, step);
             Learning += realLearning;
+            if (realLearning > Tolerance)
+            {
+                var learningEventArgs = new LearningEventArgs(KnowledgeId, index, realLearning);
+                OnAfterLearning?.Invoke(this, learningEventArgs);
+            }
+
             return realLearning;
         }
 

@@ -53,44 +53,44 @@ namespace SymuMessageAndTask
             #region Task model
 
             CanPerformTask.Checked =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTask;
-            CanPerformTasksOnWeekends.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance
+                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask;
+            CanPerformTasksOnWeekends.Checked = OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance
                 .CanPerformTaskOnWeekEnds;
-            LimitNumberTasks.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit
+            LimitNumberTasks.Checked = OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit
                 .LimitTasksInTotal;
             maxNumberTasks.Text =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal
+                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal
                     .ToString(CultureInfo.InvariantCulture);
-            LimitSimultaneousTasks.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance
+            LimitSimultaneousTasks.Checked = OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance
                 .TasksLimit
                 .LimitSimultaneousTasks;
             MaxSimultaneousTasks.Text =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit
+                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit
                     .MaximumSimultaneousTasks
                     .ToString(CultureInfo.InvariantCulture);
             AgentCanBeIsolated.Items.AddRange(FrequencyLevelService.GetNames());
-            AgentCanBeIsolated.SelectedItem = FrequencyLevelService.GetName(OrganizationEntity.AgentTemplates.Human
+            AgentCanBeIsolated.SelectedItem = FrequencyLevelService.GetName(OrganizationEntity.Templates.Human
                 .Cognitive.InteractionPatterns.AgentCanBeIsolated);
 
             #endregion
 
             #region Message model
 
-            LimitMessages.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+            LimitMessages.Checked = OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics
                 .LimitMessagesPerPeriod;
             MaxMessages.Text =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod
                     .ToString(CultureInfo.InvariantCulture);
-            LimitMessagesSent.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+            LimitMessagesSent.Checked = OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics
                 .LimitMessagesSentPerPeriod;
             MaxMessagesSent.Text =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics
                     .MaximumMessagesSentPerPeriod
                     .ToString(CultureInfo.InvariantCulture);
-            LimitMessagesReceived.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive
+            LimitMessagesReceived.Checked = OrganizationEntity.Templates.Human.Cognitive
                 .InteractionCharacteristics.LimitReceptionsPerPeriod;
             MaxMessagesReceived.Text =
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.MaximumReceptionsPerPeriod
                     .ToString(CultureInfo.InvariantCulture);
 
             CostToSend.Items.AddRange(GenericLevelService.GetNames());
@@ -110,16 +110,16 @@ namespace SymuMessageAndTask
 
             #region Task model
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTask =
+            OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask =
                 CanPerformTask.Checked;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds =
+            OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds =
                 CanPerformTasksOnWeekends.Checked;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit
+            OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit
                 .LimitTasksInTotal = LimitNumberTasks.Checked;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit
+            OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit
                 .LimitSimultaneousTasks = LimitSimultaneousTasks.Checked;
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated =
                 FrequencyLevelService.GetValue(AgentCanBeIsolated.SelectedItem.ToString());
             try
             {
@@ -135,11 +135,11 @@ namespace SymuMessageAndTask
 
             #region message
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod =
                 LimitMessages.Checked;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod =
                 LimitMessagesSent.Checked;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.LimitReceptionsPerPeriod =
                 LimitMessagesReceived.Checked;
 
             OrganizationEntity.Communication.Email.CostToSendLevel =
@@ -279,7 +279,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal =
+                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumTasksInTotal =
                     ushort.Parse(maxNumberTasks.Text, CultureInfo.InvariantCulture);
                 maxNumberTasks.BackColor = SystemColors.Window;
             }
@@ -298,7 +298,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit
+                OrganizationEntity.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit
                         .MaximumSimultaneousTasks =
                     byte.Parse(MaxSimultaneousTasks.Text, CultureInfo.InvariantCulture);
                 MaxSimultaneousTasks.BackColor = SystemColors.Window;
@@ -323,7 +323,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod =
                     byte.Parse(MaxMessages.Text, CultureInfo.InvariantCulture);
                 MaxMessages.BackColor = SystemColors.Window;
             }
@@ -342,7 +342,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics
                         .MaximumMessagesSentPerPeriod =
                     byte.Parse(MaxMessagesSent.Text, CultureInfo.InvariantCulture);
                 MaxMessagesSent.BackColor = SystemColors.Window;
@@ -362,7 +362,7 @@ namespace SymuMessageAndTask
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics
+                OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics
                         .MaximumReceptionsPerPeriod =
                     byte.Parse(MaxMessagesReceived.Text, CultureInfo.InvariantCulture);
                 MaxMessagesReceived.BackColor = SystemColors.Window;

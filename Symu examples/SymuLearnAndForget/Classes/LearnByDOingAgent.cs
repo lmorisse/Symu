@@ -9,6 +9,7 @@
 
 #region using directives
 
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Environment;
@@ -19,7 +20,7 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByDoingAgent : LearnAgent
     {
-        public LearnByDoingAgent(ushort agentKey, SymuEnvironment environment) : base(agentKey, environment)
+        public LearnByDoingAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentKey, environment, template)
         {
         }
 

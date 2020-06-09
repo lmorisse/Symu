@@ -250,7 +250,7 @@ namespace Symu.Repository.Networks
                 NetworkGroups.AddGroup(groupId);
                 if (State == AgentState.Started)
                 {
-                    // AddLink is done during the symu. 1t the initialization, use InitializeNetworkLinks, for performance issues
+                    // AddLink is done during the simulation. 1t the initialization, use InitializeNetworkLinks, for performance issues
                     foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
                     {
                         NetworkLinks.AddLink(agentId, newTeammateId);

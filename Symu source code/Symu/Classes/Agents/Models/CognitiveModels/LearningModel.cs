@@ -22,7 +22,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 {
     /// <summary>
     ///     CognitiveArchitecture define how an actor will learn
-    ///     Entity enable or not this mechanism for all the agents during the symu
+    ///     Entity enable or not this mechanism for all the agents during the simulation
     ///     The LearningModel initialize the real value of the agent's learning parameters
     /// </summary>
     /// <remarks>From Construct Software</remarks>
@@ -33,6 +33,27 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly NetworkKnowledges _networkKnowledges;
 
         private readonly byte _randomLevel;
+
+        public TasksAndPerformance TasksAndPerformance { get; set; }
+
+        private AgentExpertise Expertise
+        {
+            get
+            {
+                if (!_networkKnowledges.Exists(_id))
+                {
+                    return null;
+                }
+
+                var expertise = _networkKnowledges.GetAgentExpertise(_id);
+                expertise.OnAfterLearning += AfterLearning;
+                return expertise;
+            }
+        }
+        /// <summary>
+        ///     EventHandler triggered after learning a new information
+        /// </summary>
+        public event EventHandler<LearningEventArgs> OnAfterLearning;
 
         public LearningModel(AgentId agentId, OrganizationModels models, NetworkKnowledges networkKnowledges,
             CognitiveArchitecture cognitiveArchitecture)
@@ -59,10 +80,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 On = false;
             }
         }
-
-        public TasksAndPerformance TasksAndPerformance { get; set; }
-
-        private AgentExpertise Expertise => _networkKnowledges.GetAgentExpertise(_id);
 
 
         /// <summary>
@@ -253,6 +270,17 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
+        }
+
+        /// <summary>
+        ///     OnAfterLearning event is triggered if learning occurs,
+        ///     you can subscribe to this event to treat the new learning
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void AfterLearning(object sender, LearningEventArgs e)
+        {
+            OnAfterLearning?.Invoke(this, e);
         }
     }
 }

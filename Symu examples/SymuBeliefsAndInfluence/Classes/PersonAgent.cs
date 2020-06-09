@@ -16,6 +16,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -29,16 +30,46 @@ namespace SymuBeliefsAndInfluence.Classes
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 
-        public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(Template);
         }
 
-        private SimpleHumanTemplate Template => ((ExampleEnvironment) Environment).WorkerTemplate;
-        public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
         public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.Id);
+
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected override void SetCognitive()
+        {
+            base.SetCognitive();
+
+            Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            Cognitive.InteractionPatterns.AllowNewInteractions = false;
+            Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+                CommunicationMediums.Email;
+            Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
+            Cognitive.InternalCharacteristics.InfluentialnessRateMax = 0F;
+            Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+        }
+
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected override void SetModels()
+        {
+            base.SetModels();
+            foreach (var knowledge in Knowledges)
+            {
+                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge, Cognitive.InternalCharacteristics);
+                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
+                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            }
+        }
 
         public override void GetNewTasks()
         {

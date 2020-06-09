@@ -65,9 +65,9 @@ namespace SymuGroupAndInteraction
             #region Interaction
 
             OrganizationEntity.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.Homophily);
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0.1F;
-            ThresholdFornewInteraction.Text = OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns
+            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
+            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0.1F;
+            ThresholdFornewInteraction.Text = OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns
                 .ThresholdForNewInteraction.ToString(CultureInfo.InvariantCulture);
             MaxDailyInteractions.Text = "2";
 
@@ -93,6 +93,7 @@ namespace SymuGroupAndInteraction
         protected override void UpdateSettings()
         {
             base.UpdateSettings();
+
             #region Knowledge
 
             if (KnowledgeSame.Checked)
@@ -142,7 +143,7 @@ namespace SymuGroupAndInteraction
 
             #region Interactions
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions =
                 AllowNewInteractions.Checked;
 
             #endregion
@@ -184,9 +185,7 @@ namespace SymuGroupAndInteraction
         private void UpDateMessages()
         {
             WriteTextSafe(lblMessagesSent, _environment.Messages.Result.SentMessagesCount.ToString(CultureInfo.InvariantCulture));
-            var notAcceptedMessages = _environment.WhitePages.AllAgents()
-                .Sum(agent => agent.MessageProcessor.NotAcceptedMessages.Count);
-            WriteTextSafe(NotAcceptedMessages, notAcceptedMessages.ToString(CultureInfo.InvariantCulture));
+            WriteTextSafe(NotAcceptedMessages, _environment.Messages.Result.NotAcceptedMessagesCount.ToString(CultureInfo.InvariantCulture));
         }
 
         private void UpdateAgents()
@@ -257,7 +256,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnActivities =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnActivities =
                     float.Parse(InteractionActivities.Text, CultureInfo.InvariantCulture);
                 InteractionActivities.BackColor = SystemColors.Window;
             }
@@ -276,7 +275,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnKnowledge =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnKnowledge =
                     float.Parse(InteractionKnowledge.Text, CultureInfo.InvariantCulture);
                 InteractionKnowledge.BackColor = SystemColors.Window;
             }
@@ -295,7 +294,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction =
                     float.Parse(ThresholdFornewInteraction.Text, CultureInfo.InvariantCulture);
                 ThresholdFornewInteraction.BackColor = SystemColors.Window;
             }
@@ -314,7 +313,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
                     byte.Parse(MaxDailyInteractions.Text, CultureInfo.InvariantCulture);
                 MaxDailyInteractions.BackColor = SystemColors.Window;
             }
@@ -333,7 +332,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnSocialDemographics =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnSocialDemographics =
                     float.Parse(InteractionSocialDemographics.Text, CultureInfo.InvariantCulture);
                 InteractionSocialDemographics.BackColor = SystemColors.Window;
             }
@@ -352,7 +351,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnBeliefs =
+                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnBeliefs =
                     float.Parse(InteractionBeliefs.Text, CultureInfo.InvariantCulture);
                 InteractionBeliefs.BackColor = SystemColors.Window;
             }
@@ -482,7 +481,7 @@ namespace SymuGroupAndInteraction
                 return;
             }
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(
+            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(
                 InteractionStrategy.Homophily);
             InteractionActivities.Text = "0";
             InteractionBeliefs.Text = "0";

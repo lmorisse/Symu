@@ -42,7 +42,7 @@ namespace Symu.Environment
         public OrganizationEntity Organization { get; protected set; }
 
         /// <summary>
-        ///     The white pages service of the symu
+        ///     The white pages service of the simulation
         ///     To have access to all agents
         /// </summary>
         public WhitePages WhitePages { get; private set; }
@@ -50,7 +50,7 @@ namespace Symu.Environment
         public IterationResult IterationResult { get; set; }
 
         /// <summary>
-        ///     Use to slow down or speed up the symu
+        ///     Use to slow down or speed up the simulation
         ///     Delay is in milliseconds
         /// </summary>
         /// <example>Delay = 1000</example>
@@ -67,7 +67,7 @@ namespace Symu.Environment
         public Schedule Schedule { get; set; } = new Schedule();
 
         /// <summary>
-        ///     Use to log messages in the symu
+        ///     Use to log messages in the simulation
         ///     to debug and manage TimeBased Step
         /// </summary>
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
@@ -79,7 +79,7 @@ namespace Symu.Environment
         public virtual void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.AgentTemplates, Organization.Models);
+            WhitePages = new WhitePages(Organization.Templates, Organization.Models);
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace Symu.Environment
             WhitePages.Network.NetworkBeliefs.Model =
                 Organization.Models.Generator;
             IterationResult.Initialize();
-            // Intentionally before SetModelForAgents
-            SetModelForAgents();
-            // Intentionally after SetModelForAgents
+            // Intentionally before SetAgents
+            SetAgents();
+            // Intentionally after SetAgents
             WhitePages.Network.InitializeNetworkLinks();
             WhitePages.SetStarted();
         }
@@ -385,7 +385,7 @@ namespace Symu.Environment
         /// <summary>
         ///     Transform organization into agents
         /// </summary>
-        public virtual void SetModelForAgents()
+        public virtual void SetAgents()
         {
             SetKnowledges();
             SetDatabases();

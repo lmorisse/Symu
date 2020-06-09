@@ -30,12 +30,12 @@ namespace Symu.Repository.Networks.Knowledges
         public List<AgentKnowledge> List { get; } = new List<AgentKnowledge>();
 
         /// <summary>
-        ///     Accumulates all learning of the agent for all knowledge during the symu
+        ///     Accumulates all learning of the agent for all knowledge during the simulation
         /// </summary>
         public float Learning => List.Any() ? List.Sum(t => t.Learning) : 0;
 
         /// <summary>
-        ///     Accumulates all forgetting of the agent for all knowledge during the symu
+        ///     Accumulates all forgetting of the agent for all knowledge during the simulation
         /// </summary>
         public float Forgetting => List.Any() ? List.Sum(t => t.Forgetting) : 0;
 
@@ -43,6 +43,10 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
         public float Obsolescence => List.Any() ? List.Average(t => t.Obsolescence) : 0;
+        /// <summary>
+        ///     EventHandler triggered after learning a new information
+        /// </summary>
+        public event EventHandler<LearningEventArgs> OnAfterLearning;
 
         public int Count => List.Count;
 
@@ -76,10 +80,18 @@ namespace Symu.Repository.Networks.Knowledges
 
         public void Add(AgentKnowledge agentKnowledge)
         {
-            if (!Contains(agentKnowledge))
+            if (agentKnowledge == null)
             {
-                List.Add(agentKnowledge);
+                throw new ArgumentNullException(nameof(agentKnowledge));
             }
+
+            if (Contains(agentKnowledge))
+            {
+                return;
+            }
+
+            agentKnowledge.OnAfterLearning += AfterLearning;
+            List.Add(agentKnowledge);
         }
 
         public void Add(ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
@@ -142,6 +154,16 @@ namespace Symu.Repository.Networks.Knowledges
         public void ForgettingProcess(float forgettingRate, ushort step)
         {
             List.ForEach(x => x.ForgettingProcess(forgettingRate, step));
+        }
+        /// <summary>
+        ///     OnAfterLearning event is triggered if learning occurs,
+        ///     you can subscribe to this event to treat the new learning
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void AfterLearning(object sender, LearningEventArgs e)
+        {
+            OnAfterLearning?.Invoke(this, e);
         }
     }
 }

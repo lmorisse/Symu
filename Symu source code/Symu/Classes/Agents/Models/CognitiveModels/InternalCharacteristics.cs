@@ -65,6 +65,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             internalCharacteristics.PartialForgettingRate = PartialForgettingRate;
             internalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode;
             internalCharacteristics.MinimumRemainingKnowledge = MinimumRemainingKnowledge;
+            internalCharacteristics.TimeToLive = TimeToLive;
 
             #endregion
 
@@ -316,7 +317,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         /// <summary>
         ///     The risk aversion parameter affects whether or not an agent can make a particular decision.
-        ///     Agents can accumulate beliefs during the symu and in the absence of risk aversion will act upon these
+        ///     Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these
         ///     beliefs.
         ///     The risk aversion parameter, however, acts as a catch-all for factors not included in the model which prevent an
         ///     agent from acting on a particular belief.

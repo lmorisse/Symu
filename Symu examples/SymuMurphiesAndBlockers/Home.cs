@@ -47,7 +47,7 @@ namespace SymuMurphiesAndBlockers
             KnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
             KnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_environment.KnowledgeLevel);
             BeliefsLevel.Items.AddRange(BeliefLevelService.GetNames());
-            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.AgentTemplates.Human.Cognitive
+            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(OrganizationEntity.Templates.Human.Cognitive
                 .KnowledgeAndBeliefs.DefaultBeliefLevel);
             EmailComm.Checked = true;
 
@@ -177,12 +177,12 @@ namespace SymuMurphiesAndBlockers
             OrganizationEntity.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
             _environment.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(KnowledgeLevel.SelectedItem.ToString());
-            OrganizationEntity.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(BeliefsLevel.SelectedItem.ToString());
 
             OrganizationEntity.Models.Learning.On = EmailSearching.Checked;
 
-            OrganizationEntity.AgentTemplates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+            OrganizationEntity.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
 
@@ -240,37 +240,37 @@ namespace SymuMurphiesAndBlockers
                     .ToString("F0", CultureInfo.InvariantCulture));
 
             WriteTextSafe(BlockersInDone,
-                _environment.IterationResult.Blockers.TotalBlockersDone
+                _environment.IterationResult.Blockers.Done
                     .ToString("F0", CultureInfo.InvariantCulture));
 
             WriteTextSafe(BlockersInProgress,
                 _environment.IterationResult.Blockers.BlockersStillInProgress
                     .ToString("F0", CultureInfo.InvariantCulture));
 
-            var totalExternalHelp = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
+            var totalExternalHelp = _environment.IterationResult.Blockers.Done < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalExternalHelp * 100 /
-                  _environment.IterationResult.Blockers.TotalBlockersDone;
+                  _environment.IterationResult.Blockers.Done;
 
             WriteTextSafe(BlockersExternal, totalExternalHelp
                 .ToString("F1", CultureInfo.InvariantCulture));
 
-            var totalInternalHelp = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
+            var totalInternalHelp = _environment.IterationResult.Blockers.Done < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalInternalHelp * 100 /
-                  _environment.IterationResult.Blockers.TotalBlockersDone;
+                  _environment.IterationResult.Blockers.Done;
             WriteTextSafe(BlockersInternal, totalInternalHelp
                 .ToString("F1", CultureInfo.InvariantCulture));
-            var totalGuesses = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
+            var totalGuesses = _environment.IterationResult.Blockers.Done < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalGuesses * 100 /
-                  _environment.IterationResult.Blockers.TotalBlockersDone;
+                  _environment.IterationResult.Blockers.Done;
             WriteTextSafe(BlockersGuessing, totalGuesses
                 .ToString("F1", CultureInfo.InvariantCulture));
-            var totalSearches = _environment.IterationResult.Blockers.TotalBlockersDone < Constants.Tolerance
+            var totalSearches = _environment.IterationResult.Blockers.Done < Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Blockers.TotalSearches * 100 /
-                  _environment.IterationResult.Blockers.TotalBlockersDone;
+                  _environment.IterationResult.Blockers.Done;
             WriteTextSafe(BlockersSearching, totalSearches
                 .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(BlockersCancelled, _environment.IterationResult.Blockers.TotalCancelled

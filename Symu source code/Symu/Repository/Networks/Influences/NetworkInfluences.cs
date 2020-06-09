@@ -53,7 +53,10 @@ namespace Symu.Repository.Networks.Influences
             }
 
             var influence = new Influence(agentId, influenceability, influentialness);
-            List.Add(influence);
+            lock (List)
+            {
+                List.Add(influence);
+            }
         }
 
         /// <summary>

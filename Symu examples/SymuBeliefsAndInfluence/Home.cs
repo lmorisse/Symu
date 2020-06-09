@@ -51,7 +51,7 @@ namespace SymuBeliefsAndInfluence
             tbInfluencers.Text = _environment.InfluencersCount.ToString(CultureInfo.InvariantCulture);
             tbKnowledge.Text = _environment.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
 
-            HasBeliefs.Checked = OrganizationEntity.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
+            HasBeliefs.Checked = OrganizationEntity.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
             ThresholdForReacting.Text = OrganizationEntity.Murphies.IncompleteBelief.ThresholdForReacting.ToString(CultureInfo.InvariantCulture);
 
             #region Influencer

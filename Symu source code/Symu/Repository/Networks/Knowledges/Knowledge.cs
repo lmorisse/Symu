@@ -205,7 +205,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// </example>
         public byte[] GetTaskRequiredBits(MurphyTask model, float complexity)
         {
-            if (model is null)
+            if (model is null || Length == 0)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -230,7 +230,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// </example>
         public byte[] GetTaskMandatoryBits(MurphyTask model, float complexity)
         {
-            if (model is null)
+            if (model is null || Length == 0)
             {
                 throw new ArgumentNullException(nameof(model));
             }

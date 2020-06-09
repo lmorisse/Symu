@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -41,35 +42,15 @@ namespace SymuScenariosAndEvents.Classes
 
             base.SetOrganization(organization);
 
-            #region Template
-
-            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            organization.AgentTemplates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
-            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
-            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
-            organization.AgentTemplates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
-            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
-            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
-            organization.AgentTemplates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-
-            #endregion
-
-            #region Results
-
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
-
-            #endregion
 
             SetDebug(false);
         }
 
-        public override void SetModelForAgents()
+        public override void SetAgents()
         {
-            base.SetModelForAgents();
+            base.SetAgents();
 
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
@@ -90,27 +71,15 @@ namespace SymuScenariosAndEvents.Classes
             }
         }
 
-        private void SetKnowledge(Agent actor, IReadOnlyList<Knowledge> knowledges)
-        {
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                actor.KnowledgeModel.AddKnowledge(knowledges[i].Id,
-                    KnowledgeLevel.Intermediate,
-                    Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-                actor.BeliefsModel.AddBelief(knowledges[i].Id);
-            }
-        }
-
         private PersonAgent AddPersonAgent()
         {
-            var actor = new PersonAgent(Organization.NextEntityIndex(), this)
+            var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
             {
                 GroupId = _groupId
             };
             CommunicationTemplate communication = new EmailTemplate();
             WhitePages.Network.AddEmail(actor.Id, communication);
             WhitePages.Network.AddMemberToGroup(actor.Id, 100, _groupId);
-            SetKnowledge(actor, Knowledges);
             return actor;
         }
 

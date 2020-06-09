@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -20,12 +21,12 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByAskingAgent : LearnAgent
     {
-        public LearnByAskingAgent(ushort agentKey, SymuEnvironment environment) : base(agentKey, environment)
+        public LearnByAskingAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentKey, environment, template)
         {
         }
 
         /// <summary>
-        ///     Agent search in the wiki for an information
+        ///     Agent ask an expert for the information
         /// </summary>
         public override void GetNewTasks()
         {

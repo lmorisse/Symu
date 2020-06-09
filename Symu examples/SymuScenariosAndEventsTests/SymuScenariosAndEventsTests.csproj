@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>SymuMurphiesAndBlockersTests</AssemblyName>
+    <AssemblyName>SymuScenariosAndEventsTests</AssemblyName>
 
-    <RootNamespace>SymuMurphiesAndBlockersTests</RootNamespace>
+    <RootNamespace>SymuScenariosAndEventsTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

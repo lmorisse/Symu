@@ -20,7 +20,7 @@ using SymuScenariosAndEvents.Classes;
 #endregion
 
 
-namespace SymuMurphiesAndBlockersTests
+namespace SymuScenariosAndEventsTests
 {
     /// <summary>
     ///     Integration tests using SymuEngine

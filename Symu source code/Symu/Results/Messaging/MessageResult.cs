@@ -67,6 +67,12 @@ namespace Symu.Results.Messaging
         ///     Give the count of the messages with the state Missed
         /// </summary>
         public uint MissedMessagesCount { get; set; }
+        /// <summary>
+        ///     An sender agent has send a message but the sender was not in the interaction sphere
+        ///     of the receiver and did not accept the message.
+        ///     NotAcceptedMessagesCount represents the rejected new interactions 
+        /// </summary>
+        public uint NotAcceptedMessagesCount { get; set; }
 
 
         /// <summary>
@@ -86,6 +92,7 @@ namespace Symu.Results.Messaging
             SentMessagesCost = 0;
             ReceivedMessagesCost = 0;
             MissedMessagesCount = 0;
+            NotAcceptedMessagesCount = 0;
         }
     }
 }

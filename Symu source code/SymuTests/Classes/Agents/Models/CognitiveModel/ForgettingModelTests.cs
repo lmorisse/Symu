@@ -58,6 +58,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _forgetting.RateOfAgentsOn = 1;
             _forgettingModel = new ForgettingModel(_forgetting, _cognitiveArchitecture, randomLevel, _networkKnowledges,
                 _agentId);
+            _forgettingModel.InitializeForgettingProcess();
         }
 
         /// <summary>

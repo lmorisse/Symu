@@ -25,7 +25,7 @@ namespace Symu.Messaging.Tracker
     ///     Use to manage timeBased interaction Step :
     ///     It is based on the flow of messages. When there is no more messages in the step, the step is over
     ///     Symu can trigger the next interaction step
-    ///     It is also use to trace messages in the symu, to debug
+    ///     It is also use to trace messages in the simulation, to debug
     /// </summary>
     public class MessagesTracker
     {

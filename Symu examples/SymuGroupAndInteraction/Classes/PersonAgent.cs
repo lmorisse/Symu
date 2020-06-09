@@ -10,10 +10,15 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
+using Symu.Repository.Networks.Knowledges;
+using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 
@@ -23,14 +28,23 @@ namespace SymuGroupAndInteraction.Classes
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 
-        public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(Environment.Organization.AgentTemplates.Human);
+        }
+
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected override void SetCognitive()
+        {
+            base.SetCognitive();
             // Communication medium
             Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 CommunicationMediums.FaceToFace;
+            Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
         }
 
         /// <summary>
@@ -39,14 +53,14 @@ namespace SymuGroupAndInteraction.Classes
         public AgentId GroupId { get; set; }
 
 
-        protected override void ActClassKey(Message message)
+        public override void ActMessage(Message message)
         {
             if (message is null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
-            base.ActClassKey(message);
+            base.ActMessage(message);
             switch (message.Subject)
             {
                 case SymuYellowPages.Actor:

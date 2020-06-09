@@ -19,7 +19,7 @@ using Symu.Messaging.Templates;
 namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
-    ///     Entity for DataBase class, used to store and search information during the symu
+    ///     Entity for DataBase class, used to store and search information during the simulation
     /// </summary>
     public class DataBaseEntity
     {

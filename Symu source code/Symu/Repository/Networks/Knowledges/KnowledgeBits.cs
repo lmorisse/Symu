@@ -22,7 +22,7 @@ namespace Symu.Repository.Networks.Knowledges
     public class KnowledgeBits : Bits
     {
         /// <summary>
-        ///     LastStep of the symu
+        ///     LastStep of the simulation
         /// </summary>
         private ushort _lastStep;
 
@@ -53,7 +53,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        /// <returns>0 for the first step of the symu</returns>
+        /// <returns>0 for the first step of the simulation</returns>
         public float Obsolescence => _lastStep > 0 ? 1F - _lastTouched.Average() / _lastStep : 0;
 
         /// <summary>

@@ -10,9 +10,12 @@
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Environment;
 using Symu.Messaging.Messages;
+using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
@@ -24,14 +27,24 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class InternetAccessAgent : Agent
     {
         public const byte ClassKey = 1;
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment)Environment).Knowledges;
 
-        public InternetAccessAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public InternetAccessAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(Environment.Organization.AgentTemplates.Internet);
         }
-
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected override void SetModels()
+        {
+            base.SetModels();
+            foreach (var knowledge in Knowledges)
+            {
+                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment)Environment).KnowledgeLevel, Cognitive.InternalCharacteristics);
+            }
+        }
         /// <summary>
         ///     Ask Help from PersonAgent when blocked
         /// </summary>

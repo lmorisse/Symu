@@ -51,7 +51,7 @@ namespace Symu.Classes.Organization
         ///     Use to set attributes of those templates
         ///     and to set agent with templates
         /// </summary>
-        public AgentTemplates AgentTemplates { get; set; } = new AgentTemplates();
+        public AgentTemplates Templates { get; set; } = new AgentTemplates();
         /// <summary>
         ///     List of the communication templates that are available
         ///     Use to set attributes of those templates
@@ -69,7 +69,7 @@ namespace Symu.Classes.Organization
         public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
         /// <summary>
-        ///     List of the /Maydays handle in the symu
+        ///     List of the /Maydays handle in the simulation
         /// </summary>
         public MurphyCollection Murphies { get; } = new MurphyCollection();
 

@@ -25,15 +25,13 @@ namespace SymuTests.Helpers
     {
         public static byte ClassKey = SymuYellowPages.Actor;
 
-        public TestAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment)
+        public TestAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment, environment.Organization.Templates.Human)
         {
-            SetCognitive(new SimpleHumanTemplate());
         }
 
         public TestAgent(ushort key, byte classKey, SymuEnvironment environment) : base(new AgentId(key, classKey),
-            environment)
+            environment, environment.Organization.Templates.Human)
         {
-            SetCognitive(new SimpleHumanTemplate());
         }
     }
 }

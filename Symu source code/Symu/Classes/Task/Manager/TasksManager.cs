@@ -441,13 +441,13 @@ namespace Symu.Classes.Task.Manager
         #region Tasks Limit management
 
         /// <summary>
-        ///     Check if Worker has reached the maximum number of tasks he can do during the symu
+        ///     Check if Worker has reached the maximum number of tasks he can do during the simulation
         /// </summary>
         /// <returns>true if worker has not reached yet the maximum number of tasks</returns>
         public bool HasReachedTotalMaximumLimit => TasksLimit.HasReachedTotalMaximumLimit(TaskResult.TotalTasksNumber);
 
         /// <summary>
-        ///     Check if Worker has reached the maximum number of tasks he can do during the symu
+        ///     Check if Worker has reached the maximum number of tasks he can do during the simulation
         /// </summary>
         /// <returns>true if worker has not reached yet the maximum number of tasks</returns>
         public bool HasReachedSimultaneousMaximumLimit =>

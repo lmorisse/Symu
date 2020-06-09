@@ -105,9 +105,6 @@ namespace Symu.Classes.Agents
                 case SymuYellowPages.Help:
                     ActHelp(message);
                     break;
-                default:
-                    ActClassKey(message);
-                    break;
             }
         }
 
@@ -219,7 +216,7 @@ namespace Symu.Classes.Agents
             }
 
             // Send new interactions
-            SendToMany(agents, MessageAction.Ask, SymuYellowPages.Actor, CommunicationMediums.FaceToFace);
+            SendToMany(agents, MessageAction.Ask, SymuYellowPages.Actor, null, NextMedium);
         }
 
         public virtual void ActCadence()
@@ -299,10 +296,6 @@ namespace Symu.Classes.Agents
             {
                 PostDelayedMessages();
             }
-        }
-
-        protected virtual void ActClassKey(Message message)
-        {
         }
     }
 }

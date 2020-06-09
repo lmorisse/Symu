@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
 
 #endregion
@@ -36,7 +37,7 @@ namespace Symu.Repository.Networks.Knowledges
         public RandomGenerator Model { get; set; } = RandomGenerator.RandomBinary;
 
         /// <summary>
-        ///     Repository of all the knowledges used during the symu
+        ///     Repository of all the knowledges used during the simulation
         /// </summary>
         public KnowledgeCollection Repository { get; } = new KnowledgeCollection();
 
@@ -123,6 +124,18 @@ namespace Symu.Repository.Networks.Knowledges
             {
                 AgentsRepository[agentId].Add(agentKnowledge);
             }
+        }
+
+        public void Add(AgentId agentId, ushort knowledgeId, KnowledgeLevel level, InternalCharacteristics internalCharacteristics)
+        {
+            if (internalCharacteristics == null)
+            {
+                throw new ArgumentNullException(nameof(internalCharacteristics));
+            }
+
+            AddAgentId(agentId);
+            AddKnowledge(agentId, knowledgeId, level, internalCharacteristics.MinimumRemainingKnowledge,
+                internalCharacteristics.TimeToLive);
         }
 
         public void Add(AgentId agentId, ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge,

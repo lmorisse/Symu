@@ -46,13 +46,24 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     Constructor
+        ///     Constructor with standard agent template
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
         protected Agent(AgentId agentId, SymuEnvironment environment)
         {
             CreateAgent(agentId, environment);
+        }
+
+        /// <summary>
+        ///     Constructor with specific agentTemplate
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="environment"></param>
+        /// <param name="template"></param>
+        protected Agent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            CreateAgent(agentId, environment, template);
         }
 
         /// <summary>
@@ -98,32 +109,32 @@ namespace Symu.Classes.Agents
         protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
 
         /// <summary>
-        ///     Define how agent will forget knowledge during the symu based on its cognitive architecture
+        ///     Define how agent will forget knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public ForgettingModel ForgettingModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will learn knowledge during the symu based on its cognitive architecture
+        ///     Define how agent will learn knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public LearningModel LearningModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will influence or be influenced during the symu based on its cognitive architecture
+        ///     Define how agent will influence or be influenced during the simulation based on its cognitive architecture
         /// </summary>
         public InfluenceModel InfluenceModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its beliefs during the symu based on its cognitive architecture
+        ///     Define how agent will manage its beliefs during the simulation based on its cognitive architecture
         /// </summary>
         public BeliefsModel BeliefsModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its knowledge during the symu based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public KnowledgeModel KnowledgeModel { get; set; }
 
         /// <summary>
-        ///     Define how agent will manage its knowledge during the symu based on its cognitive architecture
+        ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
         /// </summary>
         public ActivityModel ActivityModel { get; set; }
 
@@ -133,7 +144,18 @@ namespace Symu.Classes.Agents
         [Obsolete]
         public BlockerCollection Blockers { get; } = new BlockerCollection();
 
+        #region Initialization
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            CreateAgent(agentId, environment, environment.Organization.Templates.Standard);
+        }
+
+        protected void CreateAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate agentTemplate)
         {
             Id = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -143,32 +165,31 @@ namespace Symu.Classes.Agents
             {
                 environment.WhitePages.Network.AddDatabase(Id, database.AgentId.Key);
             }
+            SetTemplate(agentTemplate);
+            SetCognitive();
+            // for testability SetDefaultModels should stay here
         }
 
         /// <summary>
         ///     CopyTo the cognitive architecture of the agent
         ///     Applying AgentTemplate
-        ///     Initializing parameters
         /// </summary>
         /// <param name="agentTemplate"></param>
-        protected virtual void SetCognitive(CognitiveArchitectureTemplate agentTemplate)
+        protected void SetTemplate(CognitiveArchitectureTemplate agentTemplate)
         {
             Cognitive = new CognitiveArchitecture();
             //Apply Cognitive template
             agentTemplate?.Set(Cognitive);
-            // Initialize agent models
-            LearningModel = new LearningModel(Id, Environment.Organization.Models,
-                Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
-            ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
-                Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
-            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
-                Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
-            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,
-                Environment.WhitePages.Network);
-            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive,
-                Environment.WhitePages.Network);
-            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.Network);
         }
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected virtual void SetCognitive()
+        {
+        }
+
+        #endregion
 
         #region Interaction strategy
 
@@ -236,8 +257,6 @@ namespace Symu.Classes.Agents
         /// </summary>
         public virtual void BeforeStart()
         {
-            KnowledgeModel.InitializeExpertise(Schedule.Step);
-            BeliefsModel.InitializeBeliefs();
             // Messaging initializing
             while (MessageProcessor is null)
             {
@@ -246,6 +265,41 @@ namespace Symu.Classes.Agents
             }
 
             MessageProcessor.OnBeforePostEvent += MessageOnBeforePost;
+        }
+        /// <summary>
+        ///     Initialize all the agent's models
+        ///     Should be called after SetTemplate and after having customized the cognitive parameters
+        /// </summary>
+        protected void SetDefaultModels()
+        {
+            // Initialize agent models
+            LearningModel = new LearningModel(Id, Environment.Organization.Models,
+                Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
+            ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
+                Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
+            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
+                Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
+            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,
+                Environment.WhitePages.Network);
+            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive,
+                Environment.WhitePages.Network);
+            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.Network);
+        }
+
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected virtual void SetModels()
+        {
+        }
+        /// <summary>
+        ///     Finalize all the agent's models
+        /// </summary>
+        protected void FinalizeModels()
+        {
+            BeliefsModel.InitializeBeliefs();
+            KnowledgeModel.InitializeExpertise(Schedule.Step);
         }
 
         /// <summary>
@@ -275,6 +329,9 @@ namespace Symu.Classes.Agents
                 throw new Exception("Environment is null in agent " + Id.Key + " (ConcurrentAgent.Start)");
             }
 
+            SetDefaultModels();
+            SetModels();
+            FinalizeModels();
             // MessageProcessor initializing
             MessageProcessor = AsyncMessageProcessor.Start(async mp =>
             {

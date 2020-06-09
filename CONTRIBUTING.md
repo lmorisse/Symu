@@ -47,7 +47,7 @@ A good branch name would be ISSUENUMBER-FEATURE-YOU-IMPLEMENT
 
 ### Get the test suite running
 Support your developments in unit testing.
-Make sure that the existing tests of the SymuEngineTests and SymuToolsTests projects still pass with your modifications.
+Make sure that the existing tests of the SymuTests and SymuToolsTests projects still pass with your modifications.
 
 ### Implement your fix or feature
 

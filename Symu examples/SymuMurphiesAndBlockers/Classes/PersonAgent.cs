@@ -13,8 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -29,18 +31,50 @@ namespace SymuMurphiesAndBlockers.Classes
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 
-        public PersonAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey),
-            environment)
+        public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(agentKey, ClassKey), environment, template)
         {
-            SetCognitive(Environment.Organization.AgentTemplates.Human);
         }
 
         public AgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
         public InternetAccessAgent Internet => ((ExampleEnvironment) Environment).Internet;
+
+        /// <summary>
+        ///     Customize the cognitive architecture of the agent
+        ///     After setting the Agent template
+        /// </summary>
+        protected override void SetCognitive()
+        {
+            base.SetCognitive();
+            Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
+            Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
+            Cognitive.KnowledgeAndBeliefs.HasBelief = true;
+            Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
+            Cognitive.TasksAndPerformance.CanPerformTask = true;
+            Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
+            Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
+            Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
+            Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
+            Cognitive.InteractionPatterns.AllowNewInteractions = false;
+        }
+        /// <summary>
+        ///     Customize the models of the agent
+        ///     After setting the Agent basics models
+        /// </summary>
+        protected override void SetModels()
+        {
+            base.SetModels();
+            foreach (var knowledge in Knowledges)
+            {
+                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment)Environment).KnowledgeLevel, Cognitive.InternalCharacteristics);
+                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
+                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+            }
+        }
 
         public override void GetNewTasks()
         {

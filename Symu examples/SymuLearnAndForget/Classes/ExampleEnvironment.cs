@@ -48,31 +48,20 @@ namespace SymuLearnAndForget.Classes
             SetDebug(false);
         }
 
-        public override void SetModelForAgents()
+        public override void SetAgents()
         {
-            base.SetModelForAgents();
+            base.SetAgents();
             Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             WhitePages.Network.AddKnowledge(Knowledge);
             Wiki.InitializeKnowledge(Knowledge, 0);
 
-            LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this);
-            LearnFromSourceAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
-                Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-            LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this);
-            LearnByDoingAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
-                Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-            LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this);
-            LearnByAskingAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
-                Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this);
-            DoesNotLearnAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel,
-                Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-            ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this);
-            ExpertAgent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            ExpertAgent.KnowledgeModel.AddKnowledge(Knowledge.Id, KnowledgeLevel.Expert,
-                Organization.AgentTemplates.Human.Cognitive.InternalCharacteristics);
-            // CopyTo active link between expert and LearnByAskingAgent to be able to exchange information
+            LearnFromSourceAgent = new LearnFromSourceAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            LearnByDoingAgent = new LearnByDoingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            LearnByAskingAgent = new LearnByAskingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+            // Active link between expert and LearnByAskingAgent to be able to exchange information
             WhitePages.Network.NetworkLinks.AddLink(LearnByAskingAgent.Id, ExpertAgent.Id);
         }
     }
