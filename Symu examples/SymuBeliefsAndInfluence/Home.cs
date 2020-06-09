@@ -159,10 +159,10 @@ namespace SymuBeliefsAndInfluence
                 _environment.IterationResult.OrganizationFlexibility.Triads.First().Density
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(TotalBeliefs,
-                _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum
+                _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Sum
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(InitialTotalBeliefs,
-                _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum
+                _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum
                     .ToString("F1", CultureInfo.InvariantCulture));
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Tolerance
                 ? 0

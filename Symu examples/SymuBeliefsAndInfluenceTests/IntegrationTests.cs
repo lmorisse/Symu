@@ -56,7 +56,7 @@ namespace SymuBeliefsAndInfluenceTests
         {
             _environment.KnowledgeCount = 0;
             _simulation.Process();
-            Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
+            Assert.AreEqual(0, _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
 
@@ -69,7 +69,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = false;
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = false;
             _simulation.Process();
-            Assert.AreEqual(0, _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum);
+            Assert.AreEqual(0, _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum);
             Assert.AreEqual(100, _environment.IterationResult.OrganizationFlexibility.Triads.First().Density);
         }
 
@@ -201,8 +201,8 @@ namespace SymuBeliefsAndInfluenceTests
 
         private void CheckNoChange()
         {
-            Assert.AreEqual(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum,
-                _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
+            Assert.AreEqual(_environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum,
+                _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Sum);
             Assert.AreEqual(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
@@ -303,10 +303,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
             _simulation.Process();
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum >
-                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean >
-                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
+            Assert.IsTrue(_environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum >
+                          _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Sum);
+            Assert.IsTrue(_environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Mean >
+                          _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Mean);
             Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density <=
                           _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
@@ -326,10 +326,10 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyAgree;
             _simulation.Process();
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Sum <
-                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Sum);
-            Assert.IsTrue(_environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.First().Mean <
-                          _environment.IterationResult.OrganizationKnowledgeAndBelief.Beliefs.Last().Mean);
+            Assert.IsTrue(_environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Sum <
+                          _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Sum);
+            Assert.IsTrue(_environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Mean <
+                          _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.Last().Mean);
             Assert.IsTrue(_environment.IterationResult.OrganizationFlexibility.Triads.First().Density <
                           _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }

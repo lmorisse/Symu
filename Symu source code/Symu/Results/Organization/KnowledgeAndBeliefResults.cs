@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
+using Symu.Common;
 using Symu.Environment;
 
 #endregion
@@ -22,19 +23,21 @@ namespace Symu.Results.Organization
     /// <summary>
     ///     Get the knowledge and Belief performance for the group
     /// </summary>
-    public class OrganizationKnowledgeAndBelief
+    public class KnowledgeAndBeliefResults
     {
         private readonly SymuEnvironment _environment;
 
-        public OrganizationKnowledgeAndBelief(SymuEnvironment environment)
+        public KnowledgeAndBeliefResults(SymuEnvironment environment)
         {
             _environment = environment;
         }
 
         /// <summary>
-        ///     If set to true, OrganizationKnowledgeAndBelief will be filled with value and stored during the simulation
+        ///     If set to true, KnowledgeAndBeliefResults will be filled with value and stored during the simulation
         /// </summary>
         public bool On { get; set; }
+
+        public TimeStepType Frequency { get; set; } = TimeStepType.Monthly;
 
         /// <summary>
         ///     List of knowledge performance per step
@@ -77,19 +80,48 @@ namespace Symu.Results.Organization
         /// <summary>
         ///     Handle the performance around knowledge and beliefs
         /// </summary>
-        /// <param name="step"></param>
-        public void HandlePerformance(ushort step)
+        /// <param name="schedule"></param>
+        public void SetResults(Schedule schedule)
         {
+            if (schedule == null)
+            {
+                throw new ArgumentNullException(nameof(schedule));
+            }
+
             if (!On)
             {
                 return;
             }
 
-            HandleBelief(step);
-            HandleKnowledge(step);
-            HandleLearning(step);
-            HandleForgetting(step);
-            HandleKnowledgeObsolescence(step);
+            bool handle;
+            switch (Frequency)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    handle = true;
+                    break;
+                case TimeStepType.Weekly:
+                    handle = schedule.IsEndOfWeek;
+                    break;
+                case TimeStepType.Monthly:
+                    handle = schedule.IsEndOfMonth;
+                    break;
+                case TimeStepType.Yearly:
+                    handle = schedule.IsEndOfYear;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (!handle)
+            {
+                return;
+            }
+            HandleBelief(schedule.Step);
+            HandleKnowledge(schedule.Step);
+            HandleLearning(schedule.Step);
+            HandleForgetting(schedule.Step);
+            HandleKnowledgeObsolescence(schedule.Step);
         }
 
         public void HandleLearning(ushort step)
@@ -162,41 +194,41 @@ namespace Symu.Results.Organization
             Beliefs.Add(belief);
         }
 
-        public void CopyTo(OrganizationKnowledgeAndBelief cloneOrganizationKnowledgeAndBelief)
+        public void CopyTo(KnowledgeAndBeliefResults cloneKnowledgeAndBeliefResults)
         {
-            if (cloneOrganizationKnowledgeAndBelief == null)
+            if (cloneKnowledgeAndBeliefResults == null)
             {
-                throw new ArgumentNullException(nameof(cloneOrganizationKnowledgeAndBelief));
+                throw new ArgumentNullException(nameof(cloneKnowledgeAndBeliefResults));
             }
 
-            cloneOrganizationKnowledgeAndBelief.Knowledge = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Knowledge = new List<KnowledgeAndBeliefStruct>();
             foreach (var result in Knowledge)
             {
-                cloneOrganizationKnowledgeAndBelief.Knowledge.Add(result);
+                cloneKnowledgeAndBeliefResults.Knowledge.Add(result);
             }
 
-            cloneOrganizationKnowledgeAndBelief.Beliefs = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Beliefs = new List<KnowledgeAndBeliefStruct>();
             foreach (var result in Beliefs)
             {
-                cloneOrganizationKnowledgeAndBelief.Beliefs.Add(result);
+                cloneKnowledgeAndBeliefResults.Beliefs.Add(result);
             }
 
-            cloneOrganizationKnowledgeAndBelief.Learning = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Learning = new List<KnowledgeAndBeliefStruct>();
             foreach (var result in Learning)
             {
-                cloneOrganizationKnowledgeAndBelief.Learning.Add(result);
+                cloneKnowledgeAndBeliefResults.Learning.Add(result);
             }
 
-            cloneOrganizationKnowledgeAndBelief.Forgetting = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.Forgetting = new List<KnowledgeAndBeliefStruct>();
             foreach (var result in Forgetting)
             {
-                cloneOrganizationKnowledgeAndBelief.Forgetting.Add(result);
+                cloneKnowledgeAndBeliefResults.Forgetting.Add(result);
             }
 
-            cloneOrganizationKnowledgeAndBelief.KnowledgeObsolescence = new List<KnowledgeAndBeliefStruct>();
+            cloneKnowledgeAndBeliefResults.KnowledgeObsolescence = new List<KnowledgeAndBeliefStruct>();
             foreach (var result in KnowledgeObsolescence)
             {
-                cloneOrganizationKnowledgeAndBelief.KnowledgeObsolescence.Add(result);
+                cloneKnowledgeAndBeliefResults.KnowledgeObsolescence.Add(result);
             }
         }
     }

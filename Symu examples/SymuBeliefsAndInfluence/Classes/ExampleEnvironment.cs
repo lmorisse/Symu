@@ -53,7 +53,7 @@ namespace SymuBeliefsAndInfluence.Classes
             organization.Murphies.IncompleteBelief.On = true;
             organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             IterationResult.Tasks.On = true;
-            IterationResult.OrganizationKnowledgeAndBelief.On = true;
+            IterationResult.KnowledgeAndBeliefResults.On = true;
             IterationResult.OrganizationFlexibility.On = true;
 
             // Interaction sphere setup

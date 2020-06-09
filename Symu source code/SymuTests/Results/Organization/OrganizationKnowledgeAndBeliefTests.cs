@@ -30,7 +30,7 @@ namespace SymuTests.Results.Organization
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
-        private OrganizationKnowledgeAndBelief _result;
+        private KnowledgeAndBeliefResults _result;
 
 
         [TestInitialize]
@@ -38,7 +38,7 @@ namespace SymuTests.Results.Organization
         {
             var organization = new OrganizationEntity("1");
             _environment.SetOrganization(organization);
-            _result = new OrganizationKnowledgeAndBelief(_environment);
+            _result = new KnowledgeAndBeliefResults(_environment);
             _environment.WhitePages.Network.AddKnowledge(_knowledge);
             _environment.WhitePages.Network.AddKnowledge(_knowledge2);
         }

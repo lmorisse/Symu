@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Networks.Sphere;
@@ -40,6 +41,8 @@ namespace Symu.Results.Organization
         ///     If set to true, OrganizationFlexibility will be filled with value and stored during the simulation
         /// </summary>
         public bool On { get; set; }
+
+        public TimeStepType Frequency { get; set; } = TimeStepType.Monthly;
 
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
@@ -106,17 +109,43 @@ namespace Symu.Results.Organization
             Sphere.Add(sphere);
         }
 
-        public void HandlePerformance(ushort step)
+        public void SetResults(Schedule schedule)
         {
             if (!On)
             {
                 return;
             }
+            bool handle;
+            switch (Frequency)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    handle = true;
+                    break;
+                case TimeStepType.Weekly:
+                    handle = schedule.IsEndOfWeek;
+                    break;
+                case TimeStepType.Monthly:
+                    handle = schedule.IsEndOfMonth;
+                    break;
+                case TimeStepType.Yearly:
+                    handle = schedule.IsEndOfYear;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
-            var actorCount = _environment.WhitePages.FilteredAgentsByClassCount(SymuYellowPages.Actor);
-            HandleTriads(actorCount, step);
-            HandleLinks(actorCount, step);
-            HandleSphere(step);
+            if (!handle)
+            {
+                return;
+            }
+
+            var actorCount =(ushort) _environment.WhitePages.AllAgents()
+                .Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+
+            HandleTriads(actorCount, schedule.Step);
+            HandleLinks(actorCount, schedule.Step);
+            HandleSphere(schedule.Step);
         }
 
         public void CopyTo(OrganizationFlexibility cloneOrganizationFlexibility)

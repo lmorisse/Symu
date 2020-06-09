@@ -43,7 +43,7 @@ namespace SymuLearnAndForget.Classes
 
             var wiki = new DataBaseEntity(organization.Id, organization.Communication.Email);
             organization.AddDatabase(wiki);
-            IterationResult.OrganizationKnowledgeAndBelief.On = true;
+            IterationResult.KnowledgeAndBeliefResults.On = true;
 
             SetDebug(false);
         }

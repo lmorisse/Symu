@@ -30,7 +30,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class ForgettingModel : ModelEntity
     {
         private readonly AgentId _id;
-        private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly NetworkKnowledges _network;
         private readonly byte _randomLevel;
         private bool _isAgentOnToday;
@@ -49,9 +48,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             InternalCharacteristics = cognitive.InternalCharacteristics;
-            _knowledgeAndBeliefs = cognitive.KnowledgeAndBeliefs;
             _randomLevel = randomLevel;
-            if (!knowledgeModelOn || !_knowledgeAndBeliefs.HasKnowledge || !InternalCharacteristics.CanForget)
+            if (!knowledgeModelOn || !cognitive.KnowledgeAndBeliefs.HasKnowledge || !InternalCharacteristics.CanForget)
             {
                 // If KnowledgeModel Off or has no knowledge, there is no knowledge to forget
                 // Agent is not concerned by this model

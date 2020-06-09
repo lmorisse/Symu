@@ -276,9 +276,9 @@ namespace SymuLearnAndForgetTests
         {
             _organization.Models.Learning.On = false;
             _simulation.Process();
-            var global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Learning.Last();
+            var global = _environment.IterationResult.KnowledgeAndBeliefResults.Learning.Last();
             Assert.AreEqual(0, global.Sum);
-            global = _environment.IterationResult.OrganizationKnowledgeAndBelief.Forgetting.Last();
+            global = _environment.IterationResult.KnowledgeAndBeliefResults.Forgetting.Last();
             Assert.AreEqual(0, global.Sum);
         }
 

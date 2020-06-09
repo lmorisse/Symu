@@ -264,22 +264,22 @@ namespace SymuLearnAndForget
 
             // Global Knowledge - using iteration result
 
-            lock (_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge)
+            lock (_environment.IterationResult.KnowledgeAndBeliefResults.Knowledge)
             {
-                if (!_environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge.Any())
+                if (!_environment.IterationResult.KnowledgeAndBeliefResults.Knowledge.Any())
                 {
                     return;
                 }
             }
 
 
-            var knowledge = _environment.IterationResult.OrganizationKnowledgeAndBelief.Knowledge.Last();
+            var knowledge = _environment.IterationResult.KnowledgeAndBeliefResults.Knowledge.Last();
             WriteTextSafe(lblGlobalKnowledge, knowledge.Sum.ToString("F1", CultureInfo.InvariantCulture));
-            var obsolescence = _environment.IterationResult.OrganizationKnowledgeAndBelief.KnowledgeObsolescence.Last();
+            var obsolescence = _environment.IterationResult.KnowledgeAndBeliefResults.KnowledgeObsolescence.Last();
             WriteTextSafe(lblGlobalObsolescence, obsolescence.Sum.ToString("F1", CultureInfo.InvariantCulture));
-            var learning = _environment.IterationResult.OrganizationKnowledgeAndBelief.Learning.Last();
+            var learning = _environment.IterationResult.KnowledgeAndBeliefResults.Learning.Last();
             WriteTextSafe(lblGlobalLearning, learning.Sum.ToString("F1", CultureInfo.InvariantCulture));
-            var forgetting = _environment.IterationResult.OrganizationKnowledgeAndBelief.Forgetting.Last();
+            var forgetting = _environment.IterationResult.KnowledgeAndBeliefResults.Forgetting.Last();
             WriteTextSafe(lblGlobalForgetting, forgetting.Sum.ToString("F1", CultureInfo.InvariantCulture));
         }
 

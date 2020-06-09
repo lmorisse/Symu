@@ -303,7 +303,6 @@ namespace Symu.Environment
 
             if (Schedule.Type <= TimeStepType.Monthly && Schedule.IsEndOfMonth)
             {
-                SetMonthlyIterationResult();
                 agents.ForEach(a => a.ActEndOfMonth());
                 if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
                     TimeStepType.Monthly && Schedule.Step > 0)
@@ -334,17 +333,6 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     CopyTo monthly iterationResult
-        /// </summary>
-        public virtual void SetMonthlyIterationResult()
-        {
-            // Flexibility
-            IterationResult.OrganizationFlexibility.HandlePerformance(Schedule.Step);
-            // Knowledge
-            IterationResult.OrganizationKnowledgeAndBelief.HandlePerformance(Schedule.Step);
-        }
-
-        /// <summary>
         ///     Trigger every event before the new step
         ///     Do not send messages, use NextStep for that
         ///     Trigger Agent.PreStep()
@@ -356,13 +344,13 @@ namespace Symu.Environment
 
         /// <summary>
         ///     Trigger every event after the actual step
-        ///     Trigger Agent.PostStep()
+        ///     Trigger Agent.SetResults()
         /// </summary>
         public void PostStep()
         {
             WhitePages.AllAgents().ToList().ForEach(a => a.PostStep());
             Messages.ClearMessagesSent(Schedule.Step);
-            IterationResult.PostStep();
+            IterationResult.SetResults();
             Schedule.Step++;
         }
 

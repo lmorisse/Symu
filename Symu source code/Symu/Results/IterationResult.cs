@@ -29,7 +29,7 @@ namespace Symu.Results
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             OrganizationFlexibility = new OrganizationFlexibility(Environment);
-            OrganizationKnowledgeAndBelief = new OrganizationKnowledgeAndBelief(Environment);
+            KnowledgeAndBeliefResults = new KnowledgeAndBeliefResults(Environment);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Symu.Results
         /// <summary>
         ///     Get the knowledge and Belief performance for the group
         /// </summary>
-        public OrganizationKnowledgeAndBelief OrganizationKnowledgeAndBelief { get; }
+        public KnowledgeAndBeliefResults KnowledgeAndBeliefResults { get; }
 
         /// <summary>
         ///     Get the Task blockers metrics
@@ -81,7 +81,7 @@ namespace Symu.Results
         public virtual void Initialize()
         {
             OrganizationFlexibility.Clear();
-            OrganizationKnowledgeAndBelief.Clear();
+            KnowledgeAndBeliefResults.Clear();
             Blockers.Clear();
             Tasks.Clear();
             Messages.Clear();
@@ -100,11 +100,13 @@ namespace Symu.Results
         ///     Triggered at each end of step by SymuEnvironment.
         ///     Use to process metrics
         /// </summary>
-        public void PostStep()
+        public void SetResults()
         {
             Tasks.SetResults(Environment);
             Blockers.SetResults(Environment);
             Messages.SetResults(Environment);
+            KnowledgeAndBeliefResults.SetResults(Environment.Schedule);
+            OrganizationFlexibility.SetResults(Environment.Schedule);
         }
 
         public IterationResult Clone()
@@ -112,7 +114,7 @@ namespace Symu.Results
             var clone = new IterationResult(Environment);
             clone.Initialize();
             OrganizationFlexibility.CopyTo(clone.OrganizationFlexibility);
-            OrganizationKnowledgeAndBelief.CopyTo(clone.OrganizationKnowledgeAndBelief);
+            KnowledgeAndBeliefResults.CopyTo(clone.KnowledgeAndBeliefResults);
             Blockers.CopyTo(clone.Blockers);
             Tasks.CopyTo(clone.Tasks);
             Messages.CopyTo(clone.Messages);
@@ -134,7 +136,7 @@ namespace Symu.Results
         public virtual void On()
         {
             OrganizationFlexibility.On = true;
-            OrganizationKnowledgeAndBelief.On = true;
+            KnowledgeAndBeliefResults.On = true;
             Tasks.On = true;
             Blockers.On = true;
             Messages.On = true;
@@ -146,7 +148,7 @@ namespace Symu.Results
         public virtual void Off()
         {
             OrganizationFlexibility.On = false;
-            OrganizationKnowledgeAndBelief.On = false;
+            KnowledgeAndBeliefResults.On = false;
             Tasks.On = false;
             Blockers.On = false;
             Messages.On = false;
