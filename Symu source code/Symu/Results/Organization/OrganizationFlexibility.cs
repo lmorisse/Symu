@@ -96,8 +96,7 @@ namespace Symu.Results.Organization
 
         protected override void HandleResults()
         {
-            var actorCount = (ushort) Environment.WhitePages.AllAgents()
-                .Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+            var actorCount = Environment.WhitePages.GetInteractionSphereCount;
 
             HandleTriads(actorCount);
             HandleLinks(actorCount);

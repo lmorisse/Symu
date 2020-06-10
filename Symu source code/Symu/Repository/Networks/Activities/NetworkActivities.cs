@@ -355,7 +355,7 @@ namespace Symu.Repository.Networks.Activities
         /// <returns></returns>
         public bool HasAgentActivities(AgentId agentId)
         {
-            return AgentActivities.Any(a => a.Value.Exists(v => v.AgentId.Equals(agentId)));
+            return AgentActivities.Any(a => a.Value.Exists(v => v!= null && v.AgentId.Equals(agentId)));
         }
 
         #endregion

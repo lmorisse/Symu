@@ -26,6 +26,60 @@ namespace Symu.Repository.Networks.Sphere
     public static class InteractionMatrix
     {
         /// <summary>
+        ///     Max value of the interaction matrix
+        /// </summary>
+        /// <param name="interactionMatrix"></param>
+        /// <returns></returns>
+        public static float GetMaxInteractionMatrix(float[,] interactionMatrix)
+        {
+            if (interactionMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(interactionMatrix));
+            }
+
+            var actorsCount = interactionMatrix.GetLength(0);
+            if (actorsCount == 0 || actorsCount == 1)
+            {
+                return 0;
+            }
+
+            float max = 0;
+            for (var i = 0; i < actorsCount; i++)
+            for (var j = i + 1; j < actorsCount; j++)
+            {
+                max = Math.Max(max, interactionMatrix[i, j]);
+            }
+
+            return max;
+        }
+        /// <summary>
+        ///     Max value of the interaction matrix
+        /// </summary>
+        /// <param name="interactionMatrix"></param>
+        /// <returns></returns>
+        public static float GetMinInteractionMatrix(float[,] interactionMatrix)
+        {
+            if (interactionMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(interactionMatrix));
+            }
+
+            var actorsCount = interactionMatrix.GetLength(0);
+            if (actorsCount == 0 || actorsCount == 1)
+            {
+                return 0;
+            }
+
+            float min = 0;
+            for (var i = 0; i < actorsCount; i++)
+            for (var j = i + 1; j < actorsCount; j++)
+            {
+                min = Math.Min(min, interactionMatrix[i, j]);
+            }
+
+            return min;
+        }
+        /// <summary>
         ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
         ///     the actor i knows the fact k or not
         /// </summary>
@@ -67,6 +121,38 @@ namespace Symu.Repository.Networks.Sphere
             var beliefs = GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Beliefs));
             var socialDemographics =
                 GetAverageInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
+            return new DerivedParameter(socialDemographics, beliefs, knowledge, activities);
+        }
+
+        /// <summary>
+        ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
+        ///     the actor i knows the fact k or not
+        /// </summary>
+        /// <param name="network"></param>
+        /// <returns></returns>
+        public static DerivedParameter GetMaxInteractionMatrix(DerivedParameter[,] network)
+        {
+            var knowledge = GetMaxInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Knowledge));
+            var activities = GetMaxInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Activities));
+            var beliefs = GetMaxInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Beliefs));
+            var socialDemographics =
+                GetMaxInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
+            return new DerivedParameter(socialDemographics, beliefs, knowledge, activities);
+        }
+
+        /// <summary>
+        ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
+        ///     the actor i knows the fact k or not
+        /// </summary>
+        /// <param name="network"></param>
+        /// <returns></returns>
+        public static DerivedParameter GetMinInteractionMatrix(DerivedParameter[,] network)
+        {
+            var knowledge = GetMinInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Knowledge));
+            var activities = GetMinInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Activities));
+            var beliefs = GetMinInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.Beliefs));
+            var socialDemographics =
+                GetMinInteractionMatrix(GetInteractionMatrix(network, InteractionStrategy.SocialDemographics));
             return new DerivedParameter(socialDemographics, beliefs, knowledge, activities);
         }
 
@@ -181,6 +267,36 @@ namespace Symu.Repository.Networks.Sphere
         public static uint MaxTriads(int agentsCount)
         {
             return Combinatorics.Combinations(agentsCount, 3);
+        }
+
+        public static float GetDensity(DerivedParameter[,] network)
+        {
+            if (network == null)
+            {
+                throw new ArgumentNullException(nameof(network));
+            }
+
+            var actorsCount = network.GetLength(0);
+            var density = 0;
+            var total = 0;
+            for (var i = 0; i < actorsCount; i++)
+
+                // InteractionSphere is a symmetrical matrix with identity == 0
+            for (var j = i + 1; j < actorsCount; j++)
+            {
+                total++;
+                if (network[i, j].Homophily > 0)
+                {
+                    density++;
+                }
+            }
+
+            if (total == 0)
+            {
+                return 0;
+            }
+
+            return (float)density / total;
         }
     }
 }

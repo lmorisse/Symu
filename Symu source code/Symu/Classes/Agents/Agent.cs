@@ -302,8 +302,12 @@ namespace Symu.Classes.Agents
         /// </summary>
         protected void FinalizeModels()
         {
-            BeliefsModel.InitializeBeliefs();
             KnowledgeModel.InitializeExpertise(Schedule.Step);
+            foreach (var agentKnowledge in KnowledgeModel.Expertise.List)
+            {
+                BeliefsModel.AddBelief(agentKnowledge.KnowledgeId);
+            }
+            BeliefsModel.InitializeBeliefs();
         }
 
         /// <summary>

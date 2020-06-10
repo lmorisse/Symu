@@ -324,7 +324,7 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Clone Sphere for the InteractionSphere
+        ///     SetSphere for the InteractionSphere
         /// </summary>
         public void SetInteractionSphere(bool initialization)
         {

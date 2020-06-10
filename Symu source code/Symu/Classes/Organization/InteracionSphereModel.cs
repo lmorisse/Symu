@@ -58,6 +58,10 @@ namespace Symu.Classes.Organization
                 {
                     throw new ArgumentOutOfRangeException("MinSphereDensity should be between [0;1]");
                 }
+                if (value > _maxSphereDensity)
+                {
+                    throw new ArgumentOutOfRangeException("MinSphereDensity should be <= MaxSphereDensity");
+                }
 
                 _minSphereDensity = value;
             }
@@ -76,34 +80,94 @@ namespace Symu.Classes.Organization
                 {
                     throw new ArgumentOutOfRangeException("MaxSphereDensity should be between [0;1]");
                 }
+                if (value < _minSphereDensity)
+                {
+                    throw new ArgumentOutOfRangeException("MaxSphereDensity should be <= MinSphereDensity");
+                }
 
                 _maxSphereDensity = value;
             }
         }
 
+        private float _socialDemographicWeight = 1;
+
         /// <summary>
         ///     Weight of SocialDemographic in the calculus of DerivedParameter
         ///     Range[0;1]
         /// </summary>
-        public float SocialDemographicWeight { get; set; } = 1;
+        public float SocialDemographicWeight
+        {
+            get => _socialDemographicWeight;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("SocialDemographicWeight should be between [0;1]");
+                }
+
+                _socialDemographicWeight = value;
+            }
+        }
+
+        private float _relativeBeliefWeight = 1;
 
         /// <summary>
         ///     Weight of RelativeBelief in the calculus of DerivedParameter
         ///     Range[0;1]
         /// </summary>
-        public float RelativeBeliefWeight { get; set; } = 1;
+        public float RelativeBeliefWeight
+        {
+            get => _relativeBeliefWeight;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RelativeBeliefWeight should be between [0;1]");
+                }
+
+                _relativeBeliefWeight = value;
+            }
+        }
+
+        private float _relativeKnowledgeWeight = 1;
 
         /// <summary>
         ///     Weight of RelativeKnowledge in the calculus of DerivedParameter
         ///     Range[0;1]
         /// </summary>
-        public float RelativeKnowledgeWeight { get; set; } = 1;
+        public float RelativeKnowledgeWeight
+        {
+            get => _relativeKnowledgeWeight;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RelativeKnowledgeWeight should be between [0;1]");
+                }
+
+                _relativeKnowledgeWeight = value;
+            }
+        }
+
+        private float _relativeActivityWeight = 1;
 
         /// <summary>
         ///     Weight of RelativeBeliefs in the calculus of DerivedParameter
         ///     Range[0;1]
         /// </summary>
-        public float RelativeActivityWeight { get; set; } = 1;
+        public float RelativeActivityWeight
+        {
+            get => _relativeActivityWeight;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentOutOfRangeException("RelativeActivityWeight should be between [0;1]");
+                }
+
+                _relativeActivityWeight = value;
+            }
+        }
 
         public void CopyTo(InteractionSphereModel entity)
         {
