@@ -79,4 +79,4 @@ This project is licensed under the GNU General Public License v2.0 - see the [LI
 ## Integration
 
 Symu is used in projects:
-- ``Symu.biz``: an enterprise level implementation
+- [``Symu.biz``](https://symu.biz): an enterprise level implementation
