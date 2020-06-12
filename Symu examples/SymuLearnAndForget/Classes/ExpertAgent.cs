@@ -46,7 +46,7 @@ namespace SymuLearnAndForget.Classes
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
-        protected override void SetModels()
+        public override void SetModels()
         {
             base.SetModels();
             KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).Knowledge.Id, KnowledgeLevel.Expert,

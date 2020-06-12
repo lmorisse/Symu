@@ -293,7 +293,6 @@ namespace Symu.Forms
 
         private void SetUp(SymuEnvironment environment)
         {
-            OrganizationEntity.Clear();
             Engine.SetEnvironment(environment);
             Engine.Environment.SetOrganization(OrganizationEntity);
             UpdateSettings();
@@ -317,6 +316,7 @@ namespace Symu.Forms
         protected virtual void UpdateSettings()
         {
             Engine.Scenarii.Clear();
+            OrganizationEntity.Clear();
         }
 
         protected void SetDebug(bool value)

@@ -39,7 +39,7 @@ namespace SymuToolsTests.MachineLearning
 
             var coef = LinearRegression.Process(data); // use design matrix
 
-            Assert.AreEqual(30, Math.Round(coef[1] * 30 + coef[0]));
+            Assert.AreEqual(30, System.Math.Round(coef[1] * 30 + coef[0]));
         } // Main
 
         [TestMethod]
@@ -75,8 +75,8 @@ namespace SymuToolsTests.MachineLearning
             data[14][1] = 4;
             var coef = LinearRegression.Process(data); // use design matrix
 
-            Assert.AreEqual(3.52, Math.Round(coef[1] * 16 + coef[0], 2));
-            Assert.AreEqual(5.67, Math.Round(coef[1] * 30 + coef[0], 2));
+            Assert.AreEqual(3.52, System.Math.Round(coef[1] * 16 + coef[0], 2));
+            Assert.AreEqual(5.67, System.Math.Round(coef[1] * 30 + coef[0], 2));
         } // Main
 
 
@@ -91,7 +91,7 @@ namespace SymuToolsTests.MachineLearning
             var coef = LinearRegression.Process(data); // use design matrix
 
             var y = Income(14, 12, 0, coef);
-            Assert.AreEqual(33, Math.Round(y));
+            Assert.AreEqual(33, System.Math.Round(y));
         } // Main
 
         private static double[][] DummyData(int rows, int seed)

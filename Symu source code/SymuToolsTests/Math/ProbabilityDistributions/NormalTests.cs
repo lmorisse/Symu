@@ -14,7 +14,7 @@ using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuToolsTests.ProbabilityDistributions
+namespace SymuToolsTests.Math.ProbabilityDistributions
 {
     [TestClass]
     public class NormalTests

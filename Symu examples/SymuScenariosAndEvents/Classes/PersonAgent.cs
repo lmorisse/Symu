@@ -38,7 +38,7 @@ namespace SymuScenariosAndEvents.Classes
         public AgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public List<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public List<Knowledge> Knowledges => Environment.Organization.Knowledges;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -64,7 +64,7 @@ namespace SymuScenariosAndEvents.Classes
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
-        protected override void SetModels()
+        public override void SetModels()
         {
             base.SetModels();
             foreach (var knowledge in Knowledges)

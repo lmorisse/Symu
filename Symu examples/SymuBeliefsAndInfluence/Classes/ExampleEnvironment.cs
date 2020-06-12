@@ -27,12 +27,10 @@ namespace SymuBeliefsAndInfluence.Classes
         public byte WorkersCount { get; set; } = 5;
         public byte InfluencersCount { get; set; } = 2;
         public byte KnowledgeCount { get; set; } = 2;
-        public List<Knowledge> Knowledges { get; private set; }
         public List<InfluencerAgent> Influencers { get; } = new List<InfluencerAgent>();
         public PromoterTemplate InfluencerTemplate { get; } = new PromoterTemplate();
 
         public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
-        //public MurphyTask Model { get; } = new MurphyTask();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -71,28 +69,27 @@ namespace SymuBeliefsAndInfluence.Classes
             SetDebug(false);
         }
 
+        /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public override void AddOrganizationKnowledges()
+        {
+            base.AddOrganizationKnowledges();
+            // KnowledgeCount are added for tasks initialization
+            // Adn Beliefs are created based on knowledge
+            for (var i = 0; i < KnowledgeCount; i++)
+            {
+                // knowledge length of 10 is arbitrary in this example
+                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                Organization.AddKnowledge(knowledge);
+            }
+        }
+
         public override void SetAgents()
         {
             base.SetAgents();
 
-            #region Common
-
-            // KnowledgeCount are added for tasks initialization
-            // Adn Beliefs are created based on knowledge
-            Knowledges = new List<Knowledge>();
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
-                WhitePages.Network.AddKnowledge(knowledge);
-                Knowledges.Add(knowledge);
-            }
-
-            #endregion
-
             var agentIds = new List<AgentId>();
-
-            #region Agents
 
             for (var j = 0; j < InfluencersCount; j++)
             {
@@ -106,8 +103,6 @@ namespace SymuBeliefsAndInfluence.Classes
                 var actor = new PersonAgent(Organization.NextEntityIndex(), this, WorkerTemplate);
                 agentIds.Add(actor.Id);
             }
-
-            #endregion
 
             WhitePages.Network.NetworkLinks.AddLinks(agentIds);
         }

@@ -41,20 +41,37 @@ namespace SymuLearnAndForget.Classes
 
             base.SetOrganization(organization);
 
-            var wiki = new DataBaseEntity(organization.Id, organization.Communication.Email);
-            organization.AddDatabase(wiki);
             IterationResult.KnowledgeAndBeliefResults.On = true;
+            Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
+            Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
 
             SetDebug(false);
+        }
+
+        /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public override void AddOrganizationKnowledges()
+        {
+            base.AddOrganizationKnowledges();
+            Organization.AddKnowledge(Knowledge);
+            Wiki.InitializeKnowledge(Knowledge, 0);
+        }
+
+        /// <summary>
+        ///     Add Organization database 
+        /// </summary>
+        public override void AddOrganizationDatabase()
+        {
+            base.AddOrganizationDatabase();
+
+            var wikiEntity = new DataBaseEntity(Organization.Id, Organization.Communication.Email);
+            Organization.AddDatabase(wikiEntity);
         }
 
         public override void SetAgents()
         {
             base.SetAgents();
-            Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
-            Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
-            WhitePages.Network.AddKnowledge(Knowledge);
-            Wiki.InitializeKnowledge(Knowledge, 0);
 
             LearnFromSourceAgent =
                 new LearnFromSourceAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);

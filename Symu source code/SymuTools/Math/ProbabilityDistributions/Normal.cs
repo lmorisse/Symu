@@ -40,6 +40,18 @@ namespace Symu.Tools.Math.ProbabilityDistributions
         }
 
         /// <summary>
+        ///     Generates a sample from the normal distribution using the Box-Muller algorithm.
+        /// </summary>
+        /// <param name="mean">The mean (μ) of the normal distribution.</param>
+        /// <param name="stdDev">The standard deviation (σ) of the normal distribution. Range: σ ≥ 0.</param>
+        /// <param name="lowerBound"></param>
+        /// <returns>a sample from the distribution always superior to lowerBound</returns>
+        public static float SampleWithLowerBound(float mean, float stdDev, float lowerBound)
+        {
+            return System.Math.Max(lowerBound, Sample(mean, stdDev));
+        }
+
+        /// <summary>
         ///     Computes the cumulative distribution (CDF) of the distribution at x, i.e. P(X ≤ x).
         /// </summary>
         /// <param name="x">The location at which to compute the cumulative distribution function</param>

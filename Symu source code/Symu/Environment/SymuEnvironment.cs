@@ -177,7 +177,12 @@ namespace Symu.Environment
             WhitePages.Network.NetworkBeliefs.Model =
                 Organization.Models.Generator;
             IterationResult.Initialize();
+            // Intentionally before AddOrganizationKnowledges
+            AddOrganizationDatabase();
+            SetDatabases();
             // Intentionally before SetAgents
+            AddOrganizationKnowledges();
+            SetKnowledges();
             SetAgents();
             // Intentionally after SetAgents
             WhitePages.Network.InitializeNetworkLinks();
@@ -376,14 +381,18 @@ namespace Symu.Environment
         /// </summary>
         public virtual void SetAgents()
         {
-            SetKnowledges();
-            SetDatabases();
         }
 
         /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public virtual void AddOrganizationKnowledges()
+        {
+        }
+        /// <summary>
         ///     Clone repository of Knowledge network
         /// </summary>
-        public virtual void SetKnowledges()
+        public void SetKnowledges()
         {
             foreach (var knowledge in Organization.Knowledges)
             {
@@ -391,10 +400,17 @@ namespace Symu.Environment
             }
         }
 
+
+        /// <summary>
+        ///     Add Organization database 
+        /// </summary>
+        public virtual void AddOrganizationDatabase()
+        {
+        }
         /// <summary>
         ///     Clone repository of Databases network
         /// </summary>
-        public virtual void SetDatabases()
+        public void SetDatabases()
         {
             foreach (var database in Organization.Databases.Select(databaseEntity =>
                 new Database(databaseEntity, Organization.Models, WhitePages.Network.NetworkKnowledges)))

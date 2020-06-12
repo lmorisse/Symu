@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using Symu.Repository;
+using Symu.Tools;
+
 #region Licence
 
 // Description: SymuBiz - SymuTests
@@ -38,7 +42,7 @@ namespace SymuTests.Repository
             _environment.SetOrganization(_organizationEntity);
             _environment.InitializeIteration();
             _symu.SetEnvironment(_environment);
-            _agent = new TestAgent(1, _environment);
+            _agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
         }
 
         [TestMethod]
@@ -156,6 +160,42 @@ namespace SymuTests.Repository
             {
                 Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(agentId));
             }
+        }
+        [TestMethod]
+        public void GetFilteredAgentIdsWithExclusionListTest()
+        {
+            _environment.WhitePages.Clear();
+            for (byte i = 0; i < 10; i++)
+            {
+                _ = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+            }
+
+            var excludeIds = new List<AgentId>();
+            for (byte i = 10; i < 20; i++)
+            {
+                var agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                excludeIds.Add(agent.Id);
+            }
+
+            Assert.AreEqual(10, _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestAgent.ClassKey, excludeIds).Count);
+        }
+        [TestMethod]
+        public void GetFilteredAgentsWithExclusionListTest()
+        {
+            _environment.WhitePages.Clear();
+            for (byte i = 0; i < 10; i++)
+            {
+                _ = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+            }
+
+            var excludeIds = new List<AgentId>();
+            for (byte i = 10; i < 20; i++)
+            {
+                var agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                excludeIds.Add(agent.Id);
+            }
+
+            Assert.AreEqual(10, _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestAgent.ClassKey, excludeIds).Count());
         }
     }
 }

@@ -9,14 +9,13 @@
 
 #region using directives
 
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Tools;
 using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace SymuToolsTests.ProbabilityDistributions
+namespace SymuToolsTests.Math.ProbabilityDistributions
 {
     [TestClass]
     public class DiscreteUniformTests
@@ -54,8 +53,8 @@ namespace SymuToolsTests.ProbabilityDistributions
             Assert.AreEqual(10, t.Length);
             for (var i = 0; i < 10; i++)
             {
-                Assert.IsTrue(Math.Abs(t[i]) < Constants.Tolerance || Math.Abs(t[i] - 1) < Constants.Tolerance ||
-                              Math.Abs(t[i] + 1) < Constants.Tolerance);
+                Assert.IsTrue(System.Math.Abs(t[i]) < Constants.Tolerance || System.Math.Abs(t[i] - 1) < Constants.Tolerance ||
+                              System.Math.Abs(t[i] + 1) < Constants.Tolerance);
             }
         }
     }

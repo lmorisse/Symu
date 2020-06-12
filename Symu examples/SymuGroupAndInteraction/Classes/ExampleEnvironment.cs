@@ -24,12 +24,12 @@ namespace SymuGroupAndInteraction.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
+        private readonly List<string> _activities = new List<string>();
         public byte GroupsCount { get; set; } = 2;
         public byte WorkersCount { get; set; } = 5;
         public byte Knowledge { get; set; } = 0;
         public byte Activities { get; set; } = 0;
         public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
-        public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -47,20 +47,25 @@ namespace SymuGroupAndInteraction.Classes
             SetDebug(false);
         }
 
-        public override void SetAgents()
+        /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public override void AddOrganizationKnowledges()
         {
-            base.SetAgents();
-            var activities = new List<string>();
-            Knowledges.Clear();
+            base.AddOrganizationKnowledges(); 
             for (var i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
-                WhitePages.Network.AddKnowledge(knowledge);
-                Knowledges.Add(knowledge);
-                activities.Add(i.ToString());
+                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                Organization.AddKnowledge(knowledge);
+                _activities.Add(i.ToString());
                 //Beliefs are created based on knowledge
             }
+        }
+
+        public override void SetAgents()
+        {
+            base.SetAgents();
 
             for (var i = 0; i < GroupsCount; i++)
             {
@@ -74,8 +79,8 @@ namespace SymuGroupAndInteraction.Classes
                     };
                     WhitePages.Network.AddMemberToGroup(actor.Id, 100, group.Id);
                     //Beliefs are added with knowledge
-                    SetKnowledge(actor, Knowledges, i);
-                    SetActivity(actor.Id, activities, i, group.Id);
+                    SetKnowledge(actor, Organization.Knowledges, i);
+                    SetActivity(actor.Id, _activities, i, group.Id);
                 }
             }
         }

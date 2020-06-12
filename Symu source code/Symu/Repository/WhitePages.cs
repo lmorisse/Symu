@@ -198,6 +198,40 @@ namespace Symu.Repository
             return Agents.FilteredByClassKey(classKey);
         }
 
+        /// <summary>
+        /// FilteredAgentIdsByClassKey with an exclusion list
+        /// </summary>
+        /// <param name="classKey"></param>
+        /// <param name="excludeIds"></param>
+        /// <returns></returns>
+        public List<AgentId> GetFilteredAgentIdsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
+        {
+            var actors = FilteredAgentIdsByClassKey(classKey).ToList();
+            if (excludeIds != null)
+            {
+                actors.RemoveAll(excludeIds.Contains);
+            }
+
+            return actors;
+        }
+
+
+        /// <summary>
+        /// FilteredAgentsByClassKey with an exclusion list
+        /// </summary>
+        /// <param name="classKey"></param>
+        /// <param name="excludeIds"></param>
+        /// <returns></returns>
+        public IEnumerable<Agent> GetFilteredAgentsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
+        {
+            var actors = FilteredAgentsByClassKey(classKey).ToList();
+            if (excludeIds != null)
+            {
+                actors.RemoveAll(x => excludeIds.Contains(x.Id));
+            }
+            return actors;
+        }
+
         #endregion
 
         #region ToStop & Stopped Agents

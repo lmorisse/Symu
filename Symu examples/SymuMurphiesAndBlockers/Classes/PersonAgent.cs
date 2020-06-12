@@ -39,7 +39,7 @@ namespace SymuMurphiesAndBlockers.Classes
         public AgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public IEnumerable<Knowledge> Knowledges => Environment.Organization.Knowledges;
         public InternetAccessAgent Internet => ((ExampleEnvironment) Environment).Internet;
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SymuMurphiesAndBlockers.Classes
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
-        protected override void SetModels()
+        public override void SetModels()
         {
             base.SetModels();
             foreach (var knowledge in Knowledges)

@@ -29,7 +29,6 @@ namespace SymuMurphiesAndBlockers.Classes
         public byte KnowledgeCount { get; set; } = 2;
 
         public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.Intermediate;
-        public List<Knowledge> Knowledges { get; private set; }
         public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
 
         public InternetAccessAgent Internet { get; private set; }
@@ -57,20 +56,25 @@ namespace SymuMurphiesAndBlockers.Classes
             SetDebug(false);
         }
 
-        public override void SetAgents()
+        /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public override void AddOrganizationKnowledges()
         {
-            base.SetAgents();
-
+            base.AddOrganizationKnowledges();  
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
-            Knowledges = new List<Knowledge>();
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
-                WhitePages.Network.AddKnowledge(knowledge);
-                Knowledges.Add(knowledge);
+                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                Organization.AddKnowledge(knowledge);
             }
+        }
+
+        public override void SetAgents()
+        {
+            base.SetAgents();
 
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             Internet = new InternetAccessAgent(Organization.NextEntityIndex(), this, Organization.Templates.Internet);

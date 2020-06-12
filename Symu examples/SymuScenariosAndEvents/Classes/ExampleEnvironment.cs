@@ -28,7 +28,6 @@ namespace SymuScenariosAndEvents.Classes
         public byte WorkersCount { get; set; } = 5;
         private byte KnowledgeCount { get; } = 2;
 
-        public List<Knowledge> Knowledges { get; private set; }
         public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
 
         public override void SetOrganization(OrganizationEntity organization)
@@ -46,20 +45,26 @@ namespace SymuScenariosAndEvents.Classes
             SetDebug(false);
         }
 
-        public override void SetAgents()
+        /// <summary>
+        ///     Add Organization knowledge 
+        /// </summary>
+        public override void AddOrganizationKnowledges()
         {
-            base.SetAgents();
-
+            base.AddOrganizationKnowledges();
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
-            Knowledges = new List<Knowledge>();
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
-                WhitePages.Network.AddKnowledge(knowledge);
-                Knowledges.Add(knowledge);
+                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                Organization.AddKnowledge(knowledge);
             }
+
+        }
+
+        public override void SetAgents()
+        {
+            base.SetAgents();
 
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
             _groupId = group.Id;
@@ -94,7 +99,6 @@ namespace SymuScenariosAndEvents.Classes
             // knowledge length of 10 is arbitrary in this example
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
             WhitePages.Network.AddKnowledge(knowledge);
-            Knowledges.Add(knowledge);
 
             foreach (var person in WhitePages.FilteredAgentsByClassKey(PersonAgent.ClassKey))
             {

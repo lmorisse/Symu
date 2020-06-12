@@ -293,7 +293,7 @@ namespace Symu.Classes.Agents
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
-        protected virtual void SetModels()
+        public virtual void SetModels()
         {
         }
 
@@ -302,12 +302,19 @@ namespace Symu.Classes.Agents
         /// </summary>
         protected void FinalizeModels()
         {
-            KnowledgeModel.InitializeExpertise(Schedule.Step);
-            foreach (var agentKnowledge in KnowledgeModel.Expertise.List)
+            if (KnowledgeModel.On)
             {
-                BeliefsModel.AddBelief(agentKnowledge.KnowledgeId);
+                KnowledgeModel.InitializeExpertise(Schedule.Step);
+                foreach (var agentKnowledge in KnowledgeModel.Expertise.List)
+                {
+                    BeliefsModel.AddBelief(agentKnowledge.KnowledgeId);
+                }
             }
-            BeliefsModel.InitializeBeliefs();
+
+            if (BeliefsModel.On)
+            {
+                BeliefsModel.InitializeBeliefs();
+            }
         }
 
         /// <summary>

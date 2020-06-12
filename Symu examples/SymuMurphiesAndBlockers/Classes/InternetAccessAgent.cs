@@ -34,13 +34,13 @@ namespace SymuMurphiesAndBlockers.Classes
         {
         }
 
-        public IEnumerable<Knowledge> Knowledges => ((ExampleEnvironment) Environment).Knowledges;
+        public IEnumerable<Knowledge> Knowledges => Environment.Organization.Knowledges;
 
         /// <summary>
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
-        protected override void SetModels()
+        public override void SetModels()
         {
             base.SetModels();
             foreach (var knowledge in Knowledges)
