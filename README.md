@@ -78,7 +78,7 @@ This project is licensed under the GNU General Public License v2.0 - see the [LI
 
 ## Support
 
-Paid consulting and support options are available from the corporate sponsors. See [Symu services](https://symu.org/services/)
+Paid consulting and support options are available from the corporate sponsors. See [Symu services](https://symu.org/services/).
 
 ## Integration
 
