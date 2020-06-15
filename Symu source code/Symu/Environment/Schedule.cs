@@ -46,7 +46,7 @@ namespace Symu.Environment
                 IsEndOfWeek = SetIsEndOfWeek(day);
                 IsEndOfMonth = SetIsEndOfMonth(day);
                 IsEndOfQuarter = SetIsEndOfQuarter(day);
-                IsEndOfYear = SetIsEndOfYear(day);
+                IsEndOfYear = SetIsEndOfYear(_step);
             }
         }
 
@@ -100,24 +100,75 @@ namespace Symu.Environment
             }
         }
 
-        private static bool SetIsEndOfWeek(ushort day)
+        private bool SetIsEndOfWeek(ushort step)
         {
-            return day % ConstWeek == 0;
+            switch (Type)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    return step % ConstWeek == 0;
+                case TimeStepType.Weekly:
+                    return true;
+                case TimeStepType.Monthly:
+                case TimeStepType.Yearly:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        private static bool SetIsEndOfMonth(ushort day)
+        private bool SetIsEndOfMonth(ushort step)
         {
-            return day % ConstMonth == 0;
+            switch (Type)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    return step % ConstMonth == 0;
+                case TimeStepType.Weekly:
+                    return step % 4 == 0;
+                case TimeStepType.Monthly:
+                    return true;
+                case TimeStepType.Yearly:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        private static bool SetIsEndOfQuarter(ushort day)
+        private bool SetIsEndOfQuarter(ushort step)
         {
-            return day % ConstQuarter == 0;
+            switch (Type)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    return step % ConstQuarter == 0;
+                case TimeStepType.Weekly:
+                    return step % 12 == 0;
+                case TimeStepType.Monthly:
+                    return step % 3 == 0;
+                case TimeStepType.Yearly:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        private static bool SetIsEndOfYear(ushort day)
+        private bool SetIsEndOfYear(ushort step)
         {
-            return day % ConstYear == 0;
+            switch (Type)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    return step % ConstYear == 0;
+                case TimeStepType.Weekly:
+                    return step % 52 == 0;
+                case TimeStepType.Monthly:
+                    return step % 12 == 0;
+                case TimeStepType.Yearly:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public static bool SetIsWorkingDay(ushort day)

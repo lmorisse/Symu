@@ -112,6 +112,19 @@ namespace Symu.Classes.Task.Manager
             task.SetTasksManager(this);
         }
 
+        public void AddToDo(IEnumerable<SymuTask> tasks)
+        {
+            if (tasks == null)
+            {
+                return;
+            }
+
+            foreach (var task in tasks)
+            {
+                AddToDo(task);
+            }
+        }
+
         /// <summary>
         ///     Add a task directly in AverageInProgress
         /// </summary>
@@ -430,6 +443,13 @@ namespace Symu.Classes.Task.Manager
         /// </summary>
         /// <param name="tasks">list of tasks to prioritize</param>
         /// <returns>The prioritize task</returns>
+        /// <example>
+        ///     manager.OnPrioritizeTasks += PrioritizeManager;
+        ///     public void PrioritizeManager(object sender, TasksEventArgs e)
+        ///     {
+        ///         e.Tasks = e.Tasks.OrderBy(i => i.Created);
+        ///     }
+        /// </example>
         public SymuTask PrioritizeNextTask(IEnumerable<SymuTask> tasks)
         {
             if (tasks is null)
