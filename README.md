@@ -76,7 +76,11 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE) file for details
 
+## Support
+
+Paid consulting and support options are available from the corporate sponsors. See [Symu services](https://symu.org/services/).
+
 ## Integration
 
 Symu is used in projects:
-- ``Symu.biz``: an enterprise level implementation
+- [``Symu.biz``](https://symu.biz): an enterprise level implementation
