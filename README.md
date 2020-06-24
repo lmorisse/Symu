@@ -83,4 +83,4 @@ Paid consulting and support options are available from the corporate sponsors. S
 ## Integration
 
 Symu is used in projects:
-- [``Symu.biz``](https://symu.biz): an enterprise level implementation
+- [``Symu.biz``](http://symu.biz): an enterprise level implementation
