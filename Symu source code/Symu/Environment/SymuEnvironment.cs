@@ -103,7 +103,7 @@ namespace Symu.Environment
         public virtual void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Templates, Organization.Models);
+            WhitePages = new WhitePages(Organization.Models);
         }
 
         /// <summary>
@@ -135,6 +135,10 @@ namespace Symu.Environment
         public void SetTimeStepType(TimeStepType type)
         {
             Schedule.Type = type;
+            foreach (var result in IterationResult.Results.Where(result => result.Frequency < type))
+            {
+                result.Frequency = type;
+            }
         }
 
         /// <summary>
@@ -192,7 +196,7 @@ namespace Symu.Environment
         /// <summary>
         ///     Stop Agent is managed by the WhitePages services responsible of Agent Lifecycle Management
         /// </summary>
-        public void ManageAgentsToStop()
+        public void StopAgents()
         {
             WhitePages.ManageAgentsToStop();
             Messages.WaitingToClearAllMessages();
@@ -267,12 +271,18 @@ namespace Symu.Environment
             while (WaitForStepEnd())
             {
             }
-
             PostStep();
+            StopAgents();
         }
 
         public void NextStep()
         {
+            // Here, Sphere is updated, it is initialized in InitializeIteration
+            if (Schedule.Step > 0)
+            {
+                UpdateInteractionSphere();
+            }
+
             ScheduleEvents();
 
             SendDelayedMessages();
@@ -289,52 +299,51 @@ namespace Symu.Environment
                 {
                     agents.ForEach(a => a.ActWeekEnd());
                 }
-
-                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate <=
-                    TimeStepType.Daily && Schedule.Step > 0)
-                {
-                    SetInteractionSphere(false);
-                }
             }
 
             if (Schedule.Type <= TimeStepType.Weekly && Schedule.IsEndOfWeek)
             {
                 agents.ForEach(a => a.ActEndOfWeek());
-                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Weekly && Schedule.Step > 0)
-                {
-                    SetInteractionSphere(false);
-                }
             }
 
             if (Schedule.Type <= TimeStepType.Monthly && Schedule.IsEndOfMonth)
             {
                 agents.ForEach(a => a.ActEndOfMonth());
-                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Monthly && Schedule.Step > 0)
-                {
-                    SetInteractionSphere(false);
-                }
             }
 
             if (Schedule.IsEndOfYear)
             {
                 agents.ForEach(a => a.ActEndOfYear());
-                if (Organization.Models.InteractionSphere.FrequencyOfSphereUpdate ==
-                    TimeStepType.Yearly && Schedule.Step > 0)
-                {
-                    SetInteractionSphere(false);
-                }
             }
         }
 
         /// <summary>
-        ///     SetSphere for the InteractionSphere
+        ///     Initialize the InteractionSphere
+        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere : 
+        ///     Knowledge model, beliefs models must be initialized for the agents
         /// </summary>
-        public void SetInteractionSphere(bool initialization)
+        public void InitializeInteractionSphere()
         {
-            var agentIds = WhitePages.AllAgents().Where(x => x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere)
-                .Select(x => x.Id).ToList();
+            SetInteractionSphere(true);
+        }
+
+        /// <summary>
+        ///     Update the InteractionSphere
+        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere 
+        /// </summary>
+        public void UpdateInteractionSphere()
+        {
+            SetInteractionSphere(false);
+        }
+
+        /// <summary>
+        ///     SetSphere for the InteractionSphere
+        /// for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere 
+        /// </summary>
+        private void SetInteractionSphere(bool initialization)
+        {
+            var agentIds = WhitePages.AllAgents().Where(x => x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
+                                                             x.State == AgentState.Started).Select(x => x.Id).ToList();
             WhitePages.Network.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.Network);
         }
 

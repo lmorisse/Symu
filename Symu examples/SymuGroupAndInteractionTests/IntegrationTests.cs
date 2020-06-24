@@ -258,7 +258,6 @@ namespace SymuGroupAndInteractionTests
             _environment.GroupsCount = 2;
             _environment.WorkersCount = 1;
             _environment.Knowledge = 1;
-            _organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Daily;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             _simulation.Process();

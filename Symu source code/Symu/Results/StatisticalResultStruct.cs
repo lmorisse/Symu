@@ -7,6 +7,11 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using MathNet.Numerics.Statistics;
+
 namespace Symu.Results
 {
     /// <summary>
@@ -42,6 +47,51 @@ namespace Symu.Results
         public override string ToString()
         {
             return "Sum " + Sum + "Average " + Mean + " - stdDev " + StandardDeviation + " / step" + Step;
+        }
+
+        public static StatisticalResultStruct SetStruct(ushort step,
+            IReadOnlyList<byte> values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            var floats = values.Select(Convert.ToSingle).ToList();
+            return SetStruct(step, floats);
+        }
+
+        public static StatisticalResultStruct SetStruct(ushort step,
+            IReadOnlyList<float> values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            float sum;
+            float mean;
+            float stdDev;
+            switch (values.Count)
+            {
+                case 0:
+                    sum = 0;
+                    mean = 0;
+                    stdDev = 0;
+                    break;
+                case 1:
+                    sum = values[0];
+                    mean = values[0];
+                    stdDev = 0;
+                    break;
+                default:
+                    sum = values.Sum();
+                    mean = values.Average();
+                    stdDev = (float)values.StandardDeviation();
+                    break;
+            }
+
+            return new StatisticalResultStruct(sum, mean, stdDev, step);
         }
     }
 }

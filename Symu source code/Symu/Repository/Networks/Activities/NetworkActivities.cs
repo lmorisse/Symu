@@ -63,10 +63,8 @@ namespace Symu.Repository.Networks.Activities
             {
                 RemoveGroup(agentId);
             }
-            else
-            {
-                RemoveMember(agentId);
-            }
+
+            RemoveMember(agentId);
         }
 
         #region for Group

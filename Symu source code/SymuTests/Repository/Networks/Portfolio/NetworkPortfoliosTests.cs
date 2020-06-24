@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Repository.Networks.Portfolio;
@@ -178,17 +179,17 @@ namespace SymuTests.Repository.Networks.Portfolio
         [TestMethod]
         public void GetObjectIdsTest()
         {
-            Assert.AreEqual(0, _portfolios.GetObjectIds(_agentId).Count);
+            Assert.AreEqual(0, _portfolios.GetObjectIds(_agentId).Count());
             _portfolios.AddPortfolio(_agentId, _objectId, IsUsing, 100);
-            Assert.AreEqual(1, _portfolios.GetObjectIds(_agentId).Count);
+            Assert.AreEqual(1, _portfolios.GetObjectIds(_agentId).Count());
         }
 
         [TestMethod]
         public void GetObjectIdsTest1()
         {
-            Assert.AreEqual(0, _portfolios.GetObjectIds(_agentId, IsUsing).Count);
+            Assert.AreEqual(0, _portfolios.GetObjectIds(_agentId, IsUsing).Count());
             _portfolios.AddPortfolio(_agentId, _objectId, IsUsing, 100);
-            Assert.AreEqual(1, _portfolios.GetObjectIds(_agentId, IsUsing).Count);
+            Assert.AreEqual(1, _portfolios.GetObjectIds(_agentId, IsUsing).Count());
         }
     }
 }

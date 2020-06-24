@@ -58,7 +58,7 @@ namespace Symu.Repository.Networks.Role
         /// <returns></returns>
         public IEnumerable<AgentId> IsMemberOfGroups(AgentId teammateId, byte groupClassKey)
         {
-            return List.FindAll(r => r.IsMemberOfGroups(teammateId, groupClassKey)).Select(x => x.GroupId);
+            return List.FindAll(l => l != null && l.IsMemberOfGroups(teammateId, groupClassKey)).Select(x => x.GroupId);
         }
 
         /// <summary>
@@ -69,22 +69,23 @@ namespace Symu.Repository.Networks.Role
         /// <returns></returns>
         public bool IsMember(AgentId teammateId, byte groupClassKey)
         {
-            return List.Exists(r => r.IsMemberOfGroups(teammateId, groupClassKey));
+            return List.Exists(l => l != null && l.IsMemberOfGroups(teammateId, groupClassKey));
         }
 
         public bool ExistAgentForRoleType(byte roleType, AgentId groupId)
         {
-            return List.Exists(l => l.HasRoleInGroup(roleType, groupId));
+            return List.Exists(l => l!= null && l.HasRoleInGroup(roleType, groupId));
         }
 
         public AgentId GetAgentIdForRoleType(byte roleType, AgentId groupId)
         {
-            return List.Find(l => l.HasRoleInGroup(roleType, groupId)).AgentId;
+            var group = List.Find(l => l != null && l.HasRoleInGroup(roleType, groupId));
+            return group?.AgentId ?? new AgentId();
         }
 
         public IEnumerable<AgentId> GetGroups(AgentId agentId, byte roleType)
         {
-            return List.FindAll(r => r.HasRole(agentId, roleType)).Select(x => x.GroupId);
+            return List.FindAll(l => l != null && l.HasRole(agentId, roleType)).Select(x => x.GroupId);
         }
 
         /// <summary>
@@ -92,27 +93,27 @@ namespace Symu.Repository.Networks.Role
         /// </summary>
         public bool HasRoles(AgentId agentId)
         {
-            return List.Exists(r => r.AgentId.Equals(agentId));
+            return List.Exists(l => l != null && l.AgentId.Equals(agentId));
         }
 
         public bool HasRole(AgentId agentId, byte roleType)
         {
-            return List.Exists(l => l.HasRole(agentId, roleType));
+            return List.Exists(l => l != null && l.HasRole(agentId, roleType));
         }
 
         public bool HasARoleIn(AgentId agentId, byte roleType, AgentId groupId)
         {
-            return List.Exists(l => l.HasRoleInGroup(agentId, roleType, groupId));
+            return List.Exists(l => l!= null && l.HasRoleInGroup(agentId, roleType, groupId));
         }
 
         public bool HasARoleIn(AgentId agentId, AgentId groupId)
         {
-            return List.Exists(l => l.HasRoleInGroup(agentId, groupId));
+            return List.Exists(l => l != null && l.HasRoleInGroup(agentId, groupId));
         }
 
         public void RemoveMember(AgentId agentId, AgentId groupId)
         {
-            List.RemoveAll(r => r.HasRoleInGroup(agentId, groupId));
+            List.RemoveAll(l => l == null || l.HasRoleInGroup(agentId, groupId));
         }
 
         /// <summary>
@@ -123,7 +124,10 @@ namespace Symu.Repository.Networks.Role
         /// <returns></returns>
         public IEnumerable<NetworkRole> GetRoles(AgentId agentId, AgentId groupId)
         {
-            return List.Where(r => r.HasRoleInGroup(agentId, groupId));
+            lock (List)
+            {
+                return List.Where(r => r.HasRoleInGroup(agentId, groupId));
+            }
         }
 
         /// <summary>
@@ -154,13 +158,21 @@ namespace Symu.Repository.Networks.Role
         /// <param name="groupTargetId"></param>
         public void TransferTo(AgentId agentId, AgentId groupSourceId, AgentId groupTargetId)
         {
-            var roles = GetRoles(agentId, groupSourceId).ToList();
-            foreach (var role in roles)
+            if (groupSourceId.Equals(groupTargetId))
             {
-                List.Add(new NetworkRole(agentId, groupTargetId, role.RoleType));
+                return;
             }
 
-            RemoveMember(agentId, groupSourceId);
+            lock (List)
+            {
+                var roles = GetRoles(agentId, groupSourceId).ToList();
+                foreach (var role in roles)
+                {
+                    List.Add(new NetworkRole(agentId, groupTargetId, role.RoleType));
+                }
+
+                RemoveMember(agentId, groupSourceId);
+            }
         }
 
         public void Add(NetworkRole role)

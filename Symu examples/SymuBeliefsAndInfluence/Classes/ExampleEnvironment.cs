@@ -56,7 +56,6 @@ namespace SymuBeliefsAndInfluence.Classes
             // Interaction sphere setup
             organization.Models.InteractionSphere.On = true;
             organization.Models.InteractionSphere.SphereUpdateOverTime = true;
-            organization.Models.InteractionSphere.FrequencyOfSphereUpdate = TimeStepType.Monthly;
             organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
             organization.Models.InteractionSphere.RelativeBeliefWeight = 0.5F;
             organization.Models.InteractionSphere.RelativeActivityWeight = 0;

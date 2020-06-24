@@ -178,9 +178,9 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetGroupAllocationsTest()
         {
-            Assert.AreEqual(0, _group.GetGroupAllocations(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
             _group.AddMember(_teammateId, 100, _teamId);
-            Assert.AreEqual(1, _group.GetGroupAllocations(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(1, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
         }
 
         [TestMethod]

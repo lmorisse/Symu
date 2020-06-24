@@ -28,7 +28,6 @@ namespace Symu.Results.Organization
         public OrganizationFlexibility(SymuEnvironment environment) : base(environment)
         {
         }
-
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
         ///     Rapid formation and reformation of triads is one key aspect of flexibility

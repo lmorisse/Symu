@@ -292,7 +292,7 @@ namespace SymuMurphiesAndBlockersTests
         }
 
         /// <summary>
-        ///     Ony Guessing
+        ///     Only Guessing
         /// </summary>
         [TestMethod]
         public void OnlyKnowledgeTest6()

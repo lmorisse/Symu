@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Repository;
 
 #endregion
 
@@ -68,10 +69,23 @@ namespace Symu.Messaging.Subscription
         {
             return _subscriptions.Where(s => s.Content == content).Select(s => s.AgentId).ToList();
         }
+        /// <summary>
+        /// Even if _subscriptions should be up to date if agent unsubscribe before stop
+        /// It happens that _subscriptions is not well synchronized
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="stoppedAgentIds"></param>
+        /// <returns></returns>
+        public IEnumerable<AgentId> Subscribers(byte content, List<AgentId> stoppedAgentIds)
+        {
+            _subscriptions.RemoveAll(x => stoppedAgentIds.Exists(stopped => stopped.Equals(x.AgentId)));
+            return _subscriptions.Where(s => s.Content == content).Select(s => s.AgentId).ToList();
+        }
 
         public ushort SubscribersCount(byte content)
         {
             return (ushort) _subscriptions.Count(s => s.Content == content);
         }
+
     }
 }

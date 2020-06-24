@@ -66,7 +66,6 @@ namespace Symu.Engine
         public virtual void OnNextStep()
         {
             Environment.OnNextStep();
-            Environment.ManageAgentsToStop();
         }
 
         #endregion
@@ -164,7 +163,7 @@ namespace Symu.Engine
             Iterations.UpdateIteration(Scenarii);
             Environment.Start();
             Environment.WaitingForStart();
-            Environment.SetInteractionSphere(true);
+            Environment.InitializeInteractionSphere();
             State = AgentState.Started;
         }
 
@@ -235,6 +234,8 @@ namespace Symu.Engine
             PreIteration();
             InitializeIteration();
             environment.Start();
+            environment.WaitingForStart();
+            environment.InitializeInteractionSphere();
             environment.PreStep();
             environment.Messages.WaitingToClearAllMessages();
         }

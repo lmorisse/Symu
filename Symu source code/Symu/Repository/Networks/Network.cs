@@ -162,7 +162,7 @@ namespace Symu.Repository.Networks
         /// <returns>List of groupAllocations (groupId, Allocation)</returns>
         public IEnumerable<GroupAllocation> GetGroupAllocations(AgentId agentId, byte classKey)
         {
-            return NetworkGroups.GetGroupAllocations(agentId, classKey);
+            return NetworkGroups.GetGroupAllocationsOfAnAgentId(agentId, classKey);
         }
 
         /// <summary>

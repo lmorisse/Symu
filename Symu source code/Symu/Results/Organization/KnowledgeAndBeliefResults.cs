@@ -81,7 +81,7 @@ namespace Symu.Results.Organization
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning)
                 .ToList();
-            var learning = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
+            var learning = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
             Learning.Add(learning);
         }
 
@@ -89,7 +89,7 @@ namespace Symu.Results.Organization
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(e => e.Forgetting).ToList();
-            var forgetting = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
+            var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
             Forgetting.Add(forgetting);
         }
 
@@ -97,7 +97,7 @@ namespace Symu.Results.Organization
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(e => e.Obsolescence).ToList();
-            var obsolescence = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
+            var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
             KnowledgeObsolescence.Add(obsolescence);
         }
 
@@ -105,37 +105,8 @@ namespace Symu.Results.Organization
         {
             var sumKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(expertise => expertise.GetKnowledgesSum()).ToList();
-            var knowledge = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sumKnowledge);
+            var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sumKnowledge);
             Knowledge.Add(knowledge);
-        }
-
-        private static StatisticalResultStruct SetStructKnowledgeAndBeliefStruct(ushort step,
-            IReadOnlyList<float> sumKnowledge)
-        {
-            float sum;
-            float mean;
-            float stdDev;
-            switch (sumKnowledge.Count)
-            {
-                case 0:
-                    sum = 0;
-                    mean = 0;
-                    stdDev = 0;
-                    break;
-                case 1:
-                    sum = sumKnowledge[0];
-                    mean = sumKnowledge[0];
-                    stdDev = 0;
-                    break;
-                default:
-                    sum = sumKnowledge.Sum();
-                    mean = sumKnowledge.Average();
-                    stdDev = (float) sumKnowledge.StandardDeviation();
-                    break;
-            }
-
-            var knowledge = new StatisticalResultStruct(sum, mean, stdDev, step);
-            return knowledge;
         }
 
         public void HandleBelief()
@@ -143,7 +114,7 @@ namespace Symu.Results.Organization
             var sum = Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
                 .Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
-            var belief = SetStructKnowledgeAndBeliefStruct(Environment.Schedule.Step, sum);
+            var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
             Beliefs.Add(belief);
         }
 
@@ -154,31 +125,31 @@ namespace Symu.Results.Organization
                 return;
             }
 
-            cloneKnowledgeAndBeliefResults.Knowledge = new List<StatisticalResultStruct>();
+            //cloneKnowledgeAndBeliefResults.Knowledge = new List<StatisticalResultStruct>();
             foreach (var result in Knowledge)
             {
                 cloneKnowledgeAndBeliefResults.Knowledge.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Beliefs = new List<StatisticalResultStruct>();
+            //cloneKnowledgeAndBeliefResults.Beliefs = new List<StatisticalResultStruct>();
             foreach (var result in Beliefs)
             {
                 cloneKnowledgeAndBeliefResults.Beliefs.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Learning = new List<StatisticalResultStruct>();
+            //cloneKnowledgeAndBeliefResults.Learning = new List<StatisticalResultStruct>();
             foreach (var result in Learning)
             {
                 cloneKnowledgeAndBeliefResults.Learning.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.Forgetting = new List<StatisticalResultStruct>();
+            //cloneKnowledgeAndBeliefResults.Forgetting = new List<StatisticalResultStruct>();
             foreach (var result in Forgetting)
             {
                 cloneKnowledgeAndBeliefResults.Forgetting.Add(result);
             }
 
-            cloneKnowledgeAndBeliefResults.KnowledgeObsolescence = new List<StatisticalResultStruct>();
+            //cloneKnowledgeAndBeliefResults.KnowledgeObsolescence = new List<StatisticalResultStruct>();
             foreach (var result in KnowledgeObsolescence)
             {
                 cloneKnowledgeAndBeliefResults.KnowledgeObsolescence.Add(result);

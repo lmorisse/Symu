@@ -149,7 +149,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.State = AgentState.Stopping;
             Assert.AreEqual(AgentState.Stopping, _agent.State);
-            _environment.ManageAgentsToStop();
+            _environment.StopAgents();
             Assert.AreEqual(AgentState.Stopped, _agent.State);
         }
 
@@ -822,7 +822,7 @@ namespace SymuTests.Classes.Agents
             _agent.ForgettingModel.On = false;
             _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
-            _environment.SetInteractionSphere(true);
+            _environment.InitializeInteractionSphere();
             _environment.PreStep();
             Assert.AreEqual(0, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
@@ -838,7 +838,7 @@ namespace SymuTests.Classes.Agents
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
             _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
-            _environment.SetInteractionSphere(true);
+            _environment.InitializeInteractionSphere();
             _environment.PreStep();
             Assert.AreEqual(1, _agent.ForgettingModel.ForgettingExpertise.Count);
         }

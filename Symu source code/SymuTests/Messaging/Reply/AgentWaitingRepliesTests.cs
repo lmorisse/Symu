@@ -53,11 +53,11 @@ namespace SymuTests.Messaging.Reply
         [TestMethod]
         public void NoWaitingMessageTest()
         {
-            Assert.IsTrue(_agentWaitingReplies.NoWaitingMessage(ClassKey));
+            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassKey));
             _agentWaitingReplies.Enqueue(ClassKey, 1);
-            Assert.IsFalse(_agentWaitingReplies.NoWaitingMessage(ClassKey));
+            Assert.IsFalse(_agentWaitingReplies.NoWaitingReply(ClassKey));
             _agentWaitingReplies.Dequeue(ClassKey);
-            Assert.IsTrue(_agentWaitingReplies.NoWaitingMessage(ClassKey));
+            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassKey));
         }
     }
 }

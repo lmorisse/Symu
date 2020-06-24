@@ -34,6 +34,14 @@ namespace Symu.Classes.Agents
     public abstract partial class Agent
     {
         private byte _newInteractionCounter;
+        /// <summary>
+        ///     Day of creation of the  agent
+        /// </summary>
+        public ushort Created { get; private set; }
+        /// <summary>
+        ///     Day of stopped of the agent
+        /// </summary>
+        public ushort Stopped { get; private set; }
 
         /// <summary>
         ///     constructor for generic new()
@@ -168,7 +176,7 @@ namespace Symu.Classes.Agents
 
             SetTemplate(agentTemplate);
             SetCognitive();
-            // for testability SetDefaultModels should stay here
+            Created = Schedule.Step;
         }
 
         /// <summary>
@@ -316,13 +324,23 @@ namespace Symu.Classes.Agents
                 BeliefsModel.InitializeBeliefs();
             }
         }
+        /// <summary>
+        /// Set the state of the agent to Stopping so that the agent will be stopped at the end of this step
+        /// </summary>
+        public void Stop()
+        {
+            State = AgentState.Stopping;
+        }
 
         /// <summary>
         ///     Use to trigger an event before the agent is stopped
+        ///     Be sure to call base.BeforeStop() at the end of the override method
+        ///     Don't remove items from WhitePages.Network, it is automatically done by WhitePages.RemoveAgent
         /// </summary>
         public virtual void BeforeStop()
         {
             State = AgentState.Stopped;
+            Stopped = Schedule.Step;
         }
 
         public void Dispose()
@@ -442,7 +460,15 @@ namespace Symu.Classes.Agents
         public void Subscribe(AgentId agentId, byte subject)
         {
             var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
-            SendDelayed(message, Schedule.Step);
+            if (Schedule.Step == 0)
+            {
+                // Not sure the receiver exists already
+                SendDelayed(message, Schedule.Step);
+            }
+            else
+            {
+                Send(message);
+            }
         }
 
         /// <summary>
@@ -451,6 +477,14 @@ namespace Symu.Classes.Agents
         public void Unsubscribe(AgentId agentId, byte subject)
         {
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
+        }
+
+        /// <summary>
+        ///     UnSubscribe to all subjects
+        /// </summary>
+        public void Unsubscribe(AgentId agentId)
+        {
+            Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe);
         }
 
         #endregion

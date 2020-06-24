@@ -104,7 +104,7 @@ namespace SymuTests.Repository
             _environment.Start();
             _environment.WhitePages.WaitingForStart(_agent.Id);
             _agent.State = AgentState.Stopping;
-            _environment.ManageAgentsToStop();
+            _environment.StopAgents();
             _environment.WhitePages.WaitingForStop(_agent.Id);
             _environment.InitializeIteration();
             //Assert
@@ -126,7 +126,7 @@ namespace SymuTests.Repository
         {
             _agent.State = AgentState.Stopping;
 
-            _environment.ManageAgentsToStop();
+            _environment.StopAgents();
 
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);
             Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.Id.ClassKey));

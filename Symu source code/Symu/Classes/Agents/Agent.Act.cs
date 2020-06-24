@@ -15,6 +15,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 
@@ -98,7 +99,7 @@ namespace Symu.Classes.Agents
             switch (message.Subject)
             {
                 case SymuYellowPages.Stop:
-                    State = AgentState.Stopping;
+                    Stop();
                     break;
                 case SymuYellowPages.Subscribe:
                     ActSubscribe(message);
@@ -173,7 +174,10 @@ namespace Symu.Classes.Agents
 
             await ProcessWorkInProgress().ConfigureAwait(false);
 
-            ActEndOfDay();
+            if (Schedule.Type <= TimeStepType.Daily)
+            {
+                ActEndOfDay();
+            }
         }
 
         /// <summary>

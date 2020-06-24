@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Remove InteractionSphereModel.FrequencyOfSphereUpdate
+* Schedule Bug fixe 
+
 ## 0.8.0 [☰](https://github.com/lmorisse/symu/compare/v0.8.0..v0.7.0) by [lmorisse](https://github.com/lmorisse)
 * Refactoring IterationResult
 * Add LearningModel.OnAfterLearning event

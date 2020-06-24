@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
+using Symu.Common;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 
@@ -72,11 +73,13 @@ namespace SymuTests.Results.Organization
             for (var i = 0; i < count; i++)
             {
                 var agent = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+                agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
+                agent.State = AgentState.Started;
                 agents.Add(agent.Id);
             }
 
             _environment.WhitePages.Network.NetworkLinks.AddLinks(agents);
-            _environment.SetInteractionSphere(true);
+            _environment.InitializeInteractionSphere();
         }
 
         #endregion

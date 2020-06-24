@@ -181,5 +181,31 @@ namespace Symu.Environment
         {
             return new DateTime(new TimeSpan(Convert.ToInt32(Math.Floor(days)), 0, 0, 0).Ticks);
         }
+
+
+
+        public static int FrequencyFactor(TimeStepType frequency)
+        {
+            var frequencyFactor = 1;
+            switch (frequency)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    frequencyFactor = ConstYear;
+                    break;
+                case TimeStepType.Weekly:
+                    frequencyFactor = 52;
+                    break;
+                case TimeStepType.Monthly:
+                    frequencyFactor = 12;
+                    break;
+                case TimeStepType.Yearly:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(frequency), frequency, null);
+            }
+
+            return frequencyFactor;
+        }
     }
 }

@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Repository.Networks;
@@ -33,7 +32,7 @@ namespace Symu.Repository
     /// <remarks>FIPA Norm : Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        public WhitePages(AgentTemplates agentTemplates, OrganizationModels models)
+        public WhitePages(OrganizationModels models)
         {
             Network = new Network(models);
         }
@@ -86,6 +85,11 @@ namespace Symu.Repository
         /// <param name="agent">The agent to be removed</param>
         public void RemoveAgent(Agent agent)
         {
+            if (agent == null)
+            {
+                throw new ArgumentNullException(nameof(agent));
+            }
+
             Network.RemoveAgent(agent.Id);
             Agents.Remove(agent.Id);
             StoppedAgents.Add(agent);

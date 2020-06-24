@@ -46,7 +46,7 @@ namespace Symu.Messaging.Reply
         }
 
         /// <summary>
-        ///     Call NoWaitingMessage to check if the agent has received all the replies
+        ///     Call NoWaitingReply to check if the agent has received all the replies
         ///     The number replies expected is not set but it is a parameter
         /// </summary>
         /// <param name="expectedReplies"></param>

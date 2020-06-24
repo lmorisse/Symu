@@ -57,5 +57,11 @@ namespace SymuToolsTests.Math.ProbabilityDistributions
                               System.Math.Abs(t[i] + 1) < Constants.Tolerance);
             }
         }
+        [TestMethod]
+        public void SampleByMeanToByteTest()
+        {
+            // test that there is no exception
+            Assert.IsTrue(DiscreteUniform.SampleByMeanToByte(1, 2)>=0);
+        }
     }
 }

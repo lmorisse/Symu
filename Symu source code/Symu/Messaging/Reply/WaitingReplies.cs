@@ -92,12 +92,12 @@ namespace Symu.Messaging.Reply
         }
 
         /// <summary>
-        ///     Call NoWaitingMessage to check if the agent has received all the replies
+        ///     Call NoWaitingReply to check if the agent has received all the replies
         ///     set with Enqueue or increment
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public bool NoWaitingMessage(byte content)
+        public bool NoWaitingReply(byte content)
         {
             if (!Exists(content))
             {

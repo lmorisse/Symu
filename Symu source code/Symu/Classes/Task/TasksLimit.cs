@@ -21,8 +21,6 @@ namespace Symu.Classes.Task
     /// <remarks>Tasks and Density from Construct Software</remarks>
     public class TasksLimit
     {
-        private byte _maximumSimultaneousTasks = 10;
-
         /// <summary>
         ///     This parameter specify that the maximum number of tasks that an agent of this class can perform during one
         ///     interaction period is not fixed if false
@@ -36,19 +34,7 @@ namespace Symu.Classes.Task
         ///     period
         ///     If the maximum number of tasks is unlimited, SimultaneousTasksLimit should be set to true
         /// </summary>
-        public byte MaximumSimultaneousTasks
-        {
-            get => _maximumSimultaneousTasks;
-            set
-            {
-                if (value == 0)
-                {
-                    throw new ArgumentOutOfRangeException("MaximumSimultaneousTasks should be between [1; 255]");
-                }
-
-                _maximumSimultaneousTasks = value;
-            }
-        }
+        public byte MaximumSimultaneousTasks { get; set; } = 10;
 
         /// <summary>
         ///     This parameter specify that the total maximum number of tasks that an agent of this class can perform during the

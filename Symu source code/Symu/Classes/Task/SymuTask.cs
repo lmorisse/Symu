@@ -31,9 +31,9 @@ namespace Symu.Classes.Task
         private TasksManager _tasksManager;
         private float _weight;
 
-        public SymuTask(ushort step)
+        public SymuTask(ushort day)
         {
-            Created = step;
+            Created = day;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Symu.Classes.Task
         public BlockerCollection Blockers { get; } = new BlockerCollection();
 
         /// <summary>
-        ///     Last step when a worker has worked on that task
+        ///     Last day when a worker has worked on that task
         ///     Updated in update method
         /// </summary>
         public ushort LastTouched { get; set; }
@@ -132,7 +132,7 @@ namespace Symu.Classes.Task
         public bool IsBlocked => Blockers.IsBlocked;
 
         /// <summary>
-        ///     Step of creation of the task, to be able to check TimeToLive
+        ///     Day of creation of the task, to be able to check TimeToLive
         /// </summary>
         public ushort Created { get; }
 
@@ -140,6 +140,7 @@ namespace Symu.Classes.Task
         ///     Time to live : task may be created have a limited time to live,
         ///     it will self-destruct if the time is exceeded
         ///     -1 for unlimited time to live
+        /// TimeToLive is in days
         /// </summary>
         /// <example>An information on an IRC channel has a more limited lifetime than an email</example>
         /// <example>Slack offer a limited history, some messaging system have a limited storage capacity</example>
@@ -163,7 +164,7 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     Update Last touched value with the new step
+        ///     Update Last touched value with the new day
         /// </summary>
         /// <param name="step"></param>
         public void Update(ushort step)
@@ -228,7 +229,7 @@ namespace Symu.Classes.Task
         ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
+        /// <param name="step">day of creation of the blocker</param>
         /// <param name="parameter1"></param>
         /// <param name="parameter2"></param>
         public Blocker Add(int type, ushort step, object parameter1, object parameter2)
@@ -242,7 +243,7 @@ namespace Symu.Classes.Task
         ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
+        /// <param name="step">day of creation of the blocker</param>
         /// <param name="parameter"></param>
         public Blocker Add(int type, ushort step, object parameter)
         {
@@ -255,7 +256,7 @@ namespace Symu.Classes.Task
         ///     And follow it in the IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="type">type of the blocker</param>
-        /// <param name="step">step of creation of the blocker</param>
+        /// <param name="step">day of creation of the blocker</param>
         public Blocker Add(int type, ushort step)
         {
             var blocker = new Blocker(type, step);

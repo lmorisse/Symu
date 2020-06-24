@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
@@ -29,8 +30,8 @@ namespace Symu.Repository.Networks.Portfolio
         ///     Key => ObjectIds
         ///     Values => List of NetworkPortfolio which define who is using which object and how
         /// </summary>
-        public Dictionary<AgentId, List<NetworkPortfolio>> List { get; } =
-            new Dictionary<AgentId, List<NetworkPortfolio>>();
+        public ConcurrentDictionary<AgentId, List<NetworkPortfolio>> List { get; } =
+            new ConcurrentDictionary<AgentId, List<NetworkPortfolio>>();
 
         public int Count => List.Count;
 
@@ -97,7 +98,7 @@ namespace Symu.Repository.Networks.Portfolio
         {
             if (!ContainsObject(objectId))
             {
-                List.Add(objectId, new List<NetworkPortfolio>());
+                List.TryAdd(objectId, new List<NetworkPortfolio>());
             }
         }
 
@@ -109,18 +110,17 @@ namespace Symu.Repository.Networks.Portfolio
                 RemoveObject(agentId);
             }
             // Or a kanban/worker
-            else
+
+            foreach (var key in List.Keys)
             {
-                foreach (var key in List.Keys)
-                {
-                    List[key].RemoveAll(n => n.AgentId.Equals(agentId));
-                }
+                List[key].RemoveAll(n => n.AgentId.Equals(agentId));
             }
+
         }
 
         public void RemoveObject(AgentId objectId)
         {
-            List.Remove(objectId);
+            List.TryRemove(objectId, out _);
         }
 
         public float GetAllocation(AgentId agentId, AgentId objectId, byte type)
@@ -156,15 +156,16 @@ namespace Symu.Repository.Networks.Portfolio
         /// <param name="agentId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public HashSet<AgentId> GetObjectIds(AgentId agentId, byte type)
+        public IEnumerable<AgentId> GetObjectIds(AgentId agentId, byte type)
         {
-            var objectIds = new HashSet<AgentId>();
-            foreach (var objectId in List.Keys.Where(iId => List[iId].Exists(n => n.Equals(agentId, type))))
-            {
-                objectIds.Add(objectId);
-            }
+            //var objectIds = new HashSet<AgentId>();
+            //foreach (var objectId in List.Keys.Where(iId => List[iId].Exists(n => n.Equals(agentId, type))))
+            //{
+            //    objectIds.Add(objectId);
+            //}
 
-            return objectIds;
+            //return objectIds;
+            return List.Keys.Where(iId => List[iId].Exists(n => n != null && n.Equals(agentId, type)));
         }
 
         /// <summary>
@@ -172,15 +173,9 @@ namespace Symu.Repository.Networks.Portfolio
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public HashSet<AgentId> GetObjectIds(AgentId agentId)
+        public IEnumerable<AgentId> GetObjectIds(AgentId agentId)
         {
-            var objectIds = new HashSet<AgentId>();
-            foreach (var objectId in List.Keys.Where(oId => List[oId].Exists(n => n.Equals(agentId))))
-            {
-                objectIds.Add(objectId);
-            }
-
-            return objectIds;
+            return List.Keys.Where(oId => List[oId].Exists(n => n != null && n.Equals(agentId)));
         }
 
         /// <summary>

@@ -54,7 +54,11 @@ namespace Symu.Tools.Math.ProbabilityDistributions
         /// <returns>A sample from the discrete uniform distribution [mean-standardDeviation, mean+standardDeviation]</returns>
         public static byte SampleByMeanToByte(byte mean, byte standardDeviation)
         {
-            var lower = (byte) (mean - standardDeviation);
+            byte lower = 0;
+            if (mean >= standardDeviation)
+            {
+                lower = (byte) (mean - standardDeviation);
+            }
             var upper = (byte) (mean + standardDeviation);
             return SampleToByte(lower, upper);
         }

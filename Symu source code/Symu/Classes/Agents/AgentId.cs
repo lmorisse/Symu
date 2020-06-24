@@ -28,6 +28,7 @@ namespace Symu.Classes.Agents
         public byte ClassKey { get; set; }
 
         public bool IsNull => Key == 0;
+        public bool IsNotNull => Key != 0;
 
         public AgentId(ushort key, byte classKey)
         {

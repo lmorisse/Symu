@@ -35,11 +35,6 @@ namespace Symu.Classes.Organization
         public bool SphereUpdateOverTime { get; set; }
 
         /// <summary>
-        ///     Define the frequency of sphere change if sphere change overtime
-        /// </summary>
-        public TimeStepType FrequencyOfSphereUpdate { get; set; } = TimeStepType.Monthly;
-
-        /// <summary>
         ///     If set to true, sphere of interaction is randomly generated, min/max sphere density are associated.
         ///     Is set to false, sphere is generated based on similarity matching
         /// </summary>
@@ -178,7 +173,6 @@ namespace Symu.Classes.Organization
 
             base.CopyTo(entity);
             entity.SphereUpdateOverTime = SphereUpdateOverTime;
-            entity.FrequencyOfSphereUpdate = FrequencyOfSphereUpdate;
             entity.MaxSphereDensity = MaxSphereDensity;
             entity.MinSphereDensity = MinSphereDensity;
             entity.RandomlyGeneratedSphere = RandomlyGeneratedSphere;

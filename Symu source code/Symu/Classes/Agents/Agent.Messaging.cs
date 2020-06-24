@@ -187,6 +187,11 @@ namespace Symu.Classes.Agents
             }
 
             var sender = Environment.WhitePages.GetAgent(senderId);
+            // sender may be stopped since he accept this new interaction
+            if (sender == null)
+            {
+                ///todo remove 
+            }
             if (!Cognitive.InteractionPatterns.IsPartOfInteractionSphere ||
                 !sender.Cognitive.InteractionPatterns.IsPartOfInteractionSphere)
             {
@@ -436,21 +441,49 @@ namespace Symu.Classes.Agents
         {
         }
 
+        /// <summary>
+        /// Agent try send a message to another agent
+        /// if the receiver is stopping or stopped, the message is not sent
+        /// otherwise, the message is send to the next step
+        /// </summary>
+        /// <param name="message"></param>
+        public void TrySendDelayed(Message message)
+        {
+            TrySendDelayed(message, Schedule.Step);
+        }
+
+        /// <summary>
+        /// Agent try send a message to another agent
+        /// if the receiver is stopping or stopped, the message is not sent
+        /// otherwise, the message is send with delay
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="step"></param>
+        public void TrySendDelayed(Message message, ushort step)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            var receiver = Environment.WhitePages.GetAgent(message.Receiver);
+            if (receiver == null)
+            {
+                // receiver is already stopped
+                return;
+            }
+            switch (receiver.State)
+            {
+                case AgentState.Stopping:
+                    return;
+                case AgentState.Started:
+                    SendDelayed(message, step);
+                    break;
+            }
+        }
         public void SendDelayed(Message message, ushort step)
         {
             Environment.SendDelayedMessage(message, step);
-        }
-
-        public ushort SendToClass(byte classKey, MessageAction action, byte content)
-        {
-            var receivers = Environment.WhitePages.FilteredAgentIdsByClassKey(classKey).ToList();
-
-            foreach (var a in receivers.Shuffle())
-            {
-                Send(a, action, content);
-            }
-
-            return (ushort) receivers.Count;
         }
 
         public void SendToMany(IEnumerable<AgentId> receivers, MessageAction action, byte content)
