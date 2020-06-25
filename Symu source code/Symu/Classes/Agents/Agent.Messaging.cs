@@ -476,6 +476,7 @@ namespace Symu.Classes.Agents
             {
                 case AgentState.Stopping:
                     return;
+                case AgentState.Starting:
                 case AgentState.Started:
                     SendDelayed(message, step);
                     break;
