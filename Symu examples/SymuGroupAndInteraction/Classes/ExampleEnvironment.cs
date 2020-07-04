@@ -48,15 +48,15 @@ namespace SymuGroupAndInteraction.Classes
         }
 
         /// <summary>
-        ///     Add Organization knowledge 
+        ///     Add Organization knowledge
         /// </summary>
         public override void AddOrganizationKnowledges()
         {
-            base.AddOrganizationKnowledges(); 
+            base.AddOrganizationKnowledges();
             for (var i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
                 _activities.Add(i.ToString());
                 //Beliefs are created based on knowledge

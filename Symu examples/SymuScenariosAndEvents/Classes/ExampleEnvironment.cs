@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
@@ -46,7 +45,7 @@ namespace SymuScenariosAndEvents.Classes
         }
 
         /// <summary>
-        ///     Add Organization knowledge 
+        ///     Add Organization knowledge
         /// </summary>
         public override void AddOrganizationKnowledges()
         {
@@ -56,10 +55,9 @@ namespace SymuScenariosAndEvents.Classes
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
             }
-
         }
 
         public override void SetAgents()

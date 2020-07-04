@@ -13,10 +13,8 @@
 
 #region using directives
 
-using MathNet.Numerics.Statistics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using MathNet.Numerics.Statistics;
 
 #endregion
 
@@ -31,7 +29,7 @@ namespace Symu.Tools.Math.Statistics
                 return 0;
             }
 
-            return (float)values.StandardDeviation();
+            return (float) values.StandardDeviation();
         }
     }
 }

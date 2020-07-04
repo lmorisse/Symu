@@ -131,6 +131,7 @@ namespace Symu.Messaging.Tracker
             Result.Clear();
             LostMessages.Clear();
             WaitingMessages.Clear();
+            Result.Clear();
         }
 
         #endregion

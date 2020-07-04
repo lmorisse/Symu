@@ -183,7 +183,6 @@ namespace Symu.Environment
         }
 
 
-
         public static int FrequencyFactor(TimeStepType frequency)
         {
             var frequencyFactor = 1;

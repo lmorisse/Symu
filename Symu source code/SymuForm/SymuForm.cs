@@ -59,6 +59,12 @@ namespace Symu.Forms
 
         #endregion
 
+        #region Nested type: SafeCallCheckBoxDelegate
+
+        protected delegate void SafeCallCheckBoxDelegate(CheckBox checkbox, bool checkedValue);
+
+        #endregion
+
         #region Nested type: SafeCallTextDelegate
 
         protected delegate void SafeCallTextDelegate(Label label, string text);
@@ -90,6 +96,24 @@ namespace Symu.Forms
             else
             {
                 label.Text = text;
+            }
+        }
+
+        protected void WriteCheckBoxSafe(CheckBox checkBox, bool checkedValue)
+        {
+            if (checkBox is null)
+            {
+                throw new ArgumentNullException(nameof(checkBox));
+            }
+
+            if (checkBox.InvokeRequired)
+            {
+                var d = new SafeCallCheckBoxDelegate(WriteCheckBoxSafe);
+                checkBox.Invoke(d, checkBox, checkedValue);
+            }
+            else
+            {
+                checkBox.Checked = checkedValue;
             }
         }
 

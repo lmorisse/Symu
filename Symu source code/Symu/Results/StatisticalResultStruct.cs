@@ -7,10 +7,14 @@
 
 #endregion
 
+#region using directives
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
+
+#endregion
 
 namespace Symu.Results
 {
@@ -87,7 +91,7 @@ namespace Symu.Results
                 default:
                     sum = values.Sum();
                     mean = values.Average();
-                    stdDev = (float)values.StandardDeviation();
+                    stdDev = (float) values.StandardDeviation();
                     break;
             }
 

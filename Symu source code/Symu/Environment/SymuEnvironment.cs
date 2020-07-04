@@ -271,6 +271,7 @@ namespace Symu.Environment
             while (WaitForStepEnd())
             {
             }
+
             PostStep();
             StopAgents();
         }
@@ -319,7 +320,7 @@ namespace Symu.Environment
 
         /// <summary>
         ///     Initialize the InteractionSphere
-        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere : 
+        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere :
         ///     Knowledge model, beliefs models must be initialized for the agents
         /// </summary>
         public void InitializeInteractionSphere()
@@ -329,7 +330,7 @@ namespace Symu.Environment
 
         /// <summary>
         ///     Update the InteractionSphere
-        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere 
+        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere
         /// </summary>
         public void UpdateInteractionSphere()
         {
@@ -338,12 +339,13 @@ namespace Symu.Environment
 
         /// <summary>
         ///     SetSphere for the InteractionSphere
-        /// for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere 
+        ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere
         /// </summary>
         private void SetInteractionSphere(bool initialization)
         {
-            var agentIds = WhitePages.AllAgents().Where(x => x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
-                                                             x.State == AgentState.Started).Select(x => x.Id).ToList();
+            var agentIds = WhitePages.AllAgents().Where(x =>
+                x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
+                x.State == AgentState.Started).Select(x => x.Id).ToList();
             WhitePages.Network.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.Network);
         }
 
@@ -393,11 +395,12 @@ namespace Symu.Environment
         }
 
         /// <summary>
-        ///     Add Organization knowledge 
+        ///     Add Organization knowledge
         /// </summary>
         public virtual void AddOrganizationKnowledges()
         {
         }
+
         /// <summary>
         ///     Clone repository of Knowledge network
         /// </summary>
@@ -411,11 +414,12 @@ namespace Symu.Environment
 
 
         /// <summary>
-        ///     Add Organization database 
+        ///     Add Organization database
         /// </summary>
         public virtual void AddOrganizationDatabase()
         {
         }
+
         /// <summary>
         ///     Clone repository of Databases network
         /// </summary>

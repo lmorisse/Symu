@@ -53,15 +53,17 @@ namespace SymuToolsTests.Math.ProbabilityDistributions
             Assert.AreEqual(10, t.Length);
             for (var i = 0; i < 10; i++)
             {
-                Assert.IsTrue(System.Math.Abs(t[i]) < Constants.Tolerance || System.Math.Abs(t[i] - 1) < Constants.Tolerance ||
+                Assert.IsTrue(System.Math.Abs(t[i]) < Constants.Tolerance ||
+                              System.Math.Abs(t[i] - 1) < Constants.Tolerance ||
                               System.Math.Abs(t[i] + 1) < Constants.Tolerance);
             }
         }
+
         [TestMethod]
         public void SampleByMeanToByteTest()
         {
             // test that there is no exception
-            Assert.IsTrue(DiscreteUniform.SampleByMeanToByte(1, 2)>=0);
+            Assert.IsTrue(DiscreteUniform.SampleByMeanToByte(1, 2) >= 0);
         }
     }
 }

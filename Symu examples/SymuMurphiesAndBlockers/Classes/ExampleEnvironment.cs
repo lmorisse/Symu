@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -57,17 +56,17 @@ namespace SymuMurphiesAndBlockers.Classes
         }
 
         /// <summary>
-        ///     Add Organization knowledge 
+        ///     Add Organization knowledge
         /// </summary>
         public override void AddOrganizationKnowledges()
         {
-            base.AddOrganizationKnowledges();  
+            base.AddOrganizationKnowledges();
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort)i, i.ToString(), 10);
+                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
             }
         }

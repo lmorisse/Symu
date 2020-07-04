@@ -447,7 +447,7 @@ namespace Symu.Classes.Task.Manager
         ///     manager.OnPrioritizeTasks += PrioritizeManager;
         ///     public void PrioritizeManager(object sender, TasksEventArgs e)
         ///     {
-        ///         e.Tasks = e.Tasks.OrderBy(i => i.Created);
+        ///     e.Tasks = e.Tasks.OrderBy(i => i.Created);
         ///     }
         /// </example>
         public SymuTask PrioritizeNextTask(IEnumerable<SymuTask> tasks)

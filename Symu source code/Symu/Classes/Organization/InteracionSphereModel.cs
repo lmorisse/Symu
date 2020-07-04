@@ -12,7 +12,6 @@
 using System;
 using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Environment;
 
 #endregion
 
@@ -26,6 +25,14 @@ namespace Symu.Classes.Organization
         private float _maxSphereDensity = 1;
 
         private float _minSphereDensity;
+
+        private float _relativeActivityWeight = 1;
+
+        private float _relativeBeliefWeight = 1;
+
+        private float _relativeKnowledgeWeight = 1;
+
+        private float _socialDemographicWeight = 1;
 
         /// <summary>
         ///     If set to true, sphere of interaction will be re calculate at the FrequencyOfSphereUpdate.
@@ -53,6 +60,7 @@ namespace Symu.Classes.Organization
                 {
                     throw new ArgumentOutOfRangeException("MinSphereDensity should be between [0;1]");
                 }
+
                 if (value > _maxSphereDensity)
                 {
                     throw new ArgumentOutOfRangeException("MinSphereDensity should be <= MaxSphereDensity");
@@ -75,6 +83,7 @@ namespace Symu.Classes.Organization
                 {
                     throw new ArgumentOutOfRangeException("MaxSphereDensity should be between [0;1]");
                 }
+
                 if (value < _minSphereDensity)
                 {
                     throw new ArgumentOutOfRangeException("MaxSphereDensity should be <= MinSphereDensity");
@@ -83,8 +92,6 @@ namespace Symu.Classes.Organization
                 _maxSphereDensity = value;
             }
         }
-
-        private float _socialDemographicWeight = 1;
 
         /// <summary>
         ///     Weight of SocialDemographic in the calculus of DerivedParameter
@@ -104,8 +111,6 @@ namespace Symu.Classes.Organization
             }
         }
 
-        private float _relativeBeliefWeight = 1;
-
         /// <summary>
         ///     Weight of RelativeBelief in the calculus of DerivedParameter
         ///     Range[0;1]
@@ -124,8 +129,6 @@ namespace Symu.Classes.Organization
             }
         }
 
-        private float _relativeKnowledgeWeight = 1;
-
         /// <summary>
         ///     Weight of RelativeKnowledge in the calculus of DerivedParameter
         ///     Range[0;1]
@@ -143,8 +146,6 @@ namespace Symu.Classes.Organization
                 _relativeKnowledgeWeight = value;
             }
         }
-
-        private float _relativeActivityWeight = 1;
 
         /// <summary>
         ///     Weight of RelativeBeliefs in the calculus of DerivedParameter

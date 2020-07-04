@@ -52,6 +52,7 @@ namespace Symu.Repository.Networks.Sphere
 
             return max;
         }
+
         /// <summary>
         ///     Max value of the interaction matrix
         /// </summary>
@@ -79,6 +80,7 @@ namespace Symu.Repository.Networks.Sphere
 
             return min;
         }
+
         /// <summary>
         ///     The likelihood that one actor is to attempt to interact with another is defined by the fact that
         ///     the actor i knows the fact k or not
@@ -296,7 +298,7 @@ namespace Symu.Repository.Networks.Sphere
                 return 0;
             }
 
-            return (float)density / total;
+            return (float) density / total;
         }
     }
 }

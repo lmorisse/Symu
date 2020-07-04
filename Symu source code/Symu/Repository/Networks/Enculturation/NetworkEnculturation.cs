@@ -93,8 +93,9 @@ namespace Symu.Repository.Networks.Enculturation
 
             return 0;
         }
+
         /// <summary>
-        /// Take the numberOfEmployees with the lowest enculturation level
+        ///     Take the numberOfEmployees with the lowest enculturation level
         /// </summary>
         /// <param name="numberOfEmployees"></param>
         public IEnumerable<AgentId> Take(short numberOfEmployees)

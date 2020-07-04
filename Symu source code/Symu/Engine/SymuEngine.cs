@@ -53,11 +53,6 @@ namespace Symu.Engine
         /// </summary>
         public SimulationResults SimulationResults { get; set; } = new SimulationResults();
 
-        /// <summary>
-        ///     The result of the actual iteration
-        /// </summary>
-        public IterationResult IterationResult => Environment?.IterationResult;
-
         #region Step level
 
         /// <summary>

@@ -34,14 +34,6 @@ namespace Symu.Classes.Agents
     public abstract partial class Agent
     {
         private byte _newInteractionCounter;
-        /// <summary>
-        ///     Day of creation of the  agent
-        /// </summary>
-        public ushort Created { get; private set; }
-        /// <summary>
-        ///     Day of stopped of the agent
-        /// </summary>
-        public ushort Stopped { get; private set; }
 
         /// <summary>
         ///     constructor for generic new()
@@ -71,6 +63,16 @@ namespace Symu.Classes.Agents
         {
             CreateAgent(agentId, environment, template);
         }
+
+        /// <summary>
+        ///     Day of creation of the  agent
+        /// </summary>
+        public ushort Created { get; private set; }
+
+        /// <summary>
+        ///     Day of stopped of the agent
+        /// </summary>
+        public ushort Stopped { get; private set; }
 
         /// <summary>
         ///     The name of the agent. Each agent must have a unique name in its environment.
@@ -324,8 +326,9 @@ namespace Symu.Classes.Agents
                 BeliefsModel.InitializeBeliefs();
             }
         }
+
         /// <summary>
-        /// Set the state of the agent to Stopping so that the agent will be stopped at the end of this step
+        ///     Set the state of the agent to Stopping so that the agent will be stopped at the end of this step
         /// </summary>
         public void Stop()
         {
@@ -463,7 +466,7 @@ namespace Symu.Classes.Agents
             if (Schedule.Step == 0)
             {
                 // Not sure the receiver exists already
-                SendDelayed(message, Schedule.Step);
+                TrySendDelayed(message);
             }
             else
             {

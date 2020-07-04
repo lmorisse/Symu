@@ -11,7 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Messaging.Manager;
@@ -188,10 +187,6 @@ namespace Symu.Classes.Agents
 
             var sender = Environment.WhitePages.GetAgent(senderId);
             // sender may be stopped since he accept this new interaction
-            if (sender == null)
-            {
-                ///todo remove 
-            }
             if (!Cognitive.InteractionPatterns.IsPartOfInteractionSphere ||
                 !sender.Cognitive.InteractionPatterns.IsPartOfInteractionSphere)
             {
@@ -442,9 +437,9 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        /// Agent try send a message to another agent
-        /// if the receiver is stopping or stopped, the message is not sent
-        /// otherwise, the message is send to the next step
+        ///     Agent try send a message to another agent
+        ///     if the receiver is stopping or stopped, the message is not sent
+        ///     otherwise, the message is send to the next step
         /// </summary>
         /// <param name="message"></param>
         public void TrySendDelayed(Message message)
@@ -453,9 +448,9 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        /// Agent try send a message to another agent
-        /// if the receiver is stopping or stopped, the message is not sent
-        /// otherwise, the message is send with delay
+        ///     Agent try send a message to another agent
+        ///     if the receiver is stopping or stopped, the message is not sent
+        ///     otherwise, the message is send with delay
         /// </summary>
         /// <param name="message"></param>
         /// <param name="step"></param>
@@ -472,6 +467,7 @@ namespace Symu.Classes.Agents
                 // receiver is already stopped
                 return;
             }
+
             switch (receiver.State)
             {
                 case AgentState.Stopping:
@@ -482,7 +478,8 @@ namespace Symu.Classes.Agents
                     break;
             }
         }
-        public void SendDelayed(Message message, ushort step)
+
+        private void SendDelayed(Message message, ushort step)
         {
             Environment.SendDelayedMessage(message, step);
         }

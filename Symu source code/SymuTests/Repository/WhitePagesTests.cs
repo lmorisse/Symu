@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Symu.Repository;
-using Symu.Tools;
-
 #region Licence
 
 // Description: SymuBiz - SymuTests
@@ -13,6 +9,19 @@ using Symu.Tools;
 
 #region using directives
 
+#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+using System.Collections.Generic;
+
+#region using directives
+
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,6 +30,8 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Engine;
 using SymuTests.Helpers;
+
+#endregion
 
 #endregion
 
@@ -161,6 +172,7 @@ namespace SymuTests.Repository
                 Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(agentId));
             }
         }
+
         [TestMethod]
         public void GetFilteredAgentIdsWithExclusionListTest()
         {
@@ -177,8 +189,10 @@ namespace SymuTests.Repository
                 excludeIds.Add(agent.Id);
             }
 
-            Assert.AreEqual(10, _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestAgent.ClassKey, excludeIds).Count);
+            Assert.AreEqual(10,
+                _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestAgent.ClassKey, excludeIds).Count);
         }
+
         [TestMethod]
         public void GetFilteredAgentsWithExclusionListTest()
         {
@@ -195,7 +209,8 @@ namespace SymuTests.Repository
                 excludeIds.Add(agent.Id);
             }
 
-            Assert.AreEqual(10, _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestAgent.ClassKey, excludeIds).Count());
+            Assert.AreEqual(10,
+                _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestAgent.ClassKey, excludeIds).Count());
         }
     }
 }

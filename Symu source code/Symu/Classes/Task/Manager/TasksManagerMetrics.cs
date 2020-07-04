@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: Symu - Simulation
+// Description: SymuBiz - Symu
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -62,6 +62,7 @@ namespace Symu.Classes.Task.Manager
             {
                 clone.InProgress.Add(inProgress.Key, inProgress.Value);
             }
+
             foreach (var done in Done)
             {
                 clone.Done.Add(done.Key, done.Value);

@@ -140,7 +140,7 @@ namespace Symu.Classes.Task
         ///     Time to live : task may be created have a limited time to live,
         ///     it will self-destruct if the time is exceeded
         ///     -1 for unlimited time to live
-        /// TimeToLive is in days
+        ///     TimeToLive is in days
         /// </summary>
         /// <example>An information on an IRC channel has a more limited lifetime than an email</example>
         /// <example>Slack offer a limited history, some messaging system have a limited storage capacity</example>

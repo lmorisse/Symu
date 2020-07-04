@@ -10,7 +10,6 @@
 #region using directives
 
 using System.Collections.Generic;
-using System.Linq;
 using Symu.Environment;
 using Symu.Repository.Networks.Sphere;
 using Symu.Tools.Math;
@@ -28,6 +27,7 @@ namespace Symu.Results.Organization
         public OrganizationFlexibility(SymuEnvironment environment) : base(environment)
         {
         }
+
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
         ///     Rapid formation and reformation of triads is one key aspect of flexibility

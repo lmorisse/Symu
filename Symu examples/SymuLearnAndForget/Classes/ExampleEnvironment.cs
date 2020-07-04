@@ -49,7 +49,7 @@ namespace SymuLearnAndForget.Classes
         }
 
         /// <summary>
-        ///     Add Organization knowledge 
+        ///     Add Organization knowledge
         /// </summary>
         public override void AddOrganizationKnowledges()
         {
@@ -59,7 +59,7 @@ namespace SymuLearnAndForget.Classes
         }
 
         /// <summary>
-        ///     Add Organization database 
+        ///     Add Organization database
         /// </summary>
         public override void AddOrganizationDatabase()
         {

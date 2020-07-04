@@ -122,6 +122,19 @@ namespace Symu.Repository.Networks.Activities
         }
 
         /// <summary>
+        ///     Remove an activity from a group
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <param name="groupId"></param>
+        public void RemoveActivity(AgentId groupId, Activity activity)
+        {
+            if (Exists(groupId))
+            {
+                _repository[groupId].Remove(activity);
+            }
+        }
+
+        /// <summary>
         ///     Add an activity to a group
         /// </summary>
         /// <param name="activities"></param>
@@ -353,7 +366,7 @@ namespace Symu.Repository.Networks.Activities
         /// <returns></returns>
         public bool HasAgentActivities(AgentId agentId)
         {
-            return AgentActivities.Any(a => a.Value.Exists(v => v!= null && v.AgentId.Equals(agentId)));
+            return AgentActivities.Any(a => a.Value.Exists(v => v != null && v.AgentId.Equals(agentId)));
         }
 
         #endregion

@@ -11,7 +11,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics.Statistics;
 using Symu.Environment;
 
 #endregion
@@ -30,27 +29,27 @@ namespace Symu.Results.Organization
         /// <summary>
         ///     List of knowledge performance per step
         /// </summary>
-        public List<StatisticalResultStruct> Knowledge { get; private set; } = new List<StatisticalResultStruct>();
+        public List<StatisticalResultStruct> Knowledge { get; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of belief performance per step
         /// </summary>
-        public List<StatisticalResultStruct> Beliefs { get; private set; } = new List<StatisticalResultStruct>();
+        public List<StatisticalResultStruct> Beliefs { get; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of learning performance per step
         /// </summary>
-        public List<StatisticalResultStruct> Learning { get; private set; } = new List<StatisticalResultStruct>();
+        public List<StatisticalResultStruct> Learning { get; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of forgetting performance per step
         /// </summary>
-        public List<StatisticalResultStruct> Forgetting { get; private set; } = new List<StatisticalResultStruct>();
+        public List<StatisticalResultStruct> Forgetting { get; } = new List<StatisticalResultStruct>();
 
         /// <summary>
         ///     List of Global Knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public List<StatisticalResultStruct> KnowledgeObsolescence { get; private set; } =
+        public List<StatisticalResultStruct> KnowledgeObsolescence { get; } =
             new List<StatisticalResultStruct>();
 
         /// <summary>

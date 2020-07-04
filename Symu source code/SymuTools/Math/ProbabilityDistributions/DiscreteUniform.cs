@@ -59,6 +59,7 @@ namespace Symu.Tools.Math.ProbabilityDistributions
             {
                 lower = (byte) (mean - standardDeviation);
             }
+
             var upper = (byte) (mean + standardDeviation);
             return SampleToByte(lower, upper);
         }

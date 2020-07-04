@@ -203,7 +203,7 @@ namespace Symu.Repository
         }
 
         /// <summary>
-        /// FilteredAgentIdsByClassKey with an exclusion list
+        ///     FilteredAgentIdsByClassKey with an exclusion list
         /// </summary>
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
@@ -221,7 +221,7 @@ namespace Symu.Repository
 
 
         /// <summary>
-        /// FilteredAgentsByClassKey with an exclusion list
+        ///     FilteredAgentsByClassKey with an exclusion list
         /// </summary>
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
@@ -233,6 +233,7 @@ namespace Symu.Repository
             {
                 actors.RemoveAll(x => excludeIds.Contains(x.Id));
             }
+
             return actors;
         }
 
@@ -241,14 +242,18 @@ namespace Symu.Repository
         #region ToStop & Stopped Agents
 
         public bool HasAgentsToStop => AllAgents().Count(a => a.State == AgentState.Stopping) > 0;
+
         /// <summary>
-        /// Get the number of agents which are part of the interaction sphere
+        ///     Get the number of agents which are part of the interaction sphere
         /// </summary>
-        public ushort GetInteractionSphereCount => (ushort) AllAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+        public ushort GetInteractionSphereCount =>
+            (ushort) AllAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+
         /// <summary>
-        /// Get the agents which are part of the interaction sphere
+        ///     Get the agents which are part of the interaction sphere
         /// </summary>
-        public IEnumerable<Agent> GetInteractionSphereAgents => AllAgents().Where(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+        public IEnumerable<Agent> GetInteractionSphereAgents =>
+            AllAgents().Where(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
 
         /// <summary>
         ///     Stop Agent is managed by the WhitePages services responsible of Agent Lifecycle Management

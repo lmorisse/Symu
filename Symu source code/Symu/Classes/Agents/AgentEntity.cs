@@ -39,7 +39,7 @@ namespace Symu.Classes.Agents
             Name = name;
         }
 
-        public AgentEntity(ushort key, byte classKey, string name, ushort parent) : this(key, classKey, name)
+        public AgentEntity(ushort key, byte classKey, string name, AgentId parent) : this(key, classKey, name)
         {
             Parent = parent;
         }
@@ -51,7 +51,7 @@ namespace Symu.Classes.Agents
         public AgentId Id { get; set; }
 
         public string Name { get; set; }
-        public ushort Parent { get; set; }
+        public AgentId Parent { get; set; }
 
         public void CopyTo(AgentEntity entity)
         {

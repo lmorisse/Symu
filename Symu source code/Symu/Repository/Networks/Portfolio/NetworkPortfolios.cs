@@ -115,7 +115,6 @@ namespace Symu.Repository.Networks.Portfolio
             {
                 List[key].RemoveAll(n => n.AgentId.Equals(agentId));
             }
-
         }
 
         public void RemoveObject(AgentId objectId)
@@ -158,13 +157,6 @@ namespace Symu.Repository.Networks.Portfolio
         /// <returns></returns>
         public IEnumerable<AgentId> GetObjectIds(AgentId agentId, byte type)
         {
-            //var objectIds = new HashSet<AgentId>();
-            //foreach (var objectId in List.Keys.Where(iId => List[iId].Exists(n => n.Equals(agentId, type))))
-            //{
-            //    objectIds.Add(objectId);
-            //}
-
-            //return objectIds;
             return List.Keys.Where(iId => List[iId].Exists(n => n != null && n.Equals(agentId, type)));
         }
 
@@ -224,6 +216,11 @@ namespace Symu.Repository.Networks.Portfolio
             {
                 List[objectId].RemoveAll(l => l.Equals(agentId, groupPortfolio.TypeOfUse));
             }
+        }
+
+        public void RemoveMemberFromObject(AgentId agentId, AgentId objectId)
+        {
+            List[objectId].RemoveAll(l => l.Equals(agentId));
         }
 
         /// <summary>

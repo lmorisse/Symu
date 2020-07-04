@@ -16,7 +16,8 @@ using System;
 namespace Symu.Tools.Math.ProbabilityDistributions
 {
     /// <summary>
-    ///     a log-normal (or lognormal) distribution is a continuous probability distribution of a random variable whose logarithm is normally distributed
+    ///     a log-normal (or lognormal) distribution is a continuous probability distribution of a random variable whose
+    ///     logarithm is normally distributed
     ///     The parameter mu  is the mean or expectation of the distribution (and also its median and mode);
     ///     and sigma  is its standard deviation.
     ///     The variance of the distribution is sigma ^2.

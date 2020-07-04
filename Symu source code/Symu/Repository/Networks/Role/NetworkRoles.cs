@@ -74,7 +74,7 @@ namespace Symu.Repository.Networks.Role
 
         public bool ExistAgentForRoleType(byte roleType, AgentId groupId)
         {
-            return List.Exists(l => l!= null && l.HasRoleInGroup(roleType, groupId));
+            return List.Exists(l => l != null && l.HasRoleInGroup(roleType, groupId));
         }
 
         public AgentId GetAgentIdForRoleType(byte roleType, AgentId groupId)
@@ -103,7 +103,7 @@ namespace Symu.Repository.Networks.Role
 
         public bool HasARoleIn(AgentId agentId, byte roleType, AgentId groupId)
         {
-            return List.Exists(l => l!= null && l.HasRoleInGroup(agentId, roleType, groupId));
+            return List.Exists(l => l != null && l.HasRoleInGroup(agentId, roleType, groupId));
         }
 
         public bool HasARoleIn(AgentId agentId, AgentId groupId)
