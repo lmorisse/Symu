@@ -42,7 +42,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public float Obsolescence => List.Any() ? List.Average(t => t.Obsolescence) : 0;
+        public float Obsolescence(float step) => List.Any() ? List.Average(t => t.Obsolescence(step)) : 0;
 
         public int Count => List.Count;
 

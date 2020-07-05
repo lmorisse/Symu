@@ -95,7 +95,7 @@ namespace Symu.Results.Organization
         public void HandleKnowledgeObsolescence()
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
-                .Select(e => e.Obsolescence).ToList();
+                .Select(e => e.Obsolescence(Environment.Schedule.Step)).ToList();
             var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
             KnowledgeObsolescence.Add(obsolescence);
         }

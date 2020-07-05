@@ -22,11 +22,6 @@ namespace Symu.Repository.Networks.Knowledges
     public class KnowledgeBits : Bits
     {
         /// <summary>
-        ///     LastStep of the simulation
-        /// </summary>
-        private ushort _lastStep;
-
-        /// <summary>
         ///     Don't use auto property because of rule CA1819
         /// </summary>
         private ushort[] _lastTouched;
@@ -54,7 +49,7 @@ namespace Symu.Repository.Networks.Knowledges
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
         /// <returns>0 for the first step of the simulation</returns>
-        public float Obsolescence => _lastStep > 0 ? 1F - _lastTouched.Average() / _lastStep : 0;
+        public float Obsolescence(float step) => step > 0 ? 1F - _lastTouched.Average() / step : 0;
 
         /// <summary>
         ///     Array of last touched
@@ -85,7 +80,6 @@ namespace Symu.Repository.Networks.Knowledges
         public float GetBit(byte index, ushort step)
         {
             _lastTouched[index] = step;
-            _lastStep = step;
             return GetBit(index);
         }
 

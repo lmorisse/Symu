@@ -107,7 +107,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public float Obsolescence => KnowledgeBits.Obsolescence;
+        public float Obsolescence(float step) => KnowledgeBits.Obsolescence(step);
 
         public byte Length => KnowledgeBits?.Length ?? 0;
 
