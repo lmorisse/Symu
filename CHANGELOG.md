@@ -5,6 +5,7 @@
 * Remove InteractionSphereModel.FrequencyOfSphereUpdate
 * Schedule Bug fixe 
 * AgentEntity.Parent is now an AgentId
+* Knowledge and Beliefs result are in percentage to be easily understandable. Sym examples are updated
 
 ## 0.8.0 [☰](https://github.com/lmorisse/symu/compare/v0.8.0..v0.7.0) by [lmorisse](https://github.com/lmorisse)
 * Refactoring IterationResult

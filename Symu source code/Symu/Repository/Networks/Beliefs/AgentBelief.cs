@@ -215,12 +215,21 @@ namespace Symu.Repository.Networks.Beliefs
         }
 
         /// <summary>
-        ///     Get the sum of all the _knowledgeBits of this knowledgeId
+        ///     Get the sum of all the BeliefBits of this beliefId
         /// </summary>
-        /// <returns>if _knowledgeBits == null, return 0;</returns>
+        /// <returns>if BeliefBits == null, return 0;</returns>
         public float GetBeliefSum()
         {
             return BeliefBits.GetSum();
+        }
+
+        /// <summary>
+        ///     Get the maximum potential of all the BeliefBits of this beliefId
+        /// </summary>
+        /// <returns>if BeliefBits == null, return 0;</returns>
+        public float GetBeliefPotential()
+        {
+            return BeliefBits.Length;
         }
 
         public void SetBeliefBits(float[] beliefBits)

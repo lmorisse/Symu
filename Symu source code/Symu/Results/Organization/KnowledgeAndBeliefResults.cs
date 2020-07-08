@@ -78,17 +78,21 @@ namespace Symu.Results.Organization
 
         public void HandleLearning()
         {
-            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.Learning)
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.CumulativeLearning)
                 .ToList();
-            var learning = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
+            var potentialKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Sum(expertise => expertise.GetKnowledgePotential());
+            var learning = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             Learning.Add(learning);
         }
 
         public void HandleForgetting()
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
-                .Select(e => e.Forgetting).ToList();
-            var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
+                .Select(e => e.CumulativeForgetting).ToList();
+            var sumKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Sum(expertise => expertise.GetKnowledgeSum());
+            var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, sumKnowledge);
             Forgetting.Add(forgetting);
         }
 
@@ -96,15 +100,19 @@ namespace Symu.Results.Organization
         {
             var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Select(e => e.Obsolescence(Environment.Schedule.Step)).ToList();
-            var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
+            var potentialKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Sum(expertise => expertise.GetKnowledgePotential());
+            var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             KnowledgeObsolescence.Add(obsolescence);
         }
 
         public void HandleKnowledge()
         {
-            var sumKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
-                .Select(expertise => expertise.GetKnowledgesSum()).ToList();
-            var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sumKnowledge);
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Select(expertise => expertise.GetKnowledgeSum()).ToList();
+            var potential = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Sum(expertise => expertise.GetKnowledgePotential());
+            var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Knowledge.Add(knowledge);
         }
 
@@ -113,7 +121,9 @@ namespace Symu.Results.Organization
             var sum = Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
                 .Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
-            var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum);
+            var potential= Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
+                .Sum(beliefs => beliefs.GetBeliefsPotential());
+            var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Beliefs.Add(belief);
         }
 

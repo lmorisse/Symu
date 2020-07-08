@@ -59,6 +59,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             On = entity.IsAgentOn();
+            if (!On)
+            {
+                return;
+            }
             _agentId = agentAgentId;
             _networkInfluences = network.NetworkInfluences;
             _networkBeliefs = network.NetworkBeliefs;
@@ -118,15 +122,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefLevel"></param>
         public void BeInfluenced(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
         {
-            //if (beliefId == 0 || beliefBits == null)
-            //{
-            //    return;
-            //}
-
-            if (!On || beliefBits == null) // && beliefId > 0)
+            if (!On || beliefBits == null) 
             {
                 return;
-                //throw new ArgumentNullException(nameof(beliefBits));
             }
 
             // Learning From agent

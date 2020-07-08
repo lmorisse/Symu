@@ -97,12 +97,12 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     Accumulates all learning of the agent for this knowledge during the simulation
         /// </summary>
-        public float Learning { get; private set; }
+        public float CumulativeLearning { get; private set; }
 
         /// <summary>
         ///     Accumulates all forgetting of the agent for this knowledge during the simulation
         /// </summary>
-        public float Forgetting { get; private set; }
+        public float CumulativeForgetting { get; private set; }
 
         /// <summary>
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
@@ -188,6 +188,15 @@ namespace Symu.Repository.Networks.Knowledges
         public float GetKnowledgeSum()
         {
             return KnowledgeBits.GetSum();
+        }
+
+        /// <summary>
+        ///     Get the maximum potential of all the _knowledgeBits of this knowledgeId
+        /// </summary>
+        /// <returns>if _knowledgeBits == null, return 0;</returns>
+        public float GetKnowledgePotential()
+        {
+            return KnowledgeBits.Length;
         }
 
         public void SetKnowledgeBits(float[] knowledgeBits, ushort step)
@@ -280,7 +289,7 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             var realLearning = KnowledgeBits.UpdateBit(index, learningRate, step);
-            Learning += realLearning;
+            CumulativeLearning += realLearning;
             if (realLearning > Tolerance)
             {
                 var learningEventArgs = new LearningEventArgs(KnowledgeId, index, realLearning);
@@ -314,7 +323,7 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             var realForgetting = KnowledgeBits.UpdateBit(index, -forgetRate, step);
-            Forgetting += realForgetting;
+            CumulativeForgetting += realForgetting;
             return realForgetting;
         }
 
@@ -327,7 +336,7 @@ namespace Symu.Repository.Networks.Knowledges
         public float ForgetOldest(float forgettingRate, ushort step)
         {
             var realForgetting = KnowledgeBits.ForgetOldest(forgettingRate, step);
-            Forgetting += realForgetting;
+            CumulativeForgetting += realForgetting;
             return realForgetting;
         }
     }

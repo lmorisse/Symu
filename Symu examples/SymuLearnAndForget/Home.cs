@@ -200,57 +200,59 @@ namespace SymuLearnAndForget
 
         public override void DisplayStep()
         {
+
             DisplayButtons();
             WriteTextSafe(TimeStep, _environment.Schedule.Step.ToString(CultureInfo.InvariantCulture));
             // 1st Agent
+            
             WriteTextSafe(lblKnowledge1,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning1,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.PercentageLearning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting1,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
+                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 2nd Agent
             WriteTextSafe(lblKnowledge2,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
+            _environment.LearnByDoingAgent.KnowledgeModel.Expertise.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning2,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
+                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.PercentageLearning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting2,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
+                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 3rd Agent
             WriteTextSafe(lblKnowledge3,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
+            _environment.LearnByAskingAgent.KnowledgeModel.Expertise.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning3,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
+                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.PercentageLearning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting3,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
+                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // 4th Agent
             WriteTextSafe(lblKnowledge4,
-                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
+            _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning4,
-                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
+                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.PercentageLearning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblForgetting4,
-                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
+                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Expert Agent
             WriteTextSafe(lblExpertKnowledge,
-                _environment.ExpertAgent.KnowledgeModel.Expertise.GetKnowledgesSum()
+            _environment.ExpertAgent.KnowledgeModel.Expertise.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblExpertLearning,
-                _environment.ExpertAgent.KnowledgeModel.Expertise.Learning.ToString("F1",
+                _environment.ExpertAgent.KnowledgeModel.Expertise.PercentageLearning.ToString("F1",
                     CultureInfo.InvariantCulture));
             WriteTextSafe(lblExpertForgetting,
-                _environment.ExpertAgent.KnowledgeModel.Expertise.Forgetting.ToString("F1",
+                _environment.ExpertAgent.KnowledgeModel.Expertise.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Wiki
             WriteTextSafe(lblWiki, _environment.Wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
@@ -274,13 +276,13 @@ namespace SymuLearnAndForget
 
 
             var knowledge = _environment.IterationResult.KnowledgeAndBeliefResults.Knowledge.Last();
-            WriteTextSafe(lblGlobalKnowledge, knowledge.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblGlobalKnowledge, knowledge.Percentage.ToString("F1", CultureInfo.InvariantCulture));
             var obsolescence = _environment.IterationResult.KnowledgeAndBeliefResults.KnowledgeObsolescence.Last();
-            WriteTextSafe(lblGlobalObsolescence, obsolescence.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblGlobalObsolescence, obsolescence.Percentage.ToString("F1", CultureInfo.InvariantCulture));
             var learning = _environment.IterationResult.KnowledgeAndBeliefResults.Learning.Last();
-            WriteTextSafe(lblGlobalLearning, learning.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblGlobalLearning, learning.Percentage.ToString("F1", CultureInfo.InvariantCulture));
             var forgetting = _environment.IterationResult.KnowledgeAndBeliefResults.Forgetting.Last();
-            WriteTextSafe(lblGlobalForgetting, forgetting.Sum.ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblGlobalForgetting, forgetting.Percentage.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         private void button4_Click(object sender, EventArgs e)

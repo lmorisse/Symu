@@ -136,6 +136,25 @@
             this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label52 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -726,6 +745,25 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.groupBox5.Controls.Add(this.label55);
+            this.groupBox5.Controls.Add(this.label52);
+            this.groupBox5.Controls.Add(this.label53);
+            this.groupBox5.Controls.Add(this.label54);
+            this.groupBox5.Controls.Add(this.label47);
+            this.groupBox5.Controls.Add(this.label48);
+            this.groupBox5.Controls.Add(this.label49);
+            this.groupBox5.Controls.Add(this.label50);
+            this.groupBox5.Controls.Add(this.label51);
+            this.groupBox5.Controls.Add(this.label41);
+            this.groupBox5.Controls.Add(this.label42);
+            this.groupBox5.Controls.Add(this.label44);
+            this.groupBox5.Controls.Add(this.label45);
+            this.groupBox5.Controls.Add(this.label46);
+            this.groupBox5.Controls.Add(this.label40);
+            this.groupBox5.Controls.Add(this.label38);
+            this.groupBox5.Controls.Add(this.label28);
+            this.groupBox5.Controls.Add(this.label27);
+            this.groupBox5.Controls.Add(this.label16);
             this.groupBox5.Controls.Add(this.lblGlobalObsolescence);
             this.groupBox5.Controls.Add(this.label39);
             this.groupBox5.Controls.Add(this.lblGlobalKnowledge);
@@ -1230,6 +1268,177 @@
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(227, 154);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(20, 17);
+            this.label16.TabIndex = 51;
+            this.label16.Text = "%";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(227, 189);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(20, 17);
+            this.label27.TabIndex = 52;
+            this.label27.Text = "%";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(227, 224);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(20, 17);
+            this.label28.TabIndex = 53;
+            this.label28.Text = "%";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(227, 259);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(20, 17);
+            this.label38.TabIndex = 54;
+            this.label38.Text = "%";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(227, 292);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(20, 17);
+            this.label40.TabIndex = 55;
+            this.label40.Text = "%";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(313, 292);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(20, 17);
+            this.label41.TabIndex = 60;
+            this.label41.Text = "%";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(313, 259);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(20, 17);
+            this.label42.TabIndex = 59;
+            this.label42.Text = "%";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(313, 224);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(20, 17);
+            this.label44.TabIndex = 58;
+            this.label44.Text = "%";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(313, 189);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(20, 17);
+            this.label45.TabIndex = 57;
+            this.label45.Text = "%";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(313, 154);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(20, 17);
+            this.label46.TabIndex = 56;
+            this.label46.Text = "%";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(404, 292);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(20, 17);
+            this.label47.TabIndex = 65;
+            this.label47.Text = "%";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(404, 259);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(20, 17);
+            this.label48.TabIndex = 64;
+            this.label48.Text = "%";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(404, 224);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(20, 17);
+            this.label49.TabIndex = 63;
+            this.label49.Text = "%";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(404, 189);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(20, 17);
+            this.label50.TabIndex = 62;
+            this.label50.Text = "%";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(404, 154);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(20, 17);
+            this.label51.TabIndex = 61;
+            this.label51.Text = "%";
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(404, 376);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(20, 17);
+            this.label52.TabIndex = 68;
+            this.label52.Text = "%";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(313, 376);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(20, 17);
+            this.label53.TabIndex = 67;
+            this.label53.Text = "%";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(227, 376);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(20, 17);
+            this.label54.TabIndex = 66;
+            this.label54.Text = "%";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(151, 376);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(20, 17);
+            this.label55.TabIndex = 69;
+            this.label55.Text = "%";
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1376,5 +1585,24 @@
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label16;
     }
 }

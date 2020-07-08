@@ -174,7 +174,7 @@ namespace SymuTests.Repository.Networks.Knowledges
             _network.Add(_agentId, agentExpertise);
             agentExpertise = _network.GetAgentExpertise(_agentId);
             Assert.IsNotNull(agentExpertise);
-            Assert.AreEqual(1, agentExpertise.GetKnowledgesSum());
+            Assert.AreEqual(1, agentExpertise.GetKnowledgeSum());
         }
 
         [TestMethod]

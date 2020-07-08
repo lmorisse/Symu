@@ -143,7 +143,7 @@ namespace Symu.Repository.Networks.Databases
         /// </summary>
         public float GetKnowledgesSum()
         {
-            return _database.GetKnowledgesSum();
+            return _database.GetKnowledgeSum();
         }
 
         /// <summary>

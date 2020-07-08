@@ -1,4 +1,6 @@
-﻿namespace Symu.Forms
+﻿using Symu.Environment;
+
+namespace Symu.Forms
 {
     partial class SymuForm
     {
@@ -52,6 +54,37 @@
 
         #endregion
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+
+        /// <summary>
+        /// Set timeStepType and adjust step based ontimeStepType
+        /// </summary>
+        /// <param name="timeStepType"></param>
+        /// <param name="step"></param>
+        /// <returns>Label of the timestep type</returns>
+        protected string SetTimeStep(int timeStepType, ref ushort step)
+        {
+            var s = string.Empty;
+            switch (timeStepType)
+            {
+                case 0:
+                    SetTimeStepType(TimeStepType.Daily);
+                    step *= 365;
+                    s = "days";
+                    break;
+                case 1:
+                    SetTimeStepType(TimeStepType.Weekly);
+                    step *= 52;
+                    s = "weeks";
+                    break;
+                case 2:
+                    SetTimeStepType(TimeStepType.Monthly);
+                    step *= 12;
+                    s = "months";
+                    break;
+            }
+
+            return s;
+        }
     }
 }
 

@@ -227,9 +227,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            var learningStandardDeviation =
+            var stdDev =
                 LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
-            return Normal.Sample(TasksAndPerformance.LearningRate, learningStandardDeviation * _randomLevel);
+            return TasksAndPerformance.LearningRate* Normal.Sample(1, stdDev * _randomLevel);
         }
 
         /// <summary>
@@ -245,9 +245,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            var learningStandardDeviation =
+            var stdDev =
                 LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
-            return Normal.Sample(TasksAndPerformance.LearningByDoingRate, learningStandardDeviation * _randomLevel);
+            return TasksAndPerformance.LearningByDoingRate * Normal.Sample(1, stdDev * _randomLevel);
         }
 
         private static float LearningStandardDeviationValue(GenericLevel level)

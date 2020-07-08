@@ -92,6 +92,15 @@ namespace Symu.Repository.Networks.Beliefs
             return List.Sum(l => l.GetBeliefSum());
         }
 
+        /// <summary>
+        ///     Get the maximum potential of all the beliefs
+        /// </summary>
+        /// <returns></returns>
+        public float GetBeliefsPotential()
+        {
+            return List.Sum(l => l.GetBeliefPotential());
+        }
+
 
         /// <summary>
         ///     Get all the belief Ids of an agent

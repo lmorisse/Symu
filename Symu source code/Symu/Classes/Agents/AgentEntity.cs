@@ -60,7 +60,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            entity.Id = Id; // new AgentId(Id.Key, Id.ClassKey);
+            entity.Id = Id; 
             entity.Name = Name;
             entity.Parent = Parent;
         }

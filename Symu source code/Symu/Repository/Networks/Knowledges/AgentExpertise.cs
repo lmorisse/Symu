@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Symu.Tools.Constants;
 
 #endregion
 
@@ -32,13 +33,69 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     Accumulates all learning of the agent for all knowledge during the simulation
         /// </summary>
-        public float Learning => List.Any() ? List.Sum(t => t.Learning) : 0;
+        public float CumulativeLearning => List.Any() ? List.Sum(t => t.CumulativeLearning) : 0;
 
         /// <summary>
         ///     Accumulates all forgetting of the agent for all knowledge during the simulation
         /// </summary>
-        public float Forgetting => List.Any() ? List.Sum(t => t.Forgetting) : 0;
+        public float CumulativeForgetting => List.Any() ? List.Sum(t => t.CumulativeForgetting) : 0;
 
+        /// <summary>
+        ///     Percentage of all forgetting of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageForgetting
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = CumulativeForgetting;
+                var sumKnowledge = GetKnowledgeSum();
+                if (sumKnowledge > Tolerance)
+                {
+                    percentage = 100 * sum / sumKnowledge;
+                }
+
+                return percentage;
+            }
+        }
+
+        /// <summary>
+        ///     Percentage of all learning of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageLearning
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = CumulativeLearning;
+                var potential = GetKnowledgePotential();
+                if (potential > Tolerance)
+                {
+                    percentage = 100 * sum / potential;
+                }
+
+                return percentage;
+            }
+        }
+
+        /// <summary>
+        ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageKnowledge
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = GetKnowledgeSum();
+                var potential = GetKnowledgePotential();
+                if (potential > Tolerance)
+                {
+                    percentage = 100 * sum / potential;
+                }
+
+                return percentage;
+            }
+        }
         /// <summary>
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
@@ -52,21 +109,21 @@ namespace Symu.Repository.Networks.Knowledges
         public event EventHandler<LearningEventArgs> OnAfterLearning;
 
         /// <summary>
-        ///     Get the sum of all the knowledges
+        ///     Get the sum of all the knowledge
         /// </summary>
         /// <returns></returns>
-        public float GetKnowledgesSum()
+        public float GetKnowledgeSum()
         {
             return List.Sum(l => l.GetKnowledgeSum());
         }
 
         /// <summary>
-        ///     Get the sum of all the knowledges
+        ///     Get the maximum potential knowledge
         /// </summary>
         /// <returns></returns>
-        public float GetNormalizedKnowledgesSum()
+        public float GetKnowledgePotential()
         {
-            return List.Sum(l => l.GetKnowledgeSum());
+            return List.Sum(l => l.GetKnowledgePotential());
         }
 
         public bool Any()

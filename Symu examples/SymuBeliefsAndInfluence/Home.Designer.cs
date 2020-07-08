@@ -114,6 +114,8 @@
             this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -164,6 +166,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label36);
+            this.groupBox3.Controls.Add(this.label35);
             this.groupBox3.Controls.Add(this.TasksCancelled);
             this.groupBox3.Controls.Add(this.label24);
             this.groupBox3.Controls.Add(this.label29);
@@ -983,6 +987,25 @@
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(222, 55);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(20, 17);
+            this.label35.TabIndex = 34;
+            this.label35.Text = "%";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.ForeColor = System.Drawing.SystemColors.Window;
+            this.label36.Location = new System.Drawing.Point(322, 55);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(20, 17);
+            this.label36.TabIndex = 35;
+            this.label36.Text = "%";
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1103,5 +1126,7 @@
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label35;
     }
 }
