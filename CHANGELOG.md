@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.8.1 [☰](https://github.com/lmorisse/symu/compare/v0.8.1..v0.8.0) by [lmorisse](https://github.com/lmorisse)
+## 0.9 [☰](https://github.com/lmorisse/symu/compare/v0.9.0..v0.8.0) by [lmorisse](https://github.com/lmorisse)
 * Remove InteractionSphereModel.FrequencyOfSphereUpdate
 * Schedule Bug fixe 
 * AgentEntity.Parent is now an AgentId
