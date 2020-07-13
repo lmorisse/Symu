@@ -96,12 +96,16 @@ namespace Symu.Repository.Networks.Knowledges
                 return percentage;
             }
         }
+
+        public int Count => List.Count;
+
         /// <summary>
         ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public float Obsolescence(float step) => List.Any() ? List.Average(t => t.Obsolescence(step)) : 0;
-
-        public int Count => List.Count;
+        public float Obsolescence(float step)
+        {
+            return List.Any() ? List.Average(t => t.Obsolescence(step)) : 0;
+        }
 
         /// <summary>
         ///     EventHandler triggered after learning a new information

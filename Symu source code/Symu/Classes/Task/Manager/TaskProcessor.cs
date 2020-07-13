@@ -105,7 +105,7 @@ namespace Symu.Classes.Task.Manager
         }
 
         /// <summary>
-        ///     CancelBlocker a task in the TasksManager
+        ///     Cancel a task in the TasksManager
         /// </summary>
         /// <param name="task"></param>
         public void Cancel(SymuTask task)

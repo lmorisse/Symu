@@ -13,6 +13,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
+using Symu.Common;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Beliefs;
@@ -78,7 +79,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.On = false;
             _environment.Organization.Murphies.UnAvailability.On = false;
             _environment.Organization.Murphies.IncompleteInformation.On = false;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -100,7 +102,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.UnAvailability.On = true;
             _environment.Organization.Murphies.UnAvailability.RateOfAgentsOn = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -121,7 +124,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.UnAvailability.On = true;
             _environment.Organization.Murphies.UnAvailability.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.UnAvailability.RateOfUnavailability = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -163,7 +167,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -212,7 +217,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -257,7 +263,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.ThresholdForReacting = 1;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
             _environment.KnowledgeLevel = KnowledgeLevel.FullKnowledge;
 
             _simulation.Process();
@@ -413,11 +420,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
 
             _simulation.Process();
+            Assert.AreNotEqual(0,_environment.IterationResult.Tasks.Incorrectness);
             if (_environment.IterationResult.Tasks.Done > 0)
-            {
-                Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Incorrectness);
-            }
-            else
             {
                 Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Cancelled);
             }
@@ -438,7 +442,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteInformation.On = false;
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -482,7 +487,8 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
 
             _simulation.Process();
 
@@ -504,7 +510,7 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
-            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
+            _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel = 0;
             _environment.Organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevel.StronglyDisagree;
 

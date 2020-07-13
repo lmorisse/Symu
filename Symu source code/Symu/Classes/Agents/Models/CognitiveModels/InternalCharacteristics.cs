@@ -52,7 +52,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             #region Risk aversion
 
-            internalCharacteristics.RiskAversionThreshold = RiskAversionThreshold;
+            internalCharacteristics.RiskAversionLevel = RiskAversionLevel;
 
             #endregion
 
@@ -313,8 +313,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         #region Risk aversion
 
-        private float _riskAversionThreshold;
-
         /// <summary>
         ///     The risk aversion parameter affects whether or not an agent can make a particular decision.
         ///     Agents can accumulate beliefs during the simulation and in the absence of risk aversion will act upon these
@@ -328,17 +326,30 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     RiskAversionThreshold should be > Environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting
         ///     Range [0;1]
         /// </summary>
-        public float RiskAversionThreshold
-        {
-            get => _riskAversionThreshold;
-            set
-            {
-                if (value < 0 || value > 1)
-                {
-                    throw new ArgumentOutOfRangeException("RiskAversionThreshold should be between 0 and 1");
-                }
+        public GenericLevel RiskAversionLevel { get; set; }
 
-                _riskAversionThreshold = value;
+        public float RiskAversionValue()
+        {
+            switch (RiskAversionLevel)
+            {
+                // No risk aversion
+                case GenericLevel.None:
+                    return 1;
+                case GenericLevel.VeryLow:
+                    return 0.83F;
+                case GenericLevel.Low:
+                    return 0.66F;
+                case GenericLevel.Medium:
+                    return 0.5F;
+                case GenericLevel.High:
+                    return 0.34F;
+                case GenericLevel.VeryHigh:
+                    return 0.17F;
+                // Full risk aversion
+                case GenericLevel.Complete:
+                    return 0;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(RiskAversionLevel), RiskAversionLevel, null);
             }
         }
 

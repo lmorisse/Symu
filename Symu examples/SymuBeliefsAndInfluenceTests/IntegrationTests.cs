@@ -13,6 +13,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
+using Symu.Common;
 using Symu.Engine;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Tools;
@@ -223,7 +224,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoRiskAversionTest()
         {
             _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold = 1;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel = GenericLevel.None;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
             _simulation.Process();
             CheckNoChange();
@@ -255,8 +256,8 @@ namespace SymuBeliefsAndInfluenceTests
         public void FullWeightTest()
         {
             _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                0;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.Complete;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
@@ -277,8 +278,8 @@ namespace SymuBeliefsAndInfluenceTests
         public void FullWeightTest1()
         {
             _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                1;
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
             _environment.WhitePages.Network.NetworkBeliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
@@ -298,8 +299,8 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void StronglyDisagreeTest()
         {
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                1; // no risk aversion
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
@@ -321,8 +322,8 @@ namespace SymuBeliefsAndInfluenceTests
         [TestMethod]
         public void StronglyAgreeTest()
         {
-            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                1; // no risk aversion
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevel.None;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             _environment.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin = 1;
             _environment.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =

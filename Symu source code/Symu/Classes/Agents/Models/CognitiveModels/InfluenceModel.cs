@@ -63,6 +63,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 return;
             }
+
             _agentId = agentAgentId;
             _networkInfluences = network.NetworkInfluences;
             _networkBeliefs = network.NetworkBeliefs;
@@ -122,7 +123,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefLevel"></param>
         public void BeInfluenced(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
         {
-            if (!On || beliefBits == null) 
+            if (!On || beliefBits == null)
             {
                 return;
             }

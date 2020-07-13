@@ -25,9 +25,31 @@ namespace Symu.Results
     public class StatisticalResultStruct
     {
         /// <summary>
-        /// Maximum potential value of the Sum : the sum of potential of each agent, not the potential of the mean
+        ///     Maximum potential value of the Sum : the sum of potential of each agent, not the potential of the mean
         /// </summary>
         private readonly float _potential;
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="sum"></param>
+        /// <param name="mean"></param>
+        /// <param name="standardDeviation"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="potential">Maximum potential value of the Sum : the sum of potential of each agent</param>
+        /// <param name="step"></param>
+        public StatisticalResultStruct(float sum, float mean, float standardDeviation, float min, float max,
+            float potential, ushort step)
+        {
+            Sum = sum;
+            Mean = mean;
+            StandardDeviation = standardDeviation;
+            Minimum = min;
+            Maximum = max;
+            _potential = potential;
+            Step = step;
+        }
 
         /// <summary>
         ///     Sum in the organization
@@ -40,7 +62,7 @@ namespace Symu.Results
         public float Mean { get; }
 
         /// <summary>
-        ///     Standard deviation 
+        ///     Standard deviation
         /// </summary>
         public float StandardDeviation { get; }
 
@@ -53,12 +75,14 @@ namespace Symu.Results
         ///     Maximum in the organization
         /// </summary>
         public float Maximum { get; }
+
         /// <summary>
-        /// The percentage is calculated based on the Sum and the Maximum potential value
+        ///     The percentage is calculated based on the Sum and the Maximum potential value
         /// </summary>
         public float Percentage => Math.Abs(_potential) < Tolerance ? 0 : 100F * Sum / _potential;
+
         /// <summary>
-        /// The standard deviation normalized for the percentage
+        ///     The standard deviation normalized for the percentage
         /// </summary>
         public float StdDevPercentage => Math.Abs(_potential) < Tolerance ? 0 : 100F * StandardDeviation / _potential;
 
@@ -68,28 +92,9 @@ namespace Symu.Results
         {
             return "Sum " + Sum + "Average " + Mean + " - stdDev " + StandardDeviation + " / step" + Step;
         }
+
         /// <summary>
-        /// Constructor 
-        /// </summary>
-        /// <param name="sum"></param>
-        /// <param name="mean"></param>
-        /// <param name="standardDeviation"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="potential">Maximum potential value of the Sum : the sum of potential of each agent</param>
-        /// <param name="step"></param>
-        public StatisticalResultStruct(float sum, float mean, float standardDeviation, float min, float max, float potential, ushort step)
-        {
-            Sum = sum;
-            Mean = mean;
-            StandardDeviation = standardDeviation;
-            Minimum = min;
-            Maximum = max;
-            _potential = potential;
-            Step = step;
-        }
-        /// <summary>
-        /// Factory method for the result 
+        ///     Factory method for the result
         /// </summary>
         /// <param name="step"></param>
         /// <param name="values"></param>
@@ -106,8 +111,9 @@ namespace Symu.Results
             var floats = values.Select(Convert.ToSingle).ToList();
             return SetStruct(step, floats, potential);
         }
+
         /// <summary>
-        /// Factory method for the struct
+        ///     Factory method for the struct
         /// </summary>
         /// <param name="step"></param>
         /// <param name="values"></param>

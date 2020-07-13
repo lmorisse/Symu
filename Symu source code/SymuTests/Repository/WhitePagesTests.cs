@@ -9,6 +9,8 @@
 
 #region using directives
 
+#region using directives
+
 #region Licence
 
 // Description: SymuBiz - SymuTests
@@ -18,11 +20,10 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 #region using directives
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
@@ -30,6 +31,8 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Engine;
 using SymuTests.Helpers;
+
+#endregion
 
 #endregion
 

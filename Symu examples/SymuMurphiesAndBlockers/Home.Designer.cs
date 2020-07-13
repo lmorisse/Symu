@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Murphies", System.Windows.Forms.HorizontalAlignment.Center);
-            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem("Incomplete information");
-            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Murphies", System.Windows.Forms.HorizontalAlignment.Center);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Incomplete information");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "Changing Information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
             "Incorrectness information"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Communication breakdowns"}, -1, System.Drawing.SystemColors.InactiveCaption, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem("Agent unavailability");
-            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem("Incomplete knowledge");
-            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem("Incomplete belief");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Agent unavailability");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Incomplete knowledge");
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Incomplete belief");
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -423,9 +423,9 @@
             this.label40.AutoSize = true;
             this.label40.Location = new System.Drawing.Point(44, 177);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(51, 17);
+            this.label40.Size = new System.Drawing.Size(88, 21);
             this.label40.TabIndex = 202;
-            this.label40.Text = "CancelBlocker";
+            this.label40.Text = "Cancelled";
             // 
             // label34
             // 
@@ -887,36 +887,36 @@
             this.lvMurphies.CheckBoxes = true;
             this.lvMurphies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3});
-            listViewGroup4.Header = "Murphies";
-            listViewGroup4.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-            listViewGroup4.Name = "Murphies";
+            listViewGroup1.Header = "Murphies";
+            listViewGroup1.HeaderAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+            listViewGroup1.Name = "Murphies";
             this.lvMurphies.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup4});
+            listViewGroup1});
             this.lvMurphies.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lvMurphies.HideSelection = false;
-            listViewItem22.Group = listViewGroup4;
-            listViewItem22.StateImageIndex = 0;
-            listViewItem23.Group = listViewGroup4;
-            listViewItem23.StateImageIndex = 0;
-            listViewItem24.Group = listViewGroup4;
-            listViewItem24.StateImageIndex = 0;
-            listViewItem25.Group = listViewGroup4;
-            listViewItem25.StateImageIndex = 0;
-            listViewItem26.Group = listViewGroup4;
-            listViewItem26.StateImageIndex = 0;
-            listViewItem27.Group = listViewGroup4;
-            listViewItem27.StateImageIndex = 0;
-            listViewItem27.ToolTipText = "to complete task";
-            listViewItem28.Group = listViewGroup4;
-            listViewItem28.StateImageIndex = 0;
+            listViewItem1.Group = listViewGroup1;
+            listViewItem1.StateImageIndex = 0;
+            listViewItem2.Group = listViewGroup1;
+            listViewItem2.StateImageIndex = 0;
+            listViewItem3.Group = listViewGroup1;
+            listViewItem3.StateImageIndex = 0;
+            listViewItem4.Group = listViewGroup1;
+            listViewItem4.StateImageIndex = 0;
+            listViewItem5.Group = listViewGroup1;
+            listViewItem5.StateImageIndex = 0;
+            listViewItem6.Group = listViewGroup1;
+            listViewItem6.StateImageIndex = 0;
+            listViewItem6.ToolTipText = "to complete task";
+            listViewItem7.Group = listViewGroup1;
+            listViewItem7.StateImageIndex = 0;
             this.lvMurphies.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem22,
-            listViewItem23,
-            listViewItem24,
-            listViewItem25,
-            listViewItem26,
-            listViewItem27,
-            listViewItem28});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5,
+            listViewItem6,
+            listViewItem7});
             this.lvMurphies.Location = new System.Drawing.Point(17, 350);
             this.lvMurphies.Name = "lvMurphies";
             this.lvMurphies.Scrollable = false;
@@ -1437,28 +1437,28 @@
             // symuorgToolStripMenuItem
             // 
             this.symuorgToolStripMenuItem.Name = "symuorgToolStripMenuItem";
-            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.symuorgToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.symuorgToolStripMenuItem.Text = "Symu.org";
             this.symuorgToolStripMenuItem.Click += new System.EventHandler(this.symuorgToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem1
             // 
             this.documentationToolStripMenuItem1.Name = "documentationToolStripMenuItem1";
-            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.documentationToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.documentationToolStripMenuItem1.Text = "Documentation";
             this.documentationToolStripMenuItem1.Click += new System.EventHandler(this.documentationToolStripMenuItem1_Click);
             // 
             // sourceCodeToolStripMenuItem1
             // 
             this.sourceCodeToolStripMenuItem1.Name = "sourceCodeToolStripMenuItem1";
-            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.sourceCodeToolStripMenuItem1.Size = new System.Drawing.Size(195, 26);
             this.sourceCodeToolStripMenuItem1.Text = "Source code";
             this.sourceCodeToolStripMenuItem1.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem1_Click);
             // 
             // issuesToolStripMenuItem
             // 
             this.issuesToolStripMenuItem.Name = "issuesToolStripMenuItem";
-            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.issuesToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 

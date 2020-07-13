@@ -98,7 +98,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             var forgettingStandardDeviation =
                 ForgettingStandardDeviationValue(InternalCharacteristics.ForgettingStandardDeviation);
-            return InternalCharacteristics.ForgettingMean * Normal.Sample(1, forgettingStandardDeviation * _randomLevel);
+            return InternalCharacteristics.ForgettingMean *
+                   Normal.Sample(1, forgettingStandardDeviation * _randomLevel);
         }
 
         public void UpdateForgettingProcess(TaskKnowledgesBits knowledgesBits)

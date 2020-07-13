@@ -34,6 +34,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TimeStep = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
             this.TasksCancelled = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -88,8 +90,6 @@
             this.ThresholdForReacting = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
-            this.RiskAversion = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
             this.BeliefWeight = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
             this.MandatoryRatio = new System.Windows.Forms.TextBox();
@@ -114,8 +114,8 @@
             this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
+            this.RiskAversion = new System.Windows.Forms.ComboBox();
+            this.label46 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -191,6 +191,25 @@
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Beliefs impacts ";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.ForeColor = System.Drawing.SystemColors.Window;
+            this.label36.Location = new System.Drawing.Point(322, 55);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(20, 17);
+            this.label36.TabIndex = 35;
+            this.label36.Text = "%";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(222, 55);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(20, 17);
+            this.label35.TabIndex = 34;
+            this.label35.Text = "%";
             // 
             // TasksCancelled
             // 
@@ -687,12 +706,12 @@
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.RiskAversion);
+            this.groupBox9.Controls.Add(this.label46);
             this.groupBox9.Controls.Add(this.label19);
             this.groupBox9.Controls.Add(this.ThresholdForReacting);
             this.groupBox9.Controls.Add(this.label33);
             this.groupBox9.Controls.Add(this.label32);
-            this.groupBox9.Controls.Add(this.RiskAversion);
-            this.groupBox9.Controls.Add(this.label31);
             this.groupBox9.Controls.Add(this.BeliefWeight);
             this.groupBox9.Controls.Add(this.label27);
             this.groupBox9.Controls.Add(this.MandatoryRatio);
@@ -748,24 +767,6 @@
             this.label32.Size = new System.Drawing.Size(210, 17);
             this.label32.TabIndex = 150;
             this.label32.Text = "Parameters that block tasks";
-            // 
-            // RiskAversion
-            // 
-            this.RiskAversion.Location = new System.Drawing.Point(285, 288);
-            this.RiskAversion.Name = "RiskAversion";
-            this.RiskAversion.Size = new System.Drawing.Size(54, 22);
-            this.RiskAversion.TabIndex = 149;
-            this.RiskAversion.Text = "5";
-            this.RiskAversion.TextChanged += new System.EventHandler(this.RiskAversion_TextChanged);
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(37, 291);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(188, 17);
-            this.label31.TabIndex = 148;
-            this.label31.Text = "Risk aversion threshold [0;1]";
             // 
             // BeliefWeight
             // 
@@ -987,24 +988,22 @@
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
             // 
-            // label35
+            // RiskAversion
             // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(222, 55);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(20, 17);
-            this.label35.TabIndex = 34;
-            this.label35.Text = "%";
+            this.RiskAversion.FormattingEnabled = true;
+            this.RiskAversion.Location = new System.Drawing.Point(223, 289);
+            this.RiskAversion.Name = "RiskAversion";
+            this.RiskAversion.Size = new System.Drawing.Size(121, 24);
+            this.RiskAversion.TabIndex = 155;
             // 
-            // label36
+            // label46
             // 
-            this.label36.AutoSize = true;
-            this.label36.ForeColor = System.Drawing.SystemColors.Window;
-            this.label36.Location = new System.Drawing.Point(322, 55);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(20, 17);
-            this.label36.TabIndex = 35;
-            this.label36.Text = "%";
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(30, 292);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(126, 17);
+            this.label46.TabIndex = 154;
+            this.label46.Text = "Risk aversion level";
             // 
             // Home
             // 
@@ -1089,7 +1088,6 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label34;
@@ -1105,7 +1103,6 @@
         private System.Windows.Forms.TextBox MinimumNumberOfBitsOfBeliefToSend;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.TextBox RiskAversion;
         private System.Windows.Forms.Label TasksDone;
         private System.Windows.Forms.TextBox tbInfluencers;
         private System.Windows.Forms.TextBox tbKnowledge;
@@ -1128,5 +1125,7 @@
         private System.Windows.Forms.ToolStripMenuItem issuesToolStripMenuItem;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.ComboBox RiskAversion;
+        private System.Windows.Forms.Label label46;
     }
 }

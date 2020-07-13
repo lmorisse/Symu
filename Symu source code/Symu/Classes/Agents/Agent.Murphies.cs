@@ -132,7 +132,7 @@ namespace Symu.Classes.Agents
             }
 
             // Some repliers arrive a bit late, blocker has already been removed
-            if (!task.Blockers.IsBlocked)
+            if (!task.IsBlocked || !task.IsAssigned)
             {
                 return;
             }
@@ -207,9 +207,19 @@ namespace Symu.Classes.Agents
         /// <param name="blocker"></param>
         protected virtual void TryRecoverBlocker(SymuTask task, Blocker blocker)
         {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
             if (blocker is null)
             {
                 throw new ArgumentNullException(nameof(blocker));
+            }
+
+            if (!task.IsAssigned)
+            {
+                return;
             }
 
             switch (blocker.Type)
@@ -258,7 +268,6 @@ namespace Symu.Classes.Agents
             {
                 //Agent decide to cancel the task
                 TaskProcessor.Cancel(task);
-                task.CancelBlocker(blocker);
             }
             else
             {
@@ -370,7 +379,7 @@ namespace Symu.Classes.Agents
 
             if (!Environment.Organization.Murphies.IncompleteKnowledge.On ||
                 Math.Abs(task.WorkToDo) < Tolerance || // Task is done
-                task.IsCancelledBy(Id))
+                !task.IsAssigned)
             {
                 return;
             }
@@ -483,8 +492,7 @@ namespace Symu.Classes.Agents
             var murphy = Environment.Organization.Murphies.IncompleteKnowledge;
             var teammates = GetAgentIdsForInteractions(InteractionStrategy.Knowledge).ToList();
             var askInternally = murphy.AskInternally(Schedule.Step, blocker.InitialStep);
-            if (teammates.Any() && askInternally &&
-                !murphy.ShouldGuess(blocker.NumberOfTries))
+            if (teammates.Any() && askInternally)
             {
                 var attachments = new MessageAttachments();
                 attachments.Add(blocker);
@@ -496,15 +504,18 @@ namespace Symu.Classes.Agents
                 ImpactOfTheCommunicationMediumOnTimeSpent(messageType, true, task.KeyActivity);
                 SendToMany(teammates, MessageAction.Ask, SymuYellowPages.Help, attachments, messageType);
             }
-            else if (!teammates.Any() || !askInternally)
-            {
-                TryRecoverBlockerIncompleteKnowledgeExternally(task, blocker, knowledgeId, knowledgeBit);
-            }
             else
             {
-                // blocker must be unblocked in a way or another
-                RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
-                    BlockerResolution.Guessing);
+                if (murphy.ShouldGuess(blocker.NumberOfTries))
+                {
+                    // blocker must be unblocked in a way or another
+                    RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
+                        BlockerResolution.Guessing);
+                }
+                else
+                {
+                    TryRecoverBlockerIncompleteKnowledgeExternally(task, blocker, knowledgeId, knowledgeBit);
+                }
             }
         }
 
@@ -561,14 +572,14 @@ namespace Symu.Classes.Agents
                 return;
             }
 
+            if (task.WorkToDo < Tolerance || !task.IsAssigned)
+            {
+                // Task is done or cancelled
+                return;
+            }
+
             foreach (var knowledgeId in task.KnowledgesBits.KnowledgeIds)
             {
-                if (Math.Abs(task.WorkToDo) < Tolerance || task.IsCancelledBy(Id))
-                {
-                    // Task is done or cancelled
-                    continue;
-                }
-
                 CheckBlockerIncompleteBelief(task, knowledgeId);
                 CheckRiskAversion(task, knowledgeId);
             }
@@ -640,8 +651,8 @@ namespace Symu.Classes.Agents
             }
 
             // mandatoryScore is not enough => agent don't want to do the task, the task is blocked
-            var blocker1 = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
-            TryRecoverBlockerIncompleteBelief(task, blocker1);
+            var blocker = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
+            TryRecoverBlockerIncompleteBelief(task, blocker);
         }
 
 
@@ -668,16 +679,26 @@ namespace Symu.Classes.Agents
 
             var belief = Environment.WhitePages.Network.NetworkBeliefs.GetBelief(knowledgeId);
             MurphyIncompleteBelief.CheckRiskAversion(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore,
-                ref mandatoryIndex, -Cognitive.InternalCharacteristics.RiskAversionThreshold);
-            if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionThreshold))
+                ref mandatoryIndex, -Cognitive.InternalCharacteristics.RiskAversionValue());
+            if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionValue()))
             {
                 return;
             }
 
+            var murphy = Environment.Organization.Murphies.IncompleteBelief;
             // Prevent the agent from acting on a particular belief
-            var blocker = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
-            TaskProcessor.Cancel(task);
-            task.CancelBlocker(blocker);
+            if (murphy.ShouldGuess((byte) task.HasBeenCancelledBy.Count))
+            {
+                // to avoid complete blocking, we allow the agent, depending on the Murphies.IncompleteBelief parameters
+                // to unblock the task
+                var blocker = task.Add(Murphy.IncompleteBelief, Schedule.Step, knowledgeId, mandatoryIndex);
+                RecoverBlockerIncompleteBeliefByGuessing(task, blocker);
+            }
+            else
+            {
+                // Agent can cancel the task a certain number of times
+                TaskProcessor.Cancel(task);
+            }
         }
 
         /// <summary>
@@ -715,7 +736,7 @@ namespace Symu.Classes.Agents
             var askInternally = murphy.AskInternally(Schedule.Step,
                 blocker.InitialStep);
 
-            if (teammates.Any() && askInternally && !murphy.ShouldGuess(blocker.NumberOfTries))
+            if (teammates.Any() && askInternally)
             {
                 var attachments = new MessageAttachments();
                 attachments.Add(blocker);
@@ -727,14 +748,17 @@ namespace Symu.Classes.Agents
                 ImpactOfTheCommunicationMediumOnTimeSpent(messageType, true, task.KeyActivity);
                 SendToMany(teammates, MessageAction.Ask, SymuYellowPages.Help, attachments, messageType);
             }
-            else if (!teammates.Any() || !askInternally)
-            {
-                TryRecoverBlockerIncompleteBeliefExternally(task, blocker);
-            }
             else
             {
-                // Blocker must be unblocked in a way or another
-                RecoverBlockerIncompleteBeliefByGuessing(task, blocker);
+                if (murphy.ShouldGuess(blocker.NumberOfTries))
+                {
+                    // Blocker must be unblocked in a way or another
+                    RecoverBlockerIncompleteBeliefByGuessing(task, blocker);
+                }
+                else
+                {
+                    TryRecoverBlockerIncompleteBeliefExternally(task, blocker);
+                }
             }
         }
 
@@ -803,7 +827,7 @@ namespace Symu.Classes.Agents
 
             if (!murphy.On ||
                 Math.Abs(task.WorkToDo) < Tolerance || // Task is done
-                task.IsCancelledBy(Id) ||
+                !task.IsAssigned ||
                 task.Creator.Equals(Id)) // Worker can't be blocked by himself
             {
                 return false;
@@ -844,27 +868,27 @@ namespace Symu.Classes.Agents
                 blocker.InitialStep);
 
             //TODO send to creator only if he has the right to communicate to cf. Network
-            if (askInternally && !murphy.ShouldGuess(blocker.NumberOfTries))
+            if (askInternally && task.Creator.IsNotNull)
             {
-                // Let's try another time
                 var messageType = murphy.AskOnWhichChannel(Cognitive.InteractionCharacteristics
                     .PreferredCommunicationMediums);
-                var parameterF = new MessageAttachments();
-                parameterF.Add(blocker);
-                parameterF.Add(task);
-                if (task.Creator.Key != 0)
-                {
-                    Send(task.Creator, MessageAction.Ask, SymuYellowPages.Help, parameterF, messageType);
-                }
-            }
-            else if (!askInternally)
-            {
-                TryRecoverBlockerIncompleteInformationExternally(task, blocker);
+                var parameter = new MessageAttachments();
+                parameter.Add(blocker);
+                parameter.Add(task);
+                Send(task.Creator, MessageAction.Ask, SymuYellowPages.Help, parameter, messageType);
             }
             else
             {
-                RecoverBlockerIncompleteByGuessing(task, blocker,
-                    Environment.Organization.Murphies.IncompleteInformation, BlockerResolution.Guessing);
+                if (murphy.ShouldGuess(blocker.NumberOfTries))
+                {
+                    // Blocker must be unblocked in a way or another
+                    RecoverBlockerIncompleteByGuessing(task, blocker,
+                        Environment.Organization.Murphies.IncompleteInformation, BlockerResolution.Guessing);
+                }
+                else
+                {
+                    TryRecoverBlockerIncompleteInformationExternally(task, blocker);
+                }
             }
         }
 

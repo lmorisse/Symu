@@ -78,7 +78,8 @@ namespace Symu.Results.Organization
 
         public void HandleLearning()
         {
-            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values.Select(e => e.CumulativeLearning)
+            var sum = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
+                .Select(e => e.CumulativeLearning)
                 .ToList();
             var potentialKnowledge = Environment.WhitePages.Network.NetworkKnowledges.AgentsRepository.Values
                 .Sum(expertise => expertise.GetKnowledgePotential());
@@ -121,7 +122,7 @@ namespace Symu.Results.Organization
             var sum = Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
                 .Select(beliefs => beliefs.GetBeliefsSum())
                 .ToList();
-            var potential= Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
+            var potential = Environment.WhitePages.Network.NetworkBeliefs.AgentsRepository.Values
                 .Sum(beliefs => beliefs.GetBeliefsPotential());
             var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Beliefs.Add(belief);

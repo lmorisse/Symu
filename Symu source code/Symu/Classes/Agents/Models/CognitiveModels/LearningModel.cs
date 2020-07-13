@@ -229,7 +229,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             var stdDev =
                 LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
-            return TasksAndPerformance.LearningRate* Normal.Sample(1, stdDev * _randomLevel);
+            return TasksAndPerformance.LearningRate * Normal.Sample(1, stdDev * _randomLevel);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Beliefs;
@@ -81,8 +82,13 @@ namespace SymuBeliefsAndInfluence
 
             MandatoryRatio.Text =
                 OrganizationEntity.Murphies.IncompleteBelief.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
-            RiskAversion.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold
-                .ToString(CultureInfo.InvariantCulture);
+
+
+            RiskAversion.Items.AddRange(GenericLevelService.GetNames());
+            RiskAversion.SelectedItem =
+                GenericLevelService.GetName(_environment.WorkerTemplate.Cognitive.InternalCharacteristics
+                    .RiskAversionLevel);
+
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
             BeliefWeight.SelectedItem =
                 BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
@@ -102,6 +108,9 @@ namespace SymuBeliefsAndInfluence
             base.UpdateSettings();
             OrganizationEntity.Models.Influence.On = InfluenceModelOn.Checked;
             OrganizationEntity.Models.Beliefs.On = BeliefsModelOn.Checked;
+
+            _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+                GenericLevelService.GetValue(RiskAversion.SelectedItem.ToString());
 
             #region influencer
 
@@ -425,25 +434,6 @@ namespace SymuBeliefsAndInfluence
             catch (ArgumentOutOfRangeException exception)
             {
                 InfluenceRateOfAgentsOn.BackColor = Color.Red;
-                MessageBox.Show(exception.Message);
-            }
-        }
-
-        private void RiskAversion_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionThreshold =
-                    float.Parse(RiskAversion.Text, CultureInfo.InvariantCulture);
-                RiskAversion.BackColor = SystemColors.Window;
-            }
-            catch (FormatException)
-            {
-                RiskAversion.BackColor = Color.Red;
-            }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                RiskAversion.BackColor = Color.Red;
                 MessageBox.Show(exception.Message);
             }
         }

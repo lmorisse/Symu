@@ -11,7 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Symu.Classes.Agents.Models;
 using Symu.Classes.Task;
 using Symu.Environment;
@@ -58,7 +57,7 @@ namespace Symu.Classes.Agents
             CheckBlockers(task);
             // Task may have been blocked or cancelled
             // Capacity may have been used for blockers
-            if (!task.IsCancelledBy(Id) && !task.IsBlocked && Capacity.HasCapacity)
+            if (!task.IsBlocked && Capacity.HasCapacity && task.IsAssigned) // && !task.IsCancelledBy(Id)
             {
                 WorkOnTask(task);
             }
@@ -266,7 +265,9 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(task));
             }
 
-            if (!Cognitive.TasksAndPerformance.CanPerformTask || task.IsCancelledBy(Id)) //|| task.IsBlocked)
+            // if filtering tasks here, we must unassigned the task otherwise the task would not be taken by anyone
+            // for the moment it is not filtered
+            if (!Cognitive.TasksAndPerformance.CanPerformTask) // || task.IsCancelledBy(Id)) //|| task.IsBlocked)
             {
                 return;
             }
@@ -293,7 +294,9 @@ namespace Symu.Classes.Agents
                 return;
             }
 
-            foreach (var task in tasks.Where(x => !x.IsCancelledBy(Id))) //.Where(x => !x.IsBlocked))
+            // if filtering tasks here, we must unassigned the task otherwise the task would not be taken by anyone
+            // for the moment it is not filtered
+            foreach (var task in tasks) //.Where(x => !x.IsCancelledBy(Id))) //.Where(x => !x.IsBlocked))
             {
                 OnBeforePostTask(task);
                 TaskProcessor.Post(task);

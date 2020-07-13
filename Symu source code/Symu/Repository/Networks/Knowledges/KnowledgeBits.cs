@@ -49,7 +49,10 @@ namespace Symu.Repository.Networks.Knowledges
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
         /// <returns>0 for the first step of the simulation</returns>
-        public float Obsolescence(float step) => step > 0 ? 1F - _lastTouched.Average() / step : 0;
+        public float Obsolescence(float step)
+        {
+            return step > 0 ? 1F - _lastTouched.Average() / step : 0;
+        }
 
         /// <summary>
         ///     Array of last touched

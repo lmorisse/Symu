@@ -77,7 +77,8 @@ namespace Symu.Classes.Agents
                 TimeToLive = communication.TimeToLive,
                 Parent = message,
                 Weight = Environment.Organization.Communication.TimeSpent(message.Medium, false,
-                    Environment.Organization.Models.RandomLevelValue)
+                    Environment.Organization.Models.RandomLevelValue),
+                Assigned = message.Receiver
             };
 
             Environment.Messages.Result.ReceivedMessagesCost += task.Weight;

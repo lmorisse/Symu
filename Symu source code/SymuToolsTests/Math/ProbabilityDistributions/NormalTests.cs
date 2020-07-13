@@ -9,11 +9,7 @@
 
 #region using directives
 
-using System.Collections.Generic;
-using System.Linq;
-using MathNet.Numerics.Statistics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Tools;
 using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion

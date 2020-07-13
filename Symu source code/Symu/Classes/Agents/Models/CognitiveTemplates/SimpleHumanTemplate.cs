@@ -11,6 +11,7 @@
 
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
+using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
@@ -28,6 +29,7 @@ namespace Symu.Classes.Agents.Models.CognitiveTemplates
             Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             Cognitive.KnowledgeAndBeliefs.HasInitialBelief = true;
+            Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.Agree;
             // Message content
             Cognitive.MessageContent.CanSendKnowledge = true;
             Cognitive.MessageContent.CanReceiveKnowledge = true;
@@ -49,7 +51,7 @@ namespace Symu.Classes.Agents.Models.CognitiveTemplates
             Cognitive.InternalCharacteristics.InfluenceabilityRateMin = 0;
             Cognitive.InternalCharacteristics.InfluentialnessRateMax = 1;
             Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
-            Cognitive.InternalCharacteristics.RiskAversionThreshold = 0.1F;
+            Cognitive.InternalCharacteristics.RiskAversionLevel = GenericLevel.VeryLow;
             // Interaction Characteristics
             Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
             Cognitive.InteractionCharacteristics.LimitMessagesSentPerPeriod = false;
@@ -60,6 +62,7 @@ namespace Symu.Classes.Agents.Models.CognitiveTemplates
             // Cognitive.InteractionCharacteristics.PreferredCommunicationMediums ;
             // Tasks and performance
             Cognitive.TasksAndPerformance.CanPerformTask = true;
+            Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
             Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
             Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 10;
             Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;

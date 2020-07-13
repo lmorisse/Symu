@@ -183,14 +183,26 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
+            if (!task.IsAssigned)
+            {
+                // Task has been cancelled
+                return;
+            }
+
+            task.UnAssign();
             var todo = ToDo.Contains(task);
+            var inProgress = InProgress.Contains(task);
             if (todo)
             {
                 ToDo.Remove(task);
             }
-            else
+            else if (inProgress)
             {
                 InProgress.Remove(task);
+            }
+            else
+            {
+                return;
             }
 
             task.SetDone();
@@ -231,14 +243,24 @@ namespace Symu.Classes.Task.Manager
                 throw new ArgumentNullException(nameof(task));
             }
 
+            if (!task.IsAssigned)
+            {
+                return;
+            }
+
             var todo = ToDo.Contains(task);
+            var inProgress = InProgress.Contains(task);
             if (todo)
             {
                 ToDo.Remove(task);
             }
-            else
+            else if (inProgress)
             {
                 InProgress.Remove(task);
+            }
+            else
+            {
+                return;
             }
 
             task.Cancel();
@@ -334,14 +356,13 @@ namespace Symu.Classes.Task.Manager
         /// </summary>
         public void SetAllTasksDone()
         {
-            while (ToDo.Any())
+            foreach (var task in ToDo.ToArray())
             {
-                SetDone(ToDo.First());
+                SetDone(task);
             }
 
-            while (InProgress.Any())
+            foreach (var task in InProgress.ToArray())
             {
-                var task = InProgress.First();
                 task.ClearBlockers();
                 SetDone(task);
             }

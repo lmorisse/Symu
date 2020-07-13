@@ -21,19 +21,13 @@ namespace Symu.Classes.Blockers
     /// </summary>
     public class BlockerCollection
     {
-        /// <summary>
-        ///     Number of blockers In Progress
-        /// </summary>
-        //public BlockerResult Result { get; set; } = new BlockerResult();
-
         public List<Blocker> List { get; } = new List<Blocker>();
 
         public bool IsBlocked => List.Any();
 
-        public Blocker Add(Blocker blocker)
+        public void Add(Blocker blocker)
         {
             List.Add(blocker);
-            return blocker;
         }
 
         /// <summary>
@@ -41,45 +35,16 @@ namespace Symu.Classes.Blockers
         ///     And update IterationResult if FollowBlocker is true
         /// </summary>
         /// <param name="blocker"></param>
-        public void Recover(Blocker blocker)
-        {
-            if (!Contains(blocker))
-            {
-                // Blocker may have been already resolved
-                return;
-            }
-
-            if (blocker != null)
-            {
-                Remove(blocker);
-            }
-        }
-
-        /// <summary>
-        ///     CancelBlocker an existing blocker from a task
-        ///     And update IterationResult if FollowBlocker is true
-        /// </summary>
-        /// <param name="blocker"></param>
-        /// <returns>true if blocker has been removed</returns>
-        public bool Cancel(Blocker blocker)
+        public bool Remove(Blocker blocker)
         {
             if (blocker == null || !Contains(blocker))
             {
-                // Blocker may have been already cancelled
+                // Blocker may have been already resolved
                 return false;
             }
 
-            Remove(blocker);
-            return true;
-        }
-
-        /// <summary>
-        ///     Remove a blocker
-        /// </summary>
-        /// <param name="blocker"></param>
-        public void Remove(Blocker blocker)
-        {
             List.Remove(blocker);
+            return true;
         }
 
         /// <summary>

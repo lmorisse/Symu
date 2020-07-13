@@ -104,12 +104,15 @@ namespace Symu.Repository.Networks.Knowledges
         /// </summary>
         public float CumulativeForgetting { get; private set; }
 
+        public byte Length => KnowledgeBits?.Length ?? 0;
+
         /// <summary>
         ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
         /// </summary>
-        public float Obsolescence(float step) => KnowledgeBits.Obsolescence(step);
-
-        public byte Length => KnowledgeBits?.Length ?? 0;
+        public float Obsolescence(float step)
+        {
+            return KnowledgeBits.Obsolescence(step);
+        }
 
         /// <summary>
         ///     EventHandler triggered after learning a new information

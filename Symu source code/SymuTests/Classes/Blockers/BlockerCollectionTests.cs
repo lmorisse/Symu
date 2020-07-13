@@ -26,7 +26,7 @@ namespace SymuTests.Classes.Blockers
         [TestMethod]
         public void AddBlockerTest()
         {
-            Assert.IsNotNull(_blockers.Add(_blocker1));
+            _blockers.Add(_blocker1);
             Assert.IsTrue(_blockers.IsBlocked);
         }
 
@@ -41,8 +41,8 @@ namespace SymuTests.Classes.Blockers
         [TestMethod]
         public void RemoveTest1()
         {
-            var blocker = _blockers.Add(_blocker1);
-            _blockers.Remove(blocker);
+            _blockers.Add(_blocker1);
+            _blockers.Remove(_blocker1);
             Assert.IsFalse(_blockers.Exists(1, 1));
         }
 

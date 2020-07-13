@@ -2,10 +2,13 @@
 
 ## Unreleased
 
+## 0.8.1 [☰](https://github.com/lmorisse/symu/compare/v0.8.1..v0.8.0) by [lmorisse](https://github.com/lmorisse)
 * Remove InteractionSphereModel.FrequencyOfSphereUpdate
 * Schedule Bug fixe 
 * AgentEntity.Parent is now an AgentId
-* Knowledge and Beliefs result are in percentage to be easily understandable. Sym examples are updated
+* Knowledge and Beliefs result are in percentage to be easily understandable. Symu examples are updated
+* Update Task.Cancel
+* InternalCharacteristics.RiskAversionLevel is non a GenericLevel to make it easier, and the model is a little bit more tolerant
 
 ## 0.8.0 [☰](https://github.com/lmorisse/symu/compare/v0.8.0..v0.7.0) by [lmorisse](https://github.com/lmorisse)
 * Refactoring IterationResult

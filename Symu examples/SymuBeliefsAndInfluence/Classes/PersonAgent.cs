@@ -20,6 +20,7 @@ using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
+using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -54,6 +55,7 @@ namespace SymuBeliefsAndInfluence.Classes
             Cognitive.InternalCharacteristics.InfluentialnessRateMin = 0;
             Cognitive.InternalCharacteristics.InfluentialnessRateMax = 0F;
             Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel = BeliefLevel.NeitherAgreeNorDisagree;
         }
 
         /// <summary>

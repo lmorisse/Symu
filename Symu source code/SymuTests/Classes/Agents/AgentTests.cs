@@ -1421,7 +1421,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void ReplyHelpTest1()
         {
-            var task = new SymuTask(0);
+            var task = new SymuTask(0) {Assigned = _agent.Id};
             var blocker = task.Add(Murphy.IncompleteBelief, 0);
             var message = new Message
             {
@@ -1492,7 +1492,7 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteInformation.On = true;
             _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
-            var task = new SymuTask(0) {Weight = 0};
+            var task = new SymuTask(0) {Weight = 0, Assigned = _agent.Id };
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
             Assert.IsFalse(task.IsBlocked);
         }
@@ -1508,9 +1508,8 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteInformation.On = true;
             _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
-            var task = new SymuTask(0) {Weight = 1};
+            var task = new SymuTask(0) {Weight = 1, Assigned = _agent.Id };
             Assert.IsTrue(_agent.CheckBlockerIncompleteInformation(task));
-            Assert.IsTrue(task.IsBlocked);
         }
 
         /// <summary>
@@ -1588,7 +1587,7 @@ namespace SymuTests.Classes.Agents
         public void CheckKnowledgesBitsTest2()
         {
             _organizationEntity.Murphies.IncompleteKnowledge.On = true;
-            var task = new SymuTask(0) {Weight = 1};
+            var task = new SymuTask(0) {Weight = 1, Assigned = _agent.Id };
             task.SetTasksManager(_agent.TaskProcessor.TasksManager);
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
@@ -1610,7 +1609,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
             _organizationEntity.Murphies.IncompleteKnowledge.RequiredRatio = 1;
             _organizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
-            var task = new SymuTask(0) {Weight = 1};
+            var task = new SymuTask(0) {Weight = 1, Assigned= _agent.Id};
             task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges, 1);
             _agent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = false;
             _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
@@ -1630,7 +1629,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Murphies.IncompleteKnowledge.On = true;
             _organizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
             _organizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
-            var task = new SymuTask(0) {Weight = 1};
+            var task = new SymuTask(0) {Weight = 1, Assigned = _agent.Id };
             task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);

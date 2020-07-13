@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
@@ -124,7 +125,7 @@ namespace Symu.Classes.Task
         /// </summary>
         public byte Priority { get; set; }
 
-        public bool IsAssigned => Assigned.Key > 0;
+        public bool IsAssigned => Assigned.IsNotNull;
 
         public bool IsStarted { get; private set; }
         public bool IsToDo => !IsStarted && !IsBlocked && !IsAssigned;
@@ -209,20 +210,35 @@ namespace Symu.Classes.Task
         }
 
         /// <summary>
-        ///     CancelBlocker a task
+        ///     Cancel a task
         /// </summary>
         public void Cancel()
         {
             HasBeenCancelledBy.Add(Assigned);
+            CancelBlockers();
+            // intentionally after CancelBlockers
+            UnAssign();
         }
+
+        //UnAssign the task
+        public void UnAssign()
+        {
+            // UnAssigned
+            Assigned = new AgentId();
+            _tasksManager = null;
+        }
+
+
+        #region blockers
 
         public void ClearBlockers()
         {
-            SetBlockerDone(BlockerResolution.Internal);
-            Blockers.Clear();
+            while (Blockers.List.Any())
+            {
+                var blocker = Blockers.List.First();
+                Recover(blocker, BlockerResolution.Internal);
+            }
         }
-
-        #region blockers
 
         /// <summary>
         ///     Add a blocker with two parameters
@@ -235,7 +251,8 @@ namespace Symu.Classes.Task
         public Blocker Add(int type, ushort step, object parameter1, object parameter2)
         {
             var blocker = new Blocker(type, step, parameter1, parameter2);
-            return Add(blocker);
+            Add(blocker);
+            return blocker;
         }
 
         /// <summary>
@@ -248,7 +265,8 @@ namespace Symu.Classes.Task
         public Blocker Add(int type, ushort step, object parameter)
         {
             var blocker = new Blocker(type, step, parameter);
-            return Add(blocker);
+            Add(blocker);
+            return blocker;
         }
 
         /// <summary>
@@ -260,13 +278,14 @@ namespace Symu.Classes.Task
         public Blocker Add(int type, ushort step)
         {
             var blocker = new Blocker(type, step);
-            return Add(blocker);
+            Add(blocker);
+            return blocker;
         }
 
-        public Blocker Add(Blocker blocker)
+        public void Add(Blocker blocker)
         {
             SetBlockerInProgress();
-            return Blockers.Add(blocker);
+            Blockers.Add(blocker);
         }
 
         /// <summary>
@@ -277,22 +296,26 @@ namespace Symu.Classes.Task
         /// <param name="resolution"></param>
         public void Recover(Blocker blocker, BlockerResolution resolution)
         {
-            Blockers.Recover(blocker);
-
-            SetBlockerDone(resolution);
+            if (Blockers.Remove(blocker))
+            {
+                SetBlockerDone(resolution);
+            }
         }
 
 
         /// <summary>
-        ///     CancelBlocker an existing blocker from a task
+        ///     Cancel Blockers of a task
         ///     And update IterationResult if FollowBlocker is true
         /// </summary>
-        /// <param name="blocker"></param>
-        public void CancelBlocker(Blocker blocker)
+        public void CancelBlockers()
         {
-            if (Blockers.Cancel(blocker))
+            while (Blockers.List.Any())
             {
-                SetBlockerCancelled();
+                var blocker = Blockers.List.First();
+                if (Blockers.Remove(blocker))
+                {
+                    SetBlockerCancelled();
+                }
             }
         }
 

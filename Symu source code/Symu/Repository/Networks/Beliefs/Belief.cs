@@ -185,21 +185,6 @@ namespace Symu.Repository.Networks.Beliefs
                     }
 
                     beliefBits = ContinuousUniform.Samples(Length, min, max);
-                    if (Math.Abs(min - max) < Constants.Tolerance)
-                    {
-                        return beliefBits;
-                    }
-
-                    for (byte i = 0; i < beliefBits.Length; i++)
-                    {
-                        if (beliefBits[i] < min * (1 + 0.05))
-                        {
-                            // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
-                            // We force the lowest (Min +5%) knowledgeBit to 0  
-                            beliefBits[i] = 0;
-                        }
-                    }
-
                     break;
                 }
                 case RandomGenerator.RandomBinary:
