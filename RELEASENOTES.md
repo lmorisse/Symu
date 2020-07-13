@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.9.0
+This release contains refactoring and minor bug fixes
+
 ## 0.8.0
 This release contains refactoring and minor bug fixes
 
