@@ -36,8 +36,8 @@ namespace SymuTests.Environment
         [TestMethod]
         public void EnqueueMessageLostTest()
         {
-            var agent1 = new TestAgent(1, _environment);
-            var agent2 = new TestAgent(2, _environment);
+            var agent1 = new TestReactiveAgent(1, _environment);
+            var agent2 = new TestReactiveAgent(2, _environment);
             _environment.Start();
             _environment.WaitingForStart();
             _environment.WhitePages.RemoveAgent(agent2);

@@ -31,7 +31,7 @@ namespace Symu.Classes.Agents
     ///     An abstract base class for agents.
     ///     You must define your own agent derived classes derived
     /// </summary>
-    public abstract partial class Agent
+    public abstract partial class CognitiveAgent: ReactiveAgent
     {
         private byte _newInteractionCounter;
 
@@ -39,7 +39,7 @@ namespace Symu.Classes.Agents
         ///     constructor for generic new()
         ///     Use with CreateAgent method
         /// </summary>
-        protected Agent()
+        protected CognitiveAgent()
         {
         }
 
@@ -48,7 +48,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
-        protected Agent(AgentId agentId, SymuEnvironment environment)
+        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment)
         {
             CreateAgent(agentId, environment);
         }
@@ -59,42 +59,10 @@ namespace Symu.Classes.Agents
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
         /// <param name="template"></param>
-        protected Agent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             CreateAgent(agentId, environment, template);
         }
-
-        /// <summary>
-        ///     Day of creation of the  agent
-        /// </summary>
-        public ushort Created { get; private set; }
-
-        /// <summary>
-        ///     Day of stopped of the agent
-        /// </summary>
-        public ushort Stopped { get; private set; }
-
-        /// <summary>
-        ///     The name of the agent. Each agent must have a unique name in its environment.
-        ///     Most operations are performed using agent names rather than agent objects.
-        /// </summary>
-        public AgentId Id { get; set; }
-
-        /// <summary>
-        ///     State of the agent
-        /// </summary>
-        public AgentState State { get; set; } = AgentState.NotStarted;
-
-        /// <summary>
-        ///     Interaction Status of the agent
-        ///     Agent.State must be started
-        /// </summary>
-        public AgentStatus Status { get; set; } = AgentStatus.Available;
-
-        /// <summary>
-        ///     The environment in which the agent runs. A concurrent agent can only run in a concurrent environment.
-        /// </summary>
-        public SymuEnvironment Environment { get; private set; }
 
         /// <summary>
         ///     Define the cognitive architecture model of an agent
@@ -103,8 +71,6 @@ namespace Symu.Classes.Agents
         ///     planning, learning, goal management, ...
         /// </summary>
         public CognitiveArchitecture Cognitive { get; set; }
-
-        protected Schedule Schedule => Environment.Schedule;
 
         /// <summary>
         ///     If agent has an email, get the email database of the agent
@@ -116,6 +82,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
 
+        //TODO => all the models should be included in the cognitive architecture
         /// <summary>
         ///     Define how agent will forget knowledge during the simulation based on its cognitive architecture
         /// </summary>
@@ -154,31 +121,21 @@ namespace Symu.Classes.Agents
 
         #region Initialization
 
-        protected void CreateAgent(AgentId agentId, SymuEnvironment environment)
+        protected override void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-
             CreateAgent(agentId, environment, environment.Organization.Templates.Standard);
         }
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment,
             CognitiveArchitectureTemplate agentTemplate)
         {
-            Id = agentId;
-            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment.AddAgent(this);
-            State = AgentState.NotStarted;
-            foreach (var database in environment.Organization.Databases)
-            {
-                environment.WhitePages.Network.AddDatabase(Id, database.AgentId.Key);
-            }
-
+            base.CreateAgent(agentId, environment);
             SetTemplate(agentTemplate);
             SetCognitive();
-            Created = Schedule.Step;
         }
 
         /// <summary>
@@ -263,28 +220,12 @@ namespace Symu.Classes.Agents
         #region Start/stop
 
         /// <summary>
-        ///     This method is called right after Start, before any messages have been received. It is similar to the constructor
-        ///     of the class, but it should be used for agent-related logic, e.g. for sending initial message(s).
-        ///     Send Delayed message to the Schedule.STep to be sure the receiver exists and its started
-        /// </summary>
-        public virtual void BeforeStart()
-        {
-            // Messaging initializing
-            while (MessageProcessor is null)
-            {
-                //Sometimes Messaging is still null 
-                //Just wait for Messaging to be initialized
-            }
-
-            MessageProcessor.OnBeforePostEvent += MessageOnBeforePost;
-        }
-
-        /// <summary>
-        ///     Initialize all the agent's models
+        ///     Initialize all the agent's cognitive models
         ///     Should be called after SetTemplate and after having customized the cognitive parameters
         /// </summary>
-        protected void SetDefaultModels()
+        protected override void InitializeModels()
         {
+            base.InitializeModels();
             // Initialize agent models
             LearningModel = new LearningModel(Id, Environment.Organization.Models,
                 Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
@@ -300,18 +241,11 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     Customize the models of the agent
-        ///     After setting the Agent basics models
+        ///     Finalize all the agent's cognitive models
         /// </summary>
-        public virtual void SetModels()
+        protected override void FinalizeModels()
         {
-        }
-
-        /// <summary>
-        ///     Finalize all the agent's models
-        /// </summary>
-        protected void FinalizeModels()
-        {
+            base.FinalizeModels();
             if (KnowledgeModel.On)
             {
                 KnowledgeModel.InitializeExpertise(Schedule.Step);
@@ -327,28 +261,9 @@ namespace Symu.Classes.Agents
             }
         }
 
-        /// <summary>
-        ///     Set the state of the agent to Stopping so that the agent will be stopped at the end of this step
-        /// </summary>
-        public void Stop()
+        public override void Dispose()
         {
-            State = AgentState.Stopping;
-        }
-
-        /// <summary>
-        ///     Use to trigger an event before the agent is stopped
-        ///     Be sure to call base.BeforeStop() at the end of the override method
-        ///     Don't remove items from WhitePages.Network, it is automatically done by WhitePages.RemoveAgent
-        /// </summary>
-        public virtual void BeforeStop()
-        {
-            State = AgentState.Stopped;
-            Stopped = Schedule.Step;
-        }
-
-        public void Dispose()
-        {
-            MessageProcessor?.Dispose();
+            base.Dispose();
             TaskProcessor?.Dispose();
         }
 
@@ -357,29 +272,10 @@ namespace Symu.Classes.Agents
         ///     First, the Setup method is called, and then the Act method is automatically called when the agent receives a
         ///     message.
         /// </summary>
-        public void Start()
+        public override void Start()
         {
-            State = AgentState.Starting;
-            if (Environment == null)
-            {
-                throw new Exception("Environment is null in agent " + Id.Key + " (ConcurrentAgent.Start)");
-            }
+            base.Start();
 
-            SetDefaultModels();
-            SetModels();
-            FinalizeModels();
-            // MessageProcessor initializing
-            MessageProcessor = AsyncMessageProcessor.Start(async mp =>
-            {
-                BeforeStart();
-                State = AgentState.Started;
-                while (true)
-                {
-                    var message = await mp.Receive().ConfigureAwait(false);
-                    Act(message);
-                    Environment.Messages.DeQueueWaitingMessage(message);
-                }
-            });
             // TaskProcessor initializing
             if (!Cognitive.TasksAndPerformance.CanPerformTask)
             {
@@ -388,16 +284,6 @@ namespace Symu.Classes.Agents
 
             TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit, Environment.Debug);
             OnAfterTaskProcessorStart();
-        }
-
-        /// <summary>
-        ///     Waiting that the status agent == State.Started
-        /// </summary>
-        public void WaitingToStart()
-        {
-            while (State != AgentState.Started)
-            {
-            }
         }
 
         #endregion

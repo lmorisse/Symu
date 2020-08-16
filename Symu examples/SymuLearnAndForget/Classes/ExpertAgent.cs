@@ -22,7 +22,7 @@ using Symu.Repository.Networks.Knowledges;
 
 namespace SymuLearnAndForget.Classes
 {
-    public sealed class ExpertAgent : Agent
+    public sealed class ExpertAgent : CognitiveAgent
     {
         public const byte ClassKey = 2;
 

@@ -22,7 +22,7 @@ namespace Symu.Repository
     /// <summary>
     ///     thread-safe list of agents that can be accessed by multiple threads concurrently
     /// </summary>
-    public class ConcurrentAgents<T> where T : Agent
+    public class ConcurrentAgents<T> where T : ReactiveAgent
     {
         private readonly ConcurrentDictionary<AgentId, T> _list = new ConcurrentDictionary<AgentId, T>();
         public int Count => _list.Count;

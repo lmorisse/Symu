@@ -12,6 +12,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Classes.Agents;
 using Symu.Environment;
 
 #endregion
@@ -62,17 +63,17 @@ namespace Symu.Results.Task
 
             if (Environment.Schedule.IsWorkingDay)
             {
-                max = Environment.WhitePages.AllAgents()
+                max = Environment.WhitePages.AllCognitiveAgents()
                     .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask);
-                sum = Environment.WhitePages.AllAgents()
+                sum = Environment.WhitePages.AllCognitiveAgents()
                     .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask)
                     .Select(x => x.Capacity.Initial).Sum();
             }
             else
             {
-                max = Environment.WhitePages.AllAgents()
+                max = Environment.WhitePages.AllCognitiveAgents()
                     .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds);
-                sum = Environment.WhitePages.AllAgents()
+                sum = Environment.WhitePages.AllCognitiveAgents()
                     .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds)
                     .Select(x => x.Capacity.Initial).Sum();
             }
@@ -92,10 +93,10 @@ namespace Symu.Results.Task
             }
 
             // alive agents
-            HandleResults(Environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             Tasks.TryAdd(Environment.Schedule.Step, result);
         }

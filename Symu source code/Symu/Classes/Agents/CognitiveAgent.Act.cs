@@ -27,14 +27,14 @@ namespace Symu.Classes.Agents
     ///     You must define your own agent derived classes derived
     ///     This partial class focus on Act methods
     /// </summary>
-    public abstract partial class Agent
+    public abstract partial class CognitiveAgent
     {
         /// <summary>
         ///     This is the method that is called when the agent receives a message and is activated.
         ///     When Schedule.Type is Intraday, messages are treated as tasks and stored in task.Parent attribute
         /// </summary>
         /// <param name="message">The message that the agent has received and should respond to</param>
-        public void Act(Message message)
+        public override void Act(Message message)
         {
             if (message is null)
             {
@@ -89,21 +89,17 @@ namespace Symu.Classes.Agents
         ///     This is where the main logic of the agent should be placed.
         /// </summary>
         /// <param name="message"></param>
-        public virtual void ActMessage(Message message)
+        public override void ActMessage(Message message)
         {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
+            base.ActMessage(message);
+
             switch (message.Subject)
             {
-                case SymuYellowPages.Stop:
-                    Stop();
-                    break;
-                case SymuYellowPages.Subscribe:
-                    ActSubscribe(message);
-                    break;
                 case SymuYellowPages.Help:
                     ActHelp(message);
                     break;
@@ -114,7 +110,7 @@ namespace Symu.Classes.Agents
         ///     Trigger every event before the new step
         ///     Do not send messages, use NextStep for that
         /// </summary>
-        public virtual async void PreStep()
+        public override async void PreStep()
         {
             MessageProcessor?.ClearMessagesPerPeriod();
             ForgettingModel?.InitializeForgettingProcess();
@@ -181,20 +177,12 @@ namespace Symu.Classes.Agents
         }
 
         /// <summary>
-        ///     Trigger event after the taskManager is started.
-        ///     Used by the agent to subscribe to AfterSetTaskDone event
-        /// </summary>
-        /// <example>TaskManager.AfterSetTaskDone += AfterSetTaskDone;</example>
-        public virtual void OnAfterTaskProcessorStart()
-        {
-        }
-
-        /// <summary>
         ///     Trigger every event after the actual step,
         ///     Do not send messages
         /// </summary>
-        public virtual void PostStep()
+        public override void PostStep()
         {
+            base.PostStep();
             ForgettingModel?.FinalizeForgettingProcess(Schedule.Step);
         }
 
@@ -224,24 +212,19 @@ namespace Symu.Classes.Agents
             SendToMany(agents, MessageAction.Ask, SymuYellowPages.Actor, null, NextMedium);
         }
 
-        public virtual void ActCadence()
-        {
-        }
-
         /// <summary>
         ///     Start the working day, by asking new tasks
         /// </summary>
-        public virtual void ActWorkingDay()
+        public override void ActWorkingDay()
         {
+            base.ActWorkingDay();
             // update ActWeekEnd to have the same behaviour
             if (!Cognitive.TasksAndPerformance.CanPerformTask
-                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit
-                || Status == AgentStatus.Offline)
+                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
             {
                 return;
             }
 
-            Status = AgentStatus.Busy;
             ImpactOfBlockersOnCapacity();
             GetNewTasks();
         }
@@ -249,33 +232,17 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Start a weekend, by asking new tasks if agent perform tasks on weekends
         /// </summary>
-        public virtual void ActWeekEnd()
+        public override void ActWeekEnd()
         {
             // update ActWorkingDay to have the same behaviour
             if (!Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds
-                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit
-                || Status == AgentStatus.Offline)
+                || TaskProcessor.TasksManager.HasReachedTotalMaximumLimit)
             {
                 return;
             }
 
             ImpactOfBlockersOnCapacity();
             GetNewTasks();
-        }
-
-        /// <summary>
-        ///     Event that occur on friday to end the work week
-        /// </summary>
-        public virtual void ActEndOfWeek()
-        {
-        }
-
-        public virtual void ActEndOfMonth()
-        {
-        }
-
-        public virtual void ActEndOfYear()
-        {
         }
 
         /// <summary>
@@ -288,19 +255,6 @@ namespace Symu.Classes.Agents
             return !isolated && (Cognitive.TasksAndPerformance.CanPerformTask && Schedule.IsWorkingDay ||
                                  Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds &&
                                  !Schedule.IsWorkingDay);
-        }
-
-        /// <summary>
-        ///     Clone the Status to available if agent as InitialCapacity, Offline otherwise
-        /// </summary>
-        public virtual void HandleStatus(bool isolated)
-        {
-            Status = !isolated ? AgentStatus.Available : AgentStatus.Offline;
-            if (Status != AgentStatus.Offline)
-                // Open the agent mailbox with all the waiting messages
-            {
-                PostDelayedMessages();
-            }
         }
     }
 }

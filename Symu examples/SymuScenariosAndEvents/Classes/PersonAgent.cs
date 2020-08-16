@@ -26,7 +26,7 @@ using Symu.Tools.Math.ProbabilityDistributions;
 
 namespace SymuScenariosAndEvents.Classes
 {
-    public sealed class PersonAgent : Agent
+    public sealed class PersonAgent : CognitiveAgent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 

@@ -98,7 +98,7 @@ namespace SymuScenariosAndEvents.Classes
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
             WhitePages.Network.AddKnowledge(knowledge);
 
-            foreach (var person in WhitePages.FilteredAgentsByClassKey(PersonAgent.ClassKey))
+            foreach (var person in WhitePages.FilteredCognitiveAgentsByClassKey(PersonAgent.ClassKey))
             {
                 person.KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.BasicKnowledge, 0.15F, -1);
                 person.KnowledgeModel.InitializeKnowledge(knowledge.Id, Schedule.Step);

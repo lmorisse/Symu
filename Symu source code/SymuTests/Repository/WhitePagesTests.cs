@@ -48,7 +48,7 @@ namespace SymuTests.Repository
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
         private readonly SymuEngine _symu = new SymuEngine();
 
-        private TestAgent _agent;
+        private TestReactiveAgent _agent;
 
         [TestInitialize]
         public void Initialize()
@@ -56,7 +56,7 @@ namespace SymuTests.Repository
             _environment.SetOrganization(_organizationEntity);
             _environment.InitializeIteration();
             _symu.SetEnvironment(_environment);
-            _agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+            _agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace SymuTests.Repository
         [TestMethod]
         public void TestAgentTest()
         {
-            Assert.AreEqual(1, _environment.WhitePages.FilteredAgentsByClassCount(TestAgent.ClassKey));
+            Assert.AreEqual(1, _environment.WhitePages.FilteredAgentsByClassCount(TestCognitiveAgent.ClassKey));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace SymuTests.Repository
         [TestMethod]
         public void TestAgentTest1()
         {
-            Assert.ThrowsException<ArgumentException>(() => new TestAgent(1, _environment));
+            Assert.ThrowsException<ArgumentException>(() => new TestReactiveAgent(1, _environment));
         }
 
         [TestMethod]
@@ -165,7 +165,7 @@ namespace SymuTests.Repository
         {
             for (byte i = 10; i < 20; i++)
             {
-                _ = new TestAgent(i, _environment);
+                _ = new TestReactiveAgent(i, _environment);
             }
 
             _environment.Start();
@@ -182,18 +182,18 @@ namespace SymuTests.Repository
             _environment.WhitePages.Clear();
             for (byte i = 0; i < 10; i++)
             {
-                _ = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                _ = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
             }
 
             var excludeIds = new List<AgentId>();
             for (byte i = 10; i < 20; i++)
             {
-                var agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
                 excludeIds.Add(agent.Id);
             }
 
             Assert.AreEqual(10,
-                _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestAgent.ClassKey, excludeIds).Count);
+                _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassKey, excludeIds).Count);
         }
 
         [TestMethod]
@@ -202,18 +202,18 @@ namespace SymuTests.Repository
             _environment.WhitePages.Clear();
             for (byte i = 0; i < 10; i++)
             {
-                _ = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                _ = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
             }
 
             var excludeIds = new List<AgentId>();
             for (byte i = 10; i < 20; i++)
             {
-                var agent = new TestAgent(_environment.Organization.NextEntityIndex(), _environment);
+                var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
                 excludeIds.Add(agent.Id);
             }
 
             Assert.AreEqual(10,
-                _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestAgent.ClassKey, excludeIds).Count());
+                _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassKey, excludeIds).Count());
         }
     }
 }

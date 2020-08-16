@@ -26,7 +26,7 @@ namespace Symu.Classes.Agents
     ///     You must define your own agent derived classes derived
     ///     This partial class focus on tasks management methods
     /// </summary>
-    public abstract partial class Agent
+    public abstract partial class CognitiveAgent
     {
         #region Work on task
 

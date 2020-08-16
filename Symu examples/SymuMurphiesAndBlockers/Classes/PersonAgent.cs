@@ -27,7 +27,7 @@ using Symu.Tools;
 
 namespace SymuMurphiesAndBlockers.Classes
 {
-    public sealed class PersonAgent : Agent
+    public sealed class PersonAgent : CognitiveAgent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 

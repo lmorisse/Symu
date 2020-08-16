@@ -21,7 +21,7 @@ using Symu.Repository;
 
 namespace SymuGroupAndInteraction.Classes
 {
-    public sealed class PersonAgent : Agent
+    public sealed class PersonAgent : CognitiveAgent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 

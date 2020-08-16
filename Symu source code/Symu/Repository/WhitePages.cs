@@ -40,12 +40,12 @@ namespace Symu.Repository
         /// <summary>
         ///     Local agents of this environment
         /// </summary>
-        public ConcurrentAgents<Agent> Agents { get; } = new ConcurrentAgents<Agent>();
+        public ConcurrentAgents<ReactiveAgent> Agents { get; } = new ConcurrentAgents<ReactiveAgent>();
 
         /// <summary>
         ///     Stopped keep a trace of all the agentIds stopped during the iteration
         /// </summary>
-        public List<Agent> StoppedAgents { get; } = new List<Agent>();
+        public List<ReactiveAgent> StoppedAgents { get; } = new List<ReactiveAgent>();
 
         public Network Network { get; }
 
@@ -83,7 +83,7 @@ namespace Symu.Repository
         ///     Don't call it directly, use WhitePages.RemoveAgent
         /// </summary>
         /// <param name="agent">The agent to be removed</param>
-        public void RemoveAgent(Agent agent)
+        public void RemoveAgent(ReactiveAgent agent)
         {
             if (agent == null)
             {
@@ -122,7 +122,7 @@ namespace Symu.Repository
         ///     Start Agent if start is set
         /// </summary>
         /// <param name="agentToStart"></param>
-        public static void StartAgent(Agent agentToStart)
+        public static void StartAgent(ReactiveAgent agentToStart)
         {
             if (agentToStart is null)
             {
@@ -148,12 +148,12 @@ namespace Symu.Repository
             return Agents.Exists(agentId);
         }
 
-        public TAgent GetAgent<TAgent>(AgentId agentId) where TAgent : Agent
+        public TAgent GetAgent<TAgent>(AgentId agentId) where TAgent : ReactiveAgent
         {
             return Agents.Get<TAgent>(agentId);
         }
 
-        public Agent GetAgent(AgentId agentId)
+        public ReactiveAgent GetAgent(AgentId agentId)
         {
             return Agents.Get(agentId);
         }
@@ -171,9 +171,18 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Agent> AllAgents()
+        public IEnumerable<ReactiveAgent> AllAgents()
         {
             return Agents.GetValues();
+        }
+
+        /// <summary>
+        ///     Returns a list with the names of all the agents.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<CognitiveAgent> AllCognitiveAgents()
+        {
+            return Agents.GetValues().OfType<CognitiveAgent>();
         }
 
         /// <summary>
@@ -197,9 +206,18 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<Agent> FilteredAgentsByClassKey(byte classKey)
+        public IEnumerable<ReactiveAgent> FilteredAgentsByClassKey(byte classKey)
         {
             return Agents.FilteredByClassKey(classKey);
+        }
+
+        /// <summary>
+        ///     Returns a list with the names of all the agents that contain a certain string.
+        /// </summary>
+        /// <returns>The name fragment that the agent names should contain</returns>
+        public IEnumerable<CognitiveAgent> FilteredCognitiveAgentsByClassKey(byte classKey)
+        {
+            return Agents.FilteredByClassKey(classKey).OfType<CognitiveAgent>();
         }
 
         /// <summary>
@@ -226,7 +244,7 @@ namespace Symu.Repository
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
         /// <returns></returns>
-        public IEnumerable<Agent> GetFilteredAgentsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
+        public IEnumerable<ReactiveAgent> GetFilteredAgentsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
         {
             var actors = FilteredAgentsByClassKey(classKey).ToList();
             if (excludeIds != null)
@@ -247,13 +265,13 @@ namespace Symu.Repository
         ///     Get the number of agents which are part of the interaction sphere
         /// </summary>
         public ushort GetInteractionSphereCount =>
-            (ushort) AllAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+            (ushort)AllCognitiveAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
 
         /// <summary>
         ///     Get the agents which are part of the interaction sphere
         /// </summary>
-        public IEnumerable<Agent> GetInteractionSphereAgents =>
-            AllAgents().Where(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+        public IEnumerable<CognitiveAgent> GetInteractionSphereAgents =>
+            AllCognitiveAgents().Where(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
 
         /// <summary>
         ///     Stop Agent is managed by the WhitePages services responsible of Agent Lifecycle Management

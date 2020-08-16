@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.9.1
+This release contains a refactoring of the agent class
+
 ## 0.9.0
 This release contains refactoring and minor bug fixes
 

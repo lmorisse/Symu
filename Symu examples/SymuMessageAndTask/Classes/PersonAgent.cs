@@ -24,7 +24,7 @@ using Symu.Repository;
 
 namespace SymuMessageAndTask.Classes
 {
-    public sealed class PersonAgent : Agent
+    public sealed class PersonAgent : CognitiveAgent
     {
         public const byte ClassKey = 2;
 

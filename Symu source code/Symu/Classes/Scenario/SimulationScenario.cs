@@ -18,7 +18,7 @@ using Symu.Environment;
 
 namespace Symu.Classes.Scenario
 {
-    public class SimulationScenario : Agent
+    public class SimulationScenario : ReactiveAgent
     {
         public SimulationScenario(object parent, SymuEnvironment environment) : base(
             new AgentId(environment.Organization.NextEntityIndex(), ScenarioEntity.ClassKey), environment)
@@ -30,8 +30,6 @@ namespace Symu.Classes.Scenario
 
             Entity = new ScenarioEntity(Id.Key);
             Parent = parent;
-            SetTemplate(new StandardAgentTemplate());
-            SetDefaultModels();
         }
 
         public bool Success { get; set; }

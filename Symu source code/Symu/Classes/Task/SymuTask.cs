@@ -105,8 +105,10 @@ namespace Symu.Classes.Task
                     throw new ArgumentOutOfRangeException(nameof(_weight));
                 }
 
+                var delta = value - _weight;
                 _weight = value;
-                WorkToDo = value;
+                // as agent may have already been working on the task, we assign only the delta value
+                WorkToDo += delta;
             }
         }
 

@@ -16,7 +16,7 @@ using Symu.Environment;
 
 namespace SymuGroupAndInteraction.Classes
 {
-    public sealed class GroupAgent : Agent
+    public sealed class GroupAgent : ReactiveAgent
     {
         public const byte ClassKey = 1;
 

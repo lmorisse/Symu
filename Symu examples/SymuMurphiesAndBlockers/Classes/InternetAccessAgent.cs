@@ -24,7 +24,7 @@ namespace SymuMurphiesAndBlockers.Classes
     /// <summary>
     ///     Provide an access to internet information if DynamicEnvironmentModel is On
     /// </summary>
-    public sealed class InternetAccessAgent : Agent
+    public sealed class InternetAccessAgent : CognitiveAgent
     {
         public const byte ClassKey = 1;
 

@@ -72,7 +72,7 @@ namespace SymuTests.Results.Organization
             var agents = new List<AgentId>();
             for (var i = 0; i < count; i++)
             {
-                var agent = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+                var agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
                 agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
                 agent.State = AgentState.Started;
                 agents.Add(agent.Id);

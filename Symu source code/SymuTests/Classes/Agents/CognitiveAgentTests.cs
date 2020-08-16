@@ -32,7 +32,7 @@ using SymuTests.Helpers;
 namespace SymuTests.Classes.Agents
 {
     [TestClass]
-    public class AgentTests
+    public class CognitiveAgentTests
     {
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
@@ -40,7 +40,7 @@ namespace SymuTests.Classes.Agents
         private readonly List<Knowledge> _knowledges = new List<Knowledge>();
         private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
         private readonly SymuEngine _symu = new SymuEngine();
-        private TestAgent _agent;
+        private TestCognitiveAgent _agent;
         private AgentKnowledge _agentKnowledge;
 
         [TestInitialize]
@@ -51,7 +51,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Models.On(1);
             _environment.IterationResult.On();
 
-            _agent = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
+            _agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             _agent.Cognitive.MessageContent.CanReceiveBeliefs = true;
@@ -97,14 +97,14 @@ namespace SymuTests.Classes.Agents
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
 
-        private TestAgent AddTeammate()
+        private TestCognitiveAgent AddAgent()
         {
-            var teammate = new TestAgent(_organizationEntity.NextEntityIndex(), _environment);
-            teammate.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
-            teammate.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
-            teammate.Start();
-            teammate.WaitingToStart();
-            return teammate;
+            var agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
+            agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
+            agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            agent.Start();
+            agent.WaitingToStart();
+            return agent;
         }
 
         #region message
@@ -142,174 +142,7 @@ namespace SymuTests.Classes.Agents
 
         #endregion
 
-        #region status
-
-        [TestMethod]
-        public void StateAgentTests()
-        {
-            _agent.State = AgentState.Stopping;
-            Assert.AreEqual(AgentState.Stopping, _agent.State);
-            _environment.StopAgents();
-            Assert.AreEqual(AgentState.Stopped, _agent.State);
-        }
-
-        /// <summary>
-        ///     Isolated
-        /// </summary>
-        [TestMethod]
-        public void IsActiveTest()
-        {
-            Assert.IsFalse(_agent.IsPerformingTask(true));
-        }
-
-        /// <summary>
-        ///     non Isolated, can't perform task
-        /// </summary>
-        [TestMethod]
-        public void IsActiveTest1()
-        {
-            _agent.Cognitive.TasksAndPerformance.CanPerformTask = false;
-            _agent.Environment.Schedule.Step = 1;
-            Assert.IsFalse(_agent.IsPerformingTask(false));
-        }
-
-        /// <summary>
-        ///     non Isolated, can perform task
-        /// </summary>
-        [TestMethod]
-        public void IsActiveTest2()
-        {
-            _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _agent.Environment.Schedule.Step = 1;
-            Assert.IsTrue(_agent.IsPerformingTask(false));
-        }
-
-        /// <summary>
-        ///     non Isolated, can't perform task on weekend
-        /// </summary>
-        [TestMethod]
-        public void IsActiveTest3()
-        {
-            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
-            _agent.Environment.Schedule.Step = 5;
-            Assert.IsFalse(_agent.IsPerformingTask(false));
-        }
-
-        /// <summary>
-        ///     non Isolated, can't perform task on weekend
-        /// </summary>
-        [TestMethod]
-        public void IsActiveTest4()
-        {
-            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
-            _agent.Environment.Schedule.Step = 5;
-            Assert.IsTrue(_agent.IsPerformingTask(false));
-        }
-
-        #endregion
-
         #region Post message
-
-        /// <summary>
-        ///     Online Agent with a IRC/Email message
-        /// </summary>
-        [TestMethod]
-        public void PostTest1()
-        {
-            _agent.Status = AgentStatus.Available;
-            var message = new Message
-            {
-                Sender = _agent.Id,
-                Medium = CommunicationMediums.Irc
-            };
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
-            message.Medium = CommunicationMediums.Email;
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
-        }
-
-        /// <summary>
-        ///     Offline Agent with a IRC/Email message
-        /// </summary>
-        [TestMethod]
-        public void PostTest11()
-        {
-            _agent.Status = AgentStatus.Offline;
-            var message = new Message
-            {
-                Medium = CommunicationMediums.Irc
-            };
-            _agent.Post(message);
-            Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-            message.Medium = CommunicationMediums.Email;
-            _agent.Post(message);
-            Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-        }
-
-        /// <summary>
-        ///     Offline Agent with a phone/meeting message
-        /// </summary>
-        [TestMethod]
-        public void PostTest2()
-        {
-            _agent.Status = AgentStatus.Offline;
-            var message = new Message
-            {
-                Sender = _agent.Id,
-                Medium = CommunicationMediums.Phone
-            };
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
-            message.Medium = CommunicationMediums.Meeting;
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
-            //TODO test Missed messages
-        }
-
-        /// <summary>
-        ///     Online Agent with a phone/meeting message
-        /// </summary>
-        [TestMethod]
-        public void PostTest22()
-        {
-            _agent.Status = AgentStatus.Available;
-            var message = new Message
-            {
-                Sender = _agent.Id,
-                Medium = CommunicationMediums.Phone
-            };
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
-            message.Medium = CommunicationMediums.Meeting;
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
-            //TODO test Missed messages
-        }
-
-        [TestMethod]
-        public void PostDelayedMessagesTest()
-        {
-            var message = new Message();
-            // Post as a delayed message
-            _agent.PostAsADelayedMessage(message, 0);
-            Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
-            Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
-            // Post Delayed messages
-            _agent.PostDelayedMessages();
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
-            Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
-        }
 
         /// <summary>
         ///     Without limit messages per period
@@ -430,75 +263,6 @@ namespace SymuTests.Classes.Agents
             var agentKnowledge = new AgentKnowledge(knowledge.Id, bit0S);
             agentExpertise.Add(agentKnowledge);
             _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, agentExpertise);
-        }
-
-        #endregion
-
-        #region System message
-
-        /// <summary>
-        ///     Stopped Agent with a system message
-        /// </summary>
-        [TestMethod]
-        public void PostTest()
-        {
-            _agent.State = AgentState.Stopped;
-            var message = new Message();
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-        }
-
-        /// <summary>
-        ///     OnLine Agent with stopped agent
-        /// </summary>
-        [TestMethod]
-        public void PostTest4()
-        {
-            _agent.State = AgentState.NotStarted;
-            var message = new Message();
-            _agent.Post(message);
-            Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-
-            _agent.State = AgentState.Starting;
-            _agent.Post(message);
-            Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-        }
-
-        /// <summary>
-        ///     OnLine Agent with Started agent
-        /// </summary>
-        [TestMethod]
-        public void PostTest5()
-        {
-            _agent.State = AgentState.Started;
-            var message = new Message
-            {
-                Sender = _agent.Id,
-                Medium = CommunicationMediums.Email
-            };
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
-        }
-
-        /// <summary>
-        ///     OnLine Agent with stopping agent
-        /// </summary>
-        [TestMethod]
-        public void PostTest6()
-        {
-            _agent.State = AgentState.Stopping;
-            var message = new Message
-            {
-                Sender = _agent.Id,
-                Medium = CommunicationMediums.Email
-            };
-            _agent.Post(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
         }
 
         #endregion
@@ -678,7 +442,7 @@ namespace SymuTests.Classes.Agents
         public void SendAMessageTests()
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = false;
-            var agent2 = AddTeammate();
+            var agent2 = AddAgent();
             var message = new Message(_agent.Id, agent2.Id, MessageAction.Add, 0)
             {
                 Sender = _agent.Id,
@@ -702,7 +466,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             agent2.Start();
             agent2.WaitingToStart();
             var message = new Message(_agent.Id, agent2.Id, MessageAction.Add, 0)
@@ -845,51 +609,6 @@ namespace SymuTests.Classes.Agents
 
         #endregion
 
-        #region subscription
-
-        /// <summary>
-        ///     One subscription
-        /// </summary>
-        [TestMethod]
-        public void RemoveSubscribeTest()
-        {
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
-            _agent.RemoveSubscribe(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
-        }
-
-        /// <summary>
-        ///     Multiple subscriptions
-        /// </summary>
-        [TestMethod]
-        public void RemoveSubscribeTest1()
-        {
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 2);
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 3);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
-            _agent.RemoveSubscribe(message);
-            Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
-            Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));
-            Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(3));
-        }
-
-        [TestMethod]
-        public void AddSubscribeTest()
-        {
-            var attachments = new MessageAttachments();
-            attachments.Add((byte) 1);
-            attachments.Add((byte) 2);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Add, SymuYellowPages.Subscribe, attachments);
-            _agent.AddSubscribe(message);
-            Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
-            Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));
-            Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(0));
-        }
-
-        #endregion
-
         #region Capacity management
 
         /// <summary>
@@ -963,26 +682,60 @@ namespace SymuTests.Classes.Agents
 
         #endregion
 
-        #region Status
+
+        #region status
 
         /// <summary>
-        ///     Initial capacity = 0 - nothing arrived
+        ///     Isolated
         /// </summary>
         [TestMethod]
-        public void HandleStatusTest()
+        public void IsActiveTest()
         {
-            _agent.HandleStatus(true);
-            Assert.AreEqual(AgentStatus.Offline, _agent.Status);
+            Assert.IsFalse(_agent.IsPerformingTask(true));
         }
 
         /// <summary>
-        ///     Initial capacity = 0 - nothing arrived
+        ///     non Isolated, can't perform task
         /// </summary>
         [TestMethod]
-        public void HandleStatusTest1()
+        public void IsActiveTest1()
         {
-            _agent.HandleStatus(false);
-            Assert.AreEqual(AgentStatus.Available, _agent.Status);
+            _agent.Cognitive.TasksAndPerformance.CanPerformTask = false;
+            _agent.Environment.Schedule.Step = 1;
+            Assert.IsFalse(_agent.IsPerformingTask(false));
+        }
+
+        /// <summary>
+        ///     non Isolated, can perform task
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest2()
+        {
+            _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
+            _agent.Environment.Schedule.Step = 1;
+            Assert.IsTrue(_agent.IsPerformingTask(false));
+        }
+
+        /// <summary>
+        ///     non Isolated, can't perform task on weekend
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest3()
+        {
+            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
+            _agent.Environment.Schedule.Step = 5;
+            Assert.IsFalse(_agent.IsPerformingTask(false));
+        }
+
+        /// <summary>
+        ///     non Isolated, can't perform task on weekend
+        /// </summary>
+        [TestMethod]
+        public void IsActiveTest4()
+        {
+            _agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
+            _agent.Environment.Schedule.Step = 5;
+            Assert.IsTrue(_agent.IsPerformingTask(false));
         }
 
         /// <summary>
@@ -1074,7 +827,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AcceptNewInteractionTest()
         {
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1086,7 +839,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             _environment.WhitePages.Network.NetworkLinks.AddLink(_agent.Id, agent2.Id);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
@@ -1101,7 +854,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1116,7 +869,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 0;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1130,7 +883,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             Assert.IsFalse(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1144,7 +897,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
-            var agent2 = new TestAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(2, _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1519,8 +1272,8 @@ namespace SymuTests.Classes.Agents
         public void TryRecoverBlockerIncompleteKnowledgeTest()
         {
             // Add teammates with knowledge
-            var teammate = AddTeammate();
-            var group = new TestAgent(_organizationEntity.NextEntityIndex(), 2, _environment);
+            var teammate = AddAgent();
+            var group = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), 2, _environment);
             group.Start();
             _environment.WhitePages.Network.AddMemberToGroup(_agent.Id, 100, group.Id);
             _environment.WhitePages.Network.AddMemberToGroup(teammate.Id, 100, group.Id);
@@ -1709,7 +1462,7 @@ namespace SymuTests.Classes.Agents
         public void TryRecoverBlockerIncompleteBeliefTest()
         {
             // Add teammates with knowledge
-            var teammate = AddTeammate();
+            var teammate = AddAgent();
             teammate.BeliefsModel.AddBelief(_knowledge.Id, BeliefLevel.StronglyAgree);
             teammate.BeliefsModel.InitializeBeliefs();
             _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);

@@ -85,7 +85,7 @@ namespace SymuGroupAndInteraction.Classes
             }
         }
 
-        private void SetKnowledge(Agent actor, IReadOnlyList<Knowledge> knowledges, int i)
+        private void SetKnowledge(CognitiveAgent actor, IReadOnlyList<Knowledge> knowledges, int i)
         {
             switch (Knowledge)
             {

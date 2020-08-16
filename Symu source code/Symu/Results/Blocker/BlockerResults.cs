@@ -12,6 +12,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Classes.Agents;
 using Symu.Environment;
 
 #endregion
@@ -92,10 +93,10 @@ namespace Symu.Results.Blocker
             //}
 
             // alive agents
-            HandleResults(Environment.WhitePages.AllAgents().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             Results.TryAdd(Environment.Schedule.Step, result);
         }

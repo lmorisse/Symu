@@ -23,7 +23,7 @@ using Symu.Repository.Networks.Knowledges;
 
 namespace SymuBeliefsAndInfluence.Classes
 {
-    public sealed class InfluencerAgent : Agent
+    public sealed class InfluencerAgent : CognitiveAgent
     {
         public const byte ClassKey = SymuYellowPages.Actor;
 

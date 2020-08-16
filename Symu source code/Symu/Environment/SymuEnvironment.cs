@@ -80,7 +80,7 @@ namespace Symu.Environment
         ///     Adds an agent to the environment. The agent should already have a name and its name should be unique.
         /// </summary>
         /// <param name="agent">The concurrent agent that will be added</param>
-        public void AddAgent(Agent agent)
+        public void AddAgent(ReactiveAgent agent)
         {
             if (agent is null)
             {
@@ -343,7 +343,7 @@ namespace Symu.Environment
         /// </summary>
         private void SetInteractionSphere(bool initialization)
         {
-            var agentIds = WhitePages.AllAgents().Where(x =>
+            var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.Id).ToList();
             WhitePages.Network.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.Network);

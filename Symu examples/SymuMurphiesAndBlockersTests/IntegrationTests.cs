@@ -75,10 +75,7 @@ namespace SymuMurphiesAndBlockersTests
         public void NoMurphiesTest(int knowledgeCount)
         {
             _environment.KnowledgeCount = (byte) knowledgeCount;
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
                 GenericLevel.None;
 
@@ -162,9 +159,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 0;
             _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
@@ -185,9 +180,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest1()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
@@ -210,9 +203,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest2()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -234,9 +225,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest3()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -256,9 +245,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest4()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -281,9 +268,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest5()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -304,9 +289,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest6()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -323,8 +306,11 @@ namespace SymuMurphiesAndBlockersTests
             Assert.IsTrue(TasksRatio() < 100);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalInternalHelp);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.TotalSearches);
-            Assert.AreNotEqual(0, _environment.IterationResult.Blockers.TotalGuesses);
-            Assert.AreNotEqual(0, _environment.IterationResult.Blockers.TotalCancelled);
+            if (_environment.IterationResult.Blockers.Done > 0)
+            {
+                Assert.AreNotEqual(0, _environment.IterationResult.Blockers.TotalGuesses);
+                Assert.AreNotEqual(0, _environment.IterationResult.Blockers.TotalCancelled);
+            }
         }
 
         /// <summary>
@@ -333,9 +319,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest7()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -363,9 +347,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest8()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -388,9 +370,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyKnowledgeTest9()
         {
-            _environment.Organization.Murphies.IncompleteBelief.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteKnowledge.On = true;
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 1;
@@ -437,9 +417,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 0;
             _environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionLevel =
@@ -459,9 +437,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest1()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
@@ -481,9 +457,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest2()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
@@ -504,9 +478,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest3()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
@@ -532,9 +504,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest4()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             //_environment.Organization.Templates.Human.Cognitive.InternalCharacteristics.RiskAversionThreshold = 0;
@@ -561,9 +531,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest5()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;
@@ -589,9 +557,7 @@ namespace SymuMurphiesAndBlockersTests
         [TestMethod]
         public void OnlyBeliefsTest6()
         {
-            _environment.Organization.Murphies.IncompleteKnowledge.On = false;
-            _environment.Organization.Murphies.UnAvailability.On = false;
-            _environment.Organization.Murphies.IncompleteInformation.On = false;
+            _environment.Organization.Murphies.Off();
             _environment.Organization.Murphies.IncompleteBelief.On = true;
             _environment.Organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 0;

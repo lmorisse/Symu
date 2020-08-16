@@ -24,7 +24,7 @@ using Symu.Repository.Networks.Knowledges;
 
 namespace SymuLearnAndForget.Classes
 {
-    public class LearnAgent : Agent
+    public class LearnAgent : CognitiveAgent
     {
         public const byte ClassKey = 2;
 

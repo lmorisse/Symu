@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 0.91 [☰](https://github.com/lmorisse/symu/compare/v0.9.1..v0.9.0) by [lmorisse](https://github.com/lmorisse)
+* Split Agent into ReactiveAgent and CognitiveAgent
+
 ## 0.9 [☰](https://github.com/lmorisse/symu/compare/v0.9.0..v0.8.0) by [lmorisse](https://github.com/lmorisse)
 * Remove InteractionSphereModel.FrequencyOfSphereUpdate
 * Schedule Bug fixe 
