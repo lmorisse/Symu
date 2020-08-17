@@ -20,18 +20,18 @@ namespace SymuTests.Messaging.Reply
     [TestClass]
     public class AgentWaitingRepliesTests
     {
-        private const byte ClassKey = 1;
+        private const byte ClassId = 1;
         private readonly WaitingReplies _agentWaitingReplies = new WaitingReplies();
 
         [TestMethod]
         public void EnqueueTest()
         {
-            _agentWaitingReplies.Enqueue(ClassKey, 1);
+            _agentWaitingReplies.Enqueue(ClassId, 1);
             Assert.AreEqual(1, _agentWaitingReplies.WaitingMessages.Count);
             var waitingReply = _agentWaitingReplies.WaitingMessages[0];
             Assert.AreEqual(1, _agentWaitingReplies.WaitingMessages.Count);
             Assert.AreEqual(1, waitingReply.MessagesSent);
-            _agentWaitingReplies.Enqueue(ClassKey, 2);
+            _agentWaitingReplies.Enqueue(ClassId, 2);
             Assert.AreEqual(1, _agentWaitingReplies.WaitingMessages.Count);
             Assert.AreEqual(2, waitingReply.MessagesSent);
         }
@@ -39,25 +39,25 @@ namespace SymuTests.Messaging.Reply
         [TestMethod]
         public void DequeueTest()
         {
-            _agentWaitingReplies.Enqueue(ClassKey, 2);
+            _agentWaitingReplies.Enqueue(ClassId, 2);
             var waitingReply = _agentWaitingReplies.WaitingMessages[0];
             Assert.AreEqual(2, waitingReply.MessagesSent);
-            _agentWaitingReplies.Dequeue(ClassKey);
+            _agentWaitingReplies.Dequeue(ClassId);
             Assert.AreEqual(1, waitingReply.RepliesReceived);
-            _agentWaitingReplies.Dequeue(ClassKey);
+            _agentWaitingReplies.Dequeue(ClassId);
             Assert.AreEqual(2, waitingReply.RepliesReceived);
             //Replies received > messagesSent
-            Assert.ThrowsException<IndexOutOfRangeException>(() => _agentWaitingReplies.Dequeue(ClassKey));
+            Assert.ThrowsException<IndexOutOfRangeException>(() => _agentWaitingReplies.Dequeue(ClassId));
         }
 
         [TestMethod]
         public void NoWaitingMessageTest()
         {
-            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassKey));
-            _agentWaitingReplies.Enqueue(ClassKey, 1);
-            Assert.IsFalse(_agentWaitingReplies.NoWaitingReply(ClassKey));
-            _agentWaitingReplies.Dequeue(ClassKey);
-            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassKey));
+            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassId));
+            _agentWaitingReplies.Enqueue(ClassId, 1);
+            Assert.IsFalse(_agentWaitingReplies.NoWaitingReply(ClassId));
+            _agentWaitingReplies.Dequeue(ClassId);
+            Assert.IsTrue(_agentWaitingReplies.NoWaitingReply(ClassId));
         }
     }
 }

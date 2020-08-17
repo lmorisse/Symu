@@ -17,6 +17,7 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -88,19 +89,19 @@ namespace SymuBeliefsAndInfluence.Classes
         {
             base.SetAgents();
 
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
 
             for (var j = 0; j < InfluencersCount; j++)
             {
                 var actor = new InfluencerAgent(Organization.NextEntityIndex(), this, InfluencerTemplate);
                 Influencers.Add(actor);
-                agentIds.Add(actor.Id);
+                agentIds.Add(actor.AgentId);
             }
 
             for (var j = 0; j < WorkersCount; j++)
             {
                 var actor = new PersonAgent(Organization.NextEntityIndex(), this, WorkerTemplate);
-                agentIds.Add(actor.Id);
+                agentIds.Add(actor.AgentId);
             }
 
             WhitePages.MetaNetwork.Links.AddLinks(agentIds);

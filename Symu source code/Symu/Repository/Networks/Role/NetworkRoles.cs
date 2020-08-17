@@ -9,9 +9,11 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -37,7 +39,7 @@ namespace Symu.Repository.Networks.Role
             List.Clear();
         }
 
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             // Remove agentId as an Agent
             List.RemoveAll(l => l.AgentId.Equals(agentId));
@@ -53,37 +55,37 @@ namespace Symu.Repository.Networks.Role
         /// <summary>
         ///     List of groupIds teammate is member of
         /// </summary>
-        /// <param name="teammateId"></param>
-        /// <param name="groupClassKey"></param>
+        /// <param name="agentId"></param>
+        /// <param name="groupClassId"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> IsMemberOfGroups(AgentId teammateId, byte groupClassKey)
+        public IEnumerable<IAgentId> IsMemberOfGroups(IAgentId agentId, IClassId groupClassId)
         {
-            return List.FindAll(l => l != null && l.IsMemberOfGroups(teammateId, groupClassKey)).Select(x => x.GroupId);
+            return List.FindAll(l => l != null && l.IsMemberOfGroups(agentId, groupClassId)).Select(x => x.GroupId);
         }
 
         /// <summary>
         ///     List of groupIds teammate is member of
         /// </summary>
-        /// <param name="teammateId"></param>
-        /// <param name="groupClassKey"></param>
+        /// <param name="agentId"></param>
+        /// <param name="groupClassId"></param>
         /// <returns></returns>
-        public bool IsMember(AgentId teammateId, byte groupClassKey)
+        public bool IsMember(IAgentId agentId, IClassId groupClassId)
         {
-            return List.Exists(l => l != null && l.IsMemberOfGroups(teammateId, groupClassKey));
+            return List.Exists(l => l != null && l.IsMemberOfGroups(agentId, groupClassId));
         }
 
-        public bool ExistAgentForRoleType(byte roleType, AgentId groupId)
+        public bool ExistAgentForRoleType(byte roleType, IAgentId groupId)
         {
             return List.Exists(l => l != null && l.HasRoleInGroup(roleType, groupId));
         }
 
-        public AgentId GetAgentIdForRoleType(byte roleType, AgentId groupId)
+        public IAgentId GetAgentIdForRoleType(byte roleType, IAgentId groupId)
         {
             var group = List.Find(l => l != null && l.HasRoleInGroup(roleType, groupId));
-            return group?.AgentId ?? new AgentId();
+            return group?.AgentId;
         }
 
-        public IEnumerable<AgentId> GetGroups(AgentId agentId, byte roleType)
+        public IEnumerable<IAgentId> GetGroups(IAgentId agentId, byte roleType)
         {
             return List.FindAll(l => l != null && l.HasRole(agentId, roleType)).Select(x => x.GroupId);
         }
@@ -91,27 +93,27 @@ namespace Symu.Repository.Networks.Role
         /// <summary>
         ///     Check if agentId has a role in a team
         /// </summary>
-        public bool HasRoles(AgentId agentId)
+        public bool HasRoles(IAgentId agentId)
         {
             return List.Exists(l => l != null && l.AgentId.Equals(agentId));
         }
 
-        public bool HasRole(AgentId agentId, byte roleType)
+        public bool HasRole(IAgentId agentId, byte roleType)
         {
             return List.Exists(l => l != null && l.HasRole(agentId, roleType));
         }
 
-        public bool HasARoleIn(AgentId agentId, byte roleType, AgentId groupId)
+        public bool HasARoleIn(IAgentId agentId, byte roleType, IAgentId groupId)
         {
             return List.Exists(l => l != null && l.HasRoleInGroup(agentId, roleType, groupId));
         }
 
-        public bool HasARoleIn(AgentId agentId, AgentId groupId)
+        public bool HasARoleIn(IAgentId agentId, IAgentId groupId)
         {
             return List.Exists(l => l != null && l.HasRoleInGroup(agentId, groupId));
         }
 
-        public void RemoveMember(AgentId agentId, AgentId groupId)
+        public void RemoveMember(IAgentId agentId, IAgentId groupId)
         {
             List.RemoveAll(l => l == null || l.HasRoleInGroup(agentId, groupId));
         }
@@ -122,7 +124,7 @@ namespace Symu.Repository.Networks.Role
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<NetworkRole> GetRoles(AgentId agentId, AgentId groupId)
+        public IEnumerable<NetworkRole> GetRoles(IAgentId agentId, IAgentId groupId)
         {
             lock (List)
             {
@@ -135,7 +137,7 @@ namespace Symu.Repository.Networks.Role
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<NetworkRole> GetRoles(AgentId groupId)
+        public IEnumerable<NetworkRole> GetRoles(IAgentId groupId)
         {
             return List.Where(r => r.IsGroup(groupId));
         }
@@ -145,7 +147,7 @@ namespace Symu.Repository.Networks.Role
         /// </summary>
         /// <param name="roleType"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetAgents(byte roleType)
+        public IEnumerable<IAgentId> GetAgents(byte roleType)
         {
             return List.Where(r => r.HasRole(roleType)).Select(x => x.AgentId);
         }
@@ -156,8 +158,13 @@ namespace Symu.Repository.Networks.Role
         /// <param name="agentId"></param>
         /// <param name="groupSourceId"></param>
         /// <param name="groupTargetId"></param>
-        public void TransferTo(AgentId agentId, AgentId groupSourceId, AgentId groupTargetId)
+        public void TransferTo(IAgentId agentId, IAgentId groupSourceId, IAgentId groupTargetId)
         {
+            if (groupSourceId == null)
+            {
+                throw new ArgumentNullException(nameof(groupSourceId));
+            }
+
             if (groupSourceId.Equals(groupTargetId))
             {
                 return;
@@ -190,7 +197,7 @@ namespace Symu.Repository.Networks.Role
             return List.Contains(role);
         }
 
-        public void RemoveMembersByRoleTypeFromGroup(byte roleType, AgentId groupId)
+        public void RemoveMembersByRoleTypeFromGroup(byte roleType, IAgentId groupId)
         {
             List.RemoveAll(l => l.HasRoleInGroup(roleType, groupId));
         }

@@ -25,11 +25,11 @@ namespace SymuBeliefsAndInfluence.Classes
 {
     public sealed class InfluencerAgent : CognitiveAgent
     {
-        public const byte ClassKey = SymuYellowPages.Actor;
+        public const byte Class = SymuYellowPages.Actor;
 
         public InfluencerAgent(ushort agentKey, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 

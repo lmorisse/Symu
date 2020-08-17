@@ -15,6 +15,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -47,7 +48,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void FilterAgentsWithKnowledgeTest()
         {
-            var agentIds = new List<AgentId>
+            var agentIds = new List<IAgentId>
             {
                 _agentId
             };

@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -20,7 +21,7 @@ namespace Symu.Repository.Networks.Portfolio
     /// </summary>
     public class NetworkPortfolio
     {
-        public NetworkPortfolio(AgentId agentId, byte type, float allocation)
+        public NetworkPortfolio(IAgentId agentId, byte type, float allocation)
         {
             AgentId = agentId;
             TypeOfUse = type;
@@ -30,7 +31,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// <summary>
         ///     The agentId using an object of the portfolio
         /// </summary>
-        public AgentId AgentId { get; }
+        public IAgentId AgentId { get; }
 
         /// <summary>
         ///     Define how the AgentId is using the object
@@ -48,17 +49,17 @@ namespace Symu.Repository.Networks.Portfolio
             return TypeOfUse == type;
         }
 
-        public bool IsTypeAndClassKey(byte type, byte classKey)
+        public bool IsTypeAndClassId(byte type, IClassId classId)
         {
-            return IsType(type) && AgentId.ClassKey == classKey;
+            return IsType(type) && AgentId.Equals(classId);
         }
 
-        public bool Equals(AgentId agentId, byte type)
+        public bool Equals(IAgentId agentId, byte type)
         {
             return IsType(type) && AgentId.Equals(agentId);
         }
 
-        public bool Equals(AgentId agentId)
+        public bool Equals(IAgentId agentId)
         {
             return AgentId.Equals(agentId);
         }

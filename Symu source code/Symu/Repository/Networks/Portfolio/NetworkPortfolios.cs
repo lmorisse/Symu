@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -30,8 +31,8 @@ namespace Symu.Repository.Networks.Portfolio
         ///     Key => ObjectIds
         ///     Values => List of NetworkPortfolio which define who is using which object and how
         /// </summary>
-        public ConcurrentDictionary<AgentId, List<NetworkPortfolio>> List { get; } =
-            new ConcurrentDictionary<AgentId, List<NetworkPortfolio>>();
+        public ConcurrentDictionary<IAgentId, List<NetworkPortfolio>> List { get; } =
+            new ConcurrentDictionary<IAgentId, List<NetworkPortfolio>>();
 
         public int Count => List.Count;
 
@@ -51,11 +52,16 @@ namespace Symu.Repository.Networks.Portfolio
         /// </summary>
         /// <param name="objectId"></param>
         /// <param name="networkPortfolio"></param>
-        private void Add(AgentId objectId, NetworkPortfolio networkPortfolio)
+        private void Add(IAgentId objectId, NetworkPortfolio networkPortfolio)
         {
+            if (objectId == null)
+            {
+                throw new ArgumentNullException(nameof(objectId));
+            }
+
             List[objectId].Add(networkPortfolio);
             // Reallocation
-            var objectIds = GetObjectIds(networkPortfolio.AgentId, networkPortfolio.TypeOfUse);
+            var objectIds = GetObjectIds(networkPortfolio.AgentId, networkPortfolio.TypeOfUse).ToList();
             var totalAllocation =
                 objectIds.Sum(oId => GetAllocation(networkPortfolio.AgentId, oId, networkPortfolio.TypeOfUse));
 
@@ -74,12 +80,12 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public bool Exists(AgentId agentId, AgentId objectId, byte type)
+        public bool Exists(IAgentId agentId, IAgentId objectId, byte type)
         {
             return ContainsObject(objectId) && List[objectId].Exists(n => n.Equals(agentId, type));
         }
 
-        private void AddPortfolio(AgentId objectId, NetworkPortfolio networkPortfolio)
+        private void AddPortfolio(IAgentId objectId, NetworkPortfolio networkPortfolio)
         {
             AddObject(objectId);
             if (!List[objectId].Contains(networkPortfolio))
@@ -88,13 +94,13 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public void AddPortfolio(AgentId agentId, AgentId objectId, byte type, float allocation)
+        public void AddPortfolio(IAgentId agentId, IAgentId objectId, byte type, float allocation)
         {
             var portfolio = new NetworkPortfolio(agentId, type, allocation);
             AddPortfolio(objectId, portfolio);
         }
 
-        public void AddObject(AgentId objectId)
+        public void AddObject(IAgentId objectId)
         {
             if (!ContainsObject(objectId))
             {
@@ -102,7 +108,7 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             // AgentId can be a component  
             if (ContainsObject(agentId))
@@ -117,12 +123,12 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public void RemoveObject(AgentId objectId)
+        public void RemoveObject(IAgentId objectId)
         {
             List.TryRemove(objectId, out _);
         }
 
-        public float GetAllocation(AgentId agentId, AgentId objectId, byte type)
+        public float GetAllocation(IAgentId agentId, IAgentId objectId, byte type)
         {
             if (Exists(agentId, objectId, type))
             {
@@ -132,19 +138,19 @@ namespace Symu.Repository.Networks.Portfolio
             return 0;
         }
 
-        public IEnumerable<AgentId> GetByType(AgentId objectId, byte type, byte groupClassKey)
+        public IEnumerable<IAgentId> GetByType(IAgentId objectId, byte type, IClassId groupClassId)
         {
             return ContainsObject(objectId)
-                ? List[objectId].FindAll(n => n.IsTypeAndClassKey(type, groupClassKey)).Select(x => x.AgentId)
+                ? List[objectId].FindAll(n => n.IsTypeAndClassId(type, groupClassId)).Select(x => x.AgentId)
                 : null;
         }
 
-        public bool ContainsObject(AgentId objectId)
+        public bool ContainsObject(IAgentId objectId)
         {
             return List.ContainsKey(objectId);
         }
 
-        public bool HasObject(AgentId agentId, byte type)
+        public bool HasObject(IAgentId agentId, byte type)
         {
             return List.Keys.Any(objectId => List[objectId].Exists(n => n.Equals(agentId, type)));
         }
@@ -155,7 +161,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// <param name="agentId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetObjectIds(AgentId agentId, byte type)
+        public IEnumerable<IAgentId> GetObjectIds(IAgentId agentId, byte type)
         {
             return List.Keys.Where(iId => List[iId].Exists(n => n != null && n.Equals(agentId, type)));
         }
@@ -165,7 +171,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetObjectIds(AgentId agentId)
+        public IEnumerable<IAgentId> GetObjectIds(IAgentId agentId)
         {
             return List.Keys.Where(oId => List[oId].Exists(n => n != null && n.Equals(agentId)));
         }
@@ -176,7 +182,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// <param name="agentId"></param>
         /// <param name="objectId"></param>
         /// <returns></returns>
-        public IEnumerable<NetworkPortfolio> GetNetworkPortfolios(AgentId agentId, AgentId objectId)
+        public IEnumerable<NetworkPortfolio> GetNetworkPortfolios(IAgentId agentId, IAgentId objectId)
         {
             return List[objectId].FindAll(n => n.Equals(agentId));
         }
@@ -188,7 +194,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// <param name="objectId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public NetworkPortfolio GetNetworkPortfolio(AgentId agentId, AgentId objectId, byte type)
+        public NetworkPortfolio GetNetworkPortfolio(IAgentId agentId, IAgentId objectId, byte type)
         {
             return Exists(agentId, objectId, type) ? List[objectId].Find(n => n.Equals(agentId, type)) : null;
         }
@@ -199,7 +205,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
-        public void AddMemberToGroup(AgentId agentId, AgentId groupId)
+        public void AddMemberToGroup(IAgentId agentId, IAgentId groupId)
         {
             foreach (var objectId in GetObjectIds(groupId))
             foreach (var groupPortfolio in GetNetworkPortfolios(groupId, objectId))
@@ -209,7 +215,7 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public void RemoveMemberFromGroup(AgentId agentId, AgentId groupId)
+        public void RemoveMemberFromGroup(IAgentId agentId, IAgentId groupId)
         {
             foreach (var objectId in GetObjectIds(groupId))
             foreach (var groupPortfolio in GetNetworkPortfolios(groupId, objectId))
@@ -218,7 +224,7 @@ namespace Symu.Repository.Networks.Portfolio
             }
         }
 
-        public void RemoveMemberFromObject(AgentId agentId, AgentId objectId)
+        public void RemoveMemberFromObject(IAgentId agentId, IAgentId objectId)
         {
             List[objectId].RemoveAll(l => l.Equals(agentId));
         }
@@ -246,7 +252,7 @@ namespace Symu.Repository.Networks.Portfolio
         /// </summary>
         /// <param name="fromGroupId"></param>
         /// <param name="toGroupId"></param>
-        public void CopyTo(AgentId fromGroupId, AgentId toGroupId)
+        public void CopyTo(IAgentId fromGroupId, IAgentId toGroupId)
         {
             foreach (var networkPortfolio in List)
             foreach (var portfolio in networkPortfolio.Value.FindAll(n => n.AgentId.Equals(fromGroupId)))

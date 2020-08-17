@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -17,13 +18,13 @@ namespace Symu.Repository.Networks.Activities
 {
     public class AgentActivity
     {
-        public AgentActivity(AgentId agentId, string activity)
+        public AgentActivity(IAgentId agentId, string activity)
         {
             AgentId = agentId;
             Activity = activity;
         }
 
-        public AgentId AgentId { get; }
+        public IAgentId AgentId { get; }
         public string Activity { get; set; }
     }
 }

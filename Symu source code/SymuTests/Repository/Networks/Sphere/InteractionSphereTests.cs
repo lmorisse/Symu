@@ -23,6 +23,7 @@ using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Sphere;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -35,6 +36,7 @@ namespace SymuTests.Repository.Networks.Sphere
         private readonly AgentId _agentId1 = new AgentId(1, 1);
         private readonly AgentId _agentId2 = new AgentId(2, 1);
         private readonly List<AgentId> _agents = new List<AgentId>();
+        private List<IAgentId> _iAgents => _agents.Cast<IAgentId>().ToList();
 
         private readonly Belief _belief =
             new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
@@ -63,7 +65,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void GeAgentIdsForInteractionsTest()
         {
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(0, InteractionSphere.GetAgentIdsForInteractions(_agentId1, InteractionStrategy.Homophily,
                 new InteractionPatterns()).Count());
         }
@@ -74,7 +76,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void GeAgentIdsForNewInteractionsTest()
         {
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(0,
                 InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
@@ -86,7 +88,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void GeAgentIdsForNewInteractionsTest1()
         {
             _model.InteractionSphere.SphereUpdateOverTime = true;
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(1,
                 InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
@@ -99,7 +101,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             _model.InteractionSphere.SphereUpdateOverTime = true;
             AddLink();
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(0,
                 InteractionSphere.GetAgentIdsForNewInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
@@ -110,7 +112,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void GetSphereWeightTest()
         {
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(0, InteractionSphere.GetSphereWeight());
         }
 
@@ -127,14 +129,14 @@ namespace SymuTests.Repository.Networks.Sphere
             AddLink();
             AddActivity(_agentId1);
             AddActivity(_agentId2);
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(InteractionSphere.GetMaxSphereWeight(), InteractionSphere.GetSphereWeight());
         }
 
         [TestMethod]
         public void GetMaxSphereWeightTest()
         {
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(8, InteractionSphere.GetMaxSphereWeight());
         }
 
@@ -173,7 +175,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void GetHomophilyTest()
         {
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(0, InteractionSphere.GetHomophily(_agentId1, _agentId2));
         }
 
@@ -185,7 +187,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddLink();
             _model.InteractionSphere.SetInteractionPatterns(InteractionStrategy.SocialDemographics);
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(1, InteractionSphere.GetHomophily(_agentId1, _agentId2));
         }
 
@@ -197,7 +199,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddKnowledge(_agentId1, KnowledgeLevel.FullKnowledge);
             AddKnowledge(_agentId2, KnowledgeLevel.FullKnowledge);
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(1, InteractionSphere.GetHomophily(_agentId1, _agentId2));
         }
 
@@ -209,7 +211,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddBelief(_agentId1, 1);
             AddBelief(_agentId2, 1);
-            InteractionSphere.SetSphere(true, _agents, _network);
+            InteractionSphere.SetSphere(true, _iAgents, _network);
             Assert.AreEqual(1, InteractionSphere.GetHomophily(_agentId1, _agentId2));
         }
 

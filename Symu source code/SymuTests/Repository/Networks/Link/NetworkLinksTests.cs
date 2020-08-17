@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Repository.Networks.Link;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -89,16 +90,16 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void GetActiveLinksTest()
         {
-            Assert.AreEqual(0, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
+            Assert.AreEqual(0, new List<IAgentId>(_links.GetActiveLinks(_agentId1)).Count);
             _links.AddLink(_agentId1, _agentId2);
             _links.AddLink(_agentId3, _agentId1);
             var teammateId4 = new AgentId(5, 2);
             _links.AddLink(_agentId1, teammateId4);
-            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
+            Assert.AreEqual(3, new List<IAgentId>(_links.GetActiveLinks(_agentId1)).Count);
 
             // Distinct test
             _links.AddLink(_agentId1, _agentId2);
-            Assert.AreEqual(3, new List<AgentId>(_links.GetActiveLinks(_agentId1)).Count);
+            Assert.AreEqual(3, new List<IAgentId>(_links.GetActiveLinks(_agentId1)).Count);
         }
 
         [TestMethod]
@@ -137,7 +138,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void AddLinksTest()
         {
-            var agents = new List<AgentId>();
+            var agents = new List<IAgentId>();
             _links.AddLinks(agents);
             Assert.AreEqual(0, _links.Count);
         }
@@ -148,7 +149,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void AddLinksTest1()
         {
-            var agents = new List<AgentId> {_agentId1, _agentId2, _agentId3};
+            var agents = new List<IAgentId> {_agentId1, _agentId2, _agentId3};
             _links.AddLinks(agents);
             Assert.AreEqual(3, _links.Count);
             for (var i = 0; i < 3; i++)

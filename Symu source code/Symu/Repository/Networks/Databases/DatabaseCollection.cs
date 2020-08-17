@@ -43,17 +43,17 @@ namespace Symu.Repository.Networks.Databases
                 throw new ArgumentNullException(nameof(database));
             }
 
-            return Exists(database.Entity.AgentId.Key);
+            return Exists(database.Entity.AgentId.Id);
         }
 
         public Database GetDatabase(ushort databaseId)
         {
-            return List.Find(k => k.Entity.AgentId.Key == databaseId);
+            return List.Find(k => k.Entity.AgentId.Id == databaseId);
         }
 
         public bool Exists(ushort databaseId)
         {
-            return List.Exists(k => k.Entity.AgentId.Key == databaseId);
+            return List.Exists(k => k.Entity.AgentId.Id == databaseId);
         }
 
         public void Clear()

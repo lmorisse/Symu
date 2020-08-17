@@ -62,13 +62,13 @@ namespace SymuTests.Repository
         [TestMethod]
         public void ExistAgentTests()
         {
-            Assert.IsTrue(_environment.WhitePages.ExistsAgent(_agent.Id));
+            Assert.IsTrue(_environment.WhitePages.ExistsAgent(_agent.AgentId));
         }
 
         [TestMethod]
         public void GetAgentTests()
         {
-            Assert.AreEqual(_agent, _environment.WhitePages.GetAgent(_agent.Id));
+            Assert.AreEqual(_agent, _environment.WhitePages.GetAgent(_agent.AgentId));
         }
 
         [TestMethod]
@@ -76,25 +76,25 @@ namespace SymuTests.Repository
         {
             var agentId = new AgentId(1, ClassName1);
             Assert.IsFalse(_environment.WhitePages.ExistsAndStarted(agentId));
-            Assert.IsFalse(_environment.WhitePages.ExistsAndStarted(_agent.Id));
-            Assert.IsFalse(_environment.WhitePages.ExistsAndStarted(_agent.Id));
+            Assert.IsFalse(_environment.WhitePages.ExistsAndStarted(_agent.AgentId));
+            Assert.IsFalse(_environment.WhitePages.ExistsAndStarted(_agent.AgentId));
             _agent.Start();
-            _environment.WhitePages.WaitingForStart(_agent.Id);
-            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.Id));
+            _environment.WhitePages.WaitingForStart(_agent.AgentId);
+            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.AgentId));
         }
 
         [TestMethod]
         public void WaitingForAgentTests()
         {
             _agent.Start();
-            _environment.WhitePages.WaitingForStart(_agent.Id);
-            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.Id));
+            _environment.WhitePages.WaitingForStart(_agent.AgentId);
+            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.AgentId));
         }
 
         [TestMethod]
         public void TestAgentTest()
         {
-            Assert.AreEqual(1, _environment.WhitePages.FilteredAgentsByClassCount(TestCognitiveAgent.ClassKey));
+            Assert.AreEqual(1, _environment.WhitePages.FilteredAgentsByClassCount(TestCognitiveAgent.ClassId));
         }
 
         /// <summary>
@@ -116,10 +116,10 @@ namespace SymuTests.Repository
         public void ClearAgentsTest()
         {
             _environment.Start();
-            _environment.WhitePages.WaitingForStart(_agent.Id);
+            _environment.WhitePages.WaitingForStart(_agent.AgentId);
             _agent.State = AgentState.Stopping;
             _environment.StopAgents();
-            _environment.WhitePages.WaitingForStop(_agent.Id);
+            _environment.WhitePages.WaitingForStop(_agent.AgentId);
             _environment.InitializeIteration();
             //Assert
             Assert.IsFalse(_environment.WhitePages.StoppedAgents.Any());
@@ -131,7 +131,7 @@ namespace SymuTests.Repository
         {
             _environment.WhitePages.RemoveAgent(_agent);
 
-            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.Id.ClassKey));
+            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.Class));
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);
         }
 
@@ -143,7 +143,7 @@ namespace SymuTests.Repository
             _environment.StopAgents();
 
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);
-            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.Id.ClassKey));
+            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.Class));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace SymuTests.Repository
         {
             _environment.Start();
             _environment.WaitingForStart();
-            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.Id));
+            Assert.IsTrue(_environment.WhitePages.ExistsAndStarted(_agent.AgentId));
         }
 
         /// <summary>
@@ -189,11 +189,11 @@ namespace SymuTests.Repository
             for (byte i = 10; i < 20; i++)
             {
                 var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
-                excludeIds.Add(agent.Id);
+                excludeIds.Add(agent.AgentId);
             }
 
             Assert.AreEqual(10,
-                _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassKey, excludeIds).Count);
+                _environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds).Count);
         }
 
         [TestMethod]
@@ -209,11 +209,11 @@ namespace SymuTests.Repository
             for (byte i = 10; i < 20; i++)
             {
                 var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
-                excludeIds.Add(agent.Id);
+                excludeIds.Add(agent.AgentId);
             }
 
             Assert.AreEqual(10,
-                _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassKey, excludeIds).Count());
+                _environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds).Count());
         }
     }
 }

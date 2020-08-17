@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -17,7 +18,7 @@ namespace Symu.Repository.Networks.Role
 {
     public class NetworkRole
     {
-        public NetworkRole(AgentId agentId, AgentId groupId, byte roleType)
+        public NetworkRole(IAgentId agentId, IAgentId groupId, byte roleType)
         {
             AgentId = agentId;
             GroupId = groupId;
@@ -27,21 +28,21 @@ namespace Symu.Repository.Networks.Role
         /// <summary>
         ///     Unique key of the agent
         /// </summary>
-        public AgentId AgentId { get; }
+        public IAgentId AgentId { get; }
 
         /// <summary>
         ///     Unique key of the group
         /// </summary>
-        public AgentId GroupId { get; set; }
+        public IAgentId GroupId { get; set; }
 
         /// <summary>
         ///     An agent may have different role type in a group
         /// </summary>
         public byte RoleType { get; set; }
 
-        public bool IsMemberOfGroups(AgentId teammateId, byte groupClassKey)
+        public bool IsMemberOfGroups(IAgentId teammateId, IClassId groupClassId)
         {
-            return GroupId.ClassKey == groupClassKey && IsAgent(teammateId);
+            return GroupId.Equals(groupClassId) && IsAgent(teammateId);
         }
 
         /// <summary>
@@ -50,17 +51,17 @@ namespace Symu.Repository.Networks.Role
         /// <param name="roleType"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool HasRoleInGroup(byte roleType, AgentId groupId)
+        public bool HasRoleInGroup(byte roleType, IAgentId groupId)
         {
             return RoleType == roleType && IsGroup(groupId);
         }
 
-        public bool HasRoleInGroup(AgentId agentId, byte roleType, AgentId groupId)
+        public bool HasRoleInGroup(IAgentId agentId, byte roleType, IAgentId groupId)
         {
             return RoleType == roleType && IsAgent(agentId) && IsGroup(groupId);
         }
 
-        public bool HasRoleInGroup(AgentId agentId, AgentId groupId)
+        public bool HasRoleInGroup(IAgentId agentId, IAgentId groupId)
         {
             return IsAgent(agentId) && IsGroup(groupId);
         }
@@ -71,7 +72,7 @@ namespace Symu.Repository.Networks.Role
         /// <param name="roleType"></param>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public bool HasRole(AgentId agentId, byte roleType)
+        public bool HasRole(IAgentId agentId, byte roleType)
         {
             return RoleType == roleType && IsAgent(agentId);
         }
@@ -81,12 +82,12 @@ namespace Symu.Repository.Networks.Role
             return RoleType == roleType;
         }
 
-        public bool IsGroup(AgentId groupId)
+        public bool IsGroup(IAgentId groupId)
         {
             return GroupId.Equals(groupId);
         }
 
-        public bool IsAgent(AgentId agentId)
+        public bool IsAgent(IAgentId agentId)
         {
             return AgentId.Equals(agentId);
         }

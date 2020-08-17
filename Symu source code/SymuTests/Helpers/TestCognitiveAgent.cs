@@ -22,9 +22,9 @@ namespace SymuTests.Helpers
     /// </summary>
     internal sealed class TestCognitiveAgent : CognitiveAgent
     {
-        public static byte ClassKey = SymuYellowPages.Actor;
+        public static byte ClassId = SymuYellowPages.Actor;
 
-        public TestCognitiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment,
+        public TestCognitiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassId), environment,
             environment.Organization.Templates.Human)
         {
         }

@@ -62,7 +62,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
-            Assert.AreEqual(1, _agent.Id.Key);
+            Assert.AreEqual(1, _agent.AgentId.Id);
             Assert.IsNotNull(_agent.Environment);
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
@@ -96,7 +96,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
-                Sender = _agent.Id,
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Irc
             };
             _agent.Post(message);
@@ -137,7 +137,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Offline;
             var message = new Message
             {
-                Sender = _agent.Id,
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Phone
             };
             _agent.Post(message);
@@ -159,7 +159,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
-                Sender = _agent.Id,
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Phone
             };
             _agent.Post(message);
@@ -231,7 +231,7 @@ namespace SymuTests.Classes.Agents
             _agent.State = AgentState.Started;
             var message = new Message
             {
-                Sender = _agent.Id,
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
             _agent.Post(message);
@@ -248,7 +248,7 @@ namespace SymuTests.Classes.Agents
             _agent.State = AgentState.Stopping;
             var message = new Message
             {
-                Sender = _agent.Id,
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
             _agent.Post(message);
@@ -266,8 +266,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void RemoveSubscribeTest()
         {
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
+            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.AgentId, 1);
+            var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Remove, SymuYellowPages.Subscribe);
             _agent.RemoveSubscribe(message);
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
         }
@@ -278,10 +278,10 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void RemoveSubscribeTest1()
         {
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 1);
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 2);
-            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.Id, 3);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Remove, SymuYellowPages.Subscribe);
+            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.AgentId, 1);
+            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.AgentId, 2);
+            _agent.MessageProcessor.Subscriptions.Subscribe(_agent.AgentId, 3);
+            var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Remove, SymuYellowPages.Subscribe);
             _agent.RemoveSubscribe(message);
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
             Assert.AreEqual(0, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));
@@ -294,7 +294,7 @@ namespace SymuTests.Classes.Agents
             var attachments = new MessageAttachments();
             attachments.Add((byte) 1);
             attachments.Add((byte) 2);
-            var message = new Message(_agent.Id, _agent.Id, MessageAction.Add, SymuYellowPages.Subscribe, attachments);
+            var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Add, SymuYellowPages.Subscribe, attachments);
             _agent.AddSubscribe(message);
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));

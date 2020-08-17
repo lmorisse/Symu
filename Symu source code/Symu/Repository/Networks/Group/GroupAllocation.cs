@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -17,13 +18,13 @@ namespace Symu.Repository.Networks.Group
 {
     public class GroupAllocation
     {
-        public GroupAllocation(AgentId agentId, float allocation)
+        public GroupAllocation(IAgentId agentId, float allocation)
         {
             AgentId = agentId;
             Allocation = allocation;
         }
 
-        public AgentId AgentId { get; }
+        public IAgentId AgentId { get; }
 
         /// <summary>
         ///     Range 0 - 100

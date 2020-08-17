@@ -75,12 +75,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(Id.Key);
+        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(AgentId.Id);
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(Id, Id.Key);
+        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(AgentId, AgentId.Id);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -175,8 +175,8 @@ namespace Symu.Classes.Agents
                 return new List<AgentId>();
             }
 
-            var agentIds = Environment.WhitePages.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(Id,
-                Cognitive.InteractionPatterns.NextInteractionStrategy()).ToList();
+            var agentIds = Environment.WhitePages.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(AgentId,
+                Cognitive.InteractionPatterns.NextInteractionStrategy()).Cast<AgentId>().ToList();
             return FilterAgentIdsToInteract(agentIds);
         }
 
@@ -188,7 +188,7 @@ namespace Symu.Classes.Agents
         public IEnumerable<AgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
             return Environment.WhitePages.MetaNetwork.InteractionSphere
-                .GetAgentIdsForInteractions(Id, interactionStrategy, Cognitive.InteractionPatterns).ToList();
+                .GetAgentIdsForInteractions(AgentId, interactionStrategy, Cognitive.InteractionPatterns).Cast<AgentId>().ToList();
         }
 
         /// <summary>
@@ -227,17 +227,17 @@ namespace Symu.Classes.Agents
         {
             base.InitializeModels();
             // Initialize agent models
-            LearningModel = new LearningModel(Id, Environment.Organization.Models,
+            LearningModel = new LearningModel(AgentId, Environment.Organization.Models,
                 Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
-            ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
+            ForgettingModel = new ForgettingModel(AgentId, Environment.Organization.Models,
                 Cognitive, Environment.WhitePages.MetaNetwork.Knowledge);
-            InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
+            InfluenceModel = new InfluenceModel(AgentId, Environment.Organization.Models.Influence,
                 Cognitive.InternalCharacteristics, Environment.WhitePages.MetaNetwork);
-            BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,
+            BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
                 Environment.WhitePages.MetaNetwork);
-            KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive,
+            KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
                 Environment.WhitePages.MetaNetwork);
-            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.MetaNetwork);
+            ActivityModel = new ActivityModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace Symu.Classes.Agents
         /// <param name="subject"></param>
         public void Subscribe(AgentId agentId, byte subject)
         {
-            var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
+            var message = new Message(AgentId, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
             if (Schedule.Step == 0)
             {
                 // Not sure the receiver exists already

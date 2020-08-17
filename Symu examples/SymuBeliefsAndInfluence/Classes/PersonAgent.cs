@@ -29,15 +29,15 @@ namespace SymuBeliefsAndInfluence.Classes
 {
     public sealed class PersonAgent : CognitiveAgent
     {
-        public const byte ClassKey = SymuYellowPages.Actor;
+        public const byte Class = SymuYellowPages.Actor;
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 
         public IEnumerable<Knowledge> Knowledges => Environment.Organization.Knowledges;
-        public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.Id);
+        public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.AgentId);
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent

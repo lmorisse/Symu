@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -38,7 +39,7 @@ namespace Symu.Repository.Networks.Link
             set => List[index] = value;
         }
 
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             List.RemoveAll(l => l.AgentId1.Equals(agentId) || l.AgentId2.Equals(agentId));
         }
@@ -52,7 +53,7 @@ namespace Symu.Repository.Networks.Link
         ///     Reinitialize links between members of a group :
         ///     Add a bi directional link between every member of a group
         /// </summary>
-        public void AddLinks(List<AgentId> members)
+        public void AddLinks(List<IAgentId> members)
         {
             if (members == null)
             {
@@ -82,7 +83,7 @@ namespace Symu.Repository.Networks.Link
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public void AddLink(AgentId agentId1, AgentId agentId2)
+        public void AddLink(IAgentId agentId1, IAgentId agentId2)
         {
             if (agentId1.Equals(agentId2))
             {
@@ -109,22 +110,22 @@ namespace Symu.Repository.Networks.Link
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public bool Exists(AgentId agentId1, AgentId agentId2)
+        public bool Exists(IAgentId agentId1, IAgentId agentId2)
         {
             return List.Exists(x => x.HasLink(agentId1, agentId2));
         }
 
-        private NetworkLink Get(AgentId agentId1, AgentId agentId2)
+        private NetworkLink Get(IAgentId agentId1, IAgentId agentId2)
         {
             return List.Find(x => x.HasLink(agentId1, agentId2));
         }
 
-        private void Activate(AgentId agentId1, AgentId agentId2)
+        private void Activate(IAgentId agentId1, IAgentId agentId2)
         {
             Get(agentId1, agentId2).Activate();
         }
 
-        public void DeactivateLink(AgentId agentId1, AgentId agentId2)
+        public void DeactivateLink(IAgentId agentId1, IAgentId agentId2)
         {
             if (Exists(agentId1, agentId2))
             {
@@ -132,17 +133,17 @@ namespace Symu.Repository.Networks.Link
             }
         }
 
-        public bool HasActiveLink(AgentId agentId1, AgentId agentId2)
+        public bool HasActiveLink(IAgentId agentId1, IAgentId agentId2)
         {
             return List.Exists(l => l.HasActiveLink(agentId1, agentId2));
         }
 
-        public float CountLinks(AgentId agentId1, AgentId agentId2)
+        public float CountLinks(IAgentId agentId1, IAgentId agentId2)
         {
             return Exists(agentId1, agentId2) ? Get(agentId1, agentId2).Count : 0;
         }
 
-        public float NormalizedCountLinks(AgentId agentId1, AgentId agentId2)
+        public float NormalizedCountLinks(IAgentId agentId1, IAgentId agentId2)
         {
             return _maxLinksCount == 0 ? 0 : CountLinks(agentId1, agentId2) / _maxLinksCount;
         }
@@ -154,7 +155,7 @@ namespace Symu.Repository.Networks.Link
 
         #region unit tests
 
-        public bool HasPassiveLink(AgentId agentId1, AgentId agentId2)
+        public bool HasPassiveLink(IAgentId agentId1, IAgentId agentId2)
         {
             return List.Exists(l => l.HasPassiveLink(agentId1, agentId2));
         }
@@ -162,7 +163,7 @@ namespace Symu.Repository.Networks.Link
         /// <summary>
         ///     Get all the active links of an agent
         /// </summary>
-        public IEnumerable<AgentId> GetActiveLinks(AgentId agentId)
+        public IEnumerable<IAgentId> GetActiveLinks(IAgentId agentId)
         {
             return List.FindAll(l => l.HasActiveLinks(agentId)).Select(l => l.AgentId2).Distinct();
         }

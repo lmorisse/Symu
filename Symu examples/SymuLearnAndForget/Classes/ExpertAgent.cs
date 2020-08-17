@@ -24,10 +24,10 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class ExpertAgent : CognitiveAgent
     {
-        public const byte ClassKey = 2;
+        public const byte Class = 2;
 
         public ExpertAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 

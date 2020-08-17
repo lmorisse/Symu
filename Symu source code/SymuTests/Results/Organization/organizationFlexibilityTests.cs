@@ -17,6 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Results.Organization;
+using Symu.Tools.Interfaces;
 using SymuTests.Helpers;
 
 #endregion
@@ -69,13 +70,13 @@ namespace SymuTests.Results.Organization
 
         private void SetAgents(int count)
         {
-            var agents = new List<AgentId>();
+            var agents = new List<IAgentId>();
             for (var i = 0; i < count; i++)
             {
                 var agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
                 agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
                 agent.State = AgentState.Started;
-                agents.Add(agent.Id);
+                agents.Add(agent.AgentId);
             }
 
             _environment.WhitePages.MetaNetwork.Links.AddLinks(agents);

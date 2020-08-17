@@ -101,9 +101,9 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetTeammatesTest()
         {
-            Assert.IsNull(_group.GetAgents(_teamId, _teammateId.ClassKey));
+            Assert.IsNull(_group.GetAgents(_teamId, _teammateId.ClassId));
             _group.AddAgent(_teammateId, 100, _teamId);
-            Assert.IsNotNull(_group.GetAgents(_teamId, _teammateId.ClassKey));
+            Assert.IsNotNull(_group.GetAgents(_teamId, _teammateId.ClassId));
         }
 
         [TestMethod]
@@ -135,11 +135,11 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void IsTeammateTest1()
         {
-            Assert.AreEqual(0, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _group.GetGroups(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId);
-            Assert.AreEqual(1, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(1, _group.GetGroups(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId2);
-            Assert.AreEqual(2, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(2, _group.GetGroups(_teammateId, _teamId.ClassId).Count());
         }
 
         [TestMethod]
@@ -162,15 +162,15 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetCoMemberIds()
         {
-            Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId);
-            Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId2, 100, _teamId);
-            Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId3, 100, _teamId2);
-            Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId2);
-            Assert.AreEqual(2, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(2, _group.GetCoMemberIds(_teammateId, _teamId.ClassId).Count());
         }
 
         #region Allocation
@@ -178,9 +178,9 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetGroupAllocationsTest()
         {
-            Assert.AreEqual(0, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId);
-            Assert.AreEqual(1, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(1, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
         }
 
         [TestMethod]
@@ -225,7 +225,7 @@ namespace SymuTests.Repository.Networks.Group
         public void FullAllocUpdateGroupAllocationsTest()
         {
             _group.AddAgent(_teammateId, 50, _teamId);
-            _group.UpdateGroupAllocations(_teammateId, _teamId.ClassKey, true);
+            _group.UpdateGroupAllocations(_teammateId, _teamId.ClassId, true);
             Assert.AreEqual(100, _group.GetAllocation(_teammateId, _teamId));
         }
 
@@ -233,7 +233,7 @@ namespace SymuTests.Repository.Networks.Group
         public void UpdateGroupAllocationsTest()
         {
             _group.AddAgent(_teammateId, 50, _teamId);
-            _group.UpdateGroupAllocations(_teammateId, _teamId.ClassKey, false);
+            _group.UpdateGroupAllocations(_teammateId, _teamId.ClassId, false);
             Assert.AreEqual(50, _group.GetAllocation(_teammateId, _teamId));
         }
 
@@ -241,7 +241,7 @@ namespace SymuTests.Repository.Networks.Group
         public void NullUpdateGroupAllocationsTest()
         {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
-                _group.UpdateGroupAllocations(_teammateId, _teamId.ClassKey, true));
+                _group.UpdateGroupAllocations(_teammateId, _teamId.ClassId, true));
         }
 
         [TestMethod]

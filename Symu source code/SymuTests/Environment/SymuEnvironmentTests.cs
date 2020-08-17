@@ -41,7 +41,7 @@ namespace SymuTests.Environment
             _environment.Start();
             _environment.WaitingForStart();
             _environment.WhitePages.RemoveAgent(agent2);
-            var message = new Message(agent1.Id, agent2.Id, MessageAction.Handle, 1);
+            var message = new Message(agent1.AgentId, agent2.AgentId, MessageAction.Handle, 1);
             Assert.AreEqual(MessageState.Created, message.State);
             _environment.SendAgent(message);
             Assert.AreEqual(MessageState.Lost, message.State);

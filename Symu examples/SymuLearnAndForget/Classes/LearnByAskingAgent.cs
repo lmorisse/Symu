@@ -36,7 +36,7 @@ namespace SymuLearnAndForget.Classes
                 KnowledgeId = Knowledge.Id,
                 KnowledgeBit = Knowledge.GetRandomBitIndex()
             };
-            Send(((ExampleEnvironment) Environment).ExpertAgent.Id, MessageAction.Ask, SymuYellowPages.Knowledge,
+            Send(((ExampleEnvironment) Environment).ExpertAgent.AgentId, MessageAction.Ask, SymuYellowPages.Knowledge,
                 attachments, CommunicationMediums.Email);
         }
 

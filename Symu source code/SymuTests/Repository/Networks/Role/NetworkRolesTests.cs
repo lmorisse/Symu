@@ -25,6 +25,7 @@ namespace SymuTests.Repository.Networks.Role
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(2, 2);
+        private readonly ClassId _classId0 = new ClassId(0);
         private NetworkRole _networkRole;
         private NetworkRole _networkRole2;
 
@@ -78,13 +79,13 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void IsTeammateOfTest()
         {
-            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, 0).Count());
+            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, _classId0).Count());
             _roles.Add(_networkRole);
-            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, 0).Count());
-            Assert.AreEqual(1, _roles.IsMemberOfGroups(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, _classId0).Count());
+            Assert.AreEqual(1, _roles.IsMemberOfGroups(_teammateId, _teamId.ClassId).Count());
             _roles.Add(_networkRole2);
-            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, 0).Count());
-            Assert.AreEqual(2, _roles.IsMemberOfGroups(_teammateId, _teamId.ClassKey).Count());
+            Assert.AreEqual(0, _roles.IsMemberOfGroups(_teammateId, _classId0).Count());
+            Assert.AreEqual(2, _roles.IsMemberOfGroups(_teammateId, _teamId.ClassId).Count());
         }
 
         [TestMethod]

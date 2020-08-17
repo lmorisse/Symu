@@ -97,8 +97,8 @@ namespace Symu.Repository
                 throw new ArgumentNullException(nameof(agent));
             }
 
-            MetaNetwork.RemoveAgent(agent.Id);
-            Agents.Remove(agent.Id);
+            MetaNetwork.RemoveAgent(agent.AgentId);
+            Agents.Remove(agent.AgentId);
             StoppedAgents.Add(agent);
         }
 
@@ -197,34 +197,34 @@ namespace Symu.Repository
         /// </summary>
         public ushort FilteredAgentsByClassCount(byte classKey)
         {
-            return Agents.CountByClassKey(classKey);
+            return Agents.CountByClassId(classKey);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<AgentId> FilteredAgentIdsByClassKey(byte classKey)
+        public IEnumerable<AgentId> FilteredAgentIdsByClassId(byte classId)
         {
-            return Agents.FilteredKeysByClassKey(classKey);
+            return Agents.FilteredKeysByClassd(classId);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<ReactiveAgent> FilteredAgentsByClassKey(byte classKey)
+        public IEnumerable<ReactiveAgent> FilteredAgentsByClassId(byte classId)
         {
-            return Agents.FilteredByClassKey(classKey);
+            return Agents.FilteredByClassId(classId);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<CognitiveAgent> FilteredCognitiveAgentsByClassKey(byte classKey)
+        public IEnumerable<CognitiveAgent> FilteredCognitiveAgentsByClassId(byte classId)
         {
-            return Agents.FilteredByClassKey(classKey).OfType<CognitiveAgent>();
+            return Agents.FilteredByClassId(classId).OfType<CognitiveAgent>();
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace Symu.Repository
         /// <returns></returns>
         public List<AgentId> GetFilteredAgentIdsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
         {
-            var actors = FilteredAgentIdsByClassKey(classKey).ToList();
+            var actors = FilteredAgentIdsByClassId(classKey).ToList();
             if (excludeIds != null)
             {
                 actors.RemoveAll(excludeIds.Contains);
@@ -253,10 +253,10 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<ReactiveAgent> GetFilteredAgentsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
         {
-            var actors = FilteredAgentsByClassKey(classKey).ToList();
+            var actors = FilteredAgentsByClassId(classKey).ToList();
             if (excludeIds != null)
             {
-                actors.RemoveAll(x => excludeIds.Contains(x.Id));
+                actors.RemoveAll(x => excludeIds.Contains(x.AgentId));
             }
 
             return actors;
@@ -298,9 +298,9 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public ushort FilteredStoppedAgentsByClassKeyCount(byte classKey)
+        public ushort FilteredStoppedAgentsByClassIdCount(byte classId)
         {
-            return (ushort) StoppedAgents.Count(a => a.Id.ClassKey == classKey);
+            return (ushort) StoppedAgents.Count(a => a.AgentId.Equals(classId));
         }
 
         #endregion

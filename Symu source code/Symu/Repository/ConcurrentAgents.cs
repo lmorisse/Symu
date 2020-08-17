@@ -27,15 +27,15 @@ namespace Symu.Repository
         private readonly ConcurrentDictionary<AgentId, T> _list = new ConcurrentDictionary<AgentId, T>();
         public int Count => _list.Count;
 
-        internal ushort CountByClassKey(byte classKey)
+        internal ushort CountByClassId(byte classId)
         {
-            var count = _list.Values.Count(a => a.Id.ClassKey == classKey);
+            var count = _list.Values.Count(a => a.AgentId.Equals(classId));
             return Convert.ToUInt16(count);
         }
 
         internal void Add(T agent)
         {
-            _list[agent.Id] = agent;
+            _list[agent.AgentId] = agent;
         }
 
         public bool Exists(ushort key, byte classKey)
@@ -97,18 +97,18 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<T> FilteredByClassKey(byte classKey)
+        public IEnumerable<T> FilteredByClassId(byte classId)
         {
-            return GetValues().Where(a => a.Id.ClassKey == classKey);
+            return GetValues().Where(a => a.AgentId.Equals(classId));
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<AgentId> FilteredKeysByClassKey(byte classKey)
+        public IEnumerable<AgentId> FilteredKeysByClassd(byte classId)
         {
-            return _list.Keys.Where(a => a.ClassKey == classKey);
+            return _list.Keys.Where(a => a.Equals(classId));
         }
 
         /// <summary>

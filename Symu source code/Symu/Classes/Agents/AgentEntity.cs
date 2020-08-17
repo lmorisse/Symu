@@ -26,7 +26,7 @@ namespace Symu.Classes.Agents
 
         public AgentEntity(ushort key, byte classKey)
         {
-            Id = new AgentId(key, classKey);
+            AgentId = new AgentId(key, classKey);
         }
 
         public AgentEntity(ushort key, byte classKey, string name) : this(key, classKey)
@@ -48,7 +48,7 @@ namespace Symu.Classes.Agents
         ///     The Id of the agent. Each entity must have a unique Id
         ///     FIPA Norm : AID
         /// </summary>
-        public AgentId Id { get; set; }
+        public AgentId AgentId { get; set; }
 
         public string Name { get; set; }
         public AgentId Parent { get; set; }
@@ -60,7 +60,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            entity.Id = Id;
+            entity.AgentId = AgentId;
             entity.Name = Name;
             entity.Parent = Parent;
         }
@@ -68,12 +68,12 @@ namespace Symu.Classes.Agents
         public override bool Equals(object obj)
         {
             return obj is AgentEntity entity &&
-                   Id.Equals(entity.Id);
+                   AgentId.Equals(entity.AgentId);
         }
 
         protected bool Equals(AgentEntity other)
         {
-            return other != null && Id.Equals(other.Id);
+            return other != null && AgentId.Equals(other.AgentId);
         }
 
         public override string ToString()

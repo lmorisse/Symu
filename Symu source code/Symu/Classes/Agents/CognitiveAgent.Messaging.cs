@@ -96,7 +96,7 @@ namespace Symu.Classes.Agents
         /// <returns>True if the new interaction has been accepted</returns>
         public bool AcceptNewInteraction(AgentId senderId)
         {
-            if (Id.Equals(senderId))
+            if (AgentId.Equals(senderId))
             {
                 // for unit test
                 return true;
@@ -115,7 +115,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.WhitePages.MetaNetwork.Links.HasActiveLink(Id, senderId))
+            if (Environment.WhitePages.MetaNetwork.Links.HasActiveLink(AgentId, senderId))
             {
                 return true;
             }
@@ -143,7 +143,7 @@ namespace Symu.Classes.Agents
             if (Environment.Organization.Models.InteractionSphere.SphereUpdateOverTime)
             {
                 // Message.Sender is now part of agent interaction sphere
-                Environment.WhitePages.MetaNetwork.Links.AddLink(Id, senderId);
+                Environment.WhitePages.MetaNetwork.Links.AddLink(AgentId, senderId);
             }
 
             return true;

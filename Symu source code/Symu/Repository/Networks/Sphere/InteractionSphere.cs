@@ -20,6 +20,7 @@ using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
 using Symu.Tools;
+using Symu.Tools.Interfaces;
 using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
@@ -34,8 +35,8 @@ namespace Symu.Repository.Networks.Sphere
     public class InteractionSphere
     {
         private readonly InteractionSphereModel _model;
-        private Dictionary<AgentId, int> _agentIndex;
-        private Dictionary<int, AgentId> _indexAgent;
+        private Dictionary<IAgentId, int> _agentIndex;
+        private Dictionary<int, IAgentId> _indexAgent;
         private DerivedParameter _lastAverage;
 
         public InteractionSphere(InteractionSphereModel model)
@@ -48,7 +49,7 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         public DerivedParameter[,] Sphere { get; private set; }
 
-        public void SetSphere(bool initialization, List<AgentId> agentIds, MetaNetwork network)
+        public void SetSphere(bool initialization, List<IAgentId> agentIds, MetaNetwork network)
         {
             if (agentIds == null)
             {
@@ -91,7 +92,7 @@ namespace Symu.Repository.Networks.Sphere
         ///     Clone sphere randomly based on InteractionPatterns
         /// </summary>
         /// <param name="agentIds"></param>
-        public void SetSphereRandomly(IReadOnlyList<AgentId> agentIds)
+        public void SetSphereRandomly(IReadOnlyList<IAgentId> agentIds)
         {
             if (agentIds == null)
             {
@@ -99,8 +100,8 @@ namespace Symu.Repository.Networks.Sphere
             }
 
             var count = agentIds.Count;
-            _agentIndex = new Dictionary<AgentId, int>();
-            _indexAgent = new Dictionary<int, AgentId>();
+            _agentIndex = new Dictionary<IAgentId, int>();
+            _indexAgent = new Dictionary<int, IAgentId>();
             Sphere = new DerivedParameter[count, count];
             // for the moment the matrix is symmetrical
             for (var i = 0; i < count; i++)
@@ -125,7 +126,7 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentIds"></param>
         /// <param name="network"></param>
-        public void UpdateSphereRandomly(IReadOnlyList<AgentId> agentIds, MetaNetwork network)
+        public void UpdateSphereRandomly(IReadOnlyList<IAgentId> agentIds, MetaNetwork network)
         {
             if (agentIds == null)
             {
@@ -138,8 +139,8 @@ namespace Symu.Repository.Networks.Sphere
             }
 
             var count = agentIds.Count;
-            var tempAgentIndex = new Dictionary<AgentId, int>();
-            var tempIndexAgent = new Dictionary<int, AgentId>();
+            var tempAgentIndex = new Dictionary<IAgentId, int>();
+            var tempIndexAgent = new Dictionary<int, IAgentId>();
             var tempSphere = new DerivedParameter[count, count];
             for (var i = 0; i < count; i++)
             {
@@ -201,11 +202,11 @@ namespace Symu.Repository.Networks.Sphere
             Sphere = tempSphere;
         }
 
-        private void SetSphereWithSimilarityMatching(IReadOnlyList<AgentId> agentIds, MetaNetwork network)
+        private void SetSphereWithSimilarityMatching(IReadOnlyList<IAgentId> agentIds, MetaNetwork network)
         {
             var count = agentIds.Count;
-            _agentIndex = new Dictionary<AgentId, int>();
-            _indexAgent = new Dictionary<int, AgentId>();
+            _agentIndex = new Dictionary<IAgentId, int>();
+            _indexAgent = new Dictionary<int, IAgentId>();
             Sphere = new DerivedParameter[count, count];
             // for the moment it is a symmetrical matrix
             for (var i = 0; i < count; i++)
@@ -222,7 +223,7 @@ namespace Symu.Repository.Networks.Sphere
             }
         }
 
-        private DerivedParameter SetDerivedParameter(MetaNetwork network, AgentId agentI, AgentId agentJ)
+        private DerivedParameter SetDerivedParameter(MetaNetwork network, IAgentId agentI, IAgentId agentJ)
         {
             var socialProximity = _model.SocialDemographicWeight > Constants.Tolerance
                 ? SetSocialProximity(agentI, agentJ, network.Links)
@@ -246,7 +247,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <summary>
         ///     The closer two agents are in the belief area, the more likely they will be to interact.
         /// </summary>
-        public static float SetRelativeBelief(AgentId agentId1, AgentId agentId2, NetworkBeliefs networkBeliefs)
+        public static float SetRelativeBelief(IAgentId agentId1, IAgentId agentId2, NetworkBeliefs networkBeliefs)
         {
             if (networkBeliefs == null)
             {
@@ -278,7 +279,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <summary>
         ///     The closer two agents are in the knowledge area, the more likely they will be to interact.
         /// </summary>
-        public static float SetRelativeKnowledge(AgentId agentId1, AgentId agentId2,
+        public static float SetRelativeKnowledge(IAgentId agentId1, IAgentId agentId2,
             NetworkKnowledges networkKnowledges)
         {
             if (networkKnowledges == null)
@@ -318,7 +319,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="agentId2"></param>
         /// <param name="networkLinks"></param>
         /// <returns></returns>
-        public static float SetSocialProximity(AgentId agentId1, AgentId agentId2, NetworkLinks networkLinks)
+        public static float SetSocialProximity(IAgentId agentId1, IAgentId agentId2, NetworkLinks networkLinks)
         {
             //todo graph : number of nodes between agentId1 and agentId2
             if (networkLinks == null)
@@ -336,7 +337,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="agentId2"></param>
         /// <param name="networkActivities"></param>
         /// <returns></returns>
-        public static float SetRelativeActivity(AgentId agentId1, AgentId agentId2, NetworkActivities networkActivities)
+        public static float SetRelativeActivity(IAgentId agentId1, IAgentId agentId2, NetworkActivities networkActivities)
         {
             if (networkActivities == null)
             {
@@ -359,7 +360,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
         /// <param name="interactionPatterns"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetAgentIdsForInteractions(AgentId agentId, InteractionStrategy interactionStrategy,
+        public IEnumerable<IAgentId> GetAgentIdsForInteractions(IAgentId agentId, InteractionStrategy interactionStrategy,
             InteractionPatterns interactionPatterns)
         {
             if (interactionPatterns is null)
@@ -369,10 +370,10 @@ namespace Symu.Repository.Networks.Sphere
 
             if (!_model.On || _agentIndex is null || !_agentIndex.ContainsKey(agentId))
             {
-                return new List<AgentId>();
+                return new List<IAgentId>();
             }
 
-            var agentIdDerivedParameters = new Dictionary<AgentId, DerivedParameter>();
+            var agentIdDerivedParameters = new Dictionary<IAgentId, DerivedParameter>();
             var agentIndex = _agentIndex[agentId];
             for (var i = 0; i < _agentIndex.Count; i++)
             {
@@ -436,10 +437,10 @@ namespace Symu.Repository.Networks.Sphere
             return OrderAgentIdsForInteractions(interactionStrategy, agentIdDerivedParameters);
         }
 
-        private static IEnumerable<AgentId> OrderAgentIdsForInteractions(InteractionStrategy interactionStrategy,
-            Dictionary<AgentId, DerivedParameter> agentIdDerivedParameters)
+        private static IEnumerable<IAgentId> OrderAgentIdsForInteractions(InteractionStrategy interactionStrategy,
+            Dictionary<IAgentId, DerivedParameter> agentIdDerivedParameters)
         {
-            List<AgentId> orderedAgentIds;
+            List<IAgentId> orderedAgentIds;
             switch (interactionStrategy)
             {
                 case InteractionStrategy.Homophily:
@@ -480,7 +481,7 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="agentId"></param>
         /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetAgentIdsForNewInteractions(AgentId agentId,
+        public IEnumerable<IAgentId> GetAgentIdsForNewInteractions(IAgentId agentId,
             InteractionStrategy interactionStrategy)
         {
             if (_agentIndex is null)
@@ -490,10 +491,10 @@ namespace Symu.Repository.Networks.Sphere
 
             if (!_model.On || !_model.SphereUpdateOverTime || !_agentIndex.ContainsKey(agentId))
             {
-                return new List<AgentId>();
+                return new List<IAgentId>();
             }
 
-            var agentIdDerivedParameters = new Dictionary<AgentId, DerivedParameter>();
+            var agentIdDerivedParameters = new Dictionary<IAgentId, DerivedParameter>();
             var agentIndex = _agentIndex[agentId];
             for (var i = 0; i < _agentIndex.Count; i++)
             {
@@ -572,7 +573,7 @@ namespace Symu.Repository.Networks.Sphere
         ///     similar knowledge, and similar beliefs.
         ///     This process utilizes the derived parameters
         /// </remarks>
-        public float GetHomophily(AgentId agentId1, AgentId agentId2)
+        public float GetHomophily(IAgentId agentId1, IAgentId agentId2)
         {
             if (_agentIndex == null)
             {

@@ -26,10 +26,10 @@ namespace SymuMessageAndTask.Classes
 {
     public sealed class PersonAgent : CognitiveAgent
     {
-        public const byte ClassKey = 2;
+        public const byte Class = 2;
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 

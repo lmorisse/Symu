@@ -125,13 +125,13 @@ namespace SymuMessageAndTask.Classes
             {
                 var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
                 {
-                    GroupId = group.Id
+                    GroupId = group.AgentId
                 };
                 CommunicationTemplate communication = new EmailTemplate();
-                var entity = new DataBaseEntity(actor.Id, communication);
+                var entity = new DataBaseEntity(actor.AgentId, communication);
                 var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.Knowledge);
-                WhitePages.MetaNetwork.Databases.Add(actor.Id, email);
-                WhitePages.MetaNetwork.AddAgentToGroup(actor.Id, 100, group.Id, false);
+                WhitePages.MetaNetwork.Databases.Add(actor.AgentId, email);
+                WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);
             }
         }
     }

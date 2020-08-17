@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -32,15 +33,15 @@ namespace Symu.Repository.Networks.Group
         ///     Key => groupId
         ///     Value => list of group allocation : AgentId, Allocation of the agentId to the groupId
         /// </summary>
-        public ConcurrentDictionary<AgentId, List<GroupAllocation>> List { get; } =
-            new ConcurrentDictionary<AgentId, List<GroupAllocation>>();
+        public ConcurrentDictionary<IAgentId, List<GroupAllocation>> List { get; } =
+            new ConcurrentDictionary<IAgentId, List<GroupAllocation>>();
 
         /// <summary>
         ///     Remove agent from network,
         ///     either it is a group or a member of a group
         /// </summary>
         /// <param name="agentId"></param>
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             if (Exists(agentId))
             {
@@ -50,7 +51,7 @@ namespace Symu.Repository.Networks.Group
             RemoveMember(agentId);
         }
 
-        public void RemoveMember(AgentId agentId)
+        public void RemoveMember(IAgentId agentId)
         {
             foreach (var groupId in GetGroups().ToList())
             {
@@ -58,7 +59,7 @@ namespace Symu.Repository.Networks.Group
             }
         }
 
-        public void RemoveMember(AgentId agentId, AgentId groupId)
+        public void RemoveMember(IAgentId agentId, IAgentId groupId)
         {
             if (Exists(groupId))
             {
@@ -66,9 +67,9 @@ namespace Symu.Repository.Networks.Group
             }
         }
 
-        public IEnumerable<AgentId> GetGroups()
+        public IEnumerable<IAgentId> GetGroups()
         {
-            return List.Any() ? List.Keys : new List<AgentId>();
+            return List.Any() ? List.Keys : new List<IAgentId>();
         }
 
         /// <summary>
@@ -76,12 +77,12 @@ namespace Symu.Repository.Networks.Group
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool Exists(AgentId groupId)
+        public bool Exists(IAgentId groupId)
         {
             return List.ContainsKey(groupId);
         }
 
-        public void RemoveGroup(AgentId groupId)
+        public void RemoveGroup(IAgentId groupId)
         {
             List.TryRemove(groupId, out _);
         }
@@ -96,7 +97,7 @@ namespace Symu.Repository.Networks.Group
             List.Clear();
         }
 
-        public void AddGroup(AgentId groupId)
+        public void AddGroup(IAgentId groupId)
         {
             if (!Exists(groupId))
             {
@@ -110,7 +111,7 @@ namespace Symu.Repository.Networks.Group
         /// <param name="agentId"></param>
         /// <param name="allocation"></param>
         /// <param name="groupId"></param>
-        public void AddAgent(AgentId agentId, float allocation, AgentId groupId)
+        public void AddAgent(IAgentId agentId, float allocation, IAgentId groupId)
         {
             AddGroup(groupId);
             if (!IsMemberOfGroup(agentId, groupId))
@@ -124,19 +125,34 @@ namespace Symu.Repository.Networks.Group
                 groupAllocation.Allocation = allocation;
             }
 
-            UpdateGroupAllocations(agentId, groupId.ClassKey, false);
+            if (groupId != null)
+            {
+                UpdateGroupAllocations(agentId, groupId.ClassId, false);
+            }
+        }
+
+        /// <summary>
+        ///     Get agents of a group 
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public IEnumerable<IAgentId> GetAgents(IAgentId groupId)
+        {
+            return Exists(groupId)
+                ? List[groupId].Select(x => x.AgentId)
+                : null;
         }
 
         /// <summary>
         ///     Get agents of a group filtered by classKey
         /// </summary>
         /// <param name="groupId"></param>
-        /// <param name="classKey"></param>
+        /// <param name="classId"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetAgents(AgentId groupId, byte classKey)
+        public IEnumerable<IAgentId> GetAgents(IAgentId groupId, IClassId classId)
         {
             return Exists(groupId)
-                ? List[groupId].FindAll(x => x.AgentId.ClassKey == classKey).Select(x => x.AgentId)
+                ? List[groupId].FindAll(x => x.AgentId.ClassId.Equals(classId)).Select(x => x.AgentId)
                 : null;
         }
 
@@ -145,7 +161,7 @@ namespace Symu.Repository.Networks.Group
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public byte GetAgentsCount(AgentId groupId)
+        public byte GetAgentsCount(IAgentId groupId)
         {
             return Exists(groupId) ? Convert.ToByte(List[groupId].Count) : (byte) 0;
         }
@@ -154,9 +170,9 @@ namespace Symu.Repository.Networks.Group
         ///     Get members count of a group
         /// </summary>
         /// <param name="groupId"></param>
-        /// <param name="classKey"></param>
+        /// <param name="classId"></param>
         /// <returns></returns>
-        public byte GetAgentsCount(AgentId groupId, byte classKey)
+        public byte GetAgentsCount(IAgentId groupId, IClassId classId)
         {
             if (!Exists(groupId))
             {
@@ -165,21 +181,21 @@ namespace Symu.Repository.Networks.Group
 
             lock (List[groupId])
             {
-                return Convert.ToByte(List[groupId].Count(x => x.AgentId.ClassKey == classKey));
+                return Convert.ToByte(List[groupId].Count(x => x.AgentId.ClassId.Equals(classId)));
             }
         }
 
-        public bool IsMemberOfGroup(AgentId agentId, AgentId groupId)
+        public bool IsMemberOfGroup(IAgentId agentId, IAgentId groupId)
         {
             return Exists(groupId) && List[groupId].Exists(g => g != null && g.AgentId.Equals(agentId));
         }
 
-        public GroupAllocation GetGroupAllocation(AgentId agentId, AgentId groupId)
+        public GroupAllocation GetGroupAllocation(IAgentId agentId, IAgentId groupId)
         {
             return Exists(groupId) ? List[groupId].Find(g => g != null && g.AgentId.Equals(agentId)) : null;
         }
 
-        public float GetAllocation(AgentId agentId, AgentId groupId)
+        public float GetAllocation(IAgentId agentId, IAgentId groupId)
         {
             if (IsMemberOfGroup(agentId, groupId))
             {
@@ -193,17 +209,17 @@ namespace Symu.Repository.Networks.Group
         ///     Get the list of the groupIds of a agentId, filtered by group.ClassKey
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="groupClassKey"></param>
+        /// <param name="groupClassId"></param>
         /// <returns>List of groupIds</returns>
-        public IEnumerable<AgentId> GetGroups(AgentId agentId, byte groupClassKey)
+        public IEnumerable<IAgentId> GetGroups(IAgentId agentId, IClassId groupClassId)
         {
-            var groupIds = new List<AgentId>();
+            var groupIds = new List<IAgentId>();
             if (!List.Any())
             {
                 return groupIds;
             }
 
-            groupIds.AddRange(GetGroups().Where(g => g.ClassKey == groupClassKey && IsMemberOfGroup(agentId, g)));
+            groupIds.AddRange(GetGroups().Where(g => g.ClassId.Equals(groupClassId) && IsMemberOfGroup(agentId, g)));
 
             return groupIds;
         }
@@ -211,17 +227,17 @@ namespace Symu.Repository.Networks.Group
         /// <summary>
         ///     Get the list of all the groupIds filtered by group.ClassKey
         /// </summary>
-        /// <param name="groupClassKey"></param>
+        /// <param name="groupClassId"></param>
         /// <returns>List of groupIds</returns>
-        public IEnumerable<AgentId> GetGroups(byte groupClassKey)
+        public IEnumerable<IAgentId> GetGroups(IClassId groupClassId)
         {
-            var groupIds = new List<AgentId>();
+            var groupIds = new List<IAgentId>();
             if (!List.Any())
             {
                 return groupIds;
             }
 
-            groupIds.AddRange(GetGroups().Where(g => g.ClassKey == groupClassKey));
+            groupIds.AddRange(GetGroups().Where(g => g.ClassId.Equals(groupClassId)));
 
             return groupIds;
         }
@@ -230,12 +246,12 @@ namespace Symu.Repository.Networks.Group
         ///     Get the list of the members of all the groups of a agentId, filtered by group.ClassKey
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="groupClassKey"></param>
+        /// <param name="groupClassId"></param>
         /// <returns>List of groupIds</returns>
-        public IEnumerable<AgentId> GetCoMemberIds(AgentId agentId, byte groupClassKey)
+        public IEnumerable<IAgentId> GetCoMemberIds(IAgentId agentId, IClassId groupClassId)
         {
-            var coMemberIds = new List<AgentId>();
-            var groupIds = GetGroups(agentId, groupClassKey).ToList();
+            var coMemberIds = new List<IAgentId>();
+            var groupIds = GetGroups(agentId, groupClassId).ToList();
             if (!groupIds.Any())
             {
                 return coMemberIds;
@@ -253,9 +269,9 @@ namespace Symu.Repository.Networks.Group
         ///     Get the list of the group allocations of a agentId, filtered by group.ClassKey
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="classKey"></param>
+        /// <param name="classId"></param>
         /// <returns>List of groupAllocations (groupId, Allocation)</returns>
-        public IEnumerable<GroupAllocation> GetGroupAllocationsOfAnAgentId(AgentId agentId, byte classKey)
+        public IEnumerable<GroupAllocation> GetGroupAllocationsOfAnAgentId(IAgentId agentId, IClassId classId)
         {
             var groupAllocations = new List<GroupAllocation>();
             if (!List.Any())
@@ -265,7 +281,7 @@ namespace Symu.Repository.Networks.Group
 
             // convert To List, because the collection can be modified during the method
             groupAllocations.AddRange(GetGroups().ToList()
-                .Where(g => g.ClassKey == classKey && IsMemberOfGroup(agentId, g))
+                .Where(g => g.ClassId.Equals(classId) && IsMemberOfGroup(agentId, g))
                 .Select(groupId => new GroupAllocation(groupId, GetAllocation(agentId, groupId))));
 
             return groupAllocations;
@@ -275,12 +291,12 @@ namespace Symu.Repository.Networks.Group
         ///     Get the list of the group allocations of a groupId, filtered by agentId.ClassKey
         /// </summary>
         /// <param name="groupId"></param>
-        /// <param name="classKey"></param>
+        /// <param name="classId"></param>
         /// <returns>List of groupAllocations (groupId, Allocation)</returns>
-        public IEnumerable<GroupAllocation> GetGroupAllocationsOfAGroupId(AgentId groupId, byte classKey)
+        public IEnumerable<GroupAllocation> GetGroupAllocationsOfAGroupId(IAgentId groupId, IClassId classId)
         {
             return Exists(groupId)
-                ? List[groupId].FindAll(x => x.AgentId.ClassKey == classKey)
+                ? List[groupId].FindAll(x => x.AgentId.ClassId.Equals(classId))
                 : new List<GroupAllocation>();
         }
 
@@ -289,7 +305,7 @@ namespace Symu.Repository.Networks.Group
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns>allocation</returns>
-        public float GetAgentAllocations(AgentId groupId)
+        public float GetAgentAllocations(IAgentId groupId)
         {
             return Exists(groupId) ? List[groupId].Sum(a => a.Allocation) : 0;
         }
@@ -302,7 +318,7 @@ namespace Symu.Repository.Networks.Group
         /// <param name="allocation"></param>
         /// <param name="capacityThreshold"></param>
         /// <example>allocation = 50 & groupAllocation = 20 => updated groupAllocation =50+20=70</example>
-        public void UpdateGroupAllocation(AgentId agentId, AgentId groupId, float allocation, float capacityThreshold)
+        public void UpdateGroupAllocation(IAgentId agentId, IAgentId groupId, float allocation, float capacityThreshold)
         {
             var groupAllocation = GetGroupAllocation(agentId, groupId);
             if (groupAllocation is null)
@@ -317,11 +333,11 @@ namespace Symu.Repository.Networks.Group
         ///     Update all groupAllocation of the agentId filtered by the groupId.ClassKey
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="classKey">groupId.ClassKey</param>
+        /// <param name="classId">groupId.ClassKey</param>
         /// <param name="fullAlloc">true if all groupAllocations are added, false if we are in modeling phase</param>
-        public void UpdateGroupAllocations(AgentId agentId, byte classKey, bool fullAlloc)
+        public void UpdateGroupAllocations(IAgentId agentId, IClassId classId, bool fullAlloc)
         {
-            var groupAllocations = GetGroupAllocationsOfAnAgentId(agentId, classKey).ToList();
+            var groupAllocations = GetGroupAllocationsOfAnAgentId(agentId, classId).ToList();
 
             if (!groupAllocations.Any())
             {
@@ -353,17 +369,17 @@ namespace Symu.Repository.Networks.Group
         ///     The main group is defined by the maximum GroupAllocation
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="classKey"></param>
+        /// <param name="classId"></param>
         /// <returns>
         ///     return AgentId of the main group is exists, default Agent if don't exist, so check the result when using this
         ///     method
         /// </returns>
-        public AgentId GetMainGroupOrDefault(AgentId agentId, byte classKey)
+        public IAgentId GetMainGroupOrDefault(IAgentId agentId, IClassId classId)
         {
-            var groups = GetGroupAllocationsOfAnAgentId(agentId, classKey);
+            var groups = GetGroupAllocationsOfAnAgentId(agentId, classId);
             return groups.Any()
-                ? GetGroupAllocationsOfAnAgentId(agentId, classKey).OrderByDescending(ga => ga.Allocation).First().AgentId
-                : new AgentId();
+                ? GetGroupAllocationsOfAnAgentId(agentId, classId).OrderByDescending(ga => ga.Allocation).First().AgentId
+                : null;
         }
 
         /// <summary>
@@ -371,7 +387,7 @@ namespace Symu.Repository.Networks.Group
         /// </summary>
         /// <param name="groupSourceId"></param>
         /// <param name="groupTargetId"></param>
-        public void CopyTo(AgentId groupSourceId, AgentId groupTargetId)
+        public void CopyTo(IAgentId groupSourceId, IAgentId groupTargetId)
         {
             AddGroup(groupTargetId);
             foreach (var groupAllocation in List[groupSourceId])

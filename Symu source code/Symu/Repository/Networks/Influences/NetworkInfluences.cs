@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -24,7 +25,7 @@ namespace Symu.Repository.Networks.Influences
     {
         public List<Influence> List { get; } = new List<Influence>();
 
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             List.RemoveAll(l => l.Equals(agentId));
         }
@@ -45,7 +46,7 @@ namespace Symu.Repository.Networks.Influences
         /// <param name="agentId"></param>
         /// <param name="influenceability"></param>
         /// <param name="influentialness"></param>
-        public void Add(AgentId agentId, float influenceability, float influentialness)
+        public void Add(IAgentId agentId, float influenceability, float influentialness)
         {
             if (Exists(agentId))
             {
@@ -65,7 +66,7 @@ namespace Symu.Repository.Networks.Influences
         /// <param name="agentId"></param>
         /// <param name="influentialness"></param>
         /// <param name="influenceability"></param>
-        public void Update(AgentId agentId, float influentialness, float influenceability)
+        public void Update(IAgentId agentId, float influentialness, float influenceability)
         {
             if (!Exists(agentId))
             {
@@ -82,7 +83,7 @@ namespace Symu.Repository.Networks.Influences
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public bool Exists(AgentId agentId)
+        public bool Exists(IAgentId agentId)
         {
             return List.Exists(l => l.Equals(agentId));
         }
@@ -92,7 +93,7 @@ namespace Symu.Repository.Networks.Influences
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns>Influentialness of an agentId if exists, 0 if not</returns>
-        public float GetInfluentialness(AgentId agentId)
+        public float GetInfluentialness(IAgentId agentId)
         {
             if (Exists(agentId))
             {
@@ -107,7 +108,7 @@ namespace Symu.Repository.Networks.Influences
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns>Influenceability of an agentId if exists, 0 if not</returns>
-        public float GetInfluenceability(AgentId agentId)
+        public float GetInfluenceability(IAgentId agentId)
         {
             if (Exists(agentId))
             {
@@ -122,7 +123,7 @@ namespace Symu.Repository.Networks.Influences
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns>influence of an agentId if exists, null if not</returns>
-        public Influence GetInfluence(AgentId agentId)
+        public Influence GetInfluence(IAgentId agentId)
         {
             return Exists(agentId) ? List.Find(l => l.Equals(agentId)) : null;
         }

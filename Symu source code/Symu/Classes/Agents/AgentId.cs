@@ -10,35 +10,41 @@
 #region using directives
 
 using System;
+using Symu.Tools.Interfaces;
 
 #endregion
 
 namespace Symu.Classes.Agents
 {
-    public struct AgentId
+    /// <summary>
+    /// AgentId is the implementation of the interface of the unique identifier of the agent
+    /// </summary>
+    public struct AgentId : IAgentId
     {
         /// <summary>
-        ///     Unique key of the agent
+        ///     Unique Id of the agent
         /// </summary>
-        public ushort Key { get; set; }
+        public ushort Id { get; set; }
 
         /// <summary>
-        ///     Class Key of the agent
+        ///     ClassId of the agent
         /// </summary>
-        public byte ClassKey { get; set; }
+        public IClassId ClassId { get; set; }
 
-        public bool IsNull => Key == 0;
-        public bool IsNotNull => Key != 0;
+        public byte Class => ((ClassId?) ClassId)?.Id ?? 0;
 
-        public AgentId(ushort key, byte classKey)
+        public bool IsNull => Id == 0;
+        public bool IsNotNull => Id != 0;
+
+        public AgentId(ushort id, byte classId)
         {
-            if (classKey == 0)
+            if (classId == 0)
             {
-                throw new ArgumentNullException(nameof(classKey));
+                throw new ArgumentNullException(nameof(classId));
             }
 
-            Key = key;
-            ClassKey = classKey;
+            Id = id;
+            ClassId = new ClassId(classId);
         }
 
         /// <summary>
@@ -48,18 +54,37 @@ namespace Symu.Classes.Agents
         public override bool Equals(object obj)
         {
             return obj is AgentId id &&
-                   Key == id.Key; //&&
-            //ClassKey == id.ClassKey;
+                   Id == id.Id;
         }
 
-        public bool Equals(AgentId other)
+        public bool Equals(IAgentId agentId)
         {
-            return Key == other.Key; //&& ClassKey == other.ClassKey;
+            return Id == ((AgentId)agentId).Id;
+        }
+
+        public bool Equals(IClassId classId)
+        {
+            return ClassId.Equals(classId);
+        }
+
+        public bool Equals(byte classId)
+        {
+            return Class == classId;
+        }
+
+        /// <summary>
+        /// Implement inferior operator
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <returns>true if this is inferior to agentId </returns>
+        public bool CompareTo(IAgentId agentId)
+        {
+            return Id < ((AgentId)agentId).Id;
         }
 
         public override string ToString()
         {
-            return Key.ToString();
+            return Id.ToString();
         }
 
         public static bool operator ==(AgentId left, AgentId right)
@@ -70,11 +95,6 @@ namespace Symu.Classes.Agents
         public static bool operator !=(AgentId left, AgentId right)
         {
             return !(left == right);
-        }
-
-        public AgentId Clone()
-        {
-            return new AgentId(Key, ClassKey);
         }
     }
 }

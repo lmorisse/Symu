@@ -26,11 +26,11 @@ namespace SymuMurphiesAndBlockers.Classes
     /// </summary>
     public sealed class InternetAccessAgent : CognitiveAgent
     {
-        public const byte ClassKey = 1;
+        public const byte Class = 1;
 
         public InternetAccessAgent(ushort agentKey, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 

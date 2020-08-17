@@ -23,10 +23,10 @@ namespace SymuGroupAndInteraction.Classes
 {
     public sealed class PersonAgent : CognitiveAgent
     {
-        public const byte ClassKey = SymuYellowPages.Actor;
+        public const byte Class = SymuYellowPages.Actor;
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 

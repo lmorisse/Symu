@@ -18,9 +18,9 @@ namespace Symu.Classes.Scenario
 {
     public class ScenarioEntity : AgentEntity
     {
-        public const byte ClassKey = SymuYellowPages.Scenario;
+        public const byte Class = SymuYellowPages.Scenario;
 
-        public ScenarioEntity(ushort key) : base(key, ClassKey)
+        public ScenarioEntity(ushort key) : base(key, Class)
         {
         }
     }

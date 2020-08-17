@@ -95,17 +95,17 @@ namespace Symu.Messaging.Tracker
             return _messages.ContainsKey(step) ? _messages[step].ToList().FindAll(m => m.Sender.Equals(agentId)) : null;
         }
 
-        public bool Exists(MessageAction action, byte content, byte senderClassKey, byte receiverClassKey)
+        public bool Exists(MessageAction action, byte content, byte senderClassId, byte receiverClassId)
         {
             return _messages.Any(m => m.Value.Exists(v => v.Action == action && v.Subject == content
-                                                                             && v.Sender.ClassKey == senderClassKey &&
-                                                                             v.Receiver.ClassKey == receiverClassKey));
+                                                                             && v.Sender.Equals(senderClassId) &&
+                                                                             v.Receiver.Equals(receiverClassId)));
         }
 
-        public bool Exists(MessageAction action, byte content, byte senderClassKey)
+        public bool Exists(MessageAction action, byte content, byte senderClassId)
         {
             return _messages.Any(m => m.Value.Exists(v => v.Action == action && v.Subject == content
-                                                                             && v.Sender.ClassKey == senderClassKey));
+                                                                             && v.Sender.Equals(senderClassId)));
         }
     }
 }

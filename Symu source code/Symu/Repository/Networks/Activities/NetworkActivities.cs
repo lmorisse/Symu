@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -31,15 +32,15 @@ namespace Symu.Repository.Networks.Activities
         /// <summary>
         ///     List of all GroupIds and their activities
         /// </summary>
-        private readonly ConcurrentDictionary<AgentId, List<Activity>> _repository =
-            new ConcurrentDictionary<AgentId, List<Activity>>();
+        private readonly ConcurrentDictionary<IAgentId, List<Activity>> _repository =
+            new ConcurrentDictionary<IAgentId, List<Activity>>();
 
         /// <summary>
         ///     Key => GroupId
         ///     Value => list of AgentActivity : AgentId, activity
         /// </summary>
-        public ConcurrentDictionary<AgentId, List<AgentActivity>> AgentActivities { get; } =
-            new ConcurrentDictionary<AgentId, List<AgentActivity>>();
+        public ConcurrentDictionary<IAgentId, List<AgentActivity>> AgentActivities { get; } =
+            new ConcurrentDictionary<IAgentId, List<AgentActivity>>();
 
         public bool Any()
         {
@@ -57,7 +58,7 @@ namespace Symu.Repository.Networks.Activities
         ///     either it is a Group or an agent
         /// </summary>
         /// <param name="agentId"></param>
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             if (Exists(agentId))
             {
@@ -69,7 +70,7 @@ namespace Symu.Repository.Networks.Activities
 
         #region for Group
 
-        public IEnumerable<AgentId> GetGroupIds()
+        public IEnumerable<IAgentId> GetGroupIds()
         {
             return _repository.Any() ? _repository.Keys : null;
         }
@@ -79,12 +80,12 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool Exists(AgentId groupId)
+        public bool Exists(IAgentId groupId)
         {
             return _repository.ContainsKey(groupId);
         }
 
-        public void RemoveGroup(AgentId groupId)
+        public void RemoveGroup(IAgentId groupId)
         {
             _repository.TryRemove(groupId, out _);
             AgentActivities.TryRemove(groupId, out _);
@@ -96,7 +97,7 @@ namespace Symu.Repository.Networks.Activities
         ///     which call AddGroup
         /// </summary>
         /// <param name="groupId"></param>
-        public void AddGroup(AgentId groupId)
+        public void AddGroup(IAgentId groupId)
         {
             if (Exists(groupId))
             {
@@ -112,7 +113,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="activity"></param>
         /// <param name="groupId"></param>
-        public void AddActivity(Activity activity, AgentId groupId)
+        public void AddActivity(Activity activity, IAgentId groupId)
         {
             AddGroup(groupId);
             if (!_repository[groupId].Contains(activity))
@@ -126,7 +127,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="activity"></param>
         /// <param name="groupId"></param>
-        public void RemoveActivity(AgentId groupId, Activity activity)
+        public void RemoveActivity(IAgentId groupId, Activity activity)
         {
             if (Exists(groupId))
             {
@@ -139,7 +140,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="activities"></param>
         /// <param name="groupId"></param>
-        public void AddActivities(IEnumerable<Activity> activities, AgentId groupId)
+        public void AddActivities(IEnumerable<Activity> activities, IAgentId groupId)
         {
             if (activities is null)
             {
@@ -161,7 +162,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool GroupHasActivities(AgentId groupId)
+        public bool GroupHasActivities(IAgentId groupId)
         {
             return Exists(groupId) && _repository[groupId].Any();
         }
@@ -171,7 +172,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetGroupActivities(AgentId groupId)
+        public IEnumerable<string> GetGroupActivities(IAgentId groupId)
         {
             return Exists(groupId) ? _repository[groupId].Select(x => x.Name) : new List<string>();
         }
@@ -182,7 +183,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="groupId"></param>
         /// <returns>Dictionary</returns>
         public IDictionary<string, List<Knowledge>> GetActivitiesKnowledgesByActivity(
-            AgentId groupId)
+            IAgentId groupId)
         {
             if (!Exists(groupId))
             {
@@ -203,7 +204,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns>Dictionary</returns>
-        public IEnumerable<ushort> GetActivitiesKnowledgeIds(AgentId groupId)
+        public IEnumerable<ushort> GetActivitiesKnowledgeIds(IAgentId groupId)
         {
             if (!Exists(groupId))
             {
@@ -223,7 +224,7 @@ namespace Symu.Repository.Networks.Activities
 
         #region for agent
 
-        public void RemoveMember(AgentId agentId)
+        public void RemoveMember(IAgentId agentId)
         {
             var groupIds = GetGroupIds();
             if (groupIds == null)
@@ -237,7 +238,7 @@ namespace Symu.Repository.Networks.Activities
             }
         }
 
-        public void RemoveMember(AgentId agentId, AgentId groupId)
+        public void RemoveMember(IAgentId agentId, IAgentId groupId)
         {
             if (Exists(groupId))
             {
@@ -251,7 +252,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="activity"></param>
         /// <param name="groupId"></param>
-        public void AddActivity(AgentId agentId, string activity, AgentId groupId)
+        public void AddActivity(IAgentId agentId, string activity, IAgentId groupId)
         {
             AddGroup(groupId);
             if (AgentHasAnActivityOn(agentId, groupId, activity))
@@ -263,13 +264,13 @@ namespace Symu.Repository.Networks.Activities
             AgentActivities[groupId].Add(agentActivity);
         }
 
-        public bool AgentHasAnActivityOn(AgentId agentId, AgentId groupId, string activity)
+        public bool AgentHasAnActivityOn(IAgentId agentId, IAgentId groupId, string activity)
         {
             return Exists(groupId) && AgentActivities[groupId]
                 .Exists(g => g.AgentId.Equals(agentId) && g.Activity == activity);
         }
 
-        public bool AgentHasActivitiesOn(AgentId agentId, AgentId groupId)
+        public bool AgentHasActivitiesOn(IAgentId agentId, IAgentId groupId)
         {
             return Exists(groupId) && AgentActivities[groupId].Exists(g => g.AgentId.Equals(agentId));
         }
@@ -281,7 +282,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetAgentActivities(AgentId agentId, AgentId groupId)
+        public IEnumerable<string> GetAgentActivities(IAgentId agentId, IAgentId groupId)
         {
             return Exists(groupId)
                 ? AgentActivities[groupId].FindAll(g => g.AgentId.Equals(agentId)).Select(x => x.Activity)
@@ -293,7 +294,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetAgentActivities(AgentId agentId)
+        public IEnumerable<string> GetAgentActivities(IAgentId agentId)
         {
             var activities = new List<string>();
             foreach (var agentActivities in AgentActivities)
@@ -305,7 +306,7 @@ namespace Symu.Repository.Networks.Activities
             return activities;
         }
 
-        public IEnumerable<AgentId> FilterAgentIdsWithActivity(IEnumerable<AgentId> agentIds, AgentId groupId,
+        public IEnumerable<IAgentId> FilterAgentIdsWithActivity(IEnumerable<IAgentId> agentIds, IAgentId groupId,
             string activity)
         {
             if (agentIds is null)
@@ -322,7 +323,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <param name="activities"></param>
-        public void AddActivities(AgentId agentId, AgentId groupId, IEnumerable<string> activities)
+        public void AddActivities(IAgentId agentId, IAgentId groupId, IEnumerable<string> activities)
         {
             if (activities is null)
             {
@@ -341,7 +342,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <param name="agentKnowledgeIds"></param>
-        public void AddActivities(AgentId agentId, AgentId groupId, List<ushort> agentKnowledgeIds)
+        public void AddActivities(IAgentId agentId, IAgentId groupId, List<ushort> agentKnowledgeIds)
         {
             AddActivities(agentId, groupId,
                 _repository[groupId].Where(a => a.CheckKnowledgeIds(agentKnowledgeIds)).Select(x => x.Name));
@@ -353,7 +354,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupSourceId"></param>
         /// <param name="groupTargetId"></param>
-        public void TransferTo(AgentId agentId, AgentId groupSourceId, AgentId groupTargetId)
+        public void TransferTo(IAgentId agentId, IAgentId groupSourceId, AgentId groupTargetId)
         {
             AddActivities(agentId, groupTargetId, GetAgentActivities(agentId, groupSourceId));
             RemoveMember(agentId, groupSourceId);
@@ -364,7 +365,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public bool HasAgentActivities(AgentId agentId)
+        public bool HasAgentActivities(IAgentId agentId)
         {
             return AgentActivities.Any(a => a.Value.Exists(v => v != null && v.AgentId.Equals(agentId)));
         }

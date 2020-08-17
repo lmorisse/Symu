@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -277,7 +278,7 @@ namespace SymuTests.Repository.Networks.Activities
         public void FilterAgentIdsWithActivityTest()
         {
             // Empty AgentIds
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
             Assert.AreEqual(0, _network.FilterAgentIdsWithActivity(agentIds, _kanbanId, _activity1.Name).Count());
             // One agent not working on activity
             agentIds.Add(_agentId);

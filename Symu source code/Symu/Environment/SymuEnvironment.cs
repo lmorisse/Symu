@@ -24,6 +24,7 @@ using Symu.Repository;
 using Symu.Repository.Networks.Databases;
 using Symu.Results;
 using Symu.Tools;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -87,10 +88,10 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(agent));
             }
 
-            if (WhitePages.Agents.Exists(agent.Id))
+            if (WhitePages.Agents.Exists(agent.AgentId))
             {
-                throw new ArgumentException("Trying to add an agent " + agent.Id.ClassKey + " with an existing key: " +
-                                            agent.Id.Key);
+                throw new ArgumentException("Trying to add an agent " + agent.AgentId.ClassId + " with an existing key: " +
+                                            agent.AgentId.Id);
             }
 
             WhitePages.Agents.Add(agent);
@@ -204,8 +205,8 @@ namespace Symu.Environment
 
         public List<SimulationScenario> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.Id.ClassKey == SymuYellowPages.Scenario)
-                .Select(x => x.Id);
+            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.AgentId.Equals(SymuYellowPages.Scenario))
+                .Select(x => x.AgentId);
 
             return scenarioIds.Select(scenarioId => WhitePages.GetAgent<SimulationScenario>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
@@ -345,7 +346,7 @@ namespace Symu.Environment
         {
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
-                x.State == AgentState.Started).Select(x => x.Id).ToList();
+                x.State == AgentState.Started).Select(x => x.AgentId).Cast<IAgentId>().ToList();
             WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork);
         }
 

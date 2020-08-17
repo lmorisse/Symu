@@ -75,12 +75,12 @@ namespace SymuGroupAndInteraction.Classes
                 {
                     var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
                     {
-                        GroupId = group.Id
+                        GroupId = group.AgentId
                     };
-                    WhitePages.MetaNetwork.AddAgentToGroup(actor.Id, 100, group.Id, false);
+                    WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);
                     //Beliefs are added with knowledge
                     SetKnowledge(actor, Organization.Knowledges, i);
-                    SetActivity(actor.Id, _activities, i, group.Id);
+                    SetActivity(actor.AgentId, _activities, i, group.AgentId);
                 }
             }
         }
@@ -91,18 +91,18 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[0].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[0].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
                 case 1:
                     // Knowledge is by group
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[i].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[i].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[index].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[index].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
             }

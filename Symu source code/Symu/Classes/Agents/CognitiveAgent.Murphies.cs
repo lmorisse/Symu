@@ -158,7 +158,7 @@ namespace Symu.Classes.Agents
                     break;
             }
 
-            ReplyHelpIncomplete(task, blocker, message.Medium, message.Sender.ClassKey == SymuYellowPages.Actor);
+            ReplyHelpIncomplete(task, blocker, message.Medium, message.Sender.Equals(SymuYellowPages.Actor));
             // specifics behaviour
             switch (blocker.Type)
             {
@@ -828,7 +828,7 @@ namespace Symu.Classes.Agents
             if (!murphy.On ||
                 Math.Abs(task.WorkToDo) < Tolerance || // Task is done
                 !task.IsAssigned ||
-                task.Creator.Equals(Id)) // Worker can't be blocked by himself
+                task.Creator.Equals(AgentId)) // Worker can't be blocked by himself
             {
                 return false;
             }

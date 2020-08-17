@@ -28,10 +28,10 @@ namespace SymuScenariosAndEvents.Classes
 {
     public sealed class PersonAgent : CognitiveAgent
     {
-        public const byte ClassKey = SymuYellowPages.Actor;
+        public const byte Class = SymuYellowPages.Actor;
 
         public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, ClassKey), environment, template)
+            new AgentId(agentKey, Class), environment, template)
         {
         }
 
@@ -83,7 +83,7 @@ namespace SymuScenariosAndEvents.Classes
                 // Weight is randomly distributed around 1, but has a minimum of 0
                 Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.Organization.Models.RandomLevelValue)),
                 // Creator is randomly  a person of the group - for the incomplete information murphy
-                Creator = Environment.WhitePages.FilteredAgentIdsByClassKey(ClassKey).Shuffle().First()
+                Creator = Environment.WhitePages.FilteredAgentIdsByClassId(Class).Shuffle().First()
             };
             task.SetKnowledgesBits(Model, Knowledges, 1);
             Post(task);

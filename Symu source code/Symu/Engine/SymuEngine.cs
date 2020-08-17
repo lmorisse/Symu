@@ -78,7 +78,7 @@ namespace Symu.Engine
 
         public void AddScenario(SimulationScenario scenario)
         {
-            if (!Scenarii.Exists(s => s.Id.Equals(scenario.Id)))
+            if (!Scenarii.Exists(s => s.AgentId.Equals(scenario.AgentId)))
             {
                 Scenarii.Add(scenario);
             }

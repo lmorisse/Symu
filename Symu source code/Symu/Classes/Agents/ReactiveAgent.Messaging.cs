@@ -206,32 +206,32 @@ namespace Symu.Classes.Agents
         /// </param>
         public void Send(AgentId receiverId, MessageAction action, byte content)
         {
-            var message = new Message(Id, receiverId, action, content);
+            var message = new Message(AgentId, receiverId, action, content);
             Send(message);
         }
 
         public void Send(AgentId receiverId, MessageAction action, byte content, object parameter)
         {
-            var message = new Message(Id, receiverId, action, content, parameter);
+            var message = new Message(AgentId, receiverId, action, content, parameter);
             Send(message);
         }
 
         public void Send(AgentId receiverId, MessageAction action, byte content, CommunicationMediums mediums)
         {
-            var message = new Message(Id, receiverId, action, content, mediums);
+            var message = new Message(AgentId, receiverId, action, content, mediums);
             Send(message);
         }
 
         public void Send(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter)
         {
-            var message = new Message(Id, receiverId, action, content, parameter);
+            var message = new Message(AgentId, receiverId, action, content, parameter);
             Send(message);
         }
 
         public void Send(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter,
             CommunicationMediums communicationMedium)
         {
-            var message = new Message(Id, receiverId, action, content, parameter, communicationMedium);
+            var message = new Message(AgentId, receiverId, action, content, parameter, communicationMedium);
             Send(message);
         }
 
@@ -424,26 +424,26 @@ namespace Symu.Classes.Agents
         /// </param>
         public void Reply(AgentId receiverId, MessageAction action, byte content)
         {
-            var message = new Message(Id, receiverId, action, content);
+            var message = new Message(AgentId, receiverId, action, content);
             Reply(message);
         }
 
         public void Reply(AgentId receiverId, MessageAction action, byte content, object parameter)
         {
-            var message = new Message(Id, receiverId, action, content, parameter);
+            var message = new Message(AgentId, receiverId, action, content, parameter);
             Reply(message);
         }
 
         public void Reply(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter)
         {
-            var message = new Message(Id, receiverId, action, content, parameter);
+            var message = new Message(AgentId, receiverId, action, content, parameter);
             Reply(message);
         }
 
         public void Reply(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter,
             CommunicationMediums communicationMedium)
         {
-            var message = new Message(Id, receiverId, action, content, parameter, communicationMedium);
+            var message = new Message(AgentId, receiverId, action, content, parameter, communicationMedium);
             Reply(message);
         }
 

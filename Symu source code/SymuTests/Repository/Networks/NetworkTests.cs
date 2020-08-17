@@ -154,8 +154,8 @@ namespace SymuTests.Repository.Networks
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));
             Assert.IsFalse(_network.Links.Any());
-            Assert.AreEqual(0, _network.Groups.GetAgentsCount(_teamId, _teammateId.ClassKey));
-            Assert.IsFalse(_network.Roles.IsMember(_teammateId, _teamId.ClassKey));
+            Assert.AreEqual(0, _network.Groups.GetAgentsCount(_teamId, _teammateId.ClassId));
+            Assert.IsFalse(_network.Roles.IsMember(_teammateId, _teamId.ClassId));
             Assert.IsFalse(_network.Resources.Exists(_teammateId, _componentId, IsWorkingOn));
             Assert.IsFalse(_network.Knowledge.Any());
             Assert.IsFalse(_network.Activities.AgentHasActivitiesOn(_teammateId, _teamId));
@@ -165,14 +165,13 @@ namespace SymuTests.Repository.Networks
         public void GetMainGroupTest()
         {
             // Default test
-            var agentId = _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassKey);
-            Assert.AreEqual(0, agentId.Key);
-            Assert.AreEqual(0, agentId.ClassKey);
+            var agentId = _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId);
+            Assert.IsNull(agentId);
             // Normal test
             _network.AddAgentToGroup(_teammateId, 100, _teamId, false);
-            Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassKey));
+            Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId));
             _network.AddAgentToGroup(_teammateId, 10, _teamId2, false);
-            Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassKey));
+            Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId));
         }
 
         #region Knowledge

@@ -15,9 +15,9 @@ namespace SymuTests.Helpers
 {
     internal sealed class TestReactiveAgent : ReactiveAgent
     {
-        public static byte ClassKey = SymuYellowPages.Actor;
+        public static byte ClassId = SymuYellowPages.Actor;
 
-        public TestReactiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassKey), environment)
+        public TestReactiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassId), environment)
         {
         }
 

@@ -9,7 +9,9 @@
 
 #region using directives
 
+using System;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -27,9 +29,14 @@ namespace Symu.Repository.Networks.Link
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public NetworkLink(AgentId agentId1, AgentId agentId2)
+        public NetworkLink(IAgentId agentId1, IAgentId agentId2)
         {
-            if (agentId1.Key < agentId2.Key)
+            if (agentId1 == null)
+            {
+                throw new ArgumentNullException(nameof(agentId1));
+            }
+
+            if (agentId1.CompareTo(agentId2))
             {
                 AgentId1 = agentId1;
                 AgentId2 = agentId2;
@@ -51,12 +58,12 @@ namespace Symu.Repository.Networks.Link
         /// <summary>
         ///     Unique key of the agent with the smallest key
         /// </summary>
-        public AgentId AgentId1 { get; }
+        public IAgentId AgentId1 { get; }
 
         /// <summary>
         ///     Unique key of the agent with the highest key
         /// </summary>
-        public AgentId AgentId2 { get; }
+        public IAgentId AgentId2 { get; }
 
         public bool IsActive => Count > 0;
         public bool IsPassive => Count == 0;
@@ -74,24 +81,29 @@ namespace Symu.Repository.Networks.Link
             }
         }
 
-        public bool HasActiveLinks(AgentId agentId)
+        public bool HasActiveLinks(IAgentId agentId)
         {
             return IsActive && (AgentId1.Equals(agentId) || AgentId2.Equals(agentId));
         }
 
-        public bool HasActiveLink(AgentId agentId1, AgentId agentId2)
+        public bool HasActiveLink(IAgentId agentId1, IAgentId agentId2)
         {
             return IsActive && HasLink(agentId1, agentId2);
         }
 
-        public bool HasPassiveLink(AgentId agentId1, AgentId agentId2)
+        public bool HasPassiveLink(IAgentId agentId1, IAgentId agentId2)
         {
             return IsPassive && HasLink(agentId1, agentId2);
         }
 
-        public bool HasLink(AgentId agentId1, AgentId agentId2)
+        public bool HasLink(IAgentId agentId1, IAgentId agentId2)
         {
-            if (agentId1.Key < agentId2.Key)
+            if (agentId1 == null)
+            {
+                throw new ArgumentNullException(nameof(agentId1));
+            }
+
+            if (agentId1.CompareTo(agentId2))
             {
                 return AgentId1.Equals(agentId1) && AgentId2.Equals(agentId2);
             }
@@ -104,10 +116,5 @@ namespace Symu.Repository.Networks.Link
             return obj is NetworkLink link &&
                    link.HasLink(AgentId1, AgentId2);
         }
-
-        //public bool HasActiveLinks(AgentId agentId, byte groupClassKey)
-        //{
-        //    return AgentId2.ClassKey == groupClassKey && HasActiveLinks(agentId);
-        //}
     }
 }

@@ -400,9 +400,9 @@ namespace SymuMurphiesAndBlockersTests
             _environment.Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
 
             _simulation.Process();
-            Assert.AreNotEqual(0,_environment.IterationResult.Tasks.Incorrectness);
             if (_environment.IterationResult.Tasks.Done > 0)
             {
+                Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Incorrectness);
                 Assert.AreNotEqual(0, _environment.IterationResult.Tasks.Cancelled);
             }
         }

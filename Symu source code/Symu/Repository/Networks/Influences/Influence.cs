@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -21,7 +22,7 @@ namespace Symu.Repository.Networks.Influences
     /// </summary>
     public class Influence
     {
-        public Influence(AgentId agentId, float influenceability, float influentialness)
+        public Influence(IAgentId agentId, float influenceability, float influentialness)
         {
             AgentId = agentId;
             Influenceability = influenceability;
@@ -31,7 +32,7 @@ namespace Symu.Repository.Networks.Influences
         /// <summary>
         ///     Unique key of the agent
         /// </summary>
-        public AgentId AgentId { get; }
+        public IAgentId AgentId { get; }
 
         /// <summary>
         ///     how susceptible an agent will be to the influentialness of another agent
@@ -49,7 +50,7 @@ namespace Symu.Repository.Networks.Influences
                    AgentId.Equals(influence.AgentId);
         }
 
-        public bool Equals(AgentId agentId)
+        public bool Equals(IAgentId agentId)
         {
             return AgentId.Equals(agentId);
         }

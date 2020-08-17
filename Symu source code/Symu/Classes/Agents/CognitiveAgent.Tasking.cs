@@ -315,7 +315,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(task));
             }
 
-            task.Assigned = Id;
+            task.Assigned = AgentId;
         }
 
         /// <summary>

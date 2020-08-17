@@ -24,6 +24,7 @@ namespace SymuTests.Repository.Networks.Portfolio
         private const byte IsSupportOn = 2;
         private const byte IsUsing = 3;
         private readonly AgentId _agentId = new AgentId(1, 1);
+        private readonly ClassId _classId2 = new ClassId(2);
 
         [TestMethod]
         public void IsTypeTest()
@@ -34,12 +35,12 @@ namespace SymuTests.Repository.Networks.Portfolio
         }
 
         [TestMethod]
-        public void IsTypeAndClassKeyTest()
+        public void IsTypeAndClassIdTest()
         {
             var portfolio = new NetworkPortfolio(_agentId, IsSupportOn, 100);
-            Assert.IsTrue(portfolio.IsTypeAndClassKey(IsSupportOn, _agentId.ClassKey));
-            Assert.IsFalse(portfolio.IsTypeAndClassKey(IsSupportOn, 2));
-            Assert.IsFalse(portfolio.IsTypeAndClassKey(IsUsing, _agentId.ClassKey));
+            Assert.IsTrue(portfolio.IsTypeAndClassId(IsSupportOn, _agentId.ClassId));
+            Assert.IsFalse(portfolio.IsTypeAndClassId(IsSupportOn, _classId2));
+            Assert.IsFalse(portfolio.IsTypeAndClassId(IsUsing, _agentId.ClassId));
         }
 
         [TestMethod]

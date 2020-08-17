@@ -66,7 +66,7 @@ namespace SymuScenariosAndEvents.Classes
             base.SetAgents();
 
             var group = new GroupAgent(Organization.NextEntityIndex(), this);
-            _groupId = group.Id;
+            _groupId = group.AgentId;
             for (var j = 0; j < WorkersCount; j++)
             {
                 AddPersonAgent();
@@ -80,10 +80,10 @@ namespace SymuScenariosAndEvents.Classes
                 GroupId = _groupId
             };
             CommunicationTemplate communication = new EmailTemplate();
-            var entity = new DataBaseEntity(actor.Id, communication);
+            var entity = new DataBaseEntity(actor.AgentId, communication);
             var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.Knowledge);
-            WhitePages.MetaNetwork.Databases.Add(actor.Id, email);
-            WhitePages.MetaNetwork.AddAgentToGroup(actor.Id, 100, _groupId, false);
+            WhitePages.MetaNetwork.Databases.Add(actor.AgentId, email);
+            WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, _groupId, false);
             return actor;
         }
 
@@ -101,7 +101,7 @@ namespace SymuScenariosAndEvents.Classes
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
             WhitePages.MetaNetwork.AddKnowledge(knowledge);
 
-            foreach (var person in WhitePages.FilteredCognitiveAgentsByClassKey(PersonAgent.ClassKey))
+            foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.Class))
             {
                 person.KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.BasicKnowledge, 0.15F, -1);
                 person.KnowledgeModel.InitializeKnowledge(knowledge.Id, Schedule.Step);

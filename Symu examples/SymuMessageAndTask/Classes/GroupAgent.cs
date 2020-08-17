@@ -23,10 +23,10 @@ namespace SymuMessageAndTask.Classes
 {
     public sealed class GroupAgent : ReactiveAgent
     {
-        public const byte ClassKey = 1;
+        public const byte Class = 1;
 
         public GroupAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, ClassKey), environment)
+            new AgentId(agentKey, Class), environment)
         {
         }
 

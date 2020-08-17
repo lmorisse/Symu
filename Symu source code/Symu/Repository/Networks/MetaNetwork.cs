@@ -157,9 +157,9 @@ namespace Symu.Repository.Networks
                 Groups.AddGroup(groupId);
                 if (addLink)
                 {
-                    foreach (var newTeammateId in Groups.GetAgents(groupId, agentId.ClassKey))
+                    foreach (var newAgentId in Groups.GetAgents(groupId, agentId.ClassId))
                     {
-                        Links.AddLink(agentId, newTeammateId);
+                        Links.AddLink(agentId, newAgentId);
                     }
                 }
 
@@ -177,7 +177,7 @@ namespace Symu.Repository.Networks
         {
             foreach (var groupId in Groups.GetGroups().ToList())
             {
-                Links.AddLinks(Groups.GetAgents(groupId, SymuYellowPages.Actor).ToList());
+                Links.AddLinks(Groups.GetAgents(groupId, new ClassId(SymuYellowPages.Actor)).ToList());
             }
         }
 
@@ -194,9 +194,9 @@ namespace Symu.Repository.Networks
                 return;
             }
 
-            foreach (var oldTeammateId in Groups.GetAgents(groupId, agentId.ClassKey))
+            foreach (var agentIdToRemove in Groups.GetAgents(groupId, agentId.ClassId))
             {
-                Links.DeactivateLink(agentId, oldTeammateId);
+                Links.DeactivateLink(agentId, agentIdToRemove);
             }
 
             Groups.RemoveMember(agentId, groupId);
@@ -228,7 +228,6 @@ namespace Symu.Repository.Networks
         }
 
         #endregion
-
 
     }
 }

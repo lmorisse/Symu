@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -36,8 +37,8 @@ namespace Symu.Repository.Networks.Databases
         ///     AgentDataBases.Key = AgentId
         ///     AgentDataBases.Value = List of all the databaseId the agentId has subscribed
         /// </summary>
-        public ConcurrentDictionary<AgentId, List<ushort>> AgentDataBases { get; } =
-            new ConcurrentDictionary<AgentId, List<ushort>>();
+        public ConcurrentDictionary<IAgentId, List<ushort>> AgentDataBases { get; } =
+            new ConcurrentDictionary<IAgentId, List<ushort>>();
 
         public bool Any()
         {
@@ -88,22 +89,22 @@ namespace Symu.Repository.Networks.Databases
         ///     Remove agent from network
         /// </summary>
         /// <param name="agentId"></param>
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             AgentDataBases.TryRemove(agentId, out _);
         }
 
-        public bool Exists(AgentId agentId)
+        public bool Exists(IAgentId agentId)
         {
             return AgentDataBases.ContainsKey(agentId);
         }
 
-        public bool Exists(AgentId agentId, ushort databaseId)
+        public bool Exists(IAgentId agentId, ushort databaseId)
         {
             return Exists(agentId) && AgentDataBases[agentId].Contains(databaseId);
         }
 
-        public void Add(AgentId agentId, Database database)
+        public void Add(IAgentId agentId, Database database)
         {
             if (database is null)
             {
@@ -112,10 +113,10 @@ namespace Symu.Repository.Networks.Databases
 
             AddDatabase(database);
             AddAgentId(agentId);
-            AddDatabase(agentId, database.Entity.AgentId.Key);
+            AddDatabase(agentId, database.Entity.AgentId.Id);
         }
 
-        public void Add(AgentId agentId, ushort databaseId)
+        public void Add(IAgentId agentId, ushort databaseId)
         {
             AddAgentId(agentId);
             AddDatabase(agentId, databaseId);
@@ -128,7 +129,7 @@ namespace Symu.Repository.Networks.Databases
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="databaseId"></param>
-        public void AddDatabase(AgentId agentId, ushort databaseId)
+        public void AddDatabase(IAgentId agentId, ushort databaseId)
         {
             if (!AgentDataBases[agentId].Contains(databaseId))
             {
@@ -136,7 +137,7 @@ namespace Symu.Repository.Networks.Databases
             }
         }
 
-        public void AddAgentId(AgentId agentId)
+        public void AddAgentId(IAgentId agentId)
         {
             if (!Exists(agentId))
             {

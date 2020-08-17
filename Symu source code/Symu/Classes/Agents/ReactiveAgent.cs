@@ -65,7 +65,7 @@ namespace Symu.Classes.Agents
         ///     The name of the agent. Each agent must have a unique name in its environment.
         ///     Most operations are performed using agent names rather than agent objects.
         /// </summary>
-        public AgentId Id { get; set; }
+        public AgentId AgentId { get; set; }
 
         /// <summary>
         ///     State of the agent
@@ -94,13 +94,13 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            Id = agentId;
+            AgentId = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment.AddAgent(this);
             State = AgentState.NotStarted;
             foreach (var database in environment.Organization.Databases)
             {
-                environment.WhitePages.MetaNetwork.Databases.Add(Id, database.AgentId.Key);
+                environment.WhitePages.MetaNetwork.Databases.Add(AgentId, database.AgentId.Id);
             }
             Created = Schedule.Step;
         }
@@ -176,7 +176,7 @@ namespace Symu.Classes.Agents
             State = AgentState.Starting;
             if (Environment == null)
             {
-                throw new Exception("Environment is null in agent " + Id.Key + " (ConcurrentAgent.Start)");
+                throw new Exception("Environment is null in agent " + AgentId.Id + " (ConcurrentAgent.Start)");
             }
 
             InitializeModels();
@@ -269,7 +269,7 @@ namespace Symu.Classes.Agents
         /// <param name="subject"></param>
         public void Subscribe(AgentId agentId, byte subject)
         {
-            var message = new Message(Id, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
+            var message = new Message(AgentId, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
             if (Schedule.Step == 0)
             {
                 // Not sure the receiver exists already

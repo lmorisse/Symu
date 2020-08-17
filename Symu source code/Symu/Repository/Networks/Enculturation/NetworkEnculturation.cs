@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Tools.Interfaces;
 
 #endregion
 
@@ -28,7 +29,7 @@ namespace Symu.Repository.Networks.Enculturation
         /// <summary>
         ///     List of all agentId and their enculturation information
         /// </summary>
-        public Dictionary<AgentId, float> EnculturationCollection { get; } = new Dictionary<AgentId, float>();
+        public Dictionary<IAgentId, float> EnculturationCollection { get; } = new Dictionary<IAgentId, float>();
 
         public bool Any()
         {
@@ -45,7 +46,7 @@ namespace Symu.Repository.Networks.Enculturation
         ///     either it is a kanban or an agent
         /// </summary>
         /// <param name="agentId"></param>
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             EnculturationCollection.Remove(agentId);
         }
@@ -55,7 +56,7 @@ namespace Symu.Repository.Networks.Enculturation
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public bool Exists(AgentId agentId)
+        public bool Exists(IAgentId agentId)
         {
             return EnculturationCollection.ContainsKey(agentId);
         }
@@ -66,7 +67,7 @@ namespace Symu.Repository.Networks.Enculturation
         ///     which call AddAgentId
         /// </summary>
         /// <param name="agentId"></param>
-        public void AddAgentId(AgentId agentId)
+        public void AddAgentId(IAgentId agentId)
         {
             if (!Exists(agentId))
             {
@@ -78,13 +79,13 @@ namespace Symu.Repository.Networks.Enculturation
         /// </summary>
         /// <param name="enculturationLevel"></param>
         /// <param name="agentId"></param>
-        public void UpdateEnculturation(AgentId agentId, float enculturationLevel)
+        public void UpdateEnculturation(IAgentId agentId, float enculturationLevel)
         {
             AddAgentId(agentId);
             EnculturationCollection[agentId] = enculturationLevel;
         }
 
-        public float GetEnculturation(AgentId agentId)
+        public float GetEnculturation(IAgentId agentId)
         {
             if (Exists(agentId))
             {
@@ -92,15 +93,6 @@ namespace Symu.Repository.Networks.Enculturation
             }
 
             return 0;
-        }
-
-        /// <summary>
-        ///     Take the numberOfEmployees with the lowest enculturation level
-        /// </summary>
-        /// <param name="numberOfEmployees"></param>
-        public IEnumerable<AgentId> Take(short numberOfEmployees)
-        {
-            return EnculturationCollection.OrderBy(x => x.Value).Take(numberOfEmployees).Select(x => x.Key);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace SymuLearnAndForget.Classes
         {
             base.AddOrganizationDatabase();
 
-            var wikiEntity = new DataBaseEntity(Organization.Id, Organization.Communication.Email);
+            var wikiEntity = new DataBaseEntity(Organization.AgentId, Organization.Communication.Email);
             Organization.AddDatabase(wikiEntity);
         }
 
@@ -82,7 +82,7 @@ namespace SymuLearnAndForget.Classes
             DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
             ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
-            WhitePages.MetaNetwork.Links.AddLink(LearnByAskingAgent.Id, ExpertAgent.Id);
+            WhitePages.MetaNetwork.Links.AddLink(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
         }
     }
 }

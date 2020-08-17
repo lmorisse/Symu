@@ -29,10 +29,10 @@ namespace SymuTests.Repository.Networks.Role
         public void IsMemberOfGroupsTest()
         {
             var role = new NetworkRole(_agentId, _groupId, 1);
-            Assert.IsTrue(role.IsMemberOfGroups(_agentId, _groupId.ClassKey));
-            Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId.ClassKey));
-            Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId2.ClassKey));
-            Assert.IsFalse(role.IsMemberOfGroups(_agentId, _groupId2.ClassKey));
+            Assert.IsTrue(role.IsMemberOfGroups(_agentId, _groupId.ClassId));
+            Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId.ClassId));
+            Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId2.ClassId));
+            Assert.IsFalse(role.IsMemberOfGroups(_agentId, _groupId2.ClassId));
         }
 
         [TestMethod]
