@@ -122,9 +122,9 @@
       <Project>{fb0a9519-923e-4a4f-a6ac-dab4c7a03f63}</Project>
       <Name>SymuForm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj">
-      <Project>{5475a2e5-e10f-46ef-b24e-450d717af7cf}</Project>
-      <Name>SymuTools</Name>
+    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuCommon.csproj">
+      <Project>{28CA606E-49D3-4136-AD3F-6B46EAB9BE75}</Project>
+      <Name>SymuCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj">
       <Project>{bd01bccd-7194-4bd1-8e62-9be1343af2ce}</Project>

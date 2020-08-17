@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Symu.Tools</AssemblyName>
-    <RootNamespace>Symu.Tools</RootNamespace>
+    <AssemblyName>Symu.Common</AssemblyName>
+    <RootNamespace>Symu.Common</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

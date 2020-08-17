@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj" />
+    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuCommon.csproj" />
     <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj" />
     <ProjectReference Include="..\SymuMurphiesAndBlockers\SymuMurphiesAndBlockers.csproj" />
   </ItemGroup>

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SymuTools\SymuTools.csproj" />
+    <ProjectReference Include="..\SymuTools\SymuCommon.csproj" />
   </ItemGroup>
 
 </Project>

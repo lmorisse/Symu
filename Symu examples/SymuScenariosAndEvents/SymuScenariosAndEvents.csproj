@@ -121,9 +121,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuTools.csproj">
+    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuCommon.csproj">
       <Project>{28ca606e-49d3-4136-ad3f-6b46eab9be75}</Project>
-      <Name>SymuTools</Name>
+      <Name>SymuCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Symu source code\SymuForm\SymuForm.csproj">
       <Project>{fb0a9519-923e-4a4f-a6ac-dab4c7a03f63}</Project>
