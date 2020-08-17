@@ -42,7 +42,6 @@ namespace SymuTests.Repository.Networks.Sphere
         private readonly AgentId _groupId = new AgentId(3, 2);
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly OrganizationModels _model = new OrganizationModels();
-        private readonly AgentTemplates _templates = new AgentTemplates();
         private MetaNetwork _network;
         private InteractionSphere InteractionSphere => _network.InteractionSphere;
 
@@ -50,7 +49,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void Initialize()
         {
             _model.InteractionSphere.On = true;
-            _network = new MetaNetwork(_model);
+            _network = new MetaNetwork(_model.InteractionSphere, _model.ImpactOfBeliefOnTask);
             _agents.Add(_agentId1);
             _agents.Add(_agentId2);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);

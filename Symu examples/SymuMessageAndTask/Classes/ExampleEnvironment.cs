@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Organization;
 using Symu.Environment;
 using Symu.Messaging.Templates;
+using Symu.Repository.Networks.Databases;
 
 #endregion
 
@@ -127,7 +128,9 @@ namespace SymuMessageAndTask.Classes
                     GroupId = group.Id
                 };
                 CommunicationTemplate communication = new EmailTemplate();
-                WhitePages.MetaNetwork.AddEmail(actor.Id, communication);
+                var entity = new DataBaseEntity(actor.Id, communication);
+                var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.NetworkKnowledges);
+                WhitePages.MetaNetwork.AddDatabase(actor.Id, email);
                 WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, group.Id, false);
             }
         }

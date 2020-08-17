@@ -34,9 +34,9 @@ namespace SymuTests.Repository.Networks.Databases
         public void Initialize()
         {
             var agentId = new AgentId(1, 1);
-            var agentTemplates = new AgentTemplates();
+
             var models = new OrganizationModels();
-            var network = new MetaNetwork(models);
+            var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask); 
             var cognitive = new CognitiveArchitecture();
 
             cognitive.TasksAndPerformance.LearningRate = 1;

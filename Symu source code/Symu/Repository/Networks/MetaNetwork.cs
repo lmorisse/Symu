@@ -37,13 +37,11 @@ namespace Symu.Repository.Networks
     /// </summary>
     public class MetaNetwork
     {
-        private readonly OrganizationModels _models;
 
-        public MetaNetwork(OrganizationModels models)
+        public MetaNetwork(InteractionSphereModel interactionSphere , BeliefWeightLevel beliefWeightLevel)
         {
-            _models = models ?? throw new ArgumentNullException(nameof(models));
-            InteractionSphere = new InteractionSphere(models.InteractionSphere);
-            NetworkBeliefs = new NetworkBeliefs(models.ImpactOfBeliefOnTask);
+            InteractionSphere = new InteractionSphere(interactionSphere);
+            NetworkBeliefs = new NetworkBeliefs(beliefWeightLevel);
         }
 
         /// <summary>
@@ -355,18 +353,9 @@ namespace Symu.Repository.Networks
             NetworkDatabases.Add(agentId, databaseId);
         }
 
-        public void AddEmail(AgentId agentId, CommunicationTemplate communication)
+        public void AddDatabase(AgentId agentId, Database database)
         {
-            if (communication is null)
-            {
-                throw new ArgumentNullException(nameof(communication));
-            }
-
-
-            var entity = new DataBaseEntity(agentId, communication);
-
-            var email = new Database(entity, _models, NetworkKnowledges);
-            NetworkDatabases.Add(agentId, email);
+            NetworkDatabases.Add(agentId, database);
         }
 
         #endregion

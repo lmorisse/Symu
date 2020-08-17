@@ -37,7 +37,7 @@ namespace SymuTests.Repository.Networks
             new Knowledge(1, "1", 1);
 
         private readonly AgentId _managerId = new AgentId(3, 2);
-        private readonly MetaNetwork _network = new MetaNetwork(new OrganizationModels());
+        private MetaNetwork _network ;
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
@@ -48,6 +48,8 @@ namespace SymuTests.Repository.Networks
         [TestInitialize]
         public void Initialize()
         {
+            var models = new OrganizationModels();
+            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _belief = new Belief(1, "1", 1,
                 _network.NetworkKnowledges.Model, BeliefWeightLevel.RandomWeight);
             _network.NetworkActivities.AddActivities(new List<Activity> {_activity}, _teamId);

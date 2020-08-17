@@ -34,7 +34,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            _network = new MetaNetwork(new OrganizationModels());
+            var models = new OrganizationModels();
+            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             var entity = new ModelEntity();
             _influenceModel = new InfluenceModel(_agentId, entity, _internalCharacteristics, _network);
         }

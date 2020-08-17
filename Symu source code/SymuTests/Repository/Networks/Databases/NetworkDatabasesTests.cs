@@ -31,9 +31,9 @@ namespace SymuTests.Repository.Networks.Databases
         [TestInitialize]
         public void Initialize()
         {
-            var agentTemplates = new AgentTemplates();
+
             var models = new OrganizationModels();
-            var network = new MetaNetwork(models);
+            var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask); 
             var cognitive = new CognitiveArchitecture();
             var databaseEntity = new DataBaseEntity(_agentId, cognitive);
             _database = new Database(databaseEntity, models, network.NetworkKnowledges);

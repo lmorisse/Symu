@@ -34,7 +34,8 @@ namespace SymuTests.Classes.Murphies
         [TestInitialize]
         public void Initialize()
         {
-            _network = new MetaNetwork(new OrganizationModels());
+            var models = new OrganizationModels();
+            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _knowledge = new Knowledge(1, "1", 1);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);

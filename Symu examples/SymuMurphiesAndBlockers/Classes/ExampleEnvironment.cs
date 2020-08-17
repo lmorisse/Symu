@@ -16,6 +16,7 @@ using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Templates;
+using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -84,7 +85,9 @@ namespace SymuMurphiesAndBlockers.Classes
                     GroupId = group.Id
                 };
                 CommunicationTemplate communication = new EmailTemplate();
-                WhitePages.MetaNetwork.AddEmail(actor.Id, communication);
+                var entity = new DataBaseEntity(actor.Id, communication);
+                var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.NetworkKnowledges);
+                WhitePages.MetaNetwork.AddDatabase(actor.Id, email);
                 WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, group.Id, false);
             }
         }

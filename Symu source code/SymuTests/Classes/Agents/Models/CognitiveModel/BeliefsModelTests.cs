@@ -42,7 +42,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            _network = new MetaNetwork(new OrganizationModels());
+            var models = new OrganizationModels();
+            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

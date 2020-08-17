@@ -28,7 +28,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly MetaNetwork _network = new MetaNetwork(new OrganizationModels());
+        private MetaNetwork _network;
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private CognitiveArchitecture _cognitiveArchitecture;
         private LearningModel _learningModel;
@@ -36,6 +36,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
+            var models = new OrganizationModels();
+            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _network.NetworkKnowledges.Add(_agentId, _expertise);
             InitializeModel(0, true);
         }

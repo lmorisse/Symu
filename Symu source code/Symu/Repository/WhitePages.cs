@@ -29,12 +29,17 @@ namespace Symu.Repository
     ///     every application agent must register itself with the WhitePagesServices to permit the validation of its identifier
     ///     in the multi-agent environment.
     /// </summary>
-    /// <remarks>FIPA Norm : Agent Management System (AMS)</remarks>
+    /// <remarks>FIPA Norm : equivalent of the Agent Management System (AMS)</remarks>
     public class WhitePages
     {
         public WhitePages(OrganizationModels models)
         {
-            MetaNetwork = new MetaNetwork(models);
+            if (models == null)
+            {
+                throw new ArgumentNullException(nameof(models));
+            }
+
+            MetaNetwork = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
         }
 
         /// <summary>

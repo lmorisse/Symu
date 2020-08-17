@@ -38,7 +38,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestInitialize]
         public void Initialize()
         {
-            var network = new MetaNetwork(new OrganizationModels());
+            var models = new OrganizationModels();
+            var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _networkKnowledges = network.NetworkKnowledges;
             _networkKnowledges.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
