@@ -41,7 +41,7 @@ namespace SymuTests.Repository.Networks.Sphere
             new Knowledge(3, "3", 1);
 
         private readonly AgentTemplates _templates = new AgentTemplates();
-        private Network _network;
+        private MetaNetwork _network;
 
         private NetworkKnowledges _networkKnowledge;
 
@@ -50,7 +50,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             _templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(InteractionStrategy.Knowledge);
             var organizationModels = new OrganizationModels {InteractionSphere = {On = true}};
-            _network = new Network(organizationModels);
+            _network = new MetaNetwork(organizationModels);
             _networkKnowledge = _network.NetworkKnowledges;
         }
 

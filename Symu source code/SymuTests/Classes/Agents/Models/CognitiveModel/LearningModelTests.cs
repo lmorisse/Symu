@@ -28,7 +28,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly Network _network = new Network(new OrganizationModels());
+        private readonly MetaNetwork _network = new MetaNetwork(new OrganizationModels());
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private CognitiveArchitecture _cognitiveArchitecture;
         private LearningModel _learningModel;

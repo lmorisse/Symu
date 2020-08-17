@@ -34,7 +34,7 @@ namespace Symu.Repository
     {
         public WhitePages(OrganizationModels models)
         {
-            Network = new Network(models);
+            MetaNetwork = new MetaNetwork(models);
         }
 
         /// <summary>
@@ -47,7 +47,9 @@ namespace Symu.Repository
         /// </summary>
         public List<ReactiveAgent> StoppedAgents { get; } = new List<ReactiveAgent>();
 
-        public Network Network { get; }
+        public MetaNetwork MetaNetwork { get; }
+
+        public AgentState State { get; set; } = AgentState.NotStarted;
 
         public bool Any()
         {
@@ -61,9 +63,9 @@ namespace Symu.Repository
         /// </summary>
         public void Clear()
         {
-            Network.State = AgentState.Starting;
+            State = AgentState.Starting;
             StoppedAgents.Clear();
-            Network.Clear();
+            MetaNetwork.Clear();
             Agents.Clear();
         }
 
@@ -72,7 +74,7 @@ namespace Symu.Repository
         /// </summary>
         public void SetStarted()
         {
-            Network.State = AgentState.Started;
+            State = AgentState.Started;
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace Symu.Repository
                 throw new ArgumentNullException(nameof(agent));
             }
 
-            Network.RemoveAgent(agent.Id);
+            MetaNetwork.RemoveAgent(agent.Id);
             Agents.Remove(agent.Id);
             StoppedAgents.Add(agent);
         }
@@ -297,5 +299,6 @@ namespace Symu.Repository
         }
 
         #endregion
+
     }
 }

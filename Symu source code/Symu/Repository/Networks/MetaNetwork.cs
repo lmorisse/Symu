@@ -33,20 +33,18 @@ using Symu.Repository.Networks.Sphere;
 namespace Symu.Repository.Networks
 {
     /// <summary>
-    ///     Network: referential for social, communication, knowledge, authority
+    ///     MetaNetwork: referential for social and organizational network analysis
     /// </summary>
-    public class Network
+    public class MetaNetwork
     {
         private readonly OrganizationModels _models;
 
-        public Network(OrganizationModels models)
+        public MetaNetwork(OrganizationModels models)
         {
             _models = models ?? throw new ArgumentNullException(nameof(models));
             InteractionSphere = new InteractionSphere(models.InteractionSphere);
             NetworkBeliefs = new NetworkBeliefs(models.ImpactOfBeliefOnTask);
         }
-
-        public AgentState State { get; set; } = AgentState.NotStarted;
 
         /// <summary>
         ///     Directory of social links between AgentIds, with their interaction type
@@ -227,28 +225,20 @@ namespace Symu.Repository.Networks
         }
 
         /// <summary>
-        ///     Check if an Agent has roles in any group
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <returns></returns>
-        public bool HasRoles(AgentId agentId)
-        {
-            return NetworkRoles.HasRoles(agentId);
-        }
-
-        /// <summary>
         ///     Add an agent to a group
         ///     It doesn't handle roles
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="allocation"></param>
         /// <param name="groupId"></param>
-        public void AddMemberToGroup(AgentId agentId, float allocation, AgentId groupId)
+        /// <param name="addLink">If true, a link is created with the members of the group and the new member</param>
+        public void AddMemberToGroup(AgentId agentId, float allocation, AgentId groupId, bool addLink)
         {
             lock (NetworkGroups)
             {
                 NetworkGroups.AddGroup(groupId);
-                if (State == AgentState.Started)
+                if (addLink)
+                //if (State == AgentState.Started)
                 {
                     // AddLink is done during the simulation. 1t the initialization, use InitializeNetworkLinks, for performance issues
                     foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))

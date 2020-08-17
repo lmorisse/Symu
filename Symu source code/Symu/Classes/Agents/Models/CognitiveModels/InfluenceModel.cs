@@ -41,7 +41,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="internalCharacteristics"></param>
         /// <param name="network"></param>
         public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics,
-            Network network)
+            MetaNetwork network)
         {
             if (entity is null)
             {

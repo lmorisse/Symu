@@ -42,7 +42,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         public KnowledgeModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            Network network)
+            MetaNetwork network)
         {
             if (entity is null)
             {

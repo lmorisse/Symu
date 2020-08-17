@@ -28,13 +28,13 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly InternalCharacteristics _internalCharacteristics = new InternalCharacteristics();
         private InfluenceModel _influenceModel;
-        private Network _network;
+        private MetaNetwork _network;
 
 
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new OrganizationModels());
+            _network = new MetaNetwork(new OrganizationModels());
             var entity = new ModelEntity();
             _influenceModel = new InfluenceModel(_agentId, entity, _internalCharacteristics, _network);
         }

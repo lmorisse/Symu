@@ -43,14 +43,14 @@ namespace SymuTests.Repository.Networks.Sphere
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly OrganizationModels _model = new OrganizationModels();
         private readonly AgentTemplates _templates = new AgentTemplates();
-        private Network _network;
+        private MetaNetwork _network;
         private InteractionSphere InteractionSphere => _network.InteractionSphere;
 
         [TestInitialize]
         public void Initialize()
         {
             _model.InteractionSphere.On = true;
-            _network = new Network(_model);
+            _network = new MetaNetwork(_model);
             _agents.Add(_agentId1);
             _agents.Add(_agentId2);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);

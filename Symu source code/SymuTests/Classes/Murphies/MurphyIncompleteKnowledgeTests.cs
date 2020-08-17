@@ -29,12 +29,12 @@ namespace SymuTests.Classes.Murphies
         private readonly MurphyIncompleteKnowledge _murphy = new MurphyIncompleteKnowledge();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private Knowledge _knowledge;
-        private Network _network;
+        private MetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new OrganizationModels());
+            _network = new MetaNetwork(new OrganizationModels());
             _knowledge = new Knowledge(1, "1", 1);
             _network.NetworkKnowledges.AddKnowledge(_knowledge);
             _network.NetworkKnowledges.Add(_agentId, _expertise);

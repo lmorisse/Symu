@@ -176,9 +176,9 @@ namespace Symu.Environment
         {
             Messages.Clear();
             WhitePages.Clear();
-            WhitePages.Network.NetworkKnowledges.Model =
+            WhitePages.MetaNetwork.NetworkKnowledges.Model =
                 Organization.Models.Generator;
-            WhitePages.Network.NetworkBeliefs.Model =
+            WhitePages.MetaNetwork.NetworkBeliefs.Model =
                 Organization.Models.Generator;
             IterationResult.Initialize();
             // Intentionally before AddOrganizationKnowledges
@@ -189,7 +189,7 @@ namespace Symu.Environment
             SetKnowledges();
             SetAgents();
             // Intentionally after SetAgents
-            WhitePages.Network.InitializeNetworkLinks();
+            WhitePages.MetaNetwork.InitializeNetworkLinks();
             WhitePages.SetStarted();
         }
 
@@ -346,7 +346,7 @@ namespace Symu.Environment
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.Id).ToList();
-            WhitePages.Network.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.Network);
+            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace Symu.Environment
         {
             foreach (var knowledge in Organization.Knowledges)
             {
-                WhitePages.Network.AddKnowledge(knowledge);
+                WhitePages.MetaNetwork.AddKnowledge(knowledge);
             }
         }
 
@@ -426,9 +426,9 @@ namespace Symu.Environment
         public void SetDatabases()
         {
             foreach (var database in Organization.Databases.Select(databaseEntity =>
-                new Database(databaseEntity, Organization.Models, WhitePages.Network.NetworkKnowledges)))
+                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork.NetworkKnowledges)))
             {
-                WhitePages.Network.NetworkDatabases.AddDatabase(database);
+                WhitePages.MetaNetwork.NetworkDatabases.AddDatabase(database);
             }
         }
 

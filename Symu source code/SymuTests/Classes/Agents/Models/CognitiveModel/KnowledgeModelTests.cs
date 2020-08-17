@@ -36,12 +36,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         private CognitiveArchitecture _cognitiveArchitecture;
         private Knowledge _knowledge;
         private KnowledgeModel _knowledgeModel;
-        private Network _network;
+        private MetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
-            _network = new Network(new OrganizationModels());
+            _network = new MetaNetwork(new OrganizationModels());
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

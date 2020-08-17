@@ -65,13 +65,13 @@ namespace SymuTests.Classes.Agents
 
             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(_knowledge);
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_knowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(_knowledge2);
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(_knowledge2);
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.AddKnowledge(_knowledge);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.AddBelief(_knowledge);
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.AddKnowledge(_knowledge2);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.AddBelief(_knowledge2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, expertise);
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.Add(_agent.Id, expertise);
 
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
             _agent.Start();
@@ -92,8 +92,8 @@ namespace SymuTests.Classes.Agents
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
             Assert.AreNotEqual(0, _agent.KnowledgeModel.Expertise.Count);
-            Assert.AreNotEqual(0, _environment.WhitePages.Network.NetworkInfluences.GetInfluenceability(_agent.Id));
-            Assert.AreNotEqual(0, _environment.WhitePages.Network.NetworkInfluences.GetInfluentialness(_agent.Id));
+            Assert.AreNotEqual(0, _environment.WhitePages.MetaNetwork.NetworkInfluences.GetInfluenceability(_agent.Id));
+            Assert.AreNotEqual(0, _environment.WhitePages.MetaNetwork.NetworkInfluences.GetInfluentialness(_agent.Id));
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
 
@@ -246,10 +246,10 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
-            _environment.WhitePages.Network.NetworkBeliefs.AddBelief(belief);
-            _environment.WhitePages.Network.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.Network.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
-            _environment.WhitePages.Network.NetworkInfluences.Update(_agent.Id, 1, 1);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.AddBelief(belief);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.Add(_agent.Id, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.InitializeBeliefs(_agent.Id, true);
+            _environment.WhitePages.MetaNetwork.NetworkInfluences.Update(_agent.Id, 1, 1);
             return belief;
         }
 
@@ -258,11 +258,11 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             // Knowledge
             var knowledge = new Knowledge(1, "1", 1);
-            _environment.WhitePages.Network.NetworkKnowledges.AddKnowledge(knowledge);
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.AddKnowledge(knowledge);
             var agentExpertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(knowledge.Id, bit0S);
             agentExpertise.Add(agentKnowledge);
-            _environment.WhitePages.Network.NetworkKnowledges.Add(_agent.Id, agentExpertise);
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.Add(_agent.Id, agentExpertise);
         }
 
         #endregion
@@ -504,12 +504,12 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.Network.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.GetAgentBelief(_agent.Id, belief.Id).BeliefBits.SetBit(0, 1);
 
             _agent.Reply(message);
 
@@ -537,12 +537,12 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.Network.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
+            _environment.WhitePages.MetaNetwork.NetworkKnowledges.GetAgentKnowledge(_agent.Id, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.Network.NetworkBeliefs.GetAgentBelief(_agent.Id, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.GetAgentBelief(_agent.Id, belief.Id).BeliefBits.SetBit(0, 1);
             _agent.ReplyDelayed(message, 0);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
@@ -840,7 +840,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             var agent2 = new TestCognitiveAgent(2, _environment);
-            _environment.WhitePages.Network.NetworkLinks.AddLink(_agent.Id, agent2.Id);
+            _environment.WhitePages.MetaNetwork.NetworkLinks.AddLink(_agent.Id, agent2.Id);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.Id));
         }
 
@@ -1127,7 +1127,7 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteBelief.On = true;
             _organizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
-            _environment.WhitePages.Network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
+            _environment.WhitePages.MetaNetwork.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
             var task = new SymuTask(0) {Weight = 1};
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
@@ -1275,13 +1275,13 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             var group = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), 2, _environment);
             group.Start();
-            _environment.WhitePages.Network.AddMemberToGroup(_agent.Id, 100, group.Id);
-            _environment.WhitePages.Network.AddMemberToGroup(teammate.Id, 100, group.Id);
+            _environment.WhitePages.MetaNetwork.AddMemberToGroup(_agent.Id, 100, group.Id, true);
+            _environment.WhitePages.MetaNetwork.AddMemberToGroup(teammate.Id, 100, group.Id, true);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
-            _environment.WhitePages.Network.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().ToList(), _environment.WhitePages.Network);
+            _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
+                _environment.WhitePages.AllAgentIds().ToList(), _environment.WhitePages.MetaNetwork);
 
             var task = new SymuTask(0) {KeyActivity = 1};
 
@@ -1415,7 +1415,7 @@ namespace SymuTests.Classes.Agents
 
             Assert.IsTrue(1 < task.Weight);
             var agentKnowledge =
-                _environment.WhitePages.Network.NetworkKnowledges.GetAgentKnowledge(_agent.Id, _knowledge.Id);
+                _environment.WhitePages.MetaNetwork.NetworkKnowledges.GetAgentKnowledge(_agent.Id, _knowledge.Id);
             Assert.AreEqual(_agent.LearningModel.TasksAndPerformance.LearningByDoingRate,
                 agentKnowledge.GetKnowledgeBit(0));
         }
@@ -1467,8 +1467,8 @@ namespace SymuTests.Classes.Agents
             teammate.BeliefsModel.InitializeBeliefs();
             _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
             teammate.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
-            _environment.WhitePages.Network.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().ToList(), _environment.WhitePages.Network);
+            _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
+                _environment.WhitePages.AllAgentIds().ToList(), _environment.WhitePages.MetaNetwork);
 
             var task = new SymuTask(0) {Weight = 1, KeyActivity = 1};
 

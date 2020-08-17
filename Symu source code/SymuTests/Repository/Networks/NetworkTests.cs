@@ -37,7 +37,7 @@ namespace SymuTests.Repository.Networks
             new Knowledge(1, "1", 1);
 
         private readonly AgentId _managerId = new AgentId(3, 2);
-        private readonly Network _network = new Network(new OrganizationModels());
+        private readonly MetaNetwork _network = new MetaNetwork(new OrganizationModels());
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
@@ -89,12 +89,12 @@ namespace SymuTests.Repository.Networks
         [TestMethod]
         public void AddMemberToGroupTest()
         {
-            _network.State = AgentState.Started;
+            //_network.State = AgentState.Started;
             _network.AddGroup(_teamId);
             _network.NetworkPortfolios.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
             // Method to test
-            _network.AddMemberToGroup(_teammateId, 100, _teamId);
-            _network.AddMemberToGroup(_teammateId2, 100, _teamId);
+            _network.AddMemberToGroup(_teammateId, 100, _teamId, true);
+            _network.AddMemberToGroup(_teammateId2, 100, _teamId, true);
             // Test link teammates
             Assert.IsTrue(_network.NetworkLinks.HasActiveLink(_teammateId, _teammateId2));
             // Test group
@@ -109,12 +109,12 @@ namespace SymuTests.Repository.Networks
         [TestMethod]
         public void AddMemberToGroupTest2()
         {
-            _network.State = AgentState.Starting;
+            //_network.State = AgentState.Starting;
             _network.AddGroup(_teamId);
             _network.NetworkPortfolios.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
             // Method to test
-            _network.AddMemberToGroup(_teammateId, 100, _teamId);
-            _network.AddMemberToGroup(_teammateId2, 100, _teamId);
+            _network.AddMemberToGroup(_teammateId, 100, _teamId, false);
+            _network.AddMemberToGroup(_teammateId2, 100, _teamId, false);
             // Test link teammates
             Assert.IsFalse(_network.NetworkLinks.HasActiveLink(_teammateId, _teammateId2));
         }
@@ -123,8 +123,8 @@ namespace SymuTests.Repository.Networks
         public void RemoveMemberFromGroupTest()
         {
             _network.AddGroup(_teamId);
-            _network.AddMemberToGroup(_teammateId, 100, _teamId);
-            _network.AddMemberToGroup(_teammateId2, 100, _teamId);
+            _network.AddMemberToGroup(_teammateId, 100, _teamId, false);
+            _network.AddMemberToGroup(_teammateId2, 100, _teamId, false);
             _network.NetworkPortfolios.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
             // Method to test
             _network.RemoveMemberFromGroup(_teammateId, _teamId);
@@ -167,9 +167,9 @@ namespace SymuTests.Repository.Networks
             Assert.AreEqual(0, agentId.Key);
             Assert.AreEqual(0, agentId.ClassKey);
             // Normal test
-            _network.AddMemberToGroup(_teammateId, 100, _teamId);
+            _network.AddMemberToGroup(_teammateId, 100, _teamId, false);
             Assert.AreEqual(_teamId, _network.GetMainGroupOrDefault(_teammateId, _teamId.ClassKey));
-            _network.AddMemberToGroup(_teammateId, 10, _teamId2);
+            _network.AddMemberToGroup(_teammateId, 10, _teamId2, false);
             Assert.AreEqual(_teamId, _network.GetMainGroupOrDefault(_teammateId, _teamId.ClassKey));
         }
 

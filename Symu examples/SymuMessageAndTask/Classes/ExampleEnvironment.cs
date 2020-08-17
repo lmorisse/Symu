@@ -127,8 +127,8 @@ namespace SymuMessageAndTask.Classes
                     GroupId = group.Id
                 };
                 CommunicationTemplate communication = new EmailTemplate();
-                WhitePages.Network.AddEmail(actor.Id, communication);
-                WhitePages.Network.AddMemberToGroup(actor.Id, 100, group.Id);
+                WhitePages.MetaNetwork.AddEmail(actor.Id, communication);
+                WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, group.Id, false);
             }
         }
     }

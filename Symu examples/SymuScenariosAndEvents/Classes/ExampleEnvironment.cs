@@ -79,8 +79,8 @@ namespace SymuScenariosAndEvents.Classes
                 GroupId = _groupId
             };
             CommunicationTemplate communication = new EmailTemplate();
-            WhitePages.Network.AddEmail(actor.Id, communication);
-            WhitePages.Network.AddMemberToGroup(actor.Id, 100, _groupId);
+            WhitePages.MetaNetwork.AddEmail(actor.Id, communication);
+            WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, _groupId, false);
             return actor;
         }
 
@@ -96,7 +96,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             // knowledge length of 10 is arbitrary in this example
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
-            WhitePages.Network.AddKnowledge(knowledge);
+            WhitePages.MetaNetwork.AddKnowledge(knowledge);
 
             foreach (var person in WhitePages.FilteredCognitiveAgentsByClassKey(PersonAgent.ClassKey))
             {

@@ -78,10 +78,10 @@ namespace SymuGroupAndInteractionTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 1;
             _environment.Knowledge = 1;
             _simulation.Process();
-            var links = _environment.WhitePages.Network.NetworkLinks.Count;
+            var links = _environment.WhitePages.MetaNetwork.NetworkLinks.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
             _simulation.Process();
-            Assert.AreEqual(links, _environment.WhitePages.Network.NetworkLinks.Count);
+            Assert.AreEqual(links, _environment.WhitePages.MetaNetwork.NetworkLinks.Count);
             Assert.AreEqual(triads, _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }
 
@@ -144,12 +144,12 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void TriadsTest5()
         {
-            SetInteractionPatterns(InteractionStrategy.Homophily);
+            SetInteractionPatterns(InteractionStrategy.Knowledge);
             _environment.GroupsCount = 1;
             _environment.WorkersCount = 3;
             _organization.Models.InteractionSphere.RandomlyGeneratedSphere = true;
-            _organization.Models.InteractionSphere.MinSphereDensity = 0;
-            _organization.Models.InteractionSphere.MaxSphereDensity = 0;
+            _organization.Models.InteractionSphere.MinSphereDensity = 1;
+            _organization.Models.InteractionSphere.MaxSphereDensity = 1;
             _simulation.Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
@@ -165,17 +165,17 @@ namespace SymuGroupAndInteractionTests
             _environment.Knowledge = 1;
             SetInteractionPatterns(InteractionStrategy.Knowledge);
             _simulation.Process();
-            var links = _environment.WhitePages.Network.NetworkLinks.Count;
+            var links = _environment.WhitePages.MetaNetwork.NetworkLinks.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
             // results should be a multiple of groups count, because interaction sphere can't changes
             _environment.GroupsCount = 2;
             _simulation.Process();
-            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.Network.NetworkLinks.Count);
+            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.MetaNetwork.NetworkLinks.Count);
             Assert.AreEqual(triads * _environment.GroupsCount,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
             _environment.GroupsCount = 3;
             _simulation.Process();
-            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.Network.NetworkLinks.Count);
+            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.MetaNetwork.NetworkLinks.Count);
             Assert.AreEqual(triads * _environment.GroupsCount,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }

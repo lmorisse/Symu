@@ -75,12 +75,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.Network.NetworkDatabases.GetDatabase(Id.Key);
+        protected Database Email => Environment.WhitePages.MetaNetwork.NetworkDatabases.GetDatabase(Id.Key);
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        protected bool HasEmail => Environment.WhitePages.Network.NetworkDatabases.Exists(Id, Id.Key);
+        protected bool HasEmail => Environment.WhitePages.MetaNetwork.NetworkDatabases.Exists(Id, Id.Key);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -175,7 +175,7 @@ namespace Symu.Classes.Agents
                 return new List<AgentId>();
             }
 
-            var agentIds = Environment.WhitePages.Network.InteractionSphere.GetAgentIdsForNewInteractions(Id,
+            var agentIds = Environment.WhitePages.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(Id,
                 Cognitive.InteractionPatterns.NextInteractionStrategy()).ToList();
             return FilterAgentIdsToInteract(agentIds);
         }
@@ -187,7 +187,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public IEnumerable<AgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
-            return Environment.WhitePages.Network.InteractionSphere
+            return Environment.WhitePages.MetaNetwork.InteractionSphere
                 .GetAgentIdsForInteractions(Id, interactionStrategy, Cognitive.InteractionPatterns).ToList();
         }
 
@@ -228,16 +228,16 @@ namespace Symu.Classes.Agents
             base.InitializeModels();
             // Initialize agent models
             LearningModel = new LearningModel(Id, Environment.Organization.Models,
-                Environment.WhitePages.Network.NetworkKnowledges, Cognitive);
+                Environment.WhitePages.MetaNetwork.NetworkKnowledges, Cognitive);
             ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
-                Cognitive, Environment.WhitePages.Network.NetworkKnowledges);
+                Cognitive, Environment.WhitePages.MetaNetwork.NetworkKnowledges);
             InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
-                Cognitive.InternalCharacteristics, Environment.WhitePages.Network);
+                Cognitive.InternalCharacteristics, Environment.WhitePages.MetaNetwork);
             BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,
-                Environment.WhitePages.Network);
+                Environment.WhitePages.MetaNetwork);
             KnowledgeModel = new KnowledgeModel(Id, Environment.Organization.Models.Knowledge, Cognitive,
-                Environment.WhitePages.Network);
-            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.Network);
+                Environment.WhitePages.MetaNetwork);
+            ActivityModel = new ActivityModel(Id, Cognitive, Environment.WhitePages.MetaNetwork);
         }
 
         /// <summary>

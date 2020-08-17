@@ -48,7 +48,7 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         public DerivedParameter[,] Sphere { get; private set; }
 
-        public void SetSphere(bool initialization, List<AgentId> agentIds, Network network)
+        public void SetSphere(bool initialization, List<AgentId> agentIds, MetaNetwork network)
         {
             if (agentIds == null)
             {
@@ -125,7 +125,7 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentIds"></param>
         /// <param name="network"></param>
-        public void UpdateSphereRandomly(IReadOnlyList<AgentId> agentIds, Network network)
+        public void UpdateSphereRandomly(IReadOnlyList<AgentId> agentIds, MetaNetwork network)
         {
             if (agentIds == null)
             {
@@ -201,7 +201,7 @@ namespace Symu.Repository.Networks.Sphere
             Sphere = tempSphere;
         }
 
-        private void SetSphereWithSimilarityMatching(IReadOnlyList<AgentId> agentIds, Network network)
+        private void SetSphereWithSimilarityMatching(IReadOnlyList<AgentId> agentIds, MetaNetwork network)
         {
             var count = agentIds.Count;
             _agentIndex = new Dictionary<AgentId, int>();
@@ -222,7 +222,7 @@ namespace Symu.Repository.Networks.Sphere
             }
         }
 
-        private DerivedParameter SetDerivedParameter(Network network, AgentId agentI, AgentId agentJ)
+        private DerivedParameter SetDerivedParameter(MetaNetwork network, AgentId agentI, AgentId agentJ)
         {
             var socialProximity = _model.SocialDemographicWeight > Constants.Tolerance
                 ? SetSocialProximity(agentI, agentJ, network.NetworkLinks)
