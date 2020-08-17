@@ -75,12 +75,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.MetaNetwork.NetworkDatabases.GetDatabase(Id.Key);
+        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(Id.Key);
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        protected bool HasEmail => Environment.WhitePages.MetaNetwork.NetworkDatabases.Exists(Id, Id.Key);
+        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(Id, Id.Key);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -228,9 +228,9 @@ namespace Symu.Classes.Agents
             base.InitializeModels();
             // Initialize agent models
             LearningModel = new LearningModel(Id, Environment.Organization.Models,
-                Environment.WhitePages.MetaNetwork.NetworkKnowledges, Cognitive);
+                Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
             ForgettingModel = new ForgettingModel(Id, Environment.Organization.Models,
-                Cognitive, Environment.WhitePages.MetaNetwork.NetworkKnowledges);
+                Cognitive, Environment.WhitePages.MetaNetwork.Knowledge);
             InfluenceModel = new InfluenceModel(Id, Environment.Organization.Models.Influence,
                 Cognitive.InternalCharacteristics, Environment.WhitePages.MetaNetwork);
             BeliefsModel = new BeliefsModel(Id, Environment.Organization.Models.Beliefs, Cognitive,

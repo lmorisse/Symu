@@ -63,7 +63,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             On = entity.IsAgentOn();
             _agentId = agentId;
-            _networkBeliefs = network.NetworkBeliefs;
+            _networkBeliefs = network.Beliefs;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
         }

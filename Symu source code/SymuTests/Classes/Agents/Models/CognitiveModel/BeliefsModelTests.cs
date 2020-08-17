@@ -54,8 +54,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
             _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
 
-            _network.NetworkBeliefs.AddBelief(_belief);
-            _network.NetworkBeliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.AddBelief(_belief);
+            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
 
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
@@ -71,7 +71,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             var agentKnowledge = new AgentKnowledge(2, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _beliefsModel.AddBeliefs(_expertise);
-            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, 2));
+            Assert.IsFalse(_network.Beliefs.Exists(_agentId, 2));
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _expertise.Add(agentKnowledge);
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
             _beliefsModel.AddBeliefs(_expertise);
-            Assert.IsTrue(_network.NetworkBeliefs.Exists(_agentId));
-            Assert.AreEqual(2, _network.NetworkBeliefs.GetAgentBeliefs(_agentId).Count);
+            Assert.IsTrue(_network.Beliefs.Exists(_agentId));
+            Assert.AreEqual(2, _network.Beliefs.GetAgentBeliefs(_agentId).Count);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialBelief = false;
             _beliefsModel.InitializeBeliefs();
-            Assert.IsTrue(_network.NetworkBeliefs.Exists(_agentId));
+            Assert.IsTrue(_network.Beliefs.Exists(_agentId));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
 
             _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _beliefsModel.InitializeBeliefs();
-            var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_agentId, _belief.Id);
+            var agentBelief = _network.Beliefs.GetAgentBelief(_agentId, _belief.Id);
             Assert.IsNotNull(agentBelief);
             Assert.IsNotNull(agentBelief.BeliefBits);
         }
@@ -157,7 +157,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         public void GetFilteredBeliefToSendTest0()
         {
             _beliefsModel.On = false;
-            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
         }
 
@@ -168,7 +168,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void GetFilteredBeliefToSendTest()
         {
-            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = false;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
         }
@@ -180,7 +180,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void GetFilteredBeliefToSendTest1()
         {
-            _network.NetworkBeliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(0, 0, _emailTemplate));
         }
@@ -192,9 +192,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void GetFilteredBeliefToSendTest2()
         {
-            _network.NetworkBeliefs.AddBelief(_belief);
-            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.NetworkBeliefs.InitializeBeliefs(_agentId, true);
+            _network.Beliefs.AddBelief(_belief);
+            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.InitializeBeliefs(_agentId, true);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
@@ -206,9 +206,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void GetFilteredBeliefToSendTest3()
         {
-            _network.NetworkBeliefs.AddBelief(_belief);
-            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
+            _network.Beliefs.AddBelief(_belief);
+            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.InitializeBeliefs(_agentId, false);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
             var bits = _beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate);
@@ -222,10 +222,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         [TestMethod]
         public void GetFilteredBeliefToSendTest4()
         {
-            _network.NetworkBeliefs.AddBelief(_belief);
-            _network.NetworkBeliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.NetworkBeliefs.InitializeBeliefs(_agentId, false);
-            _network.NetworkBeliefs.GetAgentBelief(_agentId, _belief.Id).BeliefBits
+            _network.Beliefs.AddBelief(_belief);
+            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.InitializeBeliefs(_agentId, false);
+            _network.Beliefs.GetAgentBelief(_agentId, _belief.Id).BeliefBits
                 .SetBit(0, 1);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0;

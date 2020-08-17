@@ -78,7 +78,7 @@ namespace SymuTests.Results.Organization
                 agents.Add(agent.Id);
             }
 
-            _environment.WhitePages.MetaNetwork.NetworkLinks.AddLinks(agents);
+            _environment.WhitePages.MetaNetwork.Links.AddLinks(agents);
             _environment.InitializeInteractionSphere();
         }
 

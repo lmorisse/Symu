@@ -52,9 +52,9 @@ namespace SymuTests.Repository.Networks.Sphere
             _network = new MetaNetwork(_model.InteractionSphere, _model.ImpactOfBeliefOnTask);
             _agents.Add(_agentId1);
             _agents.Add(_agentId2);
-            _network.NetworkKnowledges.AddKnowledge(_knowledge);
-            _network.NetworkBeliefs.AddBelief(_belief);
-            _network.NetworkActivities.AddActivity(_activity, _groupId);
+            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Beliefs.AddBelief(_belief);
+            _network.Activities.AddActivity(_activity, _groupId);
         }
 
         /// <summary>
@@ -142,25 +142,25 @@ namespace SymuTests.Repository.Networks.Sphere
 
         private void AddLink()
         {
-            _network.NetworkLinks.AddLink(_agentId1, _agentId2);
+            _network.Links.AddLink(_agentId1, _agentId2);
         }
 
         private void AddKnowledge(AgentId agentId, KnowledgeLevel level)
         {
-            _network.NetworkKnowledges.Add(agentId, _knowledge.Id, level, 0, -1);
-            _network.NetworkKnowledges.InitializeExpertise(agentId, false, 0);
+            _network.Knowledge.Add(agentId, _knowledge.Id, level, 0, -1);
+            _network.Knowledge.InitializeExpertise(agentId, false, 0);
         }
 
         private void AddActivity(AgentId agentId)
         {
-            _network.NetworkActivities.AddActivity(agentId, _activity.Name, _groupId);
+            _network.Activities.AddActivity(agentId, _activity.Name, _groupId);
         }
 
         private void AddBelief(AgentId agentId, float belief)
         {
-            _network.NetworkBeliefs.Add(agentId, _belief, BeliefLevel.NoBelief);
-            _network.NetworkBeliefs.InitializeBeliefs(agentId, false);
-            _network.NetworkBeliefs.GetAgentBelief(agentId, _belief.Id).BeliefBits.SetBit(0, belief);
+            _network.Beliefs.Add(agentId, _belief, BeliefLevel.NoBelief);
+            _network.Beliefs.InitializeBeliefs(agentId, false);
+            _network.Beliefs.GetAgentBelief(agentId, _belief.Id).BeliefBits.SetBit(0, belief);
         }
 
         #endregion
@@ -223,7 +223,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetRelativeBeliefTest()
         {
-            Assert.AreEqual(0, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.NetworkBeliefs));
+            Assert.AreEqual(0, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.Beliefs));
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddBelief(_agentId1, 1);
             AddBelief(_agentId2, 1);
-            Assert.AreEqual(1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.NetworkBeliefs));
+            Assert.AreEqual(1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.Beliefs));
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddBelief(_agentId1, -1);
             AddBelief(_agentId2, -1);
-            Assert.AreEqual(1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.NetworkBeliefs));
+            Assert.AreEqual(1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.Beliefs));
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddBelief(_agentId1, 0);
             AddBelief(_agentId2, 0);
-            Assert.AreEqual(0, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.NetworkBeliefs));
+            Assert.AreEqual(0, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.Beliefs));
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddBelief(_agentId1, -1);
             AddBelief(_agentId2, 1);
-            Assert.AreEqual(-1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.NetworkBeliefs));
+            Assert.AreEqual(-1, InteractionSphere.SetRelativeBelief(_agentId1, _agentId2, _network.Beliefs));
         }
 
         #endregion
@@ -281,7 +281,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void SetRelativeExpertiseTest()
         {
             Assert.AreEqual(0,
-                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.NetworkKnowledges));
+                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.Knowledge));
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace SymuTests.Repository.Networks.Sphere
             AddKnowledge(_agentId1, KnowledgeLevel.FullKnowledge);
             AddKnowledge(_agentId2, KnowledgeLevel.NoKnowledge);
             Assert.AreEqual(0,
-                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.NetworkKnowledges));
+                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.Knowledge));
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace SymuTests.Repository.Networks.Sphere
             AddKnowledge(_agentId1, KnowledgeLevel.FullKnowledge);
             AddKnowledge(_agentId2, KnowledgeLevel.FullKnowledge);
             Assert.AreEqual(1,
-                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.NetworkKnowledges));
+                InteractionSphere.SetRelativeKnowledge(_agentId1, _agentId2, _network.Knowledge));
         }
 
         #endregion
@@ -318,8 +318,8 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetSocialProximityTest()
         {
-            _network.NetworkLinks.SetMaxLinksCount();
-            Assert.AreEqual(0, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.NetworkLinks));
+            _network.Links.SetMaxLinksCount();
+            Assert.AreEqual(0, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
         }
 
         /// <summary>
@@ -329,8 +329,8 @@ namespace SymuTests.Repository.Networks.Sphere
         public void SetSocialProximityTest1()
         {
             AddLink();
-            _network.NetworkLinks.SetMaxLinksCount();
-            Assert.AreEqual(1, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.NetworkLinks));
+            _network.Links.SetMaxLinksCount();
+            Assert.AreEqual(1, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
         }
 
         /// <summary>
@@ -341,8 +341,8 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             var networkLink = new NetworkLink(_agentId1, _agentId2);
             networkLink.Deactivate();
-            _network.NetworkLinks.AddLink(_agentId1, _agentId2);
-            Assert.AreEqual(0F, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.NetworkLinks));
+            _network.Links.AddLink(_agentId1, _agentId2);
+            Assert.AreEqual(0F, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
         }
 
         #endregion
@@ -355,7 +355,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetRelativeActivityTest()
         {
-            Assert.AreEqual(0, InteractionSphere.SetRelativeActivity(_agentId1, _agentId2, _network.NetworkActivities));
+            Assert.AreEqual(0, InteractionSphere.SetRelativeActivity(_agentId1, _agentId2, _network.Activities));
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace SymuTests.Repository.Networks.Sphere
         {
             AddActivity(_agentId1);
             AddActivity(_agentId2);
-            Assert.AreEqual(1, InteractionSphere.SetRelativeActivity(_agentId1, _agentId2, _network.NetworkActivities));
+            Assert.AreEqual(1, InteractionSphere.SetRelativeActivity(_agentId1, _agentId2, _network.Activities));
         }
 
         #endregion

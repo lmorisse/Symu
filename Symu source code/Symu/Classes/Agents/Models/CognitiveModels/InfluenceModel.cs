@@ -65,8 +65,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             _agentId = agentAgentId;
-            _networkInfluences = network.NetworkInfluences;
-            _networkBeliefs = network.NetworkBeliefs;
+            _networkInfluences = network.Influences;
+            _networkBeliefs = network.Beliefs;
 
             if (internalCharacteristics.CanInfluenceOrBeInfluence && On)
             {

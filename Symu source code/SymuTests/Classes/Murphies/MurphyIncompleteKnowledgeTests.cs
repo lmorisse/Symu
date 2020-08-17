@@ -37,8 +37,8 @@ namespace SymuTests.Classes.Murphies
             var models = new OrganizationModels();
             _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             _knowledge = new Knowledge(1, "1", 1);
-            _network.NetworkKnowledges.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Knowledge.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }
@@ -103,7 +103,7 @@ namespace SymuTests.Classes.Murphies
             byte requiredIndex = 0;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            _network.Knowledge.Add(_agentId, _expertise);
             _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsFalse(mandatoryCheck && requiredCheck);
@@ -121,7 +121,7 @@ namespace SymuTests.Classes.Murphies
             byte requiredIndex = 0;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            _network.Knowledge.Add(_agentId, _expertise);
             _murphy.CheckKnowledge(1, _taskBits, _expertise, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);

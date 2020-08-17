@@ -176,9 +176,9 @@ namespace Symu.Environment
         {
             Messages.Clear();
             WhitePages.Clear();
-            WhitePages.MetaNetwork.NetworkKnowledges.Model =
+            WhitePages.MetaNetwork.Knowledge.Model =
                 Organization.Models.Generator;
-            WhitePages.MetaNetwork.NetworkBeliefs.Model =
+            WhitePages.MetaNetwork.Beliefs.Model =
                 Organization.Models.Generator;
             IterationResult.Initialize();
             // Intentionally before AddOrganizationKnowledges
@@ -426,9 +426,9 @@ namespace Symu.Environment
         public void SetDatabases()
         {
             foreach (var database in Organization.Databases.Select(databaseEntity =>
-                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork.NetworkKnowledges)))
+                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork.Knowledge)))
             {
-                WhitePages.MetaNetwork.NetworkDatabases.AddDatabase(database);
+                WhitePages.MetaNetwork.Databases.AddDatabase(database);
             }
         }
 

@@ -115,7 +115,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.WhitePages.MetaNetwork.NetworkLinks.HasActiveLink(Id, senderId))
+            if (Environment.WhitePages.MetaNetwork.Links.HasActiveLink(Id, senderId))
             {
                 return true;
             }
@@ -143,7 +143,7 @@ namespace Symu.Classes.Agents
             if (Environment.Organization.Models.InteractionSphere.SphereUpdateOverTime)
             {
                 // Message.Sender is now part of agent interaction sphere
-                Environment.WhitePages.MetaNetwork.NetworkLinks.AddLink(Id, senderId);
+                Environment.WhitePages.MetaNetwork.Links.AddLink(Id, senderId);
             }
 
             return true;

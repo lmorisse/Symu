@@ -52,8 +52,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             var modelEntity = new ModelEntity();
             _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, _network);
             _knowledge = new Knowledge(1, "1", 1);
-            _network.NetworkKnowledges.AddKnowledge(_knowledge);
-            _network.NetworkKnowledges.Add(_agentId, _expertise);
+            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Knowledge.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }
@@ -68,8 +68,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _expertise.Add(agentKnowledge);
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = false;
             _knowledgeModel.AddExpertise(_expertise);
-            Assert.AreEqual(0, _network.NetworkKnowledges.GetAgentExpertise(_agentId).Count);
-            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId));
+            Assert.AreEqual(0, _network.Knowledge.GetAgentExpertise(_agentId).Count);
+            Assert.IsFalse(_network.Beliefs.Exists(_agentId));
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);
-            Assert.AreEqual(1, _network.NetworkKnowledges.GetAgentExpertise(_agentId).Count);
+            Assert.AreEqual(1, _network.Knowledge.GetAgentExpertise(_agentId).Count);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = false;
             _knowledgeModel.InitializeExpertise(0);
-            Assert.IsTrue(_network.NetworkKnowledges.Exists(_agentId));
+            Assert.IsTrue(_network.Knowledge.Exists(_agentId));
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = false;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.ThrowsException<NullReferenceException>(() =>
-                _network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id));
+                _network.Knowledge.GetAgentKnowledge(_agentId, _knowledge.Id));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
-            var agentKnowledge = _network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id);
+            var agentKnowledge = _network.Knowledge.GetAgentKnowledge(_agentId, _knowledge.Id);
             Assert.IsNotNull(agentKnowledge);
         }
 
@@ -302,8 +302,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _knowledgeModel.InitializeKnowledge(_knowledge.Id, 0);
-            Assert.IsTrue(_network.NetworkKnowledges.Exists(_agentId, _knowledge.Id));
-            var agentKnowledge = _network.NetworkKnowledges.GetAgentKnowledge(_agentId, _knowledge.Id);
+            Assert.IsTrue(_network.Knowledge.Exists(_agentId, _knowledge.Id));
+            var agentKnowledge = _network.Knowledge.GetAgentKnowledge(_agentId, _knowledge.Id);
             Assert.AreEqual(1, agentKnowledge.KnowledgeBits.GetBit(0));
         }
     }

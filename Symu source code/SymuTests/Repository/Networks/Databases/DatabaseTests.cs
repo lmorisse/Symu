@@ -45,7 +45,7 @@ namespace SymuTests.Repository.Networks.Databases
             models.Learning.RateOfAgentsOn = 1;
             _bits1 = new Bits(_floats1, 0);
             var databaseEntity = new DataBaseEntity(agentId, cognitive);
-            _database = new Database(databaseEntity, models, network.NetworkKnowledges);
+            _database = new Database(databaseEntity, models, network.Knowledge);
         }
 
         [TestMethod]

@@ -47,11 +47,11 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         public void LearnByDoingTest()
         {
             _influenceModel.On = false;
-            _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model, BeliefWeightLevel.RandomWeight);
-            _network.NetworkBeliefs.AddBelief(belief);
+            _network.Beliefs.Model = RandomGenerator.RandomUniform;
+            var belief = new Belief(1, "1", 1, _network.Beliefs.Model, BeliefWeightLevel.RandomWeight);
+            _network.Beliefs.AddBelief(belief);
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
-            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
+            Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
         }
 
         /// <summary>
@@ -61,14 +61,14 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         public void LearnByDoingTest1()
         {
             _influenceModel.On = true;
-            _network.NetworkBeliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.NetworkBeliefs.Model, BeliefWeightLevel.RandomWeight);
-            _network.NetworkBeliefs.AddBelief(belief);
-            Assert.IsFalse(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
+            _network.Beliefs.Model = RandomGenerator.RandomUniform;
+            var belief = new Belief(1, "1", 1, _network.Beliefs.Model, BeliefWeightLevel.RandomWeight);
+            _network.Beliefs.AddBelief(belief);
+            Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
             //BeInfluenced new belief
-            Assert.IsTrue(_network.NetworkBeliefs.Exists(_agentId, belief.Id));
-            var agentBelief = _network.NetworkBeliefs.GetAgentBelief(_agentId, belief.Id);
+            Assert.IsTrue(_network.Beliefs.Exists(_agentId, belief.Id));
+            var agentBelief = _network.Beliefs.GetAgentBelief(_agentId, belief.Id);
             Assert.AreNotEqual(0, agentBelief.BeliefBits.GetBit(0));
         }
 

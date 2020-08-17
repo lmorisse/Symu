@@ -51,7 +51,7 @@ namespace SymuTests.Repository.Networks.Sphere
             _templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(InteractionStrategy.Knowledge);
             var organizationModels = new OrganizationModels {InteractionSphere = {On = true}};
             _network = new MetaNetwork(organizationModels.InteractionSphere, organizationModels.ImpactOfBeliefOnTask);
-            _networkKnowledge = _network.NetworkKnowledges;
+            _networkKnowledge = _network.Knowledge;
         }
 
         private void Interaction1X1()

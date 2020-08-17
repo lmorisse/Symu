@@ -103,7 +103,7 @@ namespace SymuBeliefsAndInfluence.Classes
                 agentIds.Add(actor.Id);
             }
 
-            WhitePages.MetaNetwork.NetworkLinks.AddLinks(agentIds);
+            WhitePages.MetaNetwork.Links.AddLinks(agentIds);
         }
     }
 }

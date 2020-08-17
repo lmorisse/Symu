@@ -100,7 +100,7 @@ namespace Symu.Classes.Agents
             State = AgentState.NotStarted;
             foreach (var database in environment.Organization.Databases)
             {
-                environment.WhitePages.MetaNetwork.AddDatabase(Id, database.AgentId.Key);
+                environment.WhitePages.MetaNetwork.Databases.Add(Id, database.AgentId.Key);
             }
             Created = Schedule.Step;
         }

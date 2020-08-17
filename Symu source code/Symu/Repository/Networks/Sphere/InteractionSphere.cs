@@ -67,7 +67,7 @@ namespace Symu.Repository.Networks.Sphere
                 return;
             }
 
-            network.NetworkLinks.SetMaxLinksCount();
+            network.Links.SetMaxLinksCount();
             if (_model.RandomlyGeneratedSphere)
             {
                 if (initialization)
@@ -225,17 +225,17 @@ namespace Symu.Repository.Networks.Sphere
         private DerivedParameter SetDerivedParameter(MetaNetwork network, AgentId agentI, AgentId agentJ)
         {
             var socialProximity = _model.SocialDemographicWeight > Constants.Tolerance
-                ? SetSocialProximity(agentI, agentJ, network.NetworkLinks)
+                ? SetSocialProximity(agentI, agentJ, network.Links)
                 : 0;
 
             var relativeBelief = _model.RelativeBeliefWeight > Constants.Tolerance
-                ? SetRelativeBelief(agentI, agentJ, network.NetworkBeliefs)
+                ? SetRelativeBelief(agentI, agentJ, network.Beliefs)
                 : 0;
             var relativeKnowledge = _model.RelativeKnowledgeWeight > Constants.Tolerance
-                ? SetRelativeKnowledge(agentI, agentJ, network.NetworkKnowledges)
+                ? SetRelativeKnowledge(agentI, agentJ, network.Knowledge)
                 : 0;
             var relativeActivity = _model.RelativeActivityWeight > Constants.Tolerance
-                ? SetRelativeActivity(agentI, agentJ, network.NetworkActivities)
+                ? SetRelativeActivity(agentI, agentJ, network.Activities)
                 : 0;
 
             var derivedParameter =

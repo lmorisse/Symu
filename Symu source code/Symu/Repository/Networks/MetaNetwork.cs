@@ -33,15 +33,14 @@ using Symu.Repository.Networks.Sphere;
 namespace Symu.Repository.Networks
 {
     /// <summary>
-    ///     MetaNetwork: referential for social and organizational network analysis
+    ///     MetaNetwork: referential of networks for social and organizational network analysis
     /// </summary>
     public class MetaNetwork
     {
-
         public MetaNetwork(InteractionSphereModel interactionSphere , BeliefWeightLevel beliefWeightLevel)
         {
             InteractionSphere = new InteractionSphere(interactionSphere);
-            NetworkBeliefs = new NetworkBeliefs(beliefWeightLevel);
+            Beliefs = new NetworkBeliefs(beliefWeightLevel);
         }
 
         /// <summary>
@@ -49,57 +48,58 @@ namespace Symu.Repository.Networks
         ///     Who report/communicate to who
         ///     Sphere of interaction of agents
         /// </summary>
-        public NetworkLinks NetworkLinks { get; } = new NetworkLinks();
+        public NetworkLinks Links { get; } = new NetworkLinks();
 
         /// <summary>
         ///     Directory of the groups of the organizationEntity :
         ///     Team, task force, workgroup, circles, community of practices, ...
         /// </summary>
-        public NetworkGroups NetworkGroups { get; } = new NetworkGroups();
+        public NetworkGroups Groups { get; } = new NetworkGroups();
 
         /// <summary>
         ///     Directory of the roles the agent are playing in the organizationEntity
         /// </summary>
-        public NetworkRoles NetworkRoles { get; } = new NetworkRoles();
+        public NetworkRoles Roles { get; } = new NetworkRoles();
 
         /// <summary>
         ///     Directory of objects used by the agentIds
         ///     using, working, support
         /// </summary>
-        public NetworkPortfolios NetworkPortfolios { get; } = new NetworkPortfolios();
+        public NetworkPortfolios Resources { get; } = new NetworkPortfolios();
 
         /// <summary>
         ///     Knowledge network
         ///     Who (agentId) knows what (Information)
         /// </summary>
-        public NetworkKnowledges NetworkKnowledges { get; } = new NetworkKnowledges();
+        public NetworkKnowledges Knowledge { get; } = new NetworkKnowledges();
 
         /// <summary>
         ///     Belief network
         ///     Who (agentId) believes what (Information)
         /// </summary>
-        public NetworkBeliefs NetworkBeliefs { get; }
+        public NetworkBeliefs Beliefs { get; }
 
         /// <summary>
         ///     Kanban activities network
         ///     Who (agentId) works on what activities (Kanban)
         /// </summary>
-        public NetworkActivities NetworkActivities { get; } = new NetworkActivities();
+        public NetworkActivities Activities { get; } = new NetworkActivities();
 
         /// <summary>
         ///     Agent enculturation level network
         /// </summary>
-        public NetworkEnculturation NetworkEnculturation { get; } = new NetworkEnculturation();
+        public NetworkEnculturation Enculturation { get; } = new NetworkEnculturation();
 
         /// <summary>
-        ///     Agent enculturation level network
+        ///     Agent influences network
         /// </summary>
-        public NetworkInfluences NetworkInfluences { get; } = new NetworkInfluences();
+        public NetworkInfluences Influences { get; } = new NetworkInfluences();
 
         /// <summary>
         ///     Communication network
         /// </summary>
-        public NetworkDatabases NetworkDatabases { get; } = new NetworkDatabases();
+        // todo should be part of resources
+        public NetworkDatabases Databases { get; } = new NetworkDatabases();
 
         /// <summary>
         ///     Derived Parameters from others networks.
@@ -111,116 +111,35 @@ namespace Symu.Repository.Networks
 
         public void Clear()
         {
-            NetworkLinks.Clear();
-            NetworkGroups.Clear();
-            NetworkRoles.Clear();
-            NetworkPortfolios.Clear();
-            NetworkKnowledges.Clear();
-            NetworkBeliefs.Clear();
-            NetworkActivities.Clear();
-            NetworkEnculturation.Clear();
-            NetworkInfluences.Clear();
-            NetworkDatabases.Clear();
+            Links.Clear();
+            Groups.Clear();
+            Roles.Clear();
+            Resources.Clear();
+            Knowledge.Clear();
+            Beliefs.Clear();
+            Activities.Clear();
+            Enculturation.Clear();
+            Influences.Clear();
+            Databases.Clear();
         }
 
         public void RemoveAgent(AgentId agentId)
         {
-            NetworkLinks.RemoveAgent(agentId);
-            NetworkGroups.RemoveAgent(agentId);
-            NetworkRoles.RemoveAgent(agentId);
-            NetworkPortfolios.RemoveAgent(agentId);
-            NetworkKnowledges.RemoveAgent(agentId);
-            NetworkActivities.RemoveAgent(agentId);
-            NetworkBeliefs.RemoveAgent(agentId);
-            NetworkEnculturation.RemoveAgent(agentId);
-            NetworkInfluences.RemoveAgent(agentId);
-            NetworkDatabases.RemoveAgent(agentId);
+            Links.RemoveAgent(agentId);
+            Groups.RemoveAgent(agentId);
+            Roles.RemoveAgent(agentId);
+            Resources.RemoveAgent(agentId);
+            Knowledge.RemoveAgent(agentId);
+            Activities.RemoveAgent(agentId);
+            Beliefs.RemoveAgent(agentId);
+            Enculturation.RemoveAgent(agentId);
+            Influences.RemoveAgent(agentId);
+            Databases.RemoveAgent(agentId);
         }
 
         #endregion
 
-        #region Shortcuts to Networks
-
-        /// <summary>
-        ///     Add a group to the networkGroup
-        /// </summary>
-        /// <param name="groupId"></param>
-        public void AddGroup(AgentId groupId)
-        {
-            NetworkGroups.AddGroup(groupId);
-        }
-
-        /// <summary>
-        ///     Get the list of the group allocations of a agentId
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="classKey"></param>
-        /// <returns>List of groupAllocations (groupId, Allocation)</returns>
-        public IEnumerable<GroupAllocation> GetGroupAllocations(AgentId agentId, byte classKey)
-        {
-            return NetworkGroups.GetGroupAllocationsOfAnAgentId(agentId, classKey);
-        }
-
-        /// <summary>
-        ///     Get the total allocation of a groupId
-        /// </summary>
-        /// <param name="groupId"></param>
-        /// <returns></returns>
-        public float GetMemberAllocations(AgentId groupId)
-        {
-            return NetworkGroups.GetMemberAllocations(groupId);
-        }
-
-        /// <summary>
-        ///     Update the agentId allocation for the groupId
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="groupId"></param>
-        /// <param name="allocation"></param>
-        /// <param name="capacityThreshold"></param>
-        public void UpdateGroupAllocation(AgentId agentId, AgentId groupId, float allocation, float capacityThreshold)
-        {
-            NetworkGroups.UpdateGroupAllocation(agentId, groupId, allocation, capacityThreshold);
-        }
-
-        /// <summary>
-        ///     Update all agentId's groupIds filtered by groupId.ClassKey
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="classKey">groupId.ClassKey</param>
-        public void UpdateGroupAllocations(AgentId agentId, byte classKey)
-        {
-            NetworkGroups.UpdateGroupAllocations(agentId, classKey, true);
-        }
-
-        /// <summary>
-        ///     Get the main group of the agentId filter by the group.ClassKey
-        ///     The main group is defined by the maximum GroupAllocation
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="classKey"></param>
-        /// <returns>
-        ///     return AgentId of the main group is exists, default Agent if don't exist, so check the result when using this
-        ///     method
-        /// </returns>
-        public AgentId GetMainGroupOrDefault(AgentId agentId, byte classKey)
-        {
-            var groups = GetGroupAllocations(agentId, classKey);
-            return groups.Any()
-                ? GetGroupAllocations(agentId, classKey).OrderByDescending(ga => ga.Allocation).First().AgentId
-                : new AgentId();
-        }
-
-        /// <summary>
-        ///     Get the group allocation of the agentIf for the groupId
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="groupId"></param>
-        /// <returns></returns>
-        public float GetGroupAllocation(AgentId agentId, AgentId groupId)
-        {
-            return NetworkGroups.GetAllocation(agentId, groupId);
-        }
+        #region Methods having crossed impacts on networks
 
         /// <summary>
         ///     Add an agent to a group
@@ -229,26 +148,25 @@ namespace Symu.Repository.Networks
         /// <param name="agentId"></param>
         /// <param name="allocation"></param>
         /// <param name="groupId"></param>
-        /// <param name="addLink">If true, a link is created with the members of the group and the new member</param>
-        public void AddMemberToGroup(AgentId agentId, float allocation, AgentId groupId, bool addLink)
+        /// <param name="addLink">If true, a link is created with the members of the group and the new member.
+        /// AddLink is done during the simulation. During the initialization, use InitializeNetworkLinks, for performance issues</param>
+        public void AddAgentToGroup(AgentId agentId, float allocation, AgentId groupId, bool addLink)
         {
-            lock (NetworkGroups)
+            lock (Groups)
             {
-                NetworkGroups.AddGroup(groupId);
+                Groups.AddGroup(groupId);
                 if (addLink)
-                //if (State == AgentState.Started)
                 {
-                    // AddLink is done during the simulation. 1t the initialization, use InitializeNetworkLinks, for performance issues
-                    foreach (var newTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
+                    foreach (var newTeammateId in Groups.GetAgents(groupId, agentId.ClassKey))
                     {
-                        NetworkLinks.AddLink(agentId, newTeammateId);
+                        Links.AddLink(agentId, newTeammateId);
                     }
                 }
 
-                NetworkGroups.AddMember(agentId, allocation, groupId);
+                Groups.AddAgent(agentId, allocation, groupId);
             }
 
-            NetworkPortfolios.AddMemberToGroup(agentId, groupId);
+            Resources.AddMemberToGroup(agentId, groupId);
         }
 
         /// <summary>
@@ -257,9 +175,9 @@ namespace Symu.Repository.Networks
         /// </summary>
         public void InitializeNetworkLinks()
         {
-            foreach (var groupId in NetworkGroups.GetGroups().ToList())
+            foreach (var groupId in Groups.GetGroups().ToList())
             {
-                NetworkLinks.AddLinks(NetworkGroups.GetMembers(groupId, SymuYellowPages.Actor).ToList());
+                Links.AddLinks(Groups.GetAgents(groupId, SymuYellowPages.Actor).ToList());
             }
         }
 
@@ -269,35 +187,24 @@ namespace Symu.Repository.Networks
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
-        public void RemoveMemberFromGroup(AgentId agentId, AgentId groupId)
+        public void RemoveAgentFromGroup(AgentId agentId, AgentId groupId)
         {
-            if (!NetworkGroups.Exists(groupId))
+            if (!Groups.Exists(groupId))
             {
                 return;
             }
 
-            foreach (var oldTeammateId in NetworkGroups.GetMembers(groupId, agentId.ClassKey))
+            foreach (var oldTeammateId in Groups.GetAgents(groupId, agentId.ClassKey))
             {
-                NetworkLinks.DeactivateLink(agentId, oldTeammateId);
+                Links.DeactivateLink(agentId, oldTeammateId);
             }
 
-            NetworkGroups.RemoveMember(agentId, groupId);
-            NetworkRoles.RemoveMember(agentId, groupId);
-            NetworkPortfolios.RemoveMemberFromGroup(agentId, groupId);
+            Groups.RemoveMember(agentId, groupId);
+            Roles.RemoveMember(agentId, groupId);
+            Resources.RemoveMemberFromGroup(agentId, groupId);
 
             // Remove all the groupId activities to the AgentId
-            NetworkActivities.RemoveMember(agentId, groupId);
-        }
-
-        /// <summary>
-        ///     Check if an agent is member of a group
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="groupId"></param>
-        /// <returns></returns>
-        public bool IsMemberOfGroup(AgentId agentId, AgentId groupId)
-        {
-            return NetworkGroups.IsMemberOfGroup(agentId, groupId);
+            Activities.RemoveMember(agentId, groupId);
         }
 
         /// <summary>
@@ -306,8 +213,8 @@ namespace Symu.Repository.Networks
         /// <param name="knowledge"></param>
         public void AddKnowledge(Knowledge knowledge)
         {
-            NetworkKnowledges.AddKnowledge(knowledge);
-            NetworkBeliefs.AddBelief(knowledge);
+            Knowledge.AddKnowledge(knowledge);
+            Beliefs.AddBelief(knowledge);
         }
 
         /// <summary>
@@ -316,48 +223,12 @@ namespace Symu.Repository.Networks
         public void AddKnowledges(IEnumerable<Knowledge> knowledge)
         {
             var knowledges = knowledge.ToList();
-            NetworkKnowledges.AddKnowledges(knowledges);
-            NetworkBeliefs.AddBeliefs(knowledges);
+            Knowledge.AddKnowledges(knowledges);
+            Beliefs.AddBeliefs(knowledges);
         }
 
         #endregion
 
-        #region NetworkPortfolio
 
-        public IEnumerable<AgentId> GetObjectIds(AgentId agentId, byte type)
-        {
-            return NetworkPortfolios.GetObjectIds(agentId, type);
-        }
-
-        /// <summary>
-        ///     Copy characteristics of a group to another
-        /// </summary>
-        /// <param name="groupSourceId"></param>
-        /// <param name="groupTargetId"></param>
-        public void GroupCopyTo(AgentId groupSourceId, AgentId groupTargetId)
-        {
-            NetworkPortfolios.CopyTo(groupSourceId, groupTargetId);
-        }
-
-        public bool HasObject(AgentId agentId, byte typeOfUse)
-        {
-            return NetworkPortfolios.HasObject(agentId, typeOfUse);
-        }
-
-        #endregion
-
-        #region Database
-
-        public void AddDatabase(AgentId agentId, ushort databaseId)
-        {
-            NetworkDatabases.Add(agentId, databaseId);
-        }
-
-        public void AddDatabase(AgentId agentId, Database database)
-        {
-            NetworkDatabases.Add(agentId, database);
-        }
-
-        #endregion
     }
 }

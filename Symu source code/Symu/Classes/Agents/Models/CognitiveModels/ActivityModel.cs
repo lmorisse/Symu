@@ -50,7 +50,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             _agentId = agentId;
-            _networkActivities = network.NetworkActivities;
+            _networkActivities = network.Activities;
         }
 
         /// <summary>

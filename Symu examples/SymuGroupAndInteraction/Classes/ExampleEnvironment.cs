@@ -77,7 +77,7 @@ namespace SymuGroupAndInteraction.Classes
                     {
                         GroupId = group.Id
                     };
-                    WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, group.Id, false);
+                    WhitePages.MetaNetwork.AddAgentToGroup(actor.Id, 100, group.Id, false);
                     //Beliefs are added with knowledge
                     SetKnowledge(actor, Organization.Knowledges, i);
                     SetActivity(actor.Id, _activities, i, group.Id);
@@ -91,18 +91,18 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    WhitePages.MetaNetwork.NetworkKnowledges.Add(actor.Id, knowledges[0].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[0].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
                 case 1:
                     // Knowledge is by group
-                    WhitePages.MetaNetwork.NetworkKnowledges.Add(actor.Id, knowledges[i].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[i].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.NetworkKnowledges.Add(actor.Id, knowledges[index].Id, KnowledgeLevel,
+                    WhitePages.MetaNetwork.Knowledge.Add(actor.Id, knowledges[index].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics);
                     break;
             }
@@ -114,16 +114,16 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same activity for all
-                    WhitePages.MetaNetwork.NetworkActivities.AddActivity(agentId, activities[0], groupId);
+                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, activities[0], groupId);
                     break;
                 case 1:
                     // Activity is by group
-                    WhitePages.MetaNetwork.NetworkActivities.AddActivity(agentId, activities[i], groupId);
+                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, activities[i], groupId);
                     break;
                 case 2:
                     // Activity is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.NetworkActivities.AddActivity(agentId, activities[index], groupId);
+                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, activities[index], groupId);
                     break;
             }
         }

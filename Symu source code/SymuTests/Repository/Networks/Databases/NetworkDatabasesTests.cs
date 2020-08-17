@@ -36,7 +36,7 @@ namespace SymuTests.Repository.Networks.Databases
             var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask); 
             var cognitive = new CognitiveArchitecture();
             var databaseEntity = new DataBaseEntity(_agentId, cognitive);
-            _database = new Database(databaseEntity, models, network.NetworkKnowledges);
+            _database = new Database(databaseEntity, models, network.Knowledge);
         }
 
         [TestMethod]

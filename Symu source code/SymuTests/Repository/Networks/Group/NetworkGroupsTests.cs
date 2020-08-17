@@ -38,7 +38,7 @@ namespace SymuTests.Repository.Networks.Group
             // Without Agent
             _group.RemoveAgent(_teammateId);
             // With agent 1 one team
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             _group.RemoveAgent(_teammateId);
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId));
         }
@@ -49,8 +49,8 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void RemoveAgentTest1()
         {
-            _group.AddMember(_teammateId, 100, _teamId);
-            _group.AddMember(_teammateId, 100, _teamId2);
+            _group.AddAgent(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId2);
             _group.RemoveAgent(_teammateId);
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId));
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId2));
@@ -60,7 +60,7 @@ namespace SymuTests.Repository.Networks.Group
         public void AddTeammateTest()
         {
             Assert.IsFalse(_group.Any());
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.IsTrue(_group.Any());
             Assert.IsTrue(_group.List[_teamId][0].AgentId.Equals(_teammateId));
         }
@@ -68,7 +68,7 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void ClearTest()
         {
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             _group.Clear();
             Assert.IsFalse(_group.Any());
         }
@@ -87,12 +87,12 @@ namespace SymuTests.Repository.Networks.Group
             // Without Agent
             _group.RemoveMember(_teammateId, _teamId);
             // With agent 1 one team
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             _group.RemoveMember(_teammateId, _teamId);
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId));
             // With agent 1 two teams
-            _group.AddMember(_teammateId, 100, _teamId);
-            _group.AddMember(_teammateId, 100, _teamId2);
+            _group.AddAgent(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId2);
             _group.RemoveMember(_teammateId, _teamId);
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId));
             Assert.IsTrue(_group.IsMemberOfGroup(_teammateId, _teamId2));
@@ -101,26 +101,26 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetTeammatesTest()
         {
-            Assert.IsNull(_group.GetMembers(_teamId, _teammateId.ClassKey));
-            _group.AddMember(_teammateId, 100, _teamId);
-            Assert.IsNotNull(_group.GetMembers(_teamId, _teammateId.ClassKey));
+            Assert.IsNull(_group.GetAgents(_teamId, _teammateId.ClassKey));
+            _group.AddAgent(_teammateId, 100, _teamId);
+            Assert.IsNotNull(_group.GetAgents(_teamId, _teammateId.ClassKey));
         }
 
         [TestMethod]
         public void GetTeammatesCountTest()
         {
-            Assert.AreEqual(0, _group.GetMembersCount(_teamId));
-            _group.AddMember(_teammateId, 100, _teamId);
-            Assert.AreEqual(1, _group.GetMembersCount(_teamId));
-            _group.AddMember(_teammateId, 100, _teamId); //Check Duplication 
-            Assert.AreEqual(1, _group.GetMembersCount(_teamId));
+            Assert.AreEqual(0, _group.GetAgentsCount(_teamId));
+            _group.AddAgent(_teammateId, 100, _teamId);
+            Assert.AreEqual(1, _group.GetAgentsCount(_teamId));
+            _group.AddAgent(_teammateId, 100, _teamId); //Check Duplication 
+            Assert.AreEqual(1, _group.GetAgentsCount(_teamId));
         }
 
         [TestMethod]
         public void IsTeammateTest()
         {
             Assert.IsFalse(_group.IsMemberOfGroup(_teammateId, _teamId));
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.IsTrue(_group.IsMemberOfGroup(_teammateId, _teamId));
         }
 
@@ -136,9 +136,9 @@ namespace SymuTests.Repository.Networks.Group
         public void IsTeammateTest1()
         {
             Assert.AreEqual(0, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.AreEqual(1, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId, 100, _teamId2);
+            _group.AddAgent(_teammateId, 100, _teamId2);
             Assert.AreEqual(2, _group.GetGroups(_teammateId, _teamId.ClassKey).Count());
         }
 
@@ -163,13 +163,13 @@ namespace SymuTests.Repository.Networks.Group
         public void GetCoMemberIds()
         {
             Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.AreEqual(0, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId2, 100, _teamId);
+            _group.AddAgent(_teammateId2, 100, _teamId);
             Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId3, 100, _teamId2);
+            _group.AddAgent(_teammateId3, 100, _teamId2);
             Assert.AreEqual(1, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId, 100, _teamId2);
+            _group.AddAgent(_teammateId, 100, _teamId2);
             Assert.AreEqual(2, _group.GetCoMemberIds(_teammateId, _teamId.ClassKey).Count());
         }
 
@@ -179,7 +179,7 @@ namespace SymuTests.Repository.Networks.Group
         public void GetGroupAllocationsTest()
         {
             Assert.AreEqual(0, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.AreEqual(1, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassKey).Count());
         }
 
@@ -187,7 +187,7 @@ namespace SymuTests.Repository.Networks.Group
         public void GetGroupAllocationTest()
         {
             Assert.IsNull(_group.GetGroupAllocation(_teammateId, _teamId));
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.IsNotNull(_group.GetGroupAllocation(_teammateId, _teamId));
         }
 
@@ -195,7 +195,7 @@ namespace SymuTests.Repository.Networks.Group
         public void GetAllocationTest()
         {
             Assert.AreEqual(0, _group.GetAllocation(_teammateId, _teamId));
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             Assert.AreEqual(100, _group.GetAllocation(_teammateId, _teamId));
         }
 
@@ -213,7 +213,7 @@ namespace SymuTests.Repository.Networks.Group
         public void UpdateGroupAllocationTest1()
         {
             // Test increment
-            _group.AddMember(_teammateId, 50, _teamId);
+            _group.AddAgent(_teammateId, 50, _teamId);
             _group.UpdateGroupAllocation(_teammateId, _teamId, 20, 0);
             Assert.AreEqual(70, _group.GetAllocation(_teammateId, _teamId));
             // Test decrement with a threshold
@@ -224,7 +224,7 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void FullAllocUpdateGroupAllocationsTest()
         {
-            _group.AddMember(_teammateId, 50, _teamId);
+            _group.AddAgent(_teammateId, 50, _teamId);
             _group.UpdateGroupAllocations(_teammateId, _teamId.ClassKey, true);
             Assert.AreEqual(100, _group.GetAllocation(_teammateId, _teamId));
         }
@@ -232,7 +232,7 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void UpdateGroupAllocationsTest()
         {
-            _group.AddMember(_teammateId, 50, _teamId);
+            _group.AddAgent(_teammateId, 50, _teamId);
             _group.UpdateGroupAllocations(_teammateId, _teamId.ClassKey, false);
             Assert.AreEqual(50, _group.GetAllocation(_teammateId, _teamId));
         }
@@ -247,7 +247,7 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void CopyToTest()
         {
-            _group.AddMember(_teammateId, 100, _teamId);
+            _group.AddAgent(_teammateId, 100, _teamId);
             _group.CopyTo(_teamId, _teamId2);
             Assert.AreEqual(100, _group.GetAllocation(_teammateId, _teamId2));
         }
@@ -255,11 +255,11 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetMemberAllocationsTest()
         {
-            Assert.AreEqual(0, _group.GetMemberAllocations(_teamId));
-            _group.AddMember(_teammateId, 100, _teamId);
-            Assert.AreEqual(100, _group.GetMemberAllocations(_teamId));
-            _group.AddMember(_teammateId2, 50, _teamId);
-            Assert.AreEqual(150, _group.GetMemberAllocations(_teamId));
+            Assert.AreEqual(0, _group.GetAgentAllocations(_teamId));
+            _group.AddAgent(_teammateId, 100, _teamId);
+            Assert.AreEqual(100, _group.GetAgentAllocations(_teamId));
+            _group.AddAgent(_teammateId2, 50, _teamId);
+            Assert.AreEqual(150, _group.GetAgentAllocations(_teamId));
         }
 
         #endregion

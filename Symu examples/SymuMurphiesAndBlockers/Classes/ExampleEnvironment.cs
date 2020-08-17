@@ -86,9 +86,9 @@ namespace SymuMurphiesAndBlockers.Classes
                 };
                 CommunicationTemplate communication = new EmailTemplate();
                 var entity = new DataBaseEntity(actor.Id, communication);
-                var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.NetworkKnowledges);
-                WhitePages.MetaNetwork.AddDatabase(actor.Id, email);
-                WhitePages.MetaNetwork.AddMemberToGroup(actor.Id, 100, group.Id, false);
+                var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.Knowledge);
+                WhitePages.MetaNetwork.Databases.Add(actor.Id, email);
+                WhitePages.MetaNetwork.AddAgentToGroup(actor.Id, 100, group.Id, false);
             }
         }
     }

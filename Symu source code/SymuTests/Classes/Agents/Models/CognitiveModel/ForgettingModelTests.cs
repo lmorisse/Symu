@@ -40,7 +40,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         {
             var models = new OrganizationModels();
             var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
-            _networkKnowledges = network.NetworkKnowledges;
+            _networkKnowledges = network.Knowledge;
             _networkKnowledges.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
