@@ -12,7 +12,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
 using Symu.Repository.Networks.Beliefs;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

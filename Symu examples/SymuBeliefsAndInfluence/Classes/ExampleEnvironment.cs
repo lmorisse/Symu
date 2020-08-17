@@ -15,9 +15,9 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Interfaces;
 
 #endregion
 

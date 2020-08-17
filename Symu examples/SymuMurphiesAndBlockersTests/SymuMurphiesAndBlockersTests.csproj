@@ -22,18 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Symu source code\SymuTools\SymuCommon.csproj" />
-    <ProjectReference Include="..\..\Symu source code\Symu\Symu.csproj" />
     <ProjectReference Include="..\SymuMurphiesAndBlockers\SymuMurphiesAndBlockers.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Symu">
-      <HintPath>..\..\Symu source code\Symu\bin\Debug\netstandard2.0\Symu.dll</HintPath>
-    </Reference>
-    <Reference Include="SymuTools">
-      <HintPath>..\..\Symu source code\SymuTools\bin\Debug\netstandard2.0\SymuTools.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

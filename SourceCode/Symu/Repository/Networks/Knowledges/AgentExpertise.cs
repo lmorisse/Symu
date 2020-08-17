@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

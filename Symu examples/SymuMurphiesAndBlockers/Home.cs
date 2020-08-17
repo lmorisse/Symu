@@ -16,12 +16,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
+using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Messaging.Messages;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools;
 using SymuMurphiesAndBlockers.Classes;
 
 #endregion

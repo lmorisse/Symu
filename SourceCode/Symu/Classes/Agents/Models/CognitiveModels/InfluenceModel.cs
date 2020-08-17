@@ -10,11 +10,11 @@
 #region using directives
 
 using System;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

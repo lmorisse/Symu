@@ -14,9 +14,9 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

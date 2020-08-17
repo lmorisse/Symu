@@ -7,7 +7,7 @@
 
 #endregion
 
-using Symu.Tools.Interfaces;
+using Symu.Common.Interfaces;
 
 namespace Symu.Classes.Agents
 {

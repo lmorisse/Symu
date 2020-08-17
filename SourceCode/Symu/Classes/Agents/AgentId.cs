@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using Symu.Tools.Interfaces;
+using Symu.Common.Interfaces;
 
 #endregion
 

@@ -16,11 +16,10 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

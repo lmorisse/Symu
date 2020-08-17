@@ -19,13 +19,13 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
-using Symu.Tools.Interfaces;
 using SymuTests.Helpers;
 
 #endregion

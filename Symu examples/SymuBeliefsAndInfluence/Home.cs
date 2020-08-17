@@ -21,7 +21,7 @@ using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

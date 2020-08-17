@@ -10,9 +10,9 @@
 #region using directives
 
 using System.Collections.Generic;
+using Symu.Common.Math;
 using Symu.Environment;
 using Symu.Repository.Networks.Sphere;
-using Symu.Tools.Math;
 
 #endregion
 

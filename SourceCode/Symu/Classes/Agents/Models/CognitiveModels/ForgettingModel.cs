@@ -13,8 +13,8 @@ using System;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

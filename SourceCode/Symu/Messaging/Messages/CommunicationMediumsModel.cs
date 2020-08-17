@@ -11,7 +11,7 @@
 
 using System.Collections;
 using System.Linq;
-using Symu.Tools.Math.ProbabilityDistributions;
+using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
 

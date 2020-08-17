@@ -17,13 +17,13 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Sphere;
-using Symu.Tools.Interfaces;
 
 #endregion
 

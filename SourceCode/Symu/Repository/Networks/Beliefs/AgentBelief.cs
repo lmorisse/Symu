@@ -12,9 +12,9 @@
 using System;
 using System.Linq;
 using Symu.Common;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Math.ProbabilityDistributions;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

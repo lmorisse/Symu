@@ -22,7 +22,7 @@ using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Networks.Knowledges;
 using SymuLearnAndForget.Classes;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

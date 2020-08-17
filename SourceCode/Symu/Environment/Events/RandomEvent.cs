@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using Symu.Tools.Math.ProbabilityDistributions;
+using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
 

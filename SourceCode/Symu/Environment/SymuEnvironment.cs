@@ -17,14 +17,13 @@ using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Interfaces;
 using Symu.Environment.Events;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
 using Symu.Results;
-using Symu.Tools;
-using Symu.Tools.Interfaces;
 
 #endregion
 

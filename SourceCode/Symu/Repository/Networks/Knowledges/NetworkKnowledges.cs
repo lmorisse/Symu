@@ -16,7 +16,7 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
-using Symu.Tools.Interfaces;
+using Symu.Common.Interfaces;
 
 #endregion
 

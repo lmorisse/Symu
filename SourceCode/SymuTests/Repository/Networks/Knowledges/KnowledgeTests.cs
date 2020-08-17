@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using Symu.Messaging.Messages;
 using Symu.Results.Blocker;
 using Symu.Results.Task;
-using static Symu.Tools.Constants;
+using static Symu.Common.Constants;
 
 #endregion
 

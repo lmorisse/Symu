@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Tools.Interfaces;
 
 #endregion
 

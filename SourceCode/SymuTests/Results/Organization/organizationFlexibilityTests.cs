@@ -16,8 +16,8 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces;
 using Symu.Results.Organization;
-using Symu.Tools.Interfaces;
 using SymuTests.Helpers;
 
 #endregion

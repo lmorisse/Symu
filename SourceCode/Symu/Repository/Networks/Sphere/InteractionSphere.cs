@@ -15,13 +15,13 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
+using Symu.Common;
+using Symu.Common.Interfaces;
+using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
-using Symu.Tools;
-using Symu.Tools.Interfaces;
-using Symu.Tools.Math.ProbabilityDistributions;
 
 #endregion
 

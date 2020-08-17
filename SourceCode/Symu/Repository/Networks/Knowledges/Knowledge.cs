@@ -12,8 +12,7 @@
 using System;
 using Symu.Classes.Task;
 using Symu.Common;
-using Symu.Tools;
-using Symu.Tools.Math.ProbabilityDistributions;
+using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
 
