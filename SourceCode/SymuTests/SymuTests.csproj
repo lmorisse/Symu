@@ -25,4 +25,10 @@
     <ProjectReference Include="..\Symu\Symu.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Symu.Common">
+      <HintPath>..\..\..\..\Symu.Common\Github\SourceCode\SymuCommon\bin\Debug\netstandard2.0\Symu.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

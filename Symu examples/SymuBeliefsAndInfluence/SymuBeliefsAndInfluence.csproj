@@ -121,8 +121,8 @@
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SourceCode\SymuCommon\SymuCommon.csproj">
-      <Project>{883cc5f0-e805-466e-a32e-e3836246d339}</Project>
+    <ProjectReference Include="..\..\..\..\Symu.Common\Github\SourceCode\SymuCommon\SymuCommon.csproj">
+      <Project>{1a21ef65-3dc6-4747-a037-0f813c05da18}</Project>
       <Name>SymuCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SourceCode\SymuForm\SymuForm.csproj">

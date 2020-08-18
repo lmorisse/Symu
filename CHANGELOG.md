@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* SymuTools refactored in Symu.Common solution
 * Prepare Symu.org for ONA project
 
 ## 0.91 [☰](https://github.com/lmorisse/symu/compare/v0.9.1..v0.9.0) by [lmorisse](https://github.com/lmorisse)

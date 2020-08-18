@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SourceCode\Symu\Symu.csproj" />
     <ProjectReference Include="..\SymuMurphiesAndBlockers\SymuMurphiesAndBlockers.csproj" />
   </ItemGroup>
 

@@ -48,6 +48,13 @@ Symu works only on Windows for the moment.
 
 ### Building
 
+Symu is built upon different repositories. We don't use git submodules. So that, to build Symu and its examples solutions, you'll need to check the dependencies manually.
+
+#### Symu dependencies
+To build Symu you have to add the Symu.Common.dll as a dependency. You find this library in the [Symu.Common](https://github.com/lmorisse/Symu.Common/releases/latest) repository.
+To build Symu examples, you'll need to add Symu.dll, Symu.Forms.dll and Symu.Common.dll as dependencies.
+
+#### External dependencies
 * [Math.net](https://www.math.net/)
 * Some examples are using [SyncFusion](https://www.syncfusion.com/)
 

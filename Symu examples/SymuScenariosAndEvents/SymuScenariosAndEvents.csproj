@@ -46,6 +46,15 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Symu">
+      <HintPath>..\..\SourceCode\Symu\bin\Debug\netstandard2.0\Symu.dll</HintPath>
+    </Reference>
+    <Reference Include="Symu.Common">
+      <HintPath>..\..\..\..\Symu.Common\Github\SourceCode\SymuCommon\bin\Debug\netstandard2.0\Symu.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Symu.Forms">
+      <HintPath>..\..\SourceCode\SymuForm\bin\Debug\netstandard2.0\Symu.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=18.1460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.Chart.Windows, Version=18.1460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
     <Reference Include="Syncfusion.Shared.Base, Version=18.1460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
@@ -126,20 +135,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.0.0\analyzers\dotnet\cs\Humanizer.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\SourceCode\SymuCommon\SymuCommon.csproj">
-      <Project>{883cc5f0-e805-466e-a32e-e3836246d339}</Project>
-      <Name>SymuCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SourceCode\SymuForm\SymuForm.csproj">
-      <Project>{d6e71e07-917e-44d2-8ae0-4c18dd5524df}</Project>
-      <Name>SymuForm</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SourceCode\Symu\Symu.csproj">
-      <Project>{43ea0b24-272a-48df-aaaa-9076663918de}</Project>
-      <Name>Symu</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

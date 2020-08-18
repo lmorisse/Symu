@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SourceCode\SymuForm\SymuForm.csproj" />
     <ProjectReference Include="..\SymuLearnAndForget\SymuLearnAndForget.csproj" />
   </ItemGroup>
 

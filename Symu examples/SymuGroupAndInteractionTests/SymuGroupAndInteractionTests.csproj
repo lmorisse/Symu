@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SourceCode\Symu\Symu.csproj" />
     <ProjectReference Include="..\SymuGroupAndInteraction\SymuGroupAndInteraction.csproj" />
   </ItemGroup>
 

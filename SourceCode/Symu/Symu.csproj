@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SymuCommon\SymuCommon.csproj" />
+    <ProjectReference Include="..\..\..\..\Symu.Common\Github\SourceCode\SymuCommon\SymuCommon.csproj" />
   </ItemGroup>
 
 </Project>
