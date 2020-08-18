@@ -27,6 +27,17 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
     [TestClass]
     public class KnowledgeModelTests
     {
+        private const float Threshold = 0.1F;
+        private readonly byte[] _taskKnowledge0 = { 0 };
+        private readonly byte[] _taskKnowledge1 = { 1 };
+        private readonly float[] _knowledgeFloatBits = { 0.1F, 0.1F }; 
+        private readonly float[] _knowledge01Bits = { 0, 1 };
+        private readonly float[] _knowledge0Bits = { 0, 0 };
+        //private readonly float[] _knowledge1Bits = { 1, 1 };
+        private AgentKnowledge _agentKnowledge0;
+        private AgentKnowledge _agentKnowledge01;
+        private AgentKnowledge _agentKnowledge1;
+        private AgentKnowledge _agentKnowledgeFloat;
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly EmailTemplate _emailTemplate = new EmailTemplate();
         private AgentExpertise _expertise;
@@ -57,6 +68,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _network.Knowledge.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
+            _agentKnowledgeFloat = new AgentKnowledge(3, _knowledgeFloatBits, 0, -1, 0);
+            _agentKnowledge0 = new AgentKnowledge(0, _knowledge0Bits, 0, -1, 0);
+            _agentKnowledge1 = new AgentKnowledge(1, _knowledge1Bits, 0, -1, 0);
+            _agentKnowledge01 = new AgentKnowledge(2, _knowledge01Bits, 0, -1, 0);
         }
 
         /// <summary>
@@ -305,5 +320,54 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             var agentKnowledge = _knowledgeModel.Expertise.GetKnowledge(_knowledge.Id);
             Assert.AreEqual(1, agentKnowledge.KnowledgeBits.GetBit(0));
         }
+
+        #region KnowsEnough
+
+        [TestMethod]
+        public void CheckTest()
+        {
+            Assert.IsFalse(_knowledgeModel.Check(_agentKnowledge0, _taskKnowledge0, out var index, Threshold, 0));
+            Assert.AreEqual(0, index);
+            Assert.IsFalse(_knowledgeModel.Check(_agentKnowledge0, _taskKnowledge1, out index, Threshold, 0));
+            Assert.AreEqual(1, index);
+            Assert.IsTrue(_knowledgeModel.Check(_agentKnowledge1, _taskKnowledge0, out _, Threshold, 0));
+            Assert.IsTrue(_knowledgeModel.Check(_agentKnowledge1, _taskKnowledge1, out _, Threshold, 0));
+            Assert.IsFalse(_knowledgeModel.Check(_agentKnowledge01, _taskKnowledge0, out index, Threshold, 0));
+            Assert.AreEqual(0, index);
+            Assert.IsTrue(_knowledgeModel.Check(_agentKnowledge01, _taskKnowledge1, out _, Threshold, 0));
+            Assert.IsTrue(_knowledgeModel.Check(_agentKnowledgeFloat, _taskKnowledge0, out _, Threshold, 0));
+            Assert.IsTrue(_knowledgeModel.Check(_agentKnowledgeFloat, _taskKnowledge1, out _, Threshold, 0));
+        }
+
+        [TestMethod]
+        public void KnowsEnoughTest()
+        {
+            var agentKnowledge = new AgentKnowledge(4, KnowledgeLevel.BasicKnowledge, 0, -1);
+            // Non passing test
+            Assert.IsFalse(KnowledgeModel.KnowsEnough(agentKnowledge, 0, Threshold, 0));
+            // Passing tests
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledge0, 0, 0, 0));
+            Assert.IsFalse(KnowledgeModel.KnowsEnough(_agentKnowledge0, 0, Threshold, 0));
+            Assert.IsFalse(KnowledgeModel.KnowsEnough(_agentKnowledge0, 1, Threshold, 0));
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledge1, 0, Threshold, 0));
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledge1, 1, Threshold, 0));
+            Assert.IsFalse(KnowledgeModel.KnowsEnough(_agentKnowledge01, 0, Threshold, 0));
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledge01, 1, Threshold, 0));
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledgeFloat, 0, Threshold, 0));
+            Assert.IsTrue(KnowledgeModel.KnowsEnough(_agentKnowledgeFloat, 1, Threshold, 0));
+        }
+
+
+        [TestMethod]
+        public void HasTest()
+        {
+            float[] bits = { 0, 1 };
+            var knowledgeBits = new KnowledgeBits(bits, 0, -1);
+            var agentKnowledge = new AgentKnowledge(1, knowledgeBits);
+            _expertise.Add(agentKnowledge);
+            Assert.IsFalse(_knowledgeModel.KnowsEnough(_knowledge.Id, 0, 0.1F, 0));
+            Assert.IsTrue(_knowledgeModel.KnowsEnough(_knowledge.Id, 1, 0.1F, 0));
+        }
+        #endregion
     }
 }

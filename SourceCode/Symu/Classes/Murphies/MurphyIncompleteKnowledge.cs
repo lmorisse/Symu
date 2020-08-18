@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Task;
 using Symu.Repository.Networks.Knowledges;
 
@@ -28,19 +29,24 @@ namespace Symu.Classes.Murphies
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="taskBitIndexes">KnowledgeBits indexes of the task that must be checked against worker Knowledge</param>
-        /// <param name="expertise"></param>
+        /// <param name="knowledgeModel"></param>
         /// <param name="mandatoryCheck"></param>
         /// <param name="requiredCheck"></param>
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <param name="step"></param>
-        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, AgentExpertise expertise,
+        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
             ref bool mandatoryCheck,
             ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
         {
             if (taskBitIndexes is null)
             {
                 throw new ArgumentNullException(nameof(taskBitIndexes));
+            }
+
+            if (knowledgeModel == null)
+            {
+                throw new ArgumentNullException(nameof(knowledgeModel));
             }
 
             // model is off
@@ -52,15 +58,15 @@ namespace Symu.Classes.Murphies
             }
 
             // agent may don't have the knowledge at all
-            var workerKnowledge = expertise?.GetKnowledge(knowledgeId);
+            var workerKnowledge = knowledgeModel.Expertise.GetKnowledge(knowledgeId);
             if (workerKnowledge == null)
             {
                 return;
             }
 
-            mandatoryCheck = workerKnowledge.Check(taskBitIndexes.GetMandatory(), out mandatoryIndex,
+            mandatoryCheck = knowledgeModel.Check(workerKnowledge, taskBitIndexes.GetMandatory(), out mandatoryIndex,
                 ThresholdForReacting, step);
-            requiredCheck = workerKnowledge.Check(taskBitIndexes.GetRequired(), out requiredIndex,
+            requiredCheck = knowledgeModel.Check(workerKnowledge, taskBitIndexes.GetRequired(), out requiredIndex,
                 ThresholdForReacting, step);
         }
 
@@ -69,10 +75,10 @@ namespace Symu.Classes.Murphies
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="knowledgeBit">KnowledgeBit index of the task that must be checked against worker Knowledge</param>
-        /// <param name="expertise"></param>
+        /// <param name="knowledgeModel"></param>
         /// <param name="step"></param>
         /// <returns>True if the knowledgeBit is known enough</returns>
-        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, AgentExpertise expertise, ushort step)
+        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, KnowledgeModel knowledgeModel, ushort step)
         {
             if (!IsAgentOn())
             {
@@ -80,10 +86,11 @@ namespace Symu.Classes.Murphies
             }
 
             // workerKnowledge may don't have the knowledge at all
-            var workerKnowledge = expertise?.GetKnowledge(knowledgeId);
-            return workerKnowledge != null &&
-                   workerKnowledge.KnowsEnough(knowledgeBit, ThresholdForReacting,
-                       step);
+            return knowledgeModel.KnowsEnough(knowledgeId, knowledgeBit, ThresholdForReacting, step);
+            //var workerKnowledge = expertise?.GetKnowledge(knowledngeId);
+            //return workerKnowledge != null &&
+            //       workerKnowledge.KnowsEnough(knowledgeBit, ThresholdForReacting,
+            //           step);
         }
     }
 }

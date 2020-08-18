@@ -14,6 +14,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
+using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Knowledges;
@@ -36,16 +37,12 @@ namespace SymuTests.Repository.Networks.Databases
             var agentId = new AgentId(1, 1);
 
             var models = new OrganizationModels();
-            var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask); 
-            var cognitive = new CognitiveArchitecture();
+            var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
 
-            cognitive.TasksAndPerformance.LearningRate = 1;
-            cognitive.InternalCharacteristics.CanLearn = true;
-            models.Learning.On = true;
-            models.Learning.RateOfAgentsOn = 1;
+            CommunicationTemplate communication = new EmailTemplate();
+            var entity = new DataBaseEntity(agentId, communication);
+            _database = new Database(entity, models, network.Knowledge);
             _bits1 = new Bits(_floats1, 0);
-            var databaseEntity = new DataBaseEntity(agentId, cognitive);
-            _database = new Database(databaseEntity, models, network.Knowledge);
         }
 
         [TestMethod]

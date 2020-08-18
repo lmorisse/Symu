@@ -25,24 +25,6 @@ namespace SymuTests.Repository.Networks.Knowledges
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 10);
 
-        private AgentKnowledge _agentKnowledge;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            float[] bits = {0, 1};
-            var knowledgeBits = new KnowledgeBits(bits, 0, -1);
-            _agentKnowledge = new AgentKnowledge(1, knowledgeBits);
-        }
-
-        [TestMethod]
-        public void HasTest()
-        {
-            _expertise.Add(_agentKnowledge);
-            Assert.IsFalse(_expertise.KnowsEnough(_knowledge.Id, 0, 0.1F, 0));
-            Assert.IsTrue(_expertise.KnowsEnough(_knowledge.Id, 1, 0.1F, 0));
-        }
-
         [TestMethod]
         public void ContainsTest()
         {

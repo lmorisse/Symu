@@ -190,7 +190,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return null;
             }
 
-            if (!Expertise.KnowsEnough(knowledgeId, knowledgeBit,
+            if (!KnowsEnough(knowledgeId, knowledgeBit,
                 _messageContent.MinimumKnowledgeToSendPerBit, step))
             {
                 return null;
@@ -241,5 +241,87 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         {
             return Expertise.GetKnowledge(knowledgeId);
         }
+
+        #region KnowsEnough
+
+        /// <summary>
+        ///     Check if agentKnowLedgeBits include or not taskKnowledgeIndexes
+        /// </summary>
+        /// <param name="agentKnowledge"></param>
+        /// <param name="taskKnowledgeIndexes">indexes of the KnowledgeBits that must be checked</param>
+        /// <param name="index"></param>
+        /// <param name="knowledgeThreshHoldForDoing"></param>
+        /// <param name="step"></param>
+        /// <returns>0 if agentKnowLedgeBits include taskKnowledge</returns>
+        /// <returns>index if agentKnowLedgeBits include taskKnowledge</returns>
+        public bool Check(AgentKnowledge agentKnowledge, byte[] taskKnowledgeIndexes, out byte index, float knowledgeThreshHoldForDoing, ushort step)
+        {
+            if (taskKnowledgeIndexes is null)
+            {
+                throw new ArgumentNullException(nameof(taskKnowledgeIndexes));
+            }
+
+            for (byte i = 0; i < taskKnowledgeIndexes.Length; i++)
+            {
+                if (KnowsEnough(agentKnowledge, taskKnowledgeIndexes[i], knowledgeThreshHoldForDoing, step))
+                {
+                    continue;
+                }
+
+                index = taskKnowledgeIndexes[i];
+                return false;
+            }
+
+            index = 0;
+            return true;
+        }
+
+        /// <summary>
+        ///     Check that agent has the knowledgeId[knowledgeBit] == 1
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBit"></param>
+        /// <param name="knowledgeThreshHoldForAnswer"></param>
+        /// <param name="step"></param>
+        /// <returns>true if the agent has the knowledge</returns>
+        public bool KnowsEnough(ushort knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer, ushort step)
+        {
+            if (!Expertise.Contains(knowledgeId))
+            {
+                return false;
+            }
+
+            var knowledge = GetKnowledge(knowledgeId);
+            return KnowsEnough(knowledge, knowledgeBit, knowledgeThreshHoldForAnswer, step);
+        }
+
+        /// <summary>
+        ///     Check that agent has the knowledgeBit
+        /// </summary>
+        /// <param name="agentKnowledge"></param>
+        /// <param name="index">index of the knowledgeBit</param>
+        /// <param name="knowledgeThreshHoldForAnswer"></param>
+        /// <param name="step"></param>
+        /// <returns>true if agent has the knowledge</returns>
+        public static bool KnowsEnough(AgentKnowledge agentKnowledge, byte index, float knowledgeThreshHoldForAnswer, ushort step)
+        {
+            if (agentKnowledge == null)
+            {
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            if (agentKnowledge.Length == 0)
+            {
+                return false;
+            }
+
+            if (index >= agentKnowledge.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return agentKnowledge.KnowledgeBits.GetBit(index, step) >= knowledgeThreshHoldForAnswer;
+        }
+        #endregion
     }
 }

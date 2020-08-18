@@ -392,7 +392,7 @@ namespace Symu.Classes.Agents
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(knowledgeId, taskBits,
-                KnowledgeModel.Expertise, ref mandatoryOk, ref requiredOk,
+                KnowledgeModel, ref mandatoryOk, ref requiredOk,
                 ref mandatoryIndex, ref requiredIndex, Schedule.Step);
             if (!mandatoryOk)
             {

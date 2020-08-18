@@ -45,6 +45,7 @@ namespace Symu.Repository.Networks.Databases
 
             AgentId = agentId;
             CognitiveArchitecture = new CognitiveArchitecture();
+            // Communication
             CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend =
                 medium.MaximumNumberOfBitsOfBeliefToSend;
             CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
@@ -58,6 +59,10 @@ namespace Symu.Repository.Networks.Databases
             CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
                 medium.MinimumNumberOfBitsOfKnowledgeToSend;
             CognitiveArchitecture.InternalCharacteristics.TimeToLive = medium.TimeToLive;
+            // Knowledge
+            CognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
+            CognitiveArchitecture.InternalCharacteristics.CanLearn = true;
+            CognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
         }
 
         /// <summary>

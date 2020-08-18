@@ -49,7 +49,7 @@ namespace SymuLearnAndForget.Classes
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
             if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.Id, knowledgeBit,
-                KnowledgeModel.Expertise, Schedule.Step))
+                KnowledgeModel, Schedule.Step))
             {
                 return;
             }

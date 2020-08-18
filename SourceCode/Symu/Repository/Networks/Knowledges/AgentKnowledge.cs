@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using static Symu.Common.Constants;
 
 #endregion
 
@@ -201,57 +200,5 @@ namespace Symu.Repository.Networks.Knowledges
             KnowledgeBits.SetBit(index, value, step);
         }
 
-        /// <summary>
-        ///     Check if agentKnowLedgeBits include or not taskKnowledgeIndexes
-        /// </summary>
-        /// <param name="taskKnowledgeIndexes">indexes of the KnowledgeBits that must be checked</param>
-        /// <param name="index"></param>
-        /// <param name="knowledgeThreshHoldForDoing"></param>
-        /// <param name="step"></param>
-        /// <returns>0 if agentKnowLedgeBits include taskKnowledge</returns>
-        /// <returns>index if agentKnowLedgeBits include taskKnowledge</returns>
-        public bool Check(byte[] taskKnowledgeIndexes, out byte index, float knowledgeThreshHoldForDoing, ushort step)
-        {
-            if (taskKnowledgeIndexes is null)
-            {
-                throw new ArgumentNullException(nameof(taskKnowledgeIndexes));
-            }
-
-            for (byte i = 0; i < taskKnowledgeIndexes.Length; i++)
-            {
-                if (KnowsEnough(taskKnowledgeIndexes[i], knowledgeThreshHoldForDoing, step))
-                {
-                    continue;
-                }
-
-                index = taskKnowledgeIndexes[i];
-                return false;
-            }
-
-            index = 0;
-            return true;
-        }
-
-        /// <summary>
-        ///     Check that agent has the knowledgeBit
-        /// </summary>
-        /// <param name="index">index of the knowledgeBit</param>
-        /// <param name="knowledgeThreshHoldForAnswer"></param>
-        /// <param name="step"></param>
-        /// <returns>true if agent has the knowledge</returns>
-        public bool KnowsEnough(byte index, float knowledgeThreshHoldForAnswer, ushort step)
-        {
-            if (Length == 0)
-            {
-                return false;
-            }
-
-            if (index >= Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            return KnowledgeBits.GetBit(index, step) >= knowledgeThreshHoldForAnswer;
-        }
     }
 }

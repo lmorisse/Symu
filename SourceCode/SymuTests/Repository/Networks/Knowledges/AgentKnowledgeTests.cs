@@ -20,18 +20,13 @@ namespace SymuTests.Repository.Networks.Knowledges
     [TestClass]
     public class AgentKnowledgeTests
     {
-        private const float Threshold = 0.1F;
         private readonly AgentKnowledge _agentKnowledge = new AgentKnowledge(4, KnowledgeLevel.BasicKnowledge, 0, -1);
         private readonly float[] _knowledge01Bits = {0, 1};
         private readonly float[] _knowledge0Bits = {0, 0};
         private readonly float[] _knowledge1Bits = {1, 1};
-        private readonly float[] _knowledgeFloatBits = {0.1F, 0.1F};
-        private readonly byte[] _taskKnowledge0 = {0};
-        private readonly byte[] _taskKnowledge1 = {1};
         private AgentKnowledge _agentKnowledge0;
         private AgentKnowledge _agentKnowledge01;
         private AgentKnowledge _agentKnowledge1;
-        private AgentKnowledge _agentKnowledgeFloat;
 
         [TestInitialize]
         public void Initialize()
@@ -39,40 +34,6 @@ namespace SymuTests.Repository.Networks.Knowledges
             _agentKnowledge0 = new AgentKnowledge(0, _knowledge0Bits, 0, -1, 0);
             _agentKnowledge1 = new AgentKnowledge(1, _knowledge1Bits, 0, -1, 0);
             _agentKnowledge01 = new AgentKnowledge(2, _knowledge01Bits, 0, -1, 0);
-            _agentKnowledgeFloat = new AgentKnowledge(3, _knowledgeFloatBits, 0, -1, 0);
-        }
-
-        [TestMethod]
-        public void CheckTest()
-        {
-            Assert.IsFalse(_agentKnowledge0.Check(_taskKnowledge0, out var index, Threshold, 0));
-            Assert.AreEqual(0, index);
-            Assert.IsFalse(_agentKnowledge0.Check(_taskKnowledge1, out index, Threshold, 0));
-            Assert.AreEqual(1, index);
-            Assert.IsTrue(_agentKnowledge1.Check(_taskKnowledge0, out _, Threshold, 0));
-            Assert.IsTrue(_agentKnowledge1.Check(_taskKnowledge1, out _, Threshold, 0));
-            Assert.IsFalse(_agentKnowledge01.Check(_taskKnowledge0, out index, Threshold, 0));
-            Assert.AreEqual(0, index);
-            Assert.IsTrue(_agentKnowledge01.Check(_taskKnowledge1, out _, Threshold, 0));
-            Assert.IsTrue(_agentKnowledgeFloat.Check(_taskKnowledge0, out _, Threshold, 0));
-            Assert.IsTrue(_agentKnowledgeFloat.Check(_taskKnowledge1, out _, Threshold, 0));
-        }
-
-        [TestMethod]
-        public void KnowsEnoughTest()
-        {
-            // Non passing test
-            Assert.IsFalse(_agentKnowledge.KnowsEnough(0, Threshold, 0));
-            // Passing tests
-            Assert.IsTrue(_agentKnowledge0.KnowsEnough(0, 0, 0));
-            Assert.IsFalse(_agentKnowledge0.KnowsEnough(0, Threshold, 0));
-            Assert.IsFalse(_agentKnowledge0.KnowsEnough(1, Threshold, 0));
-            Assert.IsTrue(_agentKnowledge1.KnowsEnough(0, Threshold, 0));
-            Assert.IsTrue(_agentKnowledge1.KnowsEnough(1, Threshold, 0));
-            Assert.IsFalse(_agentKnowledge01.KnowsEnough(0, Threshold, 0));
-            Assert.IsTrue(_agentKnowledge01.KnowsEnough(1, Threshold, 0));
-            Assert.IsTrue(_agentKnowledgeFloat.KnowsEnough(0, Threshold, 0));
-            Assert.IsTrue(_agentKnowledgeFloat.KnowsEnough(1, Threshold, 0));
         }
 
         [TestMethod]

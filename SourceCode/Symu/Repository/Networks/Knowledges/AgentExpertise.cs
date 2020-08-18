@@ -148,26 +148,6 @@ namespace Symu.Repository.Networks.Knowledges
             return List.Select(x => x.KnowledgeId);
         }
 
-        /// <summary>
-        ///     Check that agent has the knowledgeId[knowledgeBit] == 1
-        /// </summary>
-        /// <param name="knowledgeId"></param>
-        /// <param name="knowledgeBit"></param>
-        /// <param name="knowledgeThreshHoldForAnswer"></param>
-        /// <param name="step"></param>
-        /// <returns>true if the agent has the knowledge</returns>
-        public bool KnowsEnough(ushort knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer, ushort step)
-        {
-            if (!Contains(knowledgeId))
-            {
-                return false;
-            }
-
-            var knowledge = GetKnowledge(knowledgeId);
-            return knowledge.KnowsEnough(knowledgeBit, knowledgeThreshHoldForAnswer, step);
-        }
-
-
         ///// <summary>
         /////     OnAfterLearning event is triggered if learning occurs,
         /////     you can subscribe to this event to treat the new learning
