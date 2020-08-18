@@ -43,9 +43,9 @@ namespace SymuTests.Repository.Networks.Databases
         [TestMethod]
         public void AddTest()
         {
-            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId.Id));
+            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId));
             _databases.Add(_database);
-            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId.Id));
+            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId));
             // Duplicate
             _databases.Add(_database);
             Assert.AreEqual(1, _databases.List.Count);
@@ -62,10 +62,10 @@ namespace SymuTests.Repository.Networks.Databases
         [TestMethod]
         public void GetDatabaseTest()
         {
-            Assert.IsNull(_databases.GetDatabase(_database.Entity.AgentId.Id));
+            Assert.IsNull(_databases.GetDatabase(_database.Entity.AgentId));
             _databases.Add(_database);
-            Assert.IsNotNull(_databases.GetDatabase(_database.Entity.AgentId.Id));
-            Assert.AreEqual(_database, _databases.GetDatabase(_database.Entity.AgentId.Id));
+            Assert.IsNotNull(_databases.GetDatabase(_database.Entity.AgentId));
+            Assert.AreEqual(_database, _databases.GetDatabase(_database.Entity.AgentId));
         }
 
         [TestMethod]

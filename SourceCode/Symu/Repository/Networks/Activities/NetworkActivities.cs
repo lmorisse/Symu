@@ -13,7 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 using Symu.Repository.Networks.Knowledges;
 
@@ -354,7 +353,7 @@ namespace Symu.Repository.Networks.Activities
         /// <param name="agentId"></param>
         /// <param name="groupSourceId"></param>
         /// <param name="groupTargetId"></param>
-        public void TransferTo(IAgentId agentId, IAgentId groupSourceId, AgentId groupTargetId)
+        public void TransferTo(IAgentId agentId, IAgentId groupSourceId, IAgentId groupTargetId)
         {
             AddActivities(agentId, groupTargetId, GetAgentActivities(agentId, groupSourceId));
             RemoveMember(agentId, groupSourceId);

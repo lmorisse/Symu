@@ -22,14 +22,14 @@ using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
     public class KnowledgeModelTests
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly EmailTemplate _emailTemplate = new EmailTemplate();
-        private readonly AgentExpertise _expertise = new AgentExpertise();
+        private AgentExpertise _expertise;
         private readonly float[] _knowledge1Bits = {1, 1, 1, 1};
         private readonly float[] _knowledge1FBits = {1, 0.5F, 0.3F, 0};
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
@@ -51,6 +51,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             };
             var modelEntity = new ModelEntity();
             _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, _network);
+            _expertise = _knowledgeModel.Expertise;
             _knowledge = new Knowledge(1, "1", 1);
             _network.Knowledge.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_agentId, _expertise);
@@ -59,15 +60,13 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
         }
 
         /// <summary>
-        ///     Non passing test
+        ///     Non passing test - agent !HasKnowledge
         /// </summary>
         [TestMethod]
         public void AddExpertiseTest()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = false;
-            _knowledgeModel.AddExpertise(_expertise);
+            _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.AreEqual(0, _network.Knowledge.GetAgentExpertise(_agentId).Count);
             Assert.IsFalse(_network.Beliefs.Exists(_agentId));
         }
@@ -303,7 +302,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModel
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _knowledgeModel.InitializeKnowledge(_knowledge.Id, 0);
             Assert.IsTrue(_network.Knowledge.Exists(_agentId, _knowledge.Id));
-            var agentKnowledge = _network.Knowledge.GetAgentKnowledge(_agentId, _knowledge.Id);
+            var agentKnowledge = _knowledgeModel.Expertise.GetKnowledge(_knowledge.Id);
             Assert.AreEqual(1, agentKnowledge.KnowledgeBits.GetBit(0));
         }
     }

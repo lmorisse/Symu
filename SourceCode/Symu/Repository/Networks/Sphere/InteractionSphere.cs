@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
+
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
@@ -337,7 +337,8 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="agentId2"></param>
         /// <param name="networkActivities"></param>
         /// <returns></returns>
-        public static float SetRelativeActivity(IAgentId agentId1, IAgentId agentId2, NetworkActivities networkActivities)
+        public static float SetRelativeActivity(IAgentId agentId1, IAgentId agentId2,
+            NetworkActivities networkActivities)
         {
             if (networkActivities == null)
             {
@@ -360,7 +361,8 @@ namespace Symu.Repository.Networks.Sphere
         /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
         /// <param name="interactionPatterns"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetAgentIdsForInteractions(IAgentId agentId, InteractionStrategy interactionStrategy,
+        public IEnumerable<IAgentId> GetAgentIdsForInteractions(IAgentId agentId,
+            InteractionStrategy interactionStrategy,
             InteractionPatterns interactionPatterns)
         {
             if (interactionPatterns is null)

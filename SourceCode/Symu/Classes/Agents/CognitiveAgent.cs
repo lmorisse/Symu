@@ -75,12 +75,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(AgentId.Id);
+        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(AgentId);
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(AgentId, AgentId.Id);
+        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(AgentId, AgentId);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -227,15 +227,14 @@ namespace Symu.Classes.Agents
         {
             base.InitializeModels();
             // Initialize agent models
+            KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
+                Environment.WhitePages.MetaNetwork);
             LearningModel = new LearningModel(AgentId, Environment.Organization.Models,
                 Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
-            ForgettingModel = new ForgettingModel(AgentId, Environment.Organization.Models,
-                Cognitive, Environment.WhitePages.MetaNetwork.Knowledge);
+            ForgettingModel = new ForgettingModel(KnowledgeModel.Expertise, Cognitive, Environment.Organization.Models);
             InfluenceModel = new InfluenceModel(AgentId, Environment.Organization.Models.Influence,
                 Cognitive.InternalCharacteristics, Environment.WhitePages.MetaNetwork);
             BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
-                Environment.WhitePages.MetaNetwork);
-            KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
                 Environment.WhitePages.MetaNetwork);
             ActivityModel = new ActivityModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
         }

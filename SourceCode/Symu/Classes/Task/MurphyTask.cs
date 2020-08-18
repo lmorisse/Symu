@@ -11,6 +11,8 @@
 
 using System;
 using Symu.Classes.Murphies;
+using Symu.Common.Math.ProbabilityDistributions;
+using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 
 #endregion
@@ -109,6 +111,55 @@ namespace Symu.Classes.Task
 
             // Normal use
             return level * MandatoryRatio;
+        }
+        /// <summary>
+        ///     Given a KnowledgeModel and a KnowledgeLevel
+        ///     return the required knowledgeBits index for the task: an array fill of random index of the GetBits
+        ///     representing the detailed knowledge of an agent
+        /// </summary>
+        /// <param name="knowledge">knowledge to define the Required Bits Ratio compared to the length of the knowledgeBits</param>
+        /// <param name="complexity">complexity of the task from 0 to 1</param>
+        /// <returns></returns>
+        /// <example>
+        ///     given a knowledge of size 10 :
+        ///     InitializeBits = [0110110000]
+        ///     complexity = 0.3
+        ///     GetTaskRequiredBits = [359] : index 3, 5 and 9 are required
+        /// </example>
+        public byte[] GetTaskRequiredBits(Knowledge knowledge, float complexity)
+        {
+            if (knowledge is null || knowledge.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
+            var numberRequiredBits = Convert.ToByte(Math.Round(RequiredBitsRatio(complexity) * knowledge.Length));
+            return DiscreteUniform.SamplesToByte(numberRequiredBits, knowledge.Length - 1);
+        }
+
+        /// <summary>
+        ///     Given a KnowledgeModel and a KnowledgeLevel
+        ///     return the mandatory knowledgeBits index for the task: an array fill of random index of the GetBits
+        ///     representing the detailed knowledge of an agent
+        /// </summary>
+        /// <param name="knowledge">knowledge to define the mandatory Bits Ratio compared to the length of the knowledgeBits</param>
+        /// <param name="complexity">complexity of the task from 0 to 1</param>
+        /// <returns></returns>
+        /// <example>
+        ///     given a knowledge of size 10 :
+        ///     InitializeBits = [0110110000]
+        ///     complexity = 0.2
+        ///     GetTaskMandatoryBits = [17] : index 1 and 7 are mandatory
+        /// </example>
+        public byte[] GetTaskMandatoryBits(Knowledge knowledge, float complexity)
+        {
+            if (knowledge is null || knowledge.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
+            var numberMandatoryBits = Convert.ToByte(Math.Round(MandatoryBitsRatio(complexity) * knowledge.Length));
+            return DiscreteUniform.SamplesToByte(numberMandatoryBits, knowledge.Length - 1);
         }
     }
 }

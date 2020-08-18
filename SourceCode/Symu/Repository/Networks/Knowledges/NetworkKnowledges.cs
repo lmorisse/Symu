@@ -13,7 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
 using Symu.Common.Interfaces;
@@ -119,7 +118,8 @@ namespace Symu.Repository.Networks.Knowledges
                 throw new ArgumentNullException(nameof(expertise));
             }
 
-            AddAgentId(agentId);
+            AddAgentId(agentId, expertise);
+
 
             foreach (var agentKnowledge in expertise.List.Where(a => !AgentsRepository[agentId].Contains(a)))
             {
@@ -163,6 +163,14 @@ namespace Symu.Repository.Networks.Knowledges
             if (!Exists(agentId, knowledgeId))
             {
                 AgentsRepository[agentId].Add(knowledgeId, level, minimumKnowledge, timeToLive);
+            }
+        }
+
+        public void AddAgentId(IAgentId agentId, AgentExpertise agentExpertise)
+        {
+            if (!Exists(agentId))
+            {
+                AgentsRepository.TryAdd(agentId, agentExpertise);
             }
         }
 
@@ -269,7 +277,7 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Get Agent Expertise
         /// </summary>
         /// <param name="agentId"></param>
-        /// <returns>null if agentId don't Exists, AgentExpertise otherwise</returns>
+        /// <returns>NullReferenceException if agentId don't Exists, AgentExpertise otherwise</returns>
         public AgentExpertise GetAgentExpertise(IAgentId agentId)
         {
             if (!Exists(agentId))

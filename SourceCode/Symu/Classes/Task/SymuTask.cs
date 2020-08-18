@@ -184,6 +184,11 @@ namespace Symu.Classes.Task
         /// <param name="complexity"></param>
         public void SetKnowledgesBits(MurphyTask model, IEnumerable<Knowledge> knowledges, float complexity)
         {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             if (knowledges == null)
             {
                 throw new ArgumentNullException(nameof(knowledges));
@@ -195,8 +200,8 @@ namespace Symu.Classes.Task
                 {
                     KnowledgeId = knowledge.Id
                 };
-                bit.SetRequired(knowledge.GetTaskRequiredBits(model, complexity));
-                bit.SetMandatory(knowledge.GetTaskMandatoryBits(model, complexity));
+                bit.SetRequired(model.GetTaskRequiredBits(knowledge, complexity));
+                bit.SetMandatory(model.GetTaskMandatoryBits(knowledge, complexity));
                 KnowledgesBits.Add(bit);
             }
         }

@@ -9,13 +9,11 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
-using Symu.Common;
-using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Databases;
@@ -37,7 +35,7 @@ namespace Symu.Repository.Networks
     /// </summary>
     public class MetaNetwork
     {
-        public MetaNetwork(InteractionSphereModel interactionSphere , BeliefWeightLevel beliefWeightLevel)
+        public MetaNetwork(InteractionSphereModel interactionSphere, BeliefWeightLevel beliefWeightLevel)
         {
             InteractionSphere = new InteractionSphere(interactionSphere);
             Beliefs = new NetworkBeliefs(beliefWeightLevel);
@@ -123,7 +121,7 @@ namespace Symu.Repository.Networks
             Databases.Clear();
         }
 
-        public void RemoveAgent(AgentId agentId)
+        public void RemoveAgent(IAgentId agentId)
         {
             Links.RemoveAgent(agentId);
             Groups.RemoveAgent(agentId);
@@ -148,9 +146,12 @@ namespace Symu.Repository.Networks
         /// <param name="agentId"></param>
         /// <param name="allocation"></param>
         /// <param name="groupId"></param>
-        /// <param name="addLink">If true, a link is created with the members of the group and the new member.
-        /// AddLink is done during the simulation. During the initialization, use InitializeNetworkLinks, for performance issues</param>
-        public void AddAgentToGroup(AgentId agentId, float allocation, AgentId groupId, bool addLink)
+        /// <param name="addLink">
+        ///     If true, a link is created with the members of the group and the new member.
+        ///     AddLink is done during the simulation. During the initialization, use InitializeNetworkLinks, for performance
+        ///     issues
+        /// </param>
+        public void AddAgentToGroup(IAgentId agentId, float allocation, IAgentId groupId, bool addLink)
         {
             lock (Groups)
             {
@@ -187,7 +188,7 @@ namespace Symu.Repository.Networks
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
-        public void RemoveAgentFromGroup(AgentId agentId, AgentId groupId)
+        public void RemoveAgentFromGroup(IAgentId agentId, IAgentId groupId)
         {
             if (!Groups.Exists(groupId))
             {
@@ -228,6 +229,5 @@ namespace Symu.Repository.Networks
         }
 
         #endregion
-
     }
 }

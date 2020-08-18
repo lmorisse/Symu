@@ -64,6 +64,22 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _networkKnowledges = network.Knowledge;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
+            if (_knowledgeAndBeliefs.HasKnowledge)
+            {
+                if (_networkKnowledges.Exists(_agentId))
+                {
+                    Expertise = _networkKnowledges.GetAgentExpertise(_agentId);
+                }
+                else
+                {
+                    Expertise = new AgentExpertise();
+                    _networkKnowledges.Add(_agentId, Expertise);
+                }
+            }
+            else
+            {
+                Expertise = new AgentExpertise();
+            }
         }
 
         public bool On { get; set; }
@@ -71,8 +87,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <summary>
         ///     Get the Agent Expertise
         /// </summary>
-        public AgentExpertise Expertise =>
-            _knowledgeAndBeliefs.HasKnowledge ? _networkKnowledges.GetAgentExpertise(_agentId) : new AgentExpertise();
+        public AgentExpertise Expertise { get; } 
 
         /// <summary>
         ///     Initialize the expertise of the agent based on the knowledge network
@@ -85,12 +100,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            if (!_networkKnowledges.Exists(_agentId))
-                // An agent may be able to have knowledge but with no expertise for the moment
-            {
-                _networkKnowledges.AddAgentId(_agentId);
-            }
-
+            _networkKnowledges.AddAgentId(_agentId, Expertise);
             _networkKnowledges.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
         }
 

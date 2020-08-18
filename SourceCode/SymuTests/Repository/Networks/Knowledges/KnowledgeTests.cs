@@ -26,8 +26,6 @@ namespace SymuTests.Repository.Networks.Knowledges
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 10);
 
-        private readonly MurphyTask _taskModel = new MurphyTask();
-
 
         /// <summary>
         ///     Random Binary Generator
@@ -122,39 +120,6 @@ namespace SymuTests.Repository.Networks.Knowledges
             }
         }
 
-        [TestMethod]
-        public void GetTaskRequiredBitsTest()
-        {
-            var taskRequiredBits = _knowledge.GetTaskRequiredBits(_taskModel, 0.8F);
-            var numberRequiredBits = Convert.ToByte(Math.Round(_taskModel.RequiredBitsRatio(0.8F) * _knowledge.Length));
-            Assert.AreEqual(numberRequiredBits, taskRequiredBits.Length);
-            for (byte i = 0; i < taskRequiredBits.Length; i++)
-                //It's an index of a Array[knowledge.Size]
-            {
-                Assert.IsTrue(taskRequiredBits[i] < _knowledge.Length);
-            }
-        }
-
-        [TestMethod]
-        public void GetTaskMandatoryBitsTest()
-        {
-            var taskMandatoryBits = _knowledge.GetTaskMandatoryBits(_taskModel, 0.8F);
-            for (byte i = 0; i < taskMandatoryBits.Length; i++)
-                //It's an index of a Array[knowledge.Size]
-            {
-                Assert.IsTrue(taskMandatoryBits[i] < _knowledge.Length);
-            }
-        }
-
-        /// <summary>
-        ///     MandatoryRatio = 0
-        /// </summary>
-        [TestMethod]
-        public void GetTaskMandatoryBitsTest1()
-        {
-            _taskModel.MandatoryRatio = 0;
-            var taskMandatoryBits = _knowledge.GetTaskMandatoryBits(_taskModel, 0.8F);
-            Assert.AreEqual(0, taskMandatoryBits.Length);
-        }
+        
     }
 }

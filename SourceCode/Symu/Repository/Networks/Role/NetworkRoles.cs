@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 
 #endregion

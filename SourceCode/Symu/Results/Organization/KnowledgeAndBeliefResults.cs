@@ -78,8 +78,8 @@ namespace Symu.Results.Organization
 
         public void HandleLearning()
         {
-            var sum = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Select(e => e.CumulativeLearning)
+            var sum = Environment.WhitePages.AllCognitiveAgents()
+                .Select(e => e.LearningModel.CumulativeLearning)
                 .ToList();
             var potentialKnowledge = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
                 .Sum(expertise => expertise.GetKnowledgePotential());
@@ -89,8 +89,8 @@ namespace Symu.Results.Organization
 
         public void HandleForgetting()
         {
-            var sum = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Select(e => e.CumulativeForgetting).ToList();
+            var sum = Environment.WhitePages.AllCognitiveAgents()
+                .Select(e => e.ForgettingModel.CumulativeForgetting).ToList();
             var sumKnowledge = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
                 .Sum(expertise => expertise.GetKnowledgeSum());
             var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, sumKnowledge);

@@ -13,7 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 
 #endregion
@@ -132,7 +131,7 @@ namespace Symu.Repository.Networks.Group
         }
 
         /// <summary>
-        ///     Get agents of a group 
+        ///     Get agents of a group
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
@@ -364,6 +363,7 @@ namespace Symu.Repository.Networks.Group
                     Math.Min(100F, groupAllocation.Allocation * 100F / totalCapacityAllocation);
             }
         }
+
         /// <summary>
         ///     Get the main group of the agentId filter by the group.ClassKey
         ///     The main group is defined by the maximum GroupAllocation
@@ -378,7 +378,8 @@ namespace Symu.Repository.Networks.Group
         {
             var groups = GetGroupAllocationsOfAnAgentId(agentId, classId);
             return groups.Any()
-                ? GetGroupAllocationsOfAnAgentId(agentId, classId).OrderByDescending(ga => ga.Allocation).First().AgentId
+                ? GetGroupAllocationsOfAnAgentId(agentId, classId).OrderByDescending(ga => ga.Allocation).First()
+                    .AgentId
                 : null;
         }
 

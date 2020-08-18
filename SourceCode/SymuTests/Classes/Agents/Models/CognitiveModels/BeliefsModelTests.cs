@@ -24,7 +24,7 @@ using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuTests.Classes.Agents.Models.CognitiveModel
+namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
     public class BeliefsModelTests

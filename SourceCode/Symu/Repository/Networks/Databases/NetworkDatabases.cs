@@ -13,7 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 
 #endregion
@@ -37,8 +36,8 @@ namespace Symu.Repository.Networks.Databases
         ///     AgentDataBases.Key = AgentId
         ///     AgentDataBases.Value = List of all the databaseId the agentId has subscribed
         /// </summary>
-        public ConcurrentDictionary<IAgentId, List<ushort>> AgentDataBases { get; } =
-            new ConcurrentDictionary<IAgentId, List<ushort>>();
+        public ConcurrentDictionary<IAgentId, List<IAgentId>> AgentDataBases { get; } =
+            new ConcurrentDictionary<IAgentId, List<IAgentId>>();
 
         public bool Any()
         {
@@ -53,7 +52,7 @@ namespace Symu.Repository.Networks.Databases
 
         #region Repository
 
-        public Database GetDatabase(ushort databaseId)
+        public Database GetDatabase(IAgentId databaseId)
         {
             return Repository.GetDatabase(databaseId);
         }
@@ -76,7 +75,7 @@ namespace Symu.Repository.Networks.Databases
             return Repository.Contains(database);
         }
 
-        public bool Exists(ushort databaseId)
+        public bool Exists(IAgentId databaseId)
         {
             return Repository.Exists(databaseId);
         }
@@ -93,15 +92,19 @@ namespace Symu.Repository.Networks.Databases
         {
             AgentDataBases.TryRemove(agentId, out _);
         }
-
-        public bool Exists(IAgentId agentId)
+        /// <summary>
+        /// Exists agentId
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <returns></returns>
+        public bool ExistsAgentId(IAgentId agentId)
         {
             return AgentDataBases.ContainsKey(agentId);
         }
 
-        public bool Exists(IAgentId agentId, ushort databaseId)
+        public bool Exists(IAgentId agentId, IAgentId databaseId)
         {
-            return Exists(agentId) && AgentDataBases[agentId].Contains(databaseId);
+            return ExistsAgentId(agentId) && AgentDataBases[agentId].Contains(databaseId);
         }
 
         public void Add(IAgentId agentId, Database database)
@@ -113,10 +116,10 @@ namespace Symu.Repository.Networks.Databases
 
             AddDatabase(database);
             AddAgentId(agentId);
-            AddDatabase(agentId, database.Entity.AgentId.Id);
+            AddDatabase(agentId, database.Entity.AgentId);
         }
 
-        public void Add(IAgentId agentId, ushort databaseId)
+        public void Add(IAgentId agentId, IAgentId databaseId)
         {
             AddAgentId(agentId);
             AddDatabase(agentId, databaseId);
@@ -129,7 +132,7 @@ namespace Symu.Repository.Networks.Databases
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="databaseId"></param>
-        public void AddDatabase(IAgentId agentId, ushort databaseId)
+        public void AddDatabase(IAgentId agentId, IAgentId databaseId)
         {
             if (!AgentDataBases[agentId].Contains(databaseId))
             {
@@ -139,9 +142,9 @@ namespace Symu.Repository.Networks.Databases
 
         public void AddAgentId(IAgentId agentId)
         {
-            if (!Exists(agentId))
+            if (!ExistsAgentId(agentId))
             {
-                AgentDataBases.TryAdd(agentId, new List<ushort>());
+                AgentDataBases.TryAdd(agentId, new List<IAgentId>());
             }
         }
 

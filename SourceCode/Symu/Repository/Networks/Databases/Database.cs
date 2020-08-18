@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Repository.Networks.Knowledges;
@@ -36,6 +37,7 @@ namespace Symu.Repository.Networks.Databases
         private readonly AgentExpertise _database = new AgentExpertise();
 
         private readonly LearningModel _learningModel;
+        private readonly ForgettingModel _forgettingModel;
 
         public Database(DataBaseEntity entity, OrganizationModels organizationModels,
             NetworkKnowledges networkKnowledges)
@@ -51,8 +53,9 @@ namespace Symu.Repository.Networks.Databases
             }
 
             Entity = new DataBaseEntity(entity.AgentId, entity.CognitiveArchitecture);
-            _learningModel = new LearningModel(Entity.AgentId, organizationModels, networkKnowledges,
+            _learningModel = new LearningModel((AgentId)Entity.AgentId, organizationModels, networkKnowledges,
                 entity.CognitiveArchitecture);
+            _forgettingModel = new ForgettingModel(_database, entity.CognitiveArchitecture, organizationModels);
         }
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace Symu.Repository.Networks.Databases
                 throw new ArgumentNullException("knowledgeId must have been initialized first");
             }
 
-            GetKnowledge(knowledgeId).Learn(knowledgeBit, knowledgeValue, step);
+            _learningModel.AgentKnowledgeLearn(GetKnowledge(knowledgeId), knowledgeBit, knowledgeValue, step);
         }
 
         /// <summary>
@@ -157,7 +160,7 @@ namespace Symu.Repository.Networks.Databases
                 return;
             }
 
-            _database.ForgettingProcess(ForgettingRate, step);
+            _forgettingModel.ForgettingProcess(ForgettingRate, step);
         }
 
         public AgentKnowledge GetKnowledge(ushort knowledgeId)

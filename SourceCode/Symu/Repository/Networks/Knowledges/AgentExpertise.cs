@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using static Symu.Common.Constants;
 
 #endregion
@@ -30,53 +31,6 @@ namespace Symu.Repository.Networks.Knowledges
         /// </summary>
         public List<AgentKnowledge> List { get; } = new List<AgentKnowledge>();
 
-        /// <summary>
-        ///     Accumulates all learning of the agent for all knowledge during the simulation
-        /// </summary>
-        public float CumulativeLearning => List.Any() ? List.Sum(t => t.CumulativeLearning) : 0;
-
-        /// <summary>
-        ///     Accumulates all forgetting of the agent for all knowledge during the simulation
-        /// </summary>
-        public float CumulativeForgetting => List.Any() ? List.Sum(t => t.CumulativeForgetting) : 0;
-
-        /// <summary>
-        ///     Percentage of all forgetting of the agent for all knowledge during the simulation
-        /// </summary>
-        public float PercentageForgetting
-        {
-            get
-            {
-                float percentage = 0;
-                var sum = CumulativeForgetting;
-                var sumKnowledge = GetKnowledgeSum();
-                if (sumKnowledge > Tolerance)
-                {
-                    percentage = 100 * sum / sumKnowledge;
-                }
-
-                return percentage;
-            }
-        }
-
-        /// <summary>
-        ///     Percentage of all learning of the agent for all knowledge during the simulation
-        /// </summary>
-        public float PercentageLearning
-        {
-            get
-            {
-                float percentage = 0;
-                var sum = CumulativeLearning;
-                var potential = GetKnowledgePotential();
-                if (potential > Tolerance)
-                {
-                    percentage = 100 * sum / potential;
-                }
-
-                return percentage;
-            }
-        }
 
         /// <summary>
         ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
@@ -139,7 +93,10 @@ namespace Symu.Repository.Networks.Knowledges
         {
             List.Clear();
         }
-
+        /// <summary>
+        /// Add method should be called only by NetworkKnowledge, KnowledgeModel and LearningModel
+        /// </summary>
+        /// <param name="agentKnowledge"></param>
         public void Add(AgentKnowledge agentKnowledge)
         {
             if (agentKnowledge == null)
@@ -152,7 +109,7 @@ namespace Symu.Repository.Networks.Knowledges
                 return;
             }
 
-            agentKnowledge.OnAfterLearning += AfterLearning;
+            //agentKnowledge.OnAfterLearning += AfterLearning;
             List.Add(agentKnowledge);
         }
 
@@ -210,23 +167,16 @@ namespace Symu.Repository.Networks.Knowledges
             return knowledge.KnowsEnough(knowledgeBit, knowledgeThreshHoldForAnswer, step);
         }
 
-        /// <summary>
-        ///     Forget knowledges from the expertise based on knowledgeBits.LastTouched and timeToLive value
-        /// </summary>
-        public void ForgettingProcess(float forgettingRate, ushort step)
-        {
-            List.ForEach(x => x.ForgettingProcess(forgettingRate, step));
-        }
 
-        /// <summary>
-        ///     OnAfterLearning event is triggered if learning occurs,
-        ///     you can subscribe to this event to treat the new learning
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void AfterLearning(object sender, LearningEventArgs e)
-        {
-            OnAfterLearning?.Invoke(this, e);
-        }
+        ///// <summary>
+        /////     OnAfterLearning event is triggered if learning occurs,
+        /////     you can subscribe to this event to treat the new learning
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //public void AfterLearning(object sender, LearningEventArgs e)
+        //{
+        //    OnAfterLearning?.Invoke(this, e);
+        //}
     }
 }

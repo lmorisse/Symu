@@ -42,7 +42,7 @@ namespace SymuTests.Repository.Networks.Databases
         [TestMethod]
         public void ClearTest()
         {
-            _databases.Add(_agentId, _database.Entity.AgentId.Id);
+            _databases.Add(_agentId, _database.Entity.AgentId);
             Assert.IsTrue(_databases.Any());
             _databases.Clear();
             Assert.IsFalse(_databases.Any());
@@ -51,53 +51,53 @@ namespace SymuTests.Repository.Networks.Databases
         [TestMethod]
         public void GetDatabaseTest()
         {
-            Assert.IsNull(_databases.GetDatabase(_database.Entity.AgentId.Id));
+            Assert.IsNull(_databases.GetDatabase(_database.Entity.AgentId));
             _databases.AddDatabase(_database);
-            Assert.IsNotNull(_databases.GetDatabase(_database.Entity.AgentId.Id));
-            Assert.AreEqual(_database, _databases.GetDatabase(_database.Entity.AgentId.Id));
+            Assert.IsNotNull(_databases.GetDatabase(_database.Entity.AgentId));
+            Assert.AreEqual(_database, _databases.GetDatabase(_database.Entity.AgentId));
         }
 
         [TestMethod]
         public void AddDatabaseTest()
         {
-            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId.Id));
+            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId));
             _databases.AddDatabase(_database);
-            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId.Id));
+            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId));
         }
 
         [TestMethod]
         public void RemoveAgentTest()
         {
-            _databases.Add(_agentId, _database.Entity.AgentId.Id);
+            _databases.Add(_agentId, _database.Entity.AgentId);
             _databases.RemoveAgent(_agentId);
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Id));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId));
             Assert.IsFalse(_databases.Any());
         }
 
         [TestMethod]
         public void AddTest()
         {
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Id));
-            _databases.Add(_agentId, _database.Entity.AgentId.Id);
-            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId.Id));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId));
+            _databases.Add(_agentId, _database.Entity.AgentId);
+            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId));
         }
 
         [TestMethod]
         public void AddTest1()
         {
-            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId.Id));
-            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId.Id));
+            Assert.IsFalse(_databases.Exists(_database.Entity.AgentId));
+            Assert.IsFalse(_databases.Exists(_agentId, _database.Entity.AgentId));
             _databases.Add(_agentId, _database);
-            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId.Id));
-            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId.Id));
+            Assert.IsTrue(_databases.Exists(_database.Entity.AgentId));
+            Assert.IsTrue(_databases.Exists(_agentId, _database.Entity.AgentId));
         }
 
         [TestMethod]
         public void AddAgentIdTest()
         {
-            Assert.IsFalse(_databases.Exists(_agentId));
+            Assert.IsFalse(_databases.ExistsAgentId(_agentId));
             _databases.AddAgentId(_agentId);
-            Assert.IsTrue(_databases.Exists(_agentId));
+            Assert.IsTrue(_databases.ExistsAgentId(_agentId));
         }
     }
 }

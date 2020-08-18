@@ -94,15 +94,6 @@ namespace Symu.Repository.Networks.Knowledges
         /// </summary>
         public short TimeToLive { get; set; }
 
-        /// <summary>
-        ///     Accumulates all learning of the agent for this knowledge during the simulation
-        /// </summary>
-        public float CumulativeLearning { get; private set; }
-
-        /// <summary>
-        ///     Accumulates all forgetting of the agent for this knowledge during the simulation
-        /// </summary>
-        public float CumulativeForgetting { get; private set; }
 
         public byte Length => KnowledgeBits?.Length ?? 0;
 
@@ -113,11 +104,6 @@ namespace Symu.Repository.Networks.Knowledges
         {
             return KnowledgeBits.Obsolescence(step);
         }
-
-        /// <summary>
-        ///     EventHandler triggered after learning a new information
-        /// </summary>
-        public event EventHandler<LearningEventArgs> OnAfterLearning;
 
         /// <summary>
         ///     Initialize KnowledgeBits with a array filled of 0
@@ -164,14 +150,6 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             return clone;
-        }
-
-        /// <summary>
-        ///     Forget knowledgeBits based on knowledgeBits.LastTouched and timeToLive value
-        /// </summary>
-        public void ForgettingProcess(float forgettingRate, ushort step)
-        {
-            KnowledgeBits.ForgetOldest(forgettingRate, step);
         }
 
         /// <summary>
@@ -274,73 +252,6 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             return KnowledgeBits.GetBit(index, step) >= knowledgeThreshHoldForAnswer;
-        }
-
-        /// <summary>
-        ///     Agent learn _knowledgeBits at a learningRate
-        ///     OnAfterLearning event is triggered if learning occurs, you can subscribe to this event to treat the new learning
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="learningRate"></param>
-        /// <param name="step"></param>
-        /// <returns>The real learning value</returns>
-        public float Learn(byte index, float learningRate, ushort step)
-        {
-            if (Math.Abs(learningRate) < Tolerance)
-            {
-                return 0;
-            }
-
-            var realLearning = KnowledgeBits.UpdateBit(index, learningRate, step);
-            CumulativeLearning += realLearning;
-            if (realLearning > Tolerance)
-            {
-                var learningEventArgs = new LearningEventArgs(KnowledgeId, index, realLearning);
-                OnAfterLearning?.Invoke(this, learningEventArgs);
-            }
-
-            return realLearning;
-        }
-
-        /// <summary>
-        ///     Agent forget _knowledgeBits at a forgetRate coming from ForgettingModel
-        ///     If forgetRate is below the minimumLevel of KnowledgeBit that should stay, the forgetRate is adjusted to stay at the
-        ///     minimumLevel
-        /// </summary>
-        /// <param name="index">Index of the knowledgeBit</param>
-        /// <param name="forgetRate">value of the decrement</param>
-        /// <param name="step"></param>
-        /// <returns>The real forgetting value</returns>
-        public float Forget(byte index, float forgetRate, ushort step)
-        {
-            var value = KnowledgeBits.GetBit(index) - forgetRate;
-            if (value < MinimumKnowledge)
-            {
-                // forgetRate > 0 
-                forgetRate = Math.Max(0, KnowledgeBits.GetBit(index) - MinimumKnowledge);
-            }
-
-            if (Math.Abs(forgetRate) < Tolerance)
-            {
-                return 0;
-            }
-
-            var realForgetting = KnowledgeBits.UpdateBit(index, -forgetRate, step);
-            CumulativeForgetting += realForgetting;
-            return realForgetting;
-        }
-
-        /// <summary>
-        ///     Forget knowledgeBits based on knowledgeBits.LastTouched and timeToLive value
-        /// </summary>
-        /// <param name="forgettingRate"></param>
-        /// <param name="step"></param>
-        /// <returns>The real forgetting value</returns>
-        public float ForgetOldest(float forgettingRate, ushort step)
-        {
-            var realForgetting = KnowledgeBits.ForgetOldest(forgettingRate, step);
-            CumulativeForgetting += realForgetting;
-            return realForgetting;
         }
     }
 }

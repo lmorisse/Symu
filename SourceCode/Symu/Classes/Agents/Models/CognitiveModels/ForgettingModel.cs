@@ -15,6 +15,7 @@ using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
+using static Symu.Common.Constants;
 
 #endregion
 
@@ -29,10 +30,32 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>In addition, we have the MacroLearningModel</remarks>
     public class ForgettingModel : ModelEntity
     {
-        private readonly AgentId _id;
-        private readonly NetworkKnowledges _network;
         private readonly byte _randomLevel;
         private bool _isAgentOnToday;
+        /// <summary>
+        ///     Accumulates all forgetting of the agent for this knowledge during the simulation
+        /// </summary>
+        public float CumulativeForgetting { get; private set; }
+
+
+        /// <summary>
+        ///     Percentage of all forgetting of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageForgetting
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = CumulativeForgetting;
+                var sumKnowledge = Expertise.GetKnowledgeSum();
+                if (sumKnowledge > Tolerance)
+                {
+                    percentage = 100 * sum / sumKnowledge;
+                }
+
+                return percentage;
+            }
+        }
 
         public ForgettingModel(ModelEntity entity, bool knowledgeModelOn, CognitiveArchitecture cognitive,
             byte randomLevel) :
@@ -58,25 +81,21 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
         }
 
-        public ForgettingModel(ModelEntity entity, CognitiveArchitecture cognitive, byte randomLevel,
-            NetworkKnowledges network, AgentId id) :
+        public ForgettingModel(AgentExpertise expertise, CognitiveArchitecture cognitive, ModelEntity entity, byte randomLevel) :
             this(entity, true, cognitive, randomLevel)
         {
-            _network = network;
-            _id = id;
+            Expertise = expertise;
         }
 
-        public ForgettingModel(AgentId agentId, OrganizationModels models, CognitiveArchitecture cognitive,
-            NetworkKnowledges network) :
+        public ForgettingModel(AgentExpertise expertise, CognitiveArchitecture cognitive, OrganizationModels models) :
             this(models.Forgetting, models.Knowledge.On, cognitive, models.RandomLevelValue)
         {
-            _network = network;
-            _id = agentId;
+            Expertise = expertise;
         }
 
         public InternalCharacteristics InternalCharacteristics { get; set; }
 
-        private AgentExpertise Expertise => _network.GetAgentExpertise(_id);
+        private AgentExpertise Expertise { get;  }
         public AgentExpertise ForgettingExpertise { get; } = new AgentExpertise();
 
         /// <summary>
@@ -223,66 +242,140 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 case ForgettingSelectingMode.Random:
                     for (byte i = 0; i < forgetBits.Length; i++)
                     {
-                        agentKnowledge.Forget(i, forgetBits.GetBit(i), step);
+                        AgentKnowledgeForget(agentKnowledge, i, forgetBits.GetBit(i), step);
                     }
 
                     break;
                 case ForgettingSelectingMode.Oldest:
-                    agentKnowledge.ForgetOldest(NextRate(), step);
+                    AgentKnowledgeForgetOldest(agentKnowledge, NextRate(), step);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        /// <summary>
+        ///     Forget knowledgeBits based on knowledgeBits.LastTouched and timeToLive value
+        /// </summary>
+        /// <param name="agentKnowledge"></param>
+        /// <param name="forgettingRate"></param>
+        /// <param name="step"></param>
+        /// <returns>The real forgetting value</returns>
+        public float AgentKnowledgeForgetOldest(AgentKnowledge agentKnowledge, float forgettingRate, ushort step)
+        {
+            if (agentKnowledge == null)
+            {
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            var realForgetting = agentKnowledge.KnowledgeBits.ForgetOldest(forgettingRate, step);
+            CumulativeForgetting += realForgetting;
+            return realForgetting;
+        }
+
+        /// <summary>
+        ///     Agent forget _knowledgeBits at a forgetRate coming from ForgettingModel
+        ///     If forgetRate is below the minimumLevel of KnowledgeBit that should stay, the forgetRate is adjusted to stay at the
+        ///     minimumLevel
+        /// </summary>
+        /// <param name="agentKnowledge"></param>
+        /// <param name="index">Index of the knowledgeBit</param>
+        /// <param name="forgetRate">value of the decrement</param>
+        /// <param name="step"></param>
+        /// <returns>The real forgetting value</returns>
+        public float AgentKnowledgeForget(AgentKnowledge agentKnowledge, byte index, float forgetRate, ushort step)
+        {
+            if (agentKnowledge == null)
+            {
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            var value = agentKnowledge.KnowledgeBits.GetBit(index) - forgetRate;
+            if (value < agentKnowledge.MinimumKnowledge)
+            {
+                // forgetRate > 0 
+                forgetRate = Math.Max(0, agentKnowledge.KnowledgeBits.GetBit(index) - agentKnowledge.MinimumKnowledge);
+            }
+
+            if (Math.Abs(forgetRate) < Tolerance)
+            {
+                return 0;
+            }
+
+            var realForgetting = agentKnowledge.KnowledgeBits.UpdateBit(index, -forgetRate, step);
+            CumulativeForgetting += realForgetting;
+            return realForgetting;
         }
 
         /// <summary>
         ///     Clone the KnowledgeBits of the day that the worker can forget if he don't work on it
         ///     Called at the beginning of the step
         /// </summary>
-        public AgentKnowledge InitializeForgettingKnowledge(AgentKnowledge knowledge)
+        public AgentKnowledge InitializeForgettingKnowledge(AgentKnowledge agentKnowledge)
         {
-            if (knowledge is null)
+            if (agentKnowledge is null)
             {
-                throw new ArgumentNullException(nameof(knowledge));
+                throw new ArgumentNullException(nameof(agentKnowledge));
             }
 
             float[] forgettingKnowledgeBits;
             switch (InternalCharacteristics.ForgettingSelectingMode)
             {
                 case ForgettingSelectingMode.Random:
-                    forgettingKnowledgeBits = InitializeForgettingKnowledgeRandom(knowledge, NextRate());
+                    forgettingKnowledgeBits = InitializeForgettingKnowledgeRandom(agentKnowledge, NextRate());
                     break;
                 case ForgettingSelectingMode.Oldest:
-                    forgettingKnowledgeBits = Bits.Initialize(knowledge.Length, 0F);
+                    forgettingKnowledgeBits = Bits.Initialize(agentKnowledge.Length, 0F);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            return new AgentKnowledge(knowledge.KnowledgeId, forgettingKnowledgeBits, 0, -1, 0);
+            return new AgentKnowledge(agentKnowledge.KnowledgeId, forgettingKnowledgeBits, 0, -1, 0);
         }
 
         /// <summary>
         ///     Initialize the forgetting knowledge process with a random Selecting mode
         /// </summary>
-        /// <param name="knowledge"></param>
+        /// <param name="agentKnowledge"></param>
         /// <param name="nextForgettingRate"></param>
         /// <returns></returns>
-        public float[] InitializeForgettingKnowledgeRandom(AgentKnowledge knowledge, float nextForgettingRate)
+        public float[] InitializeForgettingKnowledgeRandom(AgentKnowledge agentKnowledge, float nextForgettingRate)
         {
-            if (knowledge is null)
+            if (agentKnowledge is null)
             {
-                throw new ArgumentNullException(nameof(knowledge));
+                throw new ArgumentNullException(nameof(agentKnowledge));
             }
 
-            var forgettingKnowledgeBits = ContinuousUniform.Samples(knowledge.Length, 0, 1);
+            var forgettingKnowledgeBits = ContinuousUniform.Samples(agentKnowledge.Length, 0, 1);
             var threshold = NextMean();
-            for (byte i = 0; i < knowledge.Length; i++)
+            for (byte i = 0; i < agentKnowledge.Length; i++)
             {
                 forgettingKnowledgeBits[i] = forgettingKnowledgeBits[i] < threshold ? nextForgettingRate : 0;
             }
 
             return forgettingKnowledgeBits;
+        }
+
+        /// <summary>
+        ///     Forget knowledges from the expertise based on knowledgeBits.LastTouched and timeToLive value
+        /// </summary>
+        public void ForgettingProcess(float forgettingRate, ushort step)
+        {
+            Expertise.List.ForEach(x => ForgettingProcess(x, forgettingRate, step));
+        }
+
+        /// <summary>
+        ///     Forget knowledgeBits based on knowledgeBits.LastTouched and timeToLive value
+        /// </summary>
+        public void ForgettingProcess(AgentKnowledge agentKnowledge, float forgettingRate, ushort step)
+        {
+            if (agentKnowledge == null)
+            {
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            agentKnowledge.KnowledgeBits.ForgetOldest(forgettingRate, step);
         }
 
         /// <summary>

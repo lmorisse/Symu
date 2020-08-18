@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using Symu.Common.Interfaces;
 
 #endregion
 
@@ -43,17 +44,17 @@ namespace Symu.Repository.Networks.Databases
                 throw new ArgumentNullException(nameof(database));
             }
 
-            return Exists(database.Entity.AgentId.Id);
+            return Exists(database.Entity.AgentId);
         }
 
-        public Database GetDatabase(ushort databaseId)
+        public Database GetDatabase(IAgentId databaseId)
         {
-            return List.Find(k => k.Entity.AgentId.Id == databaseId);
+            return List.Find(k => k.Entity.AgentId.Equals(databaseId));
         }
 
-        public bool Exists(ushort databaseId)
+        public bool Exists(IAgentId databaseId)
         {
-            return List.Exists(k => k.Entity.AgentId.Id == databaseId);
+            return List.Exists(k => k.Entity.AgentId.Equals(databaseId));
         }
 
         public void Clear()

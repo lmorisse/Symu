@@ -13,7 +13,7 @@ using System;
 
 #endregion
 
-namespace Symu.Repository.Networks.Knowledges
+namespace Symu.Classes.Agents.Models.CognitiveModels
 {
     /// <summary>
     ///     The eventArg class for Learning events

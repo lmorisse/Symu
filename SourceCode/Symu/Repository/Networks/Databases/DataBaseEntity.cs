@@ -10,8 +10,9 @@
 #region using directives
 
 using System;
-using Symu.Classes.Agents;
+
 using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 
 #endregion
@@ -23,7 +24,7 @@ namespace Symu.Repository.Networks.Databases
     /// </summary>
     public class DataBaseEntity
     {
-        public DataBaseEntity(AgentId agentId, CognitiveArchitecture cognitiveArchitecture)
+        public DataBaseEntity(IAgentId agentId, CognitiveArchitecture cognitiveArchitecture)
         {
             if (cognitiveArchitecture == null)
             {
@@ -35,7 +36,7 @@ namespace Symu.Repository.Networks.Databases
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
 
-        public DataBaseEntity(AgentId agentId, CommunicationTemplate medium)
+        public DataBaseEntity(IAgentId agentId, CommunicationTemplate medium)
         {
             if (medium == null)
             {
@@ -62,7 +63,7 @@ namespace Symu.Repository.Networks.Databases
         /// <summary>
         ///     Database Id
         /// </summary>
-        public AgentId AgentId { get; set; }
+        public IAgentId AgentId { get; set; }
 
         /// <summary>
         ///     Time to live : information are stored in the database
