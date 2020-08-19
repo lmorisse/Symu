@@ -9,11 +9,10 @@
 
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces;
-using Symu.Classes.Agents;
-using Symu.Classes.Organization;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Databases;
@@ -153,6 +152,11 @@ namespace Symu.Repository.Networks
         /// </param>
         public void AddAgentToGroup(IAgentId agentId, float allocation, IAgentId groupId, bool addLink)
         {
+            if (agentId == null)
+            {
+                throw new ArgumentNullException(nameof(agentId));
+            }
+
             lock (Groups)
             {
                 Groups.AddGroup(groupId);
@@ -171,18 +175,6 @@ namespace Symu.Repository.Networks
         }
 
         /// <summary>
-        ///     Initialize the network links.
-        ///     For performance it is not done in AddMemberToGroup at initialization
-        /// </summary>
-        public void InitializeNetworkLinks()
-        {
-            foreach (var groupId in Groups.GetGroups().ToList())
-            {
-                Links.AddLinks(Groups.GetAgents(groupId, new ClassId(SymuYellowPages.Actor)).ToList());
-            }
-        }
-
-        /// <summary>
         ///     Remove an agent to a group
         ///     It doesn't handle roles
         /// </summary>
@@ -190,6 +182,11 @@ namespace Symu.Repository.Networks
         /// <param name="groupId"></param>
         public void RemoveAgentFromGroup(IAgentId agentId, IAgentId groupId)
         {
+            if (agentId == null)
+            {
+                throw new ArgumentNullException(nameof(agentId));
+            }
+
             if (!Groups.Exists(groupId))
             {
                 return;
