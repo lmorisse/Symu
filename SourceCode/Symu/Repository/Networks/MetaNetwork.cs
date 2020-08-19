@@ -22,6 +22,7 @@ using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Portfolio;
+using Symu.Repository.Networks.Resources;
 using Symu.Repository.Networks.Role;
 using Symu.Repository.Networks.Sphere;
 
@@ -62,7 +63,7 @@ namespace Symu.Repository.Networks
         ///     Directory of objects used by the agentIds
         ///     using, working, support
         /// </summary>
-        public NetworkPortfolios Resources { get; } = new NetworkPortfolios();
+        public ResourceNetwork Resources { get; } = new ResourceNetwork();
 
         /// <summary>
         ///     Knowledge network
@@ -140,7 +141,7 @@ namespace Symu.Repository.Networks
 
         /// <summary>
         ///     Add an agent to a group
-        ///     It doesn't handle roles
+        ///     It doesn't handle roles' impact
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="allocation"></param>

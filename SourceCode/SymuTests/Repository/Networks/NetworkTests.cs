@@ -20,6 +20,7 @@ using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Role;
+using SymuTests.Helpers;
 
 #endregion
 
@@ -31,17 +32,17 @@ namespace SymuTests.Repository.Networks
         private const byte IsWorkingOn = 1;
         private const byte IsSupportOn = 2;
         private readonly Activity _activity = new Activity("a");
-        private readonly AgentId _componentId = new AgentId(6, 4);
+        private readonly TestResource _component = new TestResource(6, 4);
 
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);
 
-        private readonly AgentId _managerId = new AgentId(3, 2);
         private MetaNetwork _network ;
-        private readonly AgentId _teamId = new AgentId(1, 1);
-        private readonly AgentId _teamId2 = new AgentId(2, 1);
-        private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
-        private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.Actor);
+        private readonly TestAgentId _teamId = new TestAgentId(1, 1);
+        private readonly TestAgentId _teamId2 = new TestAgentId(2, 1);
+        private readonly TestAgentId _teammateId = new TestAgentId(4, SymuYellowPages.Actor);
+        private readonly TestAgentId _teammateId2 = new TestAgentId(5, SymuYellowPages.Actor);
+        private readonly TestAgentId _managerId = new TestAgentId(3, 2);
         private Belief _belief;
         private NetworkRole _networkRole;
 
@@ -62,7 +63,7 @@ namespace SymuTests.Repository.Networks
             _network.Links.AddLink(_teammateId, _managerId);
             _network.Groups.AddGroup(_teamId);
             _network.Roles.Add(_networkRole);
-            _network.Resources.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
+            _network.Resources.Add(_component);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.Beliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
@@ -93,7 +94,7 @@ namespace SymuTests.Repository.Networks
         {
             //_network.State = AgentState.Started;
             _network.Groups.AddGroup(_teamId);
-            _network.Resources.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
+            _network.Resources.Add(_teamId, _component, IsSupportOn, 100);
             // Method to test
             _network.AddAgentToGroup(_teammateId, 100, _teamId, true);
             _network.AddAgentToGroup(_teammateId2, 100, _teamId, true);
@@ -101,8 +102,8 @@ namespace SymuTests.Repository.Networks
             Assert.IsTrue(_network.Links.HasActiveLink(_teammateId, _teammateId2));
             // Test group
             Assert.IsTrue(_network.Groups.IsMemberOfGroup(_teammateId, _teamId));
-            // Portfolio
-            Assert.IsTrue(_network.Resources.HasObject(_teammateId, IsSupportOn));
+            // Resource
+            Assert.IsTrue(_network.Resources.HasResource(_teammateId, IsSupportOn));
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace SymuTests.Repository.Networks
         {
             //_network.State = AgentState.Starting;
             _network.Groups.AddGroup(_teamId);
-            _network.Resources.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
+            _network.Resources.Add(_teamId, _component, IsSupportOn, 100);
             // Method to test
             _network.AddAgentToGroup(_teammateId, 100, _teamId, false);
             _network.AddAgentToGroup(_teammateId2, 100, _teamId, false);
@@ -127,7 +128,7 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.AddAgentToGroup(_teammateId, 100, _teamId, false);
             _network.AddAgentToGroup(_teammateId2, 100, _teamId, false);
-            _network.Resources.AddPortfolio(_teamId, _componentId, IsSupportOn, 100);
+            _network.Resources.Add(_teamId, _component, IsSupportOn, 100);
             // Method to test
             _network.RemoveAgentFromGroup(_teammateId, _teamId);
             Assert.IsFalse(_network.Groups.IsMemberOfGroup(_teammateId, _teamId));
@@ -138,7 +139,7 @@ namespace SymuTests.Repository.Networks
             // Test link subordinates
             Assert.IsFalse(_network.Links.HasActiveLink(_teammateId, _managerId));
             // Portfolio
-            Assert.IsFalse(_network.Resources.HasObject(_teammateId, IsSupportOn));
+            Assert.IsFalse(_network.Resources.HasResource(_teammateId, IsSupportOn));
         }
 
         [TestMethod]
@@ -147,7 +148,7 @@ namespace SymuTests.Repository.Networks
             _network.Links.AddLink(_teammateId, _managerId);
             _network.Groups.AddAgent(_teammateId, 100, _teamId);
             _network.Roles.Add(_networkRole);
-            _network.Resources.AddPortfolio(_teammateId, _componentId, IsWorkingOn, 100);
+            _network.Resources.Add(_teammateId, _component, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<string> {_activity.Name});
@@ -156,7 +157,7 @@ namespace SymuTests.Repository.Networks
             Assert.IsFalse(_network.Links.Any());
             Assert.AreEqual(0, _network.Groups.GetAgentsCount(_teamId, _teammateId.ClassId));
             Assert.IsFalse(_network.Roles.IsMember(_teammateId, _teamId.ClassId));
-            Assert.IsFalse(_network.Resources.Exists(_teammateId, _componentId, IsWorkingOn));
+            Assert.IsFalse(_network.Resources.HasResource(_teammateId, _component.Id, IsWorkingOn));
             Assert.IsFalse(_network.Knowledge.Any());
             Assert.IsFalse(_network.Activities.AgentHasActivitiesOn(_teammateId, _teamId));
         }

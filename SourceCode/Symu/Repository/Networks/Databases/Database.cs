@@ -22,6 +22,7 @@ namespace Symu.Repository.Networks.Databases
 {
     /// <summary>
     ///     Database used to store and search information
+    ///     A database is a system where agent store temporary or permanent information
     /// </summary>
     public class Database
     {
