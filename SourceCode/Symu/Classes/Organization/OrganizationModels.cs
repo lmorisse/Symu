@@ -14,6 +14,7 @@ using Symu.Classes.Agents.Models;
 using Symu.Common;
 using Symu.Engine;
 using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Sphere;
 
 #endregion
 

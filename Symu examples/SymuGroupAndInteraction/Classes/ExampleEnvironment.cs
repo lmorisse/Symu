@@ -92,18 +92,21 @@ namespace SymuGroupAndInteraction.Classes
                 case 0:
                     // same Knowledge for all
                     WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[0].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics);
+                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
+                        actor.Cognitive.InternalCharacteristics.TimeToLive);
                     break;
                 case 1:
                     // Knowledge is by group
                     WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[i].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics);
+                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
+                        actor.Cognitive.InternalCharacteristics.TimeToLive);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
                     WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, knowledges[index].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics);
+                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
+                        actor.Cognitive.InternalCharacteristics.TimeToLive);
                     break;
             }
         }

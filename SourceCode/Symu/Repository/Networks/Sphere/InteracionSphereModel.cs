@@ -15,7 +15,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 
 #endregion
 
-namespace Symu.Classes.Organization
+namespace Symu.Repository.Networks.Sphere
 {
     /// <summary>
     ///     Model for interaction sphere settings

@@ -16,6 +16,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Engine;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Sphere;
 using SymuGroupAndInteraction.Classes;
 
 #endregion

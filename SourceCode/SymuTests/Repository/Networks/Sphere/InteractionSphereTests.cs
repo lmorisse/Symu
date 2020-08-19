@@ -66,8 +66,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void GeAgentIdsForInteractionsTest()
         {
             InteractionSphere.SetSphere(true, _iAgents, _network);
-            Assert.AreEqual(0, InteractionSphere.GetAgentIdsForInteractions(_agentId1, InteractionStrategy.Homophily,
-                new InteractionPatterns()).Count());
+            Assert.AreEqual(0, InteractionSphere.GetAgentIdsForInteractions(_agentId1, InteractionStrategy.Homophily).Count());
         }
 
         /// <summary>

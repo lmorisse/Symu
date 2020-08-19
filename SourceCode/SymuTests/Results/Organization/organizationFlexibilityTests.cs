@@ -17,6 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Repository.Networks.Sphere;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 

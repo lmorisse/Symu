@@ -13,7 +13,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
 using Symu.Common.Interfaces;
 
@@ -125,19 +124,6 @@ namespace Symu.Repository.Networks.Knowledges
             {
                 AgentsRepository[agentId].Add(agentKnowledge);
             }
-        }
-
-        public void Add(IAgentId agentId, ushort knowledgeId, KnowledgeLevel level,
-            InternalCharacteristics internalCharacteristics)
-        {
-            if (internalCharacteristics == null)
-            {
-                throw new ArgumentNullException(nameof(internalCharacteristics));
-            }
-
-            AddAgentId(agentId);
-            AddKnowledge(agentId, knowledgeId, level, internalCharacteristics.MinimumRemainingKnowledge,
-                internalCharacteristics.TimeToLive);
         }
 
         public void Add(IAgentId agentId, ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge,

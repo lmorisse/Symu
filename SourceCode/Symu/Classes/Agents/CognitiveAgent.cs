@@ -22,6 +22,7 @@ using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Databases;
+using Symu.Repository.Networks.Sphere;
 
 #endregion
 
@@ -188,7 +189,7 @@ namespace Symu.Classes.Agents
         public IEnumerable<AgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
             return Environment.WhitePages.MetaNetwork.InteractionSphere
-                .GetAgentIdsForInteractions(AgentId, interactionStrategy, Cognitive.InteractionPatterns).Cast<AgentId>().ToList();
+                .GetAgentIdsForInteractions(AgentId, interactionStrategy).Cast<AgentId>().ToList();
         }
 
         /// <summary>

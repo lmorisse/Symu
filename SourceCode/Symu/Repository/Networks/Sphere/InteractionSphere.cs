@@ -12,9 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -89,7 +86,7 @@ namespace Symu.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     Clone sphere randomly based on InteractionPatterns
+        ///     Clone sphere randomly
         /// </summary>
         /// <param name="agentIds"></param>
         public void SetSphereRandomly(IReadOnlyList<IAgentId> agentIds)
@@ -122,7 +119,7 @@ namespace Symu.Repository.Networks.Sphere
         }
 
         /// <summary>
-        ///     Update sphere randomly based on InteractionPatterns with new agent
+        ///     Update sphere randomly with new agent
         /// </summary>
         /// <param name="agentIds"></param>
         /// <param name="network"></param>
@@ -358,17 +355,11 @@ namespace Symu.Repository.Networks.Sphere
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
-        /// <param name="interactionPatterns"></param>
+        /// <param name="interactionStrategy"></param>
         /// <returns></returns>
         public IEnumerable<IAgentId> GetAgentIdsForInteractions(IAgentId agentId,
-            InteractionStrategy interactionStrategy,
-            InteractionPatterns interactionPatterns)
+            InteractionStrategy interactionStrategy)
         {
-            if (interactionPatterns is null)
-            {
-                throw new ArgumentNullException(nameof(interactionPatterns));
-            }
 
             if (!_model.On || _agentIndex is null || !_agentIndex.ContainsKey(agentId))
             {
@@ -481,7 +472,7 @@ namespace Symu.Repository.Networks.Sphere
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="interactionStrategy">can come from InteractionPatterns, but passed in parameter for unit test</param>
+        /// <param name="interactionStrategy"></param>
         /// <returns></returns>
         public IEnumerable<IAgentId> GetAgentIdsForNewInteractions(IAgentId agentId,
             InteractionStrategy interactionStrategy)
