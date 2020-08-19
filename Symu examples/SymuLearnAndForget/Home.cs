@@ -205,7 +205,7 @@ namespace SymuLearnAndForget
             // 1st Agent
 
             WriteTextSafe(lblKnowledge1,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.PercentageKnowledge
+                _environment.LearnFromSourceAgent.KnowledgeModel.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning1,
                 _environment.LearnFromSourceAgent.LearningModel.PercentageLearning.ToString("F1",
@@ -215,7 +215,7 @@ namespace SymuLearnAndForget
                     CultureInfo.InvariantCulture));
             // 2nd Agent
             WriteTextSafe(lblKnowledge2,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.PercentageKnowledge
+                _environment.LearnByDoingAgent.KnowledgeModel.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning2,
                 _environment.LearnByDoingAgent.LearningModel.PercentageLearning.ToString("F1",
@@ -225,7 +225,7 @@ namespace SymuLearnAndForget
                     CultureInfo.InvariantCulture));
             // 3rd Agent
             WriteTextSafe(lblKnowledge3,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.PercentageKnowledge
+                _environment.LearnByAskingAgent.KnowledgeModel.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning3,
                 _environment.LearnByAskingAgent.LearningModel.PercentageLearning.ToString("F1",
@@ -235,7 +235,7 @@ namespace SymuLearnAndForget
                     CultureInfo.InvariantCulture));
             // 4th Agent
             WriteTextSafe(lblKnowledge4,
-                _environment.DoesNotLearnAgent.KnowledgeModel.Expertise.PercentageKnowledge
+                _environment.DoesNotLearnAgent.KnowledgeModel.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblLearning4,
                 _environment.DoesNotLearnAgent.LearningModel.PercentageLearning.ToString("F1",
@@ -245,7 +245,7 @@ namespace SymuLearnAndForget
                     CultureInfo.InvariantCulture));
             // Expert Agent
             WriteTextSafe(lblExpertKnowledge,
-                _environment.ExpertAgent.KnowledgeModel.Expertise.PercentageKnowledge
+                _environment.ExpertAgent.KnowledgeModel.PercentageKnowledge
                     .ToString("F1", CultureInfo.InvariantCulture));
             WriteTextSafe(lblExpertLearning,
                 _environment.ExpertAgent.LearningModel.PercentageLearning.ToString("F1",

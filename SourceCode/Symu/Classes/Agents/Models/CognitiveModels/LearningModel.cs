@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -45,7 +46,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 float percentage = 0;
                 var sum = CumulativeLearning;
-                var potential = Expertise.GetKnowledgePotential();
+                var potential = GetKnowledgePotential();
                 if (potential > Tolerance)
                 {
                     percentage = 100 * sum / potential;
@@ -54,6 +55,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return percentage;
             }
         }
+        /// <summary>
+        ///     Get the maximum potential knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgePotential()
+        {
+            return Expertise.List.Sum(l => l.GetKnowledgePotential());
+        }
 
         public LearningModel(AgentId agentId, OrganizationModels models, NetworkKnowledges networkKnowledges,
             CognitiveArchitecture cognitiveArchitecture)
@@ -61,6 +70,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             if (models == null)
             {
                 throw new ArgumentNullException(nameof(models));
+            }
+
+            if (networkKnowledges == null)
+            {
+                throw new ArgumentNullException(nameof(networkKnowledges));
             }
 
             if (cognitiveArchitecture == null)
@@ -79,24 +93,26 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 // Agent is not concerned by this model
                 On = false;
             }
+
+            Expertise = _networkKnowledges.Exists(_id) ? _networkKnowledges.GetAgentExpertise(_id): null;
         }
 
         public TasksAndPerformance TasksAndPerformance { get; set; }
 
-        private AgentExpertise Expertise
-        {
-            get
-            {
-                if (!_networkKnowledges.Exists(_id))
-                {
-                    return null;
-                }
+        private AgentExpertise Expertise { get; }
+        //{
+        //    get
+        //    {
+        //        if (!_networkKnowledges.Exists(_id))
+        //        {
+        //            return null;
+        //        }
 
-                var expertise = _networkKnowledges.GetAgentExpertise(_id);
-                expertise.OnAfterLearning += AfterLearning;
-                return expertise;
-            }
-        }
+        //        var expertise = _networkKnowledges.GetAgentExpertise(_id);
+        //        expertise.OnAfterLearning += AfterLearning;
+        //        return expertise;
+        //    }
+        //}
 
         /// <summary>
         ///     EventHandler triggered after learning a new information

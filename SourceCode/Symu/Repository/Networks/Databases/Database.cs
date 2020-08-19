@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
@@ -146,7 +147,7 @@ namespace Symu.Repository.Networks.Databases
         /// </summary>
         public float GetKnowledgesSum()
         {
-            return _database.GetKnowledgeSum();
+            return _database.List.Sum(l => l.GetKnowledgeSum());
         }
 
         /// <summary>

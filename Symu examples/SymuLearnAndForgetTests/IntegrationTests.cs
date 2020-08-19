@@ -317,11 +317,11 @@ namespace SymuLearnAndForgetTests
             Assert.AreEqual(0, _environment.LearnByDoingAgent.LearningModel.CumulativeLearning);
             Assert.AreEqual(0, _environment.LearnByAskingAgent.LearningModel.CumulativeLearning);
             Assert.AreEqual(_environment.Knowledge.Length,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnFromSourceAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(_environment.Knowledge.Length,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByDoingAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(_environment.Knowledge.Length,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByAskingAgent.KnowledgeModel.GetKnowledgeSum());
         }
 
         /// <summary>
@@ -339,11 +339,11 @@ namespace SymuLearnAndForgetTests
             Assert.AreEqual(0, _environment.LearnByDoingAgent.LearningModel.CumulativeLearning);
             Assert.AreEqual(0, _environment.LearnByAskingAgent.LearningModel.CumulativeLearning);
             Assert.AreEqual(0,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnFromSourceAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(0,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByDoingAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(0,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByAskingAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(0, _environment.LearnFromSourceAgent.ForgettingModel.CumulativeForgetting);
             Assert.AreEqual(0, _environment.LearnByDoingAgent.ForgettingModel.CumulativeForgetting);
             Assert.AreEqual(0, _environment.LearnByAskingAgent.ForgettingModel.CumulativeForgetting);
@@ -451,11 +451,11 @@ namespace SymuLearnAndForgetTests
             Assert.AreNotEqual(0, _environment.LearnByDoingAgent.ForgettingModel.CumulativeForgetting);
             Assert.AreNotEqual(0, _environment.LearnByAskingAgent.ForgettingModel.CumulativeForgetting);
             Assert.AreEqual(0,
-                _environment.LearnFromSourceAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnFromSourceAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(0,
-                _environment.LearnByDoingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByDoingAgent.KnowledgeModel.GetKnowledgeSum());
             Assert.AreEqual(0,
-                _environment.LearnByAskingAgent.KnowledgeModel.Expertise.GetKnowledgeSum());
+                _environment.LearnByAskingAgent.KnowledgeModel.GetKnowledgeSum());
         }
 
         #endregion

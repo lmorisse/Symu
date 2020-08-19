@@ -81,8 +81,8 @@ namespace Symu.Results.Organization
             var sum = Environment.WhitePages.AllCognitiveAgents()
                 .Select(e => e.LearningModel.CumulativeLearning)
                 .ToList();
-            var potentialKnowledge = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Sum(expertise => expertise.GetKnowledgePotential());
+            var potentialKnowledge = Environment.WhitePages.AllCognitiveAgents()
+                .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var learning = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             Learning.Add(learning);
         }
@@ -91,28 +91,28 @@ namespace Symu.Results.Organization
         {
             var sum = Environment.WhitePages.AllCognitiveAgents()
                 .Select(e => e.ForgettingModel.CumulativeForgetting).ToList();
-            var sumKnowledge = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Sum(expertise => expertise.GetKnowledgeSum());
+            var sumKnowledge = Environment.WhitePages.AllCognitiveAgents()
+                .Sum(e => e.KnowledgeModel.GetKnowledgeSum());
             var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, sumKnowledge);
             Forgetting.Add(forgetting);
         }
 
         public void HandleKnowledgeObsolescence()
         {
-            var sum = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Select(e => e.Obsolescence(Environment.Schedule.Step)).ToList();
-            var potentialKnowledge = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Sum(expertise => expertise.GetKnowledgePotential());
+            var sum = Environment.WhitePages.AllCognitiveAgents()
+                .Select(e => e.KnowledgeModel.Obsolescence(Environment.Schedule.Step)).ToList();
+            var potentialKnowledge = Environment.WhitePages.AllCognitiveAgents()
+                .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             KnowledgeObsolescence.Add(obsolescence);
         }
 
         public void HandleKnowledge()
         {
-            var sum = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Select(expertise => expertise.GetKnowledgeSum()).ToList();
-            var potential = Environment.WhitePages.MetaNetwork.Knowledge.AgentsRepository.Values
-                .Sum(expertise => expertise.GetKnowledgePotential());
+            var sum = Environment.WhitePages.AllCognitiveAgents()
+                .Select(e=> e.KnowledgeModel.GetKnowledgeSum()).ToList();
+            var potential = Environment.WhitePages.AllCognitiveAgents()
+                .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Knowledge.Add(knowledge);
         }

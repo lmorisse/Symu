@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
@@ -47,7 +48,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 float percentage = 0;
                 var sum = CumulativeForgetting;
-                var sumKnowledge = Expertise.GetKnowledgeSum();
+                var sumKnowledge = GetKnowledgeSum();
                 if (sumKnowledge > Tolerance)
                 {
                     percentage = 100 * sum / sumKnowledge;
@@ -55,6 +56,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
                 return percentage;
             }
+        }
+        /// <summary>
+        ///     Get the sum of all the knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgeSum()
+        {
+            return Expertise.List.Sum(l => l.GetKnowledgeSum());
         }
 
         public ForgettingModel(ModelEntity entity, bool knowledgeModelOn, CognitiveArchitecture cognitive,

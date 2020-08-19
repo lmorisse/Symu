@@ -7,12 +7,6 @@
 
 #endregion
 
-#region using directives
-
-using System;
-
-#endregion
-
 namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
@@ -95,14 +89,6 @@ namespace Symu.Repository.Networks.Knowledges
 
 
         public byte Length => KnowledgeBits?.Length ?? 0;
-
-        /// <summary>
-        ///     The knowledge obsolescence : 1 - LastTouched.Average()/LastStep
-        /// </summary>
-        public float Obsolescence(float step)
-        {
-            return KnowledgeBits.Obsolescence(step);
-        }
 
         /// <summary>
         ///     Initialize KnowledgeBits with a array filled of 0

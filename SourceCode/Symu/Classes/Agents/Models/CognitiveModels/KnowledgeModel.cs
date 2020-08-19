@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
@@ -87,7 +88,54 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <summary>
         ///     Get the Agent Expertise
         /// </summary>
-        public AgentExpertise Expertise { get; } 
+        public AgentExpertise Expertise { get; }
+
+        #region Knowledge Analyze
+
+        /// <summary>
+        ///     Get the sum of all the knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgeSum()
+        {
+            return Expertise.List.Sum(l => l.GetKnowledgeSum());
+        }
+
+        /// <summary>
+        ///     Get the maximum potential knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgePotential()
+        {
+            return Expertise.List.Sum(l => l.GetKnowledgePotential());
+        }
+        /// <summary>
+        ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageKnowledge
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = GetKnowledgeSum();
+                var potential = GetKnowledgePotential();
+                if (potential > Tolerance)
+                {
+                    percentage = 100 * sum / potential;
+                }
+
+                return percentage;
+            }
+        }
+
+        /// <summary>
+        ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
+        /// </summary>
+        public float Obsolescence(float step)
+        {
+            return Expertise.List.Any() ? Expertise.List.Average(t => t.KnowledgeBits.Obsolescence(step)) : 0;
+        }
+        #endregion
 
         /// <summary>
         ///     Initialize the expertise of the agent based on the knowledge network

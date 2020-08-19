@@ -12,8 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveModels;
-using static Symu.Common.Constants;
 
 #endregion
 
@@ -31,58 +29,13 @@ namespace Symu.Repository.Networks.Knowledges
         /// </summary>
         public List<AgentKnowledge> List { get; } = new List<AgentKnowledge>();
 
-
-        /// <summary>
-        ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
-        /// </summary>
-        public float PercentageKnowledge
-        {
-            get
-            {
-                float percentage = 0;
-                var sum = GetKnowledgeSum();
-                var potential = GetKnowledgePotential();
-                if (potential > Tolerance)
-                {
-                    percentage = 100 * sum / potential;
-                }
-
-                return percentage;
-            }
-        }
-
         public int Count => List.Count;
 
-        /// <summary>
-        ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
-        /// </summary>
-        public float Obsolescence(float step)
-        {
-            return List.Any() ? List.Average(t => t.Obsolescence(step)) : 0;
-        }
+        ///// <summary>
+        /////     EventHandler triggered after learning a new information
+        ///// </summary>
+        //public event EventHandler<LearningEventArgs> OnAfterLearning;
 
-        /// <summary>
-        ///     EventHandler triggered after learning a new information
-        /// </summary>
-        public event EventHandler<LearningEventArgs> OnAfterLearning;
-
-        /// <summary>
-        ///     Get the sum of all the knowledge
-        /// </summary>
-        /// <returns></returns>
-        public float GetKnowledgeSum()
-        {
-            return List.Sum(l => l.GetKnowledgeSum());
-        }
-
-        /// <summary>
-        ///     Get the maximum potential knowledge
-        /// </summary>
-        /// <returns></returns>
-        public float GetKnowledgePotential()
-        {
-            return List.Sum(l => l.GetKnowledgePotential());
-        }
 
         public bool Any()
         {

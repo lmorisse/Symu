@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
+using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
@@ -24,13 +25,13 @@ namespace SymuTests.Results.Organization
     [TestClass]
     public class OrganizationKnowledgeAndBeliefTests
     {
-        private readonly AgentId _agentId = new AgentId(1, 1);
-        private readonly AgentId _agentId2 = new AgentId(2, 1);
         private readonly TestEnvironment _environment = new TestEnvironment();
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
         private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
         private KnowledgeAndBeliefResults _result;
+        private TestCognitiveAgent _agent;
+        private TestCognitiveAgent _agent2;
 
 
         [TestInitialize]
@@ -41,6 +42,9 @@ namespace SymuTests.Results.Organization
             _result = new KnowledgeAndBeliefResults(_environment);
             _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge);
             _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge2);
+            _agent = new TestCognitiveAgent(1, _environment);
+            _agent2 = new TestCognitiveAgent(2, _environment);
+            _environment.Start();
         }
 
         #region Knowledge
@@ -61,10 +65,10 @@ namespace SymuTests.Results.Organization
         [TestMethod]
         public void HandleKnowledge1Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_agentId, _expertise);
-            _environment.WhitePages.MetaNetwork.Knowledge.InitializeExpertise(_agentId, false, 0);
-
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge,0, -1);
+            _agent.KnowledgeModel.InitializeExpertise(0);
+            _agent2.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent2.KnowledgeModel.InitializeExpertise(0);
             _result.HandleKnowledge();
             Assert.AreEqual(1, _result.Knowledge[0].Mean);
         }
@@ -75,12 +79,12 @@ namespace SymuTests.Results.Organization
         [TestMethod]
         public void HandleKnowledge2Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_agentId, _expertise);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_agentId2, _expertise);
-            _environment.WhitePages.MetaNetwork.Knowledge.InitializeExpertise(_agentId, false, 0);
-            _environment.WhitePages.MetaNetwork.Knowledge.InitializeExpertise(_agentId2, false, 0);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.InitializeExpertise(0);
+            _agent2.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent2.KnowledgeModel.AddKnowledge(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent2.KnowledgeModel.InitializeExpertise(0);
 
             _result.HandleKnowledge();
             Assert.AreEqual(2, _result.Knowledge[0].Mean);
@@ -109,10 +113,15 @@ namespace SymuTests.Results.Organization
         public void HandleBelief1Test()
         {
             _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agentId, _expertise,
+            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, _expertise,
                 BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agentId, false);
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agentId, _knowledge.Id).BeliefBits
+            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent2.AgentId, _expertise,
+                BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent.AgentId, false);
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent.AgentId, _knowledge.Id).BeliefBits
+                .SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent2.AgentId, false);
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent2.AgentId, _knowledge.Id).BeliefBits
                 .SetBit(0, 1);
             _result.HandleBelief();
             Assert.AreEqual(1, _result.Beliefs[0].Mean);
@@ -126,19 +135,19 @@ namespace SymuTests.Results.Organization
         {
             _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agentId, _expertise,
+            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, _expertise,
                 BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agentId2, _expertise,
+            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent2.AgentId, _expertise,
                 BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agentId, false);
-            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agentId2, false);
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agentId, _knowledge.Id).BeliefBits
+            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent.AgentId, false);
+            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent2.AgentId, false);
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent.AgentId, _knowledge.Id).BeliefBits
                 .SetBit(0, 1);
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agentId, _knowledge2.Id).BeliefBits
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent.AgentId, _knowledge2.Id).BeliefBits
                 .SetBit(0, 1);
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agentId2, _knowledge.Id).BeliefBits
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent2.AgentId, _knowledge.Id).BeliefBits
                 .SetBit(0, 1);
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agentId2, _knowledge2.Id).BeliefBits
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent2.AgentId, _knowledge2.Id).BeliefBits
                 .SetBit(0, 1);
             _result.HandleBelief();
             Assert.AreEqual(2, _result.Beliefs[0].Mean);
