@@ -40,7 +40,7 @@ namespace SymuTests.Repository.Networks.Activities
         private readonly Knowledge _knowledge2 =
             new Knowledge(2, "2", 1);
 
-        private readonly NetworkActivities _network = new NetworkActivities();
+        private readonly ActivityNetwork _network = new ActivityNetwork();
 
         [TestInitialize]
         public void Initialize()

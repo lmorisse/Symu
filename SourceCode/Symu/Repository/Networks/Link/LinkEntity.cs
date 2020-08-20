@@ -21,14 +21,14 @@ namespace Symu.Repository.Networks.Link
     ///     AgentId1 has the smallest key
     ///     AgentId2 has the highest key
     /// </summary>
-    public class NetworkLink
+    public class LinkEntity
     {
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public NetworkLink(IAgentId agentId1, IAgentId agentId2)
+        public LinkEntity(IAgentId agentId1, IAgentId agentId2)
         {
             if (agentId1 == null)
             {
@@ -112,7 +112,7 @@ namespace Symu.Repository.Networks.Link
 
         public override bool Equals(object obj)
         {
-            return obj is NetworkLink link &&
+            return obj is LinkEntity link &&
                    link.HasLink(AgentId1, AgentId2);
         }
     }

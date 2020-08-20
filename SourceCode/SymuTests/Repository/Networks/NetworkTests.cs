@@ -44,7 +44,7 @@ namespace SymuTests.Repository.Networks
         private readonly TestAgentId _teammateId2 = new TestAgentId(5, SymuYellowPages.Actor);
         private readonly TestAgentId _managerId = new TestAgentId(3, 2);
         private Belief _belief;
-        private NetworkRole _networkRole;
+        private RoleEntity _roleEntity;
 
         [TestInitialize]
         public void Initialize()
@@ -54,7 +54,7 @@ namespace SymuTests.Repository.Networks
             _belief = new Belief(1, "1", 1,
                 _network.Knowledge.Model, BeliefWeightLevel.RandomWeight);
             _network.Activities.AddActivities(new List<Activity> {_activity}, _teamId);
-            _networkRole = new NetworkRole(_managerId, _teamId, 1);
+            _roleEntity = new RoleEntity(_managerId, _teamId, 1);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace SymuTests.Repository.Networks
         {
             _network.Links.AddLink(_teammateId, _managerId);
             _network.Groups.AddGroup(_teamId);
-            _network.Roles.Add(_networkRole);
+            _network.Roles.Add(_roleEntity);
             _network.Resources.Add(_component);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
@@ -147,7 +147,7 @@ namespace SymuTests.Repository.Networks
         {
             _network.Links.AddLink(_teammateId, _managerId);
             _network.Groups.AddAgent(_teammateId, 100, _teamId);
-            _network.Roles.Add(_networkRole);
+            _network.Roles.Add(_roleEntity);
             _network.Resources.Add(_teammateId, _component, IsWorkingOn, 100);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);

@@ -22,8 +22,8 @@ namespace SymuTests.Repository.Networks.Enculturation
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
 
-        private readonly NetworkEnculturation _enculturation =
-            new NetworkEnculturation();
+        private readonly EnculturationNetwork _enculturation =
+            new EnculturationNetwork();
 
         [TestMethod]
         public void RemoveAgentTest()

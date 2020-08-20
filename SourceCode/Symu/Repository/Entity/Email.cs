@@ -24,15 +24,15 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Email : Database
     {
-        public static Email CreateInstance(AgentId agentId, OrganizationModels organizationModels, NetworkKnowledges networkKnowledges)
+        public static Email CreateInstance(AgentId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(agentId, communication);
-            return new Email(entity, organizationModels, networkKnowledges);
+            return new Email(entity, organizationModels, knowledgeNetwork);
         }
 
         private Email(DatabaseEntity entity, OrganizationModels organizationModels,
-            NetworkKnowledges networkKnowledges) : base(entity, organizationModels, networkKnowledges)
+            KnowledgeNetwork knowledgeNetwork) : base(entity, organizationModels, knowledgeNetwork)
         {
         }
 

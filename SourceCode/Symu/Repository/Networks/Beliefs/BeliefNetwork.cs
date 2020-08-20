@@ -28,9 +28,9 @@ namespace Symu.Repository.Networks.Beliefs
     ///     Value : the list of NetworkInformation the agent knows
     /// </summary>
     /// <example></example>
-    public class NetworkBeliefs
+    public class BeliefNetwork
     {
-        public NetworkBeliefs(BeliefWeightLevel beliefWeightLevel)
+        public BeliefNetwork(BeliefWeightLevel beliefWeightLevel)
         {
             BeliefWeightLevel = beliefWeightLevel;
         }

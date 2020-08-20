@@ -33,17 +33,17 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private CognitiveArchitecture _cognitiveArchitecture;
         private ForgettingModel _forgettingModel;
         private InternalCharacteristics _internalCharacteristics;
-        private NetworkKnowledges _networkKnowledges;
+        private KnowledgeNetwork _knowledgeNetwork;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels();
             var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
-            _networkKnowledges = network.Knowledge;
-            _networkKnowledges.Add(_agentId, _expertise);
+            _knowledgeNetwork = network.Knowledge;
+            _knowledgeNetwork.Add(_agentId, _expertise);
 
-            Assert.AreEqual(_expertise, _networkKnowledges.GetAgentExpertise(_agentId));
+            Assert.AreEqual(_expertise, _knowledgeNetwork.GetAgentExpertise(_agentId));
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
             _forgetting.On = true;
@@ -140,7 +140,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
-            _networkKnowledges.Add(_agentId, _expertise);
+            _knowledgeNetwork.Add(_agentId, _expertise);
             _forgettingModel.InitializeForgettingProcess();
             Assert.AreEqual(1, _forgettingModel.ForgettingExpertise.Count);
         }
@@ -156,7 +156,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _forgettingModel.InternalCharacteristics.PartialForgettingRate = 1;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
-            _networkKnowledges.Add(_agentId, _expertise);
+            _knowledgeNetwork.Add(_agentId, _expertise);
             _forgettingModel.InitializeForgettingProcess();
             _forgettingModel.FinalizeForgettingProcess(0);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
@@ -170,7 +170,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
-            _networkKnowledges.Add(_agentId, _expertise);
+            _knowledgeNetwork.Add(_agentId, _expertise);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             // ForgettingRate < minimumRemainingLevel

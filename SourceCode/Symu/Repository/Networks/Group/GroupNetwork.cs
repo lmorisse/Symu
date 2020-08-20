@@ -26,7 +26,7 @@ namespace Symu.Repository.Networks.Group
     ///     Value => List of AgentIds
     /// </summary>
     /// <example>Groups : team, task force, quality circle, community of practices, committees, ....</example>
-    public class NetworkGroups
+    public class GroupNetwork
     {
         /// <summary>
         ///     Key => groupId

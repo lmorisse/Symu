@@ -26,7 +26,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void HasActiveLinkTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             Assert.IsTrue(link.HasActiveLink(_agentId1, _agentId2));
             Assert.IsFalse(link.HasPassiveLink(_agentId1, _agentId2));
         }
@@ -34,7 +34,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void HasPassiveLinkTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             link.Deactivate();
             Assert.IsFalse(link.HasActiveLink(_agentId1, _agentId2));
             Assert.IsTrue(link.HasPassiveLink(_agentId1, _agentId2));
@@ -43,17 +43,17 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void HasLinkTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             Assert.IsTrue(link.HasLink(_agentId1, _agentId2));
         }
 
         [TestMethod]
         public void EqualsTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
-            var link2 = new NetworkLink(_agentId1, _agentId2);
-            var link3 = new NetworkLink(_agentId2, _agentId1);
-            var link4 = new NetworkLink(_agentId1, _agentId1);
+            var link = new LinkEntity(_agentId1, _agentId2);
+            var link2 = new LinkEntity(_agentId1, _agentId2);
+            var link3 = new LinkEntity(_agentId2, _agentId1);
+            var link4 = new LinkEntity(_agentId1, _agentId1);
             Assert.IsTrue(link.Equals(link2));
             Assert.IsTrue(link.Equals(link3));
             Assert.IsFalse(link.Equals(link4));
@@ -62,7 +62,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void ActivateTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             link.Deactivate();
             link.Activate();
             Assert.IsTrue(link.HasActiveLink(_agentId1, _agentId2));
@@ -71,7 +71,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void DesActivateTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             link.Deactivate();
             Assert.IsTrue(link.HasPassiveLink(_agentId1, _agentId2));
         }
@@ -79,7 +79,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void HasActiveLinksTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             Assert.IsTrue(link.HasActiveLinks(_agentId1));
             // links are bidirectional
             Assert.IsTrue(link.HasActiveLinks(_agentId2));

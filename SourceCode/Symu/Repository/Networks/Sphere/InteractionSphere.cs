@@ -244,29 +244,29 @@ namespace Symu.Repository.Networks.Sphere
         /// <summary>
         ///     The closer two agents are in the belief area, the more likely they will be to interact.
         /// </summary>
-        public static float SetRelativeBelief(IAgentId agentId1, IAgentId agentId2, NetworkBeliefs networkBeliefs)
+        public static float SetRelativeBelief(IAgentId agentId1, IAgentId agentId2, BeliefNetwork beliefNetwork)
         {
-            if (networkBeliefs == null)
+            if (beliefNetwork == null)
             {
-                throw new ArgumentNullException(nameof(networkBeliefs));
+                throw new ArgumentNullException(nameof(beliefNetwork));
             }
 
-            if (!networkBeliefs.Exists(agentId1) || !networkBeliefs.Exists(agentId2))
+            if (!beliefNetwork.Exists(agentId1) || !beliefNetwork.Exists(agentId2))
             {
                 return 0;
             }
 
             var relativeBelief = 0F;
-            var beliefIds = networkBeliefs.GetBeliefIds(agentId1).ToList();
+            var beliefIds = beliefNetwork.GetBeliefIds(agentId1).ToList();
             foreach (var beliefId in beliefIds)
             {
-                var bits1 = networkBeliefs.GetAgentBelief(agentId1, beliefId).BeliefBits;
-                if (!networkBeliefs.Exists(agentId2, beliefId))
+                var bits1 = beliefNetwork.GetAgentBelief(agentId1, beliefId).BeliefBits;
+                if (!beliefNetwork.Exists(agentId2, beliefId))
                 {
                     continue;
                 }
 
-                var bits2 = networkBeliefs.GetAgentBelief(agentId2, beliefId).BeliefBits;
+                var bits2 = beliefNetwork.GetAgentBelief(agentId2, beliefId).BeliefBits;
                 relativeBelief += Bits.GetRelativeBits(bits1, bits2);
             }
 
@@ -277,29 +277,29 @@ namespace Symu.Repository.Networks.Sphere
         ///     The closer two agents are in the knowledge area, the more likely they will be to interact.
         /// </summary>
         public static float SetRelativeKnowledge(IAgentId agentId1, IAgentId agentId2,
-            NetworkKnowledges networkKnowledges)
+            KnowledgeNetwork knowledgeNetwork)
         {
-            if (networkKnowledges == null)
+            if (knowledgeNetwork == null)
             {
-                throw new ArgumentNullException(nameof(networkKnowledges));
+                throw new ArgumentNullException(nameof(knowledgeNetwork));
             }
 
-            if (!networkKnowledges.Exists(agentId1) || !networkKnowledges.Exists(agentId2))
+            if (!knowledgeNetwork.Exists(agentId1) || !knowledgeNetwork.Exists(agentId2))
             {
                 return 0;
             }
 
             var relativeExpertise = 0F;
-            var knowledgeIds = networkKnowledges.GetKnowledgeIds(agentId1).ToList();
+            var knowledgeIds = knowledgeNetwork.GetKnowledgeIds(agentId1).ToList();
             foreach (var knowledgeId in knowledgeIds)
             {
-                var knowledgeBits1 = networkKnowledges.GetAgentKnowledge(agentId1, knowledgeId).KnowledgeBits;
-                if (!networkKnowledges.Exists(agentId2, knowledgeId))
+                var knowledgeBits1 = knowledgeNetwork.GetAgentKnowledge(agentId1, knowledgeId).KnowledgeBits;
+                if (!knowledgeNetwork.Exists(agentId2, knowledgeId))
                 {
                     continue;
                 }
 
-                var knowledgeBits2 = networkKnowledges.GetAgentKnowledge(agentId2, knowledgeId).KnowledgeBits;
+                var knowledgeBits2 = knowledgeNetwork.GetAgentKnowledge(agentId2, knowledgeId).KnowledgeBits;
                 if (!knowledgeBits2.IsNull)
                 {
                     relativeExpertise += Bits.GetRelativeBits(knowledgeBits1, knowledgeBits2);
@@ -314,17 +314,17 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        /// <param name="networkLinks"></param>
+        /// <param name="linkNetwork"></param>
         /// <returns></returns>
-        public static float SetSocialProximity(IAgentId agentId1, IAgentId agentId2, NetworkLinks networkLinks)
+        public static float SetSocialProximity(IAgentId agentId1, IAgentId agentId2, LinkNetwork linkNetwork)
         {
             //todo graph : number of nodes between agentId1 and agentId2
-            if (networkLinks == null)
+            if (linkNetwork == null)
             {
-                throw new ArgumentNullException(nameof(networkLinks));
+                throw new ArgumentNullException(nameof(linkNetwork));
             }
 
-            return networkLinks.NormalizedCountLinks(agentId1, agentId2);
+            return linkNetwork.NormalizedCountLinks(agentId1, agentId2);
         }
 
         /// <summary>
@@ -332,18 +332,18 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        /// <param name="networkActivities"></param>
+        /// <param name="activityNetwork"></param>
         /// <returns></returns>
         public static float SetRelativeActivity(IAgentId agentId1, IAgentId agentId2,
-            NetworkActivities networkActivities)
+            ActivityNetwork activityNetwork)
         {
-            if (networkActivities == null)
+            if (activityNetwork == null)
             {
-                throw new ArgumentNullException(nameof(networkActivities));
+                throw new ArgumentNullException(nameof(activityNetwork));
             }
 
-            var activity1 = networkActivities.GetAgentActivities(agentId1).ToList();
-            var activity2 = networkActivities.GetAgentActivities(agentId2).ToList();
+            var activity1 = activityNetwork.GetAgentActivities(agentId1).ToList();
+            var activity2 = activityNetwork.GetAgentActivities(agentId2).ToList();
             var relativeActivity = activity1.Count(activity => activity2.Contains(activity));
             return activity1.Any() ? relativeActivity / activity1.Count : 0;
         }

@@ -21,10 +21,10 @@ namespace Symu.Repository.Networks.Link
     /// <summary>
     ///     List of Links of a NetWork
     /// </summary>
-    public class NetworkLinks
+    public class LinkNetwork
     {
         private uint _maxLinksCount;
-        public List<NetworkLink> List { get; } = new List<NetworkLink>();
+        public List<LinkEntity> List { get; } = new List<LinkEntity>();
         public int Count => List.Count;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Symu.Repository.Networks.Link
         /// </summary>
         /// <param name="index">0 based</param>
         /// <returns></returns>
-        public NetworkLink this[int index]
+        public LinkEntity this[int index]
         {
             get => List[index];
             set => List[index] = value;
@@ -95,13 +95,13 @@ namespace Symu.Repository.Networks.Link
             }
             else
             {
-                List.Add(new NetworkLink(agentId1, agentId2));
+                List.Add(new LinkEntity(agentId1, agentId2));
             }
         }
 
-        public bool Exists(NetworkLink link)
+        public bool Exists(LinkEntity linkEntity)
         {
-            return List.Contains(link);
+            return List.Contains(linkEntity);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Symu.Repository.Networks.Link
             return List.Exists(x => x.HasLink(agentId1, agentId2));
         }
 
-        private NetworkLink Get(IAgentId agentId1, IAgentId agentId2)
+        private LinkEntity Get(IAgentId agentId1, IAgentId agentId2)
         {
             return List.Find(x => x.HasLink(agentId1, agentId2));
         }

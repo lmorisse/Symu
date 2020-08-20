@@ -23,7 +23,7 @@ namespace Symu.Repository.Networks.Enculturation
     ///     Key => AgentId
     ///     Value => Enculturation value
     /// </summary>
-    public class NetworkEnculturation
+    public class EnculturationNetwork
     {
         /// <summary>
         ///     List of all agentId and their enculturation information

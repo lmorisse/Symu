@@ -20,7 +20,7 @@ namespace Symu.Repository.Networks.Influences
     /// <summary>
     ///     NetWork of agents influences
     /// </summary>
-    public class NetworkInfluences
+    public class InfluenceNetwork
     {
         public List<Influence> List { get; } = new List<Influence>();
 

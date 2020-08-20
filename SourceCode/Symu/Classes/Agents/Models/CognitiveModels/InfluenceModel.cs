@@ -29,8 +29,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class InfluenceModel
     {
         private readonly AgentId _agentId;
-        private readonly NetworkBeliefs _networkBeliefs;
-        private readonly NetworkInfluences _networkInfluences;
+        private readonly BeliefNetwork _networkBeliefs;
+        private readonly InfluenceNetwork _networkInfluences;
 
         /// <summary>
         ///     Initialize influence model :

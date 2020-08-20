@@ -18,7 +18,7 @@ using Symu.Repository.Networks.Role;
 namespace SymuTests.Repository.Networks.Role
 {
     [TestClass]
-    public class NetworkRoleTests
+    public class RoleEntityTests
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentId _agentId2 = new AgentId(2, 1);
@@ -28,7 +28,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void IsMemberOfGroupsTest()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.IsMemberOfGroups(_agentId, _groupId.ClassId));
             Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId.ClassId));
             Assert.IsFalse(role.IsMemberOfGroups(_agentId2, _groupId2.ClassId));
@@ -38,7 +38,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void HasRoleInGroupTest()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.HasRoleInGroup(1, _groupId));
             Assert.IsFalse(role.HasRoleInGroup(2, _groupId));
             Assert.IsFalse(role.HasRoleInGroup(1, _groupId2));
@@ -47,7 +47,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void HasRoleInGroupTest1()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.HasRoleInGroup(_agentId, 1, _groupId));
             Assert.IsFalse(role.HasRoleInGroup(_agentId, 2, _groupId));
             Assert.IsFalse(role.HasRoleInGroup(_agentId, 1, _groupId2));
@@ -57,7 +57,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void HasRoleInGroupTest2()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.HasRoleInGroup(_agentId, _groupId));
             Assert.IsFalse(role.HasRoleInGroup(_agentId, _groupId2));
             Assert.IsFalse(role.HasRoleInGroup(_agentId2, _groupId));
@@ -66,7 +66,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void IsGroupTest()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.IsGroup(_groupId));
             Assert.IsFalse(role.IsGroup(_groupId2));
         }
@@ -74,7 +74,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void IsAgentTest()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.IsAgent(_agentId));
             Assert.IsFalse(role.IsAgent(_agentId2));
         }
@@ -82,7 +82,7 @@ namespace SymuTests.Repository.Networks.Role
         [TestMethod]
         public void HasRoleTest()
         {
-            var role = new NetworkRole(_agentId, _groupId, 1);
+            var role = new RoleEntity(_agentId, _groupId, 1);
             Assert.IsTrue(role.HasRole(1));
             Assert.IsFalse(role.HasRole(2));
         }

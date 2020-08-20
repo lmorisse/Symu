@@ -46,7 +46,7 @@ namespace SymuTests.Repository.Networks.Sphere
         private readonly AgentTemplates _templates = new AgentTemplates();
         private MetaNetwork _network;
 
-        private NetworkKnowledges _networkKnowledge;
+        private KnowledgeNetwork _networkKnowledge;
 
         [TestInitialize]
         public void Initialize()

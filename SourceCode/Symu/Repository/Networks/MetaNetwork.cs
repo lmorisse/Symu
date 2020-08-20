@@ -36,7 +36,7 @@ namespace Symu.Repository.Networks
         public MetaNetwork(InteractionSphereModel interactionSphere, BeliefWeightLevel beliefWeightLevel)
         {
             InteractionSphere = new InteractionSphere(interactionSphere);
-            Beliefs = new NetworkBeliefs(beliefWeightLevel);
+            Beliefs = new BeliefNetwork(beliefWeightLevel);
         }
 
         /// <summary>
@@ -44,18 +44,18 @@ namespace Symu.Repository.Networks
         ///     Who report/communicate to who
         ///     Sphere of interaction of agents
         /// </summary>
-        public NetworkLinks Links { get; } = new NetworkLinks();
+        public LinkNetwork Links { get; } = new LinkNetwork();
 
         /// <summary>
         ///     Directory of the groups of the organizationEntity :
         ///     Team, task force, workgroup, circles, community of practices, ...
         /// </summary>
-        public NetworkGroups Groups { get; } = new NetworkGroups();
+        public GroupNetwork Groups { get; } = new GroupNetwork();
 
         /// <summary>
         ///     Directory of the roles the agent are playing in the organizationEntity
         /// </summary>
-        public NetworkRoles Roles { get; } = new NetworkRoles();
+        public RoleNetwork Roles { get; } = new RoleNetwork();
 
         /// <summary>
         ///     Directory of objects used by the agentIds
@@ -67,29 +67,29 @@ namespace Symu.Repository.Networks
         ///     Knowledge network
         ///     Who (agentId) knows what (Information)
         /// </summary>
-        public NetworkKnowledges Knowledge { get; } = new NetworkKnowledges();
+        public KnowledgeNetwork Knowledge { get; } = new KnowledgeNetwork();
 
         /// <summary>
         ///     Belief network
         ///     Who (agentId) believes what (Information)
         /// </summary>
-        public NetworkBeliefs Beliefs { get; }
+        public BeliefNetwork Beliefs { get; }
 
         /// <summary>
         ///     Kanban activities network
         ///     Who (agentId) works on what activities (Kanban)
         /// </summary>
-        public NetworkActivities Activities { get; } = new NetworkActivities();
+        public ActivityNetwork Activities { get; } = new ActivityNetwork();
 
         /// <summary>
         ///     Agent enculturation level network
         /// </summary>
-        public NetworkEnculturation Enculturation { get; } = new NetworkEnculturation();
+        public EnculturationNetwork Enculturation { get; } = new EnculturationNetwork();
 
         /// <summary>
         ///     Agent influences network
         /// </summary>
-        public NetworkInfluences Influences { get; } = new NetworkInfluences();
+        public InfluenceNetwork Influences { get; } = new InfluenceNetwork();
 
         /// <summary>
         ///     Derived Parameters from others networks.

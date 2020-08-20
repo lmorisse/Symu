@@ -24,15 +24,15 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Wiki : Database
     {
-        public static Wiki CreateInstance(AgentId agentId, OrganizationModels organizationModels, NetworkKnowledges networkKnowledges)
+        public static Wiki CreateInstance(AgentId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new ViaPlatformTemplate();
             var entity = new DatabaseEntity(agentId, communication);
-            return new Wiki(entity, organizationModels, networkKnowledges);
+            return new Wiki(entity, organizationModels, knowledgeNetwork);
         }
 
         private Wiki(DatabaseEntity entity, OrganizationModels organizationModels,
-            NetworkKnowledges networkKnowledges) : base(entity, organizationModels, networkKnowledges)
+            KnowledgeNetwork knowledgeNetwork) : base(entity, organizationModels, knowledgeNetwork)
         {
         }
 

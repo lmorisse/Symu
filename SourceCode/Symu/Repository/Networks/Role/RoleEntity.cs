@@ -15,9 +15,9 @@ using Symu.Common.Interfaces;
 
 namespace Symu.Repository.Networks.Role
 {
-    public class NetworkRole
+    public class RoleEntity
     {
-        public NetworkRole(IAgentId agentId, IAgentId groupId, byte roleType)
+        public RoleEntity(IAgentId agentId, IAgentId groupId, byte roleType)
         {
             AgentId = agentId;
             GroupId = groupId;

@@ -27,7 +27,7 @@ namespace Symu.Repository.Networks.Knowledges
     ///     Value : the list of NetworkInformation the agent knows
     /// </summary>
     /// <example></example>
-    public class NetworkKnowledges
+    public class KnowledgeNetwork
     {
         /// <summary>
         ///     Describe the knowledge model :

@@ -26,7 +26,7 @@ namespace SymuTests.Repository.Networks.Link
         private readonly AgentId _agentId1 = new AgentId(2, 2);
         private readonly AgentId _agentId2 = new AgentId(3, 2);
         private readonly AgentId _agentId3 = new AgentId(4, 2);
-        private readonly NetworkLinks _links = new NetworkLinks();
+        private readonly LinkNetwork _links = new LinkNetwork();
 
 
         [TestMethod]
@@ -113,7 +113,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void ExistsTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             Assert.IsFalse(_links.Exists(link));
             _links.List.Add(link);
             Assert.IsTrue(_links.Exists(link));
@@ -122,7 +122,7 @@ namespace SymuTests.Repository.Networks.Link
         [TestMethod]
         public void AddLinkTest()
         {
-            var link = new NetworkLink(_agentId1, _agentId2);
+            var link = new LinkEntity(_agentId1, _agentId2);
             _links.AddLink(_agentId1, _agentId2);
             Assert.IsTrue(_links.Exists(link));
             // Deactivate test

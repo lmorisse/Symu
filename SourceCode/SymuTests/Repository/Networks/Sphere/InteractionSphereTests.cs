@@ -340,7 +340,7 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetSocialProximityTest2()
         {
-            var networkLink = new NetworkLink(_agentId1, _agentId2);
+            var networkLink = new LinkEntity(_agentId1, _agentId2);
             networkLink.Deactivate();
             _network.Links.AddLink(_agentId1, _agentId2);
             Assert.AreEqual(0F, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));

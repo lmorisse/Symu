@@ -33,7 +33,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly AgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
-        private readonly NetworkBeliefs _networkBeliefs;
+        private readonly BeliefNetwork _networkBeliefs;
 
         /// <summary>
         ///     Initialize Beliefs model :

@@ -22,7 +22,7 @@ namespace SymuTests.Repository.Networks.Group
     [TestClass]
     public class NetworkGroupsTests
     {
-        private readonly NetworkGroups _group = new NetworkGroups();
+        private readonly GroupNetwork _group = new GroupNetwork();
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(3, 2);

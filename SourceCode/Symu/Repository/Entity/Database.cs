@@ -49,7 +49,7 @@ namespace Symu.Repository.Entity
         public IAgentId Id => Entity.AgentId;
 
         public Database(DatabaseEntity entity, OrganizationModels organizationModels,
-            NetworkKnowledges networkKnowledges)
+            KnowledgeNetwork knowledgeNetwork)
         {
             if (entity == null)
             {
@@ -62,7 +62,7 @@ namespace Symu.Repository.Entity
             }
 
             Entity = new DatabaseEntity(entity.AgentId, entity.CognitiveArchitecture);
-            _learningModel = new LearningModel((AgentId)Entity.AgentId, organizationModels, networkKnowledges,
+            _learningModel = new LearningModel((AgentId)Entity.AgentId, organizationModels, knowledgeNetwork,
                 entity.CognitiveArchitecture);
             _forgettingModel = new ForgettingModel(_database, entity.CognitiveArchitecture, organizationModels);
         }

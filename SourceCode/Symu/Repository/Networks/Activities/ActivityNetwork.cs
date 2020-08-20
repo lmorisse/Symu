@@ -26,7 +26,7 @@ namespace Symu.Repository.Networks.Activities
     ///     Key => GroupId
     ///     Value => List of AgentActivity : AgentId, activity
     /// </summary>
-    public class NetworkActivities
+    public class ActivityNetwork
     {
         /// <summary>
         ///     List of all GroupIds and their activities

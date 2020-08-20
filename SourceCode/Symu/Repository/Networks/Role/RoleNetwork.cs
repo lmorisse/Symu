@@ -18,16 +18,16 @@ using Symu.Common.Interfaces;
 
 namespace Symu.Repository.Networks.Role
 {
-    public class NetworkRoles
+    public class RoleNetwork
     {
-        public List<NetworkRole> List { get; } = new List<NetworkRole>();
+        public List<RoleEntity> List { get; } = new List<RoleEntity>();
 
         /// <summary>
         ///     Gets or sets the element at the specified index
         /// </summary>
         /// <param name="index">0 based</param>
         /// <returns></returns>
-        public NetworkRole this[int index]
+        public RoleEntity this[int index]
         {
             get => List[index];
             set => List[index] = value;
@@ -123,7 +123,7 @@ namespace Symu.Repository.Networks.Role
         /// <param name="agentId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<NetworkRole> GetRoles(IAgentId agentId, IAgentId groupId)
+        public IEnumerable<RoleEntity> GetRoles(IAgentId agentId, IAgentId groupId)
         {
             lock (List)
             {
@@ -136,7 +136,7 @@ namespace Symu.Repository.Networks.Role
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public IEnumerable<NetworkRole> GetRoles(IAgentId groupId)
+        public IEnumerable<RoleEntity> GetRoles(IAgentId groupId)
         {
             return List.Where(r => r.IsGroup(groupId));
         }
@@ -174,26 +174,26 @@ namespace Symu.Repository.Networks.Role
                 var roles = GetRoles(agentId, groupSourceId).ToList();
                 foreach (var role in roles)
                 {
-                    List.Add(new NetworkRole(agentId, groupTargetId, role.RoleType));
+                    List.Add(new RoleEntity(agentId, groupTargetId, role.RoleType));
                 }
 
                 RemoveMember(agentId, groupSourceId);
             }
         }
 
-        public void Add(NetworkRole role)
+        public void Add(RoleEntity roleEntity)
         {
-            if (Exists(role))
+            if (Exists(roleEntity))
             {
                 return;
             }
 
-            List.Add(role);
+            List.Add(roleEntity);
         }
 
-        public bool Exists(NetworkRole role)
+        public bool Exists(RoleEntity roleEntity)
         {
-            return List.Contains(role);
+            return List.Contains(roleEntity);
         }
 
         public void RemoveMembersByRoleTypeFromGroup(byte roleType, IAgentId groupId)

@@ -31,7 +31,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     {
         private readonly AgentId _id;
         private readonly InternalCharacteristics _internalCharacteristics;
-        private readonly NetworkKnowledges _networkKnowledges;
+        private readonly KnowledgeNetwork _knowledgeNetwork;
         private readonly byte _randomLevel;
         /// <summary>
         ///     Accumulates all learning of the agent during the simulation
@@ -64,7 +64,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             return Expertise.List.Sum(l => l.GetKnowledgePotential());
         }
 
-        public LearningModel(AgentId agentId, OrganizationModels models, NetworkKnowledges networkKnowledges,
+        public LearningModel(AgentId agentId, OrganizationModels models, KnowledgeNetwork knowledgeNetwork,
             CognitiveArchitecture cognitiveArchitecture)
         {
             if (models == null)
@@ -72,9 +72,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(models));
             }
 
-            if (networkKnowledges == null)
+            if (knowledgeNetwork == null)
             {
-                throw new ArgumentNullException(nameof(networkKnowledges));
+                throw new ArgumentNullException(nameof(knowledgeNetwork));
             }
 
             if (cognitiveArchitecture == null)
@@ -86,7 +86,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _id = agentId;
             TasksAndPerformance = cognitiveArchitecture.TasksAndPerformance;
             _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
-            _networkKnowledges = networkKnowledges;
+            _knowledgeNetwork = knowledgeNetwork;
             _randomLevel = models.RandomLevelValue;
             if (!cognitiveArchitecture.InternalCharacteristics.CanLearn || !cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge)
             {
@@ -94,7 +94,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 On = false;
             }
 
-            Expertise = _networkKnowledges.Exists(_id) ? _networkKnowledges.GetAgentExpertise(_id): null;
+            Expertise = _knowledgeNetwork.Exists(_id) ? _knowledgeNetwork.GetAgentExpertise(_id): null;
         }
 
         public TasksAndPerformance TasksAndPerformance { get; set; }
@@ -158,7 +158,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
 
-            _networkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
             var agentKnowledge = Expertise.GetKnowledge(knowledgeId);
             Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
         }
@@ -218,7 +218,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            _networkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
             return AgentKnowledgeLearn(Expertise.GetKnowledge(knowledgeId), knowledgeBit, NextLearning(), step);
         }
 
@@ -284,7 +284,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            _networkKnowledges.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
             return AgentKnowledgeLearn(Expertise.GetKnowledge(knowledgeId), knowledgeBit, NextLearningByDoing(), step);
         }
 

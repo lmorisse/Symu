@@ -32,7 +32,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly AgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
-        private readonly NetworkKnowledges _networkKnowledges;
+        private readonly KnowledgeNetwork _knowledgeNetwork;
 
         /// <summary>
         ///     Initialize Knowledge model :
@@ -62,19 +62,19 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             On = entity.IsAgentOn();
             _agentId = agentId;
-            _networkKnowledges = network.Knowledge;
+            _knowledgeNetwork = network.Knowledge;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
             if (_knowledgeAndBeliefs.HasKnowledge)
             {
-                if (_networkKnowledges.Exists(_agentId))
+                if (_knowledgeNetwork.Exists(_agentId))
                 {
-                    Expertise = _networkKnowledges.GetAgentExpertise(_agentId);
+                    Expertise = _knowledgeNetwork.GetAgentExpertise(_agentId);
                 }
                 else
                 {
                     Expertise = new AgentExpertise();
-                    _networkKnowledges.Add(_agentId, Expertise);
+                    _knowledgeNetwork.Add(_agentId, Expertise);
                 }
             }
             else
@@ -148,8 +148,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _networkKnowledges.AddAgentId(_agentId, Expertise);
-            _networkKnowledges.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
+            _knowledgeNetwork.AddAgentId(_agentId, Expertise);
+            _knowledgeNetwork.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="step"></param>
         public void InitializeKnowledge(ushort knowledgeId, ushort step)
         {
-            _networkKnowledges.InitializeAgentKnowledge(GetKnowledge(knowledgeId),
+            _knowledgeNetwork.InitializeAgentKnowledge(GetKnowledge(knowledgeId),
                 !_knowledgeAndBeliefs.HasInitialKnowledge, step);
         }
 
@@ -174,7 +174,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _networkKnowledges.Add(_agentId, expertise);
+            _knowledgeNetwork.Add(_agentId, expertise);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _networkKnowledges.Add(_agentId, knowledgeId, level, minimumKnowledge, timeToLive);
+            _knowledgeNetwork.Add(_agentId, knowledgeId, level, minimumKnowledge, timeToLive);
         }
 
 

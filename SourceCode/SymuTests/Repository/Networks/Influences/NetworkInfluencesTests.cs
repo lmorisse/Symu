@@ -21,7 +21,7 @@ namespace SymuTests.Repository.Networks.Influences
     public class NetworkInfluencesTests
     {
         private readonly AgentId _agentId = new AgentId();
-        private readonly NetworkInfluences _network = new NetworkInfluences();
+        private readonly InfluenceNetwork _network = new InfluenceNetwork();
 
 
         [TestMethod]
