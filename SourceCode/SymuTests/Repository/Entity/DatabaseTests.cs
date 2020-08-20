@@ -11,17 +11,15 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Messaging.Templates;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuTests.Repository.Networks.Databases
+namespace SymuTests.Repository.Entity
 {
     [TestClass]
     public class DatabaseTests
@@ -40,7 +38,7 @@ namespace SymuTests.Repository.Networks.Databases
             var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
 
             CommunicationTemplate communication = new EmailTemplate();
-            var entity = new DataBaseEntity(agentId, communication);
+            var entity = new DatabaseEntity(agentId, communication);
             _database = new Database(entity, models, network.Knowledge);
             _bits1 = new Bits(_floats1, 0);
         }

@@ -38,10 +38,10 @@ namespace Symu.Classes.Agents
 
         public AgentId(ushort id, byte classId)
         {
-            if (classId == 0)
-            {
-                throw new ArgumentNullException(nameof(classId));
-            }
+            //if (classId == 0)
+            //{
+            //    throw new ArgumentNullException(nameof(classId));
+            //}
 
             Id = id;
             ClassId = new ClassId(classId);

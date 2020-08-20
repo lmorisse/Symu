@@ -22,7 +22,7 @@ using Symu.Environment.Events;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Results;
 
 #endregion
@@ -440,7 +440,7 @@ namespace Symu.Environment
             foreach (var database in Organization.Databases.Select(databaseEntity =>
                 new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork.Knowledge)))
             {
-                WhitePages.MetaNetwork.Databases.AddDatabase(database);
+                WhitePages.MetaNetwork.Resources.Add(database);
             }
         }
 

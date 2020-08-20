@@ -16,12 +16,10 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
-using Symu.Common;
 using Symu.Environment;
-using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Sphere;
 
 #endregion
@@ -76,12 +74,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.MetaNetwork.Databases.GetDatabase(AgentId);
+        protected Database Email => Environment.WhitePages.MetaNetwork.Resources.GetResource<Database>(AgentId, AgentId) ;
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        protected bool HasEmail => Environment.WhitePages.MetaNetwork.Databases.Exists(AgentId, AgentId);
+        public bool HasEmail => Environment.WhitePages.MetaNetwork.Resources.Exists(AgentId, AgentId);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -129,6 +127,12 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(environment));
             }
             CreateAgent(agentId, environment, environment.Organization.Templates.Standard);
+            // Databases are added to CognitiveAgent only, as it is a source of knowledge
+            foreach (var database in environment.Organization.Databases)
+            {
+                // Organization databases are used by every one
+                environment.WhitePages.MetaNetwork.Resources.Add(AgentId, database.AgentId, 0);
+            }
         }
 
         protected void CreateAgent(AgentId agentId, SymuEnvironment environment,

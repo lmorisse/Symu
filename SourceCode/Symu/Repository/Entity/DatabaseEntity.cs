@@ -10,40 +10,43 @@
 #region using directives
 
 using System;
-
+using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 
 #endregion
 
-namespace Symu.Repository.Networks.Databases
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Entity for DataBase class, used to store and search information during the simulation
     /// </summary>
-    public class DataBaseEntity
+    public class DatabaseEntity
     {
-        public DataBaseEntity(IAgentId agentId, CognitiveArchitecture cognitiveArchitecture)
+        public AgentId AgentId { get; }
+        public DatabaseEntity(AgentId agentId)
+        {
+            AgentId = agentId;
+        }
+
+        public DatabaseEntity(AgentId agentId, CognitiveArchitecture cognitiveArchitecture): this(agentId)
         {
             if (cognitiveArchitecture == null)
             {
                 throw new ArgumentNullException(nameof(cognitiveArchitecture));
             }
 
-            AgentId = agentId;
             CognitiveArchitecture = new CognitiveArchitecture();
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
 
-        public DataBaseEntity(IAgentId agentId, CommunicationTemplate medium)
+        public DatabaseEntity(AgentId agentId, CommunicationTemplate medium) : this(agentId)
         {
             if (medium == null)
             {
                 throw new ArgumentNullException(nameof(medium));
             }
 
-            AgentId = agentId;
             CognitiveArchitecture = new CognitiveArchitecture();
             // Communication
             CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend =
@@ -64,11 +67,6 @@ namespace Symu.Repository.Networks.Databases
             CognitiveArchitecture.InternalCharacteristics.CanLearn = true;
             CognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
         }
-
-        /// <summary>
-        ///     Database Id
-        /// </summary>
-        public IAgentId AgentId { get; set; }
 
         /// <summary>
         ///     Time to live : information are stored in the database

@@ -10,18 +10,11 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Agents.Models.CognitiveTemplates;
-using Symu.Classes.Blockers;
-using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Networks.Databases;
 
 #endregion
 
@@ -89,19 +82,10 @@ namespace Symu.Classes.Agents
 
         protected virtual void CreateAgent(AgentId agentId, SymuEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
             AgentId = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment.AddAgent(this);
             State = AgentState.NotStarted;
-            foreach (var database in environment.Organization.Databases)
-            {
-                environment.WhitePages.MetaNetwork.Databases.Add(AgentId, database.AgentId);
-            }
             Created = Schedule.Step;
         }
 

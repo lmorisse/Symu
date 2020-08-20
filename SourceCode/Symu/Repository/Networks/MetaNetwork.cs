@@ -15,13 +15,11 @@ using System.Linq;
 using Symu.Common.Interfaces;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Databases;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Group;
 using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
-using Symu.Repository.Networks.Portfolio;
 using Symu.Repository.Networks.Resources;
 using Symu.Repository.Networks.Role;
 using Symu.Repository.Networks.Sphere;
@@ -94,12 +92,6 @@ namespace Symu.Repository.Networks
         public NetworkInfluences Influences { get; } = new NetworkInfluences();
 
         /// <summary>
-        ///     Communication network
-        /// </summary>
-        // todo should be part of resources
-        public NetworkDatabases Databases { get; } = new NetworkDatabases();
-
-        /// <summary>
         ///     Derived Parameters from others networks.
         ///     these parameters are use indirectly to change agent behavior.
         /// </summary>
@@ -118,7 +110,6 @@ namespace Symu.Repository.Networks
             Activities.Clear();
             Enculturation.Clear();
             Influences.Clear();
-            Databases.Clear();
         }
 
         public void RemoveAgent(IAgentId agentId)
@@ -132,7 +123,6 @@ namespace Symu.Repository.Networks
             Beliefs.RemoveAgent(agentId);
             Enculturation.RemoveAgent(agentId);
             Influences.RemoveAgent(agentId);
-            Databases.RemoveAgent(agentId);
         }
 
         #endregion

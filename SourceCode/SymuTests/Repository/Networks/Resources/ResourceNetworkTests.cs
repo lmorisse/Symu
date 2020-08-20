@@ -12,8 +12,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Common.Interfaces;
-using Symu.Repository.Networks.Portfolio;
 using Symu.Repository.Networks.Resources;
 using SymuTests.Helpers;
 
@@ -166,9 +164,9 @@ namespace SymuTests.Repository.Networks.Resources
         [TestMethod]
         public void GetResourceTest()
         {
-            Assert.IsNull(_resources.GetResource(_groupId, _resource.Id, IsSupportOn));
+            Assert.IsNull(_resources.GetAgentResource(_groupId, _resource.Id, IsSupportOn));
             _resources.Add(_groupId, _resource, IsSupportOn, 100);
-            Assert.IsNotNull(_resources.GetResource(_groupId, _resource.Id, IsSupportOn));
+            Assert.IsNotNull(_resources.GetAgentResource(_groupId, _resource.Id, IsSupportOn));
         }
 
         [TestMethod]
@@ -188,7 +186,7 @@ namespace SymuTests.Repository.Networks.Resources
         [TestMethod]
         public void GetResourceIdsTest()
         {
-            Assert.IsNull(_resources.GetResourceIds(_agentId));
+            Assert.AreEqual(0, _resources.GetResourceIds(_agentId).Count());
             _resources.Add(_agentId, _resource, IsUsing, 100);
             Assert.AreEqual(1, _resources.GetResourceIds(_agentId).Count());
         }
@@ -196,7 +194,7 @@ namespace SymuTests.Repository.Networks.Resources
         [TestMethod]
         public void GetResourceIdsTest1()
         {
-            Assert.IsNull(_resources.GetResourceIds(_agentId, IsUsing));
+            Assert.AreEqual(0, _resources.GetResourceIds(_agentId, IsUsing).Count());
             _resources.Add(_agentId, _resource, IsUsing, 100);
             Assert.AreEqual(1, _resources.GetResourceIds(_agentId, IsUsing).Count());
         }

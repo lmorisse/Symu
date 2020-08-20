@@ -17,7 +17,7 @@ namespace Symu.Repository.Networks.Resources
 {
 
     /// <summary>
-    ///     Define who is using an object and how
+    ///     Define who is using a resource and how
     /// </summary>
     public class IAgentResource
     {

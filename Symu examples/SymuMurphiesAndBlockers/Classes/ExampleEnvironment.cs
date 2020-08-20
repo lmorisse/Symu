@@ -15,8 +15,7 @@ using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Messaging.Templates;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -84,10 +83,8 @@ namespace SymuMurphiesAndBlockers.Classes
                 {
                     GroupId = group.AgentId
                 };
-                CommunicationTemplate communication = new EmailTemplate();
-                var entity = new DataBaseEntity(actor.AgentId, communication);
-                var email = new Database(entity, Organization.Models, WhitePages.MetaNetwork.Knowledge);
-                WhitePages.MetaNetwork.Databases.Add(actor.AgentId, email);
+                var email = Email.CreateInstance(actor.AgentId, Organization.Models, WhitePages.MetaNetwork.Knowledge);
+                WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, 0);
                 WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);
             }
         }

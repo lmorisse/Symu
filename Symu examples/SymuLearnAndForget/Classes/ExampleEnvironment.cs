@@ -14,7 +14,7 @@ using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Environment;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -30,7 +30,7 @@ namespace SymuLearnAndForget.Classes
         public ExpertAgent ExpertAgent { get; private set; }
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
-        public Database Wiki => WhitePages.MetaNetwork.Databases.Repository.List.First();
+        public Database Wiki => (Database)WhitePages.MetaNetwork.Resources.Repository.List.First();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -65,7 +65,7 @@ namespace SymuLearnAndForget.Classes
         {
             base.AddOrganizationDatabase();
 
-            var wikiEntity = new DataBaseEntity(Organization.AgentId, Organization.Communication.Email);
+            var wikiEntity = new DatabaseEntity(Organization.AgentId, Organization.Communication.Email);
             Organization.AddDatabase(wikiEntity);
         }
 

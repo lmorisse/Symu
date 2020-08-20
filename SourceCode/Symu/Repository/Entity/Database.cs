@@ -14,17 +14,19 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Resources;
 
 #endregion
 
-namespace Symu.Repository.Networks.Databases
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Database used to store and search information
     ///     A database is a system where agent store temporary or permanent information
     /// </summary>
-    public class Database
+    public class Database : IResource
     {
         /// <summary>
         ///     the numerical reduction in knowledge if the bit is to be effected by the stochastic forgetting process
@@ -41,7 +43,12 @@ namespace Symu.Repository.Networks.Databases
         private readonly LearningModel _learningModel;
         private readonly ForgettingModel _forgettingModel;
 
-        public Database(DataBaseEntity entity, OrganizationModels organizationModels,
+        /// <summary>
+        ///     Database unique Identifier
+        /// </summary>
+        public IAgentId Id => Entity.AgentId;
+
+        public Database(DatabaseEntity entity, OrganizationModels organizationModels,
             NetworkKnowledges networkKnowledges)
         {
             if (entity == null)
@@ -54,7 +61,7 @@ namespace Symu.Repository.Networks.Databases
                 throw new ArgumentNullException(nameof(organizationModels));
             }
 
-            Entity = new DataBaseEntity(entity.AgentId, entity.CognitiveArchitecture);
+            Entity = new DatabaseEntity(entity.AgentId, entity.CognitiveArchitecture);
             _learningModel = new LearningModel((AgentId)Entity.AgentId, organizationModels, networkKnowledges,
                 entity.CognitiveArchitecture);
             _forgettingModel = new ForgettingModel(_database, entity.CognitiveArchitecture, organizationModels);
@@ -63,7 +70,7 @@ namespace Symu.Repository.Networks.Databases
         /// <summary>
         ///     Define the cognitive architecture model of this class
         /// </summary>
-        public DataBaseEntity Entity { get; }
+        public DatabaseEntity Entity { get; }
 
         public bool Exists(ushort knowledgeId)
         {

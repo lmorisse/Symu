@@ -129,7 +129,16 @@ namespace Symu.Repository.Networks.Resources
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(x => x.Equals(resourceId));
         }
 
-        public void Add(IAgentId agentId, IResource resource, byte typeOfUse, float allocation)
+        /// <summary>
+        /// Add a resource to the resource repository
+        /// Add a resource to an agentId with a typeOfUse and an allocation
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="resource"></param>
+        /// <param name="typeOfUse"></param>
+        /// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
+        //todo Convert typeOfUse in IResourceUsage with a default value = IsUsing (=0)
+        public void Add(IAgentId agentId, IResource resource, byte typeOfUse, float allocation=100)
         {
             if (resource is null)
             {
@@ -141,8 +150,15 @@ namespace Symu.Repository.Networks.Resources
             var agentResource = new IAgentResource(resource.Id, typeOfUse, allocation);
             AddAgentResource(agentId, agentResource);
         }
-
-        public void Add(IAgentId agentId, IAgentId resourceId, byte typeOfUse, float allocation)
+        /// <summary>
+        /// Add a resourceId to an agentId with a typeOfUse and an allocation
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="resourceId"></param>
+        /// <param name="typeOfUse"></param>
+        /// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
+        //todo Convert typeOfUse in IResourceUsage with a default value = IsUsing (=0)
+        public void Add(IAgentId agentId, IAgentId resourceId, byte typeOfUse, float allocation=100)
         {
             if (!Exists(resourceId))
             {
@@ -199,7 +215,7 @@ namespace Symu.Repository.Networks.Resources
             }
 
             foreach (var resource in resourceCollection.Select(resourceId =>
-                GetResource(agentId, resourceId, agentResource.TypeOfUse)))
+                GetAgentResource(agentId, resourceId, agentResource.TypeOfUse)))
             {
                 //Don't use ComponentAllocation[ca] *= 100/ => return 0
                 resource.Allocation = Convert.ToSingle(resource.Allocation * 100 / totalAllocation);
@@ -218,25 +234,59 @@ namespace Symu.Repository.Networks.Resources
         {
             if (HasResource(agentId, resourceId, type))
             {
-                return GetResource(agentId, resourceId, type).Allocation;
+                return GetAgentResource(agentId, resourceId, type).Allocation;
             }
 
             return 0;
         }
         /// <summary>
-        ///     Get the NetworkPortfolio used by an agent with a specific type of use
+        ///     Get the IResource used by an agent via its resourceId
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="resourceId"></param>
+        /// <returns></returns>
+        public IResource GetResource(IAgentId agentId, IAgentId resourceId)
+        {
+            return HasResource(agentId, resourceId) ? Repository.Get(resourceId) : null;
+        }
+        /// <summary>
+        ///     Get the IResource used by an agent via its resourceId
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="resourceId"></param>
+        /// <returns></returns>
+        public TResource GetResource<TResource>(IAgentId agentId, IAgentId resourceId) where TResource : IResource
+        {
+            return HasResource(agentId, resourceId) ? (TResource)Repository.Get(resourceId) : default;
+        }
+        /// <summary>
+        ///     Get the IAgentResource used by an agent with a specific type of use
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="resourceId"></param>
+        /// <returns></returns>
+        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId)
+        {
+            return HasResource(agentId, resourceId) ? AgentResources[agentId].Find(n => n.Equals(resourceId)) : null;
+        }
+        /// <summary>
+        ///     Get the IAgentResource used by an agent with a specific type of use
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public IAgentResource GetResource(IAgentId agentId, IAgentId resourceId, byte type)
+        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId, byte type)
         {
             return HasResource(agentId, resourceId, type) ? AgentResources[agentId].Find(n => n.Equals(resourceId, type)) : null;
         }
         public bool HasResource(IAgentId agentId, IAgentId resourceId, byte type)
         {
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId, type));
+        }
+        public bool HasResource(IAgentId agentId, IAgentId resourceId)
+        {
+            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId));
         }
         public bool HasResource(IAgentId agentId, byte type)
         {

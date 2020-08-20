@@ -15,7 +15,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
 using Symu.Messaging.Templates;
 using Symu.Repository;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -61,7 +61,7 @@ namespace Symu.Classes.Organization
         /// <summary>
         ///     List of all databases accessible to everyone
         /// </summary>
-        public List<DataBaseEntity> Databases { get; } = new List<DataBaseEntity>();
+        public List<DatabaseEntity> Databases { get; } = new List<DatabaseEntity>();
 
         /// <summary>
         ///     List of all knowledges
@@ -82,7 +82,7 @@ namespace Symu.Classes.Organization
         ///     Add a database accessible to everyone
         /// </summary>
         /// <param name="database"></param>
-        public void AddDatabase(DataBaseEntity database)
+        public void AddDatabase(DatabaseEntity database)
         {
             if (!Databases.Contains(database))
             {

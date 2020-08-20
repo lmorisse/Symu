@@ -29,7 +29,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void IsTypeTest()
         {
-            var portfolio = new Portfolio(_agentId, IsSupportOn, 100);
+            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
             Assert.IsTrue(portfolio.IsTypeOfUse(IsSupportOn));
             Assert.IsFalse(portfolio.IsTypeOfUse(IsUsing));
         }
@@ -37,7 +37,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void IsTypeAndClassIdTest()
         {
-            var portfolio = new Portfolio(_agentId, IsSupportOn, 100);
+            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
             Assert.IsTrue(portfolio.IsTypeOfUseAndClassId(IsSupportOn, _agentId.ClassId));
             Assert.IsFalse(portfolio.IsTypeOfUseAndClassId(IsSupportOn, _classId2));
             Assert.IsFalse(portfolio.IsTypeOfUseAndClassId(IsUsing, _agentId.ClassId));
@@ -46,7 +46,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void EqualsTest()
         {
-            var portfolio = new Portfolio(_agentId, IsSupportOn, 100);
+            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
             Assert.IsTrue(portfolio.Equals(_agentId, IsSupportOn));
             Assert.IsFalse(portfolio.Equals(_agentId, IsWorkingOn));
             var agentId2 = new AgentId(2, 1);

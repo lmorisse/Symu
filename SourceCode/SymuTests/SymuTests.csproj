@@ -31,4 +31,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\Networks\Databases\" />
+  </ItemGroup>
+
 </Project>

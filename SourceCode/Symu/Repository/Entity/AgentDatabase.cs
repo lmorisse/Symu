@@ -17,11 +17,11 @@ using Symu.Repository.Networks.Resources;
 namespace Symu.Repository.Entity
 {
     /// <summary>
-    ///     Define who is using an object and how
+    ///     Define who is using a database and how
     /// </summary>
-    public class Portfolio : IAgentResource
+    public class AgentDatabase : IAgentResource
     {
-        public Portfolio(IAgentId agentId, byte typeOfUse, float allocation): base(agentId, typeOfUse, allocation)
+        public AgentDatabase(IAgentId agentId, byte typeOfUse, float allocation): base(agentId, typeOfUse, allocation)
         {
         }
     }

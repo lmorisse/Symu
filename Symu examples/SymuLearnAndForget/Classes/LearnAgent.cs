@@ -17,7 +17,7 @@ using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Repository.Networks.Databases;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -31,7 +31,7 @@ namespace SymuLearnAndForget.Classes
         public LearnAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(agentKey, Class), environment, template)
         {
-            Wiki = Environment.WhitePages.MetaNetwork.Databases.Repository.List.First();
+            Wiki = (Database)Environment.WhitePages.MetaNetwork.Resources.Repository.List.First();
             Knowledge = GetKnowledge();
         }
 
