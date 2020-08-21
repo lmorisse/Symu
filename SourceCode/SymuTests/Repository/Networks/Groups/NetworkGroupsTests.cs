@@ -13,11 +13,11 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Repository.Networks.Group;
+using Symu.Repository.Networks.Groups;
 
 #endregion
 
-namespace SymuTests.Repository.Networks.Group
+namespace SymuTests.Repository.Networks.Groups
 {
     [TestClass]
     public class NetworkGroupsTests
@@ -62,7 +62,7 @@ namespace SymuTests.Repository.Networks.Group
             Assert.IsFalse(_group.Any());
             _group.AddAgent(_teammateId, 100, _teamId);
             Assert.IsTrue(_group.Any());
-            Assert.IsTrue(_group.List[_teamId][0].AgentId.Equals(_teammateId));
+            Assert.IsTrue(_group.AgentGroups[_teamId][0].AgentId.Equals(_teammateId));
         }
 
         [TestMethod]
@@ -178,9 +178,9 @@ namespace SymuTests.Repository.Networks.Group
         [TestMethod]
         public void GetGroupAllocationsTest()
         {
-            Assert.AreEqual(0, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
+            Assert.AreEqual(0, _group.GetAgentGroupsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
             _group.AddAgent(_teammateId, 100, _teamId);
-            Assert.AreEqual(1, _group.GetGroupAllocationsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
+            Assert.AreEqual(1, _group.GetAgentGroupsOfAnAgentId(_teammateId, _teamId.ClassId).Count());
         }
 
         [TestMethod]

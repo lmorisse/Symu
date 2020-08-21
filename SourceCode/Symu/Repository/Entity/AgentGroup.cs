@@ -10,14 +10,15 @@
 #region using directives
 
 using Symu.Common.Interfaces;
+using Symu.Repository.Networks.Groups;
 
 #endregion
 
-namespace Symu.Repository.Networks.Group
+namespace Symu.Repository.Entity
 {
-    public class GroupAllocation
+    public class AgentGroup : IAgentGroup
     {
-        public GroupAllocation(IAgentId agentId, float allocation)
+        public AgentGroup(IAgentId agentId, float allocation)
         {
             AgentId = agentId;
             Allocation = allocation;

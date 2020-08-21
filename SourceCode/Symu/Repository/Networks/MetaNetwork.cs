@@ -16,7 +16,7 @@ using Symu.Common.Interfaces;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
-using Symu.Repository.Networks.Group;
+using Symu.Repository.Networks.Groups;
 using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
