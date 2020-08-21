@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -27,12 +28,12 @@ namespace Symu.Repository.Networks.Resources
     public class ResourceNetwork
     {
         /// <summary>
-        ///     Repository of all the Databases used during the simulation
+        ///     Repository of all the resources used during the simulation
         /// </summary>
         public ResourceCollection Repository { get; } = new ResourceCollection();
 
         /// <summary>
-        ///     AgentResources.Key = AgentId
+        ///     AgentResources.Key = IAgentId
         ///     AgentResources.Value = List of all the resourceId the agentId is using
         /// </summary>
         public ConcurrentDictionary<IAgentId, List<IAgentResource>> AgentResources { get; } =
@@ -131,14 +132,13 @@ namespace Symu.Repository.Networks.Resources
 
         /// <summary>
         /// Add a resource to the resource repository
-        /// Add a resource to an agentId with a typeOfUse and an allocation
+        /// Add an agentResource to an agentId 
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="resource"></param>
-        /// <param name="typeOfUse"></param>
-        /// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
-        //todo Convert typeOfUse in IResourceUsage with a default value = IsUsing (=0)
-        public void Add(IAgentId agentId, IResource resource, byte typeOfUse, float allocation=100)
+        /// <param name="agentResource"></param>
+        public void Add(IAgentId agentId, IResource resource, IAgentResource agentResource)
+        //public void Add(IAgentId agentId, IResource resource, IResourceUsage resourceUsage, float allocation = 100)
         {
             if (resource is null)
             {
@@ -147,28 +147,27 @@ namespace Symu.Repository.Networks.Resources
 
             Add(resource);
             AddAgentId(agentId);
-            var agentResource = new IAgentResource(resource.Id, typeOfUse, allocation);
+            //var agentResource = new IAgentResource(resource.Id, resourceUsage, allocation);
             AddAgentResource(agentId, agentResource);
         }
-        /// <summary>
-        /// Add a resourceId to an agentId with a typeOfUse and an allocation
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="resourceId"></param>
-        /// <param name="typeOfUse"></param>
-        /// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
-        //todo Convert typeOfUse in IResourceUsage with a default value = IsUsing (=0)
-        public void Add(IAgentId agentId, IAgentId resourceId, byte typeOfUse, float allocation=100)
-        {
-            if (!Exists(resourceId))
-            {
-                throw new ArgumentNullException(nameof(resourceId));
-            }
+        ///// <summary>
+        ///// Add a resourceId to an agentId with a typeOfUse and an allocation
+        ///// </summary>
+        ///// <param name="agentId"></param>
+        ///// <param name="resourceId"></param>
+        ///// <param name="resourceUsage"></param>
+        ///// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
+        //public void Add(IAgentId agentId, IAgentResource agentresource)//IAgentId resourceId, IResourceUsage resourceUsage, float allocation=100)
+        //{
+        //    if (!Exists(resourceId))
+        //    {
+        //        throw new ArgumentNullException(nameof(resourceId));
+        //    }
 
-            AddAgentId(agentId);
-            var agentResource = new IAgentResource(resourceId, typeOfUse, allocation);
-            AddAgentResource(agentId, agentResource);
-        }
+        //    AddAgentId(agentId);
+        //    var agentResource = new AgentResource(resourceId, resourceUsage, allocation);
+        //    AddAgentResource(agentId, agentResource);
+        //}
 
         public void Add(IAgentId agentId, IAgentResource agentResource)
         {
@@ -197,15 +196,15 @@ namespace Symu.Repository.Networks.Resources
 
             AgentResources[agentId].Add(agentResource);
             // Reallocation
-            var resourceIds = GetResourceIds(agentId, agentResource.TypeOfUse);
-            if (resourceIds is null)
-            {
-                return;
-            }
+            //var resourceIds = GetResourceIds(agentId, agentResource.ResourceUsage);
+            //if (resourceIds is null)
+            //{
+            //    return;
+            //}
 
-            var resourceCollection = resourceIds.ToList();
+            //var resourceCollection = resourceIds.ToList();
             var totalAllocation =
-                resourceCollection.Sum(resourceId => GetAllocation(agentId, resourceId, agentResource.TypeOfUse));
+                AgentResources[agentId].Sum(x => x.ResourceAllocation);
 
             // There is non main object used at 100%
             // Objects are added as things progress, with the good allocation
@@ -214,11 +213,10 @@ namespace Symu.Repository.Networks.Resources
                 return;
             }
 
-            foreach (var resource in resourceCollection.Select(resourceId =>
-                GetAgentResource(agentId, resourceId, agentResource.TypeOfUse)))
+            foreach (var resource in AgentResources[agentId])
             {
                 //Don't use ComponentAllocation[ca] *= 100/ => return 0
-                resource.Allocation = Convert.ToSingle(resource.Allocation * 100 / totalAllocation);
+                resource.ResourceAllocation = Convert.ToSingle(resource.ResourceAllocation * 100 / totalAllocation);
             }
         }
 
@@ -230,11 +228,21 @@ namespace Symu.Repository.Networks.Resources
             }
         }
 
-        public float GetAllocation(IAgentId agentId, IAgentId resourceId, byte type)
+        public float GetAllocation(IAgentId agentId, IAgentId resourceId)
         {
-            if (HasResource(agentId, resourceId, type))
+            if (HasResource(agentId, resourceId))
             {
-                return GetAgentResource(agentId, resourceId, type).Allocation;
+                return GetAgentResource(agentId, resourceId).Sum(x => x.ResourceAllocation);
+            }
+
+            return 0;
+        }
+
+        public float GetAllocation(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
+        {
+            if (HasResource(agentId, resourceId, resourceUsage))
+            {
+                return GetAgentResource(agentId, resourceId, resourceUsage).ResourceAllocation;
             }
 
             return 0;
@@ -265,32 +273,32 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId)
+        public List<IAgentResource> GetAgentResource(IAgentId agentId, IAgentId resourceId)
         {
-            return HasResource(agentId, resourceId) ? AgentResources[agentId].Find(n => n.Equals(resourceId)) : null;
+            return HasResource(agentId, resourceId) ? AgentResources[agentId].FindAll(n => n.Equals(resourceId)) : null;
         }
         /// <summary>
         ///     Get the IAgentResource used by an agent with a specific type of use
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
-        /// <param name="type"></param>
+        /// <param name="resourceUsage"></param>
         /// <returns></returns>
-        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId, byte type)
+        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
         {
-            return HasResource(agentId, resourceId, type) ? AgentResources[agentId].Find(n => n.Equals(resourceId, type)) : null;
+            return HasResource(agentId, resourceId, resourceUsage) ? AgentResources[agentId].Find(n => n.Equals(resourceId, resourceUsage)) : null;
         }
-        public bool HasResource(IAgentId agentId, IAgentId resourceId, byte type)
+        public bool HasResource(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
         {
-            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId, type));
+            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId, resourceUsage));
         }
         public bool HasResource(IAgentId agentId, IAgentId resourceId)
         {
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId));
         }
-        public bool HasResource(IAgentId agentId, byte type)
+        public bool HasResource(IAgentId agentId, IResourceUsage resourceUsage)
         {
-            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.IsTypeOfUse(type));
+            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.IsResourceUsage(resourceUsage));
         }
 
         /// <summary>
@@ -307,38 +315,38 @@ namespace Symu.Repository.Networks.Resources
         ///     Get the list of all the resources the agentId is using filtered by type of use
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="type"></param>
+        /// <param name="resourceUsage"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, byte type)
+        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, IResourceUsage resourceUsage)
         {
-            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsTypeOfUse(type)).Select(x => x.ResourceId) : new List<IAgentId>();
+            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsResourceUsage(resourceUsage)).Select(x => x.ResourceId) : new List<IAgentId>();
         }
 
         /// <summary>
         ///     Get the list of all the resources the agentId is using filtered by type of use
         /// </summary>
         /// <param name="agentId"></param>
-        /// <param name="type"></param>
+        /// <param name="resourceUsage"></param>
         /// <param name="classId"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, byte type, IClassId classId)
+        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, IResourceUsage resourceUsage, IClassId classId)
         {
-            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsTypeOfUseAndClassId(type, classId)).Select(x => x.ResourceId) : new List<IAgentId>();
+            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsResourceUsageAndClassId(resourceUsage, classId)).Select(x => x.ResourceId) : new List<IAgentId>();
         }
 
         /// <summary>
         ///     Get all the agents of classId using resourceId
         /// </summary>
         /// <param name="resourceId"></param>
-        /// <param name="typeOfUse"></param>
+        /// <param name="resourceUsage"></param>
         /// <param name="agentClassId"></param>
         /// <returns></returns>
-        public List<IAgentId> GetAgentIds(IAgentId resourceId, byte typeOfUse, IClassId agentClassId)
+        public List<IAgentId> GetAgentIds(IAgentId resourceId, IResourceUsage resourceUsage, IClassId agentClassId)
         {
             return (from agentId 
                 in AgentResources.Keys.Where(x => x.ClassId.Equals(agentClassId)) 
                 let agentResource = AgentResources[agentId] 
-                where agentResource.Exists(x => x.Equals(resourceId, typeOfUse))
+                where agentResource.Exists(x => x.Equals(resourceId, resourceUsage))
                 select agentId).ToList();
         }
 
@@ -357,7 +365,7 @@ namespace Symu.Repository.Networks.Resources
             AddAgentId(agentId);
             foreach (var groupResourceId in AgentResources[groupId])
             {
-                Add(agentId, groupResourceId.ResourceId, groupResourceId.TypeOfUse, groupResourceId.Allocation);
+                Add(agentId, groupResourceId.Clone());//.ResourceId, groupResourceId.ResourceUsage, groupResourceId.ResourceAllocation);
             }
         }
 
@@ -374,7 +382,7 @@ namespace Symu.Repository.Networks.Resources
 
             foreach (var groupResourceId in AgentResources[groupId])
             {
-                AgentResources[agentId].RemoveAll(n => n.Equals(groupResourceId.ResourceId, groupResourceId.TypeOfUse));
+                AgentResources[agentId].RemoveAll(n => n.Equals(groupResourceId.ResourceId) && n.IsResourceUsage(groupResourceId.ResourceUsage));
             }
         }
 
@@ -401,7 +409,7 @@ namespace Symu.Repository.Networks.Resources
             AgentResources[toAgentId].Clear();
             foreach (var agentResource in AgentResources[fromAgentId])
             {
-                Add(toAgentId, agentResource.ResourceId, agentResource.TypeOfUse, agentResource.Allocation);
+                Add(toAgentId, agentResource.Clone());
             }
         }
 

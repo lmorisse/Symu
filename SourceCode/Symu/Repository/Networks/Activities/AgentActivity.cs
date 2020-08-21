@@ -17,13 +17,13 @@ namespace Symu.Repository.Networks.Activities
 {
     public class AgentActivity
     {
-        public AgentActivity(IAgentId agentId, string activity)
+        public AgentActivity(IAgentId id, string activity)
         {
-            AgentId = agentId;
+            Id = id;
             Activity = activity;
         }
 
-        public IAgentId AgentId { get; }
+        public IAgentId Id { get; }
         public string Activity { get; set; }
     }
 }

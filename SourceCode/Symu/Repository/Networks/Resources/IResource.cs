@@ -15,9 +15,14 @@ using Symu.Common.Interfaces;
 
 namespace Symu.Repository.Networks.Resources
 {
-
+    /// <summary>
+    /// The interface that let you define a resource
+    /// </summary>
     public interface IResource 
     {
+        /// <summary>
+        /// Unique identifier of the resource
+        /// </summary>
         IAgentId Id { get; }
     }
 }

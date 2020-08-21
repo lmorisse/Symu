@@ -17,6 +17,7 @@ using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
+using Symu.Repository.Networks.Resources;
 
 #endregion
 
@@ -84,7 +85,8 @@ namespace SymuMurphiesAndBlockers.Classes
                     GroupId = group.AgentId
                 };
                 var email = Email.CreateInstance(actor.AgentId, Organization.Models, WhitePages.MetaNetwork.Knowledge);
-                WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, 0);
+                var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
+                WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
                 WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);
             }
         }

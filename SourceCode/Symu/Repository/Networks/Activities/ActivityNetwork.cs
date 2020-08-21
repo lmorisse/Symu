@@ -241,7 +241,7 @@ namespace Symu.Repository.Networks.Activities
         {
             if (Exists(groupId))
             {
-                AgentActivities[groupId].RemoveAll(g => g.AgentId.Equals(agentId));
+                AgentActivities[groupId].RemoveAll(g => g.Id.Equals(agentId));
             }
         }
 
@@ -266,12 +266,12 @@ namespace Symu.Repository.Networks.Activities
         public bool AgentHasAnActivityOn(IAgentId agentId, IAgentId groupId, string activity)
         {
             return Exists(groupId) && AgentActivities[groupId]
-                .Exists(g => g.AgentId.Equals(agentId) && g.Activity == activity);
+                .Exists(g => g.Id.Equals(agentId) && g.Activity == activity);
         }
 
         public bool AgentHasActivitiesOn(IAgentId agentId, IAgentId groupId)
         {
-            return Exists(groupId) && AgentActivities[groupId].Exists(g => g.AgentId.Equals(agentId));
+            return Exists(groupId) && AgentActivities[groupId].Exists(g => g.Id.Equals(agentId));
         }
 
 
@@ -284,7 +284,7 @@ namespace Symu.Repository.Networks.Activities
         public IEnumerable<string> GetAgentActivities(IAgentId agentId, IAgentId groupId)
         {
             return Exists(groupId)
-                ? AgentActivities[groupId].FindAll(g => g.AgentId.Equals(agentId)).Select(x => x.Activity)
+                ? AgentActivities[groupId].FindAll(g => g.Id.Equals(agentId)).Select(x => x.Activity)
                 : new List<string>();
         }
 
@@ -298,7 +298,7 @@ namespace Symu.Repository.Networks.Activities
             var activities = new List<string>();
             foreach (var agentActivities in AgentActivities)
             {
-                activities.AddRange(agentActivities.Value.Where(x => x.AgentId.Equals(agentId))
+                activities.AddRange(agentActivities.Value.Where(x => x.Id.Equals(agentId))
                     .Select(agentActivity => agentActivity.Activity));
             }
 
@@ -366,7 +366,7 @@ namespace Symu.Repository.Networks.Activities
         /// <returns></returns>
         public bool HasAgentActivities(IAgentId agentId)
         {
-            return AgentActivities.Any(a => a.Value.Exists(v => v != null && v.AgentId.Equals(agentId)));
+            return AgentActivities.Any(a => a.Value.Exists(v => v != null && v.Id.Equals(agentId)));
         }
 
         #endregion

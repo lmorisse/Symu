@@ -52,20 +52,20 @@ namespace Symu.Repository.Networks.Link
         ///     Reinitialize links between members of a group :
         ///     Add a bi directional link between every member of a group
         /// </summary>
-        public void AddLinks(List<IAgentId> members)
+        public void AddLinks(List<IAgentId> agentIds)
         {
-            if (members == null)
+            if (agentIds == null)
             {
-                throw new ArgumentNullException(nameof(members));
+                throw new ArgumentNullException(nameof(agentIds));
             }
 
-            var count = members.Count;
+            var count = agentIds.Count;
             for (var i = 0; i < count; i++)
             {
-                var agentId1 = members[i];
+                var agentId1 = agentIds[i];
                 for (var j = i + 1; j < count; j++)
                 {
-                    var agentId2 = members[j];
+                    var agentId2 = agentIds[j];
                     AddLink(agentId1, agentId2);
                 }
             }
@@ -84,6 +84,11 @@ namespace Symu.Repository.Networks.Link
         /// <param name="agentId2"></param>
         public void AddLink(IAgentId agentId1, IAgentId agentId2)
         {
+            if (agentId1 == null)
+            {
+                throw new ArgumentNullException(nameof(agentId1));
+            }
+
             if (agentId1.Equals(agentId2))
             {
                 return;

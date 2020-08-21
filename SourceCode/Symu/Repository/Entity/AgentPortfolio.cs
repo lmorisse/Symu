@@ -19,9 +19,9 @@ namespace Symu.Repository.Entity
     /// <summary>
     ///     Define who is using a component or a product and how
     /// </summary>
-    public class AgentPortfolio : IAgentResource
+    public class AgentPortfolio : AgentResource
     {
-        public AgentPortfolio(IAgentId agentId, byte typeOfUse, float allocation): base(agentId, typeOfUse, allocation)
+        public AgentPortfolio(IAgentId agentId, ResourceUsage resourceUsage, float resourceAllocation): base(agentId, resourceUsage, resourceAllocation)
         {
         }
     }

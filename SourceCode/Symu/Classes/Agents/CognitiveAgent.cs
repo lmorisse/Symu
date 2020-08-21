@@ -20,6 +20,7 @@ using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Entity;
+using Symu.Repository.Networks.Resources;
 using Symu.Repository.Networks.Sphere;
 
 #endregion
@@ -131,7 +132,8 @@ namespace Symu.Classes.Agents
             foreach (var database in environment.Organization.Databases)
             {
                 // Organization databases are used by every one
-                environment.WhitePages.MetaNetwork.Resources.Add(AgentId, database.AgentId, 0);
+                var agentResource = new AgentResource(database.AgentId, new ResourceUsage(0), 100);
+                environment.WhitePages.MetaNetwork.Resources.Add(AgentId, agentResource);
             }
         }
 

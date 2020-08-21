@@ -19,9 +19,9 @@ namespace Symu.Repository.Entity
     /// <summary>
     ///     Define who is using a database and how
     /// </summary>
-    public class AgentDatabase : IAgentResource
+    public class AgentDatabase : AgentResource
     {
-        public AgentDatabase(IAgentId agentId, byte typeOfUse, float allocation): base(agentId, typeOfUse, allocation)
+        public AgentDatabase(IAgentId agentId, ResourceUsage resourceUsage, float resourceAllocation): base(agentId, resourceUsage, resourceAllocation)
         {
         }
     }
