@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 using Symu.Repository;
 using Symu.Repository.Entity;
@@ -30,7 +31,7 @@ namespace Symu.Classes.Organization
     {
         public const byte Class = SymuYellowPages.Organization;
 
-        public OrganizationEntity(string name) : base(0, Class, name)
+        public OrganizationEntity(string name) : base(new UId(0), Class, name)
         {
         }
 
@@ -73,9 +74,9 @@ namespace Symu.Classes.Organization
         /// </summary>
         public MurphyCollection Murphies { get; } = new MurphyCollection();
 
-        public ushort NextEntityIndex()
+        public UId NextEntityId()
         {
-            return EntityIndex++;
+            return new UId(EntityIndex++);
         }
 
         /// <summary>

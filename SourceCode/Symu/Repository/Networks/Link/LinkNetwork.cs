@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 
 #endregion
 

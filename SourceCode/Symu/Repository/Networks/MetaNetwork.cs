@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
@@ -21,7 +22,7 @@ using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Resources;
-using Symu.Repository.Networks.Role;
+using Symu.Repository.Networks.Roles;
 using Symu.Repository.Networks.Sphere;
 
 #endregion

@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -28,8 +29,8 @@ namespace SymuMessageAndTask.Classes
     {
         public const byte Class = 2;
 
-        public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, Class), environment, template)
+        public PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(id, Class), environment, template)
         {
         }
 

@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository;
 
@@ -24,12 +25,12 @@ namespace SymuTests.Helpers
     {
         public static byte ClassId = SymuYellowPages.Actor;
 
-        public TestCognitiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassId), environment,
+        public TestCognitiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment,
             environment.Organization.Templates.Human)
         {
         }
 
-        public TestCognitiveAgent(ushort key, byte classKey, SymuEnvironment environment) : base(new AgentId(key, classKey),
+        public TestCognitiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
             environment, environment.Organization.Templates.Human)
         {
         }

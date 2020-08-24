@@ -11,6 +11,7 @@
 
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task.Manager;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
 
@@ -20,8 +21,8 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnFromSourceAgent : LearnAgent
     {
-        public LearnFromSourceAgent(ushort agentKey, SymuEnvironment environment,
-            CognitiveArchitectureTemplate template) : base(agentKey, environment, template)
+        public LearnFromSourceAgent(UId id, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(id, environment, template)
         {
         }
 

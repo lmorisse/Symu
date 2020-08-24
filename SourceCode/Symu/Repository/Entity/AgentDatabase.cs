@@ -10,6 +10,8 @@
 #region using directives
 
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Resources;
 
 #endregion
@@ -21,7 +23,7 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class AgentDatabase : AgentResource
     {
-        public AgentDatabase(IAgentId agentId, ResourceUsage resourceUsage, float resourceAllocation): base(agentId, resourceUsage, resourceAllocation)
+        public AgentDatabase(IId resourceId, IResourceUsage resourceUsage, float resourceAllocation): base(resourceId, resourceUsage, resourceAllocation)
         {
         }
     }

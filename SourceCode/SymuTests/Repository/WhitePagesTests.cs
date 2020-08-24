@@ -29,6 +29,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Engine;
 using SymuTests.Helpers;
 
@@ -56,7 +57,7 @@ namespace SymuTests.Repository
             _environment.SetOrganization(_organizationEntity);
             _environment.InitializeIteration();
             _symu.SetEnvironment(_environment);
-            _agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
+            _agent = new TestReactiveAgent(_environment.Organization.NextEntityId(), _environment);
         }
 
         [TestMethod]
@@ -103,7 +104,7 @@ namespace SymuTests.Repository
         [TestMethod]
         public void TestAgentTest1()
         {
-            Assert.ThrowsException<ArgumentException>(() => new TestReactiveAgent(1, _environment));
+            Assert.ThrowsException<ArgumentException>(() => new TestReactiveAgent(_agent.AgentId.Id, _environment));
         }
 
         [TestMethod]
@@ -165,7 +166,7 @@ namespace SymuTests.Repository
         {
             for (byte i = 10; i < 20; i++)
             {
-                _ = new TestReactiveAgent(i, _environment);
+                _ = new TestReactiveAgent(new UId(i), _environment);
             }
 
             _environment.Start();
@@ -182,13 +183,13 @@ namespace SymuTests.Repository
             _environment.WhitePages.Clear();
             for (byte i = 0; i < 10; i++)
             {
-                _ = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
+                _ = new TestReactiveAgent(_environment.Organization.NextEntityId(), _environment);
             }
 
             var excludeIds = new List<AgentId>();
             for (byte i = 10; i < 20; i++)
             {
-                var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
+                var agent = new TestReactiveAgent(_environment.Organization.NextEntityId(), _environment);
                 excludeIds.Add(agent.AgentId);
             }
 
@@ -202,13 +203,13 @@ namespace SymuTests.Repository
             _environment.WhitePages.Clear();
             for (byte i = 0; i < 10; i++)
             {
-                _ = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
+                _ = new TestReactiveAgent(_environment.Organization.NextEntityId(), _environment);
             }
 
             var excludeIds = new List<AgentId>();
             for (byte i = 10; i < 20; i++)
             {
-                var agent = new TestReactiveAgent(_environment.Organization.NextEntityIndex(), _environment);
+                var agent = new TestReactiveAgent(_environment.Organization.NextEntityId(), _environment);
                 excludeIds.Add(agent.AgentId);
             }
 

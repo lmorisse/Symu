@@ -17,6 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks.Sphere;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
@@ -74,7 +75,7 @@ namespace SymuTests.Results.Organization
             var agents = new List<IAgentId>();
             for (var i = 0; i < count; i++)
             {
-                var agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
+                var agent = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
                 agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
                 agent.State = AgentState.Started;
                 agents.Add(agent.AgentId);

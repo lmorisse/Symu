@@ -47,7 +47,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Models.On(1);
             _environment.IterationResult.On();
 
-            _agent = new TestReactiveAgent(_organizationEntity.NextEntityIndex(), _environment);
+            _agent = new TestReactiveAgent(_organizationEntity.NextEntityId(), _environment);
             
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
             _agent.Start();
@@ -62,7 +62,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
-            Assert.AreEqual(1, _agent.AgentId.Id);
+            Assert.AreEqual(1, _agent.AgentId.Id.Id);
             Assert.IsNotNull(_agent.Environment);
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
@@ -96,6 +96,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
+                Receiver = _agent.AgentId,
                 Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Irc
             };
@@ -137,6 +138,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Offline;
             var message = new Message
             {
+                Receiver = _agent.AgentId,
                 Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Phone
             };
@@ -159,6 +161,7 @@ namespace SymuTests.Classes.Agents
             _agent.Status = AgentStatus.Available;
             var message = new Message
             {
+                Receiver = _agent.AgentId,
                 Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Phone
             };
@@ -175,7 +178,11 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void PostDelayedMessagesTest()
         {
-            var message = new Message();
+            var message = new Message
+            {
+                Receiver = _agent.AgentId,
+                Sender = _agent.AgentId
+            };
             // Post as a delayed message
             _agent.PostAsADelayedMessage(message, 0);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
@@ -231,6 +238,7 @@ namespace SymuTests.Classes.Agents
             _agent.State = AgentState.Started;
             var message = new Message
             {
+                Receiver = _agent.AgentId,
                 Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
@@ -248,6 +256,7 @@ namespace SymuTests.Classes.Agents
             _agent.State = AgentState.Stopping;
             var message = new Message
             {
+                Receiver = _agent.AgentId,
                 Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };

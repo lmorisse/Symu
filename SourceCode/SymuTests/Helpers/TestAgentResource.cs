@@ -12,6 +12,8 @@
 using System;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Entity;
@@ -26,7 +28,7 @@ namespace SymuTests.Helpers
     /// </summary>
     public class TestAgentResource : IAgentResource
     {
-        public TestAgentResource(IAgentId resourceId, ResourceUsage resourceUsage, float resourceAllocation)
+        public TestAgentResource(IId resourceId, IResourceUsage resourceUsage, float resourceAllocation)
         {
             ResourceId = resourceId;
             ResourceUsage = resourceUsage;
@@ -36,7 +38,7 @@ namespace SymuTests.Helpers
         /// <summary>
         ///     The unique agentId of the resource
         /// </summary>
-        public IAgentId ResourceId { get; }
+        public IId ResourceId { get; }
 
         /// <summary>
         ///     Define how the AgentId is using the resource
@@ -69,22 +71,17 @@ namespace SymuTests.Helpers
             return new AgentResource(ResourceId, (ResourceUsage)ResourceUsage, ResourceAllocation);
         }
 
-        public bool IsResourceUsage(IResourceUsage resourceUsage)
+        public bool Equals(IResourceUsage resourceUsage)
         {
-            return ResourceUsage.IsResourceUsage((ResourceUsage)resourceUsage);
+            return ResourceUsage.Equals(resourceUsage);
         }
 
-        public bool IsResourceUsageAndClassId(IResourceUsage resourceUsage, IClassId classId)
+        public bool Equals(IId resourceId, IResourceUsage resourceUsage)
         {
-            return IsResourceUsage(resourceUsage) && ResourceId.Equals(classId);
+            return Equals(resourceUsage) && ResourceId.Equals(resourceId);
         }
 
-        public bool Equals(IAgentId resourceId, IResourceUsage resourceUsage)
-        {
-            return IsResourceUsage(resourceUsage) && ResourceId.Equals(resourceId);
-        }
-
-        public bool Equals(IAgentId resourceId)
+        public bool Equals(IId resourceId)
         {
             return ResourceId.Equals(resourceId);
         }
@@ -93,7 +90,7 @@ namespace SymuTests.Helpers
         {
             return obj is AgentResource agentResource &&
                    ResourceId.Equals(agentResource.ResourceId) &&
-                   ResourceUsage == agentResource.ResourceUsage;
+                   ResourceUsage.Equals(agentResource.ResourceUsage);
         }
     }
 }

@@ -16,6 +16,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using static Symu.Common.Constants;
@@ -56,7 +57,7 @@ namespace Symu.Classes.Task
         /// <summary>
         ///     the Key of the ParentId (group, process, ...) in which the task must be performed
         /// </summary>
-        public ushort KeyActivity { get; set; }
+        public UId KeyActivity { get; set; }
 
         /// <summary>
         ///     Type of the task use to have specific behaviour

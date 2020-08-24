@@ -12,11 +12,11 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Repository.Networks.Role;
+using Symu.Repository.Networks.Roles;
 
 #endregion
 
-namespace SymuTests.Repository.Networks.Role
+namespace SymuTests.Repository.Networks.Roles
 {
     [TestClass]
     public class RoleNetworkTests

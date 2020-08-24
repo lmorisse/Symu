@@ -21,7 +21,7 @@ using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Resources;
-using Symu.Repository.Networks.Role;
+using Symu.Repository.Networks.Roles;
 using SymuTests.Helpers;
 
 #endregion
@@ -34,7 +34,7 @@ namespace SymuTests.Repository.Networks
         private const byte IsWorkingOn = 1;
         private const byte IsSupportOn = 2;
         private readonly Activity _activity = new Activity("a");
-        private readonly TestResource _component = new TestResource(6, 4);
+        private readonly TestResource _component = new TestResource(6);
 
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);

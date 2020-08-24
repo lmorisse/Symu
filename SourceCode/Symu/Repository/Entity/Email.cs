@@ -11,6 +11,7 @@
 
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Knowledges;
 
@@ -24,10 +25,10 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Email : Database
     {
-        public static Email CreateInstance(AgentId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Email CreateInstance(UId id, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new EmailTemplate();
-            var entity = new DatabaseEntity(agentId, communication);
+            var entity = new DatabaseEntity(id, communication);
             return new Email(entity, organizationModels, knowledgeNetwork);
         }
 

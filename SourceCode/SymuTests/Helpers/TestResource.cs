@@ -12,9 +12,12 @@
 using System;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Networks.Resources;
+using Symu.Repository.Networks.Roles;
 
 #endregion
 
@@ -26,18 +29,18 @@ namespace SymuTests.Helpers
     internal sealed class TestResource : IResource
     {
 
-        private readonly TestAgentId _id;
-        public TestResource(IAgentId id)
+        private readonly UId _id;
+        public TestResource(UId id)
         {
-            _id = (TestAgentId)id;
+            _id = (UId)id;
         }
-        public TestResource(ushort id, byte classId)
+        public TestResource(ushort id)
         {
-            _id = new TestAgentId(id, classId);
+            _id = new UId(id);
         }
         /// <summary>
         ///     The unique agentId of the resource
         /// </summary>
-        public IAgentId Id => _id;
+        public IId Id => _id;
     }
 }

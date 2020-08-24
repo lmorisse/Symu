@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -24,12 +25,12 @@ namespace Symu.Classes.Agents
         {
         }
 
-        public AgentEntity(ushort key, byte classKey)
+        public AgentEntity(UId id, byte classId)
         {
-            AgentId = new AgentId(key, classKey);
+            AgentId = new AgentId(id, classId);
         }
 
-        public AgentEntity(ushort key, byte classKey, string name) : this(key, classKey)
+        public AgentEntity(UId id, byte classId, string name) : this(id, classId)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -39,7 +40,7 @@ namespace Symu.Classes.Agents
             Name = name;
         }
 
-        public AgentEntity(ushort key, byte classKey, string name, AgentId parent) : this(key, classKey, name)
+        public AgentEntity(UId id, byte classId, string name, AgentId parent) : this(id, classId, name)
         {
             Parent = parent;
         }

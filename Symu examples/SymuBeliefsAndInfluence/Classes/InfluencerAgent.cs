@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -27,9 +28,9 @@ namespace SymuBeliefsAndInfluence.Classes
     {
         public const byte Class = SymuYellowPages.Actor;
 
-        public InfluencerAgent(ushort agentKey, SymuEnvironment environment,
+        public InfluencerAgent(UId id, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, Class), environment, template)
+            new AgentId(id, Class), environment, template)
         {
         }
 

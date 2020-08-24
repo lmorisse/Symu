@@ -15,6 +15,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
@@ -28,8 +29,8 @@ namespace SymuLearnAndForget.Classes
     {
         public const byte Class = 2;
 
-        public LearnAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, Class), environment, template)
+        public LearnAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(id, Class), environment, template)
         {
             Wiki = (Database)Environment.WhitePages.MetaNetwork.Resources.Repository.List.First();
             Knowledge = GetKnowledge();

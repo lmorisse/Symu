@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -38,9 +39,9 @@ namespace Symu.Repository
             _list[agent.AgentId] = agent;
         }
 
-        public bool Exists(ushort key, byte classKey)
+        public bool Exists(UId id, byte classId)
         {
-            var agentId = new AgentId(key, classKey);
+            var agentId = new AgentId(id, classId);
             return Exists(agentId);
         }
 

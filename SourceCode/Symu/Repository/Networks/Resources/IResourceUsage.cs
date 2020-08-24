@@ -20,6 +20,6 @@ namespace Symu.Repository.Networks.Resources
         /// </summary>
         /// <param name="resourceUsage"></param>
         /// <returns></returns>
-        bool IsResourceUsage(IResourceUsage resourceUsage);
+        bool Equals(IResourceUsage resourceUsage);
     }
 }

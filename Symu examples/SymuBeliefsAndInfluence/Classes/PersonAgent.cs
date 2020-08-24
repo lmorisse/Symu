@@ -17,6 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -31,8 +32,8 @@ namespace SymuBeliefsAndInfluence.Classes
     {
         public const byte Class = SymuYellowPages.Actor;
 
-        public PersonAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(agentKey, Class), environment, template)
+        public PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            new AgentId(id, Class), environment, template)
         {
         }
 

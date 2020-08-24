@@ -9,7 +9,8 @@
 
 #region using directives
 
-using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -21,8 +22,8 @@ namespace Symu.Repository.Networks.Resources
     public interface IResource 
     {
         /// <summary>
-        /// Unique identifier of the resource
+        /// Unique identifier of the role
         /// </summary>
-        IAgentId Id { get; }
+        IId Id { get; }
     }
 }

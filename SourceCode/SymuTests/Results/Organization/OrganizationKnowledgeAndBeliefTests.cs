@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Organization;
@@ -42,8 +43,8 @@ namespace SymuTests.Results.Organization
             _result = new KnowledgeAndBeliefResults(_environment);
             _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge);
             _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge2);
-            _agent = new TestCognitiveAgent(1, _environment);
-            _agent2 = new TestCognitiveAgent(2, _environment);
+            _agent = new TestCognitiveAgent(new UId(1), _environment);
+            _agent2 = new TestCognitiveAgent(new UId(2), _environment);
             _environment.Start();
         }
 

@@ -69,11 +69,11 @@ namespace SymuGroupAndInteraction.Classes
 
             for (var i = 0; i < GroupsCount; i++)
             {
-                var group = new GroupAgent(Organization.NextEntityIndex(), this);
+                var group = new GroupAgent(Organization.NextEntityId(), this);
 
                 for (var j = 0; j < WorkersCount; j++)
                 {
-                    var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
+                    var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
                     {
                         GroupId = group.AgentId
                     };

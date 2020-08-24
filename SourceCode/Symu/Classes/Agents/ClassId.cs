@@ -8,6 +8,7 @@
 #endregion
 
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 
 namespace Symu.Classes.Agents
 {

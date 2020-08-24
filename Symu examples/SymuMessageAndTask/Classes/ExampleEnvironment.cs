@@ -120,14 +120,14 @@ namespace SymuMessageAndTask.Classes
         public override void SetAgents()
         {
             base.SetAgents();
-            var group = new GroupAgent(Organization.NextEntityIndex(), this);
+            var group = new GroupAgent(Organization.NextEntityId(), this);
             for (var i = 0; i < WorkersCount; i++)
             {
-                var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
+                var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
                 {
                     GroupId = group.AgentId
                 };
-                var email = Email.CreateInstance(actor.AgentId, Organization.Models, WhitePages.MetaNetwork.Knowledge);
+                var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork.Knowledge);
                 var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
                 WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
                 WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);

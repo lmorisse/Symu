@@ -15,8 +15,11 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Resources;
+using Symu.Repository.Networks.Roles;
 
 #endregion
 
@@ -46,7 +49,7 @@ namespace Symu.Repository.Entity
         /// <summary>
         ///     Database unique Identifier
         /// </summary>
-        public IAgentId Id => Entity.AgentId;
+        public IId Id => Entity.Id;
 
         public Database(DatabaseEntity entity, OrganizationModels organizationModels,
             KnowledgeNetwork knowledgeNetwork)
@@ -61,8 +64,9 @@ namespace Symu.Repository.Entity
                 throw new ArgumentNullException(nameof(organizationModels));
             }
 
-            Entity = new DatabaseEntity(entity.AgentId, entity.CognitiveArchitecture);
-            _learningModel = new LearningModel((AgentId)Entity.AgentId, organizationModels, knowledgeNetwork,
+            Entity = new DatabaseEntity(entity.Id, entity.CognitiveArchitecture);
+            var agentId = new AgentId(Entity.Id, 0);
+            _learningModel = new LearningModel(agentId, organizationModels, knowledgeNetwork,
                 entity.CognitiveArchitecture);
             _forgettingModel = new ForgettingModel(_database, entity.CognitiveArchitecture, organizationModels);
         }

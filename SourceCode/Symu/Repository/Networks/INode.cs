@@ -9,7 +9,6 @@
 
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
 
 namespace Symu.Repository.Networks.Resources
 {
@@ -17,12 +16,12 @@ namespace Symu.Repository.Networks.Resources
     /// Interface to define the node Agent/resource : define who is using a resource and how
     /// By default, an agent uses a resourceId, with an allocation from 0 to 100adn a certain ResourceUsage
     /// </summary>
-    public interface IAgentResource
+    public interface INode
     {
         /// <summary>
         ///     The unique agentId of the resource
         /// </summary>
-        IId ResourceId { get; }
+        IAgentId ResourceId { get; }
         /// <summary>
         ///     Allocation of capacity per resource
         ///     capacity allocation ranging from [0; 100]
@@ -35,10 +34,10 @@ namespace Symu.Repository.Networks.Resources
 
         IAgentResource Clone();
 
-        bool Equals(IResourceUsage resourceUsage);
-        //bool IsResourceUsageAndClassId(IResourceUsage resourceUsage, IClassId classId);
-        bool Equals(IId resourceId, IResourceUsage resourceUsage);
-        bool Equals(IId resourceId);
+        bool IsResourceUsage(IResourceUsage resourceUsage);
+        bool IsResourceUsageAndClassId(IResourceUsage resourceUsage, IClassId classId);
+        bool Equals(IAgentId resourceId, IResourceUsage resourceUsage);
+        bool Equals(IAgentId resourceId);
         bool Equals(object obj);
     }
 }

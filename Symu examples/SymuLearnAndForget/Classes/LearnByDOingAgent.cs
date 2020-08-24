@@ -12,6 +12,7 @@
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 
 #endregion
@@ -20,8 +21,8 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByDoingAgent : LearnAgent
     {
-        public LearnByDoingAgent(ushort agentKey, SymuEnvironment environment, CognitiveArchitectureTemplate template) :
-            base(agentKey, environment, template)
+        public LearnByDoingAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) :
+            base(id, environment, template)
         {
         }
 

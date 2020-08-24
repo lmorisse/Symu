@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 

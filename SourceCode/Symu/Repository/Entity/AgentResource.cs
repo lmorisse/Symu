@@ -11,6 +11,8 @@
 
 using System;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Resources;
 
 #endregion
@@ -22,7 +24,7 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class AgentResource : IAgentResource
     {
-        public AgentResource(IAgentId resourceId, ResourceUsage resourceUsage, float resourceAllocation=100)
+        public AgentResource(IId resourceId, IResourceUsage resourceUsage, float resourceAllocation=100)
         {
             ResourceId = resourceId;
             ResourceUsage = resourceUsage;
@@ -32,7 +34,7 @@ namespace Symu.Repository.Entity
         /// <summary>
         ///     The unique agentId of the resource
         /// </summary>
-        public IAgentId ResourceId { get; }
+        public IId ResourceId { get; }
 
         /// <summary>
         ///     Define how the AgentId is using the resource
@@ -65,24 +67,19 @@ namespace Symu.Repository.Entity
             return new AgentResource(ResourceId, (ResourceUsage)ResourceUsage, ResourceAllocation);
         }
 
-        public bool IsResourceUsage(IResourceUsage resourceUsage)
+        public bool Equals(IResourceUsage resourceUsage)
         {
-            return ResourceUsage.IsResourceUsage((ResourceUsage)resourceUsage);
+            return ResourceUsage.Equals(resourceUsage);
         }
 
-        public bool IsResourceUsageAndClassId(IResourceUsage resourceUsage, IClassId classId)
-        {
-            return IsResourceUsage(resourceUsage) && ResourceId.Equals(classId);
-        }
-
-        public bool Equals(IAgentId resourceId, IResourceUsage resourceUsage)
-        {
-            return IsResourceUsage(resourceUsage) && ResourceId.Equals(resourceId);
-        }
-
-        public bool Equals(IAgentId resourceId)
+        public bool Equals(IId resourceId)
         {
             return ResourceId.Equals(resourceId);
+        }
+
+        public bool Equals(IId resourceId, IResourceUsage resourceUsage)
+        {
+            return Equals(resourceUsage) && ResourceId.Equals(resourceId);
         }
 
         public override bool Equals(object obj)

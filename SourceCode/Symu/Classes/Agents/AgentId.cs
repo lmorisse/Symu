@@ -11,6 +11,8 @@
 
 using System;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -24,7 +26,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Unique Id of the agent
         /// </summary>
-        public ushort Id { get; set; }
+        public UId Id { get; set; }
 
         /// <summary>
         ///     ClassId of the agent
@@ -33,16 +35,23 @@ namespace Symu.Classes.Agents
 
         public byte Class => ((ClassId?) ClassId)?.Id ?? 0;
 
-        public bool IsNull => Id == 0;
-        public bool IsNotNull => Id != 0;
+        public bool IsNull => Id == null || Id.IsNull;
+        public bool IsNotNull => Id != null && Id.IsNotNull;
+
+        IId IAgentId.Id => Id;
+
+        public bool Equals(IId id)
+        {
+            return Id.Equals(id);
+        }
 
         public AgentId(ushort id, byte classId)
         {
-            //if (classId == 0)
-            //{
-            //    throw new ArgumentNullException(nameof(classId));
-            //}
-
+            Id = new UId(id);
+            ClassId = new ClassId(classId);
+        }
+        public AgentId(UId id, byte classId)
+        {
             Id = id;
             ClassId = new ClassId(classId);
         }
@@ -54,12 +63,15 @@ namespace Symu.Classes.Agents
         public override bool Equals(object obj)
         {
             return obj is AgentId id &&
-                   Id == id.Id;
+                   (id.Id != null && Id != null && Id.Equals(id.Id) ||
+                    Id == null && id.Id == null);
         }
 
         public bool Equals(IAgentId agentId)
         {
-            return Id == ((AgentId)agentId).Id;
+            return agentId is AgentId id &&
+                   (id.Id != null && Id !=null && Id.Equals(id.Id) ||
+                    Id == null && id.Id == null);
         }
 
         public bool Equals(IClassId classId)
@@ -79,7 +91,7 @@ namespace Symu.Classes.Agents
         /// <returns>true if this is inferior to agentId </returns>
         public bool CompareTo(IAgentId agentId)
         {
-            return Id < ((AgentId)agentId).Id;
+            return agentId is AgentId agent && Id.Id < agent.Id.Id;
         }
 
         public override string ToString()

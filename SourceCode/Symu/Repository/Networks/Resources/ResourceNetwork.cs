@@ -15,7 +15,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
+using Symu.Repository.Networks.Roles;
 
 #endregion
 
@@ -57,7 +60,7 @@ namespace Symu.Repository.Networks.Resources
         /// </summary>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        public IResource GetResource(IAgentId resourceId)
+        public IResource GetResource(IId resourceId)
         {
             return Repository.Get(resourceId);
         }
@@ -80,7 +83,7 @@ namespace Symu.Repository.Networks.Resources
             return Repository.Contains(resource);
         }
 
-        public bool Exists(IAgentId resourceId)
+        public bool Exists(IId resourceId)
         {
             return Repository.Exists(resourceId);
         }
@@ -94,7 +97,7 @@ namespace Symu.Repository.Networks.Resources
 
             RemoveResource(resource.Id);
         }
-        public void RemoveResource(IAgentId resourceId)
+        public void RemoveResource(IId resourceId)
         {
             foreach (var key in AgentResources.Keys)
             {
@@ -125,7 +128,7 @@ namespace Symu.Repository.Networks.Resources
             return AgentResources.ContainsKey(agentId);
         }
 
-        public bool Exists(IAgentId agentId, IAgentId resourceId)
+        public bool Exists(IAgentId agentId, IId resourceId)
         {
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(x => x.Equals(resourceId));
         }
@@ -150,24 +153,6 @@ namespace Symu.Repository.Networks.Resources
             //var agentResource = new IAgentResource(resource.Id, resourceUsage, allocation);
             AddAgentResource(agentId, agentResource);
         }
-        ///// <summary>
-        ///// Add a resourceId to an agentId with a typeOfUse and an allocation
-        ///// </summary>
-        ///// <param name="agentId"></param>
-        ///// <param name="resourceId"></param>
-        ///// <param name="resourceUsage"></param>
-        ///// <param name="allocation"> between [0; 100], by default : full allocation (=100)</param>
-        //public void Add(IAgentId agentId, IAgentResource agentresource)//IAgentId resourceId, IResourceUsage resourceUsage, float allocation=100)
-        //{
-        //    if (!Exists(resourceId))
-        //    {
-        //        throw new ArgumentNullException(nameof(resourceId));
-        //    }
-
-        //    AddAgentId(agentId);
-        //    var agentResource = new AgentResource(resourceId, resourceUsage, allocation);
-        //    AddAgentResource(agentId, agentResource);
-        //}
 
         public void Add(IAgentId agentId, IAgentResource agentResource)
         {
@@ -228,7 +213,7 @@ namespace Symu.Repository.Networks.Resources
             }
         }
 
-        public float GetAllocation(IAgentId agentId, IAgentId resourceId)
+        public float GetAllocation(IAgentId agentId, IId resourceId)
         {
             if (HasResource(agentId, resourceId))
             {
@@ -238,7 +223,7 @@ namespace Symu.Repository.Networks.Resources
             return 0;
         }
 
-        public float GetAllocation(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
+        public float GetAllocation(IAgentId agentId, IId resourceId, IResourceUsage resourceUsage)
         {
             if (HasResource(agentId, resourceId, resourceUsage))
             {
@@ -253,7 +238,7 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        public IResource GetResource(IAgentId agentId, IAgentId resourceId)
+        public IResource GetResource(IAgentId agentId, IId resourceId)
         {
             return HasResource(agentId, resourceId) ? Repository.Get(resourceId) : null;
         }
@@ -263,7 +248,7 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        public TResource GetResource<TResource>(IAgentId agentId, IAgentId resourceId) where TResource : IResource
+        public TResource GetResource<TResource>(IAgentId agentId, IId resourceId) where TResource : IResource
         {
             return HasResource(agentId, resourceId) ? (TResource)Repository.Get(resourceId) : default;
         }
@@ -273,7 +258,7 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="agentId"></param>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        public List<IAgentResource> GetAgentResource(IAgentId agentId, IAgentId resourceId)
+        public List<IAgentResource> GetAgentResource(IAgentId agentId, IId resourceId)
         {
             return HasResource(agentId, resourceId) ? AgentResources[agentId].FindAll(n => n.Equals(resourceId)) : null;
         }
@@ -284,21 +269,21 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="resourceId"></param>
         /// <param name="resourceUsage"></param>
         /// <returns></returns>
-        public IAgentResource GetAgentResource(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
+        public IAgentResource GetAgentResource(IAgentId agentId, IId resourceId, IResourceUsage resourceUsage)
         {
             return HasResource(agentId, resourceId, resourceUsage) ? AgentResources[agentId].Find(n => n.Equals(resourceId, resourceUsage)) : null;
         }
-        public bool HasResource(IAgentId agentId, IAgentId resourceId, IResourceUsage resourceUsage)
+        public bool HasResource(IAgentId agentId, IId resourceId, IResourceUsage resourceUsage)
         {
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId, resourceUsage));
         }
-        public bool HasResource(IAgentId agentId, IAgentId resourceId)
+        public bool HasResource(IAgentId agentId, IId resourceId)
         {
             return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceId));
         }
         public bool HasResource(IAgentId agentId, IResourceUsage resourceUsage)
         {
-            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.IsResourceUsage(resourceUsage));
+            return ExistsAgentId(agentId) && AgentResources[agentId].Exists(n => n.Equals(resourceUsage));
         }
 
         /// <summary>
@@ -306,9 +291,9 @@ namespace Symu.Repository.Networks.Resources
         /// </summary>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId)
+        public IEnumerable<IId> GetResourceIds(IAgentId agentId)
         {
-            return ExistsAgentId(agentId) ? AgentResources[agentId].Select(x => x.ResourceId) : new List<IAgentId>();
+            return ExistsAgentId(agentId) ? AgentResources[agentId].Select(x => x.ResourceId) : new List<IId>();
         }
 
         /// <summary>
@@ -317,21 +302,11 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="agentId"></param>
         /// <param name="resourceUsage"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, IResourceUsage resourceUsage)
+        public IEnumerable<IId> GetResourceIds(IAgentId agentId, IResourceUsage resourceUsage)
         {
-            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsResourceUsage(resourceUsage)).Select(x => x.ResourceId) : new List<IAgentId>();
-        }
-
-        /// <summary>
-        ///     Get the list of all the resources the agentId is using filtered by type of use
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="resourceUsage"></param>
-        /// <param name="classId"></param>
-        /// <returns></returns>
-        public IEnumerable<IAgentId> GetResourceIds(IAgentId agentId, IResourceUsage resourceUsage, IClassId classId)
-        {
-            return ExistsAgentId(agentId) ? AgentResources[agentId].FindAll(n => n.IsResourceUsageAndClassId(resourceUsage, classId)).Select(x => x.ResourceId) : new List<IAgentId>();
+            return ExistsAgentId(agentId)
+                ? AgentResources[agentId].FindAll(n => n.Equals(resourceUsage)).Select(x => x.ResourceId)
+                : new List<IId>();
         }
 
         /// <summary>
@@ -341,7 +316,7 @@ namespace Symu.Repository.Networks.Resources
         /// <param name="resourceUsage"></param>
         /// <param name="agentClassId"></param>
         /// <returns></returns>
-        public List<IAgentId> GetAgentIds(IAgentId resourceId, IResourceUsage resourceUsage, IClassId agentClassId)
+        public List<IAgentId> GetAgentIds(IId resourceId, IResourceUsage resourceUsage, IClassId agentClassId)
         {
             return (from agentId 
                 in AgentResources.Keys.Where(x => x.ClassId.Equals(agentClassId)) 
@@ -382,11 +357,11 @@ namespace Symu.Repository.Networks.Resources
 
             foreach (var groupResourceId in AgentResources[groupId])
             {
-                AgentResources[agentId].RemoveAll(n => n.Equals(groupResourceId.ResourceId) && n.IsResourceUsage(groupResourceId.ResourceUsage));
+                AgentResources[agentId].RemoveAll(n => n.Equals(groupResourceId.ResourceId) && n.Equals(groupResourceId.ResourceUsage));
             }
         }
 
-        public void Remove(IAgentId agentId, IAgentId resourceId)
+        public void Remove(IAgentId agentId, IId resourceId)
         {
             if (!ExistsAgentId(agentId))
             {

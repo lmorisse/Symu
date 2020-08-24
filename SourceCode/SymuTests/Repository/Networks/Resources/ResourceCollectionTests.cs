@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Resources;
@@ -32,20 +33,19 @@ namespace SymuTests.Repository.Networks.Resources
         [TestInitialize]
         public void Initialize()
         {
-            var agentId = new AgentId(1, 1);
             var models = new OrganizationModels();
             var network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
             var cognitive = new CognitiveArchitecture();
-            var databaseEntity = new DatabaseEntity(agentId, cognitive);
+            var databaseEntity = new DatabaseEntity(new UId(1), cognitive);
             _database = new Database(databaseEntity, models, network.Knowledge);
         }
 
         [TestMethod]
         public void AddTest()
         {
-            Assert.IsFalse(_collection.Exists(_database.Entity.AgentId));
+            Assert.IsFalse(_collection.Exists(_database.Entity.Id));
             _collection.Add(_database);
-            Assert.IsTrue(_collection.Exists(_database.Entity.AgentId));
+            Assert.IsTrue(_collection.Exists(_database.Entity.Id));
             // Duplicate
             _collection.Add(_database);
             Assert.AreEqual(1, _collection.List.Count);
@@ -62,10 +62,10 @@ namespace SymuTests.Repository.Networks.Resources
         [TestMethod]
         public void GetDatabaseTest()
         {
-            Assert.IsNull(_collection.Get(_database.Entity.AgentId));
+            Assert.IsNull(_collection.Get(_database.Entity.Id));
             _collection.Add(_database);
-            Assert.IsNotNull(_collection.Get(_database.Entity.AgentId));
-            Assert.AreEqual(_database, _collection.Get(_database.Entity.AgentId));
+            Assert.IsNotNull(_collection.Get(_database.Entity.Id));
+            Assert.AreEqual(_database, _collection.Get(_database.Entity.Id));
         }
 
         [TestMethod]

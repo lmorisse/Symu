@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;

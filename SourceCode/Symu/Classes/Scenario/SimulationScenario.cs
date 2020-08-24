@@ -21,7 +21,7 @@ namespace Symu.Classes.Scenario
     public class SimulationScenario : ReactiveAgent
     {
         public SimulationScenario(object parent, SymuEnvironment environment) : base(
-            new AgentId(environment.Organization.NextEntityIndex(), ScenarioEntity.Class), environment)
+            new AgentId(environment.Organization.NextEntityId(), ScenarioEntity.Class), environment)
         {
             if (environment is null)
             {

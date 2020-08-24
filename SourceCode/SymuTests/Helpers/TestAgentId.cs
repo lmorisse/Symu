@@ -12,6 +12,8 @@
 using System;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository;
 
@@ -24,14 +26,10 @@ namespace SymuTests.Helpers
     /// </summary>
     internal class TestAgentId : IAgentId
     {
-        public TestAgentId(ushort id)
-        {
-            Id = id;
-        }
         /// <summary>
         ///     Unique Id of the agent
         /// </summary>
-        public ushort Id { get; set; }
+        public UId Id { get; set; }
 
         /// <summary>
         ///     ClassId of the agent
@@ -40,16 +38,23 @@ namespace SymuTests.Helpers
 
         public byte Class => ((ClassId?)ClassId)?.Id ?? 0;
 
-        public bool IsNull => Id == 0;
-        public bool IsNotNull => Id != 0;
+        public bool IsNull => Id.IsNull;
+        public bool IsNotNull => Id.IsNotNull;
+
+        IId IAgentId.Id => Id;
+
+        public bool Equals(IId id)
+        {
+            return Id.Equals(id);
+        }
 
         public TestAgentId(ushort id, byte classId)
         {
-            if (classId == 0)
-            {
-                throw new ArgumentNullException(nameof(classId));
-            }
-
+            Id = new UId(id);
+            ClassId = new ClassId(classId);
+        }
+        public TestAgentId(UId id, byte classId)
+        {
             Id = id;
             ClassId = new ClassId(classId);
         }
@@ -61,12 +66,13 @@ namespace SymuTests.Helpers
         public override bool Equals(object obj)
         {
             return obj is TestAgentId id &&
-                   Id == id.Id;
+                   Id.Equals(id.Id);
         }
 
         public bool Equals(IAgentId agentId)
         {
-            return Id == ((TestAgentId)agentId).Id;
+            return agentId is TestAgentId id &&
+                   Id.Equals(id.Id);
         }
 
         public bool Equals(IClassId classId)
@@ -86,7 +92,7 @@ namespace SymuTests.Helpers
         /// <returns>true if this is inferior to agentId </returns>
         public bool CompareTo(IAgentId agentId)
         {
-            return Id < ((TestAgentId)agentId).Id;
+            return agentId is TestAgentId agent && Id.Id < agent.Id.Id;
         }
     }
 }

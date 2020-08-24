@@ -8,6 +8,7 @@
 #endregion
 
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Repository;
 
@@ -17,11 +18,11 @@ namespace SymuTests.Helpers
     {
         public static byte ClassId = SymuYellowPages.Actor;
 
-        public TestReactiveAgent(ushort key, SymuEnvironment environment) : base(new AgentId(key, ClassId), environment)
+        public TestReactiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
         {
         }
 
-        public TestReactiveAgent(ushort key, byte classKey, SymuEnvironment environment) : base(new AgentId(key, classKey), environment)
+        public TestReactiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId), environment)
         {
         }
     }

@@ -14,21 +14,21 @@ using System.Collections.Generic;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.Repository.Networks.Roles;
+using Symu.Repository.Networks.Resources;
 
 #endregion
 
-namespace Symu.Repository.Networks.Resources
+namespace Symu.Repository.Networks.Roles
 {
     /// <summary>
-    ///     List of all the resources 
-    ///     Used by ResourceNetwork
+    ///     List of all the roles 
+    ///     Used by roleNetwork
     /// </summary>
-    public class ResourceCollection
+    public class RoleCollection
     {
         /// <summary>
-        ///     Key => ResourceId
-        ///     Values => List of Resources
+        ///     Key => DatabaseId
+        ///     Values => List of Databases
         /// </summary>
         public List<IResource> List { get; } = new List<IResource>();
 
@@ -50,14 +50,14 @@ namespace Symu.Repository.Networks.Resources
             return Exists(resource.Id);
         }
 
-        public IResource Get(IId resourceId)
+        public IResource Get(IId roleId)
         {
-            return List.Find(k => k.Id.Equals(resourceId));
+            return List.Find(k => k.Id.Equals(roleId));
         }
 
-        public bool Exists(IId resourceId)
+        public bool Exists(IId roleId)
         {
-            return List.Exists(k => k.Id.Equals(resourceId));
+            return List.Exists(k => k.Id.Equals(roleId));
         }
 
         public void Clear()

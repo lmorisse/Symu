@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces.Entity;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using SymuTests.Helpers;
@@ -36,8 +37,8 @@ namespace SymuTests.Environment
         [TestMethod]
         public void EnqueueMessageLostTest()
         {
-            var agent1 = new TestReactiveAgent(1, _environment);
-            var agent2 = new TestReactiveAgent(2, _environment);
+            var agent1 = new TestReactiveAgent(new UId(1), _environment);
+            var agent2 = new TestReactiveAgent(new UId(2), _environment);
             _environment.Start();
             _environment.WaitingForStart();
             _environment.WhitePages.RemoveAgent(agent2);

@@ -75,12 +75,12 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => Environment.WhitePages.MetaNetwork.Resources.GetResource<Database>(AgentId, AgentId) ;
+        protected Database Email => Environment.WhitePages.MetaNetwork.Resources.GetResource<Database>(AgentId, AgentId.Id) ;
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        public bool HasEmail => Environment.WhitePages.MetaNetwork.Resources.Exists(AgentId, AgentId);
+        public bool HasEmail => Environment.WhitePages.MetaNetwork.Resources.Exists(AgentId, AgentId.Id);
 
         //TODO => all the models should be included in the cognitive architecture
         /// <summary>
@@ -132,7 +132,7 @@ namespace Symu.Classes.Agents
             foreach (var database in environment.Organization.Databases)
             {
                 // Organization databases are used by every one
-                var agentResource = new AgentResource(database.AgentId, new ResourceUsage(0), 100);
+                var agentResource = new AgentResource(database.Id, new ResourceUsage(0), 100);
                 environment.WhitePages.MetaNetwork.Resources.Add(AgentId, agentResource);
             }
         }

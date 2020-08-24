@@ -65,7 +65,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             base.SetAgents();
 
-            var group = new GroupAgent(Organization.NextEntityIndex(), this);
+            var group = new GroupAgent(Organization.NextEntityId(), this);
             _groupId = group.AgentId;
             for (var j = 0; j < WorkersCount; j++)
             {
@@ -75,11 +75,11 @@ namespace SymuScenariosAndEvents.Classes
 
         private PersonAgent AddPersonAgent()
         {
-            var actor = new PersonAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human)
+            var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
             {
                 GroupId = _groupId
             };
-            var email = Email.CreateInstance(actor.AgentId, Organization.Models, WhitePages.MetaNetwork.Knowledge);
+            var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork.Knowledge);
             var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
             WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
             WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, _groupId, false);

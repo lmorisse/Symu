@@ -10,10 +10,11 @@
 #region using directives
 
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 
 #endregion
 
-namespace Symu.Repository.Networks.Role
+namespace Symu.Repository.Networks.Roles
 {
     public class RoleEntity
     {

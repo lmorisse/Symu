@@ -20,6 +20,8 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -43,6 +45,8 @@ namespace SymuTests.Classes.Agents
         private readonly SymuEngine _symu = new SymuEngine();
         private TestCognitiveAgent _agent;
         private AgentKnowledge _agentKnowledge;
+        private TestCognitiveAgent _agent2 ;
+        private readonly UId _uid1 = new UId(1);
 
         [TestInitialize]
         public void Initialize()
@@ -52,7 +56,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Models.On(1);
             _environment.IterationResult.On();
 
-            _agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
+            _agent = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             _agent.Cognitive.MessageContent.CanReceiveBeliefs = true;
@@ -63,6 +67,8 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Email;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+
+            _agent2 = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
 
             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
@@ -89,7 +95,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
-            Assert.AreEqual(1, _agent.AgentId.Id);
+            Assert.AreEqual(1, _agent.AgentId.Id.Id);
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
             Assert.AreNotEqual(0, _agent.KnowledgeModel.Expertise.Count);
@@ -100,7 +106,7 @@ namespace SymuTests.Classes.Agents
 
         private TestCognitiveAgent AddAgent()
         {
-            var agent = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), _environment);
+            var agent = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
             agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
             agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             agent.Start();
@@ -467,7 +473,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
-            var agent2 = new TestCognitiveAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(new UId(2), _environment);
             agent2.Start();
             agent2.WaitingToStart();
             var message = new Message(_agent.AgentId, agent2.AgentId, MessageAction.Add, 0)
@@ -828,7 +834,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AcceptNewInteractionTest()
         {
-            var agent2 = new TestCognitiveAgent(2, _environment);
+            var agent2 = new TestCognitiveAgent(new UId(2), _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.AgentId));
         }
 
@@ -840,9 +846,8 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            var agent2 = new TestCognitiveAgent(2, _environment);
-            _environment.WhitePages.MetaNetwork.Links.AddLink(_agent.AgentId, agent2.AgentId);
-            Assert.IsTrue(_agent.AcceptNewInteraction(agent2.AgentId));
+            _environment.WhitePages.MetaNetwork.Links.AddLink(_agent.AgentId, _agent2.AgentId);
+            Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         /// <summary>
@@ -855,8 +860,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = false;
-            var agent2 = new TestCognitiveAgent(2, _environment);
-            Assert.IsFalse(_agent.AcceptNewInteraction(agent2.AgentId));
+            Assert.IsFalse(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         /// <summary>
@@ -870,8 +874,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 0;
-            var agent2 = new TestCognitiveAgent(2, _environment);
-            Assert.IsFalse(_agent.AcceptNewInteraction(agent2.AgentId));
+            Assert.IsFalse(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         /// <summary>
@@ -884,8 +887,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
-            var agent2 = new TestCognitiveAgent(2, _environment);
-            Assert.IsFalse(_agent.AcceptNewInteraction(agent2.AgentId));
+            Assert.IsFalse(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         /// <summary>
@@ -898,8 +900,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
             _agent.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
-            var agent2 = new TestCognitiveAgent(2, _environment);
-            Assert.IsTrue(_agent.AcceptNewInteraction(agent2.AgentId));
+            Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         #endregion
@@ -1030,7 +1031,7 @@ namespace SymuTests.Classes.Agents
             var task = new SymuTask(0)
             {
                 Weight = 1,
-                KeyActivity = 1
+                KeyActivity = _uid1
             };
             var attachments = new MessageAttachments();
             attachments.Add(0);
@@ -1274,7 +1275,7 @@ namespace SymuTests.Classes.Agents
         {
             // Add teammates with knowledge
             var teammate = AddAgent();
-            var group = new TestCognitiveAgent(_organizationEntity.NextEntityIndex(), 2, _environment);
+            var group = new TestCognitiveAgent(_organizationEntity.NextEntityId(), 2, _environment);
             group.Start();
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(_agent.AgentId, 100, group.AgentId, true);
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammate.AgentId, 100, group.AgentId, true);
@@ -1284,7 +1285,7 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
                 _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
 
-            var task = new SymuTask(0) {KeyActivity = 1};
+            var task = new SymuTask(0) {KeyActivity = _uid1 };
 
             var blocker = new Blocker(Murphy.IncompleteKnowledge, 0)
             {
@@ -1471,7 +1472,7 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
                 _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
 
-            var task = new SymuTask(0) {Weight = 1, KeyActivity = 1};
+            var task = new SymuTask(0) {Weight = 1, KeyActivity = _uid1 };
 
             var blocker = new Blocker(Murphy.IncompleteBelief, 0)
             {
@@ -1499,7 +1500,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Murphies.IncompleteBelief.On = true;
             _organizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
             _organizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = 1;
-            var task = new SymuTask(0) {Weight = 1, KeyActivity = 1};
+            var task = new SymuTask(0) {Weight = 1, KeyActivity = _uid1 };
             var blocker = new Blocker(Murphy.IncompleteBelief, 0)
             {
                 Parameter = _knowledge2.Id,
@@ -1525,8 +1526,8 @@ namespace SymuTests.Classes.Agents
         public void ImpactOfTheCommunicationMediumOnCapacityTest()
         {
             _agent.Capacity.Set(1);
-            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, true, 1);
-            Assert.IsTrue(_agent.TimeSpent[1] > 0);
+            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, true, _uid1);
+            Assert.IsTrue(_agent.TimeSpent[_uid1] > 0);
         }
 
         /// <summary>
@@ -1536,20 +1537,21 @@ namespace SymuTests.Classes.Agents
         public void ImpactOfTheCommunicationMediumOnCapacityTest1()
         {
             _agent.Capacity.Set(1);
-            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, false, 1);
-            Assert.IsTrue(_agent.TimeSpent[1] > 0);
+            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, false, _uid1);
+            Assert.IsTrue(_agent.TimeSpent[_uid1] > 0);
         }
 
         [TestMethod]
         public void AddTimeSpentTest()
         {
-            _agent.AddTimeSpent(1, 1);
-            Assert.AreEqual(1, _agent.TimeSpent[1]);
-            _agent.AddTimeSpent(1, 1);
-            Assert.AreEqual(2, _agent.TimeSpent[1]);
-            _agent.AddTimeSpent(2, 1);
-            Assert.AreEqual(2, _agent.TimeSpent[1]);
-            Assert.AreEqual(1, _agent.TimeSpent[2]);
+            _agent.AddTimeSpent(_uid1, 1);
+            Assert.AreEqual(1, _agent.TimeSpent[_uid1]);
+            _agent.AddTimeSpent(_uid1, 1);
+            Assert.AreEqual(2, _agent.TimeSpent[_uid1]);
+            var uid2 = new UId(2);
+            _agent.AddTimeSpent(uid2, 1);
+            Assert.AreEqual(2, _agent.TimeSpent[_uid1]);
+            Assert.AreEqual(1, _agent.TimeSpent[uid2]);
         }
 
         #endregion

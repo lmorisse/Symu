@@ -10,8 +10,8 @@
 #region using directives
 
 using System;
-using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 
 #endregion
@@ -23,13 +23,13 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class DatabaseEntity
     {
-        public AgentId AgentId { get; }
-        public DatabaseEntity(AgentId agentId)
+        public UId Id { get; }
+        public DatabaseEntity(UId id)
         {
-            AgentId = agentId;
+            Id = id;
         }
 
-        public DatabaseEntity(AgentId agentId, CognitiveArchitecture cognitiveArchitecture): this(agentId)
+        public DatabaseEntity(UId id, CognitiveArchitecture cognitiveArchitecture) : this(id)
         {
             if (cognitiveArchitecture == null)
             {
@@ -40,7 +40,7 @@ namespace Symu.Repository.Entity
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
 
-        public DatabaseEntity(AgentId agentId, CommunicationTemplate medium) : this(agentId)
+        public DatabaseEntity(UId id, CommunicationTemplate medium) : this(id)
         {
             if (medium == null)
             {

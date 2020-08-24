@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
 using Symu.Repository.Networks.Knowledges;
 
@@ -93,14 +94,14 @@ namespace SymuBeliefsAndInfluence.Classes
 
             for (var j = 0; j < InfluencersCount; j++)
             {
-                var actor = new InfluencerAgent(Organization.NextEntityIndex(), this, InfluencerTemplate);
+                var actor = new InfluencerAgent(Organization.NextEntityId(), this, InfluencerTemplate);
                 Influencers.Add(actor);
                 agentIds.Add(actor.AgentId);
             }
 
             for (var j = 0; j < WorkersCount; j++)
             {
-                var actor = new PersonAgent(Organization.NextEntityIndex(), this, WorkerTemplate);
+                var actor = new PersonAgent(Organization.NextEntityId(), this, WorkerTemplate);
                 agentIds.Add(actor.AgentId);
             }
 

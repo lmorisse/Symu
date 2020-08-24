@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 
 #endregion
@@ -20,8 +21,8 @@ namespace SymuScenariosAndEvents.Classes
     {
         public const byte Class = 1;
 
-        public GroupAgent(ushort agentKey, SymuEnvironment environment) : base(
-            new AgentId(agentKey, Class), environment)
+        public GroupAgent(UId id, SymuEnvironment environment) : base(
+            new AgentId(id, Class), environment)
         {
         }
     }

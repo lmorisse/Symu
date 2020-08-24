@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Resources;
 
@@ -21,37 +22,27 @@ namespace SymuTests.Repository.Entity
     [TestClass]
     public class PortfolioTests
     {
-        private ResourceUsage IsWorkingOn = new ResourceUsage(1);
-        private ResourceUsage IsSupportOn = new ResourceUsage(2);
-        private ResourceUsage IsUsing = new ResourceUsage(3);
-        private readonly AgentId _agentId = new AgentId(1, 1);
-        private readonly ClassId _classId2 = new ClassId(2);
+        private readonly ResourceUsage _isWorkingOn = new ResourceUsage(1);
+        private readonly ResourceUsage _isSupportOn = new ResourceUsage(2);
+        private readonly ResourceUsage _isUsing = new ResourceUsage(3);
+        private readonly UId _resourceId = new UId(1);
 
         [TestMethod]
         public void IsTypeTest()
         {
-            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
-            Assert.IsTrue(portfolio.IsResourceUsage(IsSupportOn));
-            Assert.IsFalse(portfolio.IsResourceUsage(IsUsing));
-        }
-
-        [TestMethod]
-        public void IsTypeAndClassIdTest()
-        {
-            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
-            Assert.IsTrue(portfolio.IsResourceUsageAndClassId(IsSupportOn, _agentId.ClassId));
-            Assert.IsFalse(portfolio.IsResourceUsageAndClassId(IsSupportOn, _classId2));
-            Assert.IsFalse(portfolio.IsResourceUsageAndClassId(IsUsing, _agentId.ClassId));
+            var portfolio = new AgentPortfolio(_resourceId, _isSupportOn, 100);
+            Assert.IsTrue(portfolio.Equals(_isSupportOn));
+            Assert.IsFalse(portfolio.Equals(_isUsing));
         }
 
         [TestMethod]
         public void EqualsTest()
         {
-            var portfolio = new AgentPortfolio(_agentId, IsSupportOn, 100);
-            Assert.IsTrue(portfolio.Equals(_agentId, IsSupportOn));
-            Assert.IsFalse(portfolio.Equals(_agentId, IsWorkingOn));
-            var agentId2 = new AgentId(2, 1);
-            Assert.IsFalse(portfolio.Equals(agentId2, IsSupportOn));
+            var portfolio = new AgentPortfolio(_resourceId, _isSupportOn, 100);
+            Assert.IsTrue(portfolio.Equals(_resourceId, _isSupportOn));
+            Assert.IsFalse(portfolio.Equals(_resourceId, _isWorkingOn));
+            var resource2 = new UId(2);
+            Assert.IsFalse(portfolio.Equals(resource2, _isSupportOn));
         }
     }
 }

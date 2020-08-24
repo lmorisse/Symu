@@ -18,6 +18,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Interfaces;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment.Events;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;

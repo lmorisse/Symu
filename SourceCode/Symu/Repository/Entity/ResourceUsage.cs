@@ -13,7 +13,7 @@ using Symu.Repository.Networks.Resources;
 namespace Symu.Repository.Entity
 {
     /// <summary>
-    /// Implement IResourceUsage
+    /// Default implementation of IResourceUsage
     /// </summary>
     public class ResourceUsage : IResourceUsage
     {
@@ -22,14 +22,15 @@ namespace Symu.Repository.Entity
             Usage = usage;
         }
         public byte Usage { get; }
-        public bool IsResourceUsage(IResourceUsage resourceUsage)
+        public bool Equals(IResourceUsage resourceUsage)
         {
             if (resourceUsage == null)
             {
                 throw new ArgumentNullException(nameof(resourceUsage));
             }
 
-            return Usage == ((ResourceUsage)resourceUsage).Usage;
+            return resourceUsage is ResourceUsage usage &&
+                   Usage == usage.Usage;
         }
     }
 }

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents.Models;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using static Symu.Common.Constants;
@@ -210,7 +211,7 @@ namespace Symu.Classes.Agents
         ///     Key => step
         ///     Value => time spent
         /// </summary>
-        public Dictionary<ushort, float> TimeSpent { get; } = new Dictionary<ushort, float>();
+        public Dictionary<UId, float> TimeSpent { get; } = new Dictionary<UId, float>();
 
         /// <summary>
         ///     Impact of the Communication channels on the time spent
@@ -221,9 +222,9 @@ namespace Symu.Classes.Agents
         /// <param name="send">If set, it is an ask help task, otherwise it is a reply help task</param>
         /// <remarks>Impact on capacity is done in OnBeforeSendMessage and OnAfterPostMessage</remarks>
         public void ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums medium, bool send,
-            ushort keyActivity)
+            UId keyActivity)
         {
-            if (keyActivity == 0)
+            if (keyActivity == null || keyActivity.IsNull)
             {
                 return;
             }
@@ -239,7 +240,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="keyActivity"></param>
         /// <param name="timeSpent"></param>
-        public void AddTimeSpent(ushort keyActivity, float timeSpent)
+        public void AddTimeSpent(UId keyActivity, float timeSpent)
         {
             if (!TimeSpent.ContainsKey(keyActivity))
             {

@@ -10,6 +10,7 @@
 #region using directives
 
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository;
 
 #endregion
@@ -20,7 +21,7 @@ namespace Symu.Classes.Scenario
     {
         public const byte Class = SymuYellowPages.Scenario;
 
-        public ScenarioEntity(ushort key) : base(key, Class)
+        public ScenarioEntity(UId id) : base(id, Class)
         {
         }
     }

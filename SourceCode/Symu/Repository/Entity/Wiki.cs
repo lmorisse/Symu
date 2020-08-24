@@ -11,6 +11,7 @@
 
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks.Knowledges;
 
@@ -24,7 +25,7 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Wiki : Database
     {
-        public static Wiki CreateInstance(AgentId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Wiki CreateInstance(UId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new ViaPlatformTemplate();
             var entity = new DatabaseEntity(agentId, communication);

@@ -28,7 +28,7 @@ namespace SymuTests.Repository.Networks.Resources
         private const byte IsUsing = 3;
         private readonly TestAgentId _agentId = new TestAgentId(3, 3);
         private readonly TestAgentId _groupId = new TestAgentId(1, 1);
-        private readonly TestResource _resource = new TestResource(2, 2);
+        private readonly TestResource _resource = new TestResource(2);
         private readonly ResourceNetwork _resources = new ResourceNetwork();
         private TestAgentResource _agentResourceSupportOn;
         private TestAgentResource _agentResourceWorkingOn;
@@ -99,7 +99,7 @@ namespace SymuTests.Repository.Networks.Resources
         {
             _resources.AddAgentId(_agentId);
             Assert.IsTrue(_resources.Any());
-            Assert.IsFalse(_resources.Exists(_agentId));
+            Assert.IsFalse(_resources.ExistsAgentId(_agentId));
         }
 
         [TestMethod]

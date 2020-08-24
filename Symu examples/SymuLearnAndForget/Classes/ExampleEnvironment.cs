@@ -65,7 +65,7 @@ namespace SymuLearnAndForget.Classes
         {
             base.AddOrganizationDatabase();
 
-            var wikiEntity = new DatabaseEntity(Organization.AgentId, Organization.Communication.Email);
+            var wikiEntity = new DatabaseEntity(Organization.AgentId.Id, Organization.Communication.Email);
             Organization.AddDatabase(wikiEntity);
         }
 
@@ -74,13 +74,13 @@ namespace SymuLearnAndForget.Classes
             base.SetAgents();
 
             LearnFromSourceAgent =
-                new LearnFromSourceAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+                new LearnFromSourceAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
             LearnByDoingAgent =
-                new LearnByDoingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+                new LearnByDoingAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
             LearnByAskingAgent =
-                new LearnByAskingAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
-            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
-            ExpertAgent = new ExpertAgent(Organization.NextEntityIndex(), this, Organization.Templates.Human);
+                new LearnByAskingAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
+            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
+            ExpertAgent = new ExpertAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
             WhitePages.MetaNetwork.Links.AddLink(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
         }
