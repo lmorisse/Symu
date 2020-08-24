@@ -126,7 +126,7 @@ namespace Symu.Classes.Task
         ///     complexity = 0.3
         ///     GetTaskRequiredBits = [359] : index 3, 5 and 9 are required
         /// </example>
-        public byte[] GetTaskRequiredBits(Knowledge knowledge, float complexity)
+        public byte[] GetTaskRequiredBits(IKnowledge knowledge, float complexity)
         {
             if (knowledge is null || knowledge.Length == 0)
             {
@@ -151,7 +151,7 @@ namespace Symu.Classes.Task
         ///     complexity = 0.2
         ///     GetTaskMandatoryBits = [17] : index 1 and 7 are mandatory
         /// </example>
-        public byte[] GetTaskMandatoryBits(Knowledge knowledge, float complexity)
+        public byte[] GetTaskMandatoryBits(IKnowledge knowledge, float complexity)
         {
             if (knowledge is null || knowledge.Length == 0)
             {

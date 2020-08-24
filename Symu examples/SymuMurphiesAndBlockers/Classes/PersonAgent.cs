@@ -91,7 +91,7 @@ namespace SymuMurphiesAndBlockers.Classes
         }
 
         public override void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker,
-            ushort knowledgeId,
+            IId knowledgeId,
             byte knowledgeBit)
         {
             if (blocker == null)

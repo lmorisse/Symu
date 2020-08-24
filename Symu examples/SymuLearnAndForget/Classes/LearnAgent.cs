@@ -90,7 +90,7 @@ namespace SymuLearnAndForget.Classes
         private Knowledge GetKnowledge()
         {
             var knowledgeId = Environment.WhitePages.MetaNetwork.Knowledge.Repository.List.First().Id;
-            return Environment.WhitePages.MetaNetwork.Knowledge.GetKnowledge(knowledgeId);
+            return (Knowledge)Environment.WhitePages.MetaNetwork.Knowledge.GetKnowledge(knowledgeId);
         }
     }
 }

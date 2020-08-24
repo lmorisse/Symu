@@ -183,7 +183,7 @@ namespace Symu.Classes.Task
         /// <param name="model"></param>
         /// <param name="knowledges"></param>
         /// <param name="complexity"></param>
-        public void SetKnowledgesBits(MurphyTask model, IEnumerable<Knowledge> knowledges, float complexity)
+        public void SetKnowledgesBits(MurphyTask model, IEnumerable<IKnowledge> knowledges, float complexity)
         {
             if (model == null)
             {

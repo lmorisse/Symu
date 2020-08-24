@@ -16,6 +16,7 @@ using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -62,7 +63,7 @@ namespace Symu.Repository.Networks.Knowledges
 
         #region Knowledge repository
 
-        public Knowledge GetKnowledge(ushort knowledgeId)
+        public IKnowledge GetKnowledge(IId knowledgeId)
         {
             return Repository.GetKnowledge(knowledgeId);
         }
@@ -71,7 +72,7 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Add a Knowledge to the repository
         ///     Should be called only by NetWork, not directly to add belief in parallel
         /// </summary>
-        public void AddKnowledge(Knowledge knowledge)
+        public void AddKnowledge(IKnowledge knowledge)
         {
             if (Repository.Contains(knowledge))
             {
@@ -84,7 +85,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     Add a set of Knowledge to the repository
         /// </summary>
-        public void AddKnowledges(IEnumerable<Knowledge> knowledges)
+        public void AddKnowledges(IEnumerable<IKnowledge> knowledges)
         {
             if (knowledges is null)
             {
@@ -101,7 +102,7 @@ namespace Symu.Repository.Networks.Knowledges
 
         #region Agent Knowledge
 
-        public bool Exists(IAgentId agentId, ushort knowledgeId)
+        public bool Exists(IAgentId agentId, IId knowledgeId)
         {
             return Exists(agentId) && AgentsRepository[agentId].Contains(knowledgeId);
         }
@@ -127,7 +128,7 @@ namespace Symu.Repository.Networks.Knowledges
             }
         }
 
-        public void Add(IAgentId agentId, ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge,
+        public void Add(IAgentId agentId, IId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
             short timeToLive)
         {
             AddAgentId(agentId);
@@ -144,7 +145,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <param name="level"></param>
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
-        public void AddKnowledge(IAgentId agentId, ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge,
+        public void AddKnowledge(IAgentId agentId, IId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
             short timeToLive)
         {
             if (!Exists(agentId, knowledgeId))
@@ -208,8 +209,7 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             var level = neutral ? KnowledgeLevel.NoKnowledge : agentKnowledge.KnowledgeLevel;
-            var knowledgeBits = knowledge.InitializeBits(Model, level);
-            agentKnowledge.SetKnowledgeBits(knowledgeBits, step);
+            agentKnowledge.InitializeBits(knowledge.Length, Model, level, step);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void LearnNewKnowledge(IAgentId agentId, ushort knowledgeId, float minimumKnowledge, short timeToLive,
+        public void LearnNewKnowledge(IAgentId agentId, IId knowledgeId, float minimumKnowledge, short timeToLive,
             ushort step)
         {
             if (Exists(agentId, knowledgeId))
@@ -234,7 +234,7 @@ namespace Symu.Repository.Networks.Knowledges
             InitializeAgentKnowledge(agentKnowledge, true, step);
         }
 
-        public IEnumerable<IAgentId> FilterAgentsWithKnowledge(IEnumerable<IAgentId> agentIds, ushort knowledgeId)
+        public IEnumerable<IAgentId> FilterAgentsWithKnowledge(IEnumerable<IAgentId> agentIds, IId knowledgeId)
         {
             if (agentIds is null)
             {
@@ -245,7 +245,7 @@ namespace Symu.Repository.Networks.Knowledges
                 .ToList();
         }
 
-        public IEnumerable<ushort> GetKnowledgeIds(IAgentId agentId)
+        public IEnumerable<IId> GetKnowledgeIds(IAgentId agentId)
         {
             if (!Exists(agentId))
             {
@@ -281,7 +281,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <param name="agentId"></param>
         /// <param name="knowledgeId"></param>
         /// <returns>null if agentId don't Exists, AgentExpertise otherwise</returns>
-        public AgentKnowledge GetAgentKnowledge(IAgentId agentId, ushort knowledgeId)
+        public AgentKnowledge GetAgentKnowledge(IAgentId agentId, IId knowledgeId)
         {
             if (!Exists(agentId, knowledgeId))
             {

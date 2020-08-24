@@ -11,6 +11,7 @@
 
 using System;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
@@ -157,7 +158,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="step"></param>
-        public void InitializeKnowledge(ushort knowledgeId, ushort step)
+        public void InitializeKnowledge(IId knowledgeId, ushort step)
         {
             _knowledgeNetwork.InitializeAgentKnowledge(GetKnowledge(knowledgeId),
                 !_knowledgeAndBeliefs.HasInitialKnowledge, step);
@@ -183,7 +184,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeId"></param>
         /// <param name="level"></param>
         /// <param name="internalCharacteristics"></param>
-        public void AddKnowledge(ushort knowledgeId, KnowledgeLevel level,
+        public void AddKnowledge(IId knowledgeId, KnowledgeLevel level,
             InternalCharacteristics internalCharacteristics)
         {
             if (internalCharacteristics == null)
@@ -202,7 +203,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="level"></param>
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
-        public void AddKnowledge(ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        public void AddKnowledge(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
         {
             if (!On || !_knowledgeAndBeliefs.HasKnowledge)
             {
@@ -222,7 +223,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns>a knowledgeBits if he has the knowledge or the right</returns>
         /// <returns>With binary KnowledgeBits it will return a float of 0</returns>
         /// <example>KnowledgeBits[0,1,0.6] and MinimumKnowledgeToSend = 0.8 => KnowledgeBits[0,1,0]</example>
-        public Bits FilterKnowledgeToSend(ushort knowledgeId, byte knowledgeBit, CommunicationTemplate medium,
+        public Bits FilterKnowledgeToSend(IId knowledgeId, byte knowledgeBit, CommunicationTemplate medium,
             ushort step, out byte[] knowledgeIndexToSend)
         {
             knowledgeIndexToSend = null;
@@ -285,7 +286,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             return Math.Abs(bitsToSend.GetSum()) < Tolerance ? null : bitsToSend;
         }
 
-        public AgentKnowledge GetKnowledge(ushort knowledgeId)
+        public AgentKnowledge GetKnowledge(IId knowledgeId)
         {
             return Expertise.GetKnowledge(knowledgeId);
         }
@@ -332,7 +333,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeThreshHoldForAnswer"></param>
         /// <param name="step"></param>
         /// <returns>true if the agent has the knowledge</returns>
-        public bool KnowsEnough(ushort knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer, ushort step)
+        public bool KnowsEnough(IId knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer, ushort step)
         {
             if (!Expertise.Contains(knowledgeId))
             {

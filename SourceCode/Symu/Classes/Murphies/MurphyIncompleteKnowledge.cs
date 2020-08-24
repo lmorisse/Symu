@@ -12,6 +12,7 @@
 using System;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -35,7 +36,7 @@ namespace Symu.Classes.Murphies
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <param name="step"></param>
-        public void CheckKnowledge(ushort knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
+        public void CheckKnowledge(IId knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
             ref bool mandatoryCheck,
             ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
         {
@@ -78,7 +79,7 @@ namespace Symu.Classes.Murphies
         /// <param name="knowledgeModel"></param>
         /// <param name="step"></param>
         /// <returns>True if the knowledgeBit is known enough</returns>
-        public bool CheckKnowledge(ushort knowledgeId, byte knowledgeBit, KnowledgeModel knowledgeModel, ushort step)
+        public bool CheckKnowledge(IId knowledgeId, byte knowledgeBit, KnowledgeModel knowledgeModel, ushort step)
         {
             if (!IsAgentOn())
             {

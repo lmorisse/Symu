@@ -76,12 +76,12 @@ namespace Symu.Repository.Entity
         /// </summary>
         public DatabaseEntity Entity { get; }
 
-        public bool Exists(ushort knowledgeId)
+        public bool Exists(IId knowledgeId)
         {
             return _database.Contains(knowledgeId);
         }
 
-        public void InitializeKnowledge(Knowledge knowledge, ushort step)
+        public void InitializeKnowledge(IKnowledge knowledge, ushort step)
         {
             if (knowledge == null)
             {
@@ -91,7 +91,7 @@ namespace Symu.Repository.Entity
             InitializeKnowledge(knowledge.Id, knowledge.Length, step);
         }
 
-        public void InitializeKnowledge(ushort knowledgeId, byte knowledgeLength, ushort step)
+        public void InitializeKnowledge(IId knowledgeId, byte knowledgeLength, ushort step)
         {
             if (Exists(knowledgeId))
             {
@@ -110,9 +110,9 @@ namespace Symu.Repository.Entity
         /// <param name="knowledgeBits"></param>
         /// <param name="maxRateLearnable"></param>
         /// <param name="step"></param>
-        public void StoreKnowledge(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
+        public void StoreKnowledge(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
         {
-            if (knowledgeId == 0 || knowledgeBits is null)
+            if (knowledgeId.IsNull || knowledgeBits is null)
             {
                 return;
             }
@@ -130,7 +130,7 @@ namespace Symu.Repository.Entity
         /// <param name="knowledgeBit"></param>
         /// <param name="knowledgeValue"></param>
         /// <param name="step"></param>
-        public void StoreKnowledge(ushort knowledgeId, byte knowledgeBit, float knowledgeValue, ushort step)
+        public void StoreKnowledge(IId knowledgeId, byte knowledgeBit, float knowledgeValue, ushort step)
         {
             if (!Exists(knowledgeId))
             {
@@ -148,7 +148,7 @@ namespace Symu.Repository.Entity
         /// <param name="minKnowledgeBit">the minKnowledgeBit required to have enough information</param>
         /// <returns>return false if database don't have the information</returns>
         /// <returns>return true if database have enough information</returns>
-        public bool SearchKnowledge(ushort knowledgeId, byte knowledgeBit, float minKnowledgeBit)
+        public bool SearchKnowledge(IId knowledgeId, byte knowledgeBit, float minKnowledgeBit)
         {
             var agentKnowledge = GetKnowledge(knowledgeId);
             return !(agentKnowledge is null) && agentKnowledge.GetKnowledgeBit(knowledgeBit) > minKnowledgeBit;
@@ -176,7 +176,7 @@ namespace Symu.Repository.Entity
             _forgettingModel.ForgettingProcess(ForgettingRate, step);
         }
 
-        public AgentKnowledge GetKnowledge(ushort knowledgeId)
+        public AgentKnowledge GetKnowledge(IId knowledgeId)
         {
             return _database.GetKnowledge(knowledgeId);
         }

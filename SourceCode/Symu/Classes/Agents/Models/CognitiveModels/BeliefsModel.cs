@@ -11,6 +11,7 @@
 
 using System;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
@@ -114,7 +115,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     using the DefaultBeliefLevel
         /// </summary>
         /// <param name="knowledgeId"></param>
-        public void AddBelief(ushort knowledgeId)
+        public void AddBelief(IId knowledgeId)
         {
             if (!_knowledgeAndBeliefs.HasBelief || !On)
             {
@@ -130,7 +131,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="beliefLevel"></param>
-        public void AddBelief(ushort knowledgeId, BeliefLevel beliefLevel)
+        public void AddBelief(IId knowledgeId, BeliefLevel beliefLevel)
         {
             if (!_knowledgeAndBeliefs.HasBelief || !On)
             {
@@ -140,7 +141,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _networkBeliefs.Add(_agentId, knowledgeId, beliefLevel);
         }
 
-        public AgentBelief GetBelief(ushort beliefId)
+        public AgentBelief GetBelief(IId beliefId)
         {
             return Beliefs.GetBelief(beliefId);
         }
@@ -154,7 +155,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns>a beliefBits if he has the belief or the right</returns>
         /// <returns>With binary KnowledgeBits it will return a float of 0</returns>
         /// <example>KnowledgeBits[0,1,0.6] and MinimumKnowledgeToSend = 0.8 => KnowledgeBits[0,1,0]</example>
-        public Bits FilterBeliefToSend(ushort beliefId, byte beliefBit, CommunicationTemplate medium)
+        public Bits FilterBeliefToSend(IId beliefId, byte beliefBit, CommunicationTemplate medium)
         {
             if (medium is null)
             {

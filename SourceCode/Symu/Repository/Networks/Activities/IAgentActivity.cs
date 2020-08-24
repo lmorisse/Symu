@@ -7,24 +7,13 @@
 
 #endregion
 
-#region using directives
-
-using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
-
-#endregion
 
 namespace Symu.Repository.Networks.Activities
 {
-    public class AgentActivity
+    public interface IAgentActivity
     {
-        public AgentActivity(IAgentId id, string activity)
-        {
-            Id = id;
-            Activity = activity;
-        }
-
-        public IAgentId Id { get; }
-        public string Activity { get; set; }
+        IAgentId Id { get; }
+        IActivity Activity { get; set; }
     }
 }

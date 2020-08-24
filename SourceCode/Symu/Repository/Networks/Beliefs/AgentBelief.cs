@@ -12,6 +12,7 @@
 using System;
 using System.Linq;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
@@ -37,13 +38,17 @@ namespace Symu.Repository.Networks.Beliefs
         /// </summary>
         private const int RangeMax = 1;
 
-        public AgentBelief(ushort beliefId, BeliefLevel beliefLevel)
+        public AgentBelief(ushort beliefId, BeliefLevel beliefLevel) : this(new UId(beliefId), beliefLevel)
+        {
+        }
+
+        public AgentBelief(IId beliefId, BeliefLevel beliefLevel)
         {
             BeliefId = beliefId;
             BeliefLevel = beliefLevel;
         }
 
-        public ushort BeliefId { get; }
+        public IId BeliefId { get; }
         public Bits BeliefBits { get; set; } = new Bits(RangeMin);
         public BeliefLevel BeliefLevel { get; }
 

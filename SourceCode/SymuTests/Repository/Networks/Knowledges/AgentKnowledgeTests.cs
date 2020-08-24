@@ -11,8 +11,9 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Symu.Common;
 using Symu.Repository.Networks.Knowledges;
-
+using static Symu.Common.Constants;
 #endregion
 
 namespace SymuTests.Repository.Networks.Knowledges
@@ -20,7 +21,8 @@ namespace SymuTests.Repository.Networks.Knowledges
     [TestClass]
     public class AgentKnowledgeTests
     {
-        private readonly AgentKnowledge _agentKnowledge = new AgentKnowledge(4, KnowledgeLevel.BasicKnowledge, 0, -1);
+        private readonly Knowledge _knowledge = new Knowledge(3, "k3", 10);
+        private AgentKnowledge _agentKnowledge ;
         private readonly float[] _knowledge01Bits = {0, 1};
         private readonly float[] _knowledge0Bits = {0, 0};
         private readonly float[] _knowledge1Bits = {1, 1};
@@ -34,6 +36,7 @@ namespace SymuTests.Repository.Networks.Knowledges
             _agentKnowledge0 = new AgentKnowledge(0, _knowledge0Bits, 0, -1, 0);
             _agentKnowledge1 = new AgentKnowledge(1, _knowledge1Bits, 0, -1, 0);
             _agentKnowledge01 = new AgentKnowledge(2, _knowledge01Bits, 0, -1, 0);
+            _agentKnowledge = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.BasicKnowledge, 0, -1);
         }
 
         [TestMethod]
@@ -127,5 +130,105 @@ namespace SymuTests.Repository.Networks.Knowledges
             Assert.AreEqual(_agentKnowledge1.KnowledgeBits.GetBit(0), clone.GetBit(0));
             Assert.AreEqual(_agentKnowledge1.KnowledgeBits.GetBit(1), clone.GetBit(1));
         }
+
+        #region Initialize AgentKnowledge
+        /// <summary>
+        ///     Random Binary Generator
+        /// </summary>
+        [DataRow(KnowledgeLevel.Expert)]
+        [DataRow(KnowledgeLevel.Random)]
+        [TestMethod]
+        public void InitializeBitsTest(KnowledgeLevel level)
+        {
+            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, level, 0);
+            var knowledgeBits = _agentKnowledge.KnowledgeBits;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(Math.Abs(knowledgeBits.GetBit(i)) < Tolerance ||
+                              Math.Abs(knowledgeBits.GetBit(i) - 1) < Tolerance);
+            }
+        }
+
+        /// <summary>
+        ///     Random Binary Generator with full knowledge
+        /// </summary>
+        [TestMethod]
+        public void InitializeBitsTest1()
+        {
+            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.FullKnowledge, 0);
+            var knowledgeBits = _agentKnowledge.KnowledgeBits;
+            byte no1 = 0;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(Math.Abs(knowledgeBits.GetBit(i) - 1) < Tolerance);
+                if (Math.Abs(knowledgeBits.GetBit(i) - 1) < Tolerance)
+                {
+                    no1++;
+                }
+            }
+
+            Assert.IsTrue(no1 == 10);
+        }
+
+        /// <summary>
+        ///     Random Binary Generator with no knowledge
+        /// </summary>
+        [TestMethod]
+        public void InitializeBitsTest2()
+        {
+            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.NoKnowledge, 0);
+            var knowledgeBits = _agentKnowledge.KnowledgeBits;
+            byte no1 = 0;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(Math.Abs(knowledgeBits.GetBit(i)) < Tolerance);
+                if (Math.Abs(knowledgeBits.GetBit(i)) < Tolerance)
+                {
+                    no1++;
+                }
+            }
+
+            Assert.IsTrue(no1 == 10);
+        }
+
+        /// <summary>
+        ///     Random Uniform Generator
+        /// </summary>
+        [DataRow(KnowledgeLevel.Expert)]
+        [DataRow(KnowledgeLevel.BasicKnowledge)]
+        [DataRow(KnowledgeLevel.Foundational)]
+        [DataRow(KnowledgeLevel.FullProficiency)]
+        [DataRow(KnowledgeLevel.Intermediate)]
+        [TestMethod]
+        public void InitializeBitsTest3(KnowledgeLevel level)
+        {
+            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomUniform, level, 0);
+            var knowledgeBits = _agentKnowledge.KnowledgeBits;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(
+                    Knowledge.GetMinFromKnowledgeLevel(level) <= knowledgeBits.GetBit(i) ||
+                    Math.Abs(knowledgeBits.GetBit(i)) < Tolerance);
+                Assert.IsTrue(knowledgeBits.GetBit(i) <=
+                              Knowledge.GetMaxFromKnowledgeLevel(level));
+            }
+        }
+
+        /// <summary>
+        ///     Random Uniform Generator with random knowledge
+        /// </summary>
+        [TestMethod]
+        public void InitializeBitsTest5()
+        {
+            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.Random, 0);
+            var knowledgeBits = _agentKnowledge.KnowledgeBits;
+            for (byte i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(0 <= knowledgeBits.GetBit(i) ||
+                              Math.Abs(knowledgeBits.GetBit(i)) < Tolerance);
+                Assert.IsTrue(knowledgeBits.GetBit(i) <= 1);
+            }
+        }
+        #endregion
     }
 }

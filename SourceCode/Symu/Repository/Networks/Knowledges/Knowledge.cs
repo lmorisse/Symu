@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
@@ -19,11 +20,15 @@ namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
     ///     Describe an area of knowledge
+    /// Default implementation of IKnowledge
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class Knowledge
+    public class Knowledge: IKnowledge
     {
-        public Knowledge(ushort id, string name, byte length)
+        public Knowledge(ushort id, string name, byte length): this(new UId(id), name, length)
+        {
+        }
+        public Knowledge(IId id, string name, byte length)
         {
             Id = id;
             Name = name;
@@ -36,9 +41,9 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-        ///     For the moment only an id
+        ///     Unique identifier af the knowledge
         /// </summary>
-        public ushort Id { get; }
+        public IId Id { get; }
 
         public string Name { get; }
 
@@ -56,6 +61,11 @@ namespace Symu.Repository.Networks.Knowledges
                    && Id == knowledge.Id;
         }
 
+        public bool Equals(IKnowledge knowledge)
+        {
+            return knowledge is Knowledge know
+                   && Id == know.Id;
+        }
         public override string ToString()
         {
             return Name;
@@ -66,7 +76,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        private static float GetValueFromKnowledgeLevel(KnowledgeLevel level)
+        public static float GetValueFromKnowledgeLevel(KnowledgeLevel level)
         {
             return ContinuousUniform.Sample(GetMinFromKnowledgeLevel(level), GetMaxFromKnowledgeLevel(level));
         }
@@ -115,76 +125,6 @@ namespace Symu.Repository.Networks.Knowledges
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
-        }
-
-        /// <summary>
-        ///     Given a KnowledgeModel and a KnowledgeLevel
-        ///     return the knowledgeBits for the agent: an array fill of random binaries
-        ///     representing the detailed knowledge of an agent
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="knowledgeLevel"></param>
-        /// <returns></returns>
-        public float[] InitializeBits(RandomGenerator model, KnowledgeLevel knowledgeLevel)
-        {
-            float[] knowledgeBits;
-            switch (model)
-            {
-                case RandomGenerator.RandomUniform:
-                {
-                    float min;
-                    float max;
-
-                    switch (knowledgeLevel)
-                    {
-                        case KnowledgeLevel.Random:
-                            min = 0;
-                            max = 1;
-                            break;
-                        default:
-                            min = GetMinFromKnowledgeLevel(knowledgeLevel);
-                            max = GetMaxFromKnowledgeLevel(knowledgeLevel);
-                            break;
-                    }
-
-                    knowledgeBits = ContinuousUniform.Samples(Length, min, max);
-                    if (Math.Abs(min - max) < Constants.Tolerance)
-                    {
-                        return knowledgeBits;
-                    }
-
-                    for (byte i = 0; i < knowledgeBits.Length; i++)
-                    {
-                        if (knowledgeBits[i] < min * (1 + 0.05))
-                        {
-                            // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
-                            // We force the lowest (Min +5%) knowledgeBit to 0  
-                            knowledgeBits[i] = 0;
-                        }
-                    }
-
-                    break;
-                }
-                case RandomGenerator.RandomBinary:
-                {
-                    switch (knowledgeLevel)
-                    {
-                        case KnowledgeLevel.Random:
-                            knowledgeBits = ContinuousUniform.FilteredSamples(Length, 0, 1);
-                            break;
-                        default:
-                            var mean = 1 - GetValueFromKnowledgeLevel(knowledgeLevel);
-                            knowledgeBits = ContinuousUniform.FilteredSamples(Length, mean);
-                            break;
-                    }
-
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(model), model, null);
-            }
-
-            return knowledgeBits;
         }
 
         /// <summary>

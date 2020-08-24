@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
@@ -56,7 +57,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <summary>
         ///     Get all the activities of an agent
         /// </summary>
-        public IEnumerable<string> Activities => _networkActivities.GetGroupActivities(_agentId);
+        public IEnumerable<IActivity> Activities => _networkActivities.GetGroupActivities(_agentId);
 
         /// <summary>
         ///     Add a list of activities an agent can perform
@@ -70,7 +71,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <summary>
         ///     List of the activities on which an agent is working, filtered by groupId
         /// </summary>
-        public IEnumerable<string> GetGroupActivities(AgentId groupId)
+        public IEnumerable<IActivity> GetGroupActivities(AgentId groupId)
         {
             return _networkActivities.GetAgentActivities(_agentId, groupId);
         }
@@ -80,7 +81,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="activities"></param>
         /// <param name="groupId"></param>
-        public void AddActivities(AgentId groupId, IEnumerable<string> activities)
+        public void AddActivities(AgentId groupId, IEnumerable<IActivity> activities)
         {
             _networkActivities.AddActivities(_agentId, groupId, activities);
         }
@@ -89,7 +90,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     Get the all the knowledges for all the activities of an agent
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, List<Knowledge>>
+        public IDictionary<IActivity, List<IKnowledge>>
             GetActivitiesKnowledgesByActivity()
         {
             return _networkActivities.GetActivitiesKnowledgesByActivity(_agentId);

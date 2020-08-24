@@ -25,7 +25,7 @@ namespace SymuTests.Repository.Entity
     [TestClass]
     public class DatabaseTests
     {
-        private const ushort KnowledgeId = 1;
+        private readonly UId _knowledgeId = new UId(1);
         private readonly float[] _floats1 = {1, 1};
         private Bits _bits1;
         private Database _database;
@@ -45,8 +45,8 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void InitializeKnowledgeTest()
         {
-            _database.InitializeKnowledge(KnowledgeId, 1, 0);
-            var agentKnowledge = _database.GetKnowledge(KnowledgeId);
+            _database.InitializeKnowledge(_knowledgeId, 1, 0);
+            var agentKnowledge = _database.GetKnowledge(_knowledgeId);
             Assert.IsNotNull(agentKnowledge);
         }
 
@@ -56,8 +56,8 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void StoreKnowledgeTest()
         {
-            _database.StoreKnowledge(KnowledgeId, _bits1, 1, 0);
-            var agentKnowledge = _database.GetKnowledge(KnowledgeId);
+            _database.StoreKnowledge(_knowledgeId, _bits1, 1, 0);
+            var agentKnowledge = _database.GetKnowledge(_knowledgeId);
             Assert.IsNotNull(agentKnowledge);
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(1, agentKnowledge.GetKnowledgeBit(1));
@@ -69,8 +69,8 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void StoreKnowledge1Test()
         {
-            _database.StoreKnowledge(KnowledgeId, _bits1, 0, 0);
-            var agentKnowledge = _database.GetKnowledge(KnowledgeId);
+            _database.StoreKnowledge(_knowledgeId, _bits1, 0, 0);
+            var agentKnowledge = _database.GetKnowledge(_knowledgeId);
             Assert.IsNotNull(agentKnowledge);
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(0, agentKnowledge.GetKnowledgeBit(1));
@@ -82,9 +82,9 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void SearchKnowledgeTest()
         {
-            Assert.IsFalse(_database.SearchKnowledge(KnowledgeId, 0, 0));
-            _database.StoreKnowledge(KnowledgeId, _bits1, 1, 0);
-            Assert.IsTrue(_database.SearchKnowledge(KnowledgeId, 0, 0));
+            Assert.IsFalse(_database.SearchKnowledge(_knowledgeId, 0, 0));
+            _database.StoreKnowledge(_knowledgeId, _bits1, 1, 0);
+            Assert.IsTrue(_database.SearchKnowledge(_knowledgeId, 0, 0));
         }
 
         /// <summary>
@@ -93,10 +93,10 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void SearchKnowledgeTest1()
         {
-            Assert.IsFalse(_database.SearchKnowledge(KnowledgeId, 0, 0));
-            _database.StoreKnowledge(KnowledgeId, _bits1, 0.5F, 0);
-            Assert.IsFalse(_database.SearchKnowledge(KnowledgeId, 0, 0.5F));
-            Assert.IsTrue(_database.SearchKnowledge(KnowledgeId, 0, 0.4F));
+            Assert.IsFalse(_database.SearchKnowledge(_knowledgeId, 0, 0));
+            _database.StoreKnowledge(_knowledgeId, _bits1, 0.5F, 0);
+            Assert.IsFalse(_database.SearchKnowledge(_knowledgeId, 0, 0.5F));
+            Assert.IsTrue(_database.SearchKnowledge(_knowledgeId, 0, 0.4F));
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void ForgettingProcessTest()
         {
-            _database.StoreKnowledge(KnowledgeId, _bits1, 1, 0);
+            _database.StoreKnowledge(_knowledgeId, _bits1, 1, 0);
             _database.ForgettingProcess(100);
-            Assert.IsTrue(_database.SearchKnowledge(KnowledgeId, 0, 0));
+            Assert.IsTrue(_database.SearchKnowledge(_knowledgeId, 0, 0));
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace SymuTests.Repository.Entity
         public void ForgettingProcessTest1()
         {
             _database.Entity.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
-            _database.StoreKnowledge(KnowledgeId, _bits1, 1, 0);
+            _database.StoreKnowledge(_knowledgeId, _bits1, 1, 0);
             _database.ForgettingProcess(2);
-            Assert.IsFalse(_database.SearchKnowledge(KnowledgeId, 0, 0));
+            Assert.IsFalse(_database.SearchKnowledge(_knowledgeId, 0, 0));
         }
     }
 }

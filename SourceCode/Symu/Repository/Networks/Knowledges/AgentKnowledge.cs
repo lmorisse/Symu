@@ -7,6 +7,11 @@
 
 #endregion
 
+using System;
+using Symu.Common;
+using Symu.Common.Interfaces.Entity;
+using Symu.Common.Math.ProbabilityDistributions;
+
 namespace Symu.Repository.Networks.Knowledges
 {
     /// <summary>
@@ -19,58 +24,73 @@ namespace Symu.Repository.Networks.Knowledges
         /// <summary>
         ///     Constructor used by WorkerCognitiveAgent for ForgettingKnowledge
         /// </summary>
-        /// <param name="idKnowledge"></param>
+        /// <param name="knowledgeId"></param>
         /// <param name="knowledgeBits"></param>
-        public AgentKnowledge(ushort idKnowledge, KnowledgeBits knowledgeBits)
+        public AgentKnowledge(IId knowledgeId, KnowledgeBits knowledgeBits)
         {
-            KnowledgeId = idKnowledge;
+            KnowledgeId = knowledgeId;
             KnowledgeBits = knowledgeBits;
         }
 
+        public AgentKnowledge(ushort knowledgeId, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
+            ushort step): this(new UId(knowledgeId), knowledgeBits, minimumKnowledge, timeToLive, step)
+        {
+        }
+
         /// <summary>
-        ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
-        /// </summary>
-        /// <param name="idKnowledge"></param>
-        /// <param name="knowledgeBits"></param>
-        /// <param name="minimumKnowledge"></param>
-        /// <param name="timeToLive"></param>
-        /// <param name="step"></param>
-        public AgentKnowledge(ushort idKnowledge, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
+            ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
+            /// </summary>
+            /// <param name="knowledgeId"></param>
+            /// <param name="knowledgeBits"></param>
+            /// <param name="minimumKnowledge"></param>
+            /// <param name="timeToLive"></param>
+            /// <param name="step"></param>
+            public AgentKnowledge(IId knowledgeId, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
             ushort step)
         {
-            KnowledgeId = idKnowledge;
+            KnowledgeId = knowledgeId;
             MinimumKnowledge = minimumKnowledge;
             TimeToLive = timeToLive;
             KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
             KnowledgeBits.SetBits(knowledgeBits, step);
         }
 
-        public AgentKnowledge(ushort idKnowledge, float[] knowledgeBits, KnowledgeLevel level, float minimumKnowledge,
+        public AgentKnowledge(ushort knowledgeId, float[] knowledgeBits, KnowledgeLevel level, float minimumKnowledge,
+            short timeToLive, ushort step) : this(new UId(knowledgeId), knowledgeBits, level, minimumKnowledge,
+            timeToLive, step)
+        {
+
+        }
+        public AgentKnowledge(IId knowledgeId, float[] knowledgeBits, KnowledgeLevel level, float minimumKnowledge,
             short timeToLive, ushort step) : this(
-            idKnowledge, knowledgeBits, minimumKnowledge, timeToLive, step)
+            knowledgeId, knowledgeBits, minimumKnowledge, timeToLive, step)
         {
             KnowledgeLevel = level;
         }
 
-        /// <summary>
-        ///     Constructor based on the knowledge Id and the knowledge Level.
-        ///     KnowledgeBits is not yet initialized.
-        ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
-        /// </summary>
-        /// <param name="idKnowledge"></param>
-        /// <param name="level"></param>
-        /// <param name="minimumKnowledge"></param>
-        /// <param name="timeToLive"></param>
-        public AgentKnowledge(ushort idKnowledge, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        public AgentKnowledge(ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive) : this (new UId(knowledgeId), level, minimumKnowledge, timeToLive)
         {
-            KnowledgeId = idKnowledge;
+        }
+
+        /// <summary>
+            ///     Constructor based on the knowledge Id and the knowledge Level.
+            ///     KnowledgeBits is not yet initialized.
+            ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
+            /// </summary>
+            /// <param name="knowledgeId"></param>
+            /// <param name="level"></param>
+            /// <param name="minimumKnowledge"></param>
+            /// <param name="timeToLive"></param>
+            public AgentKnowledge(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        {
+            KnowledgeId = knowledgeId;
             KnowledgeLevel = level;
             MinimumKnowledge = minimumKnowledge;
             TimeToLive = timeToLive;
             KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
         }
 
-        public ushort KnowledgeId { get; }
+        public IId KnowledgeId { get; }
         public KnowledgeBits KnowledgeBits { get; private set; }
         public KnowledgeLevel KnowledgeLevel { get; }
 
@@ -163,6 +183,80 @@ namespace Symu.Repository.Networks.Knowledges
         public float GetKnowledgePotential()
         {
             return KnowledgeBits.Length;
+        }
+
+        /// <summary>
+        ///     Given a KnowledgeModel and a KnowledgeLevel
+        ///     return the knowledgeBits for the agent: an array fill of random binaries
+        ///     representing the detailed knowledge of an agent
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="model"></param>
+        /// <param name="knowledgeLevel"></param>
+        /// <param name="step"></param>
+        /// <returns></returns>
+        //todo put in interface IAgentKnowledge
+        public void InitializeBits(byte length, RandomGenerator model, KnowledgeLevel knowledgeLevel, ushort step)
+        {
+            float[] knowledgeBits;
+            switch (model)
+            {
+                case RandomGenerator.RandomUniform:
+                    {
+                        float min;
+                        float max;
+
+                        switch (knowledgeLevel)
+                        {
+                            case KnowledgeLevel.Random:
+                                min = 0;
+                                max = 1;
+                                break;
+                            default:
+                                min = Knowledge.GetMinFromKnowledgeLevel(knowledgeLevel);
+                                max = Knowledge.GetMaxFromKnowledgeLevel(knowledgeLevel);
+                                break;
+                        }
+
+                        knowledgeBits = ContinuousUniform.Samples(length, min, max);
+                        if (Math.Abs(min - max) < Constants.Tolerance)
+                        {
+                            SetKnowledgeBits(knowledgeBits, step);
+                            return;
+                        }
+
+                        for (byte i = 0; i < knowledgeBits.Length; i++)
+                        {
+                            if (knowledgeBits[i] < min * (1 + 0.05))
+                            {
+                                // In randomUniform, there is quasi no bit == 0. But in reality, there are knowledgeBit we ignore.
+                                // We force the lowest (Min +5%) knowledgeBit to 0  
+                                knowledgeBits[i] = 0;
+                            }
+                        }
+
+                        break;
+                    }
+                case RandomGenerator.RandomBinary:
+                    {
+                        switch (knowledgeLevel)
+                        {
+                            case KnowledgeLevel.Random:
+                                knowledgeBits = ContinuousUniform.FilteredSamples(length, 0, 1);
+                                break;
+                            default:
+                                var mean = 1 - Knowledge.GetValueFromKnowledgeLevel(knowledgeLevel);
+                                knowledgeBits = ContinuousUniform.FilteredSamples(length, mean);
+                                break;
+                        }
+
+                        break;
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(model), model, null);
+            }
+
+            SetKnowledgeBits(knowledgeBits, step);
         }
 
         public void SetKnowledgeBits(float[] knowledgeBits, ushort step)

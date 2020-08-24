@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -66,7 +67,7 @@ namespace Symu.Repository.Networks.Knowledges
             List.Add(agentKnowledge);
         }
 
-        public void Add(ushort knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        public void Add(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
         {
             var agentKnowledge = new AgentKnowledge(knowledgeId, level, minimumKnowledge, timeToLive);
             Add(agentKnowledge);
@@ -82,21 +83,21 @@ namespace Symu.Repository.Networks.Knowledges
             return Contains(agentKnowledge.KnowledgeId);
         }
 
-        public bool Contains(ushort knowledgeId)
+        public bool Contains(IId knowledgeId)
         {
-            return List.Exists(x => x.KnowledgeId == knowledgeId);
+            return List.Exists(x => x.KnowledgeId.Equals(knowledgeId));
         }
 
-        public AgentKnowledge GetKnowledge(ushort knowledgeId)
+        public AgentKnowledge GetKnowledge(IId knowledgeId)
         {
-            return List.Find(x => x.KnowledgeId == knowledgeId);
+            return List.Find(x => x.KnowledgeId.Equals(knowledgeId));
         }
 
         /// <summary>
         ///     Get all the knowledge of an agent
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ushort> GetKnowledgeIds()
+        public IEnumerable<IId> GetKnowledgeIds()
         {
             return List.Select(x => x.KnowledgeId);
         }

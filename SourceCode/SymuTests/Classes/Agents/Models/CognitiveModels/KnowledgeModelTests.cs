@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
@@ -156,7 +157,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void AskKnowledgeToSendTest()
         {
-            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(1, 0, _emailTemplate, 0, out _));
+            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _));
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void GetFilteredKnowledgeToSendTest()
         {
             _cognitiveArchitecture.MessageContent.CanSendKnowledge = false;
-            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(1, 0, _emailTemplate, 0, out _));
+            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _));
         }
 
         /// <summary>
@@ -178,7 +179,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void GetFilteredKnowledgeToSendTest1()
         {
             _cognitiveArchitecture.MessageContent.CanSendKnowledge = true;
-            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(0, 0, _emailTemplate, 0, out _));
+            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(new UId(0), 0, _emailTemplate, 0, out _));
         }
 
         /// <summary>
@@ -363,7 +364,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             float[] bits = { 0, 1 };
             var knowledgeBits = new KnowledgeBits(bits, 0, -1);
-            var agentKnowledge = new AgentKnowledge(1, knowledgeBits);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, knowledgeBits);
             _expertise.Add(agentKnowledge);
             Assert.IsFalse(_knowledgeModel.KnowsEnough(_knowledge.Id, 0, 0.1F, 0));
             Assert.IsTrue(_knowledgeModel.KnowsEnough(_knowledge.Id, 1, 0.1F, 0));

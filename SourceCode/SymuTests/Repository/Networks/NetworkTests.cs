@@ -72,7 +72,7 @@ namespace SymuTests.Repository.Networks
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.Beliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Activities.AddActivities(_teammateId, _teamId, new List<string> {"a1"});
+            _network.Activities.AddActivities(_teammateId, _teamId, new List<IActivity> { _activity });
             _network.Clear();
             Assert.IsFalse(_network.Links.Any());
             Assert.IsFalse(_network.Groups.Any());
@@ -156,7 +156,7 @@ namespace SymuTests.Repository.Networks
             _network.Resources.Add(_teammateId, _agentResource);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
-            _network.Activities.AddActivities(_teammateId, _teamId, new List<string> {_activity.Name});
+            _network.Activities.AddActivities(_teammateId, _teamId, new List<IActivity> {_activity});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));
             Assert.IsFalse(_network.Links.Any());

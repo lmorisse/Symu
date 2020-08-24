@@ -210,7 +210,7 @@ namespace Symu.Repository.Networks
         /// <summary>
         ///     Add a set of Knowledge to the repository
         /// </summary>
-        public void AddKnowledges(IEnumerable<Knowledge> knowledge)
+        public void AddKnowledges(IEnumerable<IKnowledge> knowledge)
         {
             var knowledges = knowledge.ToList();
             Knowledge.AddKnowledges(knowledges);

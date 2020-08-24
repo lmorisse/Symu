@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
@@ -121,7 +122,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefBits">from agentAgentId beliefBits</param>
         /// <param name="agentId"></param>
         /// <param name="beliefLevel"></param>
-        public void BeInfluenced(ushort beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
+        public void BeInfluenced(IId beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
         {
             if (!On || beliefBits == null)
             {
@@ -136,7 +137,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _networkBeliefs.Learn(_agentId, beliefId, beliefBits, influenceability * influentialness, beliefLevel);
         }
 
-        public void ReinforcementByDoing(ushort beliefId, byte beliefBit, BeliefLevel beliefLevel)
+        public void ReinforcementByDoing(IId beliefId, byte beliefBit, BeliefLevel beliefLevel)
         {
             if (!On)
             {

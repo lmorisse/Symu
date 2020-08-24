@@ -14,6 +14,7 @@ using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
@@ -393,7 +394,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="workingBits"></param>
-        public void UpdateForgettingProcess(ushort knowledgeId, byte[] workingBits)
+        public void UpdateForgettingProcess(IId knowledgeId, byte[] workingBits)
         {
             if (workingBits is null)
             {
@@ -419,7 +420,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="knowledgeId"></param>
         /// <param name="taskBits"></param>
-        public void UpdateForgettingProcess(ushort knowledgeId, TaskKnowledgeBits taskBits)
+        public void UpdateForgettingProcess(IId knowledgeId, TaskKnowledgeBits taskBits)
         {
             if (taskBits is null)
             {

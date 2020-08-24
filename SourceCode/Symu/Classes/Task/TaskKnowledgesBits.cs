@@ -11,6 +11,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -29,23 +30,23 @@ namespace Symu.Classes.Task
         /// </summary>
         public List<TaskKnowledgeBits> List { get; } = new List<TaskKnowledgeBits>();
 
-        public IEnumerable<ushort> KnowledgeIds => List.Select(x => x.KnowledgeId);
+        public IEnumerable<IId> KnowledgeIds => List.Select(x => x.KnowledgeId);
 
         public void Add(TaskKnowledgeBits bit)
         {
             List.Add(bit);
         }
 
-        public TaskKnowledgeBits GetBits(ushort knowledgeId)
+        public TaskKnowledgeBits GetBits(IId knowledgeId)
         {
-            return List.Find(x => x.KnowledgeId == knowledgeId);
+            return List.Find(x => x.KnowledgeId.Equals(knowledgeId));
         }
 
         /// <summary>
         ///     Remove the first item of the Required Array, because the task has been done
         /// </summary>
         /// <param name="knowledgeId"></param>
-        public void RemoveFirstMandatory(ushort knowledgeId)
+        public void RemoveFirstMandatory(IId knowledgeId)
         {
             var bits = GetBits(knowledgeId);
             if (bits is null)
@@ -74,7 +75,7 @@ namespace Symu.Classes.Task
         ///     Remove the first item of the Required Array, because the task has been done
         /// </summary>
         /// <param name="knowledgeId"></param>
-        public void RemoveFirstRequired(ushort knowledgeId)
+        public void RemoveFirstRequired(IId knowledgeId)
         {
             var bits = GetBits(knowledgeId);
             byte[] removedRequired;

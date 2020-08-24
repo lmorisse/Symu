@@ -12,16 +12,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace Symu.Repository.Networks.Activities
+namespace Symu.Repository.Entity
 {
     /// <summary>
+    ///     Default implementation of IActivity
     ///     Define an activity by its name and the list of knowledgeIds required by the activity
     /// </summary>
-    public class Activity
+    public class Activity : IActivity
     {
         public Activity(string name)
         {
@@ -33,9 +36,10 @@ namespace Symu.Repository.Networks.Activities
         /// <summary>
         ///     List of knowledges required to work on this activity
         /// </summary>
-        public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
+        public List<IKnowledge> Knowledges { get; } = new List<IKnowledge>();
 
-        public void AddKnowledge(Knowledge knowledge)
+
+        public void AddKnowledge(IKnowledge knowledge)
         {
             if (Knowledges.Contains(knowledge))
             {
@@ -50,7 +54,7 @@ namespace Symu.Repository.Networks.Activities
         /// </summary>
         /// <param name="agentKnowledgeIds"></param>
         /// <returns></returns>
-        public bool CheckKnowledgeIds(List<ushort> agentKnowledgeIds)
+        public bool CheckKnowledgeIds(List<IId> agentKnowledgeIds)
         {
             if (agentKnowledgeIds is null)
             {
@@ -58,6 +62,12 @@ namespace Symu.Repository.Networks.Activities
             }
 
             return Knowledges.Any(knowledge => agentKnowledgeIds.Contains(knowledge.Id));
+        }
+
+        public bool Equals(IActivity activity)
+        {
+            return activity is Activity act &&
+                   Name == act.Name;
         }
     }
 }

@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -39,7 +40,7 @@ namespace Symu.Repository.Networks.Beliefs
             }
         }
 
-        public void Add(ushort beliefId, BeliefLevel beliefLevel)
+        public void Add(IId beliefId, BeliefLevel beliefLevel)
         {
             var agentBelief = new AgentBelief(beliefId, beliefLevel);
             Add(agentBelief);
@@ -55,14 +56,14 @@ namespace Symu.Repository.Networks.Beliefs
             return Contains(agentBelief.BeliefId);
         }
 
-        public bool Contains(ushort beliefId)
+        public bool Contains(IId beliefId)
         {
-            return List.Exists(x => x.BeliefId == beliefId);
+            return List.Exists(x => x.BeliefId.Equals(beliefId));
         }
 
-        public AgentBelief GetBelief(ushort beliefId)
+        public AgentBelief GetBelief(IId beliefId)
         {
-            return List.Find(x => x.BeliefId == beliefId);
+            return List.Find(x => x.BeliefId.Equals(beliefId));
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace Symu.Repository.Networks.Beliefs
         /// <param name="beliefBit"></param>
         /// <param name="beliefThreshHoldForAnswer"></param>
         /// <returns>true if the agent has the knowledge</returns>
-        public bool BelievesEnough(ushort beliefId, byte beliefBit, float beliefThreshHoldForAnswer)
+        public bool BelievesEnough(IId beliefId, byte beliefBit, float beliefThreshHoldForAnswer)
         {
             if (!Contains(beliefId))
             {
@@ -106,7 +107,7 @@ namespace Symu.Repository.Networks.Beliefs
         ///     Get all the belief Ids of an agent
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ushort> GetBeliefIds()
+        public IEnumerable<IId> GetBeliefIds()
         {
             return List.Select(x => x.BeliefId);
         }

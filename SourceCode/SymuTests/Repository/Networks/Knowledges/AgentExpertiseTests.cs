@@ -55,7 +55,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void GetKnowledgeTest()
         {
-            Assert.IsNull(_expertise.GetKnowledge(1));
+            Assert.IsNull(_expertise.GetKnowledge(_knowledge.Id));
         }
     }
 }

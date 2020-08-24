@@ -15,6 +15,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 
@@ -119,7 +120,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             // AgentId
             Assert.ThrowsException<NullReferenceException>(() => _network.InitializeBeliefs(_agentId, true));
-            _network.Add(_agentId, 0, BeliefLevel.NoBelief);
+            _network.Add(_agentId, new UId(0), BeliefLevel.NoBelief);
             // Belief
             Assert.ThrowsException<NullReferenceException>(() => _network.InitializeBeliefs(_agentId, true));
         }
@@ -187,7 +188,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void GetAgentBeliefTest()
         {
             _network.Add(_agentId, _belief, BeliefLevel.NoBelief);
-            Assert.IsNull(_network.GetAgentBelief(_agentId, 0));
+            Assert.IsNull(_network.GetAgentBelief(_agentId, new UId(0)));
             Assert.IsNotNull(_network.GetAgentBelief(_agentId, _belief.Id));
         }
 
@@ -217,7 +218,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             _network.AddAgentId(_agentId);
             Assert.AreEqual(0, _network.GetBeliefIds(_agentId).Count());
-            _network.AddBelief(_agentId, 1, BeliefLevel.NoBelief);
+            _network.AddBelief(_agentId, _belief.Id, BeliefLevel.NoBelief);
             Assert.AreEqual(1, _network.GetBeliefIds(_agentId).Count());
         }
 
@@ -231,7 +232,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void InitializeAgentBeliefTest()
         {
             _network.AddBelief(_belief);
-            var agentKnowledge = new AgentBelief(1, BeliefLevel.NoBelief);
+            var agentKnowledge = new AgentBelief(_belief.Id, BeliefLevel.NoBelief);
             Assert.IsTrue(agentKnowledge.BeliefBits.IsNull);
             _network.InitializeAgentBelief(agentKnowledge, false);
             Assert.IsFalse(agentKnowledge.BeliefBits.IsNull);

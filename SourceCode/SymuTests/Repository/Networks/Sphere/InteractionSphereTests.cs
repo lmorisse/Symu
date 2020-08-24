@@ -19,6 +19,7 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
@@ -155,7 +156,7 @@ namespace SymuTests.Repository.Networks.Sphere
 
         private void AddActivity(AgentId agentId)
         {
-            _network.Activities.AddActivity(agentId, _activity.Name, _groupId);
+            _network.Activities.AddActivity(agentId, _groupId, _activity);
         }
 
         private void AddBelief(AgentId agentId, float belief)

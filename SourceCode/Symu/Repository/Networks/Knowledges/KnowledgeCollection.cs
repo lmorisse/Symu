@@ -11,6 +11,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -29,7 +30,7 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Key => ComponentId
         ///     Values => List of Knowledge
         /// </summary>
-        public List<Knowledge> List { get; } = new List<Knowledge>();
+        public List<IKnowledge> List { get; } = new List<IKnowledge>();
 
         public int Count => List.Count;
 
@@ -43,7 +44,7 @@ namespace Symu.Repository.Networks.Knowledges
             List.Clear();
         }
 
-        public void Add(Knowledge knowledge)
+        public void Add(IKnowledge knowledge)
         {
             if (!Contains(knowledge))
             {
@@ -51,17 +52,17 @@ namespace Symu.Repository.Networks.Knowledges
             }
         }
 
-        public bool Contains(Knowledge knowledge)
+        public bool Contains(IKnowledge knowledge)
         {
             return List.Contains(knowledge);
         }
 
-        public Knowledge GetKnowledge(ushort knowledgeId)
+        public IKnowledge GetKnowledge(IId knowledgeId)
         {
-            return List.Find(k => k.Id == knowledgeId);
+            return List.Find(k => k.Id.Equals(knowledgeId));
         }
 
-        public IEnumerable<ushort> GetIds()
+        public IEnumerable<IId> GetIds()
         {
             return List.Select(x => x.Id);
         }

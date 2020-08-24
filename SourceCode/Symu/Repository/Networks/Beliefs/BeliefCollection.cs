@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -59,14 +60,14 @@ namespace Symu.Repository.Networks.Beliefs
             return Exists(belief.Id);
         }
 
-        public Belief GetBelief(ushort beliefId)
+        public Belief GetBelief(IId beliefId)
         {
-            return List.Find(k => k.Id == beliefId);
+            return List.Find(k => k.Id.Equals(beliefId));
         }
 
-        public bool Exists(ushort beliefId)
+        public bool Exists(IId beliefId)
         {
-            return List.Exists(k => k.Id == beliefId);
+            return List.Exists(k => k.Id.Equals(beliefId));
         }
     }
 }

@@ -15,6 +15,7 @@ using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 
@@ -272,12 +273,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void UpdateForgettingKnowledgeTest()
         {
             var forgettingBits = new float[] {1};
-            var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
+            var forgetting = new AgentKnowledge(_knowledge.Id, forgettingBits, 0, -1, 0);
             InitializeModel(true, 0);
             _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _forgettingModel.UpdateForgettingProcess(2, workingBits);
+            _forgettingModel.UpdateForgettingProcess(new UId(2), workingBits);
             // ForgettingBits should not be updated because the KnowledgeId is not the same
             Assert.AreEqual(1, forgetting.GetKnowledgeBit(0));
         }
@@ -289,12 +290,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void UpdateForgettingKnowledgeTest1()
         {
             var forgettingBits = new float[] {1};
-            var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
+            var forgetting = new AgentKnowledge(_knowledge.Id, forgettingBits, 0, -1, 0);
             InitializeModel(true, 0);
             _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _forgettingModel.UpdateForgettingProcess(1, workingBits);
+            _forgettingModel.UpdateForgettingProcess(_knowledge.Id, workingBits);
             // ForgettingBits should be set to 0
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }

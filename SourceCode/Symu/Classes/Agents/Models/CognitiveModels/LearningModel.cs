@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
@@ -128,7 +129,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeBits">the knowledge Bits to learn</param>
         /// <param name="maxRateLearnable">Maximum rate learnable from the message, depending on the medium used</param>
         /// <param name="step"></param>
-        public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
+        public void Learn(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
         {
             Learn(knowledgeId, knowledgeBits, maxRateLearnable, _internalCharacteristics.MinimumRemainingKnowledge,
                 _internalCharacteristics.TimeToLive, step);
@@ -144,16 +145,21 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void Learn(ushort knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
+        public void Learn(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
             short timeToLive, ushort step)
         {
-            if (knowledgeId == 0 || knowledgeBits == null || Math.Abs(TasksAndPerformance.LearningRate) < Tolerance ||
+            if (knowledgeId == null)
+            {
+                throw new ArgumentNullException(nameof(knowledgeId));
+            }
+
+            if (knowledgeId.IsNull || knowledgeBits == null || Math.Abs(TasksAndPerformance.LearningRate) < Tolerance ||
                 Math.Abs(maxRateLearnable) < Tolerance)
             {
                 return;
             }
 
-            if (knowledgeId > 0 && knowledgeBits == null)
+            if (knowledgeId.IsNotNull && knowledgeBits == null)
             {
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
@@ -211,7 +217,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float Learn(ushort knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive, ushort step)
+        public float Learn(IId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive, ushort step)
         {
             if (!IsAgentOn())
             {
@@ -261,7 +267,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeBit">the knowledge Bit to learn</param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float LearnByDoing(ushort knowledgeId, byte knowledgeBit, ushort step)
+        public float LearnByDoing(IId knowledgeId, byte knowledgeBit, ushort step)
         {
             return LearnByDoing(knowledgeId, knowledgeBit, _internalCharacteristics.MinimumRemainingKnowledge,
                 _internalCharacteristics.TimeToLive, step);
@@ -276,7 +282,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float LearnByDoing(ushort knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive,
+        public float LearnByDoing(IId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive,
             ushort step)
         {
             if (!IsAgentOn())

@@ -99,7 +99,7 @@ namespace SymuTests.Repository.Networks.Resources
         {
             _resources.AddAgentId(_agentId);
             Assert.IsTrue(_resources.Any());
-            Assert.IsFalse(_resources.ExistsAgentId(_agentId));
+            Assert.IsTrue(_resources.ExistsAgentId(_agentId));
         }
 
         [TestMethod]

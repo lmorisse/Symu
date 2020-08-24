@@ -17,6 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
@@ -71,7 +72,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             var agentKnowledge = new AgentKnowledge(2, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _beliefsModel.AddBeliefs(_expertise);
-            Assert.IsFalse(_network.Beliefs.Exists(_agentId, 2));
+            Assert.IsFalse(_network.Beliefs.Exists(_agentId, agentKnowledge.KnowledgeId));
         }
 
         /// <summary>
@@ -144,9 +145,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void NullGetFilteredBeliefToSendTest()
         {
-            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
-            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
         /// <summary>
@@ -157,8 +158,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void GetFilteredBeliefToSendTest0()
         {
             _beliefsModel.On = false;
-            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
-            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
         /// <summary>
@@ -168,9 +169,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest()
         {
-            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = false;
-            Assert.IsNull(_beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate));
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
         /// <summary>
@@ -180,9 +181,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest1()
         {
-            _network.Beliefs.Add(_agentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
-            Assert.IsNull(_beliefsModel.FilterBeliefToSend(0, 0, _emailTemplate));
+            Assert.IsNull(_beliefsModel.FilterBeliefToSend(new UId(0), 0, _emailTemplate));
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _network.Beliefs.InitializeBeliefs(_agentId, false);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
-            var bits = _beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate);
+            var bits = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate);
             Assert.IsNull(bits);
         }
 
@@ -229,7 +230,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
                 .SetBit(0, 1);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0;
-            var bits = _beliefsModel.FilterBeliefToSend(1, 0, _emailTemplate);
+            var bits = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate);
             Assert.IsNotNull(bits);
             Assert.AreEqual(1, bits.GetSum());
         }

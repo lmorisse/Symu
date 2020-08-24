@@ -16,6 +16,7 @@ using Symu.Classes.Blockers;
 using Symu.Classes.Murphies;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Sphere;
@@ -371,7 +372,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="task"></param>
         /// <param name="knowledgeId"></param>
-        protected virtual void CheckBlockerIncompleteKnowledge(SymuTask task, ushort knowledgeId)
+        protected virtual void CheckBlockerIncompleteKnowledge(SymuTask task, IId knowledgeId)
         {
             if (task == null)
             {
@@ -418,7 +419,7 @@ namespace Symu.Classes.Agents
         /// <param name="knowledgeBit"></param>
         /// <param name="blocker"></param>
         /// <param name="resolution">guessing or searched</param>
-        public void RecoverBlockerIncompleteKnowledgeByGuessing(SymuTask task, Blocker blocker, ushort knowledgeId,
+        public void RecoverBlockerIncompleteKnowledgeByGuessing(SymuTask task, Blocker blocker, IId knowledgeId,
             byte knowledgeBit, BlockerResolution resolution)
         {
             if (task is null)
@@ -470,7 +471,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(blocker));
             }
 
-            var knowledgeId = (ushort) blocker.Parameter;
+            var knowledgeId = (IId) blocker.Parameter;
             var knowledgeBit = (byte) blocker.Parameter2;
             // Check if he has the right to receive knowledge from others agents
             if (!Cognitive.MessageContent.CanReceiveKnowledge)
@@ -530,7 +531,7 @@ namespace Symu.Classes.Agents
         /// <param name="knowledgeId"></param>
         /// <param name="knowledgeBit"></param>
         public virtual void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker,
-            ushort knowledgeId,
+            IId knowledgeId,
             byte knowledgeBit)
         {
             RecoverBlockerIncompleteKnowledgeByGuessing(task, blocker, knowledgeId, knowledgeBit,
@@ -549,7 +550,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(blocker));
             }
 
-            task.KnowledgesBits.RemoveFirstMandatory((ushort) blocker.Parameter);
+            task.KnowledgesBits.RemoveFirstMandatory((IId) blocker.Parameter);
         }
 
         #endregion
@@ -591,7 +592,7 @@ namespace Symu.Classes.Agents
         ///     Prevent the agent from acting on a particular belief
         ///     Task may be blocked if it is the case
         /// </summary>
-        public void CheckBlockerIncompleteBelief(SymuTask task, ushort knowledgeId)
+        public void CheckBlockerIncompleteBelief(SymuTask task, IId knowledgeId)
         {
             if (task is null)
             {
@@ -637,7 +638,7 @@ namespace Symu.Classes.Agents
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected virtual void CheckBlockerIncompleteBelief(SymuTask task, ushort knowledgeId, float mandatoryScore,
+        protected virtual void CheckBlockerIncompleteBelief(SymuTask task, IId knowledgeId, float mandatoryScore,
             float requiredScore, byte mandatoryIndex, byte requiredIndex)
         {
             if (task == null)
@@ -662,7 +663,7 @@ namespace Symu.Classes.Agents
         ///     Prevent the agent from acting on a particular belief
         ///     Task may be blocked if it is the case
         /// </summary>
-        public void CheckRiskAversion(SymuTask task, ushort knowledgeId)
+        public void CheckRiskAversion(SymuTask task, IId knowledgeId)
         {
             if (task is null)
             {
@@ -730,7 +731,7 @@ namespace Symu.Classes.Agents
             }
 
             var murphy = Environment.Organization.Murphies.IncompleteBelief;
-            var knowledgeId = (ushort) blocker.Parameter;
+            var knowledgeId = (IId) blocker.Parameter;
             var knowledgeBit = (byte) blocker.Parameter2;
 
             var teammates = GetAgentIdsForInteractions(InteractionStrategy.Beliefs).ToList();
@@ -801,7 +802,7 @@ namespace Symu.Classes.Agents
                 return;
             }
 
-            var beliefId = (ushort) blocker.Parameter;
+            var beliefId = (IId) blocker.Parameter;
             var beliefBit = (byte) blocker.Parameter2;
             InfluenceModel.ReinforcementByDoing(beliefId, beliefBit, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
         }

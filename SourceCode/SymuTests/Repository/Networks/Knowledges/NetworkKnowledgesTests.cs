@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -54,7 +55,7 @@ namespace SymuTests.Repository.Networks.Knowledges
                 _agentId
             };
             // Non passing tests
-            var filteredAgents = _knowledgeNetwork.FilterAgentsWithKnowledge(agentIds, 0);
+            var filteredAgents = _knowledgeNetwork.FilterAgentsWithKnowledge(agentIds, new UId(0));
             Assert.AreEqual(0, filteredAgents.Count());
             filteredAgents = _knowledgeNetwork.FilterAgentsWithKnowledge(agentIds, _knowledge.Id);
             Assert.AreEqual(0, filteredAgents.Count());

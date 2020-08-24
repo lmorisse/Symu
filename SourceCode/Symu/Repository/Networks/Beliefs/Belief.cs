@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;
 
@@ -20,8 +21,9 @@ namespace Symu.Repository.Networks.Beliefs
 {
     /// <summary>
     ///     Describe a belief, based on knowledge/fact
+    /// Default implementation of IBelief
     /// </summary>
-    public class Belief
+    public class Belief : IBelief
     {
         /// <summary>
         ///     Range min = disagreement
@@ -34,6 +36,24 @@ namespace Symu.Repository.Networks.Beliefs
         private const int RangeMax = 1;
 
         public Belief(ushort beliefId, string name, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel): this(new UId(beliefId), name, length, model, beliefWeightLevel)
+        {
+        }
+        public Belief(IKnowledge knowledge, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel)
+        {
+            if (knowledge == null)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
+            Id = knowledge.Id;
+            Length = length;
+            Name = ((Knowledge)knowledge).Name;
+            InitializeWeights(model, length, beliefWeightLevel);
+        }
+
+        public Belief(IId beliefId, string name, byte length, RandomGenerator model,
             BeliefWeightLevel beliefWeightLevel)
         {
             Id = beliefId;
@@ -45,7 +65,7 @@ namespace Symu.Repository.Networks.Beliefs
         /// <summary>
         ///     Belief Id
         /// </summary>
-        public ushort Id { get; }
+        public IId Id { get; }
 
         public string Name { get; }
 
@@ -67,6 +87,11 @@ namespace Symu.Repository.Networks.Beliefs
         {
             return obj is Belief belief
                    && Id == belief.Id;
+        }
+        public bool Equals(IBelief belief)
+        {
+            return belief is Belief bel
+                   && Id == bel.Id;
         }
 
         /// <summary>

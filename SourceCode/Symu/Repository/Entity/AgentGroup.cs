@@ -31,5 +31,6 @@ namespace Symu.Repository.Entity
         ///     Range 0 - 100
         /// </summary>
         public float Allocation { get; set; }
+
     }
 }

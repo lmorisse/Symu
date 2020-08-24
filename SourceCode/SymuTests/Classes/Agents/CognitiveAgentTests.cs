@@ -197,7 +197,7 @@ namespace SymuTests.Classes.Agents
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = 1,
+                KnowledgeId = _knowledge.Id,
                 KnowledgeBits = bit1S
             };
             _agent.LearningModel.On = true;
@@ -208,7 +208,7 @@ namespace SymuTests.Classes.Agents
                 CommunicationMediums.System);
 
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(0, _agent.KnowledgeModel.GetKnowledge(1).GetKnowledgeSum());
+            Assert.AreEqual(0, _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).GetKnowledgeSum());
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace SymuTests.Classes.Agents
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = 1,
+                KnowledgeId = _knowledge.Id,
                 KnowledgeBits = bit1S
             };
             _agent.LearningModel.On = true;
@@ -229,7 +229,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(1, _agent.KnowledgeModel.GetKnowledge(1).GetKnowledgeSum());
+            Assert.AreEqual(1, _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).GetKnowledgeSum());
         }
 
         [TestMethod]
@@ -238,7 +238,7 @@ namespace SymuTests.Classes.Agents
             var bit1S = new Bits(new float[] {1}, 0);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = 1,
+                KnowledgeId = _knowledge.Id,
                 KnowledgeBits = bit1S,
                 BeliefBits = bit1S
             };
@@ -254,7 +254,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
             _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
-            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, 1, BeliefLevel.NeitherAgreeNorDisagree);
+            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, belief, BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent.AgentId, true);
             _environment.WhitePages.MetaNetwork.Influences.Update(_agent.AgentId, 1, 1);
             return belief;
@@ -591,7 +591,7 @@ namespace SymuTests.Classes.Agents
         public void AskPreStepTest1()
         {
             _agent.ForgettingModel.On = false;
-            _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
             _environment.InitializeInteractionSphere();
             _environment.PreStep();
@@ -607,7 +607,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.ForgettingModel.On = true;
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            _agent.KnowledgeModel.AddKnowledge(1, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
             _environment.InitializeInteractionSphere();
             _environment.PreStep();

@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common.Interfaces.Entity;
 
 #endregion
 
@@ -21,14 +22,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// </summary>
     public class LearningEventArgs : EventArgs
     {
-        public LearningEventArgs(ushort knowledgeId, byte knowledgeBit, float learning)
+        public LearningEventArgs(IId knowledgeId, byte knowledgeBit, float learning)
         {
             KnowledgeId = knowledgeId;
             KnowledgeBit = knowledgeBit;
             Learning = learning;
         }
 
-        public ushort KnowledgeId { get; set; }
+        public IId KnowledgeId { get; set; }
         public byte KnowledgeBit { get; set; }
         public float Learning { get; set; }
     }

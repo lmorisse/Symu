@@ -107,7 +107,7 @@ namespace SymuBeliefsAndInfluence.Classes
             // Ask advice from influencers
             var attachments = new MessageAttachments
             {
-                KnowledgeId = (ushort) blocker.Parameter,
+                KnowledgeId = (IId) blocker.Parameter,
                 KnowledgeBit = (byte) blocker.Parameter2
             };
             SendToMany(Influencers, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);

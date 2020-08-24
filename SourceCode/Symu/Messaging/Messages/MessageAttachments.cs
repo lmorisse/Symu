@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -81,7 +82,7 @@ namespace Symu.Messaging.Messages
         /// <summary>
         ///     The knowledge Id that is sent
         /// </summary>
-        public ushort KnowledgeId { get; set; }
+        public IId KnowledgeId { get; set; }
 
         /// <summary>
         ///     The Knowledge bit index that is asked
