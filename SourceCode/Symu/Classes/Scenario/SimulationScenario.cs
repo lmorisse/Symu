@@ -12,6 +12,7 @@
 using System;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
 
 #endregion

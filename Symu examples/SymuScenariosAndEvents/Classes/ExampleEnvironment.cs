@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;

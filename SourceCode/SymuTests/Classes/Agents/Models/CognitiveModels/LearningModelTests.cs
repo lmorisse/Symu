@@ -15,6 +15,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Engine;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;

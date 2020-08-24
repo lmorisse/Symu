@@ -9,12 +9,13 @@
 
 #region using directives
 
-using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Activities;
 
 #endregion
 
-namespace Symu.Repository.Networks.Activities
+namespace Symu.Repository.Entity
 {
     public class AgentActivity : IAgentActivity
     {

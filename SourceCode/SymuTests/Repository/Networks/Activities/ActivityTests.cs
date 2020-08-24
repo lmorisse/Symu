@@ -11,7 +11,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion

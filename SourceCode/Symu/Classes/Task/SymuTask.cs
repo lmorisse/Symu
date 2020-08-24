@@ -16,6 +16,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;

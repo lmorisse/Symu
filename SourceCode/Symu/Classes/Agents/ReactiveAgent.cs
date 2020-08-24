@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;

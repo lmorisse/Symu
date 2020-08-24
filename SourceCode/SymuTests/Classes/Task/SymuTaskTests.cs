@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion

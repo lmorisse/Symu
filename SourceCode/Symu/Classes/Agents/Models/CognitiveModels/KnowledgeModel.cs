@@ -11,6 +11,7 @@
 
 using System;
 using System.Linq;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Templates;

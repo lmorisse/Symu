@@ -12,6 +12,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Resources;
 using SymuTests.Helpers;
@@ -26,8 +27,8 @@ namespace SymuTests.Repository.Networks.Resources
         private const byte IsSupportOn = 1;
         private const byte IsWorkingOn = 2;
         private const byte IsUsing = 3;
-        private readonly TestAgentId _agentId = new TestAgentId(3, 3);
-        private readonly TestAgentId _groupId = new TestAgentId(1, 1);
+        private readonly AgentId _agentId = new AgentId(3, 3);
+        private readonly AgentId _groupId = new AgentId(1, 1);
         private readonly TestResource _resource = new TestResource(2);
         private readonly ResourceNetwork _resources = new ResourceNetwork();
         private TestAgentResource _agentResourceSupportOn;

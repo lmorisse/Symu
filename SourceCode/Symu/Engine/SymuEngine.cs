@@ -15,6 +15,7 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
 using Symu.Environment.Events;
 using Symu.Results;

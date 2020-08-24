@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Agent;
 
 #endregion
 

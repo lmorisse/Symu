@@ -15,6 +15,7 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks;
 
 #endregion

@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks.Knowledges;

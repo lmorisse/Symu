@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Networks;
@@ -37,11 +38,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     Initialize influence model :
         ///     update networkInfluences
         /// </summary>
-        /// <param name="agentAgentId"></param>
+        /// <param name="agentId"></param>
         /// <param name="entity"></param>
         /// <param name="internalCharacteristics"></param>
         /// <param name="network"></param>
-        public InfluenceModel(AgentId agentAgentId, ModelEntity entity, InternalCharacteristics internalCharacteristics,
+        public InfluenceModel(AgentId agentId, ModelEntity entity, InternalCharacteristics internalCharacteristics,
             MetaNetwork network)
         {
             if (entity is null)
@@ -65,19 +66,19 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _agentId = agentAgentId;
+            _agentId = agentId;
             _networkInfluences = network.Influences;
             _networkBeliefs = network.Beliefs;
 
             if (internalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
-                _networkInfluences.Add(agentAgentId,
+                _networkInfluences.Add(agentId,
                     NextInfluenceability(internalCharacteristics),
                     NextInfluentialness(internalCharacteristics));
             }
             else
             {
-                _networkInfluences.Add(agentAgentId, 0, 0);
+                _networkInfluences.Add(agentId, 0, 0);
             }
         }
 

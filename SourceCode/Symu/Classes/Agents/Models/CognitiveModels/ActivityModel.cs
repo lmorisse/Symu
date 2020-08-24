@@ -11,9 +11,11 @@
 
 using System;
 using System.Collections.Generic;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Activities;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -63,7 +65,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     Add a list of activities an agent can perform
         /// </summary>
         /// <param name="activities"></param>
-        public void AddActivities(IEnumerable<Activity> activities)
+        public void AddActivities(IEnumerable<IActivity> activities)
         {
             _networkActivities.AddActivities(activities, _agentId);
         }
@@ -73,17 +75,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         public IEnumerable<IActivity> GetGroupActivities(AgentId groupId)
         {
-            return _networkActivities.GetAgentActivities(_agentId, groupId);
-        }
-
-        /// <summary>
-        ///     Add all the groupId's activities to the AgentId, filtered by the agentId's knowledges
-        /// </summary>
-        /// <param name="activities"></param>
-        /// <param name="groupId"></param>
-        public void AddActivities(AgentId groupId, IEnumerable<IActivity> activities)
-        {
-            _networkActivities.AddActivities(_agentId, groupId, activities);
+            return _networkActivities.GetActivities(_agentId, groupId);
         }
 
         /// <summary>

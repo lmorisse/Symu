@@ -14,10 +14,11 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Environment;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -119,16 +120,16 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same activity for all
-                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, groupId, activities[0]);
+                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[0]));
                     break;
                 case 1:
                     // Activity is by group
-                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, groupId, activities[i]);
+                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[i]));
                     break;
                 case 2:
                     // Activity is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.Activities.AddActivity(agentId, groupId, activities[index]);
+                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[index]));
                     break;
             }
         }

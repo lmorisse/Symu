@@ -14,10 +14,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Activities;
 using Symu.Repository;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Resources;
@@ -40,11 +42,11 @@ namespace SymuTests.Repository.Networks
             new Knowledge(1, "1", 1);
 
         private MetaNetwork _network ;
-        private readonly TestAgentId _teamId = new TestAgentId(1, 1);
-        private readonly TestAgentId _teamId2 = new TestAgentId(2, 1);
-        private readonly TestAgentId _teammateId = new TestAgentId(4, SymuYellowPages.Actor);
-        private readonly TestAgentId _teammateId2 = new TestAgentId(5, SymuYellowPages.Actor);
-        private readonly TestAgentId _managerId = new TestAgentId(3, 2);
+        private readonly AgentId _teamId = new AgentId(1, 1);
+        private readonly AgentId _teamId2 = new AgentId(2, 1);
+        private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
+        private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.Actor);
+        private readonly AgentId _managerId = new AgentId(3, 2);
         private Belief _belief;
         private RoleEntity _roleEntity;
         private TestAgentResource _agentResource;
@@ -72,7 +74,7 @@ namespace SymuTests.Repository.Networks
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _network.Beliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Activities.AddActivities(_teammateId, _teamId, new List<IActivity> { _activity });
+            _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> { new AgentActivity(_teammateId, _activity) });
             _network.Clear();
             Assert.IsFalse(_network.Links.Any());
             Assert.IsFalse(_network.Groups.Any());
@@ -156,7 +158,7 @@ namespace SymuTests.Repository.Networks
             _network.Resources.Add(_teammateId, _agentResource);
             _network.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
-            _network.Activities.AddActivities(_teammateId, _teamId, new List<IActivity> {_activity});
+            _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> {new AgentActivity(_teammateId, _activity)});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));
             Assert.IsFalse(_network.Links.Any());

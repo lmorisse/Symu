@@ -15,6 +15,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;

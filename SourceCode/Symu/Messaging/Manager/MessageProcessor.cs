@@ -26,14 +26,12 @@ namespace Symu.Messaging.Manager
     public sealed class MessageProcessor : IDisposable
     {
         private readonly Func<MessageProcessor, Task> _body;
-        private readonly CancellationToken _cancellationToken;
         private readonly MessagesManager _messagesManager;
         private bool _started;
 
         public MessageProcessor(Func<MessageProcessor, Task> body)
         {
             _body = body;
-            _cancellationToken = Task.Factory.CancellationToken;
             _messagesManager = new MessagesManager();
             _started = false;
         }
@@ -93,7 +91,7 @@ namespace Symu.Messaging.Manager
                     var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
                     exceptionDispatchInfo.Throw();
                 }
-            }, _cancellationToken);
+            }, Task.Factory.CancellationToken);
         }
 
         #region Post / receive message

@@ -16,8 +16,8 @@ using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Activities;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Activities;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -30,12 +30,14 @@ namespace SymuTests.Repository.Networks.Activities
     {
         private const string StrActivity1 = "a1";
         private const string StrActivity2 = "a2";
-        private List<Activity> _activities ;
+        private List<AgentActivity> _activities ;
         private readonly Activity _activity1 = new Activity(StrActivity1);
         private readonly Activity _activity2 = new Activity(StrActivity2);
         private readonly AgentId _agentId = new AgentId(2, 2);
         private readonly AgentId _kanbanId = new AgentId(1, 1);
         private readonly AgentId _kanbanId2 = new AgentId(2, 1);
+        private AgentActivity _agentActivity1;
+        private AgentActivity _agentActivity2;
 
         private readonly Knowledge _knowledge1 =
             new Knowledge(1, "1", 1);
@@ -48,7 +50,9 @@ namespace SymuTests.Repository.Networks.Activities
         [TestInitialize]
         public void Initialize()
         {
-            _activities = new List<Activity> { _activity1, _activity2 };
+            _agentActivity1 = new AgentActivity(_agentId, _activity1);
+            _agentActivity2 = new AgentActivity(_agentId, _activity2);
+            _activities = new List<AgentActivity> { _agentActivity1, _agentActivity2 };
             _activity1.AddKnowledge(_knowledge1);
             _activity2.AddKnowledge(_knowledge2);
         }
@@ -218,7 +222,7 @@ namespace SymuTests.Repository.Networks.Activities
         {
             _network.AddGroup(_kanbanId);
             Assert.IsFalse(_network.AgentHasAnActivityOn(_agentId, _kanbanId, _activity1));
-            _network.AddActivity(_agentId, _kanbanId, _activity1);
+            _network.AddAgentActivity(_agentId, _kanbanId, _agentActivity1);
             Assert.IsTrue(_network.AgentHasAnActivityOn(_agentId, _kanbanId, _activity1));
         }
 
@@ -232,25 +236,6 @@ namespace SymuTests.Repository.Networks.Activities
             Assert.IsFalse(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
             _network.AddActivities(_agentId, _kanbanId, _activities);
             Assert.IsTrue(_network.AgentHasActivitiesOn(_agentId, _kanbanId));
-        }
-
-        /// <summary>
-        ///     Add Activities from KanbanId if the agentId has the knowledge for
-        /// </summary>
-        [TestMethod]
-        public void AddActivitiesTest1()
-        {
-            _network.AddGroup(_kanbanId);
-            _network.AddActivities(_agentId, _kanbanId, new List<IId> {_knowledge1.Id});
-            Assert.AreEqual(0, _network.GetAgentActivities(_agentId, _kanbanId).Count());
-            // Has the knowledge
-            _network.AddActivity(_activity1, _kanbanId);
-            _network.AddActivities(_agentId, _kanbanId, new List<IId> {_knowledge1.Id});
-            Assert.AreEqual(1, _network.GetAgentActivities(_agentId, _kanbanId).Count());
-            // Hasn't the knowledge
-            _network.AddActivity(_activity2, _kanbanId);
-            _network.AddActivities(_agentId, _kanbanId, new List<IId> {_knowledge1.Id});
-            Assert.AreEqual(1, _network.GetAgentActivities(_agentId, _kanbanId).Count());
         }
 
         [TestMethod]
@@ -288,7 +273,7 @@ namespace SymuTests.Repository.Networks.Activities
             agentIds.Add(_agentId);
             Assert.AreEqual(0, _network.FilterAgentIdsWithActivity(agentIds, _kanbanId, _activity1).Count());
             // One agent working on activity
-            _network.AddActivity(_agentId, _kanbanId, _activity1);
+            _network.AddAgentActivity(_agentId, _kanbanId, _agentActivity1);
             Assert.AreEqual(1, _network.FilterAgentIdsWithActivity(agentIds, _kanbanId, _activity1).Count());
         }
 
@@ -307,9 +292,9 @@ namespace SymuTests.Repository.Networks.Activities
         [TestMethod]
         public void GetAgentActivitiesTest1()
         {
-            _network.AddActivity(_agentId, _kanbanId, _activity1);
+            _network.AddAgentActivity(_agentId, _kanbanId, _agentActivity1);
             Assert.AreEqual(1, _network.GetAgentActivities(_agentId).Count());
-            _network.AddActivity(_agentId, _kanbanId, _activity2);
+            _network.AddAgentActivity(_agentId, _kanbanId, _agentActivity2);
             Assert.AreEqual(2, _network.GetAgentActivities(_agentId).Count());
         }
     }

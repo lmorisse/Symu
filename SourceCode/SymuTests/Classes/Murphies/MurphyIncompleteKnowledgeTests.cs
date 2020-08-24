@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 

@@ -18,6 +18,7 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 

@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
+using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Networks.Influences;
 
 #endregion
