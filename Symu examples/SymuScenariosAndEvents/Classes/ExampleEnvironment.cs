@@ -83,7 +83,8 @@ namespace SymuScenariosAndEvents.Classes
             var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork.Knowledge);
             var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
             WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
-            WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, _groupId, false);
+            var agentGroup = new AgentGroup(actor.AgentId, 100);
+            WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, _groupId, false);
             return actor;
         }
 

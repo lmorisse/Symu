@@ -16,9 +16,9 @@ using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Activities;
+using Symu.DNA.Groups;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
-using Symu.Repository.Networks.Groups;
 using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
@@ -135,19 +135,18 @@ namespace Symu.Repository.Networks
         ///     Add an agent to a group
         ///     It doesn't handle roles' impact
         /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="allocation"></param>
+        /// <param name="agentGroup"></param>
         /// <param name="groupId"></param>
         /// <param name="addLink">
         ///     If true, a link is created with the members of the group and the new member.
         ///     AddLink is done during the simulation. During the initialization, use InitializeNetworkLinks, for performance
         ///     issues
         /// </param>
-        public void AddAgentToGroup(IAgentId agentId, float allocation, IAgentId groupId, bool addLink)
+        public void AddAgentToGroup(IAgentGroup agentGroup, IAgentId groupId, bool addLink)
         {
-            if (agentId == null)
+            if (agentGroup == null)
             {
-                throw new ArgumentNullException(nameof(agentId));
+                throw new ArgumentNullException(nameof(agentGroup));
             }
 
             lock (Groups)
@@ -155,16 +154,16 @@ namespace Symu.Repository.Networks
                 Groups.AddGroup(groupId);
                 if (addLink)
                 {
-                    foreach (var newAgentId in Groups.GetAgents(groupId, agentId.ClassId))
+                    foreach (var newAgentId in Groups.GetAgents(groupId, agentGroup.AgentId.ClassId))
                     {
-                        Links.AddLink(agentId, newAgentId);
+                        Links.AddLink(agentGroup.AgentId, newAgentId);
                     }
                 }
 
-                Groups.AddAgent(agentId, allocation, groupId);
+                Groups.AddAgent(agentGroup, groupId);
             }
 
-            Resources.AddMemberToGroup(agentId, groupId);
+            Resources.AddMemberToGroup(agentGroup.AgentId, groupId);
         }
 
         /// <summary>

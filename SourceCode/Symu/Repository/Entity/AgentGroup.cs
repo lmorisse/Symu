@@ -11,12 +11,15 @@
 
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
-using Symu.Repository.Networks.Groups;
+using Symu.DNA.Groups;
 
 #endregion
 
 namespace Symu.Repository.Entity
 {
+    /// <summary>
+    /// AgentGroup is the default implementation of IAgentGroup
+    /// </summary>
     public class AgentGroup : IAgentGroup
     {
         public AgentGroup(IAgentId agentId, float allocation)

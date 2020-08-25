@@ -15,7 +15,7 @@ using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
-namespace SymuTests.Repository.Networks.Activities
+namespace SymuTests.Repository.Entity
 {
     [TestClass]
     public class ActivityTests
@@ -23,7 +23,7 @@ namespace SymuTests.Repository.Networks.Activities
         private readonly Activity _activity = new Activity("a");
 
         private readonly Knowledge _knowledge =
-            new Knowledge(1, "k", 10);
+            new Knowledge(1, "K1", 10);
 
         [TestMethod]
         public void AddKnowledgeTest()

@@ -80,7 +80,8 @@ namespace SymuGroupAndInteraction.Classes
                     {
                         GroupId = group.AgentId
                     };
-                    WhitePages.MetaNetwork.AddAgentToGroup(actor.AgentId, 100, group.AgentId, false);
+                    var agentGroup = new AgentGroup(actor.AgentId, 100);
+                    WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId, false);
                     //Beliefs are added with knowledge
                     SetKnowledge(actor, Organization.Knowledges, i);
                     SetActivity(actor.AgentId, _activities, i, group.AgentId);
