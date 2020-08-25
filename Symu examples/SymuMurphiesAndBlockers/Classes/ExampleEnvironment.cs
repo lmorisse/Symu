@@ -17,7 +17,6 @@ using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Repository.Networks.Resources;
 
 #endregion
 

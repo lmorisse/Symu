@@ -13,7 +13,6 @@ using System;
 using Symu.Classes.Organization;
 using Symu.Environment;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Resources;
 
 #endregion
 

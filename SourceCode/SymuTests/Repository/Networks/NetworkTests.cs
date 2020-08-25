@@ -22,7 +22,6 @@ using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Repository.Networks.Resources;
 using Symu.Repository.Networks.Roles;
 using SymuTests.Helpers;
 

@@ -17,12 +17,12 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Activities;
 using Symu.DNA.Groups;
+using Symu.DNA.Resources;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Link;
-using Symu.Repository.Networks.Resources;
 using Symu.Repository.Networks.Roles;
 using Symu.Repository.Networks.Sphere;
 
