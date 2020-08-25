@@ -17,8 +17,8 @@ using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Activities;
+using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion

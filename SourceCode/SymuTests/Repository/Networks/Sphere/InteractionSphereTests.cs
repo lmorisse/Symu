@@ -22,7 +22,6 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Sphere;
 

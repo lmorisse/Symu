@@ -12,8 +12,8 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Interactions;
 
 #endregion
 

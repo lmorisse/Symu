@@ -19,10 +19,10 @@ using Symu.DNA.Activities;
 using Symu.DNA.Groups;
 using Symu.DNA.Resources;
 using Symu.DNA.Roles;
+using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
-using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Sphere;
 
