@@ -15,9 +15,9 @@ using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Resources;
+using Symu.DNA.Roles;
 using Symu.Environment;
 using Symu.Repository;
-using Symu.Repository.Networks.Roles;
 
 #endregion
 

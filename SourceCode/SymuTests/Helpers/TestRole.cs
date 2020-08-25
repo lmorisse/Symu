@@ -7,7 +7,7 @@
 
 #endregion
 
-using Symu.Repository.Networks.Roles;
+using Symu.DNA.Roles;
 
 namespace SymuTests.Helpers
 {

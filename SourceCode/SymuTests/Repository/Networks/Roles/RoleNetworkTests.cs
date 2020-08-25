@@ -13,8 +13,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Roles;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Roles;
 using SymuTests.Helpers;
 
 #endregion
