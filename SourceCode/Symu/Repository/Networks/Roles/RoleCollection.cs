@@ -11,10 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using Symu.Common.Interfaces;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Resources;
 
 #endregion
 
@@ -27,37 +23,26 @@ namespace Symu.Repository.Networks.Roles
     public class RoleCollection
     {
         /// <summary>
-        ///     Key => DatabaseId
-        ///     Values => List of Databases
+        ///     List of all the roles used in the network
         /// </summary>
-        public List<IResource> List { get; } = new List<IResource>();
+        public List<IRole> List { get; } = new List<IRole>();
 
-        public void Add(IResource resource)
+        public void Add(IRole role)
         {
-            if (!Contains(resource))
+            if (!Contains(role))
             {
-                List.Add(resource);
+                List.Add(role);
             }
         }
 
-        public bool Contains(IResource resource)
+        public bool Contains(IRole role)
         {
-            if (resource is null)
+            if (role is null)
             {
-                throw new ArgumentNullException(nameof(resource));
+                throw new ArgumentNullException(nameof(role));
             }
 
-            return Exists(resource.Id);
-        }
-
-        public IResource Get(IId roleId)
-        {
-            return List.Find(k => k.Id.Equals(roleId));
-        }
-
-        public bool Exists(IId roleId)
-        {
-            return List.Exists(k => k.Id.Equals(roleId));
+            return List.Contains(role);
         }
 
         public void Clear()

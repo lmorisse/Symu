@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: SymuBiz - Symu
+// Description: SymuBiz - SymuTests
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -9,20 +9,30 @@
 
 #region using directives
 
+using System;
+using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Resources;
+using Symu.Environment;
+using Symu.Repository;
+using Symu.Repository.Networks.Roles;
 
 #endregion
 
-namespace Symu.Repository.Networks.Roles
+namespace SymuTests.Helpers
 {
-    public class RoleEntity
+    /// <summary>
+    ///     Class for tests
+    /// </summary>
+    internal sealed class TestAgentRole : IAgentRole
     {
-        public RoleEntity(IAgentId agentId, IAgentId groupId, byte roleType)
+        public TestAgentRole(IAgentId agentId, IAgentId groupId, byte role)
         {
             AgentId = agentId;
             GroupId = groupId;
-            RoleType = roleType;
+            Role = new TestRole(role);
         }
 
         /// <summary>
@@ -38,8 +48,7 @@ namespace Symu.Repository.Networks.Roles
         /// <summary>
         ///     An agent may have different role type in a group
         /// </summary>
-        public byte RoleType { get; set; }
-
+        public IRole Role { get; set; }
         public bool IsMemberOfGroups(IAgentId teammateId, IClassId groupClassId)
         {
             return GroupId.Equals(groupClassId) && IsAgent(teammateId);
@@ -48,17 +57,17 @@ namespace Symu.Repository.Networks.Roles
         /// <summary>
         ///     CHeck that there is a role of roleType for that groupId
         /// </summary>
-        /// <param name="roleType"></param>
+        /// <param name="role"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public bool HasRoleInGroup(byte roleType, IAgentId groupId)
+        public bool HasRoleInGroup(IRole role, IAgentId groupId)
         {
-            return RoleType == roleType && IsGroup(groupId);
+            return Role.Equals(role) && IsGroup(groupId);
         }
 
-        public bool HasRoleInGroup(IAgentId agentId, byte roleType, IAgentId groupId)
+        public bool HasRoleInGroup(IAgentId agentId, IRole role, IAgentId groupId)
         {
-            return RoleType == roleType && IsAgent(agentId) && IsGroup(groupId);
+            return Role.Equals(role) && IsAgent(agentId) && IsGroup(groupId);
         }
 
         public bool HasRoleInGroup(IAgentId agentId, IAgentId groupId)
@@ -69,17 +78,17 @@ namespace Symu.Repository.Networks.Roles
         /// <summary>
         ///     CHeck that there is a role of roleType for that groupId
         /// </summary>
-        /// <param name="roleType"></param>
+        /// <param name="role"></param>
         /// <param name="agentId"></param>
         /// <returns></returns>
-        public bool HasRole(IAgentId agentId, byte roleType)
+        public bool HasRole(IAgentId agentId, IRole role)
         {
-            return RoleType == roleType && IsAgent(agentId);
+            return Role.Equals(role) && IsAgent(agentId);
         }
 
-        public bool HasRole(byte roleType)
+        public bool HasRole(IRole role)
         {
-            return RoleType == roleType;
+            return Role.Equals(role);
         }
 
         public bool IsGroup(IAgentId groupId)
@@ -90,6 +99,10 @@ namespace Symu.Repository.Networks.Roles
         public bool IsAgent(IAgentId agentId)
         {
             return AgentId.Equals(agentId);
+        }
+        public IAgentRole Clone()
+        {
+            return new TestAgentRole(AgentId, GroupId, ((TestRole)Role).Role);
         }
     }
 }
