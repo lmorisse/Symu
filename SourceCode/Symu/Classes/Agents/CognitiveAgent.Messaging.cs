@@ -17,6 +17,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -115,7 +116,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.WhitePages.MetaNetwork.Links.HasActiveLink(AgentId, senderId))
+            if (Environment.WhitePages.MetaNetwork.Interactions.HasActiveInteraction(AgentId, senderId))
             {
                 return true;
             }
@@ -143,7 +144,8 @@ namespace Symu.Classes.Agents
             if (Environment.Organization.Models.InteractionSphere.SphereUpdateOverTime)
             {
                 // Message.Sender is now part of agent interaction sphere
-                Environment.WhitePages.MetaNetwork.Links.AddLink(AgentId, senderId);
+                var interaction = new Interaction(AgentId, senderId);
+                Environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
             }
 
             return true;

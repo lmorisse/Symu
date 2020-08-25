@@ -190,19 +190,33 @@ namespace Symu.Environment
             SetKnowledges();
             SetAgents();
             // Intentionally after SetAgents
-            InitializeNetworkLinks();
+            InitializeInteractionNetwork();
             WhitePages.SetStarted();
         }
 
         /// <summary>
-        ///     Initialize the network links.
+        ///     Initialize the network interactions.
         ///     For performance it is not done in AddMemberToGroup at initialization
         /// </summary>
-        public void InitializeNetworkLinks()
+        public void InitializeInteractionNetwork()
         {
             foreach (var groupId in WhitePages.MetaNetwork.Groups.GetGroups().ToList())
             {
-                WhitePages.MetaNetwork.Links.AddLinks(WhitePages.MetaNetwork.Groups.GetAgents(groupId, new ClassId(SymuYellowPages.Actor)).ToList());
+                var agentIds = WhitePages.MetaNetwork.Groups.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
+                    .ToList();
+
+                var count = agentIds.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var agentId1 = agentIds[i];
+                    // interaction are undirected
+                    for (var j = i + 1; j < count; j++)
+                    {
+                        var agentId2 = agentIds[j];
+                        var interaction = new Interaction(agentId1, agentId2);
+                        WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+                    }
+                }
             }
         }
 

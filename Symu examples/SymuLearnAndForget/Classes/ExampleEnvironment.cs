@@ -82,7 +82,8 @@ namespace SymuLearnAndForget.Classes
             DoesNotLearnAgent = new LearnAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
             ExpertAgent = new ExpertAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
-            WhitePages.MetaNetwork.Links.AddLink(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
+            var interaction = new Interaction(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
+            WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
         }
     }
 }

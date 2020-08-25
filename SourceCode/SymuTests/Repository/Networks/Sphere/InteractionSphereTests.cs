@@ -22,8 +22,8 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Sphere;
 
 #endregion
@@ -144,7 +144,8 @@ namespace SymuTests.Repository.Networks.Sphere
 
         private void AddLink()
         {
-            _network.Links.AddLink(_agentId1, _agentId2);
+            var interaction = new Interaction(_agentId1, _agentId2);
+            _network.Interactions.AddInteraction(interaction);
         }
 
         private void AddKnowledge(AgentId agentId, KnowledgeLevel level)
@@ -321,8 +322,8 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetSocialProximityTest()
         {
-            _network.Links.SetMaxLinksCount();
-            Assert.AreEqual(0, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
+            _network.Interactions.SetMaxLinksCount();
+            Assert.AreEqual(0, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Interactions));
         }
 
         /// <summary>
@@ -332,8 +333,8 @@ namespace SymuTests.Repository.Networks.Sphere
         public void SetSocialProximityTest1()
         {
             AddLink();
-            _network.Links.SetMaxLinksCount();
-            Assert.AreEqual(1, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
+            _network.Interactions.SetMaxLinksCount();
+            Assert.AreEqual(1, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Interactions));
         }
 
         /// <summary>
@@ -342,10 +343,10 @@ namespace SymuTests.Repository.Networks.Sphere
         [TestMethod]
         public void SetSocialProximityTest2()
         {
-            var networkLink = new LinkEntity(_agentId1, _agentId2);
-            networkLink.Deactivate();
-            _network.Links.AddLink(_agentId1, _agentId2);
-            Assert.AreEqual(0F, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Links));
+            var networkLink = new Interaction(_agentId1, _agentId2);
+            networkLink.DecreaseWeight();
+            _network.Interactions.AddInteraction(networkLink);
+            Assert.AreEqual(0F, InteractionSphere.SetSocialProximity(_agentId1, _agentId2, _network.Interactions));
         }
 
         #endregion

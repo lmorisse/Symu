@@ -18,6 +18,8 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Repository;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Sphere;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
@@ -81,8 +83,23 @@ namespace SymuTests.Results.Organization
                 agents.Add(agent.AgentId);
             }
 
-            _environment.WhitePages.MetaNetwork.Links.AddLinks(agents);
+            InitializeNetworkLinks(agents);
             _environment.InitializeInteractionSphere();
+        }
+        private void InitializeNetworkLinks(List<IAgentId> agentIds)
+        {
+            var count = agentIds.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var agentId1 = agentIds[i];
+                // interaction are undirected
+                for (var j = i + 1; j < count; j++)
+                {
+                    var agentId2 = agentIds[j];
+                    var interaction = new Interaction(agentId1, agentId2);
+                    _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+                }
+            }
         }
 
         #endregion

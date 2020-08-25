@@ -18,8 +18,8 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Activities;
 using Symu.Repository.Networks.Beliefs;
+using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Repository.Networks.Link;
 
 #endregion
 
@@ -66,7 +66,7 @@ namespace Symu.Repository.Networks.Sphere
                 return;
             }
 
-            network.Links.SetMaxLinksCount();
+            network.Interactions.SetMaxLinksCount();
             if (_model.RandomlyGeneratedSphere)
             {
                 if (initialization)
@@ -224,7 +224,7 @@ namespace Symu.Repository.Networks.Sphere
         private DerivedParameter SetDerivedParameter(MetaNetwork network, IAgentId agentI, IAgentId agentJ)
         {
             var socialProximity = _model.SocialDemographicWeight > Constants.Tolerance
-                ? SetSocialProximity(agentI, agentJ, network.Links)
+                ? SetSocialProximity(agentI, agentJ, network.Interactions)
                 : 0;
 
             var relativeBelief = _model.RelativeBeliefWeight > Constants.Tolerance
@@ -315,17 +315,17 @@ namespace Symu.Repository.Networks.Sphere
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        /// <param name="linkNetwork"></param>
+        /// <param name="interactionNetwork"></param>
         /// <returns></returns>
-        public static float SetSocialProximity(IAgentId agentId1, IAgentId agentId2, LinkNetwork linkNetwork)
+        public static float SetSocialProximity(IAgentId agentId1, IAgentId agentId2, InteractionNetwork interactionNetwork)
         {
             //todo graph : number of nodes between agentId1 and agentId2
-            if (linkNetwork == null)
+            if (interactionNetwork == null)
             {
-                throw new ArgumentNullException(nameof(linkNetwork));
+                throw new ArgumentNullException(nameof(interactionNetwork));
             }
 
-            return linkNetwork.NormalizedCountLinks(agentId1, agentId2);
+            return interactionNetwork.NormalizedCountLinks(agentId1, agentId2);
         }
 
         /// <summary>

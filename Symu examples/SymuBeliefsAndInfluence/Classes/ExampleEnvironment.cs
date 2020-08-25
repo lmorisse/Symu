@@ -18,6 +18,7 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Environment;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -89,23 +90,25 @@ namespace SymuBeliefsAndInfluence.Classes
         public override void SetAgents()
         {
             base.SetAgents();
-
-            var agentIds = new List<IAgentId>();
+            // the group is created just to initialize the interactionNetwork
+            var group = new GroupAgent(Organization.NextEntityId(), this);
+            WhitePages.MetaNetwork.Groups.AddGroup(group.AgentId);
 
             for (var j = 0; j < InfluencersCount; j++)
             {
                 var actor = new InfluencerAgent(Organization.NextEntityId(), this, InfluencerTemplate);
                 Influencers.Add(actor);
-                agentIds.Add(actor.AgentId);
+                var agentGroup = new AgentGroup(actor.AgentId, 100);
+                WhitePages.MetaNetwork.Groups.AddAgent(agentGroup, group.AgentId);
             }
 
             for (var j = 0; j < WorkersCount; j++)
             {
                 var actor = new PersonAgent(Organization.NextEntityId(), this, WorkerTemplate);
-                agentIds.Add(actor.AgentId);
+                var agentGroup = new AgentGroup(actor.AgentId, 100);
+                WhitePages.MetaNetwork.Groups.AddAgent(agentGroup, group.AgentId);
             }
 
-            WhitePages.MetaNetwork.Links.AddLinks(agentIds);
         }
     }
 }

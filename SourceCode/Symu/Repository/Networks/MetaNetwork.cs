@@ -22,8 +22,8 @@ using Symu.DNA.Roles;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
+using Symu.Repository.Networks.Interactions;
 using Symu.Repository.Networks.Knowledges;
-using Symu.Repository.Networks.Link;
 using Symu.Repository.Networks.Sphere;
 
 #endregion
@@ -46,7 +46,7 @@ namespace Symu.Repository.Networks
         ///     Who report/communicate to who
         ///     Sphere of interaction of agents
         /// </summary>
-        public LinkNetwork Links { get; } = new LinkNetwork();
+        public InteractionNetwork Interactions { get; } = new InteractionNetwork();
 
         /// <summary>
         ///     Directory of the groups of the organizationEntity :
@@ -103,7 +103,7 @@ namespace Symu.Repository.Networks
 
         public void Clear()
         {
-            Links.Clear();
+            Interactions.Clear();
             Groups.Clear();
             Roles.Clear();
             Resources.Clear();
@@ -116,7 +116,7 @@ namespace Symu.Repository.Networks
 
         public void RemoveAgent(IAgentId agentId)
         {
-            Links.RemoveAgent(agentId);
+            Interactions.RemoveAgent(agentId);
             Groups.RemoveAgent(agentId);
             Roles.RemoveAgent(agentId);
             Resources.RemoveAgent(agentId);
@@ -137,12 +137,7 @@ namespace Symu.Repository.Networks
         /// </summary>
         /// <param name="agentGroup"></param>
         /// <param name="groupId"></param>
-        /// <param name="addLink">
-        ///     If true, a link is created with the members of the group and the new member.
-        ///     AddLink is done during the simulation. During the initialization, use InitializeNetworkLinks, for performance
-        ///     issues
-        /// </param>
-        public void AddAgentToGroup(IAgentGroup agentGroup, IAgentId groupId, bool addLink)
+        public void AddAgentToGroup(IAgentGroup agentGroup, IAgentId groupId)
         {
             if (agentGroup == null)
             {
@@ -152,14 +147,6 @@ namespace Symu.Repository.Networks
             lock (Groups)
             {
                 Groups.AddGroup(groupId);
-                if (addLink)
-                {
-                    foreach (var newAgentId in Groups.GetAgents(groupId, agentGroup.AgentId.ClassId))
-                    {
-                        Links.AddLink(agentGroup.AgentId, newAgentId);
-                    }
-                }
-
                 Groups.AddAgent(agentGroup, groupId);
             }
 
@@ -186,7 +173,7 @@ namespace Symu.Repository.Networks
 
             foreach (var agentIdToRemove in Groups.GetAgents(groupId, agentId.ClassId))
             {
-                Links.DeactivateLink(agentId, agentIdToRemove);
+                Interactions.DecreaseInteraction(agentId, agentIdToRemove);
             }
 
             Groups.RemoveMember(agentId, groupId);

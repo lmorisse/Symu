@@ -48,6 +48,7 @@ namespace SymuTests.Classes.Agents
         private AgentKnowledge _agentKnowledge;
         private TestCognitiveAgent _agent2 ;
         private readonly UId _uid1 = new UId(1);
+        private Interaction _interaction;
 
         [TestInitialize]
         public void Initialize()
@@ -88,6 +89,7 @@ namespace SymuTests.Classes.Agents
             _environment.Schedule.Step = 0;
             _agent.BeliefsModel.AddBelief(_knowledge.Id);
             _agent.BeliefsModel.InitializeBeliefs();
+            _interaction = new Interaction(_agent.AgentId, _agent2.AgentId);
         }
 
         /// <summary>
@@ -847,7 +849,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            _environment.WhitePages.MetaNetwork.Links.AddLink(_agent.AgentId, _agent2.AgentId);
+            _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(_interaction);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -1280,8 +1282,10 @@ namespace SymuTests.Classes.Agents
             group.Start();
             var agentGroup = new AgentGroup(_agent.AgentId, 100);
             var teammateGroup = new AgentGroup(teammate.AgentId, 100);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId, true);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId, true);
+            _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
+            _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId);
+            var interaction = new Interaction(_agent.AgentId, teammate.AgentId);
+            _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);

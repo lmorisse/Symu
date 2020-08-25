@@ -10,26 +10,29 @@
 #region using directives
 
 using System;
-using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Repository.Networks.Interactions;
+using static Symu.Common.Constants;
 
 #endregion
 
-namespace Symu.Repository.Networks.Link
+namespace Symu.Repository.Entity
 {
     /// <summary>
-    ///     Sphere of interaction - link are bidirectional.
+    ///Default implementation of IInteraction
+    /// Defines the interaction between two agents used by InteractionNetwork
+    ///     link are bidirectional.
     ///     AgentId1 has the smallest key
     ///     AgentId2 has the highest key
     /// </summary>
-    public class LinkEntity
+    public class Interaction : IInteraction
     {
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public LinkEntity(IAgentId agentId1, IAgentId agentId2)
+        public Interaction(IAgentId agentId1, IAgentId agentId2)
         {
             if (agentId1 == null)
             {
@@ -47,13 +50,18 @@ namespace Symu.Repository.Networks.Link
                 AgentId2 = agentId1;
             }
 
-            Activate();
+            IncreaseWeight();
+        }
+
+        public Interaction(IAgentId agentId1, IAgentId agentId2, float weight) : this(agentId1, agentId2)
+        {
+            Weight = weight;
         }
 
         /// <summary>
-        ///     Number of links between the two agents
+        ///     Number of interactions between the two agents
         /// </summary>
-        public byte Count { get; private set; }
+        public float Weight { get; private set; }
 
         /// <summary>
         ///     Unique key of the agent with the smallest key
@@ -65,33 +73,54 @@ namespace Symu.Repository.Networks.Link
         /// </summary>
         public IAgentId AgentId2 { get; }
 
-        public bool IsActive => Count > 0;
-        public bool IsPassive => Count == 0;
+        public bool IsActive => Weight > 0;
+        public bool IsPassive => Weight < Tolerance;
 
-        public void Activate()
+        /// <summary>
+        /// Increase the weight of the interaction
+        /// </summary>
+        public void IncreaseWeight()
         {
-            Count++;
+            Weight++;
         }
 
-        public void Deactivate()
+        /// <summary>
+        /// Decrease the weight of the interaction
+        /// </summary>
+        public void DecreaseWeight()
         {
-            if (Count > 0)
+            if (Weight > 0)
             {
-                Count--;
+                Weight--;
             }
         }
-
-        public bool HasActiveLinks(IAgentId agentId)
+        /// <summary>
+        /// Agent has active interaction based on the weight of the interaction
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <returns></returns>
+        public bool HasActiveInteractions(IAgentId agentId)
         {
             return IsActive && (AgentId1.Equals(agentId) || AgentId2.Equals(agentId));
         }
 
-        public bool HasActiveLink(IAgentId agentId1, IAgentId agentId2)
+        /// <summary>
+        /// Agent has active interaction based on the weight of the interaction
+        /// </summary>
+        /// <param name="agentId1"></param>
+        /// <param name="agentId2"></param>
+        /// <returns></returns>
+        public bool HasActiveInteraction(IAgentId agentId1, IAgentId agentId2)
         {
             return IsActive && HasLink(agentId1, agentId2);
         }
-
-        public bool HasPassiveLink(IAgentId agentId1, IAgentId agentId2)
+        /// <summary>
+        /// Agent has passive interaction based on the weight of the interaction
+        /// </summary>
+        /// <param name="agentId1"></param>
+        /// <param name="agentId2"></param>
+        /// <returns></returns>
+        public bool HasPassiveInteraction(IAgentId agentId1, IAgentId agentId2)
         {
             return IsPassive && HasLink(agentId1, agentId2);
         }
@@ -113,7 +142,13 @@ namespace Symu.Repository.Networks.Link
 
         public override bool Equals(object obj)
         {
-            return obj is LinkEntity link &&
+            return obj is Interaction link &&
+                   link.HasLink(AgentId1, AgentId2);
+        }
+
+        public bool Equals(IInteraction obj)
+        {
+            return obj is Interaction link &&
                    link.HasLink(AgentId1, AgentId2);
         }
     }
