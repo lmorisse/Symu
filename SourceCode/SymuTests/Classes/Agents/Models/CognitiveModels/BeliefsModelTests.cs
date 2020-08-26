@@ -20,6 +20,7 @@ using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;

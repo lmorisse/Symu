@@ -18,6 +18,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Activities;
 using Symu.DNA.TwoModesNetworks.Interactions;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 
@@ -294,13 +295,13 @@ namespace Symu.Repository.Networks.Sphere
             var knowledgeIds = knowledgeNetwork.GetKnowledgeIds(agentId1).ToList();
             foreach (var knowledgeId in knowledgeIds)
             {
-                var knowledgeBits1 = knowledgeNetwork.GetAgentKnowledge(agentId1, knowledgeId).KnowledgeBits;
+                var knowledgeBits1 = knowledgeNetwork.GetAgentKnowledge<AgentKnowledge>(agentId1, knowledgeId).KnowledgeBits;
                 if (!knowledgeNetwork.Exists(agentId2, knowledgeId))
                 {
                     continue;
                 }
 
-                var knowledgeBits2 = knowledgeNetwork.GetAgentKnowledge(agentId2, knowledgeId).KnowledgeBits;
+                var knowledgeBits2 = knowledgeNetwork.GetAgentKnowledge<AgentKnowledge>(agentId2, knowledgeId).KnowledgeBits;
                 if (!knowledgeBits2.IsNull)
                 {
                     relativeExpertise += Bits.GetRelativeBits(knowledgeBits1, knowledgeBits2);

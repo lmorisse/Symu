@@ -11,16 +11,38 @@ using System;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.Repository.Networks.Knowledges;
 
-namespace Symu.Repository.Networks.Knowledges
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Describe the Knowledge of an agent :
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class AgentKnowledge
+    public class AgentKnowledge : IAgentKnowledge
     {
+
+        public IId KnowledgeId { get; }
+        public KnowledgeBits KnowledgeBits { get; private set; }
+        public KnowledgeLevel KnowledgeLevel { get; set; }
+
+        /// <summary>
+        ///     If agent has a knowledgeBit, and the forgetting model is on
+        ///     Minimum knowledge is the minimum the agent can't forget during the simulation for this KnowledgeBit.
+        ///     Range[0;1]
+        /// </summary>
+        public float MinimumKnowledge { get; set; }
+
+        /// <summary>
+        ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
+        ///     -1 for unlimited time to live
+        /// </summary>
+        public short TimeToLive { get; set; }
+
+
+        public byte Length { get; private set; }//=> KnowledgeBits?.Length ?? 0;
+
         /// <summary>
         ///     Constructor used by WorkerCognitiveAgent for ForgettingKnowledge
         /// </summary>
@@ -30,7 +52,8 @@ namespace Symu.Repository.Networks.Knowledges
         {
             KnowledgeId = knowledgeId;
             KnowledgeBits = knowledgeBits;
-        }
+            Length = KnowledgeBits?.Length ?? 0;
+}
 
         public AgentKnowledge(ushort knowledgeId, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
             ushort step): this(new UId(knowledgeId), knowledgeBits, minimumKnowledge, timeToLive, step)
@@ -38,14 +61,14 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-            ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
-            /// </summary>
-            /// <param name="knowledgeId"></param>
-            /// <param name="knowledgeBits"></param>
-            /// <param name="minimumKnowledge"></param>
-            /// <param name="timeToLive"></param>
-            /// <param name="step"></param>
-            public AgentKnowledge(IId knowledgeId, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
+        ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBits"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        /// <param name="step"></param>
+        public AgentKnowledge(IId knowledgeId, float[] knowledgeBits, float minimumKnowledge, short timeToLive,
             ushort step)
         {
             KnowledgeId = knowledgeId;
@@ -53,6 +76,7 @@ namespace Symu.Repository.Networks.Knowledges
             TimeToLive = timeToLive;
             KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
             KnowledgeBits.SetBits(knowledgeBits, step);
+            Length = KnowledgeBits.Length;
         }
 
         public AgentKnowledge(ushort knowledgeId, float[] knowledgeBits, KnowledgeLevel level, float minimumKnowledge,
@@ -73,42 +97,23 @@ namespace Symu.Repository.Networks.Knowledges
         }
 
         /// <summary>
-            ///     Constructor based on the knowledge Id and the knowledge Level.
-            ///     KnowledgeBits is not yet initialized.
-            ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
-            /// </summary>
-            /// <param name="knowledgeId"></param>
-            /// <param name="level"></param>
-            /// <param name="minimumKnowledge"></param>
-            /// <param name="timeToLive"></param>
-            public AgentKnowledge(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
+        ///     Constructor based on the knowledge Id and the knowledge Level.
+        ///     KnowledgeBits is not yet initialized.
+        ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
+        /// </summary>
+        /// <param name="knowledgeId"></param>
+        /// <param name="level"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        public AgentKnowledge(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
         {
             KnowledgeId = knowledgeId;
             KnowledgeLevel = level;
             MinimumKnowledge = minimumKnowledge;
             TimeToLive = timeToLive;
             KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
+            Length = KnowledgeBits.Length;
         }
-
-        public IId KnowledgeId { get; }
-        public KnowledgeBits KnowledgeBits { get; private set; }
-        public KnowledgeLevel KnowledgeLevel { get; }
-
-        /// <summary>
-        ///     If agent has a knowledgeBit, and the forgetting model is on
-        ///     Minimum knowledge is the minimum the agent can't forget during the simulation for this KnowledgeBit.
-        ///     Range[0;1]
-        /// </summary>
-        public float MinimumKnowledge { get; set; }
-
-        /// <summary>
-        ///     When ForgettingSelectingMode.Oldest is selected, knowledge are forget based on their timeToLive attribute
-        ///     -1 for unlimited time to live
-        /// </summary>
-        public short TimeToLive { get; set; }
-
-
-        public byte Length => KnowledgeBits?.Length ?? 0;
 
         /// <summary>
         ///     Initialize KnowledgeBits with a array filled of 0
@@ -117,6 +122,7 @@ namespace Symu.Repository.Networks.Knowledges
         {
             KnowledgeBits = new KnowledgeBits(MinimumKnowledge, TimeToLive);
             KnowledgeBits.InitializeWith0(length, step);
+            Length = KnowledgeBits.Length;
         }
 
         /// <summary>
@@ -195,8 +201,7 @@ namespace Symu.Repository.Networks.Knowledges
         /// <param name="knowledgeLevel"></param>
         /// <param name="step"></param>
         /// <returns></returns>
-        //todo put in interface IAgentKnowledge
-        public void InitializeBits(byte length, RandomGenerator model, KnowledgeLevel knowledgeLevel, ushort step)
+        public void InitializeKnowledge(byte length, RandomGenerator model, KnowledgeLevel knowledgeLevel, ushort step)
         {
             float[] knowledgeBits;
             switch (model)
@@ -267,6 +272,7 @@ namespace Symu.Repository.Networks.Knowledges
             }
 
             KnowledgeBits.SetBits(knowledgeBits, step);
+            Length = KnowledgeBits.Length;
         }
 
         /// <summary>

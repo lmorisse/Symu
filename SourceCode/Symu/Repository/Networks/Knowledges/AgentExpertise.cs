@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -28,16 +29,14 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Key => ComponentId
         ///     Values => List of Knowledge
         /// </summary>
-        public List<AgentKnowledge> List { get; } = new List<AgentKnowledge>();
+        public List<IAgentKnowledge> List { get; } = new List<IAgentKnowledge>();
 
         public int Count => List.Count;
 
-        ///// <summary>
-        /////     EventHandler triggered after learning a new information
-        ///// </summary>
-        //public event EventHandler<LearningEventArgs> OnAfterLearning;
-
-
+        public IEnumerable<TAgentKnowledge> GetAgentKnowledges<TAgentKnowledge>() where TAgentKnowledge : IAgentKnowledge
+        {
+            return List.Cast<TAgentKnowledge>();
+        }
         public bool Any()
         {
             return List.Any();
@@ -47,11 +46,8 @@ namespace Symu.Repository.Networks.Knowledges
         {
             List.Clear();
         }
-        /// <summary>
-        /// Add method should be called only by NetworkKnowledge, KnowledgeModel and LearningModel
-        /// </summary>
-        /// <param name="agentKnowledge"></param>
-        public void Add(AgentKnowledge agentKnowledge)
+
+        public void Add(IAgentKnowledge agentKnowledge)
         {
             if (agentKnowledge == null)
             {
@@ -63,17 +59,10 @@ namespace Symu.Repository.Networks.Knowledges
                 return;
             }
 
-            //agentKnowledge.OnAfterLearning += AfterLearning;
             List.Add(agentKnowledge);
         }
 
-        public void Add(IId knowledgeId, KnowledgeLevel level, float minimumKnowledge, short timeToLive)
-        {
-            var agentKnowledge = new AgentKnowledge(knowledgeId, level, minimumKnowledge, timeToLive);
-            Add(agentKnowledge);
-        }
-
-        public bool Contains(AgentKnowledge agentKnowledge)
+        public bool Contains(IAgentKnowledge agentKnowledge)
         {
             if (agentKnowledge is null)
             {
@@ -88,9 +77,14 @@ namespace Symu.Repository.Networks.Knowledges
             return List.Exists(x => x.KnowledgeId.Equals(knowledgeId));
         }
 
-        public AgentKnowledge GetKnowledge(IId knowledgeId)
+        public IAgentKnowledge GetAgentKnowledge(IId knowledgeId)
         {
             return List.Find(x => x.KnowledgeId.Equals(knowledgeId));
+        }
+
+        public TAgentKnowledge GetAgentKnowledge<TAgentKnowledge>(IId knowledgeId) where TAgentKnowledge : IAgentKnowledge
+        {
+            return (TAgentKnowledge)GetAgentKnowledge(knowledgeId);
         }
 
         /// <summary>
@@ -101,16 +95,5 @@ namespace Symu.Repository.Networks.Knowledges
         {
             return List.Select(x => x.KnowledgeId);
         }
-
-        ///// <summary>
-        /////     OnAfterLearning event is triggered if learning occurs,
-        /////     you can subscribe to this event to treat the new learning
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //public void AfterLearning(object sender, LearningEventArgs e)
-        //{
-        //    OnAfterLearning?.Invoke(this, e);
-        //}
     }
 }

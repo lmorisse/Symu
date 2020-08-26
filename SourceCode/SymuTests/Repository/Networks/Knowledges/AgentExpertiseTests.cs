@@ -11,6 +11,7 @@
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -25,11 +26,19 @@ namespace SymuTests.Repository.Networks.Knowledges
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 10);
 
+        private AgentKnowledge _agentKnowledge;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _agentKnowledge = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+        }
+
         [TestMethod]
         public void ContainsTest()
         {
             Assert.IsFalse(_expertise.Contains(_knowledge.Id));
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _expertise.Add(_agentKnowledge);
             Assert.IsTrue(_expertise.Contains(_knowledge.Id));
         }
 
@@ -37,7 +46,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         public void ContainsIdTest()
         {
             Assert.IsFalse(_expertise.Contains(_knowledge.Id));
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _expertise.Add(_agentKnowledge);
             Assert.IsTrue(_expertise.Contains(_knowledge.Id));
         }
 
@@ -45,7 +54,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         public void GetKnowledgesTest()
         {
             Assert.AreEqual(0, _expertise.GetKnowledgeIds().Count());
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _expertise.Add(_agentKnowledge);
             Assert.AreEqual(1, _expertise.GetKnowledgeIds().Count());
         }
 
@@ -55,7 +64,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void GetKnowledgeTest()
         {
-            Assert.IsNull(_expertise.GetKnowledge(_knowledge.Id));
+            Assert.IsNull(_expertise.GetAgentKnowledge(_knowledge.Id));
         }
     }
 }

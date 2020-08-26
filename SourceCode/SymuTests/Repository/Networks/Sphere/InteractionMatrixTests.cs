@@ -18,6 +18,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Sphere;
@@ -48,6 +49,9 @@ namespace SymuTests.Repository.Networks.Sphere
         private MetaNetwork _network;
 
         private KnowledgeNetwork _networkKnowledge;
+        private AgentKnowledge _agentKnowledge;
+        private AgentKnowledge _agentKnowledge2;
+        private AgentKnowledge _agentKnowledge3;
 
         [TestInitialize]
         public void Initialize()
@@ -56,14 +60,17 @@ namespace SymuTests.Repository.Networks.Sphere
             var organizationModels = new OrganizationModels {InteractionSphere = {On = true}};
             _network = new MetaNetwork(organizationModels.InteractionSphere, organizationModels.ImpactOfBeliefOnTask);
             _networkKnowledge = _network.Knowledge;
+            _agentKnowledge = new AgentKnowledge(_info1.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agentKnowledge2 = new AgentKnowledge(_info2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agentKnowledge3 = new AgentKnowledge(_info3.Id, KnowledgeLevel.FullKnowledge, 0, -1);
         }
 
         private void Interaction1X1()
         {
             _actors.Add(_agentId1);
             _networkKnowledge.AddKnowledge(_info1);
-            _networkKnowledge.Add(_agentId1, _info1.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _networkKnowledge.InitializeExpertise(_agentId1, false, 0);
+            _networkKnowledge.Add(_agentId1, _agentKnowledge);
+            _agentKnowledge.InitializeKnowledge(_info1.Length, _networkKnowledge.Model, _agentKnowledge.KnowledgeLevel, 0);
             _network.InteractionSphere.SetSphere(true, _iActors, _network);
         }
 
@@ -72,8 +79,8 @@ namespace SymuTests.Repository.Networks.Sphere
             Interaction1X1();
             _actors.Add(_agentId2);
             _networkKnowledge.AddKnowledge(_info2);
-            _networkKnowledge.Add(_agentId2, _info2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _networkKnowledge.InitializeExpertise(_agentId2, false, 0);
+            _networkKnowledge.Add(_agentId2, _agentKnowledge2);
+            _agentKnowledge2.InitializeKnowledge(_info2.Length, _networkKnowledge.Model, _agentKnowledge2.KnowledgeLevel, 0);
             _network.InteractionSphere.SetSphere(true, _iActors, _network);
         }
 
@@ -82,8 +89,8 @@ namespace SymuTests.Repository.Networks.Sphere
             NoInteraction2X2();
             _actors.Add(_agentId3);
             _networkKnowledge.AddKnowledge(_info3);
-            _networkKnowledge.Add(_agentId3, _info3.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _networkKnowledge.InitializeExpertise(_agentId3, false, 0);
+            _networkKnowledge.Add(_agentId3, _agentKnowledge3);
+            _agentKnowledge3.InitializeKnowledge(_info3.Length, _networkKnowledge.Model, _agentKnowledge3.KnowledgeLevel, 0);
             _network.InteractionSphere.SetSphere(true, _iActors, _network);
         }
 
@@ -123,10 +130,8 @@ namespace SymuTests.Repository.Networks.Sphere
         public void Average1Interaction2X2Test()
         {
             NoInteraction2X2();
-            _networkKnowledge.Add(_agentId1, _info2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _networkKnowledge.Add(_agentId2, _info1.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _networkKnowledge.InitializeExpertise(_agentId1, false, 0);
-            _networkKnowledge.InitializeExpertise(_agentId2, false, 0);
+            _networkKnowledge.Add(_agentId1, _agentKnowledge2);
+            _networkKnowledge.Add(_agentId2, _agentKnowledge);
             _network.InteractionSphere.SetSphere(true, _iActors, _network);
 
             Assert.AreEqual(1F,
@@ -162,8 +167,9 @@ namespace SymuTests.Repository.Networks.Sphere
             {
                 var agentId = new AgentId(i, 1);
                 _actors.Add(agentId);
-                _networkKnowledge.Add(agentId, _info1.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-                _networkKnowledge.InitializeExpertise(agentId, false, 0);
+                _networkKnowledge.Add(agentId, _agentKnowledge);
+                _agentKnowledge.InitializeKnowledge(_info1.Length, _networkKnowledge.Model,
+                    _agentKnowledge.KnowledgeLevel, 0);
             }
 
             _network.InteractionSphere.SetSphere(true, _iActors, _network);
@@ -187,8 +193,10 @@ namespace SymuTests.Repository.Networks.Sphere
                 _networkKnowledge.AddKnowledge(info);
                 var agentId = new AgentId(i, 1);
                 _actors.Add(agentId);
-                _networkKnowledge.Add(agentId, info.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-                _networkKnowledge.InitializeExpertise(agentId, false, 0);
+                var agentKnowledge = new AgentKnowledge(info.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+                _networkKnowledge.Add(agentId, agentKnowledge);
+                agentKnowledge.InitializeKnowledge(info.Length, _networkKnowledge.Model,
+                    KnowledgeLevel.FullKnowledge, 0);
             }
 
             _network.InteractionSphere.SetSphere(true, _iActors, _network);

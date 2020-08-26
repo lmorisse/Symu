@@ -149,8 +149,10 @@ namespace SymuTests.Repository.Networks.Sphere
 
         private void AddKnowledge(AgentId agentId, KnowledgeLevel level)
         {
-            _network.Knowledge.Add(agentId, _knowledge.Id, level, 0, -1);
-            _network.Knowledge.InitializeExpertise(agentId, false, 0);
+            var agentKnowledge = new AgentKnowledge(_knowledge.Id, level, 0, -1);
+            _network.Knowledge.Add(agentId, agentKnowledge);
+            agentKnowledge.InitializeKnowledge(_knowledge.Length, _network.Knowledge.Model,
+                level, 0);
         }
 
         private void AddActivity(AgentId agentId)

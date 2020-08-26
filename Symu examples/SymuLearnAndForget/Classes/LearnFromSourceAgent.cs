@@ -13,6 +13,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion

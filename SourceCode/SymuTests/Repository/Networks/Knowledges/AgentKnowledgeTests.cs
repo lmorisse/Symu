@@ -12,6 +12,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 #endregion
@@ -140,7 +141,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeBitsTest(KnowledgeLevel level)
         {
-            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, level, 0);
+            _agentKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, level, 0);
             var knowledgeBits = _agentKnowledge.KnowledgeBits;
             for (byte i = 0; i < 10; i++)
             {
@@ -155,7 +156,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeBitsTest1()
         {
-            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.FullKnowledge, 0);
+            _agentKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.FullKnowledge, 0);
             var knowledgeBits = _agentKnowledge.KnowledgeBits;
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
@@ -176,7 +177,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeBitsTest2()
         {
-            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.NoKnowledge, 0);
+            _agentKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.NoKnowledge, 0);
             var knowledgeBits = _agentKnowledge.KnowledgeBits;
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
@@ -202,7 +203,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeBitsTest3(KnowledgeLevel level)
         {
-            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomUniform, level, 0);
+            _agentKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomUniform, level, 0);
             var knowledgeBits = _agentKnowledge.KnowledgeBits;
             for (byte i = 0; i < 10; i++)
             {
@@ -220,7 +221,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void InitializeBitsTest5()
         {
-            _agentKnowledge.InitializeBits(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.Random, 0);
+            _agentKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.Random, 0);
             var knowledgeBits = _agentKnowledge.KnowledgeBits;
             for (byte i = 0; i < 10; i++)
             {

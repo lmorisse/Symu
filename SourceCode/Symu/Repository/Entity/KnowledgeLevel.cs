@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace Symu.Repository.Networks.Knowledges
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Measure of a employee's expertise on a scale of 0 to 5

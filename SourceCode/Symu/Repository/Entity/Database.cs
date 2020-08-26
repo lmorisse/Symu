@@ -80,7 +80,7 @@ namespace Symu.Repository.Entity
             return _database.Contains(knowledgeId);
         }
 
-        public void InitializeKnowledge(IKnowledge knowledge, ushort step)
+        public void InitializeKnowledge(Knowledge knowledge, ushort step)
         {
             if (knowledge == null)
             {
@@ -158,7 +158,7 @@ namespace Symu.Repository.Entity
         /// </summary>
         public float GetKnowledgesSum()
         {
-            return _database.List.Sum(l => l.GetKnowledgeSum());
+            return _database.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgeSum());
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Symu.Repository.Entity
 
         public AgentKnowledge GetKnowledge(IId knowledgeId)
         {
-            return _database.GetKnowledge(knowledgeId);
+            return _database.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
         }
     }
 }

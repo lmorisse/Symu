@@ -14,7 +14,7 @@ using Symu.Common;
 
 #endregion
 
-namespace Symu.Repository.Networks.Knowledges
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Describe every bit of knowledge

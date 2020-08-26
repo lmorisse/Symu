@@ -17,6 +17,7 @@ using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -32,20 +33,18 @@ namespace SymuTests.Repository.Networks.Knowledges
             new Knowledge(1, "1", 10);
 
         private readonly KnowledgeNetwork _knowledgeNetwork = new KnowledgeNetwork();
+        private AgentKnowledge _agentKnowledgeBasic;
+        private AgentKnowledge _agentKnowledgeNo;
 
         [TestInitialize]
         public void Initialize()
         {
+            _agentKnowledgeBasic = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.BasicKnowledge, 0, -1);
+            _agentKnowledgeNo = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.NoKnowledge, 0, -1);
             _knowledgeNetwork.AddKnowledge(_knowledge);
         }
 
-        [TestMethod]
-        public void InitializeExpertiseTest()
-        {
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
-            _knowledgeNetwork.InitializeExpertise(_agentId, false, 0);
-            Assert.AreEqual(10, _knowledgeNetwork.AgentsRepository[_agentId].List[0].Length);
-        }
+
 
         [TestMethod]
         public void FilterAgentsWithKnowledgeTest()
@@ -60,7 +59,7 @@ namespace SymuTests.Repository.Networks.Knowledges
             filteredAgents = _knowledgeNetwork.FilterAgentsWithKnowledge(agentIds, _knowledge.Id);
             Assert.AreEqual(0, filteredAgents.Count());
             // Passing test
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             filteredAgents = _knowledgeNetwork.FilterAgentsWithKnowledge(agentIds, _knowledge.Id);
             Assert.AreEqual(1, filteredAgents.Count());
         }
@@ -82,7 +81,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         {
             Assert.IsFalse(_knowledgeNetwork.Exists(_agentId));
             Assert.IsFalse(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Intermediate, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             Assert.IsTrue(_knowledgeNetwork.Exists(_agentId));
             Assert.IsTrue(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
         }
@@ -92,7 +91,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         {
             _knowledgeNetwork.AddAgentId(_agentId);
             Assert.IsFalse(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
-            _knowledgeNetwork.AddKnowledge(_agentId, _knowledge.Id, KnowledgeLevel.BasicKnowledge, 0, -1);
+            _knowledgeNetwork.AddKnowledge(_agentId, _agentKnowledgeBasic);
             Assert.IsTrue(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
         }
 
@@ -101,7 +100,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         {
             _knowledgeNetwork.AddAgentId(_agentId);
             Assert.AreEqual(0, _knowledgeNetwork.GetKnowledgeIds(_agentId).Count());
-            _knowledgeNetwork.AddKnowledge(_agentId, _knowledge.Id, KnowledgeLevel.BasicKnowledge, 0, -1);
+            _knowledgeNetwork.AddKnowledge(_agentId, _agentKnowledgeBasic);
             Assert.AreEqual(1, _knowledgeNetwork.GetKnowledgeIds(_agentId).Count());
         }
 
@@ -116,7 +115,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void ClearTest()
         {
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             _knowledgeNetwork.Clear();
             Assert.IsFalse(_knowledgeNetwork.Any());
         }
@@ -125,7 +124,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         public void ExistsTest()
         {
             Assert.IsFalse(_knowledgeNetwork.Exists(_agentId));
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             Assert.IsTrue(_knowledgeNetwork.Exists(_agentId));
         }
 
@@ -133,7 +132,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         public void ExistsAgentTest()
         {
             Assert.IsFalse(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             Assert.IsTrue(_knowledgeNetwork.Exists(_agentId, _knowledge.Id));
         }
 
@@ -144,7 +143,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         public void Add1Test()
         {
             Assert.IsFalse(_knowledgeNetwork.Any());
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             Assert.IsTrue(_knowledgeNetwork.Any());
         }
 
@@ -163,7 +162,7 @@ namespace SymuTests.Repository.Networks.Knowledges
         [TestMethod]
         public void GetAgentExpertiseTest1()
         {
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeBasic);
             var agentExpertise = _knowledgeNetwork.GetAgentExpertise(_agentId);
             Assert.IsNotNull(agentExpertise);
         }
@@ -180,38 +179,12 @@ namespace SymuTests.Repository.Networks.Knowledges
         }
 
         [TestMethod]
-        public void NullInitializeAgentKnowledgeTest()
-        {
-            Assert.ThrowsException<ArgumentNullException>(() => _knowledgeNetwork.InitializeAgentKnowledge(null, false, 0));
-        }
-
-        [TestMethod]
-        public void InitializeAgentKnowledgeTest()
-        {
-            var agentKnowledge = new AgentKnowledge(1, KnowledgeLevel.NoKnowledge, 0, -1);
-            Assert.IsTrue(agentKnowledge.KnowledgeBits.IsNull);
-            _knowledgeNetwork.InitializeAgentKnowledge(agentKnowledge, false, 0);
-            Assert.IsFalse(agentKnowledge.KnowledgeBits.IsNull);
-            Assert.AreEqual(0, agentKnowledge.KnowledgeBits.GetBit(0));
-        }
-
-        [TestMethod]
         public void GetAgentKnowledgeTest()
         {
             Assert.ThrowsException<NullReferenceException>(() => _knowledgeNetwork.GetAgentKnowledge(_agentId, _knowledge.Id));
-            _knowledgeNetwork.Add(_agentId, _knowledge.Id, KnowledgeLevel.NoKnowledge, 0, -1);
+            _knowledgeNetwork.Add(_agentId, _agentKnowledgeNo);
             Assert.IsNotNull(_knowledgeNetwork.GetAgentKnowledge(_agentId, _knowledge.Id));
         }
 
-        [TestMethod]
-        public void LearnNewKnowledgeTest()
-        {
-            _knowledgeNetwork.AddAgentId(_agentId);
-            _knowledgeNetwork.LearnNewKnowledge(_agentId, _knowledge.Id, 0, -1, 0);
-            var agentKnowledge = _knowledgeNetwork.GetAgentKnowledge(_agentId, _knowledge.Id);
-            Assert.IsNotNull(agentKnowledge);
-            Assert.IsFalse(agentKnowledge.KnowledgeBits.IsNull);
-            Assert.AreEqual(0, agentKnowledge.KnowledgeBits.GetBit(0));
-        }
     }
 }

@@ -21,6 +21,7 @@ using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Environment;
 using Symu.Repository;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion

@@ -18,6 +18,7 @@ using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using static Symu.Common.Constants;
@@ -196,7 +197,7 @@ namespace Symu.Classes.Task
                 throw new ArgumentNullException(nameof(knowledges));
             }
 
-            foreach (var knowledge in knowledges)
+            foreach (var knowledge in knowledges.Cast<Knowledge>())
             {
                 var bit = new TaskKnowledgeBits
                 {

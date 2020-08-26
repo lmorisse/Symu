@@ -20,6 +20,7 @@ using Symu.DNA.Groups;
 using Symu.DNA.Resources;
 using Symu.DNA.Roles;
 using Symu.DNA.TwoModesNetworks.Interactions;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
@@ -201,7 +202,8 @@ namespace Symu.Repository.Networks
         {
             var knowledges = knowledge.ToList();
             Knowledge.AddKnowledges(knowledges);
-            Beliefs.AddBeliefs(knowledges);
+            //todo temporary
+            Beliefs.AddBeliefs(knowledges.Cast<Knowledge>());
         }
 
         #endregion

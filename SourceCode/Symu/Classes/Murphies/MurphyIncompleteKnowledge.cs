@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Task;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -59,7 +60,7 @@ namespace Symu.Classes.Murphies
             }
 
             // agent may don't have the knowledge at all
-            var workerKnowledge = knowledgeModel.Expertise.GetKnowledge(knowledgeId);
+            var workerKnowledge = knowledgeModel.Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
             if (workerKnowledge == null)
             {
                 return;

@@ -5,6 +5,7 @@ using Symu.Classes.Task;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 namespace Symu.Classes.Task.Tests

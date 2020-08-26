@@ -15,7 +15,7 @@ using System.Linq;
 
 #endregion
 
-namespace Symu.Repository.Networks.Knowledges
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Describe every bit of knowledge or belief
@@ -42,7 +42,9 @@ namespace Symu.Repository.Networks.Knowledges
         {
             _bits = bits;
         }
-
+        /// <summary>
+        /// The minimum value a Bit can take
+        /// </summary>
         public float RangeMin { get; }
 
         public byte Length => IsNull ? (byte) 0 : Convert.ToByte(_bits.Length);

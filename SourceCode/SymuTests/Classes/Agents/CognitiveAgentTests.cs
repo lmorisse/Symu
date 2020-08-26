@@ -211,7 +211,7 @@ namespace SymuTests.Classes.Agents
                 CommunicationMediums.System);
 
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(0, _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).GetKnowledgeSum());
+            Assert.AreEqual(0, _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).GetKnowledgeSum());
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(1, _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).GetKnowledgeSum());
+            Assert.AreEqual(1, _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).GetKnowledgeSum());
         }
 
         [TestMethod]
@@ -514,7 +514,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge(_agent.AgentId, knowledge.Id)
+            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
@@ -547,7 +547,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge(_agent.AgentId, knowledge.Id)
+            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
                 .SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
@@ -1288,7 +1288,7 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
-            _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
                 _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
 
@@ -1353,7 +1353,7 @@ namespace SymuTests.Classes.Agents
             task.SetTasksManager(_agent.TaskProcessor.TasksManager);
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);
-            _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
 
             Assert.IsTrue(_agent.TaskProcessor.TasksManager.BlockerResult.Cancelled == 1 ||
@@ -1394,7 +1394,7 @@ namespace SymuTests.Classes.Agents
             var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId };
             task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges,
                 MurphyTask.FullRequiredBits);
-            _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteKnowledge, 0));
@@ -1413,7 +1413,7 @@ namespace SymuTests.Classes.Agents
             task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges,
                 MurphyTask.FullRequiredBits);
 
-            _agent.KnowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             _agent.RecoverBlockerIncompleteKnowledgeByGuessing(task, null, _knowledge.Id, 0,
                 BlockerResolution.Guessing);
             Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
@@ -1424,7 +1424,7 @@ namespace SymuTests.Classes.Agents
 
             Assert.IsTrue(1 < task.Weight);
             var agentKnowledge =
-                _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge(_agent.AgentId, _knowledge.Id);
+                _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, _knowledge.Id);
             Assert.AreEqual(_agent.LearningModel.TasksAndPerformance.LearningByDoingRate,
                 agentKnowledge.GetKnowledgeBit(0));
         }

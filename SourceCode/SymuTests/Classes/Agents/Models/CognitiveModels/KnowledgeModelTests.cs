@@ -19,6 +19,7 @@ using Symu.Classes.Task;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Messaging.Templates;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 
@@ -111,6 +112,22 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = false;
             _knowledgeModel.InitializeExpertise(0);
             Assert.IsTrue(_network.Knowledge.Exists(_agentId));
+        }
+
+        [TestMethod]
+        public void NullInitializeAgentKnowledgeTest()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _knowledgeModel.InitializeAgentKnowledge(null, false, 0));
+        }
+
+        [TestMethod]
+        public void InitializeAgentKnowledgeTest()
+        {
+            var agentKnowledgeNo = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.NoKnowledge, 0, -1);
+            Assert.IsTrue(agentKnowledgeNo.KnowledgeBits.IsNull);
+            _knowledgeModel.InitializeAgentKnowledge(agentKnowledgeNo, false, 0);
+            Assert.IsFalse(agentKnowledgeNo.KnowledgeBits.IsNull);
+            Assert.AreEqual(0, agentKnowledgeNo.KnowledgeBits.GetBit(0));
         }
 
         /// <summary>
@@ -207,7 +224,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
 
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _knowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.AreEqual(1, bits.GetSum());
@@ -228,7 +245,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
+            _knowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNull(bits);
         }
@@ -250,7 +267,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 2;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
+            _knowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.AreEqual(1, bits.GetSum());
@@ -273,7 +290,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
+            _knowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.IsTrue(1F <= bits.GetSum());
@@ -291,7 +308,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 3;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.GetKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1Bits, 0);
+            _knowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBits(_knowledge1Bits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.Id, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.IsTrue(1F <= bits.GetSum());
@@ -319,7 +336,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             _knowledgeModel.InitializeKnowledge(_knowledge.Id, 0);
             Assert.IsTrue(_network.Knowledge.Exists(_agentId, _knowledge.Id));
-            var agentKnowledge = _knowledgeModel.Expertise.GetKnowledge(_knowledge.Id);
+            var agentKnowledge = _knowledgeModel.Expertise.GetAgentKnowledge<AgentKnowledge>(_knowledge.Id);
             Assert.AreEqual(1, agentKnowledge.KnowledgeBits.GetBit(0));
         }
 

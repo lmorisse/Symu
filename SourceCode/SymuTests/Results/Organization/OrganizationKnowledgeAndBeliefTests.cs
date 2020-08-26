@@ -14,6 +14,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Organization;
@@ -33,6 +34,8 @@ namespace SymuTests.Results.Organization
         private KnowledgeAndBeliefResults _result;
         private TestCognitiveAgent _agent;
         private TestCognitiveAgent _agent2;
+        private AgentKnowledge _agentKnowledge;
+        private AgentKnowledge _agentKnowledge2;
 
 
         [TestInitialize]
@@ -46,6 +49,8 @@ namespace SymuTests.Results.Organization
             _agent = new TestCognitiveAgent(new UId(1), _environment);
             _agent2 = new TestCognitiveAgent(new UId(2), _environment);
             _environment.Start();
+            _agentKnowledge = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agentKnowledge2 = new AgentKnowledge(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
         }
 
         #region Knowledge
@@ -113,7 +118,7 @@ namespace SymuTests.Results.Organization
         [TestMethod]
         public void HandleBelief1Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _expertise.Add(_agentKnowledge);
             _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, _expertise,
                 BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent2.AgentId, _expertise,
@@ -134,8 +139,8 @@ namespace SymuTests.Results.Organization
         [TestMethod]
         public void HandleBelief2Test()
         {
-            _expertise.Add(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _expertise.Add(_knowledge2.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _expertise.Add(_agentKnowledge);
+            _expertise.Add(_agentKnowledge2);
             _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, _expertise,
                 BeliefLevel.NeitherAgreeNorDisagree);
             _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent2.AgentId, _expertise,

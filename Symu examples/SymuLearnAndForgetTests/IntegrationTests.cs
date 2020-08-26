@@ -16,6 +16,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Engine;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using SymuLearnAndForget.Classes;
 

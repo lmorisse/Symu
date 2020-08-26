@@ -17,6 +17,7 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -47,18 +48,18 @@ namespace Symu.Repository.Networks.Knowledges
         ///     Key => ComponentId
         ///     Values => AgentExpertise : list of KnowledgeIds/KnowledgeBits/KnowledgeLevel of an agent
         /// </summary>
-        public ConcurrentDictionary<IAgentId, AgentExpertise> AgentsRepository { get; } =
+        public ConcurrentDictionary<IAgentId, AgentExpertise> AgentKnowledgeNetwork { get; } =
             new ConcurrentDictionary<IAgentId, AgentExpertise>();
 
         public bool Any()
         {
-            return AgentsRepository.Any();
+            return AgentKnowledgeNetwork.Any();
         }
 
         public void Clear()
         {
             Repository.Clear();
-            AgentsRepository.Clear();
+            AgentKnowledgeNetwork.Clear();
         }
 
         #region Knowledge repository
@@ -66,6 +67,10 @@ namespace Symu.Repository.Networks.Knowledges
         public IKnowledge GetKnowledge(IId knowledgeId)
         {
             return Repository.GetKnowledge(knowledgeId);
+        }
+        public TKnowledge GetKnowledge<TKnowledge>(IId knowledgeId) where TKnowledge : IKnowledge
+        {
+            return (TKnowledge) GetKnowledge(knowledgeId);
         }
 
         /// <summary>
@@ -104,12 +109,12 @@ namespace Symu.Repository.Networks.Knowledges
 
         public bool Exists(IAgentId agentId, IId knowledgeId)
         {
-            return Exists(agentId) && AgentsRepository[agentId].Contains(knowledgeId);
+            return Exists(agentId) && AgentKnowledgeNetwork[agentId].Contains(knowledgeId);
         }
 
         public bool Exists(IAgentId agentId)
         {
-            return AgentsRepository.ContainsKey(agentId);
+            return AgentKnowledgeNetwork.ContainsKey(agentId);
         }
 
         public void Add(IAgentId agentId, AgentExpertise expertise)
@@ -122,17 +127,16 @@ namespace Symu.Repository.Networks.Knowledges
             AddAgentId(agentId, expertise);
 
 
-            foreach (var agentKnowledge in expertise.List.Where(a => !AgentsRepository[agentId].Contains(a)))
+            foreach (var agentKnowledge in expertise.List.Where(a => !AgentKnowledgeNetwork[agentId].Contains(a)))
             {
-                AgentsRepository[agentId].Add(agentKnowledge);
+                AgentKnowledgeNetwork[agentId].Add(agentKnowledge);
             }
         }
 
-        public void Add(IAgentId agentId, IId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
-            short timeToLive)
+        public void Add(IAgentId agentId, IAgentKnowledge agentKnowledge)
         {
             AddAgentId(agentId);
-            AddKnowledge(agentId, knowledgeId, level, minimumKnowledge, timeToLive);
+            AddKnowledge(agentId, agentKnowledge);
         }
 
         /// <summary>
@@ -140,17 +144,18 @@ namespace Symu.Repository.Networks.Knowledges
         ///     AgentId is supposed to be already present in the collection.
         ///     if not use Add method
         /// </summary>
+        /// <param name="agentKnowledge"></param>
         /// <param name="agentId"></param>
-        /// <param name="knowledgeId"></param>
-        /// <param name="level"></param>
-        /// <param name="minimumKnowledge"></param>
-        /// <param name="timeToLive"></param>
-        public void AddKnowledge(IAgentId agentId, IId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
-            short timeToLive)
+        public void AddKnowledge(IAgentId agentId, IAgentKnowledge agentKnowledge)
         {
-            if (!Exists(agentId, knowledgeId))
+            if (agentKnowledge == null)
             {
-                AgentsRepository[agentId].Add(knowledgeId, level, minimumKnowledge, timeToLive);
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            if (!Exists(agentId, agentKnowledge.KnowledgeId))
+            {
+                AgentKnowledgeNetwork[agentId].Add(agentKnowledge);
             }
         }
 
@@ -158,7 +163,7 @@ namespace Symu.Repository.Networks.Knowledges
         {
             if (!Exists(agentId))
             {
-                AgentsRepository.TryAdd(agentId, agentExpertise);
+                AgentKnowledgeNetwork.TryAdd(agentId, agentExpertise);
             }
         }
 
@@ -166,72 +171,8 @@ namespace Symu.Repository.Networks.Knowledges
         {
             if (!Exists(agentId))
             {
-                AgentsRepository.TryAdd(agentId, new AgentExpertise());
+                AgentKnowledgeNetwork.TryAdd(agentId, new AgentExpertise());
             }
-        }
-
-        /// <summary>
-        ///     Initialize AgentExpertise with a stochastic process based on the agent knowledge level
-        /// </summary>
-        /// <param name="agentId">agentId's expertise to initialize</param>
-        /// <param name="neutral">if !HasInitialKnowledge, then a neutral (KnowledgeLevel.NoKnowledge) initialization is done</param>
-        /// <param name="step"></param>
-        public void InitializeExpertise(IAgentId agentId, bool neutral, ushort step)
-        {
-            if (!Exists(agentId))
-            {
-                throw new NullReferenceException(nameof(agentId));
-            }
-
-            foreach (var agentKnowledge in AgentsRepository[agentId].List)
-            {
-                InitializeAgentKnowledge(agentKnowledge, neutral, step);
-            }
-        }
-
-        /// <summary>
-        ///     Initialize AgentExpertise with a stochastic process based on the agent knowledge level
-        /// </summary>
-        /// <param name="agentKnowledge">AgentKnowledge to initialize</param>
-        /// <param name="neutral">if !HasInitialKnowledge, then a neutral (KnowledgeLevel.NoKnowledge) initialization is done</param>
-        /// <param name="step"></param>
-        public void InitializeAgentKnowledge(AgentKnowledge agentKnowledge, bool neutral, ushort step)
-        {
-            if (agentKnowledge is null)
-            {
-                throw new ArgumentNullException(nameof(agentKnowledge));
-            }
-
-            var knowledge = GetKnowledge(agentKnowledge.KnowledgeId);
-            if (knowledge == null)
-            {
-                throw new ArgumentNullException(nameof(knowledge));
-            }
-
-            var level = neutral ? KnowledgeLevel.NoKnowledge : agentKnowledge.KnowledgeLevel;
-            agentKnowledge.InitializeBits(knowledge.Length, Model, level, step);
-        }
-
-        /// <summary>
-        ///     Agent don't have still this Knowledge, it's time to create one
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="knowledgeId"></param>
-        /// <param name="minimumKnowledge"></param>
-        /// <param name="timeToLive"></param>
-        /// <param name="step"></param>
-        public void LearnNewKnowledge(IAgentId agentId, IId knowledgeId, float minimumKnowledge, short timeToLive,
-            ushort step)
-        {
-            if (Exists(agentId, knowledgeId))
-            {
-                return;
-            }
-
-            AddAgentId(agentId);
-            AddKnowledge(agentId, knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
-            var agentKnowledge = GetAgentKnowledge(agentId, knowledgeId);
-            InitializeAgentKnowledge(agentKnowledge, true, step);
         }
 
         public IEnumerable<IAgentId> FilterAgentsWithKnowledge(IEnumerable<IAgentId> agentIds, IId knowledgeId)
@@ -241,7 +182,7 @@ namespace Symu.Repository.Networks.Knowledges
                 throw new ArgumentNullException(nameof(agentIds));
             }
 
-            return agentIds.Where(agentId => Exists(agentId) && AgentsRepository[agentId].Contains(knowledgeId))
+            return agentIds.Where(agentId => Exists(agentId) && AgentKnowledgeNetwork[agentId].Contains(knowledgeId))
                 .ToList();
         }
 
@@ -252,12 +193,12 @@ namespace Symu.Repository.Networks.Knowledges
                 throw new NullReferenceException(nameof(agentId));
             }
 
-            return AgentsRepository[agentId].GetKnowledgeIds();
+            return AgentKnowledgeNetwork[agentId].GetKnowledgeIds();
         }
 
         public void RemoveAgent(IAgentId agentId)
         {
-            AgentsRepository.TryRemove(agentId, out _);
+            AgentKnowledgeNetwork.TryRemove(agentId, out _);
         }
 
         /// <summary>
@@ -272,7 +213,7 @@ namespace Symu.Repository.Networks.Knowledges
                 throw new NullReferenceException(nameof(agentId));
             }
 
-            return AgentsRepository[agentId];
+            return AgentKnowledgeNetwork[agentId];
         }
 
         /// <summary>
@@ -281,14 +222,25 @@ namespace Symu.Repository.Networks.Knowledges
         /// <param name="agentId"></param>
         /// <param name="knowledgeId"></param>
         /// <returns>null if agentId don't Exists, AgentExpertise otherwise</returns>
-        public AgentKnowledge GetAgentKnowledge(IAgentId agentId, IId knowledgeId)
+        public IAgentKnowledge GetAgentKnowledge(IAgentId agentId, IId knowledgeId)
         {
             if (!Exists(agentId, knowledgeId))
             {
                 throw new NullReferenceException(nameof(agentId));
             }
 
-            return AgentsRepository[agentId].GetKnowledge(knowledgeId);
+            return AgentKnowledgeNetwork[agentId].GetAgentKnowledge(knowledgeId);
+        }
+
+        /// <summary>
+        ///     Get Agent Knowledge
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="knowledgeId"></param>
+        /// <returns>null if agentId don't Exists, AgentExpertise otherwise</returns>
+        public TAgentKnowledge GetAgentKnowledge<TAgentKnowledge>(IAgentId agentId, IId knowledgeId) where TAgentKnowledge : IAgentKnowledge
+        {
+            return (TAgentKnowledge)GetAgentKnowledge(agentId, knowledgeId);
         }
 
         #endregion

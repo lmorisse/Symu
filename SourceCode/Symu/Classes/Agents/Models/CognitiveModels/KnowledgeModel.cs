@@ -15,6 +15,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Messaging.Templates;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
@@ -100,7 +101,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns></returns>
         public float GetKnowledgeSum()
         {
-            return Expertise.List.Sum(l => l.GetKnowledgeSum());
+            return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgeSum());
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns></returns>
         public float GetKnowledgePotential()
         {
-            return Expertise.List.Sum(l => l.GetKnowledgePotential());
+            return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgePotential());
         }
         /// <summary>
         ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
@@ -135,7 +136,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         public float Obsolescence(float step)
         {
-            return Expertise.List.Any() ? Expertise.List.Average(t => t.KnowledgeBits.Obsolescence(step)) : 0;
+            return Expertise.List.Any() ? Expertise.GetAgentKnowledges<AgentKnowledge>().Average(t => t.KnowledgeBits.Obsolescence(step)) : 0;
         }
         #endregion
 
@@ -151,7 +152,37 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             _knowledgeNetwork.AddAgentId(_agentId, Expertise);
-            _knowledgeNetwork.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
+            //_knowledgeNetwork.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
+
+            foreach (var agentKnowledge in _knowledgeNetwork.GetAgentExpertise(_agentId).List)
+            {
+                InitializeAgentKnowledge((AgentKnowledge)agentKnowledge, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
+            }
+        }
+
+
+
+        /// <summary>
+        ///     Initialize AgentExpertise with a stochastic process based on the agent knowledge level
+        /// </summary>
+        /// <param name="agentKnowledge">AgentKnowledge to initialize</param>
+        /// <param name="neutral">if !HasInitialKnowledge, then a neutral (KnowledgeLevel.NoKnowledge) initialization is done</param>
+        /// <param name="step"></param>
+        public void InitializeAgentKnowledge(AgentKnowledge agentKnowledge, bool neutral, ushort step)
+        {
+            if (agentKnowledge is null)
+            {
+                throw new ArgumentNullException(nameof(agentKnowledge));
+            }
+
+            var knowledge = GetKnowledge(agentKnowledge.KnowledgeId);
+            if (knowledge == null)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
+            var level = neutral ? KnowledgeLevel.NoKnowledge : agentKnowledge.KnowledgeLevel;
+            agentKnowledge.InitializeKnowledge(knowledge.Length, _knowledgeNetwork.Model, level, step);
         }
 
         /// <summary>
@@ -161,7 +192,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="step"></param>
         public void InitializeKnowledge(IId knowledgeId, ushort step)
         {
-            _knowledgeNetwork.InitializeAgentKnowledge(GetKnowledge(knowledgeId),
+            InitializeAgentKnowledge(GetAgentKnowledge(knowledgeId),
                 !_knowledgeAndBeliefs.HasInitialKnowledge, step);
         }
 
@@ -211,7 +242,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _knowledgeNetwork.Add(_agentId, knowledgeId, level, minimumKnowledge, timeToLive);
+            var agentKnowledge = new AgentKnowledge(knowledgeId, level, minimumKnowledge, timeToLive);
+            _knowledgeNetwork.Add(_agentId, agentKnowledge);
         }
 
 
@@ -246,7 +278,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return null;
             }
 
-            var agentKnowledge = Expertise.GetKnowledge(knowledgeId);
+            var agentKnowledge = GetAgentKnowledge(knowledgeId);
             if (agentKnowledge is null)
             {
                 throw new ArgumentNullException(nameof(agentKnowledge));
@@ -287,9 +319,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             return Math.Abs(bitsToSend.GetSum()) < Tolerance ? null : bitsToSend;
         }
 
-        public AgentKnowledge GetKnowledge(IId knowledgeId)
+        public AgentKnowledge GetAgentKnowledge(IId knowledgeId)
         {
-            return Expertise.GetKnowledge(knowledgeId);
+            return Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
+        }
+
+        public Knowledge GetKnowledge(IId knowledgeId)
+        {
+            return _knowledgeNetwork.GetKnowledge<Knowledge>(knowledgeId);
         }
 
         #region KnowsEnough
@@ -341,8 +378,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return false;
             }
 
-            var knowledge = GetKnowledge(knowledgeId);
-            return KnowsEnough(knowledge, knowledgeBit, knowledgeThreshHoldForAnswer, step);
+            return KnowsEnough(GetAgentKnowledge(knowledgeId), knowledgeBit, knowledgeThreshHoldForAnswer, step);
         }
 
         /// <summary>

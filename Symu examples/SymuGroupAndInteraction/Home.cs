@@ -19,6 +19,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Scenario;
 using Symu.Environment;
 using Symu.Forms;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Sphere;
 using SymuGroupAndInteraction.Classes;

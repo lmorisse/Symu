@@ -16,6 +16,7 @@ using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 
@@ -63,7 +64,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns></returns>
         public float GetKnowledgePotential()
         {
-            return Expertise.List.Sum(l => l.GetKnowledgePotential());
+            return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgePotential());
         }
 
         public LearningModel(AgentId agentId, OrganizationModels models, KnowledgeNetwork knowledgeNetwork,
@@ -165,8 +166,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
 
-            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            var agentKnowledge = Expertise.GetKnowledge(knowledgeId);
+            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            var agentKnowledge = Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
             Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
         }
 
@@ -225,8 +226,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            return AgentKnowledgeLearn(Expertise.GetKnowledge(knowledgeId), knowledgeBit, NextLearning(), step);
+            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            return AgentKnowledgeLearn(Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId), knowledgeBit, NextLearning(), step);
         }
 
         /// <summary>
@@ -291,8 +292,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            _knowledgeNetwork.LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            return AgentKnowledgeLearn(Expertise.GetKnowledge(knowledgeId), knowledgeBit, NextLearningByDoing(), step);
+            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
+            return AgentKnowledgeLearn(Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId), knowledgeBit, NextLearningByDoing(), step);
         }
 
         public float NextLearning()
@@ -324,6 +325,27 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             var stdDev =
                 LearningStandardDeviationValue(TasksAndPerformance.LearningStandardDeviation);
             return TasksAndPerformance.LearningByDoingRate * Normal.Sample(1, stdDev * _randomLevel);
+        }
+        /// <summary>
+        ///     Agent don't have still this Knowledge, it's time to create one
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="knowledgeId"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        /// <param name="step"></param>
+        public void LearnNewKnowledge(IAgentId agentId, IId knowledgeId, float minimumKnowledge, short timeToLive,
+            ushort step)
+        {
+            if (_knowledgeNetwork.Exists(agentId, knowledgeId))
+            {
+                return;
+            }
+
+            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
+            _knowledgeNetwork.Add(agentId, agentKnowledge);
+            var knowledge = _knowledgeNetwork.GetKnowledge<Knowledge>(knowledgeId);
+            agentKnowledge.InitializeKnowledge(knowledge.Length, _knowledgeNetwork.Model, KnowledgeLevel.NoKnowledge, step);
         }
 
         private static float LearningStandardDeviationValue(GenericLevel level)

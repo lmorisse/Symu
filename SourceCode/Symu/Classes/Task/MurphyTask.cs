@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Murphies;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 
@@ -127,7 +128,7 @@ namespace Symu.Classes.Task
         ///     complexity = 0.3
         ///     GetTaskRequiredBits = [359] : index 3, 5 and 9 are required
         /// </example>
-        public byte[] GetTaskRequiredBits(IKnowledge knowledge, float complexity)
+        public byte[] GetTaskRequiredBits(Knowledge knowledge, float complexity)
         {
             if (knowledge is null || knowledge.Length == 0)
             {
@@ -152,7 +153,7 @@ namespace Symu.Classes.Task
         ///     complexity = 0.2
         ///     GetTaskMandatoryBits = [17] : index 1 and 7 are mandatory
         /// </example>
-        public byte[] GetTaskMandatoryBits(IKnowledge knowledge, float complexity)
+        public byte[] GetTaskMandatoryBits(Knowledge knowledge, float complexity)
         {
             if (knowledge is null || knowledge.Length == 0)
             {

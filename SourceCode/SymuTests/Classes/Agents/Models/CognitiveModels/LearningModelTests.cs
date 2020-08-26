@@ -17,6 +17,7 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Engine;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Knowledges;
 
@@ -244,6 +245,17 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             var realLearning = _learningModel.AgentKnowledgeLearn(_agentKnowledge, 0, 2, 0);
             Assert.AreEqual(1, _agentKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(1, realLearning);
+        }
+
+        [TestMethod]
+        public void LearnNewKnowledgeTest()
+        {
+            _network.Knowledge.AddAgentId(_agentId);
+            _learningModel.LearnNewKnowledge(_agentId, _knowledge.Id, 0, -1, 0);
+            var agentKnowledge = _network.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agentId, _knowledge.Id);
+            Assert.IsNotNull(agentKnowledge);
+            Assert.IsFalse(agentKnowledge.KnowledgeBits.IsNull);
+            Assert.AreEqual(0, agentKnowledge.KnowledgeBits.GetBit(0));
         }
     }
 }

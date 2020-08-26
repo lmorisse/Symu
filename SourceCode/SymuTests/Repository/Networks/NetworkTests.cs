@@ -46,10 +46,11 @@ namespace SymuTests.Repository.Networks
         private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.Actor);
         private readonly AgentId _managerId = new AgentId(3, 2);
         private Belief _belief;
-        private TestAgentRole _TestAgentRole;
+        private TestAgentRole _testAgentRole;
         private TestAgentResource _agentResource;
         private AgentGroup _agentGroup1;
         private AgentGroup _agentGroup2;
+        private AgentKnowledge _agentKnowledge;
 
         [TestInitialize]
         public void Initialize()
@@ -59,11 +60,12 @@ namespace SymuTests.Repository.Networks
             _belief = new Belief(1, "1", 1,
                 _network.Knowledge.Model, BeliefWeightLevel.RandomWeight);
             _network.Activities.AddActivities(new List<Activity> {_activity}, _teamId);
-            _TestAgentRole = new TestAgentRole(_managerId, _teamId, 1);
+            _testAgentRole = new TestAgentRole(_managerId, _teamId, 1);
 
             _agentResource = new TestAgentResource(_component.Id, new ResourceUsage(IsSupportOn), 100);
             _agentGroup1 = new AgentGroup(_teammateId, 100);
             _agentGroup2 = new AgentGroup(_teammateId2, 100);
+            _agentKnowledge = new AgentKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
         }
 
         [TestMethod]
@@ -72,10 +74,10 @@ namespace SymuTests.Repository.Networks
             var interaction = new Interaction(_teammateId, _managerId);
             _network.Interactions.AddInteraction(interaction);
             _network.Groups.AddGroup(_teamId);
-            _network.Roles.Add(_TestAgentRole);
+            _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_component);
             _network.AddKnowledge(_knowledge);
-            _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _network.Knowledge.Add(_teammateId, _agentKnowledge);
             _network.Beliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> { new AgentActivity(_teammateId, _activity) });
             _network.Clear();
@@ -156,10 +158,10 @@ namespace SymuTests.Repository.Networks
             var interaction = new Interaction(_teammateId, _managerId);
             _network.Interactions.AddInteraction(interaction);
             _network.Groups.AddAgent(_agentGroup1, _teamId);
-            _network.Roles.Add(_TestAgentRole);
+            _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_teammateId, _agentResource);
             _network.AddKnowledge(_knowledge);
-            _network.Knowledge.Add(_teammateId, _knowledge.Id, KnowledgeLevel.Expert, 0, -1);
+            _network.Knowledge.Add(_teammateId, _agentKnowledge);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> {new AgentActivity(_teammateId, _activity)});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));

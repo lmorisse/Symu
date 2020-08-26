@@ -17,6 +17,7 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Knowledges;
 
 #endregion
@@ -80,7 +81,7 @@ namespace Symu.Repository.Networks.Beliefs
         /// <summary>
         ///     Add a Belief to the repository based on a knowledge
         /// </summary>
-        public void AddBelief(IKnowledge knowledge)
+        public void AddBelief(Knowledge knowledge)
         {
             if (knowledge is null)
             {
@@ -88,12 +89,7 @@ namespace Symu.Repository.Networks.Beliefs
             }
 
             var belief = new Belief(knowledge, knowledge.Length, Model, BeliefWeightLevel);
-            if (Exists(belief))
-            {
-                return;
-            }
-
-            Repository.Add(belief);
+            AddBelief(belief);
         }
 
         /// <summary>
@@ -112,7 +108,7 @@ namespace Symu.Repository.Networks.Beliefs
         /// <summary>
         ///     Add a set of Beliefs to the repository
         /// </summary>
-        public void AddBeliefs(IEnumerable<IKnowledge> knowledges)
+        public void AddBeliefs(IEnumerable<Knowledge> knowledges)
         {
             if (knowledges is null)
             {
