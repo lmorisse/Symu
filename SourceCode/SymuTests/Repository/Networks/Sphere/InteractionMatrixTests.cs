@@ -18,9 +18,9 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Knowledges;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Knowledges;
 using Symu.Repository.Networks.Sphere;
 
 #endregion

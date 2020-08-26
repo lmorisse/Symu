@@ -19,7 +19,6 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 

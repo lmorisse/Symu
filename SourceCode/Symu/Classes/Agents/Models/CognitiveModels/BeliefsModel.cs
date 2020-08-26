@@ -14,11 +14,11 @@ using System.Linq;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 
 #endregion

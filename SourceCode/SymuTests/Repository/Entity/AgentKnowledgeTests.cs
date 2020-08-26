@@ -13,11 +13,10 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Knowledges;
 using static Symu.Common.Constants;
 #endregion
 
-namespace SymuTests.Repository.Networks.Knowledges
+namespace SymuTests.Repository.Entity
 {
     [TestClass]
     public class AgentKnowledgeTests

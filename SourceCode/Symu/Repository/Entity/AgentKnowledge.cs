@@ -11,7 +11,7 @@ using System;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Networks.Knowledges;
+using Symu.DNA.Knowledges;
 
 namespace Symu.Repository.Entity
 {

@@ -16,10 +16,10 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Knowledges;
 using Symu.Engine;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 

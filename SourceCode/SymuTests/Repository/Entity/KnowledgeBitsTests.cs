@@ -11,12 +11,11 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
 
-namespace SymuTests.Repository.Networks.Knowledges
+namespace SymuTests.Repository.Entity
 {
     [TestClass]
     public class KnowledgeBitsTests

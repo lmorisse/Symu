@@ -13,7 +13,6 @@ using System;
 using Symu.Common;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 

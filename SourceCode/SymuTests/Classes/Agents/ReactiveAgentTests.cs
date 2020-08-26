@@ -23,7 +23,6 @@ using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using SymuTests.Helpers;
 

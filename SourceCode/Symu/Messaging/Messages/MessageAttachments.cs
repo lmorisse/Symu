@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 

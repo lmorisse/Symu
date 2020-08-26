@@ -22,7 +22,6 @@ using Symu.Forms;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 using SymuMurphiesAndBlockers.Classes;
 
 #endregion

@@ -21,7 +21,6 @@ using Symu.Repository;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 using SymuTests.Helpers;
 
 #endregion

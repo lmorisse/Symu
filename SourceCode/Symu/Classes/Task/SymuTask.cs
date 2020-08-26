@@ -19,7 +19,6 @@ using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using static Symu.Common.Constants;
 

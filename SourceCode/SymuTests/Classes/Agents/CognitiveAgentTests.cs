@@ -22,12 +22,12 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Knowledges;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
-using Symu.Repository.Networks.Knowledges;
 using Symu.Results.Blocker;
 using SymuTests.Helpers;
 

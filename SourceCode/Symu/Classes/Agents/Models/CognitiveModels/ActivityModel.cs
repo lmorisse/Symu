@@ -16,7 +16,6 @@ using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Activities;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Knowledges;
 
 #endregion
 
