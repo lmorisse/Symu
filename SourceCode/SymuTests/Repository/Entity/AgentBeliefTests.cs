@@ -13,12 +13,11 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
 
-namespace SymuTests.Repository.Networks.Beliefs
+namespace SymuTests.Repository.Entity
 {
     [TestClass]
     public class AgentBeliefTests
@@ -33,7 +32,6 @@ namespace SymuTests.Repository.Networks.Beliefs
         private readonly float[] _bits0 = { };
         private readonly float[] _bits1 = { 0 };
         private readonly float[] _bits2 = { 0, 0 };
-        private readonly BeliefNetwork _network = new BeliefNetwork();
 
         [TestInitialize]
         public void Initialize()
@@ -41,9 +39,6 @@ namespace SymuTests.Repository.Networks.Beliefs
             _agentBelief0 = new AgentBelief(_belief0.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _agentBelief1 = new AgentBelief(_belief1.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _agentBelief2 = new AgentBelief(_belief2.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.AddBelief(_belief0);
-            _network.AddBelief(_belief1);
-            _network.AddBelief(_belief2);
         }
 
         /// <summary>
@@ -248,10 +243,9 @@ namespace SymuTests.Repository.Networks.Beliefs
         [TestMethod]
         public void LearnTest2()
         {
-            _network.Model = RandomGenerator.RandomUniform;
             _agentBelief1.SetBeliefBits(_bits1);
             Assert.AreEqual(0, _agentBelief1.BeliefBits.GetBit(0));
-            _agentBelief1.Learn(Model, 0);
+            _agentBelief1.Learn(RandomGenerator.RandomUniform, 0);
             Assert.AreNotEqual(0, _agentBelief1.BeliefBits.GetBit(0));
             Assert.IsTrue(-1 <= _agentBelief1.BeliefBits.GetBit(0));
             Assert.IsTrue(_agentBelief1.BeliefBits.GetBit(0) <= 1);

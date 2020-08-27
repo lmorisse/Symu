@@ -23,7 +23,6 @@ using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Beliefs;
 
 #endregion
 

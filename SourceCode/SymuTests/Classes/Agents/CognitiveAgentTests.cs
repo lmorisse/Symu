@@ -27,7 +27,6 @@ using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 using Symu.Results.Blocker;
 using SymuTests.Helpers;
 

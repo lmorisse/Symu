@@ -20,7 +20,6 @@ using Symu.DNA.Activities;
 using Symu.Repository;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Beliefs;
 using SymuTests.Helpers;
 
 #endregion

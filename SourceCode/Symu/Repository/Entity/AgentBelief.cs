@@ -14,7 +14,7 @@ using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Networks.Beliefs;
+using Symu.DNA.Beliefs;
 using static Symu.Common.Constants;
 
 #endregion

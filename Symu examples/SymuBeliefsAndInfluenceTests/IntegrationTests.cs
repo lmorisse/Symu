@@ -16,7 +16,6 @@ using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Engine;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
 
 #endregion

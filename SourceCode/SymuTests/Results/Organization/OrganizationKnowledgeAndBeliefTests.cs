@@ -16,7 +16,6 @@ using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Knowledges;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 

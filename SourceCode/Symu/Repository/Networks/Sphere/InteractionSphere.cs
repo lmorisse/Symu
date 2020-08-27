@@ -17,10 +17,10 @@ using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Activities;
+using Symu.DNA.Beliefs;
 using Symu.DNA.Knowledges;
 using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 
 #endregion
 

@@ -12,7 +12,6 @@
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 
 #endregion
 

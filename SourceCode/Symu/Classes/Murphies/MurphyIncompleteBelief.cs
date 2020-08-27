@@ -11,8 +11,8 @@
 
 using System;
 using Symu.Classes.Task;
+using Symu.DNA.Beliefs;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Beliefs;
 
 #endregion
 

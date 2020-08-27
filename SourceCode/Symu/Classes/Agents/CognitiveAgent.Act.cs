@@ -79,6 +79,7 @@ namespace Symu.Classes.Agents
                 Weight = Environment.Organization.Communication.TimeSpent(message.Medium, false,
                     Environment.Organization.Models.RandomLevelValue),
                 Assigned = message.Receiver
+                //todo maybe define a specific KeyActivity to follow the time spent on messaging?
             };
 
             Environment.Messages.Result.ReceivedMessagesCost += task.Weight;

@@ -242,6 +242,17 @@ namespace Symu.Classes.Agents
         /// <param name="timeSpent"></param>
         public void AddTimeSpent(UId keyActivity, float timeSpent)
         {
+            if (keyActivity == null)
+            {
+                // Task may not have a KeyActivity, a message transform into a task for example.
+                // This can be improve inCognitiveAgent.Act.ConvertMessageIntoTask
+                return;
+            }
+            if (TimeSpent == null)
+            {
+                throw new ArgumentNullException(nameof(TimeSpent));
+            }
+
             if (!TimeSpent.ContainsKey(keyActivity))
             {
                 TimeSpent.Add(keyActivity, 0);
