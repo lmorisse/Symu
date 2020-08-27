@@ -33,7 +33,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     {
         private readonly RandomGenerator _model;
         private readonly AgentId _agentId;
-        private readonly BeliefNetwork _networkBeliefs;
         private readonly InfluenceNetwork _networkInfluences;
         private readonly BeliefsModel _beliefsModel;
 
@@ -73,7 +72,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             _agentId = agentId;
             _networkInfluences = network.Influences;
-            _networkBeliefs = network.Beliefs;
             _beliefsModel = beliefsModel;
             _model = model;
 
