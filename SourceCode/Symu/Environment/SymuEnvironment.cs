@@ -415,8 +415,9 @@ namespace Symu.Environment
         #region Clone model
 
         /// <summary>
-        ///     Transform organization into agents
+        ///     Create every agent of the simulation in this method
         /// </summary>
+        /// <remarks>Call Initialize method after having created an agent</remarks>
         public virtual void SetAgents()
         {
         }
@@ -435,7 +436,7 @@ namespace Symu.Environment
         {
             foreach (var knowledge in Organization.Knowledges)
             {
-                WhitePages.MetaNetwork.AddKnowledge(knowledge);
+                WhitePages.MetaNetwork.AddKnowledge(knowledge, Organization.Models.BeliefWeightLevel);
             }
         }
 

@@ -21,7 +21,28 @@ namespace Symu.Classes.Scenario
 {
     public class SimulationScenario : ReactiveAgent
     {
-        public SimulationScenario(object parent, SymuEnvironment environment) : base(
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static SimulationScenario CreateInstance(object parent, SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new SimulationScenario(parent, environment);
+            agent.Initialize();
+            return agent;
+        }
+
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        protected SimulationScenario(object parent, SymuEnvironment environment) : base(
             new AgentId(environment.Organization.NextEntityId(), ScenarioEntity.Class), environment)
         {
             if (environment is null)

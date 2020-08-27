@@ -14,12 +14,12 @@ using System.Linq;
 
 #endregion
 
-namespace Symu.Repository.Networks.Beliefs
+namespace Symu.Repository.Entity
 {
     /// <summary>
-    ///     A utility to easily switch from BeliefLevel to values
+    ///     A utility to easily switch from BeliefWeightLevel to values
     /// </summary>
-    public static class BeliefLevelService
+    public static class BeliefWeightLevelService
     {
         /// <summary>
         ///     Get all names of the KnowledgeLevel enum
@@ -27,7 +27,7 @@ namespace Symu.Repository.Networks.Beliefs
         /// <returns></returns>
         public static string[] GetNames()
         {
-            return Enum.GetNames(typeof(BeliefLevel)).ToArray();
+            return Enum.GetNames(typeof(BeliefWeightLevel)).ToArray();
         }
 
         /// <summary>
@@ -35,35 +35,27 @@ namespace Symu.Repository.Networks.Beliefs
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        public static BeliefLevel GetValue(string level)
+        public static BeliefWeightLevel GetValue(string level)
         {
             switch (level)
             {
-                case "NoBelief":
-                    return BeliefLevel.NoBelief;
-                case "StronglyDisagree":
-                    return BeliefLevel.StronglyDisagree;
-                case "Disagree":
-                    return BeliefLevel.Disagree;
-                case "NeitherAgreeNorDisagree":
-                    return BeliefLevel.NeitherAgreeNorDisagree;
-                case "Agree":
-                    return BeliefLevel.Agree;
-                case "StronglyAgree":
-                    return BeliefLevel.StronglyAgree;
-                case "Random":
-                    return BeliefLevel.Random;
+                case "NoWeight":
+                    return BeliefWeightLevel.NoWeight;
+                case "RandomWeight":
+                    return BeliefWeightLevel.RandomWeight;
+                case "FullWeight":
+                    return BeliefWeightLevel.FullWeight;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
         /// <summary>
-        ///     Get the name of a KnowledgeLevel
+        ///     Get the name of a BeliefWeightLevel
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        public static string GetName(BeliefLevel level)
+        public static string GetName(BeliefWeightLevel level)
         {
             return level.ToString();
         }

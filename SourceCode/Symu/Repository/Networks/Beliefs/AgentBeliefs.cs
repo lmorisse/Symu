@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -28,11 +29,11 @@ namespace Symu.Repository.Networks.Beliefs
         ///     Key => ComponentId
         ///     Values => List of Knowledge
         /// </summary>
-        public List<AgentBelief> List { get; } = new List<AgentBelief>();
+        public List<IAgentBelief> List { get; } = new List<IAgentBelief>();
 
         public int Count => List.Count;
 
-        public void Add(AgentBelief agentBelief)
+        public void Add(IAgentBelief agentBelief)
         {
             if (!Contains(agentBelief))
             {
@@ -40,13 +41,7 @@ namespace Symu.Repository.Networks.Beliefs
             }
         }
 
-        public void Add(IId beliefId, BeliefLevel beliefLevel)
-        {
-            var agentBelief = new AgentBelief(beliefId, beliefLevel);
-            Add(agentBelief);
-        }
-
-        public bool Contains(AgentBelief agentBelief)
+        public bool Contains(IAgentBelief agentBelief)
         {
             if (agentBelief is null)
             {
@@ -61,47 +56,20 @@ namespace Symu.Repository.Networks.Beliefs
             return List.Exists(x => x.BeliefId.Equals(beliefId));
         }
 
-        public AgentBelief GetBelief(IId beliefId)
+        public IAgentBelief GetAgentBelief(IId beliefId)
         {
             return List.Find(x => x.BeliefId.Equals(beliefId));
         }
 
-        /// <summary>
-        ///     Check that agent has the BeliefId[knowledgeBit] == 1
-        /// </summary>
-        /// <param name="beliefId"></param>
-        /// <param name="beliefBit"></param>
-        /// <param name="beliefThreshHoldForAnswer"></param>
-        /// <returns>true if the agent has the knowledge</returns>
-        public bool BelievesEnough(IId beliefId, byte beliefBit, float beliefThreshHoldForAnswer)
+        public TAgentBelief GetAgentBelief<TAgentBelief>(IId beliefId) where TAgentBelief : IAgentBelief
         {
-            if (!Contains(beliefId))
-            {
-                return false;
-            }
-
-            var belief = GetBelief(beliefId);
-            return belief.BelievesEnough(beliefBit, beliefThreshHoldForAnswer);
+            return (TAgentBelief)GetAgentBelief(beliefId);
         }
 
-        /// <summary>
-        ///     Get the sum of all the beliefs
-        /// </summary>
-        /// <returns></returns>
-        public float GetBeliefsSum()
+        public IEnumerable<TAgentBelief> GetAgentBeliefs<TAgentBelief>() where TAgentBelief : IAgentBelief
         {
-            return List.Sum(l => l.GetBeliefSum());
+            return List.Cast<TAgentBelief>();
         }
-
-        /// <summary>
-        ///     Get the maximum potential of all the beliefs
-        /// </summary>
-        /// <returns></returns>
-        public float GetBeliefsPotential()
-        {
-            return List.Sum(l => l.GetBeliefPotential());
-        }
-
 
         /// <summary>
         ///     Get all the belief Ids of an agent

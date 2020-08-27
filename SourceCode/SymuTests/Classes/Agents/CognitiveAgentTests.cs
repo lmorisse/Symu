@@ -58,7 +58,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Models.On(1);
             _environment.IterationResult.On();
 
-            _agent = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
+            _agent = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             _agent.Cognitive.MessageContent.CanReceiveBeliefs = true;
@@ -70,14 +70,16 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
 
-            _agent2 = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
+            _agent2 = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
 
             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge);
-            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(_knowledge);
+            var belief = new Belief(_knowledge, _knowledge.Length, _environment.WhitePages.MetaNetwork.Beliefs.Model, _environment.Organization.Models.BeliefWeightLevel);
+            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge2);
-            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(_knowledge2);
+            var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.WhitePages.MetaNetwork.Beliefs.Model, _environment.Organization.Models.BeliefWeightLevel);
+            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
             _environment.WhitePages.MetaNetwork.Knowledge.Add(_agent.AgentId, expertise);
@@ -109,7 +111,7 @@ namespace SymuTests.Classes.Agents
 
         private TestCognitiveAgent AddAgent()
         {
-            var agent = new TestCognitiveAgent(_organizationEntity.NextEntityId(), _environment);
+            var agent = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
             agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
             agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             agent.Start();
@@ -197,6 +199,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest()
         {
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
@@ -220,6 +223,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest1()
         {
+            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
@@ -249,7 +253,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnBeliefsFromPostMessage(message);
-            Assert.AreEqual(1, _agent.BeliefsModel.GetBelief(belief.Id).GetBeliefSum());
+            Assert.AreEqual(1, _agent.BeliefsModel.GetAgentBelief(belief.Id).GetBeliefSum());
         }
 
         private Belief SetBeliefs()
@@ -257,8 +261,8 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
             _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
-            _environment.WhitePages.MetaNetwork.Beliefs.Add(_agent.AgentId, belief, BeliefLevel.NeitherAgreeNorDisagree);
-            _environment.WhitePages.MetaNetwork.Beliefs.InitializeBeliefs(_agent.AgentId, true);
+            _agent.BeliefsModel.AddBelief(belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _agent.BeliefsModel.InitializeBeliefs(true);
             _environment.WhitePages.MetaNetwork.Influences.Update(_agent.AgentId, 1, 1);
             return belief;
         }
@@ -476,7 +480,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
-            var agent2 = new TestCognitiveAgent(new UId(2), _environment);
+            var agent2 = TestCognitiveAgent.CreateInstance(new UId(2), _environment);
             agent2.Start();
             agent2.WaitingToStart();
             var message = new Message(_agent.AgentId, agent2.AgentId, MessageAction.Add, 0)
@@ -519,7 +523,7 @@ namespace SymuTests.Classes.Agents
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
 
             _agent.Reply(message);
 
@@ -552,7 +556,7 @@ namespace SymuTests.Classes.Agents
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
             _agent.ReplyDelayed(message, 0);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
@@ -837,7 +841,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AcceptNewInteractionTest()
         {
-            var agent2 = new TestCognitiveAgent(new UId(2), _environment);
+            var agent2 = TestCognitiveAgent.CreateInstance(new UId(2), _environment);
             Assert.IsTrue(_agent.AcceptNewInteraction(agent2.AgentId));
         }
 
@@ -1071,7 +1075,7 @@ namespace SymuTests.Classes.Agents
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             // no belief
-            _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
+            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
             _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
@@ -1094,7 +1098,7 @@ namespace SymuTests.Classes.Agents
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             // no belief
-            _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
+            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
             _agent.AskHelpIncomplete(message, 3);
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
@@ -1115,7 +1119,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Murphies.IncompleteBelief.ResponseTime = 0;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
-            _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 1);
+            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 1);
             _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
@@ -1138,7 +1142,7 @@ namespace SymuTests.Classes.Agents
                 MurphyTask.FullRequiredBits);
             _environment.Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing = 2;
 
-            var agentBelief = _agent.BeliefsModel.GetBelief(_knowledge.Id);
+            var agentBelief = _agent.BeliefsModel.GetAgentBelief(_knowledge.Id);
             agentBelief.BeliefBits.SetBit(0, 0);
             var blocker = new Blocker(1, 0) {Parameter = _knowledge.Id, Parameter2 = (byte) 0};
 
@@ -1278,7 +1282,7 @@ namespace SymuTests.Classes.Agents
         {
             // Add teammates with knowledge
             var teammate = AddAgent();
-            var group = new TestCognitiveAgent(_organizationEntity.NextEntityId(), 2, _environment);
+            var group = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), 2, _environment);
             group.Start();
             var agentGroup = new AgentGroup(_agent.AgentId, 100);
             var teammateGroup = new AgentGroup(teammate.AgentId, 100);
@@ -1474,8 +1478,8 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             teammate.BeliefsModel.AddBelief(_knowledge.Id, BeliefLevel.StronglyAgree);
             teammate.BeliefsModel.InitializeBeliefs();
-            _agent.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
-            teammate.BeliefsModel.GetBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
+            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
+            teammate.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
                 _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
 

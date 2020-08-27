@@ -17,6 +17,7 @@ using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.DNA.Activities;
 using Symu.Environment;
 using Symu.Repository.Entity;
 
@@ -71,14 +72,12 @@ namespace SymuGroupAndInteraction.Classes
 
             for (var i = 0; i < GroupsCount; i++)
             {
-                var group = new GroupAgent(Organization.NextEntityId(), this);
-
+                var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
                 for (var j = 0; j < WorkersCount; j++)
                 {
-                    var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
-                    {
-                        GroupId = group.AgentId
-                    };
+                    var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this,
+                        Organization.Templates.Human);
+                    actor.GroupId = group.AgentId;
                     var agentGroup = new AgentGroup(actor.AgentId, 100);
                     WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
                     //Beliefs are added with knowledge
@@ -94,25 +93,22 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same Knowledge for all
-                    var agentKnowledge1 = new AgentKnowledge(knowledges[0].Id, KnowledgeLevel,
+                    actor.KnowledgeModel.AddKnowledge(knowledges[0].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
                         actor.Cognitive.InternalCharacteristics.TimeToLive);
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, agentKnowledge1);
                     break;
                 case 1:
                     // Knowledge is by group
-                    var agentKnowledge2 = new AgentKnowledge(knowledges[i].Id, KnowledgeLevel,
+                    actor.KnowledgeModel.AddKnowledge(knowledges[i].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
                         actor.Cognitive.InternalCharacteristics.TimeToLive);
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, agentKnowledge2);
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    var agentKnowledge3 = new AgentKnowledge(knowledges[index].Id, KnowledgeLevel,
+                    actor.KnowledgeModel.AddKnowledge(knowledges[index].Id, KnowledgeLevel,
                         actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
                         actor.Cognitive.InternalCharacteristics.TimeToLive);
-                    WhitePages.MetaNetwork.Knowledge.Add(actor.AgentId, agentKnowledge3);
                     break;
             }
         }

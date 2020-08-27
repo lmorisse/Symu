@@ -74,14 +74,12 @@ namespace SymuMurphiesAndBlockers.Classes
         {
             base.SetAgents();
 
-            var group = new GroupAgent(Organization.NextEntityId(), this);
-            Internet = new InternetAccessAgent(Organization.NextEntityId(), this, Organization.Templates.Internet);
+            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
+            Internet = InternetAccessAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Internet);
             for (var j = 0; j < WorkersCount; j++)
             {
-                var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
-                {
-                    GroupId = group.AgentId
-                };
+                var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                actor.GroupId = group.AgentId;
                 var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork.Knowledge);
                 var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
                 WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);

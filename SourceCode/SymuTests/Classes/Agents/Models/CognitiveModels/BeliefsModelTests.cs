@@ -41,12 +41,15 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private BeliefsModel _beliefsModel;
         private CognitiveArchitecture _cognitiveArchitecture;
         private MetaNetwork _network;
+        private AgentBelief _agentBelief;
+        private float[] _beliefBitsNeutral;
+        private float[] _beliefBitsNonNeutral;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
@@ -56,9 +59,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             var modelEntity = new ModelEntity();
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
             _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
+            _beliefBitsNonNeutral = _belief.InitializeBits(_network.Beliefs.Model, BeliefLevel.NeitherAgreeNorDisagree);
+            _beliefBitsNeutral = _belief.InitializeBits(_network.Beliefs.Model, BeliefLevel.NoBelief);
 
             _network.Beliefs.AddBelief(_belief);
-            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+            _agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, _agentBelief);
 
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
@@ -112,7 +118,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
 
             _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _beliefsModel.InitializeBeliefs();
-            var agentBelief = _network.Beliefs.GetAgentBelief(_agentId, _belief.Id);
+            var agentBelief = _network.Beliefs.GetAgentBelief<AgentBelief>(_agentId, _belief.Id);
             Assert.IsNotNull(agentBelief);
             Assert.IsNotNull(agentBelief.BeliefBits);
         }
@@ -126,7 +132,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = false;
             _beliefsModel.AddBelief(_belief.Id);
             Assert.ThrowsException<NullReferenceException>(() =>
-                _beliefsModel.GetBelief(_belief.Id));
+                _beliefsModel.GetAgentBelief(_belief.Id));
         }
 
         /// <summary>
@@ -137,7 +143,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
             _beliefsModel.AddBelief(_belief.Id);
-            var agentBelief = _beliefsModel.GetBelief(_belief.Id);
+            var agentBelief = _beliefsModel.GetAgentBelief(_belief.Id);
             Assert.IsNotNull(agentBelief);
         }
 
@@ -160,7 +166,6 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void GetFilteredBeliefToSendTest0()
         {
             _beliefsModel.On = false;
-            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
@@ -171,7 +176,6 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest()
         {
-            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = false;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
@@ -183,7 +187,6 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest1()
         {
-            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(new UId(0), 0, _emailTemplate));
         }
@@ -195,9 +198,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest2()
         {
-            _network.Beliefs.AddBelief(_belief);
-            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Beliefs.InitializeBeliefs(_agentId, true);
+            _beliefsModel.InitializeBeliefs(true);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
@@ -209,9 +210,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest3()
         {
-            _network.Beliefs.AddBelief(_belief);
-            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Beliefs.InitializeBeliefs(_agentId, false);
+            _beliefsModel.InitializeBeliefs(false);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 1;
             var bits = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate);
@@ -225,10 +224,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void GetFilteredBeliefToSendTest4()
         {
-            _network.Beliefs.AddBelief(_belief);
-            _network.Beliefs.Add(_agentId, _belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Beliefs.InitializeBeliefs(_agentId, false);
-            _network.Beliefs.GetAgentBelief(_agentId, _belief.Id).BeliefBits
+            _beliefsModel.InitializeBeliefs(false);
+            _network.Beliefs.GetAgentBelief<AgentBelief>(_agentId, _belief.Id).BeliefBits
                 .SetBit(0, 1);
             _cognitiveArchitecture.MessageContent.CanSendBeliefs = true;
             _cognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit = 0;
@@ -281,7 +278,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 1;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
-            _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 0.5F);
+            _beliefsModel.GetAgentBelief(_belief.Id).BeliefBits.SetBit(0, 0.5F);
             Assert.IsNull(_beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate));
         }
 
@@ -302,7 +299,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 2;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
-            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            _beliefsModel.GetAgentBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
             Assert.AreEqual(1F, _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum());
         }
 
@@ -323,7 +320,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfBeliefToSend = 4;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
-            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            _beliefsModel.GetAgentBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
             Assert.IsTrue(1F <= _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum());
         }
 
@@ -339,7 +336,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend = 3;
             _beliefsModel.AddBelief(_belief.Id);
             _beliefsModel.InitializeBeliefs();
-            _beliefsModel.GetBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
+            _beliefsModel.GetAgentBelief(_belief.Id).SetBeliefBits(_knowledge1FBits);
             var sum = _beliefsModel.FilterBeliefToSend(_belief.Id, 0, _emailTemplate).GetSum();
             Assert.IsTrue(sum <= 3);
             Assert.IsTrue(sum >= 1);
@@ -357,5 +354,100 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         }
 
         #endregion
+
+
+        [TestMethod]
+        public void BelievesEnoughTest()
+        {
+            Assert.IsFalse(_beliefsModel.BelievesEnough(_belief.Id, 0, 1));
+            _agentBelief.SetBeliefBits(_beliefBitsNonNeutral);
+            Assert.IsTrue(_beliefsModel.BelievesEnough(_belief.Id, 0, 0));
+        }
+
+        /// <summary>
+        ///     Neutral initialization
+        /// </summary>
+        [TestMethod]
+        public void GetBeliefsSumTest()
+        {
+            _agentBelief.SetBeliefBits(_beliefBitsNeutral);
+            Assert.AreEqual(0, _beliefsModel.GetBeliefsSum());
+        }
+
+        /// <summary>
+        ///     non neutral initialization
+        /// </summary>
+        [TestMethod]
+        public void GetBeliefsSumTest1()
+        {
+            _agentBelief.SetBeliefBits(_beliefBitsNonNeutral);
+            Assert.AreNotEqual(0, _beliefsModel.GetBeliefsSum());
+        }
+
+        /// <summary>
+        ///     neutral initialization
+        /// </summary>
+        [TestMethod]
+        public void InitializeBeliefsTest()
+        {
+            _beliefsModel.InitializeBeliefs(true);
+            var agentBelief = _beliefsModel.GetAgentBelief(_belief.Id);
+            Assert.IsNotNull(agentBelief.BeliefBits);
+            Assert.AreEqual(0, agentBelief.BeliefBits.GetBit(0));
+        }
+
+        /// <summary>
+        ///     non neutral initialization
+        /// </summary>
+        [TestMethod]
+        public void InitializeBeliefsTest1()
+        {
+            _beliefsModel.InitializeBeliefs(false);
+            var agentBelief = _beliefsModel.GetAgentBelief(_belief.Id);
+            Assert.IsNotNull(agentBelief.BeliefBits);
+            var t = Convert.ToInt32(agentBelief.BeliefBits.GetBit(0));
+            Assert.IsTrue(t == 0 || t == 1 || t == -1);
+        }
+
+
+        [TestMethod]
+        public void NullInitializeAgentBeliefTest()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _beliefsModel.InitializeAgentBelief(null, false));
+        }
+
+        /// <summary>
+        /// Non neutral
+        /// </summary>
+        [TestMethod]
+        public void InitializeAgentBeliefTest()
+        {
+            Assert.IsTrue(_agentBelief.BeliefBits.IsNull);
+            _beliefsModel.InitializeAgentBelief(_agentBelief, false);
+            Assert.IsFalse(_agentBelief.BeliefBits.IsNull);
+            Assert.AreNotEqual(0, _agentBelief.BeliefBits.GetBit(0));
+        }
+
+        /// <summary>
+        /// Neutral
+        /// </summary>
+        [TestMethod]
+        public void InitializeAgentBeliefTest1()
+        {
+            Assert.IsTrue(_agentBelief.BeliefBits.IsNull);
+            _beliefsModel.InitializeAgentBelief(_agentBelief, true);
+            Assert.IsFalse(_agentBelief.BeliefBits.IsNull);
+            Assert.AreEqual(0, _agentBelief.BeliefBits.GetBit(0));
+        }
+
+        /// <summary>
+        ///     Passing test, with an agent which don't have still a belief
+        /// </summary>
+        [TestMethod]
+        public void LearnNewBeliefTest()
+        {
+            _beliefsModel.LearnNewBelief(_belief.Id, BeliefLevel.NoBelief);
+            Assert.IsNotNull(_beliefsModel.GetAgentBelief(_belief.Id));
+        }
     }
 }

@@ -22,7 +22,23 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByAskingAgent : LearnAgent
     {
-        public LearnByAskingAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static LearnByAskingAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            var agent = new LearnByAskingAgent(id, environment, template);
+            agent.Initialize();
+            return agent;
+        }
+
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private LearnByAskingAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
             : base(id, environment, template)
         {
         }

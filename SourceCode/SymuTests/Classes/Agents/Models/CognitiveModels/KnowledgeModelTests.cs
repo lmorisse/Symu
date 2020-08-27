@@ -56,7 +56,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
@@ -137,7 +137,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void InitializeExpertiseTest1()
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            _network.AddKnowledge(_knowledge);
+            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);

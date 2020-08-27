@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Agents.Models;
 using Symu.Common;
 using Symu.Engine;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using Symu.Repository.Networks.Sphere;
 
@@ -53,7 +54,7 @@ namespace Symu.Classes.Organization
         /// <summary>
         ///     Impact level of agent's belief on how agent will accept to do the task
         /// </summary>
-        public BeliefWeightLevel ImpactOfBeliefOnTask { get; set; } = BeliefWeightLevel.RandomWeight;
+        public BeliefWeightLevel BeliefWeightLevel { get; set; } = BeliefWeightLevel.RandomWeight;
 
         public InteractionSphereModel InteractionSphere { get; set; } = new InteractionSphereModel();
 
@@ -106,7 +107,7 @@ namespace Symu.Classes.Organization
             Beliefs.CopyTo(entity.Beliefs);
             InteractionSphere.CopyTo(entity.InteractionSphere);
             entity.Generator = Generator;
-            entity.ImpactOfBeliefOnTask = ImpactOfBeliefOnTask;
+            entity.BeliefWeightLevel = BeliefWeightLevel;
         }
 
         /// <summary>

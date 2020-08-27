@@ -32,8 +32,23 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static PersonAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            var agent = new PersonAgent(id, environment, template);
+            agent.Initialize();
+            return agent;
+        }
 
-        public PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
         }

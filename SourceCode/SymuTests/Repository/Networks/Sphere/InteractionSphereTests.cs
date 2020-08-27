@@ -50,7 +50,7 @@ namespace SymuTests.Repository.Networks.Sphere
         public void Initialize()
         {
             _model.InteractionSphere.On = true;
-            _network = new MetaNetwork(_model.InteractionSphere, _model.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(_model.InteractionSphere);
             _agents.Add(_agentId1);
             _agents.Add(_agentId2);
             _network.Knowledge.AddKnowledge(_knowledge);
@@ -162,9 +162,9 @@ namespace SymuTests.Repository.Networks.Sphere
 
         private void AddBelief(AgentId agentId, float belief)
         {
-            _network.Beliefs.Add(agentId, _belief, BeliefLevel.NoBelief);
-            _network.Beliefs.InitializeBeliefs(agentId, false);
-            _network.Beliefs.GetAgentBelief(agentId, _belief.Id).BeliefBits.SetBit(0, belief);
+            var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NoBelief);
+            _network.Beliefs.Add(agentId, agentBelief);
+            _network.Beliefs.GetAgentBelief<AgentBelief>(agentId, _belief.Id).SetBeliefBits(new []{belief});
         }
 
         #endregion

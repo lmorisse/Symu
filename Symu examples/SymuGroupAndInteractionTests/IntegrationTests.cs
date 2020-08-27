@@ -42,10 +42,8 @@ namespace SymuGroupAndInteractionTests
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = NumberOfSteps
-            };
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = NumberOfSteps;
             _simulation.AddScenario(scenario);
         }
 

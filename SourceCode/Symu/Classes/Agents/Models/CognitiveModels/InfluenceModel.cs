@@ -33,6 +33,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly AgentId _agentId;
         private readonly BeliefNetwork _networkBeliefs;
         private readonly InfluenceNetwork _networkInfluences;
+        private readonly BeliefsModel _beliefsModel;
 
         /// <summary>
         ///     Initialize influence model :
@@ -40,19 +41,20 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="entity"></param>
-        /// <param name="internalCharacteristics"></param>
+        /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public InfluenceModel(AgentId agentId, ModelEntity entity, InternalCharacteristics internalCharacteristics,
-            MetaNetwork network)
+        /// <param name="beliefsModel"></param>
+        public InfluenceModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+            MetaNetwork network, BeliefsModel beliefsModel)
         {
             if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (internalCharacteristics == null)
+            if (cognitiveArchitecture == null)
             {
-                throw new ArgumentNullException(nameof(internalCharacteristics));
+                throw new ArgumentNullException(nameof(cognitiveArchitecture));
             }
 
             if (network == null)
@@ -60,7 +62,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(network));
             }
 
-            On = entity.IsAgentOn();
+            On = cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief && entity.IsAgentOn();
             if (!On)
             {
                 return;
@@ -69,12 +71,13 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _agentId = agentId;
             _networkInfluences = network.Influences;
             _networkBeliefs = network.Beliefs;
+            _beliefsModel = beliefsModel;
 
-            if (internalCharacteristics.CanInfluenceOrBeInfluence && On)
+            if (cognitiveArchitecture.InternalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
                 _networkInfluences.Add(agentId,
-                    NextInfluenceability(internalCharacteristics),
-                    NextInfluentialness(internalCharacteristics));
+                    NextInfluenceability(cognitiveArchitecture.InternalCharacteristics),
+                    NextInfluentialness(cognitiveArchitecture.InternalCharacteristics));
             }
             else
             {
@@ -135,22 +138,17 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             // to Learner
             var influenceability = _networkInfluences.GetInfluenceability(_agentId);
             // Learner learn beliefId from agentAgentId with a weight of influenceability * influentialness
-            _networkBeliefs.Learn(_agentId, beliefId, beliefBits, influenceability * influentialness, beliefLevel);
+            _beliefsModel.Learn(beliefId, beliefBits, influenceability * influentialness, beliefLevel);
         }
 
         public void ReinforcementByDoing(IId beliefId, byte beliefBit, BeliefLevel beliefLevel)
         {
-            if (!On)
+            if (!On || _beliefsModel == null)
             {
                 return;
             }
-
-            if (!_networkBeliefs.Exists(_agentId, beliefId))
-            {
-                _networkBeliefs.LearnNewBelief(_agentId, beliefId, beliefLevel);
-            }
-
-            var agentBelief = _networkBeliefs.GetAgentBelief(_agentId, beliefId);
+            _beliefsModel.LearnNewBelief(beliefId, beliefLevel);
+            var agentBelief = _beliefsModel.GetAgentBelief(beliefId);
             agentBelief.Learn(_networkBeliefs.Model, beliefBit);
         }
     }

@@ -38,10 +38,8 @@ namespace SymuScenariosAndEventsTests
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = 10
-            };
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = 10;
             _simulation.AddScenario(scenario);
             _simulation.Iterations.Max = 3;
         }
@@ -149,22 +147,16 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void SuccessTest7()
         {
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = 10
-            };
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = 10;
             _simulation.AddScenario(scenario);
 
-            var scenario1 = new TaskBasedScenario(_environment)
-            {
-                NumberOfTasks = 10
-            };
+            var scenario1 = TaskBasedScenario.CreateInstance(_environment);
+            scenario1.NumberOfTasks = 10;
             _simulation.AddScenario(scenario1);
 
-            var scenario2 = new MessageBasedScenario(_environment)
-            {
-                NumberOfMessages = 10
-            };
+            var scenario2 = MessageBasedScenario.CreateInstance(_environment);
+            scenario2.NumberOfMessages = 10;
             _simulation.AddScenario(scenario2);
             SuccessTest();
         }

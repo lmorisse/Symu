@@ -21,8 +21,24 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByDoingAgent : LearnAgent
     {
-        public LearnByDoingAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) :
-            base(id, environment, template)
+
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static LearnByDoingAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            var agent = new LearnByDoingAgent(id, environment, template);
+            agent.Initialize();
+            return agent;
+        }
+
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private LearnByDoingAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(id, environment, template)
         {
         }
 

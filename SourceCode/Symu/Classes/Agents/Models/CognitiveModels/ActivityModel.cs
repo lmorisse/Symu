@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Activities;
+using Symu.DNA.Knowledges;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 

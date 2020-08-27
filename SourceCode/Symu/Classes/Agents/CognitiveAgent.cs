@@ -16,7 +16,9 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
+using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -33,13 +35,11 @@ namespace Symu.Classes.Agents
     /// </summary>
     public abstract partial class CognitiveAgent: ReactiveAgent
     {
-        private byte _newInteractionCounter;
 
-        /// <summary>
-        ///     constructor for generic new()
-        ///     Use with CreateAgent method
-        /// </summary>
-        protected CognitiveAgent()
+        private byte _newInteractionCounter;
+        private readonly CognitiveArchitectureTemplate _cognitiveTemplate;
+
+        private CognitiveAgent()
         {
         }
 
@@ -48,9 +48,10 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
-        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment)
+        /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
+        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment) : base(agentId, environment)
         {
-            CreateAgent(agentId, environment);
+            _cognitiveTemplate = environment.Organization.Templates.Standard;
         }
 
         /// <summary>
@@ -59,9 +60,10 @@ namespace Symu.Classes.Agents
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
         /// <param name="template"></param>
-        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
+        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentId, environment)
         {
-            CreateAgent(agentId, environment, template);
+            _cognitiveTemplate = template;
         }
 
         /// <summary>
@@ -121,28 +123,22 @@ namespace Symu.Classes.Agents
 
         #region Initialization
 
-        protected override void CreateAgent(AgentId agentId, SymuEnvironment environment)
+        /// <summary>
+        /// Should be called after the constructor 
+        /// </summary>
+        protected override void Initialize()
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            CreateAgent(agentId, environment, environment.Organization.Templates.Standard);
+            SetTemplate(_cognitiveTemplate);
+            SetCognitive();
             // Databases are added to CognitiveAgent only, as it is a source of knowledge
-            foreach (var database in environment.Organization.Databases)
+            foreach (var database in Environment.Organization.Databases)
             {
                 // Organization databases are used by every one
                 var agentResource = new AgentResource(database.Id, new ResourceUsage(0), 100);
-                environment.WhitePages.MetaNetwork.Resources.Add(AgentId, agentResource);
+                Environment.WhitePages.MetaNetwork.Resources.Add(AgentId, agentResource);
             }
-        }
-
-        protected void CreateAgent(AgentId agentId, SymuEnvironment environment,
-            CognitiveArchitectureTemplate agentTemplate)
-        {
-            base.CreateAgent(agentId, environment);
-            SetTemplate(agentTemplate);
-            SetCognitive();
+            // intentionally before base.Initialize()
+            base.Initialize();
         }
 
         /// <summary>
@@ -236,13 +232,13 @@ namespace Symu.Classes.Agents
             // Initialize agent models
             KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
                 Environment.WhitePages.MetaNetwork);
+            BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
+                Environment.WhitePages.MetaNetwork);
             LearningModel = new LearningModel(AgentId, Environment.Organization.Models,
                 Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
             ForgettingModel = new ForgettingModel(KnowledgeModel.Expertise, Cognitive, Environment.Organization.Models);
             InfluenceModel = new InfluenceModel(AgentId, Environment.Organization.Models.Influence,
-                Cognitive.InternalCharacteristics, Environment.WhitePages.MetaNetwork);
-            BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
-                Environment.WhitePages.MetaNetwork);
+                Cognitive, Environment.WhitePages.MetaNetwork, BeliefsModel);
             ActivityModel = new ActivityModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
         }
 

@@ -13,11 +13,13 @@ using System;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Entity;
+using Symu.DNA.Beliefs;
+using Symu.DNA.Knowledges;
+using Symu.Repository.Networks.Beliefs;
 
 #endregion
 
-namespace Symu.Repository.Networks.Beliefs
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Describe a belief, based on knowledge/fact

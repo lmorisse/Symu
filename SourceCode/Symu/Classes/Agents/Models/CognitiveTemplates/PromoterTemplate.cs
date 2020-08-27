@@ -11,6 +11,7 @@
 
 using Symu.Common;
 using Symu.Messaging.Messages;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 
 #endregion

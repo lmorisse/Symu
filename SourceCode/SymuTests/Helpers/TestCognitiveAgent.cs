@@ -25,13 +25,33 @@ namespace SymuTests.Helpers
     internal sealed class TestCognitiveAgent : CognitiveAgent
     {
         public static byte ClassId = SymuYellowPages.Actor;
-
-        public TestCognitiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment,
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static TestCognitiveAgent CreateInstance(UId id, SymuEnvironment environment)
+        {
+            var agent = new TestCognitiveAgent(id, environment);
+            agent.Initialize();
+            return agent;
+        }
+        public static TestCognitiveAgent CreateInstance(UId id, byte classId, SymuEnvironment environment)
+        {
+            var agent = new TestCognitiveAgent(id, classId, environment);
+            agent.Initialize();
+            return agent;
+        }
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private TestCognitiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment,
             environment.Organization.Templates.Human)
         {
         }
 
-        public TestCognitiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
+        private TestCognitiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
             environment, environment.Organization.Templates.Human)
         {
         }

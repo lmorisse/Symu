@@ -15,6 +15,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Engine;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
 
@@ -40,10 +41,8 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = NumberOfSteps
-            };
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = NumberOfSteps;
             _simulation.AddScenario(scenario);
         }
 
@@ -238,7 +237,7 @@ namespace SymuBeliefsAndInfluenceTests
         public void NoWeightTest()
         {
             _environment.Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
-            _environment.WhitePages.MetaNetwork.Beliefs.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
+            _environment.Organization.Models.BeliefWeightLevel = BeliefWeightLevel.NoWeight;
             _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
@@ -258,7 +257,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
                 GenericLevel.Complete;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
-            _environment.WhitePages.MetaNetwork.Beliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
+            _environment.Organization.Models.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance
@@ -280,7 +279,7 @@ namespace SymuBeliefsAndInfluenceTests
             _environment.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
                 GenericLevel.None;
             _environment.Organization.Murphies.IncompleteBelief.ThresholdForReacting = 1;
-            _environment.WhitePages.MetaNetwork.Beliefs.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
+            _environment.Organization.Models.BeliefWeightLevel = BeliefWeightLevel.FullWeight;
             _simulation.Process();
             CheckNoChange();
             var tasksDoneRatio = _environment.Schedule.Step * _environment.WorkersCount < Constants.Tolerance

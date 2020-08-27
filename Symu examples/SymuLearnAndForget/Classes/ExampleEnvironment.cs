@@ -73,13 +73,13 @@ namespace SymuLearnAndForget.Classes
             base.SetAgents();
 
             LearnFromSourceAgent =
-                new LearnFromSourceAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnFromSourceAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             LearnByDoingAgent =
-                new LearnByDoingAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnByDoingAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             LearnByAskingAgent =
-                new LearnByAskingAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
-            DoesNotLearnAgent = new LearnAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
-            ExpertAgent = new ExpertAgent(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnByAskingAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+            DoesNotLearnAgent = LearnAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+            ExpertAgent = ExpertAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
             var interaction = new Interaction(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
             WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);

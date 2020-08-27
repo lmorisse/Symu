@@ -29,8 +29,23 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class InternetAccessAgent : CognitiveAgent
     {
         public const byte Class = 1;
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static InternetAccessAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            var agent = new InternetAccessAgent(id, environment, template);
+            agent.Initialize();
+            return agent;
+        }
 
-        public InternetAccessAgent(UId id, SymuEnvironment environment,
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private InternetAccessAgent(UId id, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {

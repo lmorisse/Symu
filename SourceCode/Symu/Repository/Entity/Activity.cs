@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Activities;
+using Symu.DNA.Knowledges;
 
 #endregion
 

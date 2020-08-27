@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Classes.Task;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 
 #endregion
@@ -60,7 +61,7 @@ namespace Symu.Classes.Murphies
             }
 
             // agent may don't have the belief at all
-            var agentBelief = agentBeliefs?.GetBelief(belief.Id);
+            var agentBelief = agentBeliefs?.GetAgentBelief<AgentBelief>(belief.Id);
             if (agentBelief == null)
             {
                 mandatoryCheck = 0;
@@ -88,7 +89,7 @@ namespace Symu.Classes.Murphies
             }
 
             // agent may don't have the belief at all
-            var agentBelief = agentBeliefs?.GetBelief(belief.Id);
+            var agentBelief = agentBeliefs?.GetAgentBelief<AgentBelief>(belief.Id);
             if (agentBelief == null)
             {
                 mandatoryCheck = 0;

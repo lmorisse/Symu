@@ -24,17 +24,23 @@ namespace SymuTests.Repository.Networks.Beliefs
     public class AgentBeliefTests
     {
         private const RandomGenerator Model = new RandomGenerator();
-        private readonly AgentBelief _agentBelief0 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
-        private readonly AgentBelief _agentBelief1 = new AgentBelief(1, BeliefLevel.NeitherAgreeNorDisagree);
-        private readonly AgentBelief _agentBelief2 = new AgentBelief(2, BeliefLevel.NeitherAgreeNorDisagree);
+        private AgentBelief _agentBelief0 ;
+        private AgentBelief _agentBelief1 ;
+        private AgentBelief _agentBelief2 ;
         private readonly Belief _belief0 = new Belief(0, "0", 0, Model, BeliefWeightLevel.RandomWeight);
         private readonly Belief _belief1 = new Belief(1, "1", 1, Model, BeliefWeightLevel.RandomWeight);
         private readonly Belief _belief2 = new Belief(2, "2", 2, Model, BeliefWeightLevel.RandomWeight);
-        private readonly BeliefNetwork _network = new BeliefNetwork(BeliefWeightLevel.RandomWeight);
+        private readonly float[] _bits0 = { };
+        private readonly float[] _bits1 = { 0 };
+        private readonly float[] _bits2 = { 0, 0 };
+        private readonly BeliefNetwork _network = new BeliefNetwork();
 
         [TestInitialize]
         public void Initialize()
         {
+            _agentBelief0 = new AgentBelief(_belief0.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _agentBelief1 = new AgentBelief(_belief1.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _agentBelief2 = new AgentBelief(_belief2.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _network.AddBelief(_belief0);
             _network.AddBelief(_belief1);
             _network.AddBelief(_belief2);
@@ -66,7 +72,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void ZeroLengthCheckTest()
         {
             byte[] taskKnowledge = { };
-            _network.InitializeAgentBelief(_agentBelief0, true);
+            _agentBelief0.SetBeliefBits(_bits0);
             Assert.AreEqual(0, _agentBelief0.Check(taskKnowledge, out _, _belief0, 1, true));
         }
 
@@ -77,7 +83,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void CheckTest()
         {
             byte[] taskKnowledge = {0};
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             var t = _agentBelief1.Check(taskKnowledge, out _, _belief1, 1, true);
             Assert.AreEqual(0, t);
         }
@@ -90,7 +96,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         {
             byte[] taskIndexes = {0};
             _belief1.Weights.SetBit(0, 1);
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, 1);
             var t = _agentBelief1.Check(taskIndexes, out var index, _belief1, 0, true);
             Assert.AreEqual(1, t);
@@ -114,7 +120,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void NoLearningLearnTest()
         {
             var bits = new Bits(new float[] {0}, -1);
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, 1);
             _agentBelief1.Learn(bits, 1);
             Assert.AreEqual(1, _agentBelief1.BeliefBits.GetBit(0));
@@ -127,7 +133,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void NoLearningLearnTest1()
         {
             var bits = new Bits(new float[] {-1}, -1);
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, 1);
             // Non influence
             _agentBelief1.Learn(bits, 0);
@@ -141,7 +147,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void LearnTest()
         {
             var bits = new Bits(new float[] {-1}, -1);
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, 1);
             _agentBelief1.Learn(bits, 1);
             Assert.AreEqual(0, _agentBelief1.BeliefBits.GetBit(0));
@@ -154,7 +160,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void LearnTest1()
         {
             var bits = new Bits(new float[] {1}, -1);
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, 1);
             _agentBelief1.Learn(bits, 1);
             Assert.AreEqual(1, _agentBelief1.BeliefBits.GetBit(0));
@@ -173,7 +179,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         [TestMethod]
         public void CloneWrittenBeliefBitsTest()
         {
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             // 1
             _agentBelief1.BeliefBits.SetBit(0, 1);
             var bits = _agentBelief1.CloneWrittenBeliefBits(0);
@@ -191,7 +197,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         [TestMethod]
         public void BelievesEnoughTest()
         {
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, -1);
             Assert.IsTrue(_agentBelief1.BelievesEnough(0, 0));
             _agentBelief1.BeliefBits.SetBit(0, 1);
@@ -212,7 +218,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefSumTest()
         {
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             _agentBelief1.BeliefBits.SetBit(0, -1);
             Assert.AreEqual(-1, _agentBelief1.GetBeliefSum());
             _agentBelief1.BeliefBits.SetBit(0, 1);
@@ -227,7 +233,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         [TestMethod]
         public void GetBeliefSumTest1()
         {
-            _network.InitializeAgentBelief(_agentBelief2, true);
+            _agentBelief2.SetBeliefBits(_bits2);
             _agentBelief2.BeliefBits.SetBit(0, -1);
             _agentBelief2.BeliefBits.SetBit(1, -1);
             Assert.AreEqual(-2, _agentBelief2.GetBeliefSum());
@@ -243,7 +249,7 @@ namespace SymuTests.Repository.Networks.Beliefs
         public void LearnTest2()
         {
             _network.Model = RandomGenerator.RandomUniform;
-            _network.InitializeAgentBelief(_agentBelief1, true);
+            _agentBelief1.SetBeliefBits(_bits1);
             Assert.AreEqual(0, _agentBelief1.BeliefBits.GetBit(0));
             _agentBelief1.Learn(Model, 0);
             Assert.AreNotEqual(0, _agentBelief1.BeliefBits.GetBit(0));

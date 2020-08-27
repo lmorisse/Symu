@@ -9,6 +9,7 @@
 
 #region using directives
 
+using System;
 using Symu.Common;
 using Symu.Environment;
 
@@ -17,8 +18,28 @@ using Symu.Environment;
 namespace Symu.Classes.Scenario
 {
     public class TaskBasedScenario : SimulationScenario
-    {
-        public TaskBasedScenario(SymuEnvironment environment) : base(null, environment)
+    {/// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static TaskBasedScenario CreateInstance(SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new TaskBasedScenario(environment);
+            agent.Initialize();
+            return agent;
+        }
+
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private TaskBasedScenario(SymuEnvironment environment) : base(null, environment)
         {
             Environment.IterationResult.Tasks.On = true;
         }

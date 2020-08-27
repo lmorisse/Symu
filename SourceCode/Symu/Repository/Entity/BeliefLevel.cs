@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace Symu.Repository.Networks.Beliefs
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Measure of a agent's belief on a scale of 0 to 5

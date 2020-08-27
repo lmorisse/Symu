@@ -38,7 +38,7 @@ namespace SymuTests.Classes.Murphies
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(models.InteractionSphere);
             _knowledge = new Knowledge(1, "1", 1);
             _network.Knowledge.AddKnowledge(_knowledge);
             _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network);

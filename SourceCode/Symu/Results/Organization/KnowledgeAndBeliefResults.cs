@@ -119,11 +119,10 @@ namespace Symu.Results.Organization
 
         public void HandleBelief()
         {
-            var sum = Environment.WhitePages.MetaNetwork.Beliefs.AgentsRepository.Values
-                .Select(beliefs => beliefs.GetBeliefsSum())
-                .ToList();
-            var potential = Environment.WhitePages.MetaNetwork.Beliefs.AgentsRepository.Values
-                .Sum(beliefs => beliefs.GetBeliefsPotential());
+            var sum = Environment.WhitePages.AllCognitiveAgents()
+                .Select(e => e.BeliefsModel.GetBeliefsSum()).ToList();
+            var potential = Environment.WhitePages.AllCognitiveAgents()
+                .Sum(e => e.BeliefsModel.GetBeliefsPotential());
             var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Beliefs.Add(belief);
         }

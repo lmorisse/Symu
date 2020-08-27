@@ -11,6 +11,7 @@
 
 using System;
 using System.Linq;
+using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -77,7 +78,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         ///     Get the agent Beliefs
         /// </summary>
         public AgentBeliefs Beliefs =>
-            _knowledgeAndBeliefs.HasBelief ? _networkBeliefs.GetAgentBeliefs(_agentId) : null;
+            On && _knowledgeAndBeliefs.HasBelief ? _networkBeliefs.GetAgentBeliefs(_agentId) : null;
 
         /// <summary>
         ///     Initialize the beliefs of the agent based on the belief network
@@ -95,7 +96,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 _networkBeliefs.AddAgentId(_agentId);
             }
 
-            _networkBeliefs.InitializeBeliefs(_agentId, !_knowledgeAndBeliefs.HasInitialBelief);
+            InitializeBeliefs(!_knowledgeAndBeliefs.HasInitialBelief);
         }
 
         /// <summary>
@@ -109,7 +110,21 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _networkBeliefs.Add(_agentId, expertiseAgent, _knowledgeAndBeliefs.DefaultBeliefLevel);
+            AddBeliefs(expertiseAgent, _knowledgeAndBeliefs.DefaultBeliefLevel);
+        }
+        public void AddBeliefs(AgentExpertise expertise, BeliefLevel beliefLevel)
+        {
+            if (expertise is null)
+            {
+                throw new ArgumentNullException(nameof(expertise));
+            }
+
+            _networkBeliefs.AddAgentId(_agentId);
+
+            foreach (var agentBelief in expertise.List.Select(agentKnowledge => new AgentBelief(agentKnowledge.KnowledgeId, beliefLevel)))
+            {
+                _networkBeliefs.AddBelief(_agentId, agentBelief);
+            }
         }
 
         /// <summary>
@@ -119,12 +134,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeId"></param>
         public void AddBelief(IId knowledgeId)
         {
-            if (!_knowledgeAndBeliefs.HasBelief || !On)
-            {
-                return;
-            }
-
-            _networkBeliefs.Add(_agentId, knowledgeId, _knowledgeAndBeliefs.DefaultBeliefLevel);
+            AddBelief(knowledgeId, _knowledgeAndBeliefs.DefaultBeliefLevel);
         }
 
         /// <summary>
@@ -140,12 +150,18 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _networkBeliefs.Add(_agentId, knowledgeId, beliefLevel);
+            var agentBelief = new AgentBelief(knowledgeId, beliefLevel);
+            _networkBeliefs.Add(_agentId, agentBelief);
         }
 
-        public AgentBelief GetBelief(IId beliefId)
+        public AgentBelief GetAgentBelief(IId beliefId)
         {
-            return Beliefs.GetBelief(beliefId);
+            return Beliefs.GetAgentBelief<AgentBelief>(beliefId);
+        }
+
+        public Belief GetBelief(IId beliefId)
+        {
+            return _networkBeliefs.GetBelief<Belief>(beliefId);
         }
 
         /// <summary>
@@ -177,13 +193,13 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             // If Agent don't have the belief, he can't reply
-            if (!Beliefs.BelievesEnough(beliefId, beliefBit,
+            if (!BelievesEnough(beliefId, beliefBit,
                 _messageContent.MinimumBeliefToSendPerBit))
             {
                 return null;
             }
 
-            var agentBelief = Beliefs.GetBelief(beliefId);
+            var agentBelief = Beliefs.GetAgentBelief<AgentBelief>(beliefId);
             if (agentBelief is null)
             {
                 throw new ArgumentNullException(nameof(agentBelief));
@@ -225,5 +241,121 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             // We don't find always what we were looking for
             return Math.Abs(beliefBitsToSend.GetSum()) < Tolerance ? null : beliefBitsToSend;
         }
+
+        /// <summary>
+        ///     Check that agent has the BeliefId[knowledgeBit] == 1
+        /// </summary>
+        /// <param name="beliefId"></param>
+        /// <param name="beliefBit"></param>
+        /// <param name="beliefThreshHoldForAnswer"></param>
+        /// <returns>true if the agent has the knowledge</returns>
+        public bool BelievesEnough(IId beliefId, byte beliefBit, float beliefThreshHoldForAnswer)
+        {
+            if (!Beliefs.Contains(beliefId))
+            {
+                return false;
+            }
+
+            var belief = GetAgentBelief(beliefId);
+            return belief.BelievesEnough(beliefBit, beliefThreshHoldForAnswer);
+        }
+
+        /// <summary>
+        ///     Get the sum of all the beliefs
+        /// </summary>
+        /// <returns></returns>
+        public float GetBeliefsSum()
+        {
+            if (! On || Beliefs == null)
+            {
+                return 0;
+            }
+            return Beliefs.GetAgentBeliefs<AgentBelief>().Sum(l => l.GetBeliefSum());
+        }
+
+        /// <summary>
+        ///     Get the maximum potential of all the beliefs
+        /// </summary>
+        /// <returns></returns>
+        public float GetBeliefsPotential()
+        {
+            if (Beliefs == null)
+            {
+                return 0;
+            }
+            return Beliefs.GetAgentBeliefs<AgentBelief>().Sum(l => l.GetBeliefPotential());
+        }
+
+        /// <summary>
+        ///     Initialize AgentBelief with a stochastic process
+        /// </summary>
+        /// <param name="neutral"></param>
+        public void InitializeBeliefs(bool neutral)
+        {
+            if (!_networkBeliefs.Exists(_agentId))
+            {
+                throw new NullReferenceException(nameof(_agentId));
+            }
+
+            foreach (var agentBelief in Beliefs.GetAgentBeliefs<AgentBelief>())
+            {
+                InitializeAgentBelief(agentBelief, neutral);
+            }
+        }
+
+        /// <summary>
+        ///     Initialize AgentBelief with a stochastic process based on the agent belief level
+        /// </summary>
+        /// <param name="agentBelief">agentBelief to initialize</param>
+        /// <param name="neutral">if !HasInitialBelief, then a neutral initialization is done</param>
+        public void InitializeAgentBelief(AgentBelief agentBelief, bool neutral)
+        {
+            if (agentBelief == null)
+            {
+                throw new ArgumentNullException(nameof(agentBelief));
+            }
+
+            var belief = GetBelief(agentBelief.BeliefId);
+            if (belief == null)
+            {
+                throw new NullReferenceException(nameof(belief));
+            }
+
+            var level = neutral ? BeliefLevel.NoBelief : agentBelief.BeliefLevel;
+            var beliefBits = belief.InitializeBits(_networkBeliefs.Model, level);
+            agentBelief.SetBeliefBits(beliefBits);
+        }
+
+        /// <summary>
+        ///     agent learn beliefId with a weight of influenceability * influentialness
+        /// </summary>
+        /// <param name="beliefId"></param>
+        /// <param name="beliefBits"></param>
+        /// <param name="influenceWeight"></param>
+        /// <param name="beliefLevel"></param>
+        public void Learn(IId beliefId, Bits beliefBits, float influenceWeight,
+            BeliefLevel beliefLevel)
+        {
+            LearnNewBelief(beliefId, beliefLevel);
+            _networkBeliefs.GetAgentBelief<AgentBelief>(_agentId, beliefId).Learn(beliefBits, influenceWeight);
+        }
+
+        /// <summary>
+        ///     Agent don't have still this belief, it's time to learn a new one
+        /// </summary>
+        /// <param name="beliefId"></param>
+        /// <param name="beliefLevel"></param>
+        public void LearnNewBelief(IId beliefId, BeliefLevel beliefLevel)
+        {
+            if (_networkBeliefs.Exists(_agentId, beliefId))
+            {
+                return;
+            }
+
+            var agentBelief = new AgentBelief(beliefId, beliefLevel);
+            _networkBeliefs.Add(_agentId, agentBelief);
+            InitializeBeliefs(true);
+        }
+
     }
 }

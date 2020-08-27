@@ -40,10 +40,8 @@ namespace SymuLearnAndForgetTests
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = 10
-            };
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = 10;
             _simulation.AddScenario(scenario);
             _environment.Knowledge = new Knowledge(1, "1", 50);
         }

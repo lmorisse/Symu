@@ -88,28 +88,22 @@ namespace SymuScenariosAndEvents
             Iterations.Max = ushort.Parse(NumberOfIterations.Text, CultureInfo.InvariantCulture);
             if (TimeBased.Checked)
             {
-                var scenario = new TimeBasedScenario(_environment)
-                {
-                    NumberOfSteps = ushort.Parse(NumberOfSteps.Text)
-                };
+                var scenario = TimeBasedScenario.CreateInstance(_environment);
+                scenario.NumberOfSteps = ushort.Parse(NumberOfSteps.Text);
                 AddScenario(scenario);
             }
 
             if (TaskBased.Checked)
             {
-                var scenario = new TaskBasedScenario(_environment)
-                {
-                    NumberOfTasks = ushort.Parse(NumberOfTasks.Text, CultureInfo.InvariantCulture)
-                };
+                var scenario = TaskBasedScenario.CreateInstance(_environment);
+                scenario.NumberOfTasks = ushort.Parse(NumberOfTasks.Text, CultureInfo.InvariantCulture);
                 AddScenario(scenario);
             }
 
             if (MessageBased.Checked)
             {
-                var scenario = new MessageBasedScenario(_environment)
-                {
-                    NumberOfMessages = ushort.Parse(NumberOfMessages.Text, CultureInfo.InvariantCulture)
-                };
+                var scenario = MessageBasedScenario.CreateInstance(_environment);
+                scenario.NumberOfMessages = ushort.Parse(NumberOfMessages.Text, CultureInfo.InvariantCulture);
                 AddScenario(scenario);
             }
 

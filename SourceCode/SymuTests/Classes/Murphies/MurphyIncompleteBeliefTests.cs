@@ -19,6 +19,7 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks;
 using Symu.Repository.Networks.Beliefs;
 
@@ -42,7 +43,7 @@ namespace SymuTests.Classes.Murphies
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
@@ -54,7 +55,8 @@ namespace SymuTests.Classes.Murphies
             _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
 
             _network.Beliefs.AddBelief(_belief);
-            _network.Beliefs.Add(_agentId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+            var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_agentId, agentBelief);
             _agentBeliefs = _network.Beliefs.GetAgentBeliefs(_agentId);
 
             _taskBits.SetMandatory(new byte[] {0});
@@ -111,7 +113,7 @@ namespace SymuTests.Classes.Murphies
             _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _beliefsModel.InitializeBeliefs();
             // Force beliefBits
-            _beliefsModel.GetBelief(_belief.Id).BeliefBits.SetBit(0, 1);
+            _beliefsModel.GetAgentBelief(_belief.Id).BeliefBits.SetBit(0, 1);
             _belief.Weights.SetBit(0, 1);
             _murphy.CheckBelief(_belief, _taskBits, _agentBeliefs, ref mandatoryCheck, ref requiredCheck,
                 ref mandatoryIndex,

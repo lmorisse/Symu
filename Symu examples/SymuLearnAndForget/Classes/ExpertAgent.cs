@@ -27,8 +27,23 @@ namespace SymuLearnAndForget.Classes
     public sealed class ExpertAgent : CognitiveAgent
     {
         public const byte Class = 2;
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static ExpertAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        {
+            var agent = new ExpertAgent(id, environment, template);
+            agent.Initialize();
+            return agent;
+        }
 
-        public ExpertAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private ExpertAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
         }

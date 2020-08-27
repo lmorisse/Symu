@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Beliefs;
+using Symu.Repository.Entity;
 
 #endregion
 
@@ -28,7 +30,7 @@ namespace Symu.Repository.Networks.Beliefs
         ///     Key => ComponentId
         ///     Values => List of Belief
         /// </summary>
-        public List<Belief> List { get; } = new List<Belief>();
+        public List<IBelief> List { get; } = new List<IBelief>();
 
         public int Count => List.Count;
 
@@ -42,7 +44,7 @@ namespace Symu.Repository.Networks.Beliefs
             List.Clear();
         }
 
-        public void Add(Belief belief)
+        public void Add(IBelief belief)
         {
             if (!Contains(belief))
             {
@@ -50,7 +52,7 @@ namespace Symu.Repository.Networks.Beliefs
             }
         }
 
-        public bool Contains(Belief belief)
+        public bool Contains(IBelief belief)
         {
             if (belief is null)
             {
@@ -60,9 +62,14 @@ namespace Symu.Repository.Networks.Beliefs
             return Exists(belief.Id);
         }
 
-        public Belief GetBelief(IId beliefId)
+        public IBelief GetBelief(IId beliefId)
         {
             return List.Find(k => k.Id.Equals(beliefId));
+        }
+
+        public TBelief GetBelief<TBelief>(IId beliefId) where TBelief : IBelief
+        {
+            return (TBelief)GetBelief(beliefId);
         }
 
         public bool Exists(IId beliefId)

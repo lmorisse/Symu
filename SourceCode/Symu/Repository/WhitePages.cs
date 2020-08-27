@@ -40,7 +40,7 @@ namespace Symu.Repository
                 throw new ArgumentNullException(nameof(models));
             }
 
-            MetaNetwork = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            MetaNetwork = new MetaNetwork(models.InteractionSphere);
         }
 
         /// <summary>

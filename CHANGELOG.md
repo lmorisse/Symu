@@ -3,7 +3,9 @@
 ## Unreleased
 
 * SymuTools refactored in Symu.Common solution
-* Prepare Symu.org for ONA project
+* Prepare Symu.org for Symu.DNA project
+** Extract interfaces from metanetwork
+** Move Networks to Symu.DNA repo
 
 ## 0.91 [☰](https://github.com/lmorisse/symu/compare/v0.9.1..v0.9.0) by [lmorisse](https://github.com/lmorisse)
 * Split Agent into ReactiveAgent and CognitiveAgent

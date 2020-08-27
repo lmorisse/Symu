@@ -19,6 +19,7 @@ using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Environment;
 using Symu.Forms;
+using Symu.Repository.Entity;
 using Symu.Repository.Networks.Beliefs;
 using SymuBeliefsAndInfluence.Classes;
 using static Symu.Common.Constants;
@@ -91,7 +92,7 @@ namespace SymuBeliefsAndInfluence
 
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
             BeliefWeight.SelectedItem =
-                BeliefWeightLevelService.GetName(OrganizationEntity.Models.ImpactOfBeliefOnTask);
+                BeliefWeightLevelService.GetName(OrganizationEntity.Models.BeliefWeightLevel);
             InfluenceabilityMin.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics
                 .InfluenceabilityRateMin.ToString(CultureInfo.InvariantCulture);
             InfluenceabilityMax.Text = _environment.WorkerTemplate.Cognitive.InternalCharacteristics
@@ -126,16 +127,13 @@ namespace SymuBeliefsAndInfluence
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
             _environment.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
-            OrganizationEntity.Models.ImpactOfBeliefOnTask =
+            OrganizationEntity.Models.BeliefWeightLevel =
                 BeliefWeightLevelService.GetValue(BeliefWeight.SelectedItem.ToString());
 
             #endregion
 
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture)
-            };
-
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture);
             AddScenario(scenario);
 
             SetTimeStepType(TimeStepType.Daily);

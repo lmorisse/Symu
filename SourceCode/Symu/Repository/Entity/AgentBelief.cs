@@ -14,19 +14,19 @@ using System.Linq;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Entity;
+using Symu.Repository.Networks.Beliefs;
 using static Symu.Common.Constants;
 
 #endregion
 
-namespace Symu.Repository.Networks.Beliefs
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     Describe the Knowledge of an agent :
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class AgentBelief
+    public class AgentBelief : IAgentBelief
     {
         /// <summary>
         ///     Range min = disagreement

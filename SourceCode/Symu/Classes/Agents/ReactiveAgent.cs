@@ -42,13 +42,17 @@ namespace Symu.Classes.Agents
         /// <param name="environment"></param>
         protected ReactiveAgent(AgentId agentId, SymuEnvironment environment)
         {
-            CreateAgent(agentId, environment);
+            AgentId = agentId;
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            Environment.AddAgent(this);
+            State = AgentState.NotStarted;
+            Created = Schedule.Step;
         }
 
         /// <summary>
         ///     Day of creation of the  agent
         /// </summary>
-        public ushort Created { get; private set; }
+        public ushort Created { get; protected set; }
 
         /// <summary>
         ///     Day of stopped of the agent
@@ -75,22 +79,20 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     The environment in which the agent runs. A concurrent agent can only run in a concurrent environment.
         /// </summary>
-        public SymuEnvironment Environment { get; private set; }
+        public SymuEnvironment Environment { get; protected set; }
 
         protected Schedule Schedule => Environment.Schedule;
 
-        #region Initialization
-
-        protected virtual void CreateAgent(AgentId agentId, SymuEnvironment environment)
+        /// <summary>
+        /// Initialize the agent models
+        /// </summary>
+        /// <remarks>Should be called after the constructor
+        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
+        protected virtual void Initialize()
         {
-            AgentId = agentId;
-            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment.AddAgent(this);
-            State = AgentState.NotStarted;
-            Created = Schedule.Step;
+            InitializeModels();
+            SetModels();
         }
-
-        #endregion
 
         #region Start/stop
 
@@ -164,8 +166,9 @@ namespace Symu.Classes.Agents
                 throw new Exception("Environment is null in agent " + AgentId.Id + " (ConcurrentAgent.Start)");
             }
 
-            InitializeModels();
-            SetModels();
+            //now in CreateAgent
+            //InitializeModels();
+            //SetModels();
             FinalizeModels();
 
             // MessageProcessor initializing

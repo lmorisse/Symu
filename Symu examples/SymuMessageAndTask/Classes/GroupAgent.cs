@@ -26,8 +26,23 @@ namespace SymuMessageAndTask.Classes
     public sealed class GroupAgent : ReactiveAgent
     {
         public const byte Class = 1;
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static GroupAgent CreateInstance(UId id, SymuEnvironment environment)
+        {
+            var agent = new GroupAgent(id, environment);
+            agent.Initialize();
+            return agent;
+        }
 
-        public GroupAgent(UId id, SymuEnvironment environment) : base(
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private GroupAgent(UId id, SymuEnvironment environment) : base(
             new AgentId(id, Class), environment)
         {
         }

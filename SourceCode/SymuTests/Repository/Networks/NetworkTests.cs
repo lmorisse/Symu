@@ -55,7 +55,7 @@ namespace SymuTests.Repository.Networks
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere, models.ImpactOfBeliefOnTask);
+            _network = new MetaNetwork(models.InteractionSphere);
             _belief = new Belief(1, "1", 1,
                 _network.Knowledge.Model, BeliefWeightLevel.RandomWeight);
             _network.Activities.AddActivities(new List<Activity> {_activity}, _teamId);
@@ -75,9 +75,10 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_component);
-            _network.AddKnowledge(_knowledge);
+            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
             _network.Knowledge.Add(_teammateId, _agentKnowledge);
-            _network.Beliefs.Add(_teammateId, _belief, BeliefLevel.NeitherAgreeNorDisagree);
+            var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _network.Beliefs.Add(_teammateId, agentBelief);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> { new AgentActivity(_teammateId, _activity) });
             _network.Clear();
             Assert.IsFalse(_network.Interactions.Any());
@@ -159,7 +160,7 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddAgent(_agentGroup1, _teamId);
             _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_teammateId, _agentResource);
-            _network.AddKnowledge(_knowledge);
+            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
             _network.Knowledge.Add(_teammateId, _agentKnowledge);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> {new AgentActivity(_teammateId, _activity)});
             _network.RemoveAgent(_teammateId);
@@ -191,7 +192,7 @@ namespace SymuTests.Repository.Networks
         public void AddKnowledgeTest()
         {
             var knowledge = new Knowledge(1, "1", 1);
-            _network.AddKnowledge(knowledge);
+            _network.AddKnowledge(knowledge, BeliefWeightLevel.NoWeight);
             Assert.IsNotNull(_network.Knowledge.GetKnowledge(knowledge.Id));
             Assert.IsNotNull(_network.Beliefs.GetBelief(knowledge.Id));
         }
@@ -201,7 +202,7 @@ namespace SymuTests.Repository.Networks
         {
             var knowledge = new Knowledge(1, "1", 1);
             var knowledges = new List<Knowledge> {knowledge};
-            _network.AddKnowledges(knowledges);
+            _network.AddKnowledges(knowledges, BeliefWeightLevel.NoWeight);
             Assert.IsNotNull(_network.Knowledge.GetKnowledge(knowledge.Id));
             Assert.IsNotNull(_network.Beliefs.GetBelief(knowledge.Id));
         }

@@ -64,7 +64,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             base.SetAgents();
 
-            var group = new GroupAgent(Organization.NextEntityId(), this);
+            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
             _groupId = group.AgentId;
             for (var j = 0; j < WorkersCount; j++)
             {
@@ -74,10 +74,8 @@ namespace SymuScenariosAndEvents.Classes
 
         private PersonAgent AddPersonAgent()
         {
-            var actor = new PersonAgent(Organization.NextEntityId(), this, Organization.Templates.Human)
-            {
-                GroupId = _groupId
-            };
+            var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+            actor.GroupId = _groupId;
             var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork.Knowledge);
             var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
             WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
@@ -98,7 +96,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             // knowledge length of 10 is arbitrary in this example
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
-            WhitePages.MetaNetwork.AddKnowledge(knowledge);
+            WhitePages.MetaNetwork.AddKnowledge(knowledge, Organization.Models.BeliefWeightLevel);
 
             foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.Class))
             {

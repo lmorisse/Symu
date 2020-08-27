@@ -46,7 +46,7 @@ namespace SymuTests.Classes.Agents
             _organizationEntity.Models.On(1);
             _environment.IterationResult.On();
 
-            _agent = new TestReactiveAgent(_organizationEntity.NextEntityId(), _environment);
+            _agent = TestReactiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
             
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
             _agent.Start();

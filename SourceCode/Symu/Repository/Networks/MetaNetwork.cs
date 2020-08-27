@@ -36,10 +36,9 @@ namespace Symu.Repository.Networks
     /// </summary>
     public class MetaNetwork
     {
-        public MetaNetwork(InteractionSphereModel interactionSphere, BeliefWeightLevel beliefWeightLevel)
+        public MetaNetwork(InteractionSphereModel interactionSphere)
         {
             InteractionSphere = new InteractionSphere(interactionSphere);
-            Beliefs = new BeliefNetwork(beliefWeightLevel);
         }
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace Symu.Repository.Networks
         ///     Belief network
         ///     Who (agentId) believes what (Information)
         /// </summary>
-        public BeliefNetwork Beliefs { get; }
+        public BeliefNetwork Beliefs { get; } = new BeliefNetwork();
 
         /// <summary>
         ///     Kanban activities network
@@ -189,21 +188,31 @@ namespace Symu.Repository.Networks
         ///     Add a Knowledge to the repository
         /// </summary>
         /// <param name="knowledge"></param>
-        public void AddKnowledge(Knowledge knowledge)
+        /// <param name="beliefWeightLevel"></param>
+        public void AddKnowledge(Knowledge knowledge, BeliefWeightLevel beliefWeightLevel)
         {
+            if (knowledge == null)
+            {
+                throw new ArgumentNullException(nameof(knowledge));
+            }
+
             Knowledge.AddKnowledge(knowledge);
-            Beliefs.AddBelief(knowledge);
+            var belief = new Belief(knowledge, knowledge.Length, Beliefs.Model, beliefWeightLevel);
+            Beliefs.AddBelief(belief);
         }
 
         /// <summary>
         ///     Add a set of Knowledge to the repository
         /// </summary>
-        public void AddKnowledges(IEnumerable<IKnowledge> knowledge)
+        public void AddKnowledges(IEnumerable<IKnowledge> knowledgeCollection, BeliefWeightLevel beliefWeightLevel)
         {
-            var knowledges = knowledge.ToList();
+            var knowledges = knowledgeCollection.ToList();
             Knowledge.AddKnowledges(knowledges);
-            //todo temporary
-            Beliefs.AddBeliefs(knowledges.Cast<Knowledge>());
+            foreach (var knowledge in knowledges)
+            {
+                var belief = new Belief(knowledge, ((Knowledge)knowledge).Length, Beliefs.Model, beliefWeightLevel);
+                Beliefs.AddBelief(belief);
+            }
         }
 
         #endregion

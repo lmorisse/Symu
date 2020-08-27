@@ -262,13 +262,13 @@ namespace Symu.Repository.Networks.Sphere
             var beliefIds = beliefNetwork.GetBeliefIds(agentId1).ToList();
             foreach (var beliefId in beliefIds)
             {
-                var bits1 = beliefNetwork.GetAgentBelief(agentId1, beliefId).BeliefBits;
+                var bits1 = beliefNetwork.GetAgentBelief<AgentBelief>(agentId1, beliefId).BeliefBits;
                 if (!beliefNetwork.Exists(agentId2, beliefId))
                 {
                     continue;
                 }
 
-                var bits2 = beliefNetwork.GetAgentBelief(agentId2, beliefId).BeliefBits;
+                var bits2 = beliefNetwork.GetAgentBelief<AgentBelief>(agentId2, beliefId).BeliefBits;
                 relativeBelief += Bits.GetRelativeBits(bits1, bits2);
             }
 

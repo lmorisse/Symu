@@ -7,6 +7,7 @@
 
 #endregion
 
+using System;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
@@ -18,13 +19,30 @@ namespace SymuTests.Helpers
     internal sealed class TestReactiveAgent : ReactiveAgent
     {
         public static byte ClassId = SymuYellowPages.Actor;
+        /// <summary>
+        /// Factory method to create an agent
+        /// Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static TestReactiveAgent CreateInstance(UId id, SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
 
-        public TestReactiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
+            var agent = new TestReactiveAgent(id, environment);
+            agent.Initialize();
+            return agent;
+        }
+
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private TestReactiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
         {
         }
 
-        public TestReactiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId), environment)
-        {
-        }
     }
 }

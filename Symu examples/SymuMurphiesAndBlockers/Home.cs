@@ -209,11 +209,8 @@ namespace SymuMurphiesAndBlockers
                 EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
 
-            var scenario = new TimeBasedScenario(_environment)
-            {
-                NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture)
-            };
-
+            var scenario = TimeBasedScenario.CreateInstance(_environment);
+            scenario.NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture);
             AddScenario(scenario);
 
             SetTimeStepType(TimeStepType.Daily);
