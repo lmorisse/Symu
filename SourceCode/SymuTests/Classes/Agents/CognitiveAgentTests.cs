@@ -74,10 +74,10 @@ namespace SymuTests.Classes.Agents
             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge);
-            var belief = new Belief(_knowledge, _knowledge.Length, _environment.WhitePages.MetaNetwork.Beliefs.Model, _environment.Organization.Models.BeliefWeightLevel);
+            var belief = new Belief(_knowledge, _knowledge.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
             _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge2);
-            var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.WhitePages.MetaNetwork.Beliefs.Model, _environment.Organization.Models.BeliefWeightLevel);
+            var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
             _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
@@ -1135,7 +1135,7 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteBelief.On = true;
             _organizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
-            _environment.WhitePages.MetaNetwork.Beliefs.Model = RandomGenerator.RandomUniform;
+            _environment.Organization.Models.Generator = RandomGenerator.RandomUniform;
             var task = new SymuTask(0) {Weight = 1};
             task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
                 MurphyTask.FullRequiredBits);

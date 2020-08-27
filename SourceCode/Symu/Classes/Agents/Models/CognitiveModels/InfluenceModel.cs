@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -30,6 +31,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class InfluenceModel
     {
+        private readonly RandomGenerator _model;
         private readonly AgentId _agentId;
         private readonly BeliefNetwork _networkBeliefs;
         private readonly InfluenceNetwork _networkInfluences;
@@ -44,8 +46,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         /// <param name="beliefsModel"></param>
+        /// <param name="model"></param>
         public InfluenceModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            MetaNetwork network, BeliefsModel beliefsModel)
+            MetaNetwork network, BeliefsModel beliefsModel, RandomGenerator model)
         {
             if (entity is null)
             {
@@ -72,6 +75,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _networkInfluences = network.Influences;
             _networkBeliefs = network.Beliefs;
             _beliefsModel = beliefsModel;
+            _model = model;
 
             if (cognitiveArchitecture.InternalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
@@ -149,7 +153,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
             _beliefsModel.LearnNewBelief(beliefId, beliefLevel);
             var agentBelief = _beliefsModel.GetAgentBelief(beliefId);
-            agentBelief.Learn(_networkBeliefs.Model, beliefBit);
+            agentBelief.Learn(_model, beliefBit);
         }
     }
 }

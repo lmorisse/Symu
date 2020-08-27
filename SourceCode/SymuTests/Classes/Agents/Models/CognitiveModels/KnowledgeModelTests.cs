@@ -137,7 +137,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void InitializeExpertiseTest1()
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
+            _network.Knowledge.AddKnowledge(_knowledge);
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);

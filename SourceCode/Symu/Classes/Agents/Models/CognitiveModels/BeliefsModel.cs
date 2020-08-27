@@ -34,6 +34,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class BeliefsModel
     {
+        private readonly RandomGenerator _model;
         private readonly AgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
@@ -47,8 +48,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
+        /// <param name="model"></param>
         public BeliefsModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            MetaNetwork network)
+            MetaNetwork network, RandomGenerator model)
         {
             if (entity is null)
             {
@@ -70,6 +72,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _networkBeliefs = network.Beliefs;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
+            _model = model;
         }
 
         public bool On { get; set; }
@@ -322,7 +325,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             var level = neutral ? BeliefLevel.NoBelief : agentBelief.BeliefLevel;
-            var beliefBits = belief.InitializeBits(_networkBeliefs.Model, level);
+            var beliefBits = belief.InitializeBits(_model, level);
             agentBelief.SetBeliefBits(beliefBits);
         }
 

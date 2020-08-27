@@ -43,8 +43,12 @@ namespace SymuTests.Results.Organization
             var organization = new OrganizationEntity("1");
             _environment.SetOrganization(organization);
             _result = new KnowledgeAndBeliefResults(_environment);
-            _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.AddKnowledge(_knowledge2, _environment.Organization.Models.BeliefWeightLevel);
+            _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge);
+            _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge2);
+            var belief = new Belief(_knowledge, _knowledge.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
+            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
+            var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
+            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief2);
             _agent = TestCognitiveAgent.CreateInstance(new UId(1), _environment);
             _agent2 = TestCognitiveAgent.CreateInstance(new UId(2), _environment);
             _environment.Start();
@@ -99,7 +103,7 @@ namespace SymuTests.Results.Organization
 
         #endregion
 
-        #region Belief
+        #region Beliefs
 
         /// <summary>
         ///     0 knowledge

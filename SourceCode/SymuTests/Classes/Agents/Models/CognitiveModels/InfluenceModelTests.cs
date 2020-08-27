@@ -39,8 +39,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void Initialize()
         {
             _network = new MetaNetwork(_models.InteractionSphere);
-            _beliefsModel = new BeliefsModel(_agentId, _models.Beliefs, _cognitiveArchitecture, _network);
-            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel);
+            _beliefsModel = new BeliefsModel(_agentId, _models.Beliefs, _cognitiveArchitecture, _network, _models.Generator);
+            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
         }
 
         /// <summary>
@@ -50,8 +50,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void LearnByDoingTest()
         {
             _influenceModel.On = false;
-            _network.Beliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.Beliefs.Model, BeliefWeightLevel.RandomWeight);
+            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
             _network.Beliefs.AddBelief(belief);
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
             Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
@@ -65,10 +64,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _influenceModel.On = true;
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
-            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel);
+            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
 
-            _network.Beliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.Beliefs.Model, BeliefWeightLevel.RandomWeight);
+            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
             _network.Beliefs.AddBelief(belief);
             Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
@@ -85,8 +83,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void LearnByDoingTest2()
         {
             _influenceModel.On = true;
-            _network.Beliefs.Model = RandomGenerator.RandomUniform;
-            var belief = new Belief(1, "1", 1, _network.Beliefs.Model, BeliefWeightLevel.RandomWeight);
+            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
             _network.Beliefs.AddBelief(belief);
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
             Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));

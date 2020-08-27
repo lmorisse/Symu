@@ -150,6 +150,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         public void Learn(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
             short timeToLive, ushort step)
         {
+            if (!IsAgentOn())
+            {
+                return;
+            }
             if (knowledgeId == null)
             {
                 throw new ArgumentNullException(nameof(knowledgeId));
@@ -181,6 +185,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="step"></param>
         public void Learn(Bits knowledgeBits, float maxRateLearnable, AgentKnowledge agentKnowledge, ushort step)
         {
+            if (!IsAgentOn())
+            {
+                return;
+            }
             if (knowledgeBits is null)
             {
                 throw new ArgumentNullException(nameof(knowledgeBits));
@@ -373,7 +381,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         /// <summary>
         ///     OnAfterLearning event is triggered if learning occurs,
-        ///     you can subscribe to this event to treat the new learning
+        ///     Subscribe to this event to treat the new learning
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

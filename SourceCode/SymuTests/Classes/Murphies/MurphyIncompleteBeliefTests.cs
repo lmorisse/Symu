@@ -42,7 +42,7 @@ namespace SymuTests.Classes.Murphies
         [TestInitialize]
         public void Initialize()
         {
-            var models = new OrganizationModels();
+            var models = new OrganizationModels {Generator = RandomGenerator.RandomUniform};
             _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
@@ -51,8 +51,8 @@ namespace SymuTests.Classes.Murphies
                 InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new ModelEntity();
-            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
-            _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
+            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network, models.Generator) {On = true};
+            _belief = new Belief(1, "1", 1, models.Generator, BeliefWeightLevel.RandomWeight);
 
             _network.Beliefs.AddBelief(_belief);
             var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);

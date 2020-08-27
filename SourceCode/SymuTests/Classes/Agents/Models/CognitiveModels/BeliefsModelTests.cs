@@ -56,10 +56,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
                 InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new ModelEntity();
-            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network) {On = true};
+            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network, models.Generator) {On = true};
             _belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _beliefBitsNonNeutral = _belief.InitializeBits(_network.Beliefs.Model, BeliefLevel.NeitherAgreeNorDisagree);
-            _beliefBitsNeutral = _belief.InitializeBits(_network.Beliefs.Model, BeliefLevel.NoBelief);
+            _beliefBitsNonNeutral = _belief.InitializeBits(models.Generator, BeliefLevel.NeitherAgreeNorDisagree);
+            _beliefBitsNeutral = _belief.InitializeBits(models.Generator, BeliefLevel.NoBelief);
 
             _network.Beliefs.AddBelief(_belief);
             _agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);

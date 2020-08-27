@@ -184,37 +184,6 @@ namespace Symu.Repository.Networks
             Activities.RemoveMember(agentId, groupId);
         }
 
-        /// <summary>
-        ///     Add a Knowledge to the repository
-        /// </summary>
-        /// <param name="knowledge"></param>
-        /// <param name="beliefWeightLevel"></param>
-        public void AddKnowledge(Knowledge knowledge, BeliefWeightLevel beliefWeightLevel)
-        {
-            if (knowledge == null)
-            {
-                throw new ArgumentNullException(nameof(knowledge));
-            }
-
-            Knowledge.AddKnowledge(knowledge);
-            var belief = new Belief(knowledge, knowledge.Length, Beliefs.Model, beliefWeightLevel);
-            Beliefs.AddBelief(belief);
-        }
-
-        /// <summary>
-        ///     Add a set of Knowledge to the repository
-        /// </summary>
-        public void AddKnowledges(IEnumerable<IKnowledge> knowledgeCollection, BeliefWeightLevel beliefWeightLevel)
-        {
-            var knowledges = knowledgeCollection.ToList();
-            Knowledge.AddKnowledges(knowledges);
-            foreach (var knowledge in knowledges)
-            {
-                var belief = new Belief(knowledge, ((Knowledge)knowledge).Length, Beliefs.Model, beliefWeightLevel);
-                Beliefs.AddBelief(belief);
-            }
-        }
-
         #endregion
     }
 }

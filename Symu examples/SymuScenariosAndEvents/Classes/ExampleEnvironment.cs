@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Interfaces.Agent;
@@ -96,7 +95,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             // knowledge length of 10 is arbitrary in this example
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
-            WhitePages.MetaNetwork.AddKnowledge(knowledge, Organization.Models.BeliefWeightLevel);
+            WhitePages.MetaNetwork.Knowledge.AddKnowledge(knowledge);
 
             foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.Class))
             {

@@ -74,8 +74,9 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_component);
-            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
+            _network.Knowledge.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _agentKnowledge);
+            _network.Beliefs.AddBelief(_belief);
             var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _network.Beliefs.Add(_teammateId, agentBelief);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> { new AgentActivity(_teammateId, _activity) });
@@ -159,8 +160,9 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddAgent(_agentGroup1, _teamId);
             _network.Roles.Add(_testAgentRole);
             _network.Resources.Add(_teammateId, _agentResource);
-            _network.AddKnowledge(_knowledge, BeliefWeightLevel.NoWeight);
+            _network.Knowledge.AddKnowledge(_knowledge);
             _network.Knowledge.Add(_teammateId, _agentKnowledge);
+            _network.Beliefs.AddBelief(_belief);
             _network.Activities.AddActivities(_teammateId, _teamId, new List<IAgentActivity> {new AgentActivity(_teammateId, _activity)});
             _network.RemoveAgent(_teammateId);
             //Assert.IsFalse(network.AgentIdExists(teammateId));
@@ -169,6 +171,7 @@ namespace SymuTests.Repository.Networks
             Assert.IsFalse(_network.Roles.IsMember(_teammateId, _teamId.ClassId));
             Assert.IsFalse(_network.Resources.HasResource(_teammateId, _component.Id, new ResourceUsage(IsWorkingOn)));
             Assert.IsFalse(_network.Knowledge.Any());
+            Assert.IsFalse(_network.Beliefs.Any());
             Assert.IsFalse(_network.Activities.AgentHasActivitiesOn(_teammateId, _teamId));
         }
 
@@ -184,28 +187,5 @@ namespace SymuTests.Repository.Networks
             _network.AddAgentToGroup(_agentGroup1, _teamId2);
             Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId));
         }
-
-        #region Knowledge
-
-        [TestMethod]
-        public void AddKnowledgeTest()
-        {
-            var knowledge = new Knowledge(1, "1", 1);
-            _network.AddKnowledge(knowledge, BeliefWeightLevel.NoWeight);
-            Assert.IsNotNull(_network.Knowledge.GetKnowledge(knowledge.Id));
-            Assert.IsNotNull(_network.Beliefs.GetBelief(knowledge.Id));
-        }
-
-        [TestMethod]
-        public void AddKnowledgesTest()
-        {
-            var knowledge = new Knowledge(1, "1", 1);
-            var knowledges = new List<Knowledge> {knowledge};
-            _network.AddKnowledges(knowledges, BeliefWeightLevel.NoWeight);
-            Assert.IsNotNull(_network.Knowledge.GetKnowledge(knowledge.Id));
-            Assert.IsNotNull(_network.Beliefs.GetBelief(knowledge.Id));
-        }
-
-        #endregion
     }
 }
