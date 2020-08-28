@@ -33,7 +33,7 @@ namespace SymuTests.Repository.Entity
         public void Initialize()
         {
             var models = new OrganizationModels();
-            var network = new MetaNetwork(models.InteractionSphere);
+            var network = new SymuMetaNetwork(models.InteractionSphere);
 
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(new UId(1), communication);

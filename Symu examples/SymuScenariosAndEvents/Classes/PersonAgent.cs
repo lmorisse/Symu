@@ -16,6 +16,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;

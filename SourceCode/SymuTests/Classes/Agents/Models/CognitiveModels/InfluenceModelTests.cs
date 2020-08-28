@@ -15,6 +15,7 @@ using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
@@ -30,7 +31,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private readonly CognitiveArchitecture _cognitiveArchitecture = new CognitiveArchitecture();
         private readonly OrganizationModels _models = new OrganizationModels();
         private InfluenceModel _influenceModel;
-        private MetaNetwork _network;
+        private SymuMetaNetwork _network;
         private BeliefsModel _beliefsModel;
         private InternalCharacteristics InternalCharacteristics => _cognitiveArchitecture.InternalCharacteristics;
 
@@ -38,7 +39,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestInitialize]
         public void Initialize()
         {
-            _network = new MetaNetwork(_models.InteractionSphere);
+            _network = new SymuMetaNetwork(_models.InteractionSphere);
             _beliefsModel = new BeliefsModel(_agentId, _models.Beliefs, _cognitiveArchitecture, _network, _models.Generator);
             _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
         }

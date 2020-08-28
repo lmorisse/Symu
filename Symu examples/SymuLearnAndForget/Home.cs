@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Entity;

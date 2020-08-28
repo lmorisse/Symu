@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -47,7 +48,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefsModel"></param>
         /// <param name="model"></param>
         public InfluenceModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            MetaNetwork network, BeliefsModel beliefsModel, RandomGenerator model)
+            SymuMetaNetwork network, BeliefsModel beliefsModel, RandomGenerator model)
         {
             if (entity is null)
             {

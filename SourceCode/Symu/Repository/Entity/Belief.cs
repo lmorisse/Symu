@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Beliefs;

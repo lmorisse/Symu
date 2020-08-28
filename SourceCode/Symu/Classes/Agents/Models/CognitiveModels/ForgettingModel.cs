@@ -14,6 +14,7 @@ using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Knowledges;

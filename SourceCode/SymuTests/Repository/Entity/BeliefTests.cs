@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
 

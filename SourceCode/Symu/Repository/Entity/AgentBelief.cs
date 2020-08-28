@@ -12,6 +12,7 @@
 using System;
 using System.Linq;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Beliefs;
@@ -240,6 +241,15 @@ namespace Symu.Repository.Entity
         public void SetBeliefBits(float[] beliefBits)
         {
             BeliefBits.SetBits(beliefBits);
+        }
+
+        public float CompareTo(IAgentBelief other)
+        {
+            if (other is AgentBelief agentBelief)
+            {
+                return Bits.CompareTo(BeliefBits, agentBelief.BeliefBits);
+            }
+            return 0;
         }
     }
 }

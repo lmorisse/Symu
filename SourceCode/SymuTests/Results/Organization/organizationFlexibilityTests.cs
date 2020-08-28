@@ -18,9 +18,9 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Repository;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Sphere;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 

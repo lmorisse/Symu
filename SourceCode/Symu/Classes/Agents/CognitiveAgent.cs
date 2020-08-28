@@ -19,11 +19,11 @@ using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Sphere;
 
 #endregion
 

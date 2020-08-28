@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
@@ -32,13 +33,13 @@ namespace SymuTests.Classes.Murphies
         private readonly MurphyIncompleteKnowledge _murphy = new MurphyIncompleteKnowledge();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private Knowledge _knowledge;
-        private MetaNetwork _network;
+        private SymuMetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere);
+            _network = new SymuMetaNetwork(models.InteractionSphere);
             _knowledge = new Knowledge(1, "1", 1);
             _network.Knowledge.AddKnowledge(_knowledge);
             _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network);

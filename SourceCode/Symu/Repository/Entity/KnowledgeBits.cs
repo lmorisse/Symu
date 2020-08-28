@@ -11,6 +11,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Classes;
 
 #endregion
 

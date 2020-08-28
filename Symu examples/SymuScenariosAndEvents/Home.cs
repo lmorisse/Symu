@@ -17,6 +17,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Environment;
 using Symu.Environment.Events;
 using Symu.Forms;

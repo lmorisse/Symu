@@ -17,6 +17,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Environment.Events;
@@ -373,7 +374,7 @@ namespace Symu.Environment
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.AgentId).Cast<IAgentId>().ToList();
-            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork);
+            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork.Network);
         }
 
         /// <summary>

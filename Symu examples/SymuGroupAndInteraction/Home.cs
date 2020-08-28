@@ -17,10 +17,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Scenario;
+using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Environment;
 using Symu.Forms;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Sphere;
 using SymuGroupAndInteraction.Classes;
 
 #endregion

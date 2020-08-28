@@ -19,6 +19,7 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
@@ -1285,15 +1286,15 @@ namespace SymuTests.Classes.Agents
             group.Start();
             var agentGroup = new AgentGroup(_agent.AgentId, 100);
             var teammateGroup = new AgentGroup(teammate.AgentId, 100);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId);
+            _environment.WhitePages.MetaNetwork.Network.AddAgentToGroup(agentGroup, group.AgentId);
+            _environment.WhitePages.MetaNetwork.Network.AddAgentToGroup(teammateGroup, group.AgentId);
             var interaction = new Interaction(_agent.AgentId, teammate.AgentId);
             _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
+                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork.Network);
 
             var task = new SymuTask(0) {KeyActivity = _uid1 };
 
@@ -1480,7 +1481,7 @@ namespace SymuTests.Classes.Agents
             _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
             teammate.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
             _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
+                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork.Network);
 
             var task = new SymuTask(0) {Weight = 1, KeyActivity = _uid1 };
 

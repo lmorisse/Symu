@@ -11,8 +11,8 @@
 
 using System.Collections.Generic;
 using Symu.Common.Math;
+using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Environment;
-using Symu.Repository.Networks.Sphere;
 
 #endregion
 

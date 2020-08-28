@@ -120,10 +120,10 @@ namespace SymuTests.Repository.Entity
         public void GetRelativeKnowledgeBitsTest()
         {
             _bits0 = new Bits(_floats0, 0);
-            Assert.AreEqual(0, Bits.GetRelativeBits(_bits0, _bits0));
+            Assert.AreEqual(0, Bits.CompareTo(_bits0, _bits0));
             _bits1 = new Bits(_floats1, 0);
-            Assert.AreEqual(1, Bits.GetRelativeBits(_bits1, _bits1));
-            Assert.AreEqual(0, Bits.GetRelativeBits(_bits0, _bits1));
+            Assert.AreEqual(1, Bits.CompareTo(_bits1, _bits1));
+            Assert.AreEqual(0, Bits.CompareTo(_bits0, _bits1));
         }
     }
 }

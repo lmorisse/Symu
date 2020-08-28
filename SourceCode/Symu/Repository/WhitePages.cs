@@ -40,7 +40,7 @@ namespace Symu.Repository
                 throw new ArgumentNullException(nameof(models));
             }
 
-            MetaNetwork = new MetaNetwork(models.InteractionSphere);
+            MetaNetwork = new SymuMetaNetwork(models.InteractionSphere);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Symu.Repository
         /// </summary>
         public List<ReactiveAgent> StoppedAgents { get; } = new List<ReactiveAgent>();
 
-        public MetaNetwork MetaNetwork { get; }
+        public SymuMetaNetwork MetaNetwork { get; }
 
         public AgentState State { get; set; } = AgentState.NotStarted;
 

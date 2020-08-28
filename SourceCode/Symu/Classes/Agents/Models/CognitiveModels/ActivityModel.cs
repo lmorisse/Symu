@@ -40,7 +40,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="agentId"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public ActivityModel(AgentId agentId, CognitiveArchitecture cognitiveArchitecture, MetaNetwork network)
+        public ActivityModel(AgentId agentId, CognitiveArchitecture cognitiveArchitecture, SymuMetaNetwork network)
         {
             if (cognitiveArchitecture == null)
             {

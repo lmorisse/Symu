@@ -15,6 +15,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Environment;

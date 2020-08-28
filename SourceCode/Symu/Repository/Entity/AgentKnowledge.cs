@@ -9,6 +9,7 @@
 
 using System;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA.Knowledges;
@@ -286,5 +287,13 @@ namespace Symu.Repository.Entity
             KnowledgeBits.SetBit(index, value, step);
         }
 
+        public float CompareTo(IAgentKnowledge other)
+        {
+            if (other is AgentKnowledge agentKnowledge)
+            {
+                return Bits.CompareTo(KnowledgeBits, agentKnowledge.KnowledgeBits);
+            }
+            return 0;
+        }
     }
 }

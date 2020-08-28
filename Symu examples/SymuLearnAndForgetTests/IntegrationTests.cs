@@ -15,6 +15,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Repository.Entity;
 using SymuLearnAndForget.Classes;

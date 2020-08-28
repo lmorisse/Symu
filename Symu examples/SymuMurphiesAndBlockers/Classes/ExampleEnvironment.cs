@@ -13,6 +13,7 @@ using System;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
@@ -84,7 +85,7 @@ namespace SymuMurphiesAndBlockers.Classes
                 var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
                 WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
                 var agentGroup = new AgentGroup(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
+                WhitePages.MetaNetwork.Network.AddAgentToGroup(agentGroup, group.AgentId);
             }
         }
     }

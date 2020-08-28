@@ -37,7 +37,7 @@ namespace SymuTests.Repository.Networks
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);
 
-        private MetaNetwork _network ;
+        private SymuMetaNetwork _network ;
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private readonly AgentId _teammateId = new AgentId(4, SymuYellowPages.Actor);
@@ -54,7 +54,7 @@ namespace SymuTests.Repository.Networks
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere);
+            _network = new SymuMetaNetwork(models.InteractionSphere);
             _belief = new Belief(1, "1", 1,
                 _network.Knowledge.Model, BeliefWeightLevel.RandomWeight);
             _network.Activities.AddActivities(new List<Activity> {_activity}, _teamId);
@@ -91,13 +91,6 @@ namespace SymuTests.Repository.Networks
             Assert.IsFalse(_network.Beliefs.Any());
         }
 
-        [TestMethod]
-        public void AddTeamTest()
-        {
-            _network.Groups.AddGroup(_teamId);
-            Assert.IsTrue(_network.Groups.Any());
-        }
-
         /// <summary>
         ///     With network started
         /// </summary>
@@ -108,8 +101,8 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
             // Test group
             Assert.IsTrue(_network.Groups.IsMemberOfGroup(_teammateId, _teamId));
             // Resource
@@ -126,8 +119,8 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
             // Test link teammates
             Assert.IsFalse(_network.Interactions.HasActiveInteraction(_teammateId, _teammateId2));
         }
@@ -136,11 +129,11 @@ namespace SymuTests.Repository.Networks
         public void RemoveMemberFromGroupTest()
         {
             _network.Groups.AddGroup(_teamId);
-            _network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.RemoveAgentFromGroup(_teammateId, _teamId);
+            _network.Network.RemoveAgentFromGroup(_teammateId, _teamId);
             Assert.IsFalse(_network.Groups.IsMemberOfGroup(_teammateId, _teamId));
             // Test link teammates
             Assert.IsFalse(_network.Interactions.HasActiveInteraction(_teammateId, _teammateId2));
@@ -182,9 +175,9 @@ namespace SymuTests.Repository.Networks
             var agentId = _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId);
             Assert.IsNull(agentId);
             // Normal test
-            _network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
             Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId));
-            _network.AddAgentToGroup(_agentGroup1, _teamId2);
+            _network.Network.AddAgentToGroup(_agentGroup1, _teamId2);
             Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(_teammateId, _teamId.ClassId));
         }
     }

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
@@ -79,7 +80,7 @@ namespace SymuGroupAndInteraction.Classes
                         Organization.Templates.Human);
                     actor.GroupId = group.AgentId;
                     var agentGroup = new AgentGroup(actor.AgentId, 100);
-                    WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
+                    WhitePages.MetaNetwork.Network.AddAgentToGroup(agentGroup, group.AgentId);
                     //Beliefs are added with knowledge
                     SetKnowledge(actor, Organization.Knowledges, i);
                     SetActivity(actor.AgentId, _activities, i, group.AgentId);

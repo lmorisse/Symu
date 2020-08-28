@@ -214,7 +214,7 @@ namespace Symu.Repository.Entity
         /// <param name="bits1"></param>
         /// <param name="bits2"></param>
         /// <returns></returns>
-        public static float GetRelativeBits(Bits bits1, Bits bits2)
+        public static float CompareTo(Bits bits1, Bits bits2)
         {
             if (bits1 == null)
             {
