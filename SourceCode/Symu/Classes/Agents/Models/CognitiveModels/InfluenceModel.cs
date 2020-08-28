@@ -129,7 +129,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefBits">from agentAgentId beliefBits</param>
         /// <param name="agentId"></param>
         /// <param name="beliefLevel"></param>
-        public void BeInfluenced(IId beliefId, Bits beliefBits, AgentId agentId, BeliefLevel beliefLevel)
+        public void BeInfluenced(IId beliefId, Bits beliefBits, IAgentId agentId, BeliefLevel beliefLevel)
         {
             if (!On || beliefBits == null)
             {

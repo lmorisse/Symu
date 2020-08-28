@@ -125,7 +125,7 @@ namespace SymuTests.Repository
             _environment.InitializeIteration();
             //Assert
             Assert.IsFalse(_environment.WhitePages.StoppedAgents.Any());
-            Assert.AreEqual(0, _environment.WhitePages.Agents.Count);
+            Assert.AreEqual(0, _environment.WhitePages.MetaNetwork.Agents.Count);
         }
 
         [TestMethod]
@@ -133,7 +133,7 @@ namespace SymuTests.Repository
         {
             _environment.WhitePages.RemoveAgent(_agent);
 
-            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.Class));
+            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);
         }
 
@@ -145,7 +145,7 @@ namespace SymuTests.Repository
             _environment.StopAgents();
 
             Assert.AreEqual(1, _environment.WhitePages.StoppedAgents.Count);
-            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.Class));
+            Assert.AreEqual(0, _environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace SymuTests.Repository
                 _ = TestReactiveAgent.CreateInstance(_environment.Organization.NextEntityId(), _environment);
             }
 
-            var excludeIds = new List<AgentId>();
+            var excludeIds = new List<IAgentId>();
             for (byte i = 10; i < 20; i++)
             {
                 var agent = TestReactiveAgent.CreateInstance(_environment.Organization.NextEntityId(), _environment);
@@ -207,7 +207,7 @@ namespace SymuTests.Repository
                 _ = TestReactiveAgent.CreateInstance(_environment.Organization.NextEntityId(), _environment);
             }
 
-            var excludeIds = new List<AgentId>();
+            var excludeIds = new List<IAgentId>();
             for (byte i = 10; i < 20; i++)
             {
                 var agent = TestReactiveAgent.CreateInstance(_environment.Organization.NextEntityId(), _environment);

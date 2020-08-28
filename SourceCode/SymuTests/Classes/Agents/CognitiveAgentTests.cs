@@ -85,8 +85,10 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.Knowledge.Add(_agent.AgentId, expertise);
 
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
-            _agent.Start();
-            _agent.WaitingToStart();
+            //_agent.Start();
+            //_agent.WaitingToStart();
+            _environment.Start();
+            _environment.WaitingForStart();
             Assert.AreEqual(AgentState.Started, _agent.State);
             _environment.Schedule.Step = 0;
             _agent.BeliefsModel.AddBelief(_knowledge.Id);
@@ -126,6 +128,7 @@ namespace SymuTests.Classes.Agents
         {
             var message = new Message
             {
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
             _agent.Capacity.Set(1);
@@ -166,6 +169,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message
             {
                 Sender = _agent.AgentId,
+                Receiver = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
@@ -184,6 +188,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
             var message = new Message
             {
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
@@ -1079,7 +1084,7 @@ namespace SymuTests.Classes.Agents
             _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             var reply = _environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
             Assert.IsNull(reply.Attachments.BeliefBits);
         }
@@ -1102,7 +1107,7 @@ namespace SymuTests.Classes.Agents
             _agent.AskHelpIncomplete(message, 3);
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             var reply = _environment.Messages.DelayedMessages.Last();
             Assert.IsNull(reply.Attachments.BeliefBits);
         }
@@ -1123,7 +1128,7 @@ namespace SymuTests.Classes.Agents
             _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             var reply = _environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
             Assert.IsNotNull(reply.Attachments.BeliefBits);
         }
@@ -1167,6 +1172,7 @@ namespace SymuTests.Classes.Agents
             var blocker = task.Add(Murphy.IncompleteBelief, 0);
             var message = new Message
             {
+                Sender = _agent.AgentId,
                 Medium = CommunicationMediums.Email,
                 Attachments = new MessageAttachments()
             };
@@ -1187,6 +1193,7 @@ namespace SymuTests.Classes.Agents
             var blocker = task.Add(Murphy.IncompleteBelief, 0);
             var message = new Message
             {
+                Sender =  _agent.AgentId,
                 Medium = CommunicationMediums.Email,
                 Attachments = new MessageAttachments()
             };
@@ -1270,8 +1277,23 @@ namespace SymuTests.Classes.Agents
         {
             _organizationEntity.Murphies.IncompleteInformation.On = true;
             _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
-            var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId };
+            var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId, Creator = _agent2.AgentId};
             Assert.IsTrue(_agent.CheckBlockerIncompleteInformation(task));
+        }
+
+        /// <summary>
+        ///     Model IncompleteInformation on
+        ///     Rate 1
+        ///     with creator of task == null
+        ///     With RAF > 0
+        /// </summary>
+        [TestMethod]
+        public void CheckIncompleteInformationTests5()
+        {
+            _organizationEntity.Murphies.IncompleteInformation.On = true;
+            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
+            var task = new SymuTask(0) { Weight = 1, Assigned = _agent.AgentId};
+            Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
         }
 
         /// <summary>
@@ -1308,7 +1330,7 @@ namespace SymuTests.Classes.Agents
             _agent.Capacity.Reset();
             _agent.TryRecoverBlockerIncompleteKnowledge(task, blocker);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(_agent.Capacity.Actual < 1);
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
         }
@@ -1447,7 +1469,7 @@ namespace SymuTests.Classes.Agents
             var blocker = task.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(task.IsBlocked);
         }
 
@@ -1464,7 +1486,7 @@ namespace SymuTests.Classes.Agents
             blocker.NumberOfTries = 2;
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
             Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsFalse(task.IsBlocked);
         }
 
@@ -1495,7 +1517,7 @@ namespace SymuTests.Classes.Agents
             _agent.Capacity.Reset();
             _agent.TryRecoverBlockerIncompleteBelief(task, blocker);
             Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
-                _agent.AgentId.Class, _agent.AgentId.Class));
+                _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(_agent.Capacity.Actual < 1);
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
         }

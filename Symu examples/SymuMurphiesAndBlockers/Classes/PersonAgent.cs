@@ -32,6 +32,7 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
+        public static ClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
@@ -101,7 +102,7 @@ namespace SymuMurphiesAndBlockers.Classes
             {
                 Weight = 1,
                 // Creator is randomly  a person of the group - for the incomplete information murphy
-                Creator = Environment.WhitePages.FilteredAgentIdsByClassId(Class).Shuffle().First()
+                Creator = (AgentId)Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
             task.SetKnowledgesBits(Model, Knowledges, 1);
             Post(task);

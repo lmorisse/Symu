@@ -43,6 +43,22 @@ namespace SymuTests.Helpers
         private TestReactiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
         {
         }
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        internal TestReactiveAgent(UId id)
+        {
+            AgentId = new AgentId(id, ClassId);
+        }
+        /// <summary>
+        /// Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        internal TestReactiveAgent(byte id)
+        {
+            AgentId = new AgentId(id, ClassId);
 
+        }
     }
 }

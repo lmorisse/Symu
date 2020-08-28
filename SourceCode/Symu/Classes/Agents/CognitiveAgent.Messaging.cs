@@ -95,7 +95,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="senderId"></param>
         /// <returns>True if the new interaction has been accepted</returns>
-        public bool AcceptNewInteraction(AgentId senderId)
+        public bool AcceptNewInteraction(IAgentId senderId)
         {
             if (AgentId.Equals(senderId))
             {

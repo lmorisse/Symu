@@ -33,7 +33,7 @@ namespace Symu.Messaging.Subscription
         /// <summary>
         ///     Subscribe to the Message content
         /// </summary>
-        public void Subscribe(AgentId agentId, byte content)
+        public void Subscribe(IAgentId agentId, byte content)
         {
             if (!HasSubscribed(agentId, content))
             {
@@ -44,7 +44,7 @@ namespace Symu.Messaging.Subscription
         /// <summary>
         ///     UnSubscribe to the Message content
         /// </summary>
-        public void Unsubscribe(AgentId agentId, byte content)
+        public void Unsubscribe(IAgentId agentId, byte content)
         {
             _subscriptions.RemoveAll(s => s.AgentId.Equals(agentId) && s.Content == content);
         }
@@ -52,7 +52,7 @@ namespace Symu.Messaging.Subscription
         /// <summary>
         ///     UnSubscribe to the all Message contents
         /// </summary>
-        public void Unsubscribe(AgentId agentId)
+        public void Unsubscribe(IAgentId agentId)
         {
             _subscriptions.RemoveAll(s => s.AgentId.Equals(agentId));
         }
@@ -60,12 +60,12 @@ namespace Symu.Messaging.Subscription
         /// <summary>
         ///     Subscribe to the Message content
         /// </summary>
-        public bool HasSubscribed(AgentId agentId, byte content)
+        public bool HasSubscribed(IAgentId agentId, byte content)
         {
             return _subscriptions.Exists(s => s.AgentId.Equals(agentId) && s.Content == content);
         }
 
-        public IEnumerable<AgentId> Subscribers(byte content)
+        public IEnumerable<IAgentId> Subscribers(byte content)
         {
             return _subscriptions.Where(s => s.Content == content).Select(s => s.AgentId).ToList();
         }
@@ -77,7 +77,7 @@ namespace Symu.Messaging.Subscription
         /// <param name="content"></param>
         /// <param name="stoppedAgentIds"></param>
         /// <returns></returns>
-        public IEnumerable<AgentId> Subscribers(byte content, List<AgentId> stoppedAgentIds)
+        public IEnumerable<IAgentId> Subscribers(byte content, List<IAgentId> stoppedAgentIds)
         {
             _subscriptions.RemoveAll(x => stoppedAgentIds.Exists(stopped => stopped.Equals(x.AgentId)));
             return _subscriptions.Where(s => s.Content == content).Select(s => s.AgentId).ToList();

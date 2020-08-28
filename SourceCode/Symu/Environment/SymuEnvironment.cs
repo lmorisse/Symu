@@ -89,13 +89,13 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(agent));
             }
 
-            if (WhitePages.Agents.Exists(agent.AgentId))
+            if (WhitePages.ExistsAgent(agent.AgentId))
             {
                 throw new ArgumentException("Trying to add an agent " + agent.AgentId.ClassId + " with an existing key: " +
                                             agent.AgentId.Id);
             }
 
-            WhitePages.Agents.Add(agent);
+            WhitePages.AddAgent(agent);
         }
 
         #endregion
@@ -166,7 +166,7 @@ namespace Symu.Environment
         /// </returns>
         public bool StopIteration()
         {
-            return WhitePages.FilteredAgentsByClassCount(SymuYellowPages.Scenario) == 0;
+            return WhitePages.FilteredAgentsByClassCount(new ClassId(SymuYellowPages.Scenario)) == 0;
         }
 
         /// <summary>
@@ -254,10 +254,10 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (WhitePages.Agents.Exists(message.Receiver))
+            if (WhitePages.ExistsAgent(message.Receiver))
                 // Log is done within Agent.Post
             {
-                WhitePages.Agents.Get(message.Receiver).Post(message);
+                WhitePages.GetAgent(message.Receiver).Post(message);
             }
             else
             {

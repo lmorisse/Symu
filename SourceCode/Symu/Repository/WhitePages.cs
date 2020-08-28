@@ -16,7 +16,9 @@ using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces.Entity;
 using Symu.Repository.Networks;
+using Symu.Repository.Networks.Agent;
 
 #endregion
 
@@ -44,11 +46,6 @@ namespace Symu.Repository
         }
 
         /// <summary>
-        ///     Local agents of this environment
-        /// </summary>
-        public ConcurrentAgents<ReactiveAgent> Agents { get; } = new ConcurrentAgents<ReactiveAgent>();
-
-        /// <summary>
         ///     Stopped keep a trace of all the agentIds stopped during the iteration
         /// </summary>
         public List<ReactiveAgent> StoppedAgents { get; } = new List<ReactiveAgent>();
@@ -59,7 +56,7 @@ namespace Symu.Repository
 
         public bool Any()
         {
-            return Agents.Count > 0;
+            return MetaNetwork.Agents.Any();
         }
 
         #region Initialize / remove agent
@@ -72,7 +69,6 @@ namespace Symu.Repository
             State = AgentState.Starting;
             StoppedAgents.Clear();
             MetaNetwork.Clear();
-            Agents.Clear();
         }
 
         /// <summary>
@@ -99,13 +95,10 @@ namespace Symu.Repository
             }
 
             MetaNetwork.RemoveAgent(agent.AgentId);
-            Agents.Remove(agent.AgentId);
             StoppedAgents.Add(agent);
         }
 
         #endregion
-
-        #region Exists and Get Agent
 
         public void WaitingForStart(AgentId agentId)
         {
@@ -126,6 +119,8 @@ namespace Symu.Repository
             }
         }
 
+        #region Shortcuts to AgentNetwork
+
         /// <summary>
         ///     Start Agent if start is set
         /// </summary>
@@ -140,7 +135,7 @@ namespace Symu.Repository
             agentToStart.Start();
         }
 
-        public bool ExistsAndStarted(AgentId agentId)
+        public bool ExistsAndStarted(IAgentId agentId)
         {
             if (!ExistsAgent(agentId))
             {
@@ -151,28 +146,33 @@ namespace Symu.Repository
             return agent != null && agent.State == AgentState.Started;
         }
 
-        public bool ExistsAgent(AgentId agentId)
+        public bool ExistsAgent(IAgentId agentId)
         {
-            return Agents.Exists(agentId);
+            return MetaNetwork.Agents.Exists(agentId);
         }
 
-        public TAgent GetAgent<TAgent>(AgentId agentId) where TAgent : ReactiveAgent
+        public void AddAgent(ReactiveAgent agent)
         {
-            return Agents.Get<TAgent>(agentId);
+            MetaNetwork.Agents.Add(agent);
         }
 
-        public ReactiveAgent GetAgent(AgentId agentId)
+        public TAgent GetAgent<TAgent>(IAgentId agentId) where TAgent : ReactiveAgent
         {
-            return Agents.Get(agentId);
+            return MetaNetwork.Agents.Get<TAgent>(agentId);
+        }
+
+        public ReactiveAgent GetAgent(IAgentId agentId)
+        {
+            return MetaNetwork.Agents. Get(agentId);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<AgentId> AllAgentIds()
+        public IEnumerable<IAgentId> AllAgentIds()
         {
-            return Agents.GetKeys();
+            return MetaNetwork.Agents.GetKeys();
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<ReactiveAgent> AllAgents()
         {
-            return Agents.GetValues();
+            return MetaNetwork.Agents.GetValues();
         }
 
         /// <summary>
@@ -190,42 +190,42 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<CognitiveAgent> AllCognitiveAgents()
         {
-            return Agents.GetValues().OfType<CognitiveAgent>();
+            return MetaNetwork.Agents.GetValues().OfType<CognitiveAgent>();
         }
 
         /// <summary>
         ///     The number of agents in the environment
         /// </summary>
-        public ushort FilteredAgentsByClassCount(byte classKey)
+        public ushort FilteredAgentsByClassCount(IClassId classKey)
         {
-            return Agents.CountByClassId(classKey);
+            return MetaNetwork.Agents.CountByClassId(classKey);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<AgentId> FilteredAgentIdsByClassId(byte classId)
+        public IEnumerable<IAgentId> FilteredAgentIdsByClassId(IClassId classId)
         {
-            return Agents.FilteredKeysByClassd(classId);
+            return MetaNetwork.Agents.FilteredKeysByClassId(classId);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<ReactiveAgent> FilteredAgentsByClassId(byte classId)
+        public IEnumerable<ReactiveAgent> FilteredAgentsByClassId(IClassId classId)
         {
-            return Agents.FilteredByClassId(classId);
+            return MetaNetwork.Agents.FilteredByClassId(classId);
         }
 
         /// <summary>
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<CognitiveAgent> FilteredCognitiveAgentsByClassId(byte classId)
+        public IEnumerable<CognitiveAgent> FilteredCognitiveAgentsByClassId(IClassId classId)
         {
-            return Agents.FilteredByClassId(classId).OfType<CognitiveAgent>();
+            return MetaNetwork.Agents.FilteredByClassId(classId).OfType<CognitiveAgent>();
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Symu.Repository
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
         /// <returns></returns>
-        public List<AgentId> GetFilteredAgentIdsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
+        public List<IAgentId> GetFilteredAgentIdsWithExclusionList(IClassId classKey, ICollection<IAgentId> excludeIds)
         {
             var actors = FilteredAgentIdsByClassId(classKey).ToList();
             if (excludeIds != null)
@@ -252,7 +252,7 @@ namespace Symu.Repository
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
         /// <returns></returns>
-        public IEnumerable<ReactiveAgent> GetFilteredAgentsWithExclusionList(byte classKey, ICollection<AgentId> excludeIds)
+        public IEnumerable<ReactiveAgent> GetFilteredAgentsWithExclusionList(IClassId classKey, ICollection<IAgentId> excludeIds)
         {
             var actors = FilteredAgentsByClassId(classKey).ToList();
             if (excludeIds != null)
@@ -306,5 +306,9 @@ namespace Symu.Repository
 
         #endregion
 
+        public IAgentId GetAgentId(IId componentId)
+        {
+            return MetaNetwork.Agents.GetAgentId(componentId);
+        }
     }
 }

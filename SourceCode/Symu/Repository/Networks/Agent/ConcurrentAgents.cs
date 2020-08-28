@@ -19,17 +19,17 @@ using Symu.Common.Interfaces.Entity;
 
 #endregion
 
-namespace Symu.Repository
+namespace Symu.Repository.Networks.Agent
 {
     /// <summary>
     ///     thread-safe list of agents that can be accessed by multiple threads concurrently
     /// </summary>
     public class ConcurrentAgents<T> where T : ReactiveAgent
     {
-        private readonly ConcurrentDictionary<AgentId, T> _list = new ConcurrentDictionary<AgentId, T>();
+        private readonly ConcurrentDictionary<IAgentId, T> _list = new ConcurrentDictionary<IAgentId, T>();
         public int Count => _list.Count;
 
-        internal ushort CountByClassId(byte classId)
+        internal ushort CountByClassId(IClassId classId)
         {
             var count = _list.Values.Count(a => a.AgentId.Equals(classId));
             return Convert.ToUInt16(count);
@@ -40,14 +40,13 @@ namespace Symu.Repository
             _list[agent.AgentId] = agent;
         }
 
-        public bool Exists(UId id, byte classId)
+        public bool Exists(IAgentId agentId)
         {
-            var agentId = new AgentId(id, classId);
-            return Exists(agentId);
-        }
+            if (agentId == null)
+            {
+                throw new ArgumentNullException(nameof(agentId));
+            }
 
-        public bool Exists(AgentId agentId)
-        {
             return _list.ContainsKey(agentId);
         }
 
@@ -62,7 +61,7 @@ namespace Symu.Repository
         /// <typeparam name="TAgent"></typeparam>
         /// <param name="agentId"></param>
         /// <returns>The typed agent</returns>
-        public TAgent Get<TAgent>(AgentId agentId) where TAgent : T
+        public TAgent Get<TAgent>(IAgentId agentId) where TAgent : T
         {
             if (Exists(agentId))
             {
@@ -72,7 +71,7 @@ namespace Symu.Repository
             return null;
         }
 
-        public T Get(AgentId agentId)
+        public T Get(IAgentId agentId)
         {
             return Exists(agentId) ? _list[agentId] : null;
         }
@@ -81,7 +80,7 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<AgentId> GetKeys()
+        public IEnumerable<IAgentId> GetKeys()
         {
             return _list.Keys;
         }
@@ -99,7 +98,7 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<T> FilteredByClassId(byte classId)
+        public IEnumerable<T> FilteredByClassId(IClassId classId)
         {
             return GetValues().Where(a => a.AgentId.Equals(classId));
         }
@@ -108,7 +107,7 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public IEnumerable<AgentId> FilteredKeysByClassd(byte classId)
+        public IEnumerable<IAgentId> FilteredKeysByClassd(IClassId classId)
         {
             return _list.Keys.Where(a => a.Equals(classId));
         }
@@ -121,7 +120,7 @@ namespace Symu.Repository
         ///     Don't call it directly, use WhitePages.RemoveAgent
         /// </summary>
         /// <param name="agentId">The name of the agent to be removed</param>
-        public void Remove(AgentId agentId)
+        public void Remove(IAgentId agentId)
         {
             if (Exists(agentId))
             {

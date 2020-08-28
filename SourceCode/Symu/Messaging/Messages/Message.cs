@@ -36,12 +36,12 @@ namespace Symu.Messaging.Messages
         /// <summary>
         ///     The name of the agent that sends the message
         /// </summary>
-        public AgentId Sender { get; set; }
+        public IAgentId Sender { get; set; }
 
         /// <summary>
         ///     The name of the agent that needs to receive the message
         /// </summary>
-        public AgentId Receiver { get; set; }
+        public IAgentId Receiver { get; set; }
 
         /// <summary>
         ///     The State of the message
@@ -125,7 +125,7 @@ namespace Symu.Messaging.Messages
         /// <param name="receiverId">The name of the agent that needs to receive the message</param>
         /// <param name="action"></param>
         /// <param name="subject">The subject of the message</param>
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject) : this()
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject) : this()
         {
             Sender = senderId;
             Receiver = receiverId;
@@ -141,13 +141,13 @@ namespace Symu.Messaging.Messages
         /// <param name="action"></param>
         /// <param name="subject">The subject of the message</param>
         /// <param name="medium"></param>
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject,
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject,
             CommunicationMediums medium) : this(senderId, receiverId, action, subject)
         {
             Medium = medium;
         }
 
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject, object attachment)
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject, object attachment)
             : this(senderId, receiverId, action, subject)
         {
             if (attachment == null)
@@ -159,7 +159,7 @@ namespace Symu.Messaging.Messages
             Attachments.Add(attachment);
         }
 
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject, object attachment,
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject, object attachment,
             CommunicationMediums medium)
             : this(senderId, receiverId, action, subject, medium)
         {
@@ -172,7 +172,7 @@ namespace Symu.Messaging.Messages
             Attachments.Add(attachment);
         }
 
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject,
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject,
             MessageAttachments attachments)
             : this(senderId, receiverId, action, subject)
         {
@@ -184,7 +184,7 @@ namespace Symu.Messaging.Messages
             Attachments = attachments;
         }
 
-        public Message(AgentId senderId, AgentId receiverId, MessageAction action, byte subject,
+        public Message(IAgentId senderId, IAgentId receiverId, MessageAction action, byte subject,
             MessageAttachments attachments, CommunicationMediums medium)
             : this(senderId, receiverId, action, subject, medium)
         {

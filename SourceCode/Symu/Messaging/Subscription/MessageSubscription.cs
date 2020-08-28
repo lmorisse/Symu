@@ -22,7 +22,7 @@ namespace Symu.Messaging.Subscription
     /// </summary>
     public struct MessageSubscription
     {
-        public MessageSubscription(AgentId agentId, byte content)
+        public MessageSubscription(IAgentId agentId, byte content)
         {
             Content = content;
             AgentId = agentId;
@@ -36,6 +36,6 @@ namespace Symu.Messaging.Subscription
         /// <summary>
         ///     The name of the agent
         /// </summary>
-        public AgentId AgentId { get; set; }
+        public IAgentId AgentId { get; set; }
     }
 }

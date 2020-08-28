@@ -831,6 +831,7 @@ namespace Symu.Classes.Agents
             if (!murphy.On ||
                 Math.Abs(task.WorkToDo) < Tolerance || // Task is done
                 !task.IsAssigned ||
+                !task.HasCreator ||
                 task.Creator.Equals(AgentId)) // Worker can't be blocked by himself
             {
                 return false;
@@ -871,7 +872,7 @@ namespace Symu.Classes.Agents
                 blocker.InitialStep);
 
             //TODO send to creator only if he has the right to communicate to cf. Network
-            if (askInternally && task.Creator.IsNotNull)
+            if (askInternally && task.HasCreator)
             {
                 var messageType = murphy.AskOnWhichChannel(Cognitive.InteractionCharacteristics
                     .PreferredCommunicationMediums);

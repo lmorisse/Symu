@@ -20,6 +20,7 @@ using Symu.DNA.Resources;
 using Symu.DNA.Roles;
 using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.Repository.Networks.Agent;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
 
@@ -38,6 +39,12 @@ namespace Symu.Repository.Networks
         }
 
         public MetaNetwork Network { get; }
+
+
+        /// <summary>
+        ///     Local agents of this environment
+        /// </summary>
+        public AgentNetwork Agents { get; } = new AgentNetwork();
 
         /// <summary>
         ///     Agent enculturation level network
@@ -103,6 +110,7 @@ namespace Symu.Repository.Networks
             Network.Clear();
             Enculturation.Clear();
             Influences.Clear();
+            Agents.Clear();
         }
 
         public void RemoveAgent(IAgentId agentId)
@@ -110,6 +118,7 @@ namespace Symu.Repository.Networks
             Network.RemoveAgent(agentId);
             Enculturation.RemoveAgent(agentId);
             Influences.RemoveAgent(agentId);
+            Agents.RemoveAgent(agentId);
         }
     }
 }

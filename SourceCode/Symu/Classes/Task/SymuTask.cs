@@ -82,17 +82,17 @@ namespace Symu.Classes.Task
         ///     AgentId that is assigned on the task and will performed it.
         ///     Only one agent can perform a task at the same time
         /// </summary>
-        public AgentId Assigned { get; set; }
+        public IAgentId Assigned { get; set; }
 
         /// <summary>
         ///     The creator of the task
         /// </summary>
-        public AgentId Creator { get; set; }
+        public IAgentId Creator { get; set; }
 
         /// <summary>
         ///     If only one agent can perform a task at the same time, agent can cancel a task and another agent can take the task.
         /// </summary>
-        public List<AgentId> HasBeenCancelledBy { get; } = new List<AgentId>();
+        public List<IAgentId> HasBeenCancelledBy { get; } = new List<IAgentId>();
 
         /// <summary>
         ///     The weight of the task
@@ -130,7 +130,8 @@ namespace Symu.Classes.Task
         /// </summary>
         public byte Priority { get; set; }
 
-        public bool IsAssigned => Assigned.IsNotNull;
+        public bool IsAssigned => Assigned!= null && Assigned.IsNotNull;
+        public bool HasCreator => Creator != null && Creator.IsNotNull;
 
         public bool IsStarted { get; private set; }
         public bool IsToDo => !IsStarted && !IsBlocked && !IsAssigned;
