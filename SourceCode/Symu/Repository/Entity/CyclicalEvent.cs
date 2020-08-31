@@ -7,7 +7,7 @@
 
 #endregion
 
-namespace Symu.Environment.Events
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     SymuEvent helps you schedule cyclical events that happen during the simulation

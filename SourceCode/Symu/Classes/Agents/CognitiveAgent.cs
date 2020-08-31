@@ -19,8 +19,6 @@ using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Environment;
-using Symu.Messaging.Messages;
-using Symu.Repository;
 using Symu.Repository.Entity;
 
 #endregion
@@ -235,7 +233,7 @@ namespace Symu.Classes.Agents
             LearningModel = new LearningModel(AgentId, Environment.Organization.Models,
                 Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
             ForgettingModel = new ForgettingModel(KnowledgeModel.Expertise, Cognitive, Environment.Organization.Models);
-            InfluenceModel = new InfluenceModel(AgentId, Environment.Organization.Models.Influence,
+            InfluenceModel = new InfluenceModel(Environment.Organization.Models.Influence,
                 Cognitive, Environment.WhitePages.MetaNetwork, BeliefsModel, Environment.Organization.Models.Generator);
             ActivityModel = new ActivityModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
         }

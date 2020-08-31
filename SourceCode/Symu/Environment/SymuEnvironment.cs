@@ -20,11 +20,11 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
-using Symu.Environment.Events;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
 using Symu.Repository.Entity;
+using Symu.Repository.Networks.Events;
 using Symu.Results;
 
 #endregion
@@ -73,8 +73,6 @@ namespace Symu.Environment
         ///     to debug and manage TimeBased Step
         /// </summary>
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
-
-        public List<SymuEvent> Events { get; } = new List<SymuEvent>();
 
         #region Add / remove agent
 
@@ -472,7 +470,7 @@ namespace Symu.Environment
         /// </summary>
         public void ScheduleEvents()
         {
-            foreach (var symuEvent in Events)
+            foreach (var symuEvent in WhitePages.MetaNetwork.Events.List.Cast<SymuEvent>())
             {
                 symuEvent.Schedule(Schedule.Step);
             }
@@ -485,7 +483,7 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(symuEvent));
             }
 
-            Events.Add(symuEvent);
+            WhitePages.MetaNetwork.Events.Add(symuEvent);
         }
 
         #endregion

@@ -14,7 +14,7 @@ using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
 
-namespace Symu.Environment.Events
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     SymuEvent helps you schedule random events that happen during the simulation

@@ -106,8 +106,8 @@ namespace SymuTests.Classes.Agents
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
             Assert.AreNotEqual(0, _agent.KnowledgeModel.Expertise.Count);
-            Assert.AreNotEqual(0, _environment.WhitePages.MetaNetwork.Influences.GetInfluenceability(_agent.AgentId));
-            Assert.AreNotEqual(0, _environment.WhitePages.MetaNetwork.Influences.GetInfluentialness(_agent.AgentId));
+            Assert.AreNotEqual(0, _agent.InfluenceModel.Influenceability);
+            Assert.AreNotEqual(0, _agent.InfluenceModel.Influentialness);
             Assert.AreEqual(AgentState.Started, _agent.State);
         }
 
@@ -268,7 +268,8 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
             _agent.BeliefsModel.AddBelief(belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.BeliefsModel.InitializeBeliefs(true);
-            _environment.WhitePages.MetaNetwork.Influences.Update(_agent.AgentId, 1, 1);
+            _agent.InfluenceModel.Influentialness = 1;
+            _agent.InfluenceModel.Influenceability = 1;
             return belief;
         }
 

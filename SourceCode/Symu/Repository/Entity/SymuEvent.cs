@@ -14,15 +14,16 @@
 #region using directives
 
 using System;
+using Symu.Repository.Networks.Events;
 
 #endregion
 
-namespace Symu.Environment.Events
+namespace Symu.Repository.Entity
 {
     /// <summary>
     ///     SymuEvent helps you schedule one shot events that happen during the simulation
     /// </summary>
-    public class SymuEvent
+    public class SymuEvent: IEvent
     {
         public ushort Step { get; set; }
 

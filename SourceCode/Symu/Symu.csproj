@@ -21,8 +21,4 @@
     <ProjectReference Include="..\..\..\..\Symu.DNA\Github\SourceCode\SymuDNA\SymuDNA.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repository\Networks\Sphere\" />
-  </ItemGroup>
-
 </Project>

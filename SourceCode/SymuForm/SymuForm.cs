@@ -17,7 +17,8 @@ using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Engine;
 using Symu.Environment;
-using Symu.Environment.Events;
+using Symu.Repository.Entity;
+using Symu.Repository.Networks.Events;
 using Symu.Results;
 
 #endregion

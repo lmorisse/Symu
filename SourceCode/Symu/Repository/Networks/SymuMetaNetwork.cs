@@ -9,7 +9,6 @@
 
 #region using directives
 
-using System;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.DNA.Activities;
@@ -22,7 +21,7 @@ using Symu.DNA.Roles;
 using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Repository.Networks.Enculturation;
-using Symu.Repository.Networks.Influences;
+using Symu.Repository.Networks.Events;
 
 #endregion
 
@@ -40,17 +39,16 @@ namespace Symu.Repository.Networks
 
         public MetaNetwork Network { get; }
 
+        /// <summary>
+        /// occurrences or phenomena that happen
+        /// </summary>
+        public EventNetwork Events => Network.Events;
+
 
         /// <summary>
         ///     Agent enculturation level network
         /// </summary>
         public EnculturationNetwork Enculturation { get; } = new EnculturationNetwork();
-
-        /// <summary>
-        ///     Agent influences network
-        /// </summary>
-        public InfluenceNetwork Influences { get; } = new InfluenceNetwork();
-
 
         /// <summary>
         ///     Agent enculturation level network
@@ -110,14 +108,12 @@ namespace Symu.Repository.Networks
         {
             Network.Clear();
             Enculturation.Clear();
-            Influences.Clear();
         }
 
         public void RemoveAgent(IAgentId agentId)
         {
             Network.RemoveAgent(agentId);
             Enculturation.RemoveAgent(agentId);
-            Influences.RemoveAgent(agentId);
         }
     }
 }

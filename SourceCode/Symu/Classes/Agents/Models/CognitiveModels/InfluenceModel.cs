@@ -15,10 +15,9 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Beliefs;
+using Symu.DNA.Agent;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
-using Symu.Repository.Networks.Influences;
 
 #endregion
 
@@ -32,22 +31,32 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class InfluenceModel
     {
+        /// <summary>
+        ///     how susceptible an agent will be to the influentialness of another agent
+        /// </summary>
+        public float Influenceability { get; set; }
+
+        /// <summary>
+        ///     how influential an agent will be
+        /// </summary>
+        public float Influentialness { get; set; }
+
         private readonly RandomGenerator _model;
-        private readonly IAgentId _agentId;
-        private readonly InfluenceNetwork _networkInfluences;
+        //private readonly IAgentId _agentId;
+        //private readonly InfluenceNetwork _networkInfluences;
+        private readonly AgentNetwork _agentNetwork;
         private readonly BeliefsModel _beliefsModel;
 
         /// <summary>
         ///     Initialize influence model :
         ///     update networkInfluences
         /// </summary>
-        /// <param name="agentId"></param>
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         /// <param name="beliefsModel"></param>
         /// <param name="model"></param>
-        public InfluenceModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+        public InfluenceModel(ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
             SymuMetaNetwork network, BeliefsModel beliefsModel, RandomGenerator model)
         {
             if (entity is null)
@@ -71,20 +80,26 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _agentId = agentId;
-            _networkInfluences = network.Influences;
+            //_agentId = agentId;
+            //_networkInfluences = network.Influences;
+            _agentNetwork = network.Agents;
             _beliefsModel = beliefsModel;
             _model = model;
 
             if (cognitiveArchitecture.InternalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
-                _networkInfluences.Add(agentId,
-                    NextInfluenceability(cognitiveArchitecture.InternalCharacteristics),
-                    NextInfluentialness(cognitiveArchitecture.InternalCharacteristics));
+
+                Influenceability = NextInfluenceability(cognitiveArchitecture.InternalCharacteristics);
+                Influentialness = NextInfluentialness(cognitiveArchitecture.InternalCharacteristics);
+                //_networkInfluences.Add(agentId,
+                //    NextInfluenceability(cognitiveArchitecture.InternalCharacteristics),
+                //    NextInfluentialness(cognitiveArchitecture.InternalCharacteristics));
             }
             else
             {
-                _networkInfluences.Add(agentId, 0, 0);
+                Influenceability = 0;
+                Influentialness = 0;
+                //_networkInfluences.Add(agentId, 0, 0);
             }
         }
 
@@ -137,11 +152,17 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             // Learning From agent
-            var influentialness = _networkInfluences.GetInfluentialness(agentId);
+            //var influentialness = _networkInfluences.GetInfluentialness(agentId);
+            if (!_agentNetwork.Exists(agentId))
+            {
+                return;
+            }
+
+            var influentialness = _agentNetwork.Get<CognitiveAgent>(agentId).InfluenceModel.Influentialness;
             // to Learner
-            var influenceability = _networkInfluences.GetInfluenceability(_agentId);
+            //var influenceability = _networkInfluences.GetInfluenceability(_agentId);
             // Learner learn beliefId from agentAgentId with a weight of influenceability * influentialness
-            _beliefsModel.Learn(beliefId, beliefBits, influenceability * influentialness, beliefLevel);
+            _beliefsModel.Learn(beliefId, beliefBits, Influenceability * influentialness, beliefLevel);
         }
 
         public void ReinforcementByDoing(IId beliefId, byte beliefBit, BeliefLevel beliefLevel)

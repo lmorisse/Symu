@@ -41,7 +41,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _network = new SymuMetaNetwork(_models.InteractionSphere);
             _beliefsModel = new BeliefsModel(_agentId, _models.Beliefs, _cognitiveArchitecture, _network, _models.Generator);
-            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
+            _influenceModel = new InfluenceModel(_models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _influenceModel.On = true;
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
-            _influenceModel = new InfluenceModel(_agentId, _models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
+            _influenceModel = new InfluenceModel(_models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
 
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
             _network.Beliefs.AddBelief(belief);
