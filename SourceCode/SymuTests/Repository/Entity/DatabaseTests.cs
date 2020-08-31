@@ -10,13 +10,11 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 

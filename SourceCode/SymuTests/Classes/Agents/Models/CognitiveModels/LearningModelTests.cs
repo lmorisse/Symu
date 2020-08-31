@@ -11,7 +11,6 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
@@ -20,7 +19,6 @@ using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Engine;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 

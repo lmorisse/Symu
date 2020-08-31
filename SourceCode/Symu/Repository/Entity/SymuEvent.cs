@@ -14,7 +14,7 @@
 #region using directives
 
 using System;
-using Symu.Repository.Networks.Events;
+using Symu.DNA.OneModeNetworks.Event;
 
 #endregion
 

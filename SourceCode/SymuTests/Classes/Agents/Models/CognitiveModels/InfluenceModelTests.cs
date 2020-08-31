@@ -10,16 +10,12 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
-using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 
@@ -53,9 +49,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _influenceModel.On = false;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Beliefs.AddBelief(belief);
+            _network.Belief.AddBelief(belief);
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
-            Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
+            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
         }
 
         /// <summary>
@@ -69,12 +65,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _influenceModel = new InfluenceModel(_models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
 
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Beliefs.AddBelief(belief);
-            Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
+            _network.Belief.AddBelief(belief);
+            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
             //BeInfluenced new belief
-            Assert.IsTrue(_network.Beliefs.Exists(_agentId, belief.Id));
-            var agentBelief = _network.Beliefs.GetAgentBelief<AgentBelief>(_agentId, belief.Id);
+            Assert.IsTrue(_network.AgentBelief.Exists(_agentId, belief.Id));
+            var agentBelief = _network.AgentBelief.GetAgentBelief<AgentBelief>(_agentId, belief.Id);
             Assert.AreNotEqual(0, agentBelief.BeliefBits.GetBit(0));
         }
 
@@ -86,9 +82,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _influenceModel.On = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Beliefs.AddBelief(belief);
+            _network.Belief.AddBelief(belief);
             _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
-            Assert.IsFalse(_network.Beliefs.Exists(_agentId, belief.Id));
+            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
         }
 
         [TestMethod]

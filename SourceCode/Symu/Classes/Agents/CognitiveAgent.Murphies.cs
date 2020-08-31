@@ -611,7 +611,7 @@ namespace Symu.Classes.Agents
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
 
-            var belief = Environment.WhitePages.MetaNetwork.Beliefs.GetBelief<Belief>(knowledgeId);
+            var belief = Environment.WhitePages.MetaNetwork.Belief.GetBelief<Belief>(knowledgeId);
             Environment.Organization.Murphies.IncompleteBelief.CheckBelief(belief, taskBits, BeliefsModel.Beliefs,
                 ref mandatoryScore, ref requiredScore,
                 ref mandatoryIndex, ref requiredIndex);
@@ -680,7 +680,7 @@ namespace Symu.Classes.Agents
             float mandatoryScore = 0;
             byte mandatoryIndex = 0;
 
-            var belief = Environment.WhitePages.MetaNetwork.Beliefs.GetBelief<Belief>(knowledgeId);
+            var belief = Environment.WhitePages.MetaNetwork.Belief.GetBelief<Belief>(knowledgeId);
             MurphyIncompleteBelief.CheckRiskAversion(belief, taskBits, BeliefsModel.Beliefs, ref mandatoryScore,
                 ref mandatoryIndex, -Cognitive.InternalCharacteristics.RiskAversionValue());
             if (!(mandatoryScore <= -Cognitive.InternalCharacteristics.RiskAversionValue()))

@@ -22,7 +22,6 @@ using Symu.Environment;
 using Symu.Forms;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Events;
 using SymuScenariosAndEvents.Classes;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;

@@ -10,8 +10,6 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
@@ -20,7 +18,6 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 

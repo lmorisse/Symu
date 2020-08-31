@@ -11,8 +11,6 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
@@ -23,7 +21,6 @@ using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 
@@ -88,7 +85,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = false;
             _knowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.Expert, 0, -1);
             Assert.AreEqual(0, _network.Knowledge.GetAgentExpertise(_agentId).Count);
-            Assert.IsFalse(_network.Beliefs.Exists(_agentId));
+            Assert.IsFalse(_network.AgentBelief.Exists(_agentId));
         }
 
         /// <summary>

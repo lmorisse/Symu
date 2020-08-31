@@ -11,19 +11,15 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
-using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
-using Symu.DNA.Beliefs;
+using Symu.DNA.TwoModesNetworks.AgentBelief;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks;
 
 #endregion
 
@@ -56,10 +52,10 @@ namespace SymuTests.Classes.Murphies
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network, models.Generator) {On = true};
             _belief = new Belief(1, "1", 1, models.Generator, BeliefWeightLevel.RandomWeight);
 
-            _network.Beliefs.AddBelief(_belief);
+            _network.Belief.AddBelief(_belief);
             var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.Beliefs.Add(_agentId, agentBelief);
-            _agentBeliefs = _network.Beliefs.GetAgentBeliefs(_agentId);
+            _network.AgentBelief.Add(_agentId, agentBelief);
+            _agentBeliefs = _network.AgentBelief.GetAgentBeliefs(_agentId);
 
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});

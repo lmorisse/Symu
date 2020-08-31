@@ -24,7 +24,6 @@ using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
 using Symu.Repository.Entity;
-using Symu.Repository.Networks.Events;
 using Symu.Results;
 
 #endregion
@@ -437,7 +436,7 @@ namespace Symu.Environment
             foreach (var knowledge in Organization.Knowledges)
             {
                 var belief = new Belief(knowledge, knowledge.Length, Organization.Models.Generator, Organization.Models.BeliefWeightLevel);
-                WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
+                WhitePages.MetaNetwork.Belief.AddBelief(belief);
             }
         }
 

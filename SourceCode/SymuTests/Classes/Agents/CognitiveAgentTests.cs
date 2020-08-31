@@ -76,10 +76,10 @@ namespace SymuTests.Classes.Agents
             _knowledges.Add(_knowledge);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge);
             var belief = new Belief(_knowledge, _knowledge.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
+            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief);
             _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge2);
             var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief2);
+            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
             _environment.WhitePages.MetaNetwork.Knowledge.Add(_agent.AgentId, expertise);
@@ -265,7 +265,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
-            _environment.WhitePages.MetaNetwork.Beliefs.AddBelief(belief);
+            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief);
             _agent.BeliefsModel.AddBelief(belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.BeliefsModel.InitializeBeliefs(true);
             _agent.InfluenceModel.Influentialness = 1;
@@ -529,7 +529,7 @@ namespace SymuTests.Classes.Agents
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
 
             _agent.Reply(message);
 
@@ -562,7 +562,7 @@ namespace SymuTests.Classes.Agents
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.Beliefs.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
             _agent.ReplyDelayed(message, 0);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
