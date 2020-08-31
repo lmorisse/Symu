@@ -32,7 +32,7 @@ namespace SymuLearnAndForget.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static ExpertAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static ExpertAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             var agent = new ExpertAgent(id, environment, template);
             agent.Initialize();
@@ -43,7 +43,7 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private ExpertAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        private ExpertAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
         }

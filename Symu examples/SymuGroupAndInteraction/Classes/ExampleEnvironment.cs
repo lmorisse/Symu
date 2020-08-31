@@ -114,7 +114,7 @@ namespace SymuGroupAndInteraction.Classes
             }
         }
 
-        private void SetActivity(AgentId agentId, IReadOnlyList<IActivity> activities, int i, AgentId groupId)
+        private void SetActivity(IAgentId agentId, IReadOnlyList<IActivity> activities, int i, IAgentId groupId)
         {
             switch (Activities)
             {

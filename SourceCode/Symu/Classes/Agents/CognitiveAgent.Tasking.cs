@@ -211,7 +211,7 @@ namespace Symu.Classes.Agents
         ///     Key => step
         ///     Value => time spent
         /// </summary>
-        public Dictionary<UId, float> TimeSpent { get; } = new Dictionary<UId, float>();
+        public Dictionary<IId, float> TimeSpent { get; } = new Dictionary<IId, float>();
 
         /// <summary>
         ///     Impact of the Communication channels on the time spent
@@ -222,7 +222,7 @@ namespace Symu.Classes.Agents
         /// <param name="send">If set, it is an ask help task, otherwise it is a reply help task</param>
         /// <remarks>Impact on capacity is done in OnBeforeSendMessage and OnAfterPostMessage</remarks>
         public void ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums medium, bool send,
-            UId keyActivity)
+            IId keyActivity)
         {
             if (keyActivity == null || keyActivity.IsNull)
             {
@@ -240,7 +240,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="keyActivity"></param>
         /// <param name="timeSpent"></param>
-        public void AddTimeSpent(UId keyActivity, float timeSpent)
+        public void AddTimeSpent(IId keyActivity, float timeSpent)
         {
             if (keyActivity == null)
             {

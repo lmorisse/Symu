@@ -33,7 +33,7 @@ namespace SymuLearnAndForget.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static LearnAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             var agent = new LearnAgent(id, environment, template);
             agent.Initialize();
@@ -44,7 +44,7 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        protected LearnAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        protected LearnAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
             Wiki = (Database)Environment.WhitePages.MetaNetwork.Resources.Repository.List.First();

@@ -33,7 +33,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class InfluenceModel
     {
         private readonly RandomGenerator _model;
-        private readonly AgentId _agentId;
+        private readonly IAgentId _agentId;
         private readonly InfluenceNetwork _networkInfluences;
         private readonly BeliefsModel _beliefsModel;
 
@@ -47,7 +47,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="network"></param>
         /// <param name="beliefsModel"></param>
         /// <param name="model"></param>
-        public InfluenceModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+        public InfluenceModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
             SymuMetaNetwork network, BeliefsModel beliefsModel, RandomGenerator model)
         {
             if (entity is null)

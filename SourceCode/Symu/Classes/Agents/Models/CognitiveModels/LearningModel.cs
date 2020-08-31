@@ -33,7 +33,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class LearningModel : ModelEntity
     {
-        private readonly AgentId _id;
+        private readonly IAgentId _id;
         private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeNetwork _knowledgeNetwork;
         private readonly byte _randomLevel;
@@ -68,7 +68,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgePotential());
         }
 
-        public LearningModel(AgentId agentId, OrganizationModels models, KnowledgeNetwork knowledgeNetwork,
+        public LearningModel(IAgentId agentId, OrganizationModels models, KnowledgeNetwork knowledgeNetwork,
             CognitiveArchitecture cognitiveArchitecture)
         {
             if (models == null)

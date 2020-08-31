@@ -49,7 +49,7 @@ namespace Symu.Classes.Agents
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
-        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment) : base(agentId, environment)
+        protected CognitiveAgent(IAgentId agentId, SymuEnvironment environment) : base(agentId, environment)
         {
             _cognitiveTemplate = environment.Organization.Templates.Standard;
         }
@@ -61,7 +61,7 @@ namespace Symu.Classes.Agents
         /// <param name="environment"></param>
         /// <param name="template"></param>
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
-        protected CognitiveAgent(AgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentId, environment)
+        protected CognitiveAgent(IAgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentId, environment)
         {
             _cognitiveTemplate = template;
         }
@@ -170,17 +170,17 @@ namespace Symu.Classes.Agents
         ///     based on the interaction strategy of the interaction patterns :
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
-        public IEnumerable<AgentId> GetAgentIdsForNewInteractions()
+        public IEnumerable<IAgentId> GetAgentIdsForNewInteractions()
         {
             if (!Environment.Organization.Models.InteractionSphere.IsAgentOn())
             {
                 // Agent don't want to have new interactions today
-                return new List<AgentId>();
+                return new List<IAgentId>();
             }
 
             var agentIds = Environment.WhitePages.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(AgentId,
-                Cognitive.InteractionPatterns.NextInteractionStrategy()).Cast<AgentId>().ToList();
-            return FilterAgentIdsToInteract(agentIds);
+                Cognitive.InteractionPatterns.NextInteractionStrategy());
+            return FilterAgentIdsToInteract(agentIds.ToList());
         }
 
         /// <summary>
@@ -188,10 +188,10 @@ namespace Symu.Classes.Agents
         ///     based on the interaction strategy of the interaction patterns :
         ///     Filtered with interactionStrategy and limit with number of new interactions
         /// </summary>
-        public IEnumerable<AgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
+        public IEnumerable<IAgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
             return Environment.WhitePages.MetaNetwork.InteractionSphere
-                .GetAgentIdsForInteractions(AgentId, interactionStrategy).Cast<AgentId>().ToList();
+                .GetAgentIdsForInteractions(AgentId, interactionStrategy);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentIds"></param>
         /// <returns>List of AgentIds the agent can interact with via message</returns>
-        public IEnumerable<AgentId> FilterAgentIdsToInteract(List<AgentId> agentIds)
+        public IEnumerable<IAgentId> FilterAgentIdsToInteract(List<IAgentId> agentIds)
         {
             if (agentIds == null)
             {
@@ -348,7 +348,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="subject"></param>
-        public void Subscribe(AgentId agentId, byte subject)
+        public void Subscribe(IAgentId agentId, byte subject)
         {
             var message = new Message(AgentId, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
             if (Schedule.Step == 0)
@@ -365,7 +365,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     UnSubscribe to the Message subject
         /// </summary>
-        public void Unsubscribe(AgentId agentId, byte subject)
+        public void Unsubscribe(IAgentId agentId, byte subject)
         {
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
         }
@@ -373,7 +373,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     UnSubscribe to all subjects
         /// </summary>
-        public void Unsubscribe(AgentId agentId)
+        public void Unsubscribe(IAgentId agentId)
         {
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe);
         }

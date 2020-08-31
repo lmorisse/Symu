@@ -21,7 +21,7 @@ namespace Symu.Classes.Scenario
     {
         public const byte Class = SymuYellowPages.Scenario;
 
-        public ScenarioEntity(UId id) : base(id, Class)
+        public ScenarioEntity(IId id) : base(id, Class)
         {
         }
     }

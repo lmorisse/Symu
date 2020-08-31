@@ -84,14 +84,14 @@ namespace Symu.Messaging.Tracker
             return _messages.ContainsKey(step) ? _messages[step].ToList().FindAll(m => m.Subject == content) : null;
         }
 
-        public List<Message> ReceivedByAgent(ushort step, AgentId agentId)
+        public List<Message> ReceivedByAgent(ushort step, IAgentId agentId)
         {
             return _messages.ContainsKey(step)
                 ? _messages[step].ToList().FindAll(m => m.Receiver.Equals(agentId))
                 : null;
         }
 
-        public List<Message> SentByAgent(ushort step, AgentId agentId)
+        public List<Message> SentByAgent(ushort step, IAgentId agentId)
         {
             return _messages.ContainsKey(step) ? _messages[step].ToList().FindAll(m => m.Sender.Equals(agentId)) : null;
         }

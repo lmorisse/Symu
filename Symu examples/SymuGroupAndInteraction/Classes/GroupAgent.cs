@@ -26,7 +26,7 @@ namespace SymuGroupAndInteraction.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static GroupAgent CreateInstance(UId id, SymuEnvironment environment)
+        public static GroupAgent CreateInstance(IId id, SymuEnvironment environment)
         {
             var agent = new GroupAgent(id, environment);
             agent.Initialize();
@@ -37,7 +37,7 @@ namespace SymuGroupAndInteraction.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private GroupAgent(UId id, SymuEnvironment environment) : base(
+        private GroupAgent(IId id, SymuEnvironment environment) : base(
             new AgentId(id, Class), environment)
         {
         }

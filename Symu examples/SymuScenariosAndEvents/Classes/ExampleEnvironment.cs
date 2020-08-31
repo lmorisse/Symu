@@ -22,7 +22,7 @@ namespace SymuScenariosAndEvents.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        private AgentId _groupId;
+        private IAgentId _groupId;
         public byte WorkersCount { get; set; } = 5;
         private byte KnowledgeCount { get; } = 2;
 

@@ -40,7 +40,7 @@ namespace SymuTests.Repository.Networks
         private SymuMetaNetwork _network ;
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
-        private AgentId TeammateId => _agent.AgentId;
+        private IAgentId TeammateId => _agent.AgentId;
         private readonly AgentId _teammateId2 = new AgentId(5, SymuYellowPages.Actor);
         private readonly AgentId _managerId = new AgentId(3, 2);
         private TestReactiveAgent _agent;

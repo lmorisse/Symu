@@ -25,7 +25,7 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Email : Database
     {
-        public static Email CreateInstance(UId id, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Email CreateInstance(IId id, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(id, communication);

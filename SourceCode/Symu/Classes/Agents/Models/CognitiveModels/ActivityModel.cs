@@ -30,7 +30,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class ActivityModel
     {
-        private readonly AgentId _agentId;
+        private readonly IAgentId _agentId;
         private readonly ActivityNetwork _networkActivities;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="agentId"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public ActivityModel(AgentId agentId, CognitiveArchitecture cognitiveArchitecture, SymuMetaNetwork network)
+        public ActivityModel(IAgentId agentId, CognitiveArchitecture cognitiveArchitecture, SymuMetaNetwork network)
         {
             if (cognitiveArchitecture == null)
             {
@@ -73,7 +73,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <summary>
         ///     List of the activities on which an agent is working, filtered by groupId
         /// </summary>
-        public IEnumerable<IActivity> GetGroupActivities(AgentId groupId)
+        public IEnumerable<IActivity> GetGroupActivities(IAgentId groupId)
         {
             return _networkActivities.GetActivities(_agentId, groupId);
         }

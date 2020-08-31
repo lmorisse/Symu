@@ -335,13 +335,13 @@ namespace Symu.Classes.Agents
             }
         }
 
-        public void SendToMany(IEnumerable<AgentId> receivers, MessageAction action, byte content,
+        public void SendToMany(IEnumerable<IAgentId> receivers, MessageAction action, byte content,
             MessageAttachments parameter)
         {
             SendToMany(receivers, action, content, parameter, CommunicationMediums.System);
         }
 
-        public void SendToMany(IEnumerable<AgentId> receivers, MessageAction action, byte content,
+        public void SendToMany(IEnumerable<IAgentId> receivers, MessageAction action, byte content,
             MessageAttachments parameter, CommunicationMediums communicationMedium)
         {
             if (receivers is null)
@@ -422,25 +422,25 @@ namespace Symu.Classes.Agents
         ///     A conversation identifier, for the cases when a conversation involves multiple messages
         ///     that refer to the same topic
         /// </param>
-        public void Reply(AgentId receiverId, MessageAction action, byte content)
+        public void Reply(IAgentId receiverId, MessageAction action, byte content)
         {
             var message = new Message(AgentId, receiverId, action, content);
             Reply(message);
         }
 
-        public void Reply(AgentId receiverId, MessageAction action, byte content, object parameter)
+        public void Reply(IAgentId receiverId, MessageAction action, byte content, object parameter)
         {
             var message = new Message(AgentId, receiverId, action, content, parameter);
             Reply(message);
         }
 
-        public void Reply(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter)
+        public void Reply(IAgentId receiverId, MessageAction action, byte content, MessageAttachments parameter)
         {
             var message = new Message(AgentId, receiverId, action, content, parameter);
             Reply(message);
         }
 
-        public void Reply(AgentId receiverId, MessageAction action, byte content, MessageAttachments parameter,
+        public void Reply(IAgentId receiverId, MessageAction action, byte content, MessageAttachments parameter,
             CommunicationMediums communicationMedium)
         {
             var message = new Message(AgentId, receiverId, action, content, parameter, communicationMedium);

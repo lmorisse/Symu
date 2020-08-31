@@ -59,7 +59,7 @@ namespace Symu.Classes.Task
         /// <summary>
         ///     the Key of the ParentId (group, process, ...) in which the task must be performed
         /// </summary>
-        public UId KeyActivity { get; set; }
+        public IId KeyActivity { get; set; }
 
         /// <summary>
         ///     Type of the task use to have specific behaviour

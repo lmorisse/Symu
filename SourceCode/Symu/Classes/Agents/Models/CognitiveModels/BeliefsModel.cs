@@ -36,7 +36,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class BeliefsModel
     {
         private readonly RandomGenerator _model;
-        private readonly AgentId _agentId;
+        private readonly IAgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
         private readonly BeliefNetwork _networkBeliefs;
@@ -50,7 +50,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         /// <param name="model"></param>
-        public BeliefsModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+        public BeliefsModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
             SymuMetaNetwork network, RandomGenerator model)
         {
             if (entity is null)

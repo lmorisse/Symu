@@ -33,7 +33,7 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static InfluencerAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static InfluencerAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             var agent = new InfluencerAgent(id, environment, template);
             agent.Initialize();
@@ -44,7 +44,7 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private InfluencerAgent(UId id, SymuEnvironment environment,
+        private InfluencerAgent(IId id, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {

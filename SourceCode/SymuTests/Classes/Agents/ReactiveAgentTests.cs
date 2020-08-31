@@ -19,6 +19,7 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
+using Symu.Common.Interfaces.Entity;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -60,7 +61,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
-            Assert.AreEqual(1, _agent.AgentId.Id.Id);
+            Assert.AreEqual(1, UId.Cast(_agent.AgentId.Id));
             Assert.IsNotNull(_agent.Environment);
             Assert.AreEqual(AgentState.Started, _agent.State);
         }

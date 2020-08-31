@@ -25,7 +25,7 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Wiki : Database
     {
-        public static Wiki CreateInstance(UId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Wiki CreateInstance(IId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
         {
             CommunicationTemplate communication = new ViaPlatformTemplate();
             var entity = new DatabaseEntity(agentId, communication);

@@ -26,12 +26,12 @@ namespace Symu.Classes.Agents
         {
         }
 
-        public AgentEntity(UId id, byte classId)
+        public AgentEntity(IId id, byte classId)
         {
             AgentId = new AgentId(id, classId);
         }
 
-        public AgentEntity(UId id, byte classId, string name) : this(id, classId)
+        public AgentEntity(IId id, byte classId, string name) : this(id, classId)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -41,7 +41,7 @@ namespace Symu.Classes.Agents
             Name = name;
         }
 
-        public AgentEntity(UId id, byte classId, string name, AgentId parent) : this(id, classId, name)
+        public AgentEntity(IId id, byte classId, string name, IAgentId parent) : this(id, classId, name)
         {
             Parent = parent;
         }
@@ -50,10 +50,10 @@ namespace Symu.Classes.Agents
         ///     The Id of the agent. Each entity must have a unique Id
         ///     FIPA Norm : AID
         /// </summary>
-        public AgentId AgentId { get; set; }
+        public IAgentId AgentId { get; set; }
 
         public string Name { get; set; }
-        public AgentId Parent { get; set; }
+        public IAgentId Parent { get; set; }
 
         public void CopyTo(AgentEntity entity)
         {

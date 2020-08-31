@@ -24,7 +24,7 @@ namespace SymuTests.Helpers
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static TestReactiveAgent CreateInstance(UId id, SymuEnvironment environment)
+        public static TestReactiveAgent CreateInstance(IId id, SymuEnvironment environment)
         {
             if (environment == null)
             {
@@ -40,14 +40,14 @@ namespace SymuTests.Helpers
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestReactiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
+        private TestReactiveAgent(IId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
         {
         }
         /// <summary>
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        internal TestReactiveAgent(UId id)
+        internal TestReactiveAgent(IId id)
         {
             AgentId = new AgentId(id, ClassId);
         }

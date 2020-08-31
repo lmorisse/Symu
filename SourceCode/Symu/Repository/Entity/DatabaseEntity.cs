@@ -23,13 +23,13 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class DatabaseEntity
     {
-        public UId Id { get; }
-        public DatabaseEntity(UId id)
+        public IId Id { get; }
+        public DatabaseEntity(IId id)
         {
             Id = id;
         }
 
-        public DatabaseEntity(UId id, CognitiveArchitecture cognitiveArchitecture) : this(id)
+        public DatabaseEntity(IId id, CognitiveArchitecture cognitiveArchitecture) : this(id)
         {
             if (cognitiveArchitecture == null)
             {
@@ -40,7 +40,7 @@ namespace Symu.Repository.Entity
             cognitiveArchitecture.CopyTo(CognitiveArchitecture);
         }
 
-        public DatabaseEntity(UId id, CommunicationTemplate medium) : this(id)
+        public DatabaseEntity(IId id, CommunicationTemplate medium) : this(id)
         {
             if (medium == null)
             {

@@ -111,12 +111,12 @@ namespace Symu.Messaging.Tracker
             LastSentMessages.ClearSteps(stepNumber - NumberOfSteps);
         }
 
-        public List<Message> MessagesReceivedByAgent(ushort step, AgentId agentId)
+        public List<Message> MessagesReceivedByAgent(ushort step, IAgentId agentId)
         {
             return LastSentMessages.ReceivedByAgent(step, agentId);
         }
 
-        public List<Message> MessagesSentByAgent(ushort step, AgentId agentId)
+        public List<Message> MessagesSentByAgent(ushort step, IAgentId agentId)
         {
             return LastSentMessages.SentByAgent(step, agentId);
         }

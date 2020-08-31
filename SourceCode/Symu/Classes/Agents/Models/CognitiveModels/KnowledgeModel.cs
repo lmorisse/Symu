@@ -33,7 +33,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class KnowledgeModel
     {
-        private readonly AgentId _agentId;
+        private readonly IAgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
         private readonly KnowledgeNetwork _knowledgeNetwork;
@@ -46,7 +46,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public KnowledgeModel(AgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+        public KnowledgeModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
             SymuMetaNetwork network)
         {
             if (entity is null)

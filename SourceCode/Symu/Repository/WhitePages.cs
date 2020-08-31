@@ -100,7 +100,7 @@ namespace Symu.Repository
 
         #endregion
 
-        public void WaitingForStart(AgentId agentId)
+        public void WaitingForStart(IAgentId agentId)
         {
             while (!ExistsAndStarted(agentId))
             {
@@ -112,7 +112,7 @@ namespace Symu.Repository
         ///     Useful for unit tests
         /// </summary>
         /// <param name="agentId"></param>
-        public void WaitingForStop(AgentId agentId)
+        public void WaitingForStop(IAgentId agentId)
         {
             while (ExistsAndStarted(agentId))
             {
@@ -299,7 +299,7 @@ namespace Symu.Repository
         ///     Returns a list with the names of all the agents that contain a certain string.
         /// </summary>
         /// <returns>The name fragment that the agent names should contain</returns>
-        public ushort FilteredStoppedAgentsByClassIdCount(byte classId)
+        public ushort FilteredStoppedAgentsByClassIdCount(IClassId classId)
         {
             return (ushort) StoppedAgents.Count(a => a.AgentId.Equals(classId));
         }

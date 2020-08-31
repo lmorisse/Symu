@@ -102,7 +102,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
-            Assert.AreEqual(1, _agent.AgentId.Id.Id);
+            Assert.AreEqual(1, UId.Cast(_agent.AgentId.Id));
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
             Assert.AreNotEqual(0, _agent.KnowledgeModel.Expertise.Count);
@@ -786,7 +786,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void FilterAgentIdsToInteractTest()
         {
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
             Assert.AreEqual(0, _agent.FilterAgentIdsToInteract(agentIds).Count());
         }
 
@@ -796,7 +796,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void FilterAgentIdsToInteractTest1()
         {
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
             for (ushort i = 2; i < 12; i++)
             {
                 agentIds.Add(new AgentId(i, 1));
@@ -812,7 +812,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void FilterAgentIdsToInteractTest2()
         {
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
             for (ushort i = 2; i < 5; i++)
             {
                 agentIds.Add(new AgentId(i, 1));
@@ -829,7 +829,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void FilterAgentIdsToInteractTest3()
         {
-            var agentIds = new List<AgentId>();
+            var agentIds = new List<IAgentId>();
             for (ushort i = 2; i < 12; i++)
             {
                 agentIds.Add(new AgentId(i, 1));

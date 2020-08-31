@@ -36,7 +36,7 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             var agent = new PersonAgent(id, environment, template);
             agent.Initialize();
@@ -47,13 +47,13 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
         }
 
         public IEnumerable<Knowledge> Knowledges => Environment.Organization.Knowledges;
-        public IEnumerable<AgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.AgentId);
+        public IEnumerable<IAgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.AgentId);
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent

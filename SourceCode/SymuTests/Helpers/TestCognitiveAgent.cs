@@ -25,19 +25,19 @@ namespace SymuTests.Helpers
     internal sealed class TestCognitiveAgent : CognitiveAgent
     {
         public static byte Class = SymuYellowPages.Actor;
-        public static ClassId ClassId => new ClassId(Class);
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static TestCognitiveAgent CreateInstance(UId id, SymuEnvironment environment)
+        public static TestCognitiveAgent CreateInstance(IId id, SymuEnvironment environment)
         {
             var agent = new TestCognitiveAgent(id, environment);
             agent.Initialize();
             return agent;
         }
-        public static TestCognitiveAgent CreateInstance(UId id, byte classId, SymuEnvironment environment)
+        public static TestCognitiveAgent CreateInstance(IId id, byte classId, SymuEnvironment environment)
         {
             var agent = new TestCognitiveAgent(id, classId, environment);
             agent.Initialize();
@@ -47,12 +47,12 @@ namespace SymuTests.Helpers
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestCognitiveAgent(UId id, SymuEnvironment environment) : base(new AgentId(id, Class), environment,
+        private TestCognitiveAgent(IId id, SymuEnvironment environment) : base(new AgentId(id, Class), environment,
             environment.Organization.Templates.Human)
         {
         }
 
-        private TestCognitiveAgent(UId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
+        private TestCognitiveAgent(IId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
             environment, environment.Organization.Templates.Human)
         {
         }

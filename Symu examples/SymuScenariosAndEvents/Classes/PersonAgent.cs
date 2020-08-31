@@ -37,7 +37,7 @@ namespace SymuScenariosAndEvents.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
             var agent = new PersonAgent(id, environment, template);
             agent.Initialize();
@@ -48,12 +48,12 @@ namespace SymuScenariosAndEvents.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(UId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
         }
 
-        public AgentId GroupId { get; set; }
+        public IAgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
         public List<Knowledge> Knowledges => Environment.Organization.Knowledges;

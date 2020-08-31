@@ -21,11 +21,17 @@ using Symu.Repository;
 
 namespace Symu.Classes.Agents
 {
+    public interface IAgent
+    {
+        IAgentId AgentId {get;
+            set;
+        }
+    }
     /// <summary>
     ///     An abstract base class for agents.
     ///     You must define your own agent derived classes derived
     /// </summary>
-    public abstract partial class ReactiveAgent
+    public abstract partial class ReactiveAgent: IAgent
     {
         /// <summary>
         ///     constructor for generic new()
@@ -40,7 +46,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
-        protected ReactiveAgent(AgentId agentId, SymuEnvironment environment)
+        protected ReactiveAgent(IAgentId agentId, SymuEnvironment environment)
         {
             AgentId = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -63,7 +69,7 @@ namespace Symu.Classes.Agents
         ///     The name of the agent. Each agent must have a unique name in its environment.
         ///     Most operations are performed using agent names rather than agent objects.
         /// </summary>
-        public AgentId AgentId { get; set; }
+        public IAgentId AgentId { get; set; }
 
         /// <summary>
         ///     State of the agent

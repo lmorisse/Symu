@@ -73,7 +73,7 @@ namespace Symu.Classes.Organization
         /// </summary>
         public MurphyCollection Murphies { get; } = new MurphyCollection();
 
-        public UId NextEntityId()
+        public IId NextEntityId()
         {
             return new UId(EntityIndex++);
         }
