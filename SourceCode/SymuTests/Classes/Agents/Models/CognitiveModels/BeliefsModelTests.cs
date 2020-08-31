@@ -20,6 +20,7 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
@@ -40,7 +41,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private Belief _belief;
         private BeliefsModel _beliefsModel;
         private CognitiveArchitecture _cognitiveArchitecture;
-        private SymuMetaNetwork _network;
+        private MetaNetwork _network;
         private AgentBelief _agentBelief;
         private float[] _beliefBitsNeutral;
         private float[] _beliefBitsNonNeutral;
@@ -49,7 +50,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new SymuMetaNetwork(models.InteractionSphere);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

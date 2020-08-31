@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
@@ -33,7 +34,7 @@ namespace SymuTests.Repository.Entity
         public void Initialize()
         {
             var models = new OrganizationModels();
-            var network = new SymuMetaNetwork(models.InteractionSphere);
+            var network = new MetaNetwork(models.InteractionSphere);
 
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(new UId(1), communication);

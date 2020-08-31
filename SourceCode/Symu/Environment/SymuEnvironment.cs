@@ -371,8 +371,8 @@ namespace Symu.Environment
         {
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
-                x.State == AgentState.Started).Select(x => x.AgentId).Cast<IAgentId>().ToList();
-            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork.Network);
+                x.State == AgentState.Started).Select(x => x.AgentId).ToList();
+            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork);
         }
 
         /// <summary>

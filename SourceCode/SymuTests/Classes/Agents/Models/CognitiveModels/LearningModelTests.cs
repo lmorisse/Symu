@@ -16,6 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Engine;
 using Symu.Repository.Entity;
@@ -31,7 +32,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly AgentExpertise _expertise = new AgentExpertise();
         private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private SymuMetaNetwork _network;
+        private MetaNetwork _network;
         private readonly OrganizationModels _organizationModels = new OrganizationModels();
         private CognitiveArchitecture _cognitiveArchitecture;
         private LearningModel _learningModel;
@@ -41,7 +42,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new SymuMetaNetwork(models.InteractionSphere);
+            _network = new MetaNetwork(models.InteractionSphere);
             _network.Knowledge.Add(_agentId, _expertise);
             InitializeModel(0, true);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] { 0, 0 }, 0, -1, 0);

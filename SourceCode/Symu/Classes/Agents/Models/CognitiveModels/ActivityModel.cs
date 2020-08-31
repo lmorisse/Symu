@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.DNA.Activities;
 using Symu.DNA.Knowledges;
 using Symu.Repository.Entity;
@@ -40,7 +41,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="agentId"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
-        public ActivityModel(IAgentId agentId, CognitiveArchitecture cognitiveArchitecture, SymuMetaNetwork network)
+        public ActivityModel(IAgentId agentId, CognitiveArchitecture cognitiveArchitecture, MetaNetwork network)
         {
             if (cognitiveArchitecture == null)
             {

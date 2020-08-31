@@ -15,6 +15,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
@@ -47,7 +48,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         public KnowledgeModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            SymuMetaNetwork network)
+            MetaNetwork network)
         {
             if (entity is null)
             {

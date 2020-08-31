@@ -19,6 +19,7 @@ using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
@@ -51,13 +52,13 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private CognitiveArchitecture _cognitiveArchitecture;
         private Knowledge _knowledge;
         private KnowledgeModel _knowledgeModel;
-        private SymuMetaNetwork _network;
+        private MetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new SymuMetaNetwork(models.InteractionSphere);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

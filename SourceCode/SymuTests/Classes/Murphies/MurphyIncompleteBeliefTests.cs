@@ -20,6 +20,7 @@ using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA;
 using Symu.DNA.Beliefs;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
@@ -38,13 +39,13 @@ namespace SymuTests.Classes.Murphies
         private Belief _belief;
         private BeliefsModel _beliefsModel;
         private CognitiveArchitecture _cognitiveArchitecture;
-        private SymuMetaNetwork _network;
+        private MetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels {Generator = RandomGenerator.RandomUniform};
-            _network = new SymuMetaNetwork(models.InteractionSphere);
+            _network = new MetaNetwork(models.InteractionSphere);
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},

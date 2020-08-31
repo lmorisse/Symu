@@ -16,6 +16,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.DNA;
 using Symu.DNA.Beliefs;
 using Symu.DNA.Knowledges;
 using Symu.Messaging.Templates;
@@ -51,7 +52,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="network"></param>
         /// <param name="model"></param>
         public BeliefsModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            SymuMetaNetwork network, RandomGenerator model)
+            MetaNetwork network, RandomGenerator model)
         {
             if (entity is null)
             {

@@ -18,6 +18,7 @@ using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.DNA.Knowledges;
 using Symu.Repository.Entity;
 using Symu.Repository.Networks;
@@ -43,7 +44,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void Initialize()
         {
             var models = new OrganizationModels();
-            var network = new SymuMetaNetwork(models.InteractionSphere);
+            var network = new MetaNetwork(models.InteractionSphere);
             _knowledgeNetwork = network.Knowledge;
             _knowledgeNetwork.Add(_agentId, _expertise);
 

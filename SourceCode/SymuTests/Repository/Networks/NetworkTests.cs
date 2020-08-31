@@ -16,6 +16,7 @@ using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA;
 using Symu.DNA.Activities;
 using Symu.Repository;
 using Symu.Repository.Entity;
@@ -37,7 +38,7 @@ namespace SymuTests.Repository.Networks
         private readonly Knowledge _knowledge =
             new Knowledge(1, "1", 1);
 
-        private SymuMetaNetwork _network ;
+        private MetaNetwork _network ;
         private readonly AgentId _teamId = new AgentId(1, 1);
         private readonly AgentId _teamId2 = new AgentId(2, 1);
         private IAgentId TeammateId => _agent.AgentId;
@@ -55,7 +56,7 @@ namespace SymuTests.Repository.Networks
         public void Initialize()
         {
             var models = new OrganizationModels();
-            _network = new SymuMetaNetwork(models.InteractionSphere);
+            _network = new MetaNetwork(models.InteractionSphere);
             _agent = new TestReactiveAgent(4);
             _belief = new Belief(1, "1", 1,
                 _network.Knowledge.Model, BeliefWeightLevel.RandomWeight);
@@ -102,8 +103,8 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.AddAgentToGroup(_agentGroup2, _teamId);
             // Test group
             Assert.IsTrue(_network.Groups.IsMemberOfGroup(TeammateId, _teamId));
             // Resource
@@ -120,8 +121,8 @@ namespace SymuTests.Repository.Networks
             _network.Groups.AddGroup(_teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.AddAgentToGroup(_agentGroup2, _teamId);
             // Test link teammates
             Assert.IsFalse(_network.Interactions.HasActiveInteraction(TeammateId, _teammateId2));
         }
@@ -130,11 +131,11 @@ namespace SymuTests.Repository.Networks
         public void RemoveMemberFromGroupTest()
         {
             _network.Groups.AddGroup(_teamId);
-            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
-            _network.Network.AddAgentToGroup(_agentGroup2, _teamId);
+            _network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.AddAgentToGroup(_agentGroup2, _teamId);
             _network.Resources.Add(_teamId, _agentResource);
             // Method to test
-            _network.Network.RemoveAgentFromGroup(TeammateId, _teamId);
+            _network.RemoveAgentFromGroup(TeammateId, _teamId);
             Assert.IsFalse(_network.Groups.IsMemberOfGroup(TeammateId, _teamId));
             // Test link teammates
             Assert.IsFalse(_network.Interactions.HasActiveInteraction(TeammateId, _teammateId2));
@@ -177,9 +178,9 @@ namespace SymuTests.Repository.Networks
             var agentId = _network.Groups.GetMainGroupOrDefault(TeammateId, _teamId.ClassId);
             Assert.IsNull(agentId);
             // Normal test
-            _network.Network.AddAgentToGroup(_agentGroup1, _teamId);
+            _network.AddAgentToGroup(_agentGroup1, _teamId);
             Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(TeammateId, _teamId.ClassId));
-            _network.Network.AddAgentToGroup(_agentGroup1, _teamId2);
+            _network.AddAgentToGroup(_agentGroup1, _teamId2);
             Assert.AreEqual(_teamId, _network.Groups.GetMainGroupOrDefault(TeammateId, _teamId.ClassId));
         }
     }
