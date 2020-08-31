@@ -251,5 +251,10 @@ namespace Symu.Repository.Entity
             }
             return 0;
         }
+
+        public void SetBeliefBit(byte index, float value)
+        {
+            BeliefBits.SetBit(index, value);
+        }
     }
 }

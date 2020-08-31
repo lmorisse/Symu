@@ -36,7 +36,7 @@ namespace SymuTests.Repository.Entity
 
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(new UId(1), communication);
-            _database = new Database(entity, models, network.Knowledge);
+            _database = new Database(entity, models, network);
             _bits1 = new Bits(_floats1, 0);
         }
 

@@ -17,7 +17,8 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
-using Symu.DNA.Knowledges;
+using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Repository.Entity;
 
 #endregion
@@ -35,14 +36,14 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         private CognitiveArchitecture _cognitiveArchitecture;
         private ForgettingModel _forgettingModel;
         private InternalCharacteristics _internalCharacteristics;
-        private KnowledgeNetwork _knowledgeNetwork;
+        private AgentKnowledgeNetwork _knowledgeNetwork;
 
         [TestInitialize]
         public void Initialize()
         {
             var models = new OrganizationModels();
             var network = new MetaNetwork(models.InteractionSphere);
-            _knowledgeNetwork = network.Knowledge;
+            _knowledgeNetwork = network.AgentKnowledge;
             _knowledgeNetwork.Add(_agentId, _expertise);
 
             Assert.AreEqual(_expertise, _knowledgeNetwork.GetAgentExpertise(_agentId));

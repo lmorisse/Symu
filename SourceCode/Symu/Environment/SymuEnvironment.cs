@@ -175,8 +175,8 @@ namespace Symu.Environment
         {
             Messages.Clear();
             WhitePages.Clear();
-            WhitePages.MetaNetwork.Knowledge.Model =
-                Organization.Models.Generator;
+            //WhitePages.MetaNetwork.Knowledge.Model =
+            //    Organization.Models.Generator;
             //WhitePages.MetaNetwork.Beliefs.Model =
             //    Organization.Models.Generator;
             IterationResult.Initialize();
@@ -454,7 +454,7 @@ namespace Symu.Environment
         public void SetDatabases()
         {
             foreach (var database in Organization.Databases.Select(databaseEntity =>
-                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork.Knowledge)))
+                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork)))
             {
                 WhitePages.MetaNetwork.Resources.Add(database);
             }

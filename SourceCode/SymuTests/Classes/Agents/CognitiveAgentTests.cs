@@ -23,7 +23,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Knowledges;
+using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -82,7 +82,7 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_agent.AgentId, expertise);
+            _environment.WhitePages.MetaNetwork.AgentKnowledge.Add(_agent.AgentId, expertise);
 
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
             //_agent.Start();
@@ -282,7 +282,7 @@ namespace SymuTests.Classes.Agents
             var agentExpertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(knowledge.Id, bit0S);
             agentExpertise.Add(agentKnowledge);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_agent.AgentId, agentExpertise);
+            _environment.WhitePages.MetaNetwork.AgentKnowledge.Add(_agent.AgentId, agentExpertise);
         }
 
         #endregion
@@ -524,12 +524,14 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
-                .SetKnowledgeBit(0, 1, 0);
+            //_environment.WhitePages.MetaNetwork.AgentKnowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
+            //    .SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(knowledge.Id).SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _agent.BeliefsModel.GetAgentBelief(belief.Id).SetBeliefBit(0, 1);
+            //_environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
 
             _agent.Reply(message);
 
@@ -557,12 +559,14 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
-                .SetKnowledgeBit(0, 1, 0);
+            //_environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
+            //    .SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.GetAgentKnowledge(knowledge.Id).SetKnowledgeBit(0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
             var belief = SetBeliefs();
-            _environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _agent.BeliefsModel.GetAgentBelief(belief.Id).SetBeliefBit(0, 1);
+            //_environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
             _agent.ReplyDelayed(message, 0);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
@@ -1451,7 +1455,7 @@ namespace SymuTests.Classes.Agents
 
             Assert.IsTrue(1 < task.Weight);
             var agentKnowledge =
-                _environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, _knowledge.Id);
+                _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id);
             Assert.AreEqual(_agent.LearningModel.TasksAndPerformance.LearningByDoingRate,
                 agentKnowledge.GetKnowledgeBit(0));
         }

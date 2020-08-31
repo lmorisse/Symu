@@ -40,8 +40,8 @@ namespace SymuTests.Classes.Murphies
             _network = new MetaNetwork(models.InteractionSphere);
             _knowledge = new Knowledge(1, "1", 1);
             _network.Knowledge.AddKnowledge(_knowledge);
-            _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network);
-            _network.Knowledge.Add(_agentId, _knowledgeModel.Expertise);
+            _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network, RandomGenerator.RandomBinary);
+            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }
@@ -106,7 +106,7 @@ namespace SymuTests.Classes.Murphies
             byte requiredIndex = 0;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _knowledgeModel.Expertise.Add(agentKnowledge);
-            _network.Knowledge.Add(_agentId, _knowledgeModel.Expertise);
+            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
             _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsFalse(mandatoryCheck && requiredCheck);
@@ -124,7 +124,7 @@ namespace SymuTests.Classes.Murphies
             byte requiredIndex = 0;
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             _knowledgeModel.Expertise.Add(agentKnowledge);
-            _network.Knowledge.Add(_agentId, _knowledgeModel.Expertise);
+            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
             _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);

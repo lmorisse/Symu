@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.DNA.Activities;
-using Symu.DNA.Knowledges;
+using Symu.DNA.OneModeNetworks.Knowledge;
 
 #endregion
 

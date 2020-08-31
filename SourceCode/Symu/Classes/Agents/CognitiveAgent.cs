@@ -227,11 +227,11 @@ namespace Symu.Classes.Agents
             base.InitializeModels();
             // Initialize agent models
             KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
-                Environment.WhitePages.MetaNetwork);
+                Environment.WhitePages.MetaNetwork, Environment.Organization.Models.Generator);
             BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
                 Environment.WhitePages.MetaNetwork, Environment.Organization.Models.Generator);
             LearningModel = new LearningModel(AgentId, Environment.Organization.Models,
-                Environment.WhitePages.MetaNetwork.Knowledge, Cognitive);
+                Environment.WhitePages.MetaNetwork, Cognitive, Environment.Organization.Models.Generator);
             ForgettingModel = new ForgettingModel(KnowledgeModel.Expertise, Cognitive, Environment.Organization.Models);
             InfluenceModel = new InfluenceModel(Environment.Organization.Models.Influence,
                 Cognitive, Environment.WhitePages.MetaNetwork, BeliefsModel, Environment.Organization.Models.Generator);

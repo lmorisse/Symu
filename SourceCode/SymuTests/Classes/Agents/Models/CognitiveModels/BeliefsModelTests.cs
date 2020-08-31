@@ -18,7 +18,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
-using Symu.DNA.Knowledges;
+using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 

@@ -17,7 +17,9 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Knowledges;
+using Symu.DNA;
+using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
 
@@ -33,9 +35,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class LearningModel : ModelEntity
     {
+        private readonly RandomGenerator _model;
         private readonly IAgentId _id;
         private readonly InternalCharacteristics _internalCharacteristics;
         private readonly KnowledgeNetwork _knowledgeNetwork;
+        private readonly AgentKnowledgeNetwork _agentKnowledgeNetwork;
         private readonly byte _randomLevel;
         /// <summary>
         ///     Accumulates all learning of the agent during the simulation
@@ -68,17 +72,17 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgePotential());
         }
 
-        public LearningModel(IAgentId agentId, OrganizationModels models, KnowledgeNetwork knowledgeNetwork,
-            CognitiveArchitecture cognitiveArchitecture)
+        public LearningModel(IAgentId agentId, OrganizationModels models, MetaNetwork network,
+            CognitiveArchitecture cognitiveArchitecture, RandomGenerator model)
         {
             if (models == null)
             {
                 throw new ArgumentNullException(nameof(models));
             }
 
-            if (knowledgeNetwork == null)
+            if (network == null)
             {
-                throw new ArgumentNullException(nameof(knowledgeNetwork));
+                throw new ArgumentNullException(nameof(network));
             }
 
             if (cognitiveArchitecture == null)
@@ -90,7 +94,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _id = agentId;
             TasksAndPerformance = cognitiveArchitecture.TasksAndPerformance;
             _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
-            _knowledgeNetwork = knowledgeNetwork;
+            _knowledgeNetwork = network.Knowledge;
+            _agentKnowledgeNetwork = network.AgentKnowledge;
             _randomLevel = models.RandomLevelValue;
             if (!cognitiveArchitecture.InternalCharacteristics.CanLearn || !cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge)
             {
@@ -98,7 +103,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 On = false;
             }
 
-            Expertise = _knowledgeNetwork.Exists(_id) ? _knowledgeNetwork.GetAgentExpertise(_id): null;
+            Expertise = _agentKnowledgeNetwork.Exists(_id) ? _agentKnowledgeNetwork.GetAgentExpertise(_id): null;
+            _model = model;
         }
 
         public TasksAndPerformance TasksAndPerformance { get; set; }
@@ -346,15 +352,15 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         public void LearnNewKnowledge(IAgentId agentId, IId knowledgeId, float minimumKnowledge, short timeToLive,
             ushort step)
         {
-            if (_knowledgeNetwork.Exists(agentId, knowledgeId))
+            if (_agentKnowledgeNetwork.Exists(agentId, knowledgeId))
             {
                 return;
             }
 
             var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
-            _knowledgeNetwork.Add(agentId, agentKnowledge);
+            _agentKnowledgeNetwork.Add(agentId, agentKnowledge);
             var knowledge = _knowledgeNetwork.GetKnowledge<Knowledge>(knowledgeId);
-            agentKnowledge.InitializeKnowledge(knowledge.Length, _knowledgeNetwork.Model, KnowledgeLevel.NoKnowledge, step);
+            agentKnowledge.InitializeKnowledge(knowledge.Length, _model, KnowledgeLevel.NoKnowledge, step);
         }
 
         private static float LearningStandardDeviationValue(GenericLevel level)

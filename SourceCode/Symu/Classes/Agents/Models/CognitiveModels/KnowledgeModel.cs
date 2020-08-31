@@ -16,7 +16,8 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.Knowledges;
+using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
@@ -33,9 +34,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class KnowledgeModel
     {
+        private readonly RandomGenerator _model;
         private readonly IAgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
+        private readonly AgentKnowledgeNetwork _agentKnowledgeNetwork;
         private readonly KnowledgeNetwork _knowledgeNetwork;
 
         /// <summary>
@@ -46,8 +49,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="entity"></param>
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
+        /// <param name="model"></param>
         public KnowledgeModel(IAgentId agentId, ModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            MetaNetwork network)
+            MetaNetwork network, RandomGenerator model)
         {
             if (entity is null)
             {
@@ -67,18 +71,20 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             On = entity.IsAgentOn();
             _agentId = agentId;
             _knowledgeNetwork = network.Knowledge;
+            _agentKnowledgeNetwork = network.AgentKnowledge;
             _knowledgeAndBeliefs = cognitiveArchitecture.KnowledgeAndBeliefs;
             _messageContent = cognitiveArchitecture.MessageContent;
+            _model = model;
             if (_knowledgeAndBeliefs.HasKnowledge)
             {
-                if (_knowledgeNetwork.Exists(_agentId))
+                if (_agentKnowledgeNetwork.Exists(_agentId))
                 {
-                    Expertise = _knowledgeNetwork.GetAgentExpertise(_agentId);
+                    Expertise = _agentKnowledgeNetwork.GetAgentExpertise(_agentId);
                 }
                 else
                 {
                     Expertise = new AgentExpertise();
-                    _knowledgeNetwork.Add(_agentId, Expertise);
+                    _agentKnowledgeNetwork.Add(_agentId, Expertise);
                 }
             }
             else
@@ -152,10 +158,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _knowledgeNetwork.AddAgentId(_agentId, Expertise);
+            _agentKnowledgeNetwork.AddAgentId(_agentId, Expertise);
             //_knowledgeNetwork.InitializeExpertise(_agentId, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
 
-            foreach (var agentKnowledge in _knowledgeNetwork.GetAgentExpertise(_agentId).List)
+            foreach (var agentKnowledge in _agentKnowledgeNetwork.GetAgentExpertise(_agentId).List)
             {
                 InitializeAgentKnowledge((AgentKnowledge)agentKnowledge, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
             }
@@ -183,7 +189,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             var level = neutral ? KnowledgeLevel.NoKnowledge : agentKnowledge.KnowledgeLevel;
-            agentKnowledge.InitializeKnowledge(knowledge.Length, _knowledgeNetwork.Model, level, step);
+            agentKnowledge.InitializeKnowledge(knowledge.Length, _model, level, step);
         }
 
         /// <summary>
@@ -208,7 +214,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _knowledgeNetwork.Add(_agentId, expertise);
+            _agentKnowledgeNetwork.Add(_agentId, expertise);
         }
 
         /// <summary>
@@ -244,7 +250,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             var agentKnowledge = new AgentKnowledge(knowledgeId, level, minimumKnowledge, timeToLive);
-            _knowledgeNetwork.Add(_agentId, agentKnowledge);
+            _agentKnowledgeNetwork.Add(_agentId, agentKnowledge);
         }
 
 

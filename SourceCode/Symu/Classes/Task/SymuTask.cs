@@ -18,7 +18,7 @@ using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Knowledges;
+using Symu.DNA.OneModeNetworks.Knowledge;
 using Symu.Repository.Entity;
 using Symu.Results.Blocker;
 using static Symu.Common.Constants;

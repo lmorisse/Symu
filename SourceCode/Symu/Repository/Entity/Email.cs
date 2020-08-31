@@ -12,7 +12,8 @@
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Knowledges;
+using Symu.DNA;
+using Symu.DNA.OneModeNetworks.Knowledge;
 using Symu.Messaging.Templates;
 
 #endregion
@@ -25,15 +26,15 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Email : Database
     {
-        public static Email CreateInstance(IId id, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Email CreateInstance(IId id, OrganizationModels organizationModels, MetaNetwork metaNetwork)
         {
             CommunicationTemplate communication = new EmailTemplate();
             var entity = new DatabaseEntity(id, communication);
-            return new Email(entity, organizationModels, knowledgeNetwork);
+            return new Email(entity, organizationModels, metaNetwork);
         }
 
         private Email(DatabaseEntity entity, OrganizationModels organizationModels,
-            KnowledgeNetwork knowledgeNetwork) : base(entity, organizationModels, knowledgeNetwork)
+            MetaNetwork metaNetwork) : base(entity, organizationModels, metaNetwork)
         {
         }
 

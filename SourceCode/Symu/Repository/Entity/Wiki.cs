@@ -12,7 +12,8 @@
 using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Knowledges;
+using Symu.DNA;
+using Symu.DNA.OneModeNetworks.Knowledge;
 using Symu.Messaging.Templates;
 
 #endregion
@@ -25,15 +26,15 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Wiki : Database
     {
-        public static Wiki CreateInstance(IId agentId, OrganizationModels organizationModels, KnowledgeNetwork knowledgeNetwork)
+        public static Wiki CreateInstance(IId agentId, OrganizationModels organizationModels, MetaNetwork metaNetwork)
         {
             CommunicationTemplate communication = new ViaPlatformTemplate();
             var entity = new DatabaseEntity(agentId, communication);
-            return new Wiki(entity, organizationModels, knowledgeNetwork);
+            return new Wiki(entity, organizationModels, metaNetwork);
         }
 
         private Wiki(DatabaseEntity entity, OrganizationModels organizationModels,
-            KnowledgeNetwork knowledgeNetwork) : base(entity, organizationModels, knowledgeNetwork)
+            MetaNetwork metaNetwork) : base(entity, organizationModels, metaNetwork)
         {
         }
 
