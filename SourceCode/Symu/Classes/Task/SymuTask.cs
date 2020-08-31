@@ -130,8 +130,8 @@ namespace Symu.Classes.Task
         /// </summary>
         public byte Priority { get; set; }
 
-        public bool IsAssigned => Assigned!= null && Assigned.IsNotNull;
-        public bool HasCreator => Creator != null && Creator.IsNotNull;
+        public bool IsAssigned => !(Assigned == null || Assigned.IsNull);
+        public bool HasCreator => !(Creator == null || Creator.IsNull);
 
         public bool IsStarted { get; private set; }
         public bool IsToDo => !IsStarted && !IsBlocked && !IsAssigned;

@@ -160,13 +160,13 @@ namespace SymuTests.Repository.Networks
             _network.Beliefs.AddBelief(_belief);
             _network.Activities.AddActivities(TeammateId, _teamId, new List<IAgentActivity> {new AgentActivity(TeammateId, _activity)});
             _network.RemoveAgent(TeammateId);
-            //Assert.IsFalse(network.AgentIdExists(teammateId));
             Assert.IsFalse(_network.Interactions.Any());
             Assert.AreEqual(0, _network.Groups.GetAgentsCount(_teamId, TeammateId.ClassId));
             Assert.IsFalse(_network.Roles.IsMember(TeammateId, _teamId.ClassId));
             Assert.IsFalse(_network.Resources.HasResource(TeammateId, _component.Id, new ResourceUsage(IsWorkingOn)));
             Assert.IsFalse(_network.Knowledge.Any());
             Assert.IsFalse(_network.Beliefs.Any());
+            Assert.IsFalse(_network.Agents.Any());
             Assert.IsFalse(_network.Activities.AgentHasActivitiesOn(TeammateId, _teamId));
         }
 

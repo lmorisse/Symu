@@ -16,9 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
-using Symu.Common;
 using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
 using Symu.DNA.TwoModesNetworks.Sphere;
 using Symu.Environment;
 using Symu.Messaging.Messages;
@@ -263,9 +261,9 @@ namespace Symu.Classes.Agents
             }
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
+            base.Dispose(disposing);
             TaskProcessor?.Dispose();
         }
 
@@ -286,96 +284,6 @@ namespace Symu.Classes.Agents
 
             TaskProcessor = new TaskProcessor(Cognitive.TasksAndPerformance.TasksLimit, Environment.Debug);
             OnAfterTaskProcessorStart();
-        }
-
-        #endregion
-
-        #region Subscribe
-
-        private void ActSubscribe(Message message)
-        {
-            switch (message.Action)
-            {
-                case MessageAction.Remove:
-                    RemoveSubscribe(message);
-                    break;
-                case MessageAction.Add:
-                    AddSubscribe(message);
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     Remove a subscription from the list of subscriptions
-        /// </summary>
-        /// <param name="message"></param>
-        public void RemoveSubscribe(Message message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            if (message.HasAttachments)
-            {
-                MessageProcessor.Subscriptions.Unsubscribe(message.Sender, (byte) message.Attachments.First);
-            }
-            else
-            {
-                MessageProcessor.Subscriptions.Unsubscribe(message.Sender);
-            }
-        }
-
-        /// <summary>
-        ///     Add a subscription from the list of subscriptions
-        /// </summary>
-        /// <param name="message"></param>
-        public void AddSubscribe(Message message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            foreach (var subject in message.Attachments.Objects)
-            {
-                MessageProcessor.Subscriptions.Subscribe(message.Sender, (byte) subject);
-            }
-        }
-
-        /// <summary>
-        ///     Send a message to subscribe to the AgentId to the subject
-        /// </summary>
-        /// <param name="agentId"></param>
-        /// <param name="subject"></param>
-        public void Subscribe(IAgentId agentId, byte subject)
-        {
-            var message = new Message(AgentId, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
-            if (Schedule.Step == 0)
-            {
-                // Not sure the receiver exists already
-                TrySendDelayed(message);
-            }
-            else
-            {
-                Send(message);
-            }
-        }
-
-        /// <summary>
-        ///     UnSubscribe to the Message subject
-        /// </summary>
-        public void Unsubscribe(IAgentId agentId, byte subject)
-        {
-            Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
-        }
-
-        /// <summary>
-        ///     UnSubscribe to all subjects
-        /// </summary>
-        public void Unsubscribe(IAgentId agentId)
-        {
-            Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe);
         }
 
         #endregion

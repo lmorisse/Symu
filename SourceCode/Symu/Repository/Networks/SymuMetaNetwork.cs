@@ -13,6 +13,7 @@ using System;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.DNA.Activities;
+using Symu.DNA.Agent;
 using Symu.DNA.Beliefs;
 using Symu.DNA.Groups;
 using Symu.DNA.Knowledges;
@@ -20,7 +21,6 @@ using Symu.DNA.Resources;
 using Symu.DNA.Roles;
 using Symu.DNA.TwoModesNetworks.Interactions;
 using Symu.DNA.TwoModesNetworks.Sphere;
-using Symu.Repository.Networks.Agent;
 using Symu.Repository.Networks.Enculturation;
 using Symu.Repository.Networks.Influences;
 
@@ -42,11 +42,6 @@ namespace Symu.Repository.Networks
 
 
         /// <summary>
-        ///     Local agents of this environment
-        /// </summary>
-        public AgentNetwork Agents { get; } = new AgentNetwork();
-
-        /// <summary>
         ///     Agent enculturation level network
         /// </summary>
         public EnculturationNetwork Enculturation { get; } = new EnculturationNetwork();
@@ -55,6 +50,12 @@ namespace Symu.Repository.Networks
         ///     Agent influences network
         /// </summary>
         public InfluenceNetwork Influences { get; } = new InfluenceNetwork();
+
+
+        /// <summary>
+        ///     Agent enculturation level network
+        /// </summary>
+        public AgentNetwork Agents => Network.Agents;
 
         /// <summary>
         ///     Directory of social links between AgentIds, with their interaction type
@@ -110,7 +111,6 @@ namespace Symu.Repository.Networks
             Network.Clear();
             Enculturation.Clear();
             Influences.Clear();
-            Agents.Clear();
         }
 
         public void RemoveAgent(IAgentId agentId)
@@ -118,7 +118,6 @@ namespace Symu.Repository.Networks
             Network.RemoveAgent(agentId);
             Enculturation.RemoveAgent(agentId);
             Influences.RemoveAgent(agentId);
-            Agents.RemoveAgent(agentId);
         }
     }
 }

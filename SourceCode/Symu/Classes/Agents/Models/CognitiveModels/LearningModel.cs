@@ -166,7 +166,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            if (knowledgeId.IsNotNull && knowledgeBits == null)
+            if (!knowledgeId.IsNull && knowledgeBits == null)
             {
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }

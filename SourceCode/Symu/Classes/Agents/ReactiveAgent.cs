@@ -12,6 +12,7 @@
 using System;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Agent;
 using Symu.Environment;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
@@ -21,17 +22,11 @@ using Symu.Repository;
 
 namespace Symu.Classes.Agents
 {
-    public interface IAgent
-    {
-        IAgentId AgentId {get;
-            set;
-        }
-    }
     /// <summary>
     ///     An abstract base class for agents.
     ///     You must define your own agent derived classes derived
     /// </summary>
-    public abstract partial class ReactiveAgent: IAgent
+    public abstract partial class ReactiveAgent : IAgent
     {
         /// <summary>
         ///     constructor for generic new()
@@ -126,7 +121,14 @@ namespace Symu.Classes.Agents
         {
             State = AgentState.Stopping;
         }
-        public virtual void Dispose()
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             MessageProcessor?.Dispose();
         }
@@ -261,7 +263,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="subject"></param>
-        public void Subscribe(AgentId agentId, byte subject)
+        public void Subscribe(IAgentId agentId, byte subject)
         {
             var message = new Message(AgentId, agentId, MessageAction.Add, SymuYellowPages.Subscribe, subject);
             if (Schedule.Step == 0)
@@ -278,7 +280,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     UnSubscribe to the Message subject
         /// </summary>
-        public void Unsubscribe(AgentId agentId, byte subject)
+        public void Unsubscribe(IAgentId agentId, byte subject)
         {
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
         }
@@ -286,11 +288,15 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     UnSubscribe to all subjects
         /// </summary>
-        public void Unsubscribe(AgentId agentId)
+        public void Unsubscribe(IAgentId agentId)
         {
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe);
         }
 
         #endregion
+
+        /// <summary>Indicates whether a structure is null. This property is read-only.</summary>
+        /// <returns>true if the value of this object is null. Otherwise, false.</returns>
+        public bool IsNull => AgentId.IsNull;
     }
 }
