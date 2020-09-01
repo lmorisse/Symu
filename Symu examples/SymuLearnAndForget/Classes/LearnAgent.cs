@@ -47,7 +47,7 @@ namespace SymuLearnAndForget.Classes
         protected LearnAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
-            Wiki = (Database)Environment.WhitePages.MetaNetwork.Resources.Repository.List.First();
+            Wiki = (Database)Environment.WhitePages.MetaNetwork.Resource.Repository.List.First();
             Knowledge = GetKnowledge();
         }
 

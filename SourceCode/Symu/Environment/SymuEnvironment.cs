@@ -198,9 +198,9 @@ namespace Symu.Environment
         /// </summary>
         public void InitializeInteractionNetwork()
         {
-            foreach (var groupId in WhitePages.MetaNetwork.Groups.GetGroups().ToList())
+            foreach (var groupId in WhitePages.MetaNetwork.AgentGroup.GetGroups().ToList())
             {
-                var agentIds = WhitePages.MetaNetwork.Groups.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
+                var agentIds = WhitePages.MetaNetwork.AgentGroup.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
                     .ToList();
 
                 var count = agentIds.Count;
@@ -212,7 +212,7 @@ namespace Symu.Environment
                     {
                         var agentId2 = agentIds[j];
                         var interaction = new Interaction(agentId1, agentId2);
-                        WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+                        WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
                     }
                 }
             }
@@ -456,7 +456,7 @@ namespace Symu.Environment
             foreach (var database in Organization.Databases.Select(databaseEntity =>
                 new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork)))
             {
-                WhitePages.MetaNetwork.Resources.Add(database);
+                WhitePages.MetaNetwork.Resource.Add(database);
             }
         }
 
@@ -469,7 +469,7 @@ namespace Symu.Environment
         /// </summary>
         public void ScheduleEvents()
         {
-            foreach (var symuEvent in WhitePages.MetaNetwork.Events.List.Cast<SymuEvent>())
+            foreach (var symuEvent in WhitePages.MetaNetwork.Event.List.Cast<SymuEvent>())
             {
                 symuEvent.Schedule(Schedule.Step);
             }
@@ -482,7 +482,7 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(symuEvent));
             }
 
-            WhitePages.MetaNetwork.Events.Add(symuEvent);
+            WhitePages.MetaNetwork.Event.Add(symuEvent);
         }
 
         #endregion

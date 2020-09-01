@@ -82,8 +82,9 @@ namespace SymuMurphiesAndBlockers.Classes
                 var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
                 actor.GroupId = group.AgentId;
                 var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork);
+                WhitePages.MetaNetwork.Resource.Add(email);
                 var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
-                WhitePages.MetaNetwork.Resources.Add(actor.AgentId, email, agentResource);
+                WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
                 var agentGroup = new AgentGroup(actor.AgentId, 100);
                 WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
             }

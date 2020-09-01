@@ -29,7 +29,7 @@ namespace SymuLearnAndForget.Classes
         public ExpertAgent ExpertAgent { get; private set; }
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
-        public Database Wiki => (Database)WhitePages.MetaNetwork.Resources.Repository.List.First();
+        public Database Wiki => (Database)WhitePages.MetaNetwork.Resource.Repository.List.First();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -82,7 +82,7 @@ namespace SymuLearnAndForget.Classes
             ExpertAgent = ExpertAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
             var interaction = new Interaction(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
-            WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+            WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
         }
     }
 }

@@ -116,7 +116,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.WhitePages.MetaNetwork.Interactions.HasActiveInteraction(AgentId, senderId))
+            if (Environment.WhitePages.MetaNetwork.Interaction.HasActiveInteraction(AgentId, senderId))
             {
                 return true;
             }
@@ -145,7 +145,7 @@ namespace Symu.Classes.Agents
             {
                 // Message.Sender is now part of agent interaction sphere
                 var interaction = new Interaction(AgentId, senderId);
-                Environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+                Environment.WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
             }
 
             return true;

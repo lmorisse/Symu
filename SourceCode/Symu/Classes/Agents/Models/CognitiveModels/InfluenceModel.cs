@@ -81,7 +81,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             //_agentId = agentId;
             //_networkInfluences = network.Influences;
-            _agentNetwork = network.Agents;
+            _agentNetwork = network.Agent;
             _beliefsModel = beliefsModel;
             _model = model;
 

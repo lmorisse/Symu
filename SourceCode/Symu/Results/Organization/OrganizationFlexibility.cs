@@ -76,7 +76,7 @@ namespace Symu.Results.Organization
         /// </summary>
         public void HandleLinks(ushort agentsCount)
         {
-            var actualLinks = Environment.WhitePages.MetaNetwork.Interactions.Count;
+            var actualLinks = Environment.WhitePages.MetaNetwork.Interaction.Count;
             var maxLinks = Combinatorics.Combinations(agentsCount, 2);
             var sphere = new DensityStruct(actualLinks, maxLinks, Environment.Schedule.Step);
             Links.Add(sphere);

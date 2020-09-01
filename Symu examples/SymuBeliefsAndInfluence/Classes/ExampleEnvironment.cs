@@ -92,21 +92,21 @@ namespace SymuBeliefsAndInfluence.Classes
             base.SetAgents();
             // the group is created just to initialize the interactionNetwork
             var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
-            WhitePages.MetaNetwork.Groups.AddGroup(group.AgentId);
+            WhitePages.MetaNetwork.AgentGroup.AddGroup(group.AgentId);
 
             for (var j = 0; j < InfluencersCount; j++)
             {
                 var actor = InfluencerAgent.CreateInstance(Organization.NextEntityId(), this, InfluencerTemplate);
                 Influencers.Add(actor);
                 var agentGroup = new AgentGroup(actor.AgentId, 100);
-                WhitePages.MetaNetwork.Groups.AddAgent(agentGroup, group.AgentId);
+                WhitePages.MetaNetwork.AgentGroup.AddAgent(agentGroup, group.AgentId);
             }
 
             for (var j = 0; j < WorkersCount; j++)
             {
                 var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, WorkerTemplate);
                 var agentGroup = new AgentGroup(actor.AgentId, 100);
-                WhitePages.MetaNetwork.Groups.AddAgent(agentGroup, group.AgentId);
+                WhitePages.MetaNetwork.AgentGroup.AddAgent(agentGroup, group.AgentId);
             }
 
         }

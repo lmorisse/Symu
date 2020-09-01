@@ -125,7 +125,7 @@ namespace SymuTests.Repository
             _environment.InitializeIteration();
             //Assert
             Assert.IsFalse(_environment.WhitePages.StoppedAgents.Any());
-            Assert.AreEqual(0, _environment.WhitePages.MetaNetwork.Agents.Count);
+            Assert.AreEqual(0, _environment.WhitePages.MetaNetwork.Agent.Count);
         }
 
         [TestMethod]

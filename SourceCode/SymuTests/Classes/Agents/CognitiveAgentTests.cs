@@ -863,7 +863,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(_interaction);
+            _environment.WhitePages.MetaNetwork.Interaction.AddInteraction(_interaction);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -1316,7 +1316,7 @@ namespace SymuTests.Classes.Agents
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId);
             var interaction = new Interaction(_agent.AgentId, teammate.AgentId);
-            _environment.WhitePages.MetaNetwork.Interactions.AddInteraction(interaction);
+            _environment.WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
