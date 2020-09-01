@@ -7,7 +7,7 @@
 
 #endregion
 
-using Symu.DNA.OneModeNetworks.Role;
+using Symu.DNA.OneModeNetworks;
 
 namespace SymuTests.Helpers
 {

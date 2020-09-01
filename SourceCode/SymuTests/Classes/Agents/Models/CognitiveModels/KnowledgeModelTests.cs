@@ -66,7 +66,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, _network, RandomGenerator.RandomBinary);
             _expertise = _knowledgeModel.Expertise;
             _knowledge = new Knowledge(1, "1", 1);
-            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Knowledge.Add(_knowledge);
             _network.AgentKnowledge.Add(_agentId, _expertise);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
@@ -136,7 +136,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void InitializeExpertiseTest1()
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
-            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Knowledge.Add(_knowledge);
             var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
             _expertise.Add(agentKnowledge);
             _knowledgeModel.AddExpertise(_expertise);

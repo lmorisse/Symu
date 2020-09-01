@@ -12,7 +12,7 @@
 using System;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.OneModeNetworks;
 
 #endregion
 

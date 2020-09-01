@@ -12,7 +12,7 @@
 using System;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
-using Symu.DNA.OneModeNetworks.Agent;
+using Symu.DNA.OneModeNetworks;
 using Symu.Environment;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;

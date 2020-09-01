@@ -18,7 +18,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.OneModeNetworks.Activity;
+using Symu.DNA.OneModeNetworks;
 using Symu.Environment;
 using Symu.Repository.Entity;
 

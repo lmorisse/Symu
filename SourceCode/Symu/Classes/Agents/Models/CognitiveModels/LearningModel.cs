@@ -18,7 +18,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.OneModeNetworks;
 using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
@@ -359,7 +359,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
             _agentKnowledgeNetwork.Add(agentId, agentKnowledge);
-            var knowledge = _knowledgeNetwork.GetKnowledge<Knowledge>(knowledgeId);
+            var knowledge = _knowledgeNetwork.Get<Knowledge>(knowledgeId);
             agentKnowledge.InitializeKnowledge(knowledge.Length, _model, KnowledgeLevel.NoKnowledge, step);
         }
 

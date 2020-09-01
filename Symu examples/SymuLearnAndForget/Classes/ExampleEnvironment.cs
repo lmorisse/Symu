@@ -29,7 +29,7 @@ namespace SymuLearnAndForget.Classes
         public ExpertAgent ExpertAgent { get; private set; }
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
-        public Database Wiki => (Database)WhitePages.MetaNetwork.Resource.Repository.List.First();
+        public Database Wiki => (Database)WhitePages.MetaNetwork.Resource.List.First();
 
         public override void SetOrganization(OrganizationEntity organization)
         {

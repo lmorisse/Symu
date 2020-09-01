@@ -432,11 +432,11 @@ namespace Symu.Environment
         /// </summary>
         public void SetKnowledges()
         {
-            WhitePages.MetaNetwork.Knowledge.AddKnowledges(Organization.Knowledges);
+            WhitePages.MetaNetwork.Knowledge.Add(Organization.Knowledges);
             foreach (var knowledge in Organization.Knowledges)
             {
                 var belief = new Belief(knowledge, knowledge.Length, Organization.Models.Generator, Organization.Models.BeliefWeightLevel);
-                WhitePages.MetaNetwork.Belief.AddBelief(belief);
+                WhitePages.MetaNetwork.Belief.Add(belief);
             }
         }
 

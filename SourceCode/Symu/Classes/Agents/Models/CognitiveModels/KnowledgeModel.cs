@@ -16,7 +16,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.OneModeNetworks;
 using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
@@ -333,7 +333,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public Knowledge GetKnowledge(IId knowledgeId)
         {
-            return _knowledgeNetwork.GetKnowledge<Knowledge>(knowledgeId);
+            return _knowledgeNetwork.Get<Knowledge>(knowledgeId);
         }
 
         #region KnowsEnough

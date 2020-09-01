@@ -18,7 +18,7 @@ using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks.Agent;
+using Symu.DNA.OneModeNetworks;
 
 #endregion
 
@@ -172,7 +172,7 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<IAgentId> AllAgentIds()
         {
-            return MetaNetwork.Agent.GetKeys();
+            return MetaNetwork.Agent.GetIds();
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<ReactiveAgent> AllAgents()
         {
-            return MetaNetwork.Agent.GetValues().Cast<ReactiveAgent>();
+            return MetaNetwork.Agent.Gets().Cast<ReactiveAgent>();
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Symu.Repository
         /// <returns></returns>
         public IEnumerable<CognitiveAgent> AllCognitiveAgents()
         {
-            return MetaNetwork.Agent.GetValues().OfType<CognitiveAgent>();
+            return MetaNetwork.Agent.Gets().OfType<CognitiveAgent>();
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Symu.Repository
 
         public IAgentId GetAgentId(IId componentId)
         {
-            return MetaNetwork.Agent.GetAgentId(componentId);
+            return MetaNetwork.Agent.GetId(componentId);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace SymuScenariosAndEvents.Classes
         {
             // knowledge length of 10 is arbitrary in this example
             var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
-            WhitePages.MetaNetwork.Knowledge.AddKnowledge(knowledge);
+            WhitePages.MetaNetwork.Knowledge.Add(knowledge);
 
             foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.ClassId))
             {

@@ -13,8 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks.Activity;
-using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.OneModeNetworks;
 using Symu.DNA.TwoModesNetworks.Assignment;
 
 #endregion

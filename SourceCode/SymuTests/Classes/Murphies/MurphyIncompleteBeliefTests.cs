@@ -52,7 +52,7 @@ namespace SymuTests.Classes.Murphies
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network, models.Generator) {On = true};
             _belief = new Belief(1, "1", 1, models.Generator, BeliefWeightLevel.RandomWeight);
 
-            _network.Belief.AddBelief(_belief);
+            _network.Belief.Add(_belief);
             var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _network.AgentBelief.Add(_agentId, agentBelief);
             _agentBeliefs = _network.AgentBelief.GetAgentBeliefs(_agentId);

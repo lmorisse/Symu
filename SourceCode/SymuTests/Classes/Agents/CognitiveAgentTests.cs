@@ -74,12 +74,12 @@ namespace SymuTests.Classes.Agents
 
             var expertise = new AgentExpertise();
             _knowledges.Add(_knowledge);
-            _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge);
+            _environment.WhitePages.MetaNetwork.Knowledge.Add(_knowledge);
             var belief = new Belief(_knowledge, _knowledge.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief);
-            _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(_knowledge2);
+            _environment.WhitePages.MetaNetwork.Belief.Add(belief);
+            _environment.WhitePages.MetaNetwork.Knowledge.Add(_knowledge2);
             var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief2);
+            _environment.WhitePages.MetaNetwork.Belief.Add(belief2);
             _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
             expertise.Add(_agentKnowledge);
             _environment.WhitePages.MetaNetwork.AgentKnowledge.Add(_agent.AgentId, expertise);
@@ -265,7 +265,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
-            _environment.WhitePages.MetaNetwork.Belief.AddBelief(belief);
+            _environment.WhitePages.MetaNetwork.Belief.Add(belief);
             _agent.BeliefsModel.AddBelief(belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.BeliefsModel.InitializeBeliefs(true);
             _agent.InfluenceModel.Influentialness = 1;
@@ -278,7 +278,7 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             // Knowledge
             var knowledge = new Knowledge(1, "1", 1);
-            _environment.WhitePages.MetaNetwork.Knowledge.AddKnowledge(knowledge);
+            _environment.WhitePages.MetaNetwork.Knowledge.Add(knowledge);
             var agentExpertise = new AgentExpertise();
             var agentKnowledge = new AgentKnowledge(knowledge.Id, bit0S);
             agentExpertise.Add(agentKnowledge);

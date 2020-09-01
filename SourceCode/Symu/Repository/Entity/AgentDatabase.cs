@@ -12,7 +12,7 @@
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.OneModeNetworks.Resource;
+using Symu.DNA.OneModeNetworks;
 
 #endregion
 

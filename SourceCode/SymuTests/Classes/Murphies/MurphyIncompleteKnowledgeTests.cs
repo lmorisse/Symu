@@ -39,7 +39,7 @@ namespace SymuTests.Classes.Murphies
             var models = new OrganizationModels();
             _network = new MetaNetwork(models.InteractionSphere);
             _knowledge = new Knowledge(1, "1", 1);
-            _network.Knowledge.AddKnowledge(_knowledge);
+            _network.Knowledge.Add(_knowledge);
             _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network, RandomGenerator.RandomBinary);
             _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
             _taskBits.SetMandatory(new byte[] {0});

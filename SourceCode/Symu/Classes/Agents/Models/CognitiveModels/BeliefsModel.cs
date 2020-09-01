@@ -16,7 +16,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks.Belief;
+using Symu.DNA.OneModeNetworks;
 using Symu.DNA.TwoModesNetworks.AgentBelief;
 using Symu.DNA.TwoModesNetworks.AgentKnowledge;
 using Symu.Messaging.Templates;
@@ -129,7 +129,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             foreach (var agentBelief in expertise.List.Select(agentKnowledge => new AgentBelief(agentKnowledge.KnowledgeId, beliefLevel)))
             {
-                _agentBeliefNetwork.AddBelief(_agentId, agentBelief);
+                _agentBeliefNetwork.AddAgentBelief(_agentId, agentBelief);
             }
         }
 
@@ -167,7 +167,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public Belief GetBelief(IId beliefId)
         {
-            return _beliefNetwork.GetBelief<Belief>(beliefId);
+            return _beliefNetwork.Get<Belief>(beliefId);
         }
 
         /// <summary>

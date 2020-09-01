@@ -59,7 +59,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _beliefBitsNonNeutral = _belief.InitializeBits(models.Generator, BeliefLevel.NeitherAgreeNorDisagree);
             _beliefBitsNeutral = _belief.InitializeBits(models.Generator, BeliefLevel.NoBelief);
 
-            _network.Belief.AddBelief(_belief);
+            _network.Belief.Add(_belief);
             _agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
             _network.AgentBelief.Add(_agentId, _agentBelief);
 

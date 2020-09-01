@@ -47,7 +47,7 @@ namespace SymuLearnAndForget.Classes
         protected LearnAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
             new AgentId(id, Class), environment, template)
         {
-            Wiki = (Database)Environment.WhitePages.MetaNetwork.Resource.Repository.List.First();
+            Wiki = (Database)Environment.WhitePages.MetaNetwork.Resource.List.First();
             Knowledge = GetKnowledge();
         }
 
@@ -104,8 +104,8 @@ namespace SymuLearnAndForget.Classes
 
         private Knowledge GetKnowledge()
         {
-            var knowledgeId = Environment.WhitePages.MetaNetwork.Knowledge.Repository.List.First().Id;
-            return (Knowledge)Environment.WhitePages.MetaNetwork.Knowledge.GetKnowledge(knowledgeId);
+            var knowledgeId = Environment.WhitePages.MetaNetwork.Knowledge.List.First().Id;
+            return (Knowledge)Environment.WhitePages.MetaNetwork.Knowledge.Get(knowledgeId);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        protected Database Email => HasEmail ? Environment.WhitePages.MetaNetwork.Resource.GetResource<Database>(AgentId.Id) : null;
+        protected Database Email => HasEmail ? Environment.WhitePages.MetaNetwork.Resource.Get<Database>(AgentId.Id) : null;
 
         /// <summary>
         ///     If agent has an email
