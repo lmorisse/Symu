@@ -18,7 +18,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Activities;
+using Symu.DNA.OneModeNetworks.Activity;
 using Symu.Environment;
 using Symu.Repository.Entity;
 
@@ -120,16 +120,16 @@ namespace SymuGroupAndInteraction.Classes
             {
                 case 0:
                     // same activity for all
-                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[0]));
+                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[0]));
                     break;
                 case 1:
                     // Activity is by group
-                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[i]));
+                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[i]));
                     break;
                 case 2:
                     // Activity is randomly defined for agentId
                     var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.Activities.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[index]));
+                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[index]));
                     break;
             }
         }

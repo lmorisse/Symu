@@ -13,8 +13,9 @@ using System;
 using System.Collections.Generic;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
-using Symu.DNA.Activities;
+using Symu.DNA.OneModeNetworks.Activity;
 using Symu.DNA.OneModeNetworks.Knowledge;
+using Symu.DNA.TwoModesNetworks.Assignment;
 
 #endregion
 
@@ -29,7 +30,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class ActivityModel
     {
         private readonly IAgentId _agentId;
-        private readonly ActivityNetwork _networkActivities;
+        private readonly AssignmentNetwork _networkActivities;
 
         /// <summary>
         ///     Initialize influence model :
@@ -51,7 +52,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             _agentId = agentId;
-            _networkActivities = network.Activities;
+            _networkActivities = network.Assignment;
         }
 
         /// <summary>
