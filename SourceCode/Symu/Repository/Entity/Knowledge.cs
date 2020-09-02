@@ -12,7 +12,7 @@
 using System;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.OneModeNetworks;
+using Symu.DNA.Networks.OneModeNetworks;
 
 #endregion
 
@@ -58,13 +58,13 @@ namespace Symu.Repository.Entity
         public override bool Equals(object obj)
         {
             return obj is Knowledge knowledge
-                   && Id == knowledge.Id;
+                   && Id.Equals(knowledge.Id);
         }
 
         public bool Equals(IKnowledge knowledge)
         {
             return knowledge is Knowledge know
-                   && Id == know.Id;
+                   && Id.Equals(know.Id);
         }
         public override string ToString()
         {

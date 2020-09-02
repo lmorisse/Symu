@@ -11,6 +11,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Symu.Common;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
+using Symu.DNA;
+using Symu.DNA.MatrixNetworks;
 using Symu.Environment;
 using Symu.Results.Blocker;
 using Symu.Results.Messaging;
@@ -37,6 +43,7 @@ namespace Symu.Results
             Results.Add(Blockers);
             Results.Add(Tasks);
             Results.Add(Messages);
+            Results.Add(KeyFrames);
         }
 
         protected SymuEnvironment Environment { get; }
@@ -61,6 +68,10 @@ namespace Symu.Results
         public bool SeemsToBeBlocked { get; set; }
         public bool NotFinishedInTime { get; set; }
         public ushort NumberOfItemsNotDone { get; set; }
+        /// <summary>
+        /// Keyframes from Symu.DNA: list of meta-network snapshot over the time
+        /// </summary>
+        public KeyFrames KeyFrames { get; } = new KeyFrames();
 
         /// <summary>
         ///     One of the most fundamental types of groups is the triads
@@ -93,7 +104,7 @@ namespace Symu.Results
         public MessageResults Messages { get; }
 
         //Specific results
-        public List<SymuResults> Results { get; } = new List<SymuResults>();
+        public List<IResult> Results { get; } = new List<IResult>();
 
         public virtual void Initialize()
         {
@@ -117,10 +128,52 @@ namespace Symu.Results
         /// </summary>
         public void SetResults()
         {
-            foreach (var result in Results)
+            foreach (var result in Results.Where(ComputeResults))
             {
-                result.SetResults();
+                if (result is KeyFrames keyFrame)
+                {
+                    keyFrame.Add(Environment.Schedule.Step, Environment.WhitePages.MetaNetwork.ToMatrix());
+                    keyFrame.SetResults();
+                }
+                else
+                {
+                    result.SetResults();
+                }
             }
+        }
+        public bool ComputeResults(IResult result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException(nameof(result));
+            }
+
+            if (!result.On)
+            {
+                return false;
+            }
+
+            bool set;
+            switch (result.Frequency)
+            {
+                case TimeStepType.Intraday:
+                case TimeStepType.Daily:
+                    set = true;
+                    break;
+                case TimeStepType.Weekly:
+                    set = Environment.Schedule.IsEndOfWeek;
+                    break;
+                case TimeStepType.Monthly:
+                    set = Environment.Schedule.IsEndOfMonth;
+                    break;
+                case TimeStepType.Yearly:
+                    set = Environment.Schedule.IsEndOfYear;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return set;
         }
 
         public IterationResult Clone()
@@ -178,7 +231,7 @@ namespace Symu.Results
         ///     Add a results to the collection
         /// </summary>
         /// <param name="result"></param>
-        public void Add(SymuResults result)
+        public void Add(IResult result)
         {
             Results.Add(result);
         }
@@ -188,16 +241,16 @@ namespace Symu.Results
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <returns></returns>
-        public TResult Get<TResult>() where TResult : SymuResults
+        public TResult Get<TResult>() where TResult : IResult
         {
-            return Results.Find(x => x is TResult) as TResult;
+            return (TResult)Results.Find(x => x is TResult);
         }
 
         /// <summary>
         ///     Get a result from the collection by its type
         /// </summary>
         /// <returns></returns>
-        public SymuResults Get(Type type)
+        public IResult Get(Type type)
         {
             return Results.Find(x => x.GetType() == type);
         }

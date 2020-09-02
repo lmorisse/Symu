@@ -13,6 +13,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
+using Symu.DNA.Networks;
 using Symu.Messaging.Templates;
 
 #endregion

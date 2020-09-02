@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.OneModeNetworks;
+using Symu.DNA.Networks.OneModeNetworks;
 
 #endregion
 
@@ -25,12 +25,23 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class Activity : IActivity
     {
-        public Activity(string name)
+        public Activity(ushort id, string name)
         {
+            Id = new UId(id);
+            Name = name;
+        }
+        public Activity(IId id, string name)
+        {
+            Id = id;
             Name = name;
         }
 
         public string Name { get; set; }
+
+        /// <summary>
+        ///     Unique identifier of the activity
+        /// </summary>
+        public IId Id { get; }
 
         /// <summary>
         ///     List of knowledges required to work on this activity
@@ -66,7 +77,7 @@ namespace Symu.Repository.Entity
         public bool Equals(IActivity activity)
         {
             return activity is Activity act &&
-                   Name == act.Name;
+                   Id.Equals(act.Id);
         }
     }
 }

@@ -287,21 +287,12 @@ namespace Symu.Classes.Agents
             }
 
             var receiver = Environment.WhitePages.GetAgent(message.Receiver);
-            if (receiver == null)
+            if (receiver == null || receiver.State == AgentState.Stopping)
             {
                 // receiver is already stopped
                 return;
             }
-
-            switch (receiver.State)
-            {
-                case AgentState.Stopping:
-                    return;
-                case AgentState.Starting:
-                case AgentState.Started:
-                    SendDelayed(message, step);
-                    break;
-            }
+            SendDelayed(message, step);
         }
 
         private void SendDelayed(Message message, ushort step)

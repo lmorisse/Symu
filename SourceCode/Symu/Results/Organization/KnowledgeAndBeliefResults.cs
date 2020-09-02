@@ -11,6 +11,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -20,7 +21,7 @@ namespace Symu.Results.Organization
     /// <summary>
     ///     Get the knowledge and Belief performance for the group
     /// </summary>
-    public sealed class KnowledgeAndBeliefResults : SymuResults
+    public sealed class KnowledgeAndBeliefResults : Result
     {
         public KnowledgeAndBeliefResults(SymuEnvironment environment) : base(environment)
         {
@@ -67,7 +68,7 @@ namespace Symu.Results.Organization
         /// <summary>
         ///     Handle the performance around knowledge and beliefs
         /// </summary>
-        protected override void HandleResults()
+        public override void SetResults()
         {
             HandleBelief();
             HandleKnowledge();
@@ -165,7 +166,7 @@ namespace Symu.Results.Organization
             }
         }
 
-        public override SymuResults Clone()
+        public override IResult Clone()
         {
             var clone = new KnowledgeAndBeliefResults(Environment);
             CopyTo(clone);

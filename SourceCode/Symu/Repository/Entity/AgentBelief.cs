@@ -11,11 +11,10 @@
 
 using System;
 using System.Linq;
-using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.TwoModesNetworks.AgentBelief;
+using Symu.DNA.Networks.TwoModesNetworks.AgentBelief;
 using static Symu.Common.Constants;
 
 #endregion
@@ -39,6 +38,17 @@ namespace Symu.Repository.Entity
         /// </summary>
         private const int RangeMax = 1;
 
+        #region IAgentBelief
+        public IId BeliefId { get; }
+
+        /// <summary>
+        /// The value used to feed the matrix network
+        /// For a binary matrix network, the value is 1
+        /// </summary>
+        public float Value => GetBeliefSum();
+
+        #endregion
+
         public AgentBelief(ushort beliefId, BeliefLevel beliefLevel) : this(new UId(beliefId), beliefLevel)
         {
         }
@@ -49,7 +59,6 @@ namespace Symu.Repository.Entity
             BeliefLevel = beliefLevel;
         }
 
-        public IId BeliefId { get; }
         public Bits BeliefBits { get; set; } = new Bits(RangeMin);
         public BeliefLevel BeliefLevel { get; }
 
@@ -256,5 +265,6 @@ namespace Symu.Repository.Entity
         {
             BeliefBits.SetBit(index, value);
         }
+
     }
 }

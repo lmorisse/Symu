@@ -12,6 +12,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Repository.Entity;
 
+using SymuDNATests.Classes;
+
 #endregion
 
 namespace SymuTests.Repository.Entity
@@ -19,7 +21,7 @@ namespace SymuTests.Repository.Entity
     [TestClass]
     public class ActivityTests
     {
-        private readonly Activity _activity = new Activity("a");
+        private readonly TestActivity _activity = new TestActivity(1);
 
         private readonly Knowledge _knowledge =
             new Knowledge(1, "K1", 10);

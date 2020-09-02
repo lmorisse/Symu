@@ -170,7 +170,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest()
         {
-            var symuEvent = new SymuEvent {Step = 10};
+            var symuEvent = new SymuEvent(1) { Step = 10};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
@@ -182,7 +182,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest1()
         {
-            var symuEvent = new CyclicalEvent {EveryStep = 5};
+            var symuEvent = new CyclicalEvent(1) {EveryStep = 5};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
@@ -194,7 +194,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest2()
         {
-            var symuEvent = new RandomEvent {Ratio = 0.1F};
+            var symuEvent = new RandomEvent(1) { Ratio = 0.1F};
             symuEvent.OnExecute += _environment.PersonEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
@@ -206,7 +206,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest()
         {
-            var symuEvent = new SymuEvent {Step = 10};
+            var symuEvent = new SymuEvent(1) { Step = 10};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
@@ -218,7 +218,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest1()
         {
-            var symuEvent = new CyclicalEvent {EveryStep = 5};
+            var symuEvent = new CyclicalEvent(1) { EveryStep = 5};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();
@@ -230,7 +230,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest2()
         {
-            var symuEvent = new RandomEvent {Ratio = 0.1F};
+            var symuEvent = new RandomEvent(1) { Ratio = 0.1F};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             _environment.AddEvent(symuEvent);
             SuccessTest();

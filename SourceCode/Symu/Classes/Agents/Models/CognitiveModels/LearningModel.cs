@@ -18,8 +18,9 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.OneModeNetworks;
-using Symu.DNA.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks;
+using Symu.DNA.Networks.OneModeNetworks;
+using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
 

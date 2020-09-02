@@ -13,8 +13,8 @@ using System;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.OneModeNetworks;
-using Symu.DNA.TwoModesNetworks.AgentResource;
+using Symu.DNA.Networks.OneModeNetworks;
+using Symu.DNA.Networks.TwoModesNetworks.AgentResource;
 
 #endregion
 
@@ -28,8 +28,8 @@ namespace Symu.Repository.Entity
         public AgentResource(IId resourceId, IResourceUsage resourceUsage, float resourceAllocation=100)
         {
             ResourceId = resourceId;
-            ResourceUsage = resourceUsage;
-            ResourceAllocation = resourceAllocation;
+            Usage = resourceUsage;
+            Allocation = resourceAllocation;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Symu.Repository.Entity
         /// <summary>
         ///     Define how the AgentId is using the resource
         /// </summary>
-        public IResourceUsage ResourceUsage { get; }
+        public IResourceUsage Usage { get; }
 
 
         private float _resourceAllocation;
@@ -49,7 +49,7 @@ namespace Symu.Repository.Entity
         ///     Allocation of capacity per resource
         ///     capacity allocation ranging from [0; 100]
         /// </summary>
-        public float ResourceAllocation
+        public float Allocation
         {
             get => _resourceAllocation;
             set
@@ -65,12 +65,12 @@ namespace Symu.Repository.Entity
 
         public IAgentResource Clone()
         {
-            return new AgentResource(ResourceId, (ResourceUsage)ResourceUsage, ResourceAllocation);
+            return new AgentResource(ResourceId, (ResourceUsage)Usage, Allocation);
         }
 
         public bool Equals(IResourceUsage resourceUsage)
         {
-            return ResourceUsage.Equals(resourceUsage);
+            return Usage.Equals(resourceUsage);
         }
 
         public bool Equals(IId resourceId)
@@ -87,7 +87,7 @@ namespace Symu.Repository.Entity
         {
             return obj is AgentResource agentResource &&
                    ResourceId.Equals(agentResource.ResourceId) &&
-                   ResourceUsage == agentResource.ResourceUsage;
+                   Usage == agentResource.Usage;
         }
     }
 }

@@ -13,6 +13,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -22,7 +24,7 @@ namespace Symu.Results.Task
     /// <summary>
     ///     Manage the task metrics for the simulation
     /// </summary>
-    public sealed class TaskResults : SymuResults
+    public sealed class TaskResults : Result
     {
         public TaskResults(SymuEnvironment environment) : base(environment)
         {
@@ -46,7 +48,7 @@ namespace Symu.Results.Task
         /// </summary>
         public List<float> SumCapacity { get; private set; } = new List<float>();
 
-        protected override void HandleResults()
+        public override void SetResults()
         {
             HandleTasks();
             HandleCapacity();
@@ -142,7 +144,7 @@ namespace Symu.Results.Task
             cloneTasks.SumCapacity.AddRange(SumCapacity);
         }
 
-        public override SymuResults Clone()
+        public override IResult Clone()
         {
             var clone = new TaskResults(Environment);
             CopyTo(clone);

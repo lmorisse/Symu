@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
 
 #endregion
@@ -40,6 +41,13 @@ namespace Symu.Repository.Entity
         public override bool Trigger(ushort step)
         {
             return Bernoulli.Sample(_ratio);
+        }
+        public RandomEvent(ushort id): base(id)
+        {
+        }
+
+        public RandomEvent(IId id) : base(id)
+        {
         }
     }
 }

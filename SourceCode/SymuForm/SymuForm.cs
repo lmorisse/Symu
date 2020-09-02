@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Environment;
 using Symu.Repository.Entity;

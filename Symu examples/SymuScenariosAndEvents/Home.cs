@@ -184,13 +184,13 @@ namespace SymuScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        symuEvent = new SymuEvent {Step = eventStep};
+                        symuEvent = new SymuEvent(0) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
+                        symuEvent = new CyclicalEvent(0) { EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        symuEvent = new RandomEvent {Ratio = randomRatio};
+                        symuEvent = new RandomEvent(0) { Ratio = randomRatio};
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -211,13 +211,13 @@ namespace SymuScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        symuEvent = new SymuEvent {Step = eventStep};
+                        symuEvent = new SymuEvent(1) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        symuEvent = new CyclicalEvent {EveryStep = cyclicalStep};
+                        symuEvent = new CyclicalEvent(1) { EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        symuEvent = new RandomEvent {Ratio = randomRatio};
+                        symuEvent = new RandomEvent(1) { Ratio = randomRatio};
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

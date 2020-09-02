@@ -10,6 +10,7 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Symu.Common.Classes;
 using Symu.Environment;
 using Symu.Results;
 using SymuTests.Helpers;
@@ -30,9 +31,9 @@ namespace SymuTests.Results
         public void Initialize()
         {
             _result = new IterationResult(_environment);
-            _specificResult = new TestResult(_environment);
+            _specificResult = new TestResult();
             _result.Add(_specificResult);
-            _result.On();
+            _result.Off();
             _result.SetFrequency(TimeStepType.Daily);
         }
 
@@ -43,7 +44,7 @@ namespace SymuTests.Results
         public void GetTest()
         {
             _specificResult.On = false;
-            _result.Get<TestResult>().SetResults();
+            _result.SetResults();
             Assert.IsFalse(_result.Get<TestResult>().Result);
         }
 
@@ -53,22 +54,25 @@ namespace SymuTests.Results
         [TestMethod]
         public void GetTest1()
         {
+            _specificResult.On = true;
             _specificResult.Frequency = TimeStepType.Monthly;
-            _result.Get<TestResult>().SetResults();
+            _result.SetResults();
             Assert.IsFalse(_result.Get<TestResult>().Result);
         }
 
         [TestMethod]
         public void GetTest2()
         {
-            _result.Get<TestResult>().SetResults();
+            _specificResult.On = true;
+            _result.SetResults();
             Assert.IsTrue(_result.Get<TestResult>().Result);
         }
 
         [TestMethod]
         public void CloneTest()
         {
-            _result.Get<TestResult>().SetResults();
+            _specificResult.On = true;
+            _result.SetResults();
             _environment.Messages.Result.SentMessagesCost = 1;
             _result.Messages.SetResults();
 

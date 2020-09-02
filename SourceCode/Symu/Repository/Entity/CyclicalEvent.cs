@@ -7,6 +7,8 @@
 
 #endregion
 
+using Symu.Common.Interfaces.Entity;
+
 namespace Symu.Repository.Entity
 {
     /// <summary>
@@ -19,6 +21,12 @@ namespace Symu.Repository.Entity
         public override bool Trigger(ushort step)
         {
             return step % EveryStep == 0;
+        }
+        public CyclicalEvent(ushort id) : base(id)
+        {
+        }
+        public CyclicalEvent(IId id) : base(id)
+        {
         }
     }
 }

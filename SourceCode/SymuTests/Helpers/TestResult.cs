@@ -9,6 +9,8 @@
 
 #region using directives
 
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Results;
 
@@ -16,25 +18,31 @@ using Symu.Results;
 
 namespace SymuTests.Helpers
 {
-    public class TestResult : SymuResults
+    public class TestResult : IResult
     {
-        public TestResult(SymuEnvironment environment) : base(environment)
-        {
-        }
-
         public bool Result { get; private set; }
 
-        protected override void HandleResults()
+        /// <summary>
+        ///     If set to true, Tasks will be filled with value and stored during the simulation
+        /// </summary>
+        public bool On { get; set; }
+
+        /// <summary>
+        ///     Frequency of the results
+        /// </summary>
+        public TimeStepType Frequency { get; set; }
+
+        public void SetResults()
         {
             Result = true;
         }
 
-        public override void Clear()
+        public void Clear()
         {
             Result = false;
         }
 
-        public override void CopyTo(object clone)
+        public void CopyTo(object clone)
         {
             if (clone != null)
             {
@@ -42,9 +50,9 @@ namespace SymuTests.Helpers
             }
         }
 
-        public override SymuResults Clone()
+        public IResult Clone()
         {
-            var test = new TestResult(Environment);
+            var test = new TestResult();
             CopyTo(test);
             return test;
         }

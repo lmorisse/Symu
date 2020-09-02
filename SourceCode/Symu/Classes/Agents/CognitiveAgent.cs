@@ -17,7 +17,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces.Agent;
-using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 using Symu.Environment;
 using Symu.Repository.Entity;
 

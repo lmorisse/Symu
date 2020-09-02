@@ -17,7 +17,7 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using Symu.Repository.Entity;

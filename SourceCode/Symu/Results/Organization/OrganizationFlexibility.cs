@@ -10,8 +10,9 @@
 #region using directives
 
 using System.Collections.Generic;
+using Symu.Common.Interfaces;
 using Symu.Common.Math;
-using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 using Symu.Environment;
 
 #endregion
@@ -22,7 +23,7 @@ namespace Symu.Results.Organization
     ///     The ability of an organizationEntity to respond rapidly to the changing environment
     ///     Mainly center on the continual construction and reconstruction of groups
     /// </summary>
-    public sealed class OrganizationFlexibility : SymuResults
+    public sealed class OrganizationFlexibility : Result
     {
         public OrganizationFlexibility(SymuEnvironment environment) : base(environment)
         {
@@ -93,7 +94,7 @@ namespace Symu.Results.Organization
             Sphere.Add(sphere);
         }
 
-        protected override void HandleResults()
+        public override void SetResults()
         {
             var actorCount = Environment.WhitePages.GetInteractionSphereCount;
 
@@ -128,7 +129,7 @@ namespace Symu.Results.Organization
             }
         }
 
-        public override SymuResults Clone()
+        public override IResult Clone()
         {
             var clone = new OrganizationFlexibility(Environment);
             CopyTo(clone);

@@ -16,6 +16,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
+using Symu.DNA.MatrixNetworks;
 using Symu.Environment;
 using Symu.Repository.Entity;
 using Symu.Results;
@@ -59,7 +60,7 @@ namespace Symu.Engine
         /// <summary>
         ///     Used when Event OnNextDay is triggered by this class
         /// </summary>
-        public virtual void OnNextStep()
+        public void OnNextStep()
         {
             Environment.OnNextStep();
         }

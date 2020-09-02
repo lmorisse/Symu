@@ -13,7 +13,7 @@ using System;
 using Symu.Classes.Agents.Models;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 using Symu.Engine;
 using Symu.Repository.Entity;
 

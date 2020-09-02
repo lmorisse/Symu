@@ -12,7 +12,7 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
 
 namespace Symu.Repository.Entity
 {
@@ -23,8 +23,17 @@ namespace Symu.Repository.Entity
     /// <example>Dev Java, test, project management, sociology, ...</example>
     public class AgentKnowledge : IAgentKnowledge
     {
-
+        #region IAgentBelief
         public IId KnowledgeId { get; }
+
+        /// <summary>
+        /// The value used to feed the matrix network
+        /// For a binary matrix network, the value is 1
+        /// </summary>
+        public float Value => GetKnowledgeSum();
+
+        #endregion
+
         public KnowledgeBits KnowledgeBits { get; private set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
 

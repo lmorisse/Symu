@@ -23,7 +23,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -486,17 +486,14 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.InteractionCharacteristics.LimitMessagesPerPeriod = true;
             _agent.Cognitive.InteractionCharacteristics.MaximumMessagesPerPeriod = 0;
-            var agent2 = TestCognitiveAgent.CreateInstance(new UId(2), _environment);
-            agent2.Start();
-            agent2.WaitingToStart();
-            var message = new Message(_agent.AgentId, agent2.AgentId, MessageAction.Add, 0)
+            var message = new Message(_agent.AgentId, _agent2.AgentId, MessageAction.Add, 0)
             {
                 Medium = CommunicationMediums.Email
             };
             _agent.Send(message);
             _environment.Messages.WaitingToClearAllMessages();
             //environment trace the message
-            Assert.IsNull(_environment.Messages.MessagesReceivedByAgent(0, agent2.AgentId));
+            Assert.IsNull(_environment.Messages.MessagesReceivedByAgent(0, _agent2.AgentId));
             Assert.IsNull(_environment.Messages.MessagesSentByAgent(0, _agent.AgentId));
             Assert.IsFalse(_environment.Messages.LastSentMessages.Any);
             // Agent1
@@ -851,8 +848,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AcceptNewInteractionTest()
         {
-            var agent2 = TestCognitiveAgent.CreateInstance(new UId(2), _environment);
-            Assert.IsTrue(_agent.AcceptNewInteraction(agent2.AgentId));
+            Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
         /// <summary>

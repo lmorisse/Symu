@@ -8,7 +8,7 @@
 #endregion
 
 using System;
-using Symu.DNA.OneModeNetworks;
+using Symu.DNA.Networks.OneModeNetworks;
 
 namespace Symu.Repository.Entity
 {

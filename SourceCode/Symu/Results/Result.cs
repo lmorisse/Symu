@@ -10,6 +10,8 @@
 #region using directives
 
 using System;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -17,13 +19,14 @@ using Symu.Environment;
 namespace Symu.Results
 {
     /// <summary>
+    ///     Default implementation of IResult
     ///     Base class for iteration results
     ///     You may implement your own specifics results class:
     ///     Add a list or a dictionary with the tuple (step, result)
     /// </summary>
-    public abstract class SymuResults
+    public abstract class Result : IResult
     {
-        protected SymuResults(SymuEnvironment environment)
+        protected Result(SymuEnvironment environment)
         {
             Environment = environment;
         }
@@ -40,45 +43,10 @@ namespace Symu.Results
         /// </summary>
         public TimeStepType Frequency { get; set; } = TimeStepType.Monthly;
 
-        public void SetResults()
-        {
-            if (!On)
-            {
-                return;
-            }
-
-            bool handle;
-            switch (Frequency)
-            {
-                case TimeStepType.Intraday:
-                case TimeStepType.Daily:
-                    handle = true;
-                    break;
-                case TimeStepType.Weekly:
-                    handle = Environment.Schedule.IsEndOfWeek;
-                    break;
-                case TimeStepType.Monthly:
-                    handle = Environment.Schedule.IsEndOfMonth;
-                    break;
-                case TimeStepType.Yearly:
-                    handle = Environment.Schedule.IsEndOfYear;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (!handle)
-            {
-                return;
-            }
-
-            HandleResults();
-        }
-
         /// <summary>
         ///     Put the logic to compute the result and store it in the list
         /// </summary>
-        protected abstract void HandleResults();
+        public abstract void SetResults();
 
         /// <summary>
         ///     Clear the list or all information
@@ -86,9 +54,7 @@ namespace Symu.Results
         public abstract void Clear();
 
         /// <summary>
-        ///     Clone the instance.
-        ///     IterationResult is the actual iterationResult.
-        ///     With a multiple iterations simulation, SimulationResults store a clone of each IterationResult
+        ///     Copy each parameter of the instance in the object
         /// </summary>
         /// <returns></returns>
         public abstract void CopyTo(object clone);
@@ -97,8 +63,9 @@ namespace Symu.Results
         ///     Clone the instance.
         ///     IterationResult is the actual iterationResult.
         ///     With a multiple iterations simulation, SimulationResults store a clone of each IterationResult
+        ///     It is a factory that create a SymuResults then CopyTo the existing instance and return the clone
         /// </summary>
         /// <returns></returns>
-        public abstract SymuResults Clone();
+        public abstract IResult Clone();
     }
 }

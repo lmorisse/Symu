@@ -11,6 +11,8 @@
 
 using System.Collections.Concurrent;
 using System.Linq;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -20,7 +22,7 @@ namespace Symu.Results.Messaging
     /// <summary>
     ///     Manage the message metrics for the simulation
     /// </summary>
-    public sealed class MessageResults : SymuResults
+    public sealed class MessageResults : Result
     {
         public MessageResults(SymuEnvironment environment) : base(environment)
         {
@@ -101,7 +103,7 @@ namespace Symu.Results.Messaging
         public uint NotAcceptedMessagesCount =>
             Results.Values.Any() ? Results.Values.Last().NotAcceptedMessagesCount : 0;
 
-        protected override void HandleResults()
+        public override void SetResults()
         {
             Results.TryAdd(Environment.Schedule.Step, Environment.Messages.Result);
         }
@@ -125,7 +127,7 @@ namespace Symu.Results.Messaging
             }
         }
 
-        public override SymuResults Clone()
+        public override IResult Clone()
         {
             var clone = new MessageResults(Environment);
             CopyTo(clone);

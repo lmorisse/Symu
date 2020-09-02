@@ -12,7 +12,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
-using Symu.DNA.TwoModesNetworks.Sphere;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 
 #endregion
 

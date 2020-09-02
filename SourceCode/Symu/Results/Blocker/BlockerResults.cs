@@ -13,6 +13,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -22,7 +24,7 @@ namespace Symu.Results.Blocker
     /// <summary>
     ///     Manage the task blockers results for the simulation
     /// </summary>
-    public sealed class BlockerResults : SymuResults
+    public sealed class BlockerResults : Result
     {
         public BlockerResults(SymuEnvironment environment) : base(environment)
         {
@@ -71,7 +73,7 @@ namespace Symu.Results.Blocker
         /// </summary>
         public int TotalSearches => Results.Values.Any() ? Results.Values.Last().Search : 0;
 
-        protected override void HandleResults()
+        public override void SetResults()
         {
             if (!Environment.WhitePages.Any())
             {
@@ -134,7 +136,7 @@ namespace Symu.Results.Blocker
             }
         }
 
-        public override SymuResults Clone()
+        public override IResult Clone()
         {
             var clone = new BlockerResults(Environment);
             CopyTo(clone);

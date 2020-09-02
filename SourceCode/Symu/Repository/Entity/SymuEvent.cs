@@ -14,7 +14,8 @@
 #region using directives
 
 using System;
-using Symu.DNA.OneModeNetworks;
+using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Networks.OneModeNetworks;
 
 #endregion
 
@@ -25,6 +26,14 @@ namespace Symu.Repository.Entity
     /// </summary>
     public class SymuEvent: IEvent
     {
+        public SymuEvent(ushort id)
+        {
+            Id = new UId(id);
+        }
+        public SymuEvent(IId id)
+        {
+            Id = id;
+        }
         public ushort Step { get; set; }
 
         public virtual void Schedule(ushort step)
@@ -44,5 +53,10 @@ namespace Symu.Repository.Entity
         {
             return step == Step;
         }
+
+        /// <summary>
+        ///     Unique identifier of the event
+        /// </summary>
+        public IId Id { get; }
     }
 }

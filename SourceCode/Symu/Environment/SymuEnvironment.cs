@@ -278,6 +278,8 @@ namespace Symu.Environment
             {
                 SendAgent(message);
             }
+
+            Messages.WaitingToClearAllMessages();
         }
 
         #endregion

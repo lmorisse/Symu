@@ -18,7 +18,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.OneModeNetworks;
+using Symu.DNA.Networks.OneModeNetworks;
 using Symu.Environment;
 using Symu.Repository.Entity;
 
@@ -57,12 +57,12 @@ namespace SymuGroupAndInteraction.Classes
         public override void AddOrganizationKnowledges()
         {
             base.AddOrganizationKnowledges();
-            for (var i = 0; i < GroupsCount; i++)
+            for (ushort i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
                 var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
-                _activities.Add(new Activity(i.ToString()));
+                _activities.Add(new Activity(i, i.ToString()));
                 //Beliefs are created based on knowledge
             }
         }

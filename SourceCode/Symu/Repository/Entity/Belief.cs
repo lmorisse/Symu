@@ -14,7 +14,7 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.OneModeNetworks;
+using Symu.DNA.Networks.OneModeNetworks;
 
 #endregion
 
@@ -87,12 +87,12 @@ namespace Symu.Repository.Entity
         public override bool Equals(object obj)
         {
             return obj is Belief belief
-                   && Id == belief.Id;
+                   && Id.Equals(belief.Id);
         }
         public bool Equals(IBelief belief)
         {
             return belief is Belief bel
-                   && Id == bel.Id;
+                   && Id.Equals(bel.Id);
         }
 
         /// <summary>

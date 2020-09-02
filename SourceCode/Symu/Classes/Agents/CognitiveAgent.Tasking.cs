@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents.Models;
 using Symu.Classes.Task;
+using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Environment;
 using Symu.Messaging.Messages;

@@ -11,7 +11,7 @@
 
 using System;
 using Symu.Classes.Task;
-using Symu.DNA.TwoModesNetworks.AgentBelief;
+using Symu.DNA.Networks.TwoModesNetworks.AgentBelief;
 using Symu.Repository.Entity;
 
 #endregion

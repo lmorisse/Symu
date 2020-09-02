@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
+using Symu.DNA.Networks;
 using Symu.Messaging.Templates;
 using Symu.Repository.Entity;
 
