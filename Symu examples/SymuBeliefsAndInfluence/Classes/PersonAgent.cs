@@ -19,6 +19,7 @@ using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Networks.OneModeNetworks;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -52,7 +53,7 @@ namespace SymuBeliefsAndInfluence.Classes
         {
         }
 
-        public IEnumerable<Knowledge> Knowledges => Environment.Organization.Knowledges;
+        public IEnumerable<IKnowledge> Knowledges => Environment.Organization.Knowledge;
         public IEnumerable<IAgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.AgentId);
 
         /// <summary>

@@ -579,7 +579,7 @@ namespace SymuLearnAndForget
                     throw new ArgumentOutOfRangeException("Knowledge should be < " + Bits.MaxBits);
                 }
 
-                _environment.Knowledge = new Knowledge(1, "1", value);
+                _environment.Knowledge = new Knowledge(_environment.Organization.MetaNetwork.Knowledge.NextIdentity(), "1", value);
                 tbKnowledgeLength.BackColor = SystemColors.Window;
             }
             catch (FormatException)

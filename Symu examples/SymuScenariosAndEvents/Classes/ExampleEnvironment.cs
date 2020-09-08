@@ -46,15 +46,15 @@ namespace SymuScenariosAndEvents.Classes
         /// <summary>
         ///     Add Organization knowledge
         /// </summary>
-        public override void AddOrganizationKnowledges()
+        public override void AddOrganizationKnowledge()
         {
-            base.AddOrganizationKnowledges();
+            base.AddOrganizationKnowledge();
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
+                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
             }
         }
@@ -79,7 +79,7 @@ namespace SymuScenariosAndEvents.Classes
             WhitePages.MetaNetwork.Resource.Add(email);
             var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
             WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
-            var agentGroup = new AgentGroup(actor.AgentId, 100);
+            var agentGroup = new AgentOrganization(actor.AgentId, 100);
             WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, _groupId);
             return actor;
         }

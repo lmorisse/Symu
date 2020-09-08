@@ -12,18 +12,18 @@
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Networks.OneModeNetworks;
-using Symu.DNA.Networks.TwoModesNetworks.Assignment;
+using Symu.DNA.Networks.TwoModesNetworks;
 
 #endregion
 
 namespace Symu.Repository.Entity
 {
-    public class AgentActivity : IAgentActivity
+    public class AgentTask : IAgentTask
     {
-        public AgentActivity(IAgentId id, IActivity activity)
+        public AgentTask(IAgentId id, ITask task)
         {
             Id = id;
-            Activity = activity;
+            Task = task;
         }
 
         /// <summary>
@@ -33,6 +33,6 @@ namespace Symu.Repository.Entity
         public float Value => 1;
 
         public IAgentId Id { get; }
-        public IActivity Activity { get; set; }
+        public ITask Task { get; set; }
     }
 }

@@ -109,7 +109,7 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     Define how agent will manage its knowledge during the simulation based on its cognitive architecture
         /// </summary>
-        public ActivityModel ActivityModel { get; set; }
+        public AgentTaskModel TaskModel { get; set; }
 
         /// <summary>
         ///     Manage every blocker of the agent
@@ -235,7 +235,7 @@ namespace Symu.Classes.Agents
             ForgettingModel = new ForgettingModel(KnowledgeModel.Expertise, Cognitive, Environment.Organization.Models);
             InfluenceModel = new InfluenceModel(Environment.Organization.Models.Influence,
                 Cognitive, Environment.WhitePages.MetaNetwork, BeliefsModel, Environment.Organization.Models.Generator);
-            ActivityModel = new ActivityModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
+            TaskModel = new AgentTaskModel(AgentId, Cognitive, Environment.WhitePages.MetaNetwork);
         }
 
         /// <summary>

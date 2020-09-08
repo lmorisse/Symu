@@ -50,9 +50,9 @@ namespace SymuLearnAndForget.Classes
         /// <summary>
         ///     Add Organization knowledge
         /// </summary>
-        public override void AddOrganizationKnowledges()
+        public override void AddOrganizationKnowledge()
         {
-            base.AddOrganizationKnowledges();
+            base.AddOrganizationKnowledge();
             Organization.AddKnowledge(Knowledge);
             Wiki.InitializeKnowledge(Knowledge, 0);
         }
@@ -81,8 +81,8 @@ namespace SymuLearnAndForget.Classes
             DoesNotLearnAgent = LearnAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             ExpertAgent = ExpertAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
-            var interaction = new Interaction(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
-            WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
+            var interaction = new AgentAgent(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
+            WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
         }
     }
 }

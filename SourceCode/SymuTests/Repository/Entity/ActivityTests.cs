@@ -21,7 +21,7 @@ namespace SymuTests.Repository.Entity
     [TestClass]
     public class ActivityTests
     {
-        private readonly TestActivity _activity = new TestActivity(1);
+        private readonly TestTask _task = new TestTask(1);
 
         private readonly Knowledge _knowledge =
             new Knowledge(1, "K1", 10);
@@ -29,11 +29,11 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void AddKnowledgeTest()
         {
-            Assert.IsFalse(_activity.Knowledges.Contains(_knowledge));
-            _activity.AddKnowledge(_knowledge);
-            Assert.IsTrue(_activity.Knowledges.Contains(_knowledge));
-            _activity.AddKnowledge(_knowledge); //handle duplicate
-            Assert.AreEqual(1, _activity.Knowledges.Count);
+            Assert.IsFalse(_task.Knowledges.Contains(_knowledge));
+            _task.AddKnowledge(_knowledge);
+            Assert.IsTrue(_task.Knowledges.Contains(_knowledge));
+            _task.AddKnowledge(_knowledge); //handle duplicate
+            Assert.AreEqual(1, _task.Knowledges.Count);
         }
     }
 }

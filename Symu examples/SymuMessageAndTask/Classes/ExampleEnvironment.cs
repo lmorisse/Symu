@@ -128,7 +128,7 @@ namespace SymuMessageAndTask.Classes
                 WhitePages.MetaNetwork.Resource.Add(email);
                 var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
                 WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
-                var agentGroup = new AgentGroup(actor.AgentId, 100);
+                var agentGroup = new AgentOrganization(actor.AgentId, 100);
                 WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
             }
         }

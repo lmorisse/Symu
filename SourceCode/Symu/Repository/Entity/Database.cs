@@ -20,7 +20,7 @@ using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
 using Symu.DNA.Networks;
 using Symu.DNA.Networks.OneModeNetworks;
-using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks;
 
 #endregion
 
@@ -113,7 +113,7 @@ namespace Symu.Repository.Entity
         /// <param name="step"></param>
         public void StoreKnowledge(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
         {
-            if (knowledgeId.IsNull || knowledgeBits is null)
+            if (knowledgeId == null || knowledgeId.IsNull || knowledgeBits is null)
             {
                 return;
             }

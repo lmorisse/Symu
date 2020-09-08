@@ -18,7 +18,7 @@ using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA;
 using Symu.DNA.Networks;
-using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks;
 using Symu.Repository.Entity;
 
 #endregion

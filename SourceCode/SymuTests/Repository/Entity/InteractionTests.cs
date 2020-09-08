@@ -26,7 +26,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void HasActiveLinkTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             Assert.IsTrue(link.HasActiveInteraction(_agentId1, _agentId2));
             Assert.IsFalse(link.HasPassiveInteraction(_agentId1, _agentId2));
         }
@@ -34,7 +34,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void HasPassiveLinkTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             link.DecreaseWeight();
             Assert.IsFalse(link.HasActiveInteraction(_agentId1, _agentId2));
             Assert.IsTrue(link.HasPassiveInteraction(_agentId1, _agentId2));
@@ -43,17 +43,17 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void HasLinkTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             Assert.IsTrue(link.HasLink(_agentId1, _agentId2));
         }
 
         [TestMethod]
         public void EqualsTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
-            var link2 = new Interaction(_agentId1, _agentId2);
-            var link3 = new Interaction(_agentId2, _agentId1);
-            var link4 = new Interaction(_agentId1, _agentId1);
+            var link = new AgentAgent(_agentId1, _agentId2);
+            var link2 = new AgentAgent(_agentId1, _agentId2);
+            var link3 = new AgentAgent(_agentId2, _agentId1);
+            var link4 = new AgentAgent(_agentId1, _agentId1);
             Assert.IsTrue(link.Equals(link2));
             Assert.IsTrue(link.Equals(link3));
             Assert.IsFalse(link.Equals(link4));
@@ -62,7 +62,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void ActivateTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             link.DecreaseWeight();
             link.IncreaseWeight();
             Assert.IsTrue(link.HasActiveInteraction(_agentId1, _agentId2));
@@ -71,7 +71,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void DesActivateTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             link.DecreaseWeight();
             Assert.IsTrue(link.HasPassiveInteraction(_agentId1, _agentId2));
         }
@@ -79,7 +79,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void HasActiveLinksTest()
         {
-            var link = new Interaction(_agentId1, _agentId2);
+            var link = new AgentAgent(_agentId1, _agentId2);
             Assert.IsTrue(link.HasActiveInteractions(_agentId1));
             // links are bidirectional
             Assert.IsTrue(link.HasActiveInteractions(_agentId2));

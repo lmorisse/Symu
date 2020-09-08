@@ -96,8 +96,8 @@ namespace SymuTests.Results.Organization
                 for (var j = i + 1; j < count; j++)
                 {
                     var agentId2 = agentIds[j];
-                    var interaction = new Interaction(agentId1, agentId2);
-                    _environment.WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
+                    var interaction = new AgentAgent(agentId1, agentId2);
+                    _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
                 }
             }
         }

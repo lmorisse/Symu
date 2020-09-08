@@ -36,7 +36,8 @@ namespace Symu.Repository
     /// <remarks>FIPA Norm : equivalent of the Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        public WhitePages(OrganizationModels models)
+        private MetaNetwork _metaNetworkReference;
+        public WhitePages(OrganizationModels models, MetaNetwork metaNetwork)
         {
             if (models == null)
             {
@@ -44,6 +45,7 @@ namespace Symu.Repository
             }
 
             MetaNetwork = new MetaNetwork(models.InteractionSphere);
+            _metaNetworkReference = metaNetwork;
         }
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace Symu.Repository
             State = AgentState.Starting;
             StoppedAgents.Clear();
             MetaNetwork.Clear();
+            _metaNetworkReference?.CopyTo(MetaNetwork);
         }
 
         /// <summary>

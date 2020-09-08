@@ -11,7 +11,7 @@
 
 using System;
 using Symu.Common.Interfaces.Agent;
-using Symu.DNA.Networks.TwoModesNetworks.Interaction;
+using Symu.DNA.Networks.TwoModesNetworks;
 using static Symu.Common.Constants;
 
 #endregion
@@ -25,14 +25,14 @@ namespace Symu.Repository.Entity
     ///     AgentId1 has the smallest key
     ///     AgentId2 has the highest key
     /// </summary>
-    public class Interaction : IInteraction
+    public class AgentAgent : IAgentAgent
     {
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="agentId1"></param>
         /// <param name="agentId2"></param>
-        public Interaction(IAgentId agentId1, IAgentId agentId2)
+        public AgentAgent(IAgentId agentId1, IAgentId agentId2)
         {
             if (agentId1 == null)
             {
@@ -53,7 +53,7 @@ namespace Symu.Repository.Entity
             IncreaseWeight();
         }
 
-        public Interaction(IAgentId agentId1, IAgentId agentId2, float weight) : this(agentId1, agentId2)
+        public AgentAgent(IAgentId agentId1, IAgentId agentId2, float weight) : this(agentId1, agentId2)
         {
             Weight = weight;
         }
@@ -142,13 +142,13 @@ namespace Symu.Repository.Entity
 
         public override bool Equals(object obj)
         {
-            return obj is Interaction link &&
+            return obj is AgentAgent link &&
                    link.HasLink(AgentId1, AgentId2);
         }
 
-        public bool Equals(IInteraction obj)
+        public bool Equals(IAgentAgent obj)
         {
-            return obj is Interaction link &&
+            return obj is AgentAgent link &&
                    link.HasLink(AgentId1, AgentId2);
         }
     }

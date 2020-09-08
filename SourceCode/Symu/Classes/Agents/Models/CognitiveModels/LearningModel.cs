@@ -20,7 +20,7 @@ using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
 using Symu.DNA.Networks;
 using Symu.DNA.Networks.OneModeNetworks;
-using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks;
 using Symu.Repository.Entity;
 using static Symu.Common.Constants;
 

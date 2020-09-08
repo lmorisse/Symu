@@ -14,7 +14,7 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks;
 using Symu.Repository.Entity;
 using Symu.Results.Organization;
 using SymuTests.Helpers;

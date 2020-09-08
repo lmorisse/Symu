@@ -74,15 +74,15 @@ namespace SymuBeliefsAndInfluence.Classes
         /// <summary>
         ///     Add Organization knowledge
         /// </summary>
-        public override void AddOrganizationKnowledges()
+        public override void AddOrganizationKnowledge()
         {
-            base.AddOrganizationKnowledges();
+            base.AddOrganizationKnowledge();
             // KnowledgeCount are added for tasks initialization
             // Adn Beliefs are created based on knowledge
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
+                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
             }
         }
@@ -92,21 +92,21 @@ namespace SymuBeliefsAndInfluence.Classes
             base.SetAgents();
             // the group is created just to initialize the interactionNetwork
             var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
-            WhitePages.MetaNetwork.AgentGroup.AddGroup(group.AgentId);
+            WhitePages.MetaNetwork.AgentOrganization.AddKey(group.AgentId);
 
             for (var j = 0; j < InfluencersCount; j++)
             {
                 var actor = InfluencerAgent.CreateInstance(Organization.NextEntityId(), this, InfluencerTemplate);
                 Influencers.Add(actor);
-                var agentGroup = new AgentGroup(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AgentGroup.AddAgent(agentGroup, group.AgentId);
+                var agentGroup = new AgentOrganization(actor.AgentId, 100);
+                WhitePages.MetaNetwork.AgentOrganization.Add(@group.AgentId, agentGroup);
             }
 
             for (var j = 0; j < WorkersCount; j++)
             {
                 var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, WorkerTemplate);
-                var agentGroup = new AgentGroup(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AgentGroup.AddAgent(agentGroup, group.AgentId);
+                var agentGroup = new AgentOrganization(actor.AgentId, 100);
+                WhitePages.MetaNetwork.AgentOrganization.Add(@group.AgentId, agentGroup);
             }
 
         }

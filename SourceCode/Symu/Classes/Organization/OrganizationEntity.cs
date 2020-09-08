@@ -14,6 +14,9 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Networks;
+using Symu.DNA.Networks.OneModeNetworks;
+using Symu.DNA.Networks.TwoModesNetworks.Sphere;
 using Symu.Messaging.Templates;
 using Symu.Repository;
 using Symu.Repository.Entity;
@@ -31,9 +34,15 @@ namespace Symu.Classes.Organization
         public const byte Class = SymuYellowPages.Organization;
 
         public OrganizationEntity(string name) : base(new UId(0), Class, name)
-        {
+        { 
+            var interactionSphereModel = new InteractionSphereModel();
+            MetaNetwork = new MetaNetwork(interactionSphereModel);
         }
 
+        public MetaNetwork MetaNetwork
+        {
+            get;
+        }
         /// <summary>
         ///     Latest unique index of agents
         /// </summary>
@@ -61,12 +70,18 @@ namespace Symu.Classes.Organization
         /// <summary>
         ///     List of all databases accessible to everyone
         /// </summary>
+        //todo _network.Resource
         public List<DatabaseEntity> Databases { get; } = new List<DatabaseEntity>();
 
         /// <summary>
-        ///     List of all knowledges
+        ///     List of all knowledge
         /// </summary>
-        public List<Knowledge> Knowledges { get; } = new List<Knowledge>();
+        public List<IKnowledge> Knowledge => MetaNetwork.Knowledge.List;
+
+        /// <summary>
+        ///     List of all tasks
+        /// </summary>
+        public List<ITask> Tasks => MetaNetwork.Task.List;
 
         /// <summary>
         ///     List of the /Maydays handle in the simulation
@@ -91,15 +106,59 @@ namespace Symu.Classes.Organization
         }
 
         /// <summary>
-        ///     Add a knowledge to the repository of knowledges
+        ///     Clear repository of knowledge
+        /// </summary>
+        public void ClearKnowledge()
+        {
+            MetaNetwork.Knowledge.Clear();
+        }
+
+        /// <summary>
+        ///     Add a knowledge to the repository of knowledge
         /// </summary>
         /// <param name="knowledge"></param>
-        public void AddKnowledge(Knowledge knowledge)
+        public void AddKnowledge(IKnowledge knowledge)
         {
-            if (!Knowledges.Contains(knowledge))
-            {
-                Knowledges.Add(knowledge);
-            }
+            //if (!Knowledges.Contains(knowledge))
+            //{
+            //    Knowledges.Add(knowledge);
+            //}
+            MetaNetwork.Knowledge.Add(knowledge);
+        }
+
+        /// <summary>
+        ///     Add all knowledge to the repository of knowledge
+        /// </summary>
+        /// <param name="knowledge"></param>
+        public void AddKnowledge(IEnumerable<IKnowledge> knowledge)
+        {
+            MetaNetwork.Knowledge.Add(knowledge);
+        }
+
+
+        /// <summary>
+        ///     Add a task (activity) to the repository of Tasks
+        /// </summary>
+        /// <param name="task"></param>
+        public void AddTask(ITask task)
+        {
+            //if (!Knowledges.Contains(knowledge))
+            //{
+            //    Knowledges.Add(knowledge);
+            //}
+            MetaNetwork.Task.Add(task);
+        }        
+        /// <summary>
+        ///     Add a list of tasks (activities) to the repository of Tasks
+        /// </summary>
+        /// <param name="tasks"></param>
+        public void AddTasks(IEnumerable<ITask> tasks)
+        {
+            //if (!Knowledges.Contains(knowledge))
+            //{
+            //    Knowledges.Add(knowledge);
+            //}
+            MetaNetwork.Task.Add(tasks);
         }
 
         /// <summary>
@@ -108,7 +167,7 @@ namespace Symu.Classes.Organization
         public void Clear()
         {
             Databases.Clear();
-            Knowledges.Clear();
+            MetaNetwork.Clear();
             EntityIndex = 1;
         }
     }

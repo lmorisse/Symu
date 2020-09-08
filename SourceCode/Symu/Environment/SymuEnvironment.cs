@@ -102,7 +102,7 @@ namespace Symu.Environment
         public virtual void SetOrganization(OrganizationEntity organization)
         {
             Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Models);
+            WhitePages = new WhitePages(Organization.Models, organization.MetaNetwork);
         }
 
         /// <summary>
@@ -184,8 +184,11 @@ namespace Symu.Environment
             AddOrganizationDatabase();
             SetDatabases();
             // Intentionally before SetAgents
-            AddOrganizationKnowledges();
-            SetKnowledges();
+            AddOrganizationKnowledge();
+            SetKnowledge();
+            // Intentionally before SetAgents
+            AddOrganizationTasks();
+            SetTasks();
             SetAgents();
             // Intentionally after SetAgents
             InitializeInteractionNetwork();
@@ -198,9 +201,9 @@ namespace Symu.Environment
         /// </summary>
         public void InitializeInteractionNetwork()
         {
-            foreach (var groupId in WhitePages.MetaNetwork.AgentGroup.GetGroups().ToList())
+            foreach (var groupId in WhitePages.MetaNetwork.AgentOrganization.GetKeys().ToList())
             {
-                var agentIds = WhitePages.MetaNetwork.AgentGroup.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
+                var agentIds = WhitePages.MetaNetwork.AgentOrganization.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
                     .ToList();
 
                 var count = agentIds.Count;
@@ -211,8 +214,8 @@ namespace Symu.Environment
                     for (var j = i + 1; j < count; j++)
                     {
                         var agentId2 = agentIds[j];
-                        var interaction = new Interaction(agentId1, agentId2);
-                        WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
+                        var interaction = new AgentAgent(agentId1, agentId2);
+                        WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
                     }
                 }
             }
@@ -425,21 +428,37 @@ namespace Symu.Environment
         /// <summary>
         ///     Add Organization knowledge
         /// </summary>
-        public virtual void AddOrganizationKnowledges()
+        public virtual void AddOrganizationKnowledge()
         {
         }
 
         /// <summary>
         ///     Clone repository of Knowledge network
         /// </summary>
-        public void SetKnowledges()
+        public void SetKnowledge()
         {
-            WhitePages.MetaNetwork.Knowledge.Add(Organization.Knowledges);
-            foreach (var knowledge in Organization.Knowledges)
+            WhitePages.MetaNetwork.Knowledge.Add(Organization.Knowledge);
+
+            foreach (var knowledge in Organization.Knowledge.Cast<Knowledge>())
             {
                 var belief = new Belief(knowledge, knowledge.Length, Organization.Models.Generator, Organization.Models.BeliefWeightLevel);
                 WhitePages.MetaNetwork.Belief.Add(belief);
             }
+        }
+
+        /// <summary>
+        ///     Add Organization Tasks
+        /// </summary>
+        public virtual void AddOrganizationTasks()
+        {
+        }
+
+        /// <summary>
+        ///     Clone repository of Task network
+        /// </summary>
+        public void SetTasks()
+        {
+            WhitePages.MetaNetwork.Task.Add(Organization.Tasks);
         }
 
 

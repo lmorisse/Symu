@@ -20,6 +20,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
+using Symu.DNA.Networks.OneModeNetworks;
 using Symu.Environment;
 using Symu.Repository;
 using Symu.Repository.Entity;
@@ -56,7 +57,7 @@ namespace SymuScenariosAndEvents.Classes
         public IAgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public List<Knowledge> Knowledges => Environment.Organization.Knowledges;
+        public List<IKnowledge> Knowledges => Environment.Organization.Knowledge;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent

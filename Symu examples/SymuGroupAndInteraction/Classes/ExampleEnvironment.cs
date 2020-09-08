@@ -28,7 +28,6 @@ namespace SymuGroupAndInteraction.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        private readonly List<Activity> _activities = new List<Activity>();
         public byte GroupsCount { get; set; } = 2;
         public byte WorkersCount { get; set; } = 5;
         public byte Knowledge { get; set; } = 0;
@@ -54,16 +53,27 @@ namespace SymuGroupAndInteraction.Classes
         /// <summary>
         ///     Add Organization knowledge
         /// </summary>
-        public override void AddOrganizationKnowledges()
+        public override void AddOrganizationKnowledge()
         {
-            base.AddOrganizationKnowledges();
+            base.AddOrganizationKnowledge();
             for (ushort i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
+                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
                 Organization.AddKnowledge(knowledge);
-                _activities.Add(new Activity(i, i.ToString()));
                 //Beliefs are created based on knowledge
+            }
+        }
+
+        /// <summary>
+        ///     Add Organization tasks
+        /// </summary>
+        public override void AddOrganizationTasks()
+        {
+            base.AddOrganizationTasks();
+            for (ushort i = 0; i < GroupsCount; i++)
+            {
+                Organization.AddTask(new Task(Organization.MetaNetwork.Task.NextIdentity(), i.ToString(), WhitePages.MetaNetwork.TaskKnowledge));
             }
         }
 
@@ -79,59 +89,57 @@ namespace SymuGroupAndInteraction.Classes
                     var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this,
                         Organization.Templates.Human);
                     actor.GroupId = group.AgentId;
-                    var agentGroup = new AgentGroup(actor.AgentId, 100);
+                    var agentGroup = new AgentOrganization(actor.AgentId, 100);
                     WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
-                    //Beliefs are added with knowledge
-                    SetKnowledge(actor, Organization.Knowledges, i);
-                    SetActivity(actor.AgentId, _activities, i, group.AgentId);
+                    SetAgentKnowledge(actor, Organization.Knowledge, i);
+                    SetAgentTasks(actor, Organization.Tasks, i);
                 }
             }
         }
 
-        private void SetKnowledge(CognitiveAgent actor, IReadOnlyList<Knowledge> knowledges, int i)
+        private void SetAgentKnowledge(CognitiveAgent actor, IReadOnlyList<IKnowledge> knowledges, int i)
         {
+            var index = 0;
             switch (Knowledge)
             {
                 case 0:
                     // same Knowledge for all
-                    actor.KnowledgeModel.AddKnowledge(knowledges[0].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
-                        actor.Cognitive.InternalCharacteristics.TimeToLive);
+                    index = 0;
                     break;
                 case 1:
                     // Knowledge is by group
-                    actor.KnowledgeModel.AddKnowledge(knowledges[i].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
-                        actor.Cognitive.InternalCharacteristics.TimeToLive);
+                    index = i;
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
-                    var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    actor.KnowledgeModel.AddKnowledge(knowledges[index].Id, KnowledgeLevel,
-                        actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
-                        actor.Cognitive.InternalCharacteristics.TimeToLive);
+                    index = DiscreteUniform.Sample(0, GroupsCount - 1);
                     break;
             }
+            actor.KnowledgeModel.AddKnowledge(knowledges[index].Id, KnowledgeLevel,
+                actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
+                actor.Cognitive.InternalCharacteristics.TimeToLive);
         }
 
-        private void SetActivity(IAgentId agentId, IReadOnlyList<IActivity> activities, int i, IAgentId groupId)
+        private void SetAgentTasks(CognitiveAgent actor, IReadOnlyList<ITask> activities, int i)
         {
+            var index = 0;
             switch (Activities)
             {
                 case 0:
                     // same activity for all
-                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[0]));
+                    index = 0;
                     break;
                 case 1:
                     // Activity is by group
-                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[i]));
+                    index = i;
                     break;
                 case 2:
                     // Activity is randomly defined for agentId
-                    var index = DiscreteUniform.Sample(0, GroupsCount - 1);
-                    WhitePages.MetaNetwork.Assignment.AddAgentActivity(agentId, groupId, new AgentActivity(agentId, activities[index]));
+                    index = DiscreteUniform.Sample(0, GroupsCount - 1);
                     break;
             }
+            actor.TaskModel.AddAgentTask(activities[index]);
+            //WhitePages.MetaNetwork.AgentTask.Add(agentId, new AgentTask(agentId, activities[0]));
         }
     }
 }

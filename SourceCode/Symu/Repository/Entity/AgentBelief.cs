@@ -14,7 +14,7 @@ using System.Linq;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces.Entity;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Networks.TwoModesNetworks.AgentBelief;
+using Symu.DNA.Networks.TwoModesNetworks;
 using static Symu.Common.Constants;
 
 #endregion

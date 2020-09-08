@@ -19,7 +19,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces.Agent;
 using Symu.DNA;
 using Symu.DNA.Networks;
-using Symu.DNA.Networks.TwoModesNetworks.AgentBelief;
+using Symu.DNA.Networks.TwoModesNetworks;
 using Symu.Repository.Entity;
 
 #endregion

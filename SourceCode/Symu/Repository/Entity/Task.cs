@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces.Entity;
 using Symu.DNA.Networks.OneModeNetworks;
+using Symu.DNA.Networks.TwoModesNetworks;
 
 #endregion
 
@@ -23,14 +24,16 @@ namespace Symu.Repository.Entity
     ///     Default implementation of IActivity
     ///     Define an activity by its name and the list of knowledgeIds required by the activity
     /// </summary>
-    public class Activity : IActivity
+    public class Task : ITask
     {
-        public Activity(ushort id, string name)
+        private readonly TaskKnowledgeNetwork _taskKnowledgeNetwork;
+        public Task(ushort id, string name, TaskKnowledgeNetwork taskKnowledgeNetwork)
         {
             Id = new UId(id);
             Name = name;
+            _taskKnowledgeNetwork = taskKnowledgeNetwork;
         }
-        public Activity(IId id, string name)
+        public Task(IId id, string name)
         {
             Id = id;
             Name = name;
@@ -46,17 +49,18 @@ namespace Symu.Repository.Entity
         /// <summary>
         ///     List of knowledges required to work on this activity
         /// </summary>
-        public List<IKnowledge> Knowledges { get; } = new List<IKnowledge>();
+        public List<IKnowledge> Knowledges => _taskKnowledgeNetwork.GetValues(Id).ToList();//{ get; } = new List<IKnowledge>();
 
 
         public void AddKnowledge(IKnowledge knowledge)
         {
-            if (Knowledges.Contains(knowledge))
-            {
-                return;
-            }
+            //if (Knowledges.Contains(knowledge))
+            //{
+            //    return;
+            //}
 
-            Knowledges.Add(knowledge);
+            //Knowledges.Add(knowledge);
+            _taskKnowledgeNetwork.Add(Id, knowledge);
         }
 
         /// <summary>
@@ -74,9 +78,9 @@ namespace Symu.Repository.Entity
             return Knowledges.Any(knowledge => agentKnowledgeIds.Contains(knowledge.Id));
         }
 
-        public bool Equals(IActivity activity)
+        public bool Equals(ITask task)
         {
-            return activity is Activity act &&
+            return task is Task act &&
                    Id.Equals(act.Id);
         }
     }

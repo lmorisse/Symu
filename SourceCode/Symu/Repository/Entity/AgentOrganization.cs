@@ -11,18 +11,18 @@
 
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
-using Symu.DNA.Networks.TwoModesNetworks.AgentGroup;
+using Symu.DNA.Networks.TwoModesNetworks;
 
 #endregion
 
 namespace Symu.Repository.Entity
 {
     /// <summary>
-    /// AgentGroup is the default implementation of IAgentGroup
+    /// AgentOrganization is the default implementation of IAgentOrganization
     /// </summary>
-    public class AgentGroup : IAgentGroup
+    public class AgentOrganization : IAgentOrganization
     {
-        public AgentGroup(IAgentId agentId, float allocation)
+        public AgentOrganization(IAgentId agentId, float allocation)
         {
             AgentId = agentId;
             Allocation = allocation;

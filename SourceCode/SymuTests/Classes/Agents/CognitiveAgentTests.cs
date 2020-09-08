@@ -23,7 +23,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Interfaces.Agent;
 using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.TwoModesNetworks.AgentKnowledge;
+using Symu.DNA.Networks.TwoModesNetworks;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -48,7 +48,7 @@ namespace SymuTests.Classes.Agents
         private AgentKnowledge _agentKnowledge;
         private TestCognitiveAgent _agent2 ;
         private readonly UId _uid1 = new UId(1);
-        private Interaction _interaction;
+        private AgentAgent _agentAgent;
 
         [TestInitialize]
         public void Initialize()
@@ -93,7 +93,7 @@ namespace SymuTests.Classes.Agents
             _environment.Schedule.Step = 0;
             _agent.BeliefsModel.AddBelief(_knowledge.Id);
             _agent.BeliefsModel.InitializeBeliefs();
-            _interaction = new Interaction(_agent.AgentId, _agent2.AgentId);
+            _agentAgent = new AgentAgent(_agent.AgentId, _agent2.AgentId);
         }
 
         /// <summary>
@@ -859,7 +859,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            _environment.WhitePages.MetaNetwork.Interaction.AddInteraction(_interaction);
+            _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(_agentAgent);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -1307,12 +1307,12 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             var group = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), 2, _environment);
             group.Start();
-            var agentGroup = new AgentGroup(_agent.AgentId, 100);
-            var teammateGroup = new AgentGroup(teammate.AgentId, 100);
+            var agentGroup = new AgentOrganization(_agent.AgentId, 100);
+            var teammateGroup = new AgentOrganization(teammate.AgentId, 100);
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
             _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId);
-            var interaction = new Interaction(_agent.AgentId, teammate.AgentId);
-            _environment.WhitePages.MetaNetwork.Interaction.AddInteraction(interaction);
+            var interaction = new AgentAgent(_agent.AgentId, teammate.AgentId);
+            _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
