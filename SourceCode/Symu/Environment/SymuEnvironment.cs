@@ -175,10 +175,6 @@ namespace Symu.Environment
         {
             Messages.Clear();
             WhitePages.Clear();
-            //WhitePages.MetaNetwork.Knowledge.Model =
-            //    Organization.Models.Generator;
-            //WhitePages.MetaNetwork.Beliefs.Model =
-            //    Organization.Models.Generator;
             IterationResult.Initialize();
             // Intentionally before SetAgents
             AddOrganizationKnowledge();
