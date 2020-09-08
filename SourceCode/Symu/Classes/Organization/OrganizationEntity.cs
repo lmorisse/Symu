@@ -10,6 +10,7 @@
 #region using directives
 
 using System.Collections.Generic;
+using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
@@ -71,7 +72,7 @@ namespace Symu.Classes.Organization
         ///     List of all databases accessible to everyone
         /// </summary>
         //todo _network.Resource
-        public List<DatabaseEntity> Databases { get; } = new List<DatabaseEntity>();
+        public IEnumerable<DatabaseEntity> Databases => MetaNetwork.Resource.List.OfType<DatabaseEntity>();//{ get; } = new List<DatabaseEntity>();
 
         /// <summary>
         ///     List of all knowledge
@@ -96,13 +97,14 @@ namespace Symu.Classes.Organization
         /// <summary>
         ///     Add a database accessible to everyone
         /// </summary>
-        /// <param name="database"></param>
-        public void AddDatabase(DatabaseEntity database)
+        /// <param name="resource"></param>
+        public void AddResource(IResource resource)
         {
-            if (!Databases.Contains(database))
-            {
-                Databases.Add(database);
-            }
+            //if (!Databases.Contains(database))
+            //{
+            //    Databases.Add(database);
+            //}
+            MetaNetwork.Resource.List.Add(resource);
         }
 
         /// <summary>
@@ -119,10 +121,6 @@ namespace Symu.Classes.Organization
         /// <param name="knowledge"></param>
         public void AddKnowledge(IKnowledge knowledge)
         {
-            //if (!Knowledges.Contains(knowledge))
-            //{
-            //    Knowledges.Add(knowledge);
-            //}
             MetaNetwork.Knowledge.Add(knowledge);
         }
 
@@ -135,17 +133,12 @@ namespace Symu.Classes.Organization
             MetaNetwork.Knowledge.Add(knowledge);
         }
 
-
         /// <summary>
         ///     Add a task (activity) to the repository of Tasks
         /// </summary>
         /// <param name="task"></param>
         public void AddTask(ITask task)
         {
-            //if (!Knowledges.Contains(knowledge))
-            //{
-            //    Knowledges.Add(knowledge);
-            //}
             MetaNetwork.Task.Add(task);
         }        
         /// <summary>
@@ -154,10 +147,6 @@ namespace Symu.Classes.Organization
         /// <param name="tasks"></param>
         public void AddTasks(IEnumerable<ITask> tasks)
         {
-            //if (!Knowledges.Contains(knowledge))
-            //{
-            //    Knowledges.Add(knowledge);
-            //}
             MetaNetwork.Task.Add(tasks);
         }
 
@@ -166,7 +155,7 @@ namespace Symu.Classes.Organization
         /// </summary>
         public void Clear()
         {
-            Databases.Clear();
+            //Databases.Clear();
             MetaNetwork.Clear();
             EntityIndex = 1;
         }

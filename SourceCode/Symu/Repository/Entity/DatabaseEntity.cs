@@ -12,6 +12,7 @@
 using System;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common.Interfaces.Entity;
+using Symu.DNA.Networks.OneModeNetworks;
 using Symu.Messaging.Templates;
 
 #endregion
@@ -21,7 +22,7 @@ namespace Symu.Repository.Entity
     /// <summary>
     ///     Entity for DataBase class, used to store and search information during the simulation
     /// </summary>
-    public class DatabaseEntity
+    public class DatabaseEntity : IResource
     {
         public IId Id { get; }
         public DatabaseEntity(IId id)

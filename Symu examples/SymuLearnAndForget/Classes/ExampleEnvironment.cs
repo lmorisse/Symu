@@ -65,7 +65,7 @@ namespace SymuLearnAndForget.Classes
             base.AddOrganizationDatabase();
 
             var wikiEntity = new DatabaseEntity(Organization.AgentId.Id, Organization.Communication.Email);
-            Organization.AddDatabase(wikiEntity);
+            Organization.AddResource(wikiEntity);
         }
 
         public override void SetAgents()
