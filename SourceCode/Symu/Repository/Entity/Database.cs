@@ -21,6 +21,7 @@ using Symu.DNA;
 using Symu.DNA.Networks;
 using Symu.DNA.Networks.OneModeNetworks;
 using Symu.DNA.Networks.TwoModesNetworks;
+using Symu.Messaging.Templates;
 
 #endregion
 
@@ -43,48 +44,79 @@ namespace Symu.Repository.Entity
         ///     Database of the stored information
         /// </summary>
         private readonly AgentExpertise _database = new AgentExpertise();
-
         private readonly LearningModel _learningModel;
         private readonly ForgettingModel _forgettingModel;
 
         /// <summary>
         ///     Database unique Identifier
         /// </summary>
-        public IId Id => Entity.Id;
+        public IId Id { get; }
 
-        public Database(DatabaseEntity entity, OrganizationModels organizationModels,
+        public Database(IId id, CommunicationTemplate medium, OrganizationModels organizationModels,
             MetaNetwork metaNetwork)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
             if (organizationModels is null)
             {
                 throw new ArgumentNullException(nameof(organizationModels));
             }
 
-            Entity = new DatabaseEntity(entity.Id, entity.CognitiveArchitecture);
-            var agentId = new AgentId(Entity.Id, 0);
+            Id = id;
+            SetCognitiveArchitecture(medium);
+            var agentId = new AgentId(Id, 0);
             _learningModel = new LearningModel(agentId, organizationModels, metaNetwork,
-                entity.CognitiveArchitecture, organizationModels.Generator);
-            _forgettingModel = new ForgettingModel(_database, entity.CognitiveArchitecture, organizationModels);
+                CognitiveArchitecture, organizationModels.Generator);
+            _forgettingModel = new ForgettingModel(_database, CognitiveArchitecture, organizationModels);
         }
 
         /// <summary>
-        ///     Define the cognitive architecture model of this class
+        ///     Time to live : information are stored in the database
+        ///     But information have a limited lifetime depending on those database
+        ///     -1 for unlimited time to live
+        ///     Initialized by CommunicationTemplate.TimeToLive
         /// </summary>
-        public DatabaseEntity Entity { get; }
+        public short TimeToLive => CognitiveArchitecture.InternalCharacteristics.TimeToLive;
+
+        /// <summary>
+        ///     CognitiveArchitecture of the database
+        /// </summary>
+        public CognitiveArchitecture CognitiveArchitecture { get; set; }
+
+        public void SetCognitiveArchitecture(CommunicationTemplate medium) 
+        {
+            if (medium == null)
+            {
+                throw new ArgumentNullException(nameof(medium));
+            }
+
+            CognitiveArchitecture = new CognitiveArchitecture();
+            // Communication
+            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfBeliefToSend =
+                medium.MaximumNumberOfBitsOfBeliefToSend;
+            CognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
+                medium.MaximumNumberOfBitsOfKnowledgeToSend;
+            CognitiveArchitecture.MessageContent.MinimumBeliefToSendPerBit =
+                medium.MinimumBeliefToSendPerBit;
+            CognitiveArchitecture.MessageContent.MinimumKnowledgeToSendPerBit =
+                medium.MinimumKnowledgeToSendPerBit;
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfBeliefToSend =
+                medium.MinimumNumberOfBitsOfBeliefToSend;
+            CognitiveArchitecture.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
+                medium.MinimumNumberOfBitsOfKnowledgeToSend;
+            CognitiveArchitecture.InternalCharacteristics.TimeToLive = medium.TimeToLive;
+            // Knowledge
+            CognitiveArchitecture.TasksAndPerformance.LearningRate = 1;
+            CognitiveArchitecture.InternalCharacteristics.CanLearn = true;
+            CognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
+        }
 
         public bool Exists(IId knowledgeId)
         {
             return _database.Contains(knowledgeId);
         }
 
-        public void InitializeKnowledge(Knowledge knowledge, ushort step)
+        public void InitializeKnowledge(IKnowledge iKnowledge, ushort step)
         {
-            if (knowledge == null)
+            if (!(iKnowledge is Knowledge knowledge))
             {
                 throw new ArgumentNullException(nameof(knowledge));
             }
@@ -99,7 +131,7 @@ namespace Symu.Repository.Entity
                 return;
             }
 
-            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, 0, Entity.TimeToLive);
+            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, 0, TimeToLive);
             agentKnowledge.InitializeWith0(knowledgeLength, step);
             _database.Add(agentKnowledge);
         }
@@ -169,7 +201,7 @@ namespace Symu.Repository.Entity
         /// </summary>
         public void ForgettingProcess(ushort step)
         {
-            if (Entity.TimeToLive < 1)
+            if (TimeToLive < 1)
             {
                 return;
             }

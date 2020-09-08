@@ -72,7 +72,7 @@ namespace Symu.Classes.Organization
         ///     List of all databases accessible to everyone
         /// </summary>
         //todo _network.Resource
-        public IEnumerable<DatabaseEntity> Databases => MetaNetwork.Resource.List.OfType<DatabaseEntity>();//{ get; } = new List<DatabaseEntity>();
+        public IEnumerable<Database> Databases => MetaNetwork.Resource.List.OfType<Database>();//{ get; } = new List<DatabaseEntity>();
 
         /// <summary>
         ///     List of all knowledge

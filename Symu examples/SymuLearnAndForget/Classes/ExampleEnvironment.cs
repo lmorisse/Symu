@@ -29,7 +29,7 @@ namespace SymuLearnAndForget.Classes
         public ExpertAgent ExpertAgent { get; private set; }
         public Knowledge Knowledge { get; set; }
         public KnowledgeLevel KnowledgeLevel { get; set; }
-        public Database Wiki => (Database)WhitePages.MetaNetwork.Resource.List.First();
+        public Database WikiEntity => (Database)WhitePages.MetaNetwork.Resource.List.First();
 
         public override void SetOrganization(OrganizationEntity organization)
         {
@@ -54,7 +54,7 @@ namespace SymuLearnAndForget.Classes
         {
             base.AddOrganizationKnowledge();
             Organization.AddKnowledge(Knowledge);
-            Wiki.InitializeKnowledge(Knowledge, 0);
+            WikiEntity.InitializeKnowledge(Knowledge, 0);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SymuLearnAndForget.Classes
         {
             base.AddOrganizationDatabase();
 
-            var wikiEntity = new DatabaseEntity(Organization.AgentId.Id, Organization.Communication.Email);
+            var wikiEntity = Wiki.CreateInstance(Organization.AgentId.Id, Organization.Models, Organization.MetaNetwork);
             Organization.AddResource(wikiEntity);
         }
 

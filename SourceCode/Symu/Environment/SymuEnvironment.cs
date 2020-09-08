@@ -180,15 +180,14 @@ namespace Symu.Environment
             //WhitePages.MetaNetwork.Beliefs.Model =
             //    Organization.Models.Generator;
             IterationResult.Initialize();
-            // Intentionally before AddOrganizationKnowledges
-            AddOrganizationDatabase();
-            SetDatabases();
             // Intentionally before SetAgents
             AddOrganizationKnowledge();
             SetKnowledge();
             // Intentionally before SetAgents
             AddOrganizationTasks();
             SetTasks();
+            // Intentionally after AddOrganizationKnowledges
+            AddOrganizationDatabase();
             SetAgents();
             // Intentionally after SetAgents
             InitializeInteractionNetwork();
@@ -469,17 +468,17 @@ namespace Symu.Environment
         {
         }
 
-        /// <summary>
-        ///     Clone repository of Databases network
-        /// </summary>
-        public void SetDatabases()
-        {
-            foreach (var database in Organization.Databases.Select(databaseEntity =>
-                new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork)))
-            {
-                WhitePages.MetaNetwork.Resource.Add(database);
-            }
-        }
+        ///// <summary>
+        /////     Clone repository of Databases network
+        ///// </summary>
+        //public void SetDatabases()
+        //{
+        //    foreach (var database in Organization.Databases.Select(databaseEntity =>
+        //        new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork)))
+        //    {
+        //        WhitePages.MetaNetwork.Resource.Add(database);
+        //    }
+        //}
 
         #endregion
 

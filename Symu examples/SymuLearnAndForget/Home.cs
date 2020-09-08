@@ -252,9 +252,9 @@ namespace SymuLearnAndForget
                 _environment.ExpertAgent.ForgettingModel.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Wiki
-            WriteTextSafe(lblWiki, _environment.Wiki.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblWiki, _environment.WikiEntity.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
             if (_fullKnowledge == 0 &&
-                Math.Abs(_environment.Wiki.GetKnowledgesSum() - _environment.Knowledge.Length) < Tolerance)
+                Math.Abs(_environment.WikiEntity.GetKnowledgesSum() - _environment.Knowledge.Length) < Tolerance)
             {
                 _fullKnowledge = _environment.Schedule.Step;
             }

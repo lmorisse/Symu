@@ -28,13 +28,11 @@ namespace Symu.Repository.Entity
     {
         public static Email CreateInstance(IId id, OrganizationModels organizationModels, MetaNetwork metaNetwork)
         {
-            CommunicationTemplate communication = new EmailTemplate();
-            var entity = new DatabaseEntity(id, communication);
-            return new Email(entity, organizationModels, metaNetwork);
+            return new Email(id, new EmailTemplate(), organizationModels, metaNetwork);
         }
 
-        private Email(DatabaseEntity entity, OrganizationModels organizationModels,
-            MetaNetwork metaNetwork) : base(entity, organizationModels, metaNetwork)
+        private Email(IId id, CommunicationTemplate communication , OrganizationModels organizationModels,
+            MetaNetwork metaNetwork) : base(id, communication, organizationModels, metaNetwork)
         {
         }
 

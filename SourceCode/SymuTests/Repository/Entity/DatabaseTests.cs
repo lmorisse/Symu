@@ -36,8 +36,7 @@ namespace SymuTests.Repository.Entity
             var network = new MetaNetwork(models.InteractionSphere);
 
             CommunicationTemplate communication = new EmailTemplate();
-            var entity = new DatabaseEntity(new UId(1), communication);
-            _database = new Database(entity, models, network);
+            _database = new Database(new UId(1), communication, models, network);
             _bits1 = new Bits(_floats1, 0);
         }
 
@@ -115,7 +114,7 @@ namespace SymuTests.Repository.Entity
         [TestMethod]
         public void ForgettingProcessTest1()
         {
-            _database.Entity.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
+            _database.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
             _database.StoreKnowledge(_knowledgeId, _bits1, 1, 0);
             _database.ForgettingProcess(2);
             Assert.IsFalse(_database.SearchKnowledge(_knowledgeId, 0, 0));
