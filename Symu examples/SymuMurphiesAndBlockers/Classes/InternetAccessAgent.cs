@@ -13,12 +13,10 @@ using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.Common.Interfaces;
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Repository.Entity;
 
 #endregion
 
@@ -30,14 +28,21 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class InternetAccessAgent : CognitiveAgent
     {
         public const byte Class = 1;
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static InternetAccessAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static InternetAccessAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new InternetAccessAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new InternetAccessAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -46,13 +51,11 @@ namespace SymuMurphiesAndBlockers.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private InternetAccessAgent(IId id, SymuEnvironment environment,
+        private InternetAccessAgent(SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+            ClassId, environment, template)
         {
         }
-
-        public IEnumerable<IKnowledge> Knowledges => Environment.Organization.Knowledge;
 
         /// <summary>
         ///     Customize the models of the agent
@@ -61,9 +64,9 @@ namespace SymuMurphiesAndBlockers.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledge in Knowledges)
+            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment) Environment).KnowledgeLevel,
+                KnowledgeModel.AddKnowledge(knowledgeId, Organization.KnowledgeLevel,
                     Cognitive.InternalCharacteristics);
             }
         }

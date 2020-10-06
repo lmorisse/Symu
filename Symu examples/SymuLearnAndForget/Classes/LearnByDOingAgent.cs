@@ -9,10 +9,11 @@
 
 #region using directives
 
+using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
-using Symu.Common.Interfaces.Entity;
+
 using Symu.Environment;
 
 #endregion
@@ -27,9 +28,14 @@ namespace SymuLearnAndForget.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnByDoingAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static LearnByDoingAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new LearnByDoingAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new LearnByDoingAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -38,7 +44,7 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnByDoingAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(id, environment, template)
+        private LearnByDoingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(environment, template)
         {
         }
 
@@ -65,16 +71,16 @@ namespace SymuLearnAndForget.Classes
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
-            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.Id, knowledgeBit,
+            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.EntityId, knowledgeBit,
                 KnowledgeModel, Schedule.Step))
             {
                 return;
             }
 
             // Agent is learning
-            var realLearning = LearningModel.LearnByDoing(Knowledge.Id, knowledgeBit, Schedule.Step);
+            var realLearning = LearningModel.LearnByDoing(Knowledge.EntityId, knowledgeBit, Schedule.Step);
             // the knowledge is stored in a wiki
-            Wiki.StoreKnowledge(Knowledge.Id, knowledgeBit, realLearning, Schedule.Step);
+            Wiki.StoreKnowledge(Knowledge.EntityId, knowledgeBit, realLearning, Schedule.Step);
         }
     }
 }

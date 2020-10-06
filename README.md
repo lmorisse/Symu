@@ -40,19 +40,19 @@ organization theory, social networks, socio-cultural environment, information di
 With our **academic program**, we will first implement models that you want to use for you.
 
 ## Getting Started
-The main project is [Symu](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/Symu). This is the framework you'll use to build your own application in batch. You can use [SymuForm](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuForm) for a GUI mode.
+The main project is [Symu](https://github.com/lmorisse/Symu.org/tree/master/SourceCode/Symu). This is the framework you'll use to build your own application in batch. You can use [SymuForm](https://github.com/lmorisse/Symu/tree/master/Symu%20source%20code/SymuForm) for a GUI mode.
 
 ### Installing
 
-Symu works only on Windows for the moment.
+Symu works only on Windows when you use SymuForm. Otherwise, it can be used on Linux, but it have not been tested.
 
 ### Building
 
 Symu is built upon different repositories. We don't use git submodules. So that, to build Symu and its examples solutions, you'll need to check the dependencies manually.
 
 #### Symu dependencies
-To build Symu you have to add the Symu.Common.dll as a dependency. You find this library in the [Symu.Common](https://github.com/lmorisse/Symu.Common/releases/latest) repository.
-To build Symu examples, you'll need to add Symu.dll, Symu.Forms.dll and Symu.Common.dll as dependencies.
+To build Symu you have to add the Symu.Common.dll and Symu.DNA.dll as dependencies. You find this library in the [Symu.Common](https://github.com/lmorisse/Symu.Common/releases/latest) and [Symu.DNA](https://github.com/lmorisse/Symu.DNA/releases/latest) repositories.
+To build Symu examples, you'll need to add Symu.dll, Symu.Forms.dll, Symu.Common.dll and Symu.DNA.dll as dependencies.
 
 #### External dependencies
 * [Math.net](https://www.math.net/)

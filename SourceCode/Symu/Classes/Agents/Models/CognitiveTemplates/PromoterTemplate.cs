@@ -11,7 +11,8 @@
 
 using Symu.Common;
 using Symu.Messaging.Messages;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 
 #endregion
 

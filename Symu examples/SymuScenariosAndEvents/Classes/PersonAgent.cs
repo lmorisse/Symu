@@ -10,20 +10,20 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
+using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.DNA.Entities;
 using Symu.Environment;
+using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -38,9 +38,14 @@ namespace SymuScenariosAndEvents.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new PersonAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new PersonAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -49,15 +54,14 @@ namespace SymuScenariosAndEvents.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private PersonAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
         {
         }
 
         public IAgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public List<IKnowledge> Knowledges => Environment.Organization.Knowledge;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -86,12 +90,11 @@ namespace SymuScenariosAndEvents.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledge in Knowledges)
+            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.Intermediate,
+                KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.Intermediate,
                     Cognitive.InternalCharacteristics);
-                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
-                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+                BeliefsModel.AddBeliefFromKnowledgeId(knowledgeId, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }
         }
 
@@ -100,12 +103,27 @@ namespace SymuScenariosAndEvents.Classes
             var task = new SymuTask(Schedule.Step)
             {
                 // Weight is randomly distributed around 1, but has a minimum of 0
-                Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.Organization.Models.RandomLevelValue)),
+                Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.RandomLevelValue)),
                 // Creator is randomly  a person of the group - for the incomplete information murphy
                 Creator = (AgentId)Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
-            task.SetKnowledgesBits(Model, Knowledges, 1);
+            task.SetKnowledgesBits(Model, Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
             Post(task);
+        }
+
+        public override void OnAfterTaskProcessorStart()
+        {
+            base.OnAfterTaskProcessorStart();
+            TaskProcessor.OnAfterSetTaskDone += AfterSetTaskDone;
+        }
+
+        private void AfterSetTaskDone(object sender, TaskEventArgs e)
+        {
+            if (!(e.Task.Parent is Message))
+            {
+                // warns the group that he has performed the task
+                Send(GroupId, MessageAction.Close, SymuYellowPages.Task, CommunicationMediums.Email);
+            }
         }
     }
 }

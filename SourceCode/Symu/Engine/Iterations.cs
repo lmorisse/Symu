@@ -34,7 +34,7 @@ namespace Symu.Engine
             return true;
         }
 
-        public virtual void UpdateIteration(List<SimulationScenario> scenarii)
+        public virtual void UpdateIteration(List<ScenarioAgent> scenarii)
         {
             if (scenarii is null)
             {

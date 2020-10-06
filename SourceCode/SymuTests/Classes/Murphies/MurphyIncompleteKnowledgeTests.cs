@@ -15,34 +15,30 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.DNA.GraphNetworks;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
 
 #endregion
 
 namespace SymuTests.Classes.Murphies
 {
     [TestClass]
-    public class MurphyIncompleteKnowledgeTests
+    public class MurphyIncompleteKnowledgeTests : BaseTestClass
     {
-        private readonly AgentId _agentId = new AgentId(1, 1);
         private KnowledgeModel _knowledgeModel ;
         private readonly MurphyIncompleteKnowledge _murphy = new MurphyIncompleteKnowledge();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private Knowledge _knowledge;
-        private MetaNetwork _network;
 
         [TestInitialize]
         public void Initialize()
         {
-            var models = new OrganizationModels();
-            _network = new MetaNetwork(models.InteractionSphere);
-            _knowledge = new Knowledge(1, "1", 1);
-            _network.Knowledge.Add(_knowledge);
-            _knowledgeModel = new KnowledgeModel(_agentId, new ModelEntity(), new CognitiveArchitecture(), _network, RandomGenerator.RandomBinary);
-            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
+            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
+            _knowledgeModel = new KnowledgeModel(Uid1, new KnowledgeModelEntity(), new CognitiveArchitecture(),
+                Network, RandomGenerator.RandomBinary) {On = true};
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }
@@ -58,7 +54,7 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+            _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);
         }
@@ -75,7 +71,7 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+            _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);
         }
@@ -90,7 +86,8 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+            _murphy.On = true;
+            _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsFalse(mandatoryCheck && requiredCheck);
         }
@@ -105,10 +102,10 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
-            _knowledgeModel.Expertise.Add(agentKnowledge);
-            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
-            _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+            _murphy.On = true;
+            var actorKnowledge = new ActorKnowledge(Uid1,_knowledge.EntityId, new float[] {0}, 0, -1, 0);
+            Network.ActorKnowledge.Add(actorKnowledge);
+            _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsFalse(mandatoryCheck && requiredCheck);
         }
@@ -123,10 +120,10 @@ namespace SymuTests.Classes.Murphies
             var requiredCheck = false;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
-            _knowledgeModel.Expertise.Add(agentKnowledge);
-            _network.AgentKnowledge.Add(_agentId, _knowledgeModel.Expertise);
-            _murphy.CheckKnowledge(_knowledge.Id, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
+            _murphy.On = true;
+            var actorKnowledge = new ActorKnowledge(Uid1, _knowledge.EntityId, new float[] {1}, 0, -1, 0);
+            Network.ActorKnowledge.Add(actorKnowledge);
+            _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
             Assert.IsTrue(mandatoryCheck && requiredCheck);
             Assert.AreEqual(0, mandatoryIndex);

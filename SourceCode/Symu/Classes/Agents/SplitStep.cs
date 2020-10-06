@@ -10,7 +10,7 @@
 #region using directives
 
 using System;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;

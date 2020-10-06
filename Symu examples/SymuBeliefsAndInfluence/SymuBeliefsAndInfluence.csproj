@@ -77,8 +77,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ExampleOrganization.cs" />
     <Compile Include="Classes\ExampleEnvironment.cs" />
-    <Compile Include="Classes\GroupAgent.cs" />
     <Compile Include="Classes\InfluencerAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
     <Compile Include="Home.cs">

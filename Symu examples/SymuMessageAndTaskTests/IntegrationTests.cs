@@ -30,7 +30,7 @@ namespace SymuMessageAndTaskTests
     {
         private const int NumberOfSteps = 10;
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
-        private readonly OrganizationEntity _organization = new OrganizationEntity("1");
+        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly SymuEngine _simulation = new SymuEngine();
 
         [TestInitialize]
@@ -97,7 +97,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
-            _environment.CostOfTask = 0;
+            _organization.CostOfTask = 0;
             _simulation.Process();
             Assert.AreEqual(_environment.IterationResult.Tasks.Total,
                 _environment.IterationResult.Tasks.SumCapacity.Last());
@@ -110,8 +110,9 @@ namespace SymuMessageAndTaskTests
         [TestMethod]
         public void ToDoTest()
         {
+            _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.NumberOfTasks = 10;
+            _organization.NumberOfTasks = 10;
             _simulation.Process();
             Assert.AreEqual(0, _environment.IterationResult.Tasks.AverageToDo);
         }
@@ -125,7 +126,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             _organization.Templates.Human.Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 1;
-            _environment.NumberOfTasks = 10;
+            _organization.NumberOfTasks = 10;
             _simulation.Process();
             Assert.IsTrue(0 < _environment.IterationResult.Tasks.AverageToDo);
         }
@@ -134,7 +135,7 @@ namespace SymuMessageAndTaskTests
         public void InProgressTest()
         {
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.InitialCapacity = 0.1F;
+            _organization.InitialCapacity = 0.1F;
             _simulation.Process();
             Assert.IsTrue(0 < _environment.IterationResult.Tasks.AverageInProgress);
         }
@@ -150,7 +151,7 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
-            Assert.AreEqual(number * _environment.WorkersCount, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(number * _environment.ExampleOrganization.WorkersCount, _environment.IterationResult.Tasks.Total);
         }
 
         [TestMethod]
@@ -184,9 +185,9 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
-            _environment.SwitchingContextCost = 2;
-            _environment.CostOfTask = 0.5F;
-            _environment.NumberOfTasks = 2;
+            _organization.SwitchingContextCost = 2;
+            _organization.CostOfTask = 0.5F;
+            _organization.NumberOfTasks = 2;
             _simulation.Process();
             Assert.AreEqual(_environment.IterationResult.Tasks.SumCapacity.Last(),
                 2 * _environment.IterationResult.Tasks.Weight);
@@ -221,7 +222,7 @@ namespace SymuMessageAndTaskTests
             _organization.Templates.Human.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Never;
             _simulation.Process();
-            var count = _environment.WorkersCount * NumberOfSteps;
+            var count = _environment.ExampleOrganization.WorkersCount * NumberOfSteps;
             Assert.AreEqual(2 * count, (int) _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(count, _environment.IterationResult.Messages.SentMessages,
                 _environment.IterationResult.Messages.MissedMessagesCount);
@@ -243,9 +244,9 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
-            Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
+            Assert.AreEqual(2 * _environment.ExampleOrganization.WorkersCount * NumberOfSteps,
                 (int) _environment.Messages.Result.SentMessagesCount);
-            Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(_environment.ExampleOrganization.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Messages.ReceivedMessagesCost);
             Assert.AreEqual(0, _environment.IterationResult.Messages.SentMessagesCost);
         }
@@ -266,9 +267,9 @@ namespace SymuMessageAndTaskTests
             _organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
             _organization.Communication.Email.CostToSendLevel = GenericLevel.None;
             _simulation.Process();
-            Assert.AreEqual(2 * _environment.WorkersCount * NumberOfSteps,
+            Assert.AreEqual(2 * _environment.ExampleOrganization.WorkersCount * NumberOfSteps,
                 (int) _environment.Messages.Result.SentMessagesCount);
-            Assert.AreEqual(_environment.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
+            Assert.AreEqual(_environment.ExampleOrganization.WorkersCount * NumberOfSteps, _environment.IterationResult.Tasks.Total);
             Assert.AreEqual(0, _environment.IterationResult.Messages.ReceivedMessagesCost);
             Assert.AreEqual(0, _environment.IterationResult.Messages.SentMessagesCost);
         }

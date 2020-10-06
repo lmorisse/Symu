@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ExampleEnvironment.cs" />
+    <Compile Include="Classes\ExampleOrganization.cs" />
     <Compile Include="Classes\GroupAgent.cs" />
     <Compile Include="Classes\InternetAccessAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />

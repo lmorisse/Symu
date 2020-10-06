@@ -16,8 +16,7 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -29,14 +28,21 @@ namespace SymuMessageAndTask.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = 2;
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new PersonAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new PersonAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -45,8 +51,8 @@ namespace SymuMessageAndTask.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private PersonAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
         {
         }
 
@@ -74,7 +80,7 @@ namespace SymuMessageAndTask.Classes
         public override void GetNewTasks()
         {
             //Ask a task to the group
-            Send(GroupId, MessageAction.Ask, SymuYellowPages.Tasks, CommunicationMediums.Email);
+            Send(GroupId, MessageAction.Ask, SymuYellowPages.Task, CommunicationMediums.Email);
         }
 
         private void AfterSetTaskDone(object sender, TaskEventArgs e)
@@ -82,7 +88,7 @@ namespace SymuMessageAndTask.Classes
             if (!(e.Task.Parent is Message))
             {
                 // warns the group that he has performed the task
-                Send(GroupId, MessageAction.Close, SymuYellowPages.Tasks, CommunicationMediums.Email);
+                Send(GroupId, MessageAction.Close, SymuYellowPages.Task, CommunicationMediums.Email);
             }
         }
 
@@ -92,7 +98,7 @@ namespace SymuMessageAndTask.Classes
         /// <returns></returns>
         public override void SetInitialCapacity()
         {
-            Capacity.Initial = ((ExampleEnvironment) Environment).InitialCapacity;
+            Capacity.Initial = Organization.InitialCapacity;
         }
 
         public override void ActMessage(Message message)
@@ -105,7 +111,7 @@ namespace SymuMessageAndTask.Classes
             base.ActMessage(message);
             switch (message.Subject)
             {
-                case SymuYellowPages.Tasks:
+                case SymuYellowPages.Task:
                     ActTasks(message);
                     break;
             }
@@ -146,7 +152,7 @@ namespace SymuMessageAndTask.Classes
 
         public override void SwitchingContextModel()
         {
-            var switchingContextCost = ((ExampleEnvironment) Environment).SwitchingContextCost;
+            var switchingContextCost = Organization.SwitchingContextCost;
             Capacity.Multiply(1 / switchingContextCost);
         }
     }

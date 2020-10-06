@@ -9,9 +9,9 @@
 
 #region using directives
 
+using System;
 using Symu.Classes.Agents;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Repository;
 
@@ -19,6 +19,7 @@ using Symu.Repository;
 
 namespace SymuTests.Helpers
 {
+
     /// <summary>
     ///     Class for tests
     /// </summary>
@@ -31,15 +32,25 @@ namespace SymuTests.Helpers
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static TestCognitiveAgent CreateInstance(IId id, SymuEnvironment environment)
+        public static TestCognitiveAgent CreateInstance(SymuEnvironment environment)
         {
-            var agent = new TestCognitiveAgent(id, environment);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new TestCognitiveAgent(environment.WhitePages.NextAgentId(Class), environment);
             agent.Initialize();
             return agent;
         }
-        public static TestCognitiveAgent CreateInstance(IId id, byte classId, SymuEnvironment environment)
+        public static TestCognitiveAgent CreateInstance(byte classId, SymuEnvironment environment)
         {
-            var agent = new TestCognitiveAgent(id, classId, environment);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new TestCognitiveAgent(environment.WhitePages.NextAgentId(classId), environment);
             agent.Initialize();
             return agent;
         }
@@ -47,14 +58,22 @@ namespace SymuTests.Helpers
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestCognitiveAgent(IId id, SymuEnvironment environment) : base(new AgentId(id, Class), environment,
+        private TestCognitiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment,
             environment.Organization.Templates.Human)
         {
         }
 
-        private TestCognitiveAgent(IId id, byte classId, SymuEnvironment environment) : base(new AgentId(id, classId),
-            environment, environment.Organization.Templates.Human)
+        /// <summary>
+        /// Initialize the agent models
+        /// </summary>
+        /// <remarks>Should be called after the constructor
+        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
+        public override ReactiveAgent Clone()
         {
+
+            var agent = (TestCognitiveAgent)base.Clone();
+            agent.Initialize();
+            return agent;
         }
     }
 }

@@ -11,19 +11,21 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
 using Symu.Classes.Task;
-using Symu.Common.Interfaces.Agent;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.DNA.Entities;
+using Symu.DNA.GraphNetworks;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
 
 #endregion
 
 namespace SymuTests.Classes.Task
 {
     [TestClass]
-    public class SymuTaskTests
+    public class SymuTaskTests : BaseTestClass
     {
-        private readonly List<Knowledge> _knowledges = new List<Knowledge>();
+        private readonly List<IKnowledge> _knowledges = new List<IKnowledge>();
         private readonly MurphyTask _model = new MurphyTask();
         private SymuTask _task;
 
@@ -35,7 +37,7 @@ namespace SymuTests.Classes.Task
             for (var i = 0; i < 2; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge((ushort) i, i.ToString(), 10);
+                var knowledge = new Knowledge(Network, Organization.Models, i.ToString(), 10);
                 _knowledges.Add(knowledge);
             }
         }

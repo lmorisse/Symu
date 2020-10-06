@@ -207,5 +207,10 @@ namespace Symu.Environment
 
             return frequencyFactor;
         }
+
+        public void Clear()
+        {
+            Step = 0;
+        }
     }
 }

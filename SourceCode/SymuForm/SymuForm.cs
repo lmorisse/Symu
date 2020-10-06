@@ -18,7 +18,7 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 using Symu.Results;
 
 #endregion
@@ -39,8 +39,6 @@ namespace Symu.Forms
         }
 
         public SymuEngine Engine { get; } = new SymuEngine();
-
-        protected OrganizationEntity OrganizationEntity { get; set; } = new OrganizationEntity("symu");
 
         /// <summary>
         ///     Manage the multiple iterations of the simulation
@@ -187,7 +185,7 @@ namespace Symu.Forms
         /// <summary>
         /// </summary>
         /// <param name="environment"></param>
-        protected void Start(SymuEnvironment environment)
+        protected void Start(SymuEnvironment environment, Organization organization)
         {
             if (environment is null)
             {
@@ -195,7 +193,7 @@ namespace Symu.Forms
             }
 
             Engine.State = AgentState.Starting;
-            SetUp(environment);
+            SetUp(environment, organization);
             PreProcess();
             if (backgroundWorker1.IsBusy != true)
                 // Start the asynchronous operation.
@@ -316,32 +314,35 @@ namespace Symu.Forms
 
         #region Initialize / set
 
-        private void SetUp(SymuEnvironment environment)
+        private void SetUp(SymuEnvironment environment, Organization organization)
         {
             Engine.SetEnvironment(environment);
-            Engine.Environment.SetOrganization(OrganizationEntity);
-            UpdateSettings();
+            SetUpOrganization();
+            Engine.Environment.SetOrganization(organization);
+            //Intentionally after SetOrganization because Scenarii are Agents
+            SetUpScenarii();
         }
 
-        public void AddScenario(SimulationScenario scenario)
+        public void AddScenario(ScenarioAgent scenario)
         {
             Engine.AddScenario(scenario);
         }
 
-        protected void AddEvent(SymuEvent symuEvent)
+        /// <summary>
+        ///     Update organization settings via the form
+        ///     Use SetOrganization to initialize organization
+        /// </summary>
+        protected virtual void SetUpOrganization()
         {
-            Engine.AddEvent(symuEvent);
         }
 
         /// <summary>
-        ///     Update settings of the environment and the organization via the form
-        ///     Use SetOrganization to initialize organization
+        ///     Update scenarii settings via the form
         ///     Add scenarios after calling base.UpdateSettings
         /// </summary>
-        protected virtual void UpdateSettings()
+        protected virtual void SetUpScenarii()
         {
             Engine.Scenarii.Clear();
-            OrganizationEntity.Clear();
         }
 
         protected void SetDebug(bool value)

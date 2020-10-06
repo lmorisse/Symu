@@ -11,7 +11,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common.Classes;
-using Symu.Environment;
 using Symu.Results;
 using SymuTests.Helpers;
 using TestResult = SymuTests.Helpers.TestResult;
@@ -21,16 +20,15 @@ using TestResult = SymuTests.Helpers.TestResult;
 namespace SymuTests.Results
 {
     [TestClass]
-    public class IterationResultTests
+    public class IterationResultTests: BaseTestClass
     {
-        private readonly SymuEnvironment _environment = new TestEnvironment();
         private IterationResult _result;
         private TestResult _specificResult;
 
         [TestInitialize]
         public void Initialize()
         {
-            _result = new IterationResult(_environment);
+            _result = new IterationResult(Environment);
             _specificResult = new TestResult();
             _result.Add(_specificResult);
             _result.Off();
@@ -73,7 +71,7 @@ namespace SymuTests.Results
         {
             _specificResult.On = true;
             _result.SetResults();
-            _environment.Messages.Result.SentMessagesCost = 1;
+            Environment.Messages.Result.SentMessagesCost = 1;
             _result.Messages.SetResults();
 
             var clone = _result.Clone();

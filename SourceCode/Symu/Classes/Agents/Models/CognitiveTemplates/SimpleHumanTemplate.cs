@@ -11,7 +11,8 @@
 
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -63,7 +64,7 @@ namespace Symu.Classes.Agents.Models.CognitiveTemplates
             // Tasks and performance
             Cognitive.TasksAndPerformance.CanPerformTask = true;
             Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds = false;
-            Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = false;
+            Cognitive.TasksAndPerformance.TasksLimit.LimitSimultaneousTasks = true;
             Cognitive.TasksAndPerformance.TasksLimit.MaximumSimultaneousTasks = 10;
             Cognitive.TasksAndPerformance.TasksLimit.LimitTasksInTotal = false;
             Cognitive.TasksAndPerformance.LearningRate = 0.05F;

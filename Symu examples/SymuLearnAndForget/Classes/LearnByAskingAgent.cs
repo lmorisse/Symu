@@ -11,7 +11,7 @@
 
 using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
-using Symu.Common.Interfaces.Entity;
+
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -27,9 +27,14 @@ namespace SymuLearnAndForget.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnByAskingAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static LearnByAskingAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new LearnByAskingAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new LearnByAskingAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -38,8 +43,8 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnByAskingAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
-            : base(id, environment, template)
+        private LearnByAskingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+            : base(environment, template)
         {
         }
 
@@ -50,7 +55,7 @@ namespace SymuLearnAndForget.Classes
         {
             var attachments = new MessageAttachments
             {
-                KnowledgeId = Knowledge.Id,
+                KnowledgeId = Knowledge.EntityId,
                 KnowledgeBit = Knowledge.GetRandomBitIndex()
             };
             Send(((ExampleEnvironment) Environment).ExpertAgent.AgentId, MessageAction.Ask, SymuYellowPages.Knowledge,
@@ -80,7 +85,7 @@ namespace SymuLearnAndForget.Classes
                 case MessageAction.Reply:
                     // Agent has already learned from the reply
                     // We need to store this information in the wiki
-                    Wiki.StoreKnowledge(Knowledge.Id, message.Attachments.KnowledgeBits, 1, Schedule.Step);
+                    Wiki.StoreKnowledge(Knowledge.EntityId, message.Attachments.KnowledgeBits, 1, Schedule.Step);
                     break;
             }
         }

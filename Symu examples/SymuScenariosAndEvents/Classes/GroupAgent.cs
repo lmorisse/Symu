@@ -9,9 +9,9 @@
 
 #region using directives
 
+using System;
 using Symu.Classes.Agents;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 
 #endregion
@@ -21,14 +21,20 @@ namespace SymuScenariosAndEvents.Classes
     public sealed class GroupAgent : ReactiveAgent
     {
         public const byte Class = 1;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static GroupAgent CreateInstance(IId id, SymuEnvironment environment)
+        public static GroupAgent CreateInstance(SymuEnvironment environment)
         {
-            var agent = new GroupAgent(id, environment);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new GroupAgent(environment);
             agent.Initialize();
             return agent;
         }
@@ -37,8 +43,8 @@ namespace SymuScenariosAndEvents.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private GroupAgent(IId id, SymuEnvironment environment) : base(
-            new AgentId(id, Class), environment)
+        private GroupAgent(SymuEnvironment environment) : base(
+            ClassId, environment)
         {
         }
     }

@@ -9,11 +9,12 @@
 
 #region using directives
 
+using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task.Manager;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -26,9 +27,14 @@ namespace SymuLearnAndForget.Classes
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnFromSourceAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static LearnFromSourceAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new LearnFromSourceAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new LearnFromSourceAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -37,8 +43,8 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnFromSourceAgent(IId id, SymuEnvironment environment,
-            CognitiveArchitectureTemplate template) : base(id, environment, template)
+        private LearnFromSourceAgent(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(environment, template)
         {
         }
 
@@ -58,13 +64,13 @@ namespace SymuLearnAndForget.Classes
             bits.InitializeWith0(Knowledge.Length);
             // The source has the maximum knowledge bit
             bits.SetBit(knowledgeBit, 1);
-            LearningModel.Learn(Knowledge.Id, bits,
+            LearningModel.Learn(Knowledge.EntityId, bits,
                 Environment.Organization.Communication.Email.MaxRateLearnable,
                 Schedule.Step);
             // the information learned is stored in a wiki
             // not the total knowledge of the agent, it is tacit knowledge for the agent
             // wiki will be filled quicker by a non expert 
-            Wiki.StoreKnowledge(Knowledge.Id, bits, 1, Schedule.Step);
+            Wiki.StoreKnowledge(Knowledge.EntityId, bits, 1, Schedule.Step);
         }
     }
 }

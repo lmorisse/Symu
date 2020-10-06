@@ -14,9 +14,11 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Classes;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -24,69 +26,35 @@ namespace SymuMurphiesAndBlockers.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public byte WorkersCount { get; set; } = 5;
-        public byte KnowledgeCount { get; set; } = 2;
-
-        public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.Intermediate;
+        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
         public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
 
         public InternetAccessAgent Internet { get; private set; }
 
-        public override void SetOrganization(OrganizationEntity organization)
+        public ExampleEnvironment()
         {
-            if (organization == null)
-            {
-                throw new ArgumentNullException(nameof(organization));
-            }
-
-            base.SetOrganization(organization);
-
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
-            // For email knowledge storing
-            organization.Models.Learning.On = true;
-            organization.Models.Learning.RateOfAgentsOn = 1;
-            organization.Models.Forgetting.On = false;
-            organization.Models.Generator = RandomGenerator.RandomUniform;
-
-            organization.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
-            organization.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
 
             SetDebug(false);
-        }
-
-        /// <summary>
-        ///     Add Organization knowledge
-        /// </summary>
-        public override void AddOrganizationKnowledge()
-        {
-            base.AddOrganizationKnowledge();
-            // KnowledgeCount are added for tasks initialization
-            // Adn Beliefs are created based on knowledge
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
-                Organization.AddKnowledge(knowledge);
-            }
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         public override void SetAgents()
         {
             base.SetAgents();
 
-            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
-            Internet = InternetAccessAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Internet);
-            for (var j = 0; j < WorkersCount; j++)
+            var group = GroupAgent.CreateInstance(this);
+            Internet = InternetAccessAgent.CreateInstance(this, ExampleOrganization.Templates.Internet);
+            for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
             {
-                var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                var actor = PersonAgent.CreateInstance(this, ExampleOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork);
-                WhitePages.MetaNetwork.Resource.Add(email);
-                var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
-                WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
-                var agentGroup = new AgentOrganization(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
+                var email = EmailEntity.CreateInstance(ExampleOrganization.MetaNetwork, Organization.Models);
+                var actorResource = new ActorResource(actor.AgentId, email.EntityId, new ResourceUsage(0));
+                ExampleOrganization.MetaNetwork.ActorResource.Add(actorResource);
+                var actorGroup = new ActorOrganization(actor.AgentId, group.AgentId);
+                ExampleOrganization.MetaNetwork.ActorOrganization.Add(actorGroup);
             }
         }
     }

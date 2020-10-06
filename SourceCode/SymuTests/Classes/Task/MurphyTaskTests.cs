@@ -1,21 +1,24 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
+using Symu.DNA.GraphNetworks;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Symu.Repository.Entity;
-
-namespace Symu.Classes.Task.Tests
+namespace SymuTests.Classes.Task
 {
     [TestClass]
-    public class MurphyTaskTests
+    public class MurphyTaskTests : BaseTestClass
     {
-        private readonly Knowledge _knowledge =
-            new Knowledge(1, "1", 10);
-
+        private Knowledge _knowledge ;
         private readonly MurphyTask _taskModel = new MurphyTask();
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _knowledge = new Knowledge(Network, Organization.Models, "1", 10);
+        }
+
         [TestMethod]
         public void GetTaskRequiredBitsTest()
         {

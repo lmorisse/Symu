@@ -16,10 +16,11 @@ using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.OneModeNetworks;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+
+using Symu.DNA.Entities;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 using Symu.Results.Blocker;
 using static Symu.Common.Constants;
 
@@ -59,7 +60,7 @@ namespace Symu.Classes.Task
         /// <summary>
         ///     the Key of the ParentId (group, process, ...) in which the task must be performed
         /// </summary>
-        public IId KeyActivity { get; set; }
+        public IAgentId KeyActivity { get; set; }
 
         /// <summary>
         ///     Type of the task use to have specific behaviour
@@ -202,7 +203,7 @@ namespace Symu.Classes.Task
             {
                 var bit = new TaskKnowledgeBits
                 {
-                    KnowledgeId = knowledge.Id
+                    KnowledgeId = knowledge.EntityId
                 };
                 bit.SetRequired(model.GetTaskRequiredBits(knowledge, complexity));
                 bit.SetMandatory(model.GetTaskMandatoryBits(knowledge, complexity));

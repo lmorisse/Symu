@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartAppearance.cs" />
+    <Compile Include="Classes\ExampleOrganization.cs" />
     <Compile Include="Classes\GroupAgent.cs" />
     <Compile Include="Classes\PersonAgent.cs" />
     <Compile Include="Classes\ExampleEnvironment.cs" />

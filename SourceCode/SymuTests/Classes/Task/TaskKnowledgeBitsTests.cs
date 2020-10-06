@@ -11,16 +11,16 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 
 #endregion
 
 namespace SymuTests.Classes.Task
 {
     [TestClass]
-    public class TaskKnowledgeBitsTests
+    public class EntityKnowledgeBitsTests
     {
-        private readonly UId _knowledgeId = new UId(1);
+        private readonly IAgentId _knowledgeId = new AgentId(1,1);
         private readonly TaskKnowledgesBits _knowledgeBits = new TaskKnowledgesBits();
         private TaskKnowledgeBits _bits;
 

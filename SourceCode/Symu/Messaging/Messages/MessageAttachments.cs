@@ -11,8 +11,10 @@
 
 using System;
 using System.Collections.Generic;
-using Symu.Common.Interfaces.Entity;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -64,6 +66,7 @@ namespace Symu.Messaging.Messages
         public object Second => Objects.Count > 1 ? Objects[1] : null;
         public object Third => Objects.Count > 2 ? Objects[2] : null;
         public object Fourth => Objects.Count > 3 ? Objects[3] : null;
+        public object Fifth => Objects.Count > 4 ? Objects[4] : null;
 
         public object IndexOf(int index)
         {
@@ -82,7 +85,7 @@ namespace Symu.Messaging.Messages
         /// <summary>
         ///     The knowledge Id that is sent
         /// </summary>
-        public IId KnowledgeId { get; set; }
+        public IAgentId KnowledgeId { get; set; }
 
         /// <summary>
         ///     The Knowledge bit index that is asked

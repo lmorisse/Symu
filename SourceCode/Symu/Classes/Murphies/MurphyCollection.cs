@@ -57,7 +57,7 @@ namespace Symu.Classes.Murphies
         ///     Clone all murphies on
         /// </summary>
         /// <param name="rate"></param>
-        public void On(float rate)
+        public void SetOn(float rate)
         {
             foreach (var murphy in Murphies.Where(x => x != null))
             {
@@ -69,7 +69,7 @@ namespace Symu.Classes.Murphies
         /// <summary>
         ///     Clone all murphies off
         /// </summary>
-        public void Off()
+        public void SetOff()
         {
             foreach (var murphy in Murphies.Where(x => x != null))
             {
@@ -94,6 +94,15 @@ namespace Symu.Classes.Murphies
         public TMurphy Get<TMurphy>() where TMurphy : Murphy
         {
             return Murphies.Find(x => x is TMurphy) as TMurphy;
+        }
+
+        public MurphyCollection Clone()
+        {
+            var clone = new MurphyCollection();
+
+            //todo : for the moment it is a simple copy
+            clone = this;
+            return clone;
         }
     }
 }

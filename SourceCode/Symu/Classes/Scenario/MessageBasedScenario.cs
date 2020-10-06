@@ -10,6 +10,7 @@
 #region using directives
 
 using System;
+using Symu.Classes.Agents;
 using Symu.Common;
 using Symu.Environment;
 
@@ -17,7 +18,7 @@ using Symu.Environment;
 
 namespace Symu.Classes.Scenario
 {
-    public class MessageBasedScenario : SimulationScenario
+    public class MessageBasedScenario : ScenarioAgent
     {/// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
@@ -65,7 +66,7 @@ namespace Symu.Classes.Scenario
             }
         }
 
-        public override SimulationScenario Clone()
+        public override ReactiveAgent Clone()
         {
             var clone = new MessageBasedScenario(Environment)
             {

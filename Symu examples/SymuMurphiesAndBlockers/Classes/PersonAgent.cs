@@ -18,13 +18,11 @@ using Symu.Classes.Blockers;
 using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.Common.Interfaces;
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
 
 #endregion
 
@@ -33,15 +31,21 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
-        public static ClassId ClassId => new ClassId(Class);
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new PersonAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new PersonAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -50,15 +54,14 @@ namespace SymuMurphiesAndBlockers.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private PersonAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
         {
         }
 
         public IAgentId GroupId { get; set; }
 
         private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
-        public IEnumerable<IKnowledge> Knowledges => Environment.Organization.Knowledge;
         public InternetAccessAgent Internet => ((ExampleEnvironment) Environment).Internet;
 
         /// <summary>
@@ -88,12 +91,11 @@ namespace SymuMurphiesAndBlockers.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledge in Knowledges)
+            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, ((ExampleEnvironment) Environment).KnowledgeLevel,
+                KnowledgeModel.AddKnowledge(knowledgeId, Organization.KnowledgeLevel,
                     Cognitive.InternalCharacteristics);
-                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
-                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+                BeliefsModel.AddBeliefFromKnowledgeId(knowledgeId, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }
         }
 
@@ -105,12 +107,12 @@ namespace SymuMurphiesAndBlockers.Classes
                 // Creator is randomly  a person of the group - for the incomplete information murphy
                 Creator = (AgentId)Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
-            task.SetKnowledgesBits(Model, Knowledges, 1);
+            task.SetKnowledgesBits(Model, Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
             Post(task);
         }
 
         public override void TryRecoverBlockerIncompleteKnowledgeExternally(SymuTask task, Blocker blocker,
-            IId knowledgeId,
+            IAgentId knowledgeId,
             byte knowledgeBit)
         {
             if (blocker == null)

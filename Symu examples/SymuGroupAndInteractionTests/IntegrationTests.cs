@@ -11,12 +11,12 @@
 
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
-using Symu.DNA.Networks.TwoModesNetworks.Sphere;
+using Symu.Common.Classes;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Engine;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 using SymuGroupAndInteraction.Classes;
 
 #endregion
@@ -30,9 +30,9 @@ namespace SymuGroupAndInteractionTests
     [TestClass]
     public class IntegrationTests
     {
-        private const int NumberOfSteps = 31; // 2 organizationFlexibility computations
+        private const int NumberOfSteps = 15; // 2 organizationFlexibility computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
-        private readonly OrganizationEntity _organization = new OrganizationEntity("1");
+        private readonly ExampleOrganization _organization = new ExampleOrganization(); 
         private readonly SymuEngine _simulation = new SymuEngine();
 
         [TestInitialize]
@@ -41,10 +41,20 @@ namespace SymuGroupAndInteractionTests
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = false;
             _environment.SetOrganization(_organization);
             _simulation.SetEnvironment(_environment);
+
+            _environment.IterationResult.KnowledgeAndBeliefResults.Frequency = TimeStepType.Weekly;
+            _environment.IterationResult.OrganizationFlexibility.Frequency = TimeStepType.Weekly;
+
             _environment.SetDebug(true);
             var scenario = TimeBasedScenario.CreateInstance(_environment);
             scenario.NumberOfSteps = NumberOfSteps;
             _simulation.AddScenario(scenario);
+        }
+        private void Process()
+        {
+            _organization.AddKnowledge();
+            _organization.AddTasks();
+            _simulation.Process();
         }
 
         public void SetInteractionPatterns(InteractionStrategy strategy)
@@ -71,16 +81,16 @@ namespace SymuGroupAndInteractionTests
         public void KnowledgeSphereCount(int groupsCount)
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = (byte) groupsCount;
-            _environment.WorkersCount = 10;
+            _organization.GroupsCount = (byte) groupsCount;
+            _organization.WorkersCount = 10;
             _organization.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 1;
-            _environment.Knowledge = 1;
-            _simulation.Process();
-            var links = _environment.WhitePages.MetaNetwork.AgentAgent.Count;
+            _organization.Knowledge = 1;
+            Process();
+            var links = _environment.Organization.MetaNetwork.ActorActor.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
-            _simulation.Process();
-            Assert.AreEqual(links, _environment.WhitePages.MetaNetwork.AgentAgent.Count);
+            Process();
+            Assert.AreEqual(links, _environment.Organization.MetaNetwork.ActorActor.Count);
             Assert.AreEqual(triads, _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }
 
@@ -93,9 +103,9 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void NoGroupsOneMemberTest(int agentCount)
         {
-            _environment.GroupsCount = 0;
-            _environment.WorkersCount = (byte) agentCount;
-            _simulation.Process();
+            _organization.GroupsCount = 0;
+            _organization.WorkersCount = (byte) agentCount;
+            Process();
             Assert.AreEqual(0F, GetNotAcceptedMessages());
             Assert.AreEqual(0F, _environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
@@ -112,10 +122,10 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void OneGroupsOneMemberTest(int agentCount)
         {
-            _environment.GroupsCount = 0;
-            _environment.WorkersCount = (byte) agentCount;
+            _organization.GroupsCount = 0;
+            _organization.WorkersCount = (byte) agentCount;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(0F, GetNotAcceptedMessages());
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
@@ -129,9 +139,9 @@ namespace SymuGroupAndInteractionTests
         public void LinksCountTest(int workers, float links, float triads, float sphere)
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 1;
-            _environment.WorkersCount = (byte) workers;
-            _simulation.Process();
+            _organization.GroupsCount = 1;
+            _organization.WorkersCount = (byte) workers;
+            Process();
             Assert.AreEqual(links, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(triads, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(sphere, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -144,12 +154,12 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest5()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 1;
-            _environment.WorkersCount = 3;
+            _organization.GroupsCount = 1;
+            _organization.WorkersCount = 3;
             _organization.Models.InteractionSphere.RandomlyGeneratedSphere = true;
             _organization.Models.InteractionSphere.MinSphereDensity = 1;
             _organization.Models.InteractionSphere.MaxSphereDensity = 1;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
 
@@ -159,22 +169,22 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void CoworkersCountTest()
         {
-            _environment.GroupsCount = 1;
-            _environment.WorkersCount = 10;
-            _environment.Knowledge = 1;
+            _organization.GroupsCount = 1;
+            _organization.WorkersCount = 10;
+            _organization.Knowledge = 1;
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _simulation.Process();
-            var links = _environment.WhitePages.MetaNetwork.AgentAgent.Count;
+            Process();
+            var links = _environment.Organization.MetaNetwork.ActorActor.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
             // results should be a multiple of groups count, because interaction sphere can't change
-            _environment.GroupsCount = 2;
-            _simulation.Process();
-            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.MetaNetwork.AgentAgent.Count);
+            _environment.ExampleOrganization.GroupsCount = 2;
+            Process();
+            Assert.AreEqual(links * _environment.ExampleOrganization.GroupsCount, _environment.Organization.MetaNetwork.ActorActor.Count);
             //Assert.AreEqual(triads * _environment.GroupsCount,
             //    _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
-            _environment.GroupsCount = 3;
-            _simulation.Process();
-            Assert.AreEqual(links * _environment.GroupsCount, _environment.WhitePages.MetaNetwork.AgentAgent.Count);
+            _environment.ExampleOrganization.GroupsCount = 3;
+            Process();
+            Assert.AreEqual(links * _environment.ExampleOrganization.GroupsCount, _environment.Organization.MetaNetwork.ActorActor.Count);
             //Assert.AreEqual(triads * _environment.GroupsCount,
             //    _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }
@@ -185,9 +195,9 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void NewInteractionTest()
         {
-            _environment.GroupsCount = 1;
-            _environment.WorkersCount = 3;
-            _simulation.Process();
+            _organization.GroupsCount = 1;
+            _organization.WorkersCount = 3;
+            Process();
             Assert.AreEqual(0F, GetNotAcceptedMessages());
         }
 
@@ -202,10 +212,10 @@ namespace SymuGroupAndInteractionTests
         public void TwoGroupsOneMemberTest()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 1;
-            _environment.Knowledge = 0;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 1;
+            _organization.Knowledge = 0;
+            Process();
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -218,10 +228,10 @@ namespace SymuGroupAndInteractionTests
         public void TwoGroupsOneMemberTest1()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 1;
-            _environment.Knowledge = 1;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 1;
+            _organization.Knowledge = 1;
+            Process();
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -234,12 +244,12 @@ namespace SymuGroupAndInteractionTests
         public void TwoGroupsOneMemberTest2()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 1;
-            _environment.Knowledge = 1;
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 1;
+            _organization.Knowledge = 1;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -253,12 +263,12 @@ namespace SymuGroupAndInteractionTests
         public void TwoGroupsOneMemberTest3()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 1;
-            _environment.Knowledge = 1;
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 1;
+            _organization.Knowledge = 1;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -276,10 +286,10 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
-            _environment.Knowledge = 0;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
+            _organization.Knowledge = 0;
+            Process();
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(100.0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(100.0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -292,10 +302,10 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest1()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
-            _environment.Knowledge = 1;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
+            _organization.Knowledge = 1;
+            Process();
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(10.0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -308,10 +318,10 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest2()
         {
             SetInteractionPatterns(InteractionStrategy.Activities);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
-            _environment.Activities = 0;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
+            _organization.Activities = 0;
+            Process();
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(100.0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(100.0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -324,10 +334,10 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest3()
         {
             SetInteractionPatterns(InteractionStrategy.Activities);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
-            _environment.Activities = 1;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
+            _organization.Activities = 1;
+            Process();
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(10.0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.AreEqual(40.0F, _environment.IterationResult.OrganizationFlexibility.Sphere.Last().Density);
@@ -340,16 +350,16 @@ namespace SymuGroupAndInteractionTests
         public void TriadsTest4()
         {
             SetInteractionPatterns(InteractionStrategy.Knowledge);
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
-            _environment.Knowledge = 2;
-            _environment.KnowledgeLevel = KnowledgeLevel.NoKnowledge;
-            _simulation.Process();
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
+            _organization.Knowledge = 2;
+            _organization.KnowledgeLevel = KnowledgeLevel.NoKnowledge;
+            Process();
             Assert.AreEqual(0F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
         }
 
         /// <summary>
-        ///     Allow new interaction with homophily - threshold = 0
+        ///     Allow new interaction with homophily - threshold = 0 (no new interaction)
         /// </summary>
         [DataRow(1)]
         [DataRow(2)]
@@ -357,30 +367,30 @@ namespace SymuGroupAndInteractionTests
         [TestMethod]
         public void NewInteractionWithHomophilyTest(int interactions)
         {
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0;
             _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
                 (byte) interactions;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(40F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(10F, _environment.IterationResult.OrganizationFlexibility.Triads.Last().Density);
             Assert.IsTrue(GetNotAcceptedMessages() > 0);
         }
 
         /// <summary>
-        ///     Allow new interaction with homophily - threshold = 1
+        ///     Allow new interaction with homophily - threshold = 1 (full new interactions)
         /// </summary>
         [TestMethod]
         public void NewInteractionWithHomophily1Test()
         {
-            _environment.GroupsCount = 2;
-            _environment.WorkersCount = 3;
+            _organization.GroupsCount = 2;
+            _organization.WorkersCount = 3;
             _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions = true;
             _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 5;
-            _simulation.Process();
+            Process();
             Assert.AreEqual(100F, _environment.IterationResult.OrganizationFlexibility.Links.Last().Density);
             Assert.AreEqual(0, GetNotAcceptedMessages());
         }

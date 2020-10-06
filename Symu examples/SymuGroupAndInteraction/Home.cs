@@ -15,13 +15,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Symu.Classes.Agents.Models.CognitiveModels;
+using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common.Classes;
-using Symu.DNA.Networks.TwoModesNetworks.Sphere;
-using Symu.Environment;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Forms;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 using SymuGroupAndInteraction.Classes;
 
 #endregion
@@ -30,6 +29,7 @@ namespace SymuGroupAndInteraction
 {
     public partial class Home : SymuForm
     {
+        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 
         public Home()
@@ -44,8 +44,8 @@ namespace SymuGroupAndInteraction
 
             #region Environment
 
-            tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
-            GroupsCount.Text = _environment.GroupsCount.ToString(CultureInfo.InvariantCulture);
+            tbWorkers.Text = _organization.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            GroupsCount.Text = _organization.GroupsCount.ToString(CultureInfo.InvariantCulture);
 
             #endregion
 
@@ -54,29 +54,29 @@ namespace SymuGroupAndInteraction
             RadomlyGenerated.Checked = true;
             AllowNewInteractions.Checked = true;
             MaxSphereDensity.Text =
-                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity.ToString(CultureInfo.InvariantCulture);
+                _organization.Models.InteractionSphere.MaxSphereDensity.ToString(CultureInfo.InvariantCulture);
             MinSphereDensity.Text =
-                OrganizationEntity.Models.InteractionSphere.MinSphereDensity.ToString(CultureInfo.InvariantCulture);
+                _organization.Models.InteractionSphere.MinSphereDensity.ToString(CultureInfo.InvariantCulture);
             WeightKnowledge.Text =
-                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight.ToString(CultureInfo
+                _organization.Models.InteractionSphere.RelativeKnowledgeWeight.ToString(CultureInfo
                     .InvariantCulture);
             WeightActivities.Text =
-                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight.ToString(
+                _organization.Models.InteractionSphere.RelativeActivityWeight.ToString(
                     CultureInfo.InvariantCulture);
             WeightBeliefs.Text =
-                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight.ToString(CultureInfo.InvariantCulture);
+                _organization.Models.InteractionSphere.RelativeBeliefWeight.ToString(CultureInfo.InvariantCulture);
             WeightGroups.Text =
-                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight.ToString(CultureInfo
+                _organization.Models.InteractionSphere.SocialDemographicWeight.ToString(CultureInfo
                     .InvariantCulture);
 
             #endregion
 
             #region Interaction
 
-            OrganizationEntity.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.Homophily);
-            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
-            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0.1F;
-            ThresholdFornewInteraction.Text = OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns
+            _organization.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.Homophily);
+            _organization.Templates.Human.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = true;
+            _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 0.1F;
+            ThresholdFornewInteraction.Text = _organization.Templates.Human.Cognitive.InteractionPatterns
                 .ThresholdForNewInteraction.ToString(CultureInfo.InvariantCulture);
             MaxDailyInteractions.Text = "2";
 
@@ -88,7 +88,7 @@ namespace SymuGroupAndInteraction
 
             KnowledgeRandom.Checked = true;
             cbInitialKnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
-            cbInitialKnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_environment.KnowledgeLevel);
+            cbInitialKnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_organization.KnowledgeLevel);
 
             #endregion
 
@@ -99,35 +99,35 @@ namespace SymuGroupAndInteraction
             #endregion
         }
 
-        protected override void UpdateSettings()
+        protected override void SetUpOrganization()
         {
-            base.UpdateSettings();
+            base.SetUpOrganization();
 
             #region Knowledge
 
             if (KnowledgeSame.Checked)
             {
-                _environment.Knowledge = 0;
+                _organization.Knowledge = 0;
             }
 
             if (KnowledgeByGroup.Checked)
             {
-                _environment.Knowledge = 1;
+                _organization.Knowledge = 1;
             }
 
             if (KnowledgeRandom.Checked)
             {
-                _environment.Knowledge = 2;
+                _organization.Knowledge = 2;
             }
 
-            _environment.KnowledgeLevel =
+            _organization.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(cbInitialKnowledgeLevel.SelectedItem.ToString());
 
             #endregion
 
             #region sphere of interaction
 
-            OrganizationEntity.Models.InteractionSphere.RandomlyGeneratedSphere = RadomlyGenerated.Checked;
+            _organization.Models.InteractionSphere.RandomlyGeneratedSphere = RadomlyGenerated.Checked;
 
             #endregion
 
@@ -135,33 +135,42 @@ namespace SymuGroupAndInteraction
 
             if (ActivitiesSame.Checked)
             {
-                _environment.Activities = 0;
+                _organization.Activities = 0;
             }
 
             if (ActivitiesByGroup.Checked)
             {
-                _environment.Activities = 1;
+                _organization.Activities = 1;
             }
 
             if (ActivitiesRandom.Checked)
             {
-                _environment.Activities = 2;
+                _organization.Activities = 2;
             }
 
             #endregion
 
             #region Interactions
 
-            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions =
+            _organization.Templates.Human.Cognitive.InteractionPatterns.AllowNewInteractions =
                 AllowNewInteractions.Checked;
 
             #endregion
 
+            _organization.AddKnowledge();
+            _organization.AddTasks();
+        }
+
+        /// <summary>
+        ///     Update scenarii settings via the form
+        ///     Add scenarios after calling base.UpdateSettings
+        /// </summary>
+        protected override void SetUpScenarii()
+        {
+            base.SetUpScenarii(); 
             var scenario = TimeBasedScenario.CreateInstance(_environment);
             scenario.NumberOfSteps = ushort.Parse(tbSteps.Text, CultureInfo.InvariantCulture);
             AddScenario(scenario);
-
-            SetTimeStepType(TimeStepType.Daily);
         }
 
         protected override void OnStopped()
@@ -172,7 +181,7 @@ namespace SymuGroupAndInteraction
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment);
+            Start(_environment, _organization);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -228,7 +237,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                _environment.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
+                _organization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -246,7 +255,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                _environment.GroupsCount = byte.Parse(GroupsCount.Text, CultureInfo.InvariantCulture);
+                _organization.GroupsCount = byte.Parse(GroupsCount.Text, CultureInfo.InvariantCulture);
                 GroupsCount.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -264,7 +273,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnActivities =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnActivities =
                     float.Parse(InteractionActivities.Text, CultureInfo.InvariantCulture);
                 InteractionActivities.BackColor = SystemColors.Window;
             }
@@ -283,7 +292,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnKnowledge =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnKnowledge =
                     float.Parse(InteractionKnowledge.Text, CultureInfo.InvariantCulture);
                 InteractionKnowledge.BackColor = SystemColors.Window;
             }
@@ -302,7 +311,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.ThresholdForNewInteraction =
                     float.Parse(ThresholdFornewInteraction.Text, CultureInfo.InvariantCulture);
                 ThresholdFornewInteraction.BackColor = SystemColors.Window;
             }
@@ -321,7 +330,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions =
                     byte.Parse(MaxDailyInteractions.Text, CultureInfo.InvariantCulture);
                 MaxDailyInteractions.BackColor = SystemColors.Window;
             }
@@ -340,7 +349,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnSocialDemographics =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnSocialDemographics =
                     float.Parse(InteractionSocialDemographics.Text, CultureInfo.InvariantCulture);
                 InteractionSocialDemographics.BackColor = SystemColors.Window;
             }
@@ -359,7 +368,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnBeliefs =
+                _organization.Templates.Human.Cognitive.InteractionPatterns.InteractionsBasedOnBeliefs =
                     float.Parse(InteractionBeliefs.Text, CultureInfo.InvariantCulture);
                 InteractionBeliefs.BackColor = SystemColors.Window;
             }
@@ -378,7 +387,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MinSphereDensity =
+                _organization.Models.InteractionSphere.MinSphereDensity =
                     float.Parse(MinSphereDensity.Text, CultureInfo.InvariantCulture);
                 MinSphereDensity.BackColor = SystemColors.Window;
             }
@@ -397,7 +406,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.MaxSphereDensity =
+                _organization.Models.InteractionSphere.MaxSphereDensity =
                     float.Parse(MaxSphereDensity.Text, CultureInfo.InvariantCulture);
                 MaxSphereDensity.BackColor = SystemColors.Window;
             }
@@ -416,7 +425,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeKnowledgeWeight =
+                _organization.Models.InteractionSphere.RelativeKnowledgeWeight =
                     float.Parse(WeightKnowledge.Text, CultureInfo.InvariantCulture);
                 WeightKnowledge.BackColor = SystemColors.Window;
             }
@@ -435,7 +444,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeActivityWeight =
+                _organization.Models.InteractionSphere.RelativeActivityWeight =
                     float.Parse(WeightActivities.Text, CultureInfo.InvariantCulture);
                 WeightActivities.BackColor = SystemColors.Window;
             }
@@ -454,7 +463,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.SocialDemographicWeight =
+                _organization.Models.InteractionSphere.SocialDemographicWeight =
                     float.Parse(WeightGroups.Text, CultureInfo.InvariantCulture);
                 WeightGroups.BackColor = SystemColors.Window;
             }
@@ -473,7 +482,7 @@ namespace SymuGroupAndInteraction
         {
             try
             {
-                OrganizationEntity.Models.InteractionSphere.RelativeBeliefWeight =
+                _organization.Models.InteractionSphere.RelativeBeliefWeight =
                     float.Parse(WeightBeliefs.Text, CultureInfo.InvariantCulture);
                 WeightBeliefs.BackColor = SystemColors.Window;
             }
@@ -495,7 +504,7 @@ namespace SymuGroupAndInteraction
                 return;
             }
 
-            OrganizationEntity.Templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(
+            _organization.Templates.Human.Cognitive.InteractionPatterns.SetInteractionPatterns(
                 InteractionStrategy.Homophily);
             InteractionActivities.Text = "0";
             InteractionBeliefs.Text = "0";

@@ -19,34 +19,39 @@ using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
+using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 using Symu.Results;
+using EventEntity = Symu.Repository.Entities.EventEntity;
 
 #endregion
 
 namespace Symu.Environment
 {
     /// <summary>
-    ///     A environment, where the agents run in parallel
+    ///     The environment manage the agents, the messages, and the entities (the metaNetwork)
     /// </summary>
-    public abstract class SymuEnvironment
+    public class SymuEnvironment
     {
-        protected SymuEnvironment()
+        public SymuEnvironment()
         {
             IterationResult = new IterationResult(this);
         }
 
-        public OrganizationEntity Organization { get; protected set; }
+        protected Organization _organizationReference;
+        public Organization Organization { get; protected set; }
 
         /// <summary>
         ///     The white pages service of the simulation
         ///     To have access to all agents
         /// </summary>
-        public WhitePages WhitePages { get; private set; }
+        public WhitePages WhitePages { get; } = new WhitePages();
 
         public IterationResult IterationResult { get; set; }
 
@@ -73,36 +78,41 @@ namespace Symu.Environment
         /// </summary>
         public MessagesTracker Messages { get; set; } = new MessagesTracker();
 
-        #region Add / remove agent
-
         /// <summary>
-        ///     Adds an agent to the environment. The agent should already have a name and its name should be unique.
+        ///     Define level of random for the simulation.
         /// </summary>
-        /// <param name="agent">The concurrent agent that will be added</param>
-        public void AddAgent(ReactiveAgent agent)
+        public RandomLevel RandomLevel { get; set; } = RandomLevel.NoRandom;
+
+        public byte RandomLevelValue => (byte)RandomLevel;
+
+        public void SetRandomLevel(int level)
         {
-            if (agent is null)
+            switch (level)
             {
-                throw new ArgumentNullException(nameof(agent));
+                case 1:
+                    RandomLevel = RandomLevel.Simple;
+                    break;
+                case 2:
+                    RandomLevel = RandomLevel.Double;
+                    break;
+                case 3:
+                    RandomLevel = RandomLevel.Triple;
+                    break;
+                default:
+                    RandomLevel = RandomLevel.NoRandom;
+                    break;
             }
-
-            if (WhitePages.ExistsAgent(agent.AgentId))
-            {
-                throw new ArgumentException("Trying to add an agent " + agent.AgentId.ClassId + " with an existing key: " +
-                                            agent.AgentId.Id);
-            }
-
-            WhitePages.AddAgent(agent);
         }
 
-        #endregion
-
         #region Start and Stop
-
-        public virtual void SetOrganization(OrganizationEntity organization)
+        /// <summary>
+        /// Once this method is called followed by InitializeIteration (via Initialize or Process methods)
+        /// You have to use Environment.Organization instead of your organization
+        /// </summary>
+        /// <param name="organization"></param>
+        public virtual void SetOrganization(Organization organization)
         {
-            Organization = organization ?? throw new ArgumentNullException(nameof(organization));
-            WhitePages = new WhitePages(Organization.Models, organization.MetaNetwork);
+            _organizationReference = organization ?? throw new ArgumentNullException(nameof(organization));
         }
 
         /// <summary>
@@ -113,11 +123,6 @@ namespace Symu.Environment
             while (WhitePages.AllAgents().ToList().Exists(a => a.State != AgentState.Started))
             {
             }
-        }
-
-        public void SetRandomLevel(int value)
-        {
-            Organization.Models.SetRandomLevel(value);
         }
 
         public void SetDebug(bool value)
@@ -163,7 +168,7 @@ namespace Symu.Environment
         /// </returns>
         public bool StopIteration()
         {
-            return WhitePages.FilteredAgentsByClassCount(new ClassId(SymuYellowPages.Scenario)) == 0;
+            return WhitePages.FilteredAgentsByClassCount(ScenarioAgent.ClassId) == 0;
         }
 
         /// <summary>
@@ -173,21 +178,23 @@ namespace Symu.Environment
         /// </summary>
         public virtual void InitializeIteration()
         {
+            WhitePages.AgentIndex = 1;
             Messages.Clear();
-            WhitePages.Clear();
+            //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
+            Organization = _organizationReference.Clone();
+            WhitePages.Clear(); 
             IterationResult.Initialize();
-            // Intentionally before SetAgents
-            AddOrganizationKnowledge();
-            SetKnowledge();
-            // Intentionally before SetAgents
-            AddOrganizationTasks();
-            SetTasks();
-            // Intentionally after AddOrganizationKnowledges
-            AddOrganizationDatabase();
             SetAgents();
             // Intentionally after SetAgents
-            InitializeInteractionNetwork();
+            //InitializeInteractionNetwork();
             WhitePages.SetStarted();
+        }
+        /// <summary>
+        ///     Create every agent of the environment in this method
+        /// </summary>
+        /// <remarks>Call Initialize method after having created an agent</remarks>
+        public virtual void SetAgents()
+        {
         }
 
         /// <summary>
@@ -196,9 +203,9 @@ namespace Symu.Environment
         /// </summary>
         public void InitializeInteractionNetwork()
         {
-            foreach (var groupId in WhitePages.MetaNetwork.AgentOrganization.GetKeys().ToList())
+            foreach (var organizationId in Organization.MetaNetwork.ActorOrganization.Targets())
             {
-                var agentIds = WhitePages.MetaNetwork.AgentOrganization.GetAgents(groupId, new ClassId(SymuYellowPages.Actor))
+                var agentIds = Organization.MetaNetwork.ActorOrganization.SourcesFilteredByTargetAndSourceClassId(organizationId, ActorEntity.ClassId)
                     .ToList();
 
                 var count = agentIds.Count;
@@ -209,8 +216,8 @@ namespace Symu.Environment
                     for (var j = i + 1; j < count; j++)
                     {
                         var agentId2 = agentIds[j];
-                        var interaction = new AgentAgent(agentId1, agentId2);
-                        WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
+                        var interaction = new ActorActor(agentId1, agentId2);
+                        Organization.MetaNetwork.ActorActor.Add(interaction);
                     }
                 }
             }
@@ -225,12 +232,12 @@ namespace Symu.Environment
             Messages.WaitingToClearAllMessages();
         }
 
-        public List<SimulationScenario> GetAllStoppedScenarii()
+        public List<ScenarioAgent> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.AgentId.Equals(SymuYellowPages.Scenario))
+            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.AgentId.ClassId.Equals(ScenarioAgent.ClassId))
                 .Select(x => x.AgentId);
 
-            return scenarioIds.Select(scenarioId => WhitePages.GetAgent<SimulationScenario>(scenarioId))
+            return scenarioIds.Select(scenarioId => WhitePages.GetAgent<ScenarioAgent>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
         }
 
@@ -244,7 +251,7 @@ namespace Symu.Environment
         /// <param name="message"></param>
         public void SendAgent(Message message)
         {
-            if (message is null)
+            if (message?.Receiver == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
@@ -366,12 +373,13 @@ namespace Symu.Environment
         ///     SetSphere for the InteractionSphere
         ///     for all the started agents with Cognitive.InteractionPatterns.IsPartOfInteractionSphere
         /// </summary>
+        //todo should be done in MetaNetwork
         private void SetInteractionSphere(bool initialization)
         {
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.AgentId).ToList();
-            WhitePages.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, WhitePages.MetaNetwork);
+            Organization.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, Organization.MetaNetwork);
         }
 
         /// <summary>
@@ -410,74 +418,6 @@ namespace Symu.Environment
 
         #endregion
 
-        #region Clone model
-
-        /// <summary>
-        ///     Create every agent of the simulation in this method
-        /// </summary>
-        /// <remarks>Call Initialize method after having created an agent</remarks>
-        public virtual void SetAgents()
-        {
-        }
-
-        /// <summary>
-        ///     Add Organization knowledge
-        /// </summary>
-        public virtual void AddOrganizationKnowledge()
-        {
-        }
-
-        /// <summary>
-        ///     Clone repository of Knowledge network
-        /// </summary>
-        public void SetKnowledge()
-        {
-            WhitePages.MetaNetwork.Knowledge.Add(Organization.Knowledge);
-
-            foreach (var knowledge in Organization.Knowledge.Cast<Knowledge>())
-            {
-                var belief = new Belief(knowledge, knowledge.Length, Organization.Models.Generator, Organization.Models.BeliefWeightLevel);
-                WhitePages.MetaNetwork.Belief.Add(belief);
-            }
-        }
-
-        /// <summary>
-        ///     Add Organization Tasks
-        /// </summary>
-        public virtual void AddOrganizationTasks()
-        {
-        }
-
-        /// <summary>
-        ///     Clone repository of Task network
-        /// </summary>
-        public void SetTasks()
-        {
-            WhitePages.MetaNetwork.Task.Add(Organization.Tasks);
-        }
-
-
-        /// <summary>
-        ///     Add Organization database
-        /// </summary>
-        public virtual void AddOrganizationDatabase()
-        {
-        }
-
-        ///// <summary>
-        /////     Clone repository of Databases network
-        ///// </summary>
-        //public void SetDatabases()
-        //{
-        //    foreach (var database in Organization.Databases.Select(databaseEntity =>
-        //        new Database(databaseEntity, Organization.Models, WhitePages.MetaNetwork)))
-        //    {
-        //        WhitePages.MetaNetwork.Resource.Add(database);
-        //    }
-        //}
-
-        #endregion
-
         #region Events
 
         /// <summary>
@@ -485,21 +425,21 @@ namespace Symu.Environment
         /// </summary>
         public void ScheduleEvents()
         {
-            foreach (var symuEvent in WhitePages.MetaNetwork.Event.List.Cast<SymuEvent>())
+            foreach (var symuEvent in Organization.MetaNetwork.Event.List.Cast<EventEntity>())
             {
                 symuEvent.Schedule(Schedule.Step);
             }
         }
 
-        public void AddEvent(SymuEvent symuEvent)
-        {
-            if (symuEvent == null)
-            {
-                throw new ArgumentNullException(nameof(symuEvent));
-            }
+        //public void AddEvent(EventEntity eventEntity)
+        //{
+        //    if (eventEntity == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(eventEntity));
+        //    }
 
-            WhitePages.MetaNetwork.Event.Add(symuEvent);
-        }
+        //    Organization.MetaNetwork.Event.Add(eventEntity);
+        //}
 
         #endregion
     }

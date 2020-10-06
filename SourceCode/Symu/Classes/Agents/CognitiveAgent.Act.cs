@@ -78,7 +78,7 @@ namespace Symu.Classes.Agents
                 TimeToLive = communication.TimeToLive,
                 Parent = message,
                 Weight = Environment.Organization.Communication.TimeSpent(message.Medium, false,
-                    Environment.Organization.Models.RandomLevelValue),
+                    Environment.RandomLevelValue),
                 Assigned = message.Receiver
                 //todo maybe define a specific KeyActivity to follow the time spent on messaging?
             };

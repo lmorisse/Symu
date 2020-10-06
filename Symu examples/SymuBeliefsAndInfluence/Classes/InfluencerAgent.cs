@@ -10,17 +10,15 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.Common.Interfaces;
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -29,14 +27,20 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class InfluencerAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static InfluencerAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static InfluencerAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new InfluencerAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+            var entity = new ActorEntity(environment.Organization.MetaNetwork);
+            var agent = new InfluencerAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
         }
@@ -45,13 +49,11 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private InfluencerAgent(IId id, SymuEnvironment environment,
+        private InfluencerAgent(IAgentId entityId, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+            entityId, environment, template)
         {
         }
-
-        public IEnumerable<IKnowledge> Knowledge => Environment.Organization.Knowledge;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -74,11 +76,11 @@ namespace SymuBeliefsAndInfluence.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledge in Knowledge)
+            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge,
+                KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);
-                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+                BeliefsModel.AddBeliefFromKnowledgeId(knowledgeId, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }
         }
 

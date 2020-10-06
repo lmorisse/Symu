@@ -11,68 +11,63 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Organization;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.Repository;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
 
 #endregion
 
 namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
-    public class InfluenceModelTests
+    public class InfluenceModelTests : BaseTestClass
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly CognitiveArchitecture _cognitiveArchitecture = new CognitiveArchitecture();
-        private readonly OrganizationModels _models = new OrganizationModels();
         private InfluenceModel _influenceModel;
-        private MetaNetwork _network;
         private BeliefsModel _beliefsModel;
         private InternalCharacteristics InternalCharacteristics => _cognitiveArchitecture.InternalCharacteristics;
+        private Belief _belief ;
 
 
         [TestInitialize]
         public void Initialize()
         {
-            _network = new MetaNetwork(_models.InteractionSphere);
-            _beliefsModel = new BeliefsModel(_agentId, _models.Beliefs, _cognitiveArchitecture, _network, _models.Generator);
-            _influenceModel = new InfluenceModel(_models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
+            Organization.Models.SetOn(1);
+            _belief = new Belief(Organization.MetaNetwork, 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
+            Environment.SetOrganization(Organization);
+            _beliefsModel = new BeliefsModel(_agentId, Organization.Models.Beliefs, _cognitiveArchitecture, Organization.MetaNetwork, Organization.Models.Generator);
+            _influenceModel = new InfluenceModel(Organization.Models.Influence, _cognitiveArchitecture, WhitePages, _beliefsModel, Organization.Models.Generator);
         }
 
         /// <summary>
         ///     Model off
         /// </summary>
         [TestMethod]
-        public void LearnByDoingTest()
+        public void ReinforcementByDoingTest()
         {
             _influenceModel.On = false;
-            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Belief.Add(belief);
-            _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
-            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
+            _influenceModel.ReinforcementByDoing(_belief.EntityId, 0, BeliefLevel.NoBelief);
+            Assert.IsFalse(Organization.MetaNetwork.ActorBelief.Exists(_agentId, _belief.EntityId));
         }
 
         /// <summary>
         ///     Model on / have belief
         /// </summary>
         [TestMethod]
-        public void LearnByDoingTest1()
+        public void ReinforcementByDoingTest1()
         {
             _influenceModel.On = true;
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
-            _influenceModel = new InfluenceModel(_models.Influence, _cognitiveArchitecture, _network, _beliefsModel, _models.Generator);
-
-            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Belief.Add(belief);
-            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
-            _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
+            Assert.IsFalse(Organization.MetaNetwork.ActorBelief.Exists(_agentId, _belief.EntityId));
+            _influenceModel.ReinforcementByDoing(_belief.EntityId, 0, BeliefLevel.NoBelief);
             //BeInfluenced new belief
-            Assert.IsTrue(_network.AgentBelief.Exists(_agentId, belief.Id));
-            var agentBelief = _network.AgentBelief.GetAgentBelief<AgentBelief>(_agentId, belief.Id);
-            Assert.AreNotEqual(0, agentBelief.BeliefBits.GetBit(0));
+            Assert.IsTrue(Organization.MetaNetwork.ActorBelief.Exists(_agentId, _belief.EntityId));
+            var actorBelief = Organization.MetaNetwork.ActorBelief.Edge<ActorBelief>(_agentId, _belief.EntityId);
+            Assert.AreNotEqual(0, actorBelief.BeliefBits.GetBit(0));
         }
 
         /// <summary>
@@ -82,10 +77,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void LearnByDoingTest2()
         {
             _influenceModel.On = true;
-            var belief = new Belief(1, "1", 1, RandomGenerator.RandomUniform, BeliefWeightLevel.RandomWeight);
-            _network.Belief.Add(belief);
-            _influenceModel.ReinforcementByDoing(belief.Id, 0, BeliefLevel.NoBelief);
-            Assert.IsFalse(_network.AgentBelief.Exists(_agentId, belief.Id));
+            _influenceModel.ReinforcementByDoing(_belief.EntityId, 0, BeliefLevel.NoBelief);
+            Assert.IsFalse(Organization.MetaNetwork.ActorBelief.Exists(_agentId, _belief.EntityId));
         }
 
         [TestMethod]

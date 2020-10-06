@@ -12,8 +12,8 @@
 using System;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Task;
-using Symu.Common.Interfaces.Entity;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.Repository.Edges;
 
 #endregion
 
@@ -36,7 +36,7 @@ namespace Symu.Classes.Murphies
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <param name="step"></param>
-        public void CheckKnowledge(IId knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
+        public void CheckKnowledge(IAgentId knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
             ref bool mandatoryCheck,
             ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
         {
@@ -59,15 +59,15 @@ namespace Symu.Classes.Murphies
             }
 
             // agent may don't have the knowledge at all
-            var workerKnowledge = knowledgeModel.Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
-            if (workerKnowledge == null)
+            var actorKnowledge = knowledgeModel.GetActorKnowledge(knowledgeId);
+            if (actorKnowledge == null)
             {
                 return;
             }
 
-            mandatoryCheck = knowledgeModel.Check(workerKnowledge, taskBitIndexes.GetMandatory(), out mandatoryIndex,
+            mandatoryCheck = knowledgeModel.Check(actorKnowledge, taskBitIndexes.GetMandatory(), out mandatoryIndex,
                 ThresholdForReacting, step);
-            requiredCheck = knowledgeModel.Check(workerKnowledge, taskBitIndexes.GetRequired(), out requiredIndex,
+            requiredCheck = knowledgeModel.Check(actorKnowledge, taskBitIndexes.GetRequired(), out requiredIndex,
                 ThresholdForReacting, step);
         }
 
@@ -78,20 +78,16 @@ namespace Symu.Classes.Murphies
         /// <param name="knowledgeBit">KnowledgeBit index of the task that must be checked against worker Knowledge</param>
         /// <param name="knowledgeModel"></param>
         /// <param name="step"></param>
-        /// <returns>True if the knowledgeBit is known enough</returns>
-        public bool CheckKnowledge(IId knowledgeId, byte knowledgeBit, KnowledgeModel knowledgeModel, ushort step)
+        /// <returns>False if the agent is On and if the knowledgeBit is not known enough</returns>
+        /// <returns>True if the agent is not On or the knowledgeBit is known enough</returns>
+        public bool CheckKnowledge(IAgentId knowledgeId, byte knowledgeBit, KnowledgeModel knowledgeModel, ushort step)
         {
-            if (!IsAgentOn())
+            if (knowledgeModel == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(knowledgeModel));
             }
 
-            // workerKnowledge may don't have the knowledge at all
-            return knowledgeModel.KnowsEnough(knowledgeId, knowledgeBit, ThresholdForReacting, step);
-            //var workerKnowledge = expertise?.GetKnowledge(knowledngeId);
-            //return workerKnowledge != null &&
-            //       workerKnowledge.KnowsEnough(knowledgeBit, ThresholdForReacting,
-            //           step);
+            return !IsAgentOn() || knowledgeModel.KnowsEnough(knowledgeId, knowledgeBit, ThresholdForReacting, step);
         }
     }
 }

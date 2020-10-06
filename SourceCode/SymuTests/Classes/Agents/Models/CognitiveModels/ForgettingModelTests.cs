@@ -14,39 +14,33 @@ using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.DNA.Networks.TwoModesNetworks;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.DNA.Edges;
+using Symu.DNA.GraphNetworks;
+using Symu.DNA.GraphNetworks.TwoModesNetworks;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
+using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
 namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
-    public class ForgettingModelTests
+    public class ForgettingModelTests : BaseTestClass
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
-        private readonly AgentExpertise _expertise = new AgentExpertise();
-        private readonly ModelEntity _forgetting = new ModelEntity();
-        private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
+        private readonly ForgettingModelEntity _forgetting = new ForgettingModelEntity();
+        private Knowledge _knowledge ;
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private CognitiveArchitecture _cognitiveArchitecture;
         private ForgettingModel _forgettingModel;
         private InternalCharacteristics _internalCharacteristics;
-        private AgentKnowledgeNetwork _knowledgeNetwork;
 
         [TestInitialize]
         public void Initialize()
         {
-            var models = new OrganizationModels();
-            var network = new MetaNetwork(models.InteractionSphere);
-            _knowledgeNetwork = network.AgentKnowledge;
-            _knowledgeNetwork.Add(_agentId, _expertise);
-
-            Assert.AreEqual(_expertise, _knowledgeNetwork.GetAgentExpertise(_agentId));
+            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
             _forgetting.On = true;
@@ -62,7 +56,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.InternalCharacteristics.CanForget = true;
             _forgetting.On = modelOn;
             _forgetting.RateOfAgentsOn = 1;
-            _forgettingModel = new ForgettingModel(_expertise, _cognitiveArchitecture, _forgetting, randomLevel);
+            _forgettingModel = new ForgettingModel(_agentId,Network.ActorKnowledge, _cognitiveArchitecture, _forgetting, true, randomLevel);
             _forgettingModel.InitializeForgettingProcess();
         }
 
@@ -141,9 +135,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {0}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
-            _knowledgeNetwork.Add(_agentId, _expertise);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
+            Network.ActorKnowledge.Add(actorKnowledge);
             _forgettingModel.InitializeForgettingProcess();
             Assert.AreEqual(1, _forgettingModel.ForgettingExpertise.Count);
         }
@@ -157,12 +150,11 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
             _forgettingModel.InternalCharacteristics.PartialForgettingRate = 1;
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
-            _knowledgeNetwork.Add(_agentId, _expertise);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1}, 0, -1);
+            Network.ActorKnowledge.Add(actorKnowledge);
             _forgettingModel.InitializeForgettingProcess();
             _forgettingModel.FinalizeForgettingProcess(0);
-            Assert.AreEqual(1, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(1, actorKnowledge.GetKnowledgeSum());
         }
 
         /// <summary>
@@ -171,9 +163,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void FinalizeForgettingProcessTest1()
         {
-            var agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
-            _expertise.Add(agentKnowledge);
-            _knowledgeNetwork.Add(_agentId, _expertise);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1}, 0, -1);
+            Network.ActorKnowledge.Add(actorKnowledge);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             // ForgettingRate < minimumRemainingLevel
@@ -181,7 +172,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _forgettingModel.InternalCharacteristics.PartialForgetting = true;
             _forgettingModel.InitializeForgettingProcess();
             _forgettingModel.FinalizeForgettingProcess(0);
-            Assert.AreEqual(0.9F, agentKnowledge.GetKnowledgeSum());
+            Assert.AreEqual(0.9F, actorKnowledge.GetKnowledgeSum());
         }
 
         /// <summary>
@@ -192,10 +183,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void SetForgettingKnowledgeTest()
         {
             var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
-            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(actorKnowledge);
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
 
@@ -207,10 +198,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void SetForgettingKnowledgeTest1()
         {
             var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(actorKnowledge);
             Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate,
                 forgetting.GetKnowledgeBit(0));
         }
@@ -223,11 +214,11 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void SetForgettingKnowledgeTest2()
         {
             var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 0;
             _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
-            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(actorKnowledge);
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
 
@@ -240,12 +231,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void SetForgettingKnowledgeTest3()
         {
             var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
             _forgettingModel.InternalCharacteristics.PartialForgetting = true;
-            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(actorKnowledge);
             Assert.AreEqual(_forgettingModel.InternalCharacteristics.PartialForgettingRate,
                 forgetting.GetKnowledgeBit(0));
         }
@@ -259,12 +250,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void SetForgettingKnowledgeTest4()
         {
             var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.InternalCharacteristics.ForgettingMean = 1;
             _forgettingModel.InternalCharacteristics.ForgettingSelectingMode = ForgettingSelectingMode.Random;
             _forgettingModel.InternalCharacteristics.PartialForgetting = false;
-            var forgetting = _forgettingModel.InitializeForgettingKnowledge(knowledge);
+            var forgetting = _forgettingModel.InitializeForgettingKnowledge(actorKnowledge);
             Assert.AreEqual(1, forgetting.GetKnowledgeBit(0));
         }
 
@@ -275,12 +266,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void UpdateForgettingKnowledgeTest()
         {
             var forgettingBits = new float[] {1};
-            var forgetting = new AgentKnowledge(_knowledge.Id, forgettingBits, 0, -1, 0);
+            var forgetting = new ActorKnowledge(_agentId, _knowledge.EntityId, forgettingBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _forgettingModel.UpdateForgettingProcess(new UId(2), workingBits);
+            _forgettingModel.UpdateForgettingProcess(new AgentId(2, 1), workingBits);
             // ForgettingBits should not be updated because the KnowledgeId is not the same
             Assert.AreEqual(1, forgetting.GetKnowledgeBit(0));
         }
@@ -292,12 +283,12 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void UpdateForgettingKnowledgeTest1()
         {
             var forgettingBits = new float[] {1};
-            var forgetting = new AgentKnowledge(_knowledge.Id, forgettingBits, 0, -1, 0);
+            var forgetting = new ActorKnowledge(_agentId, _knowledge.EntityId, forgettingBits, 0, -1);
             InitializeModel(true, 0);
             _forgettingModel.ForgettingExpertise.Add(forgetting);
             // working on the index 0 today
             var workingBits = new byte[] {0};
-            _forgettingModel.UpdateForgettingProcess(_knowledge.Id, workingBits);
+            _forgettingModel.UpdateForgettingProcess(_knowledge.EntityId, workingBits);
             // ForgettingBits should be set to 0
             Assert.AreEqual(0, forgetting.GetKnowledgeBit(0));
         }
@@ -305,17 +296,15 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void FinalizeForgettingKnowledgeTest()
         {
-            var knowledgeBits = new float[] {1};
-            var knowledge = new AgentKnowledge(1, knowledgeBits, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1 }, 0, -1);
+            Network.ActorKnowledge.Add(actorKnowledge);
             InitializeModel(true, 0);
-            _expertise.Add(knowledge);
-            //_networkKnowledges.GetAgentExpertise(_agentId).Add(knowledge);
             // ForgettingBits value > minimumRemainingLevel 
             var forgettingBits = new[] {0.1F};
-            var forgetting = new AgentKnowledge(1, forgettingBits, 0, -1, 0);
+            var forgetting = new ActorKnowledge(_agentId, _knowledge.EntityId, forgettingBits, 0, -1);
             _forgettingModel.FinalizeForgettingKnowledge(forgetting, 0);
             // Knowledge has been forgotten
-            Assert.AreEqual(0.9F, knowledge.GetKnowledgeBit(0));
+            Assert.AreEqual(0.9F, actorKnowledge.GetKnowledgeBit(0));
         }
 
         #endregion
@@ -329,9 +318,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void ForgetTest()
         {
             InitializeModel(true, 0);
-            var agentKnowledge1 = new AgentKnowledge(1, new float[] { 1, 1 }, 0, -1, 0);
-            var realForget = _forgettingModel.AgentKnowledgeForget(agentKnowledge1, 0, 1, 0);
-            Assert.AreEqual(0, agentKnowledge1.GetKnowledgeBit(0));
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1, 1 }, 0, -1);
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
+            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(-1, realForget);
         }
 
@@ -343,9 +332,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void ForgetTest1()
         {
             InitializeModel(true, 0);
-            var agentKnowledge1 = new AgentKnowledge(1, new float[] { 1, 1 }, 0, -1, 0);
-            var realForget = _forgettingModel.AgentKnowledgeForget(agentKnowledge1, 0, 2, 0);
-            Assert.AreEqual(0, agentKnowledge1.GetKnowledgeBit(0));
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1, 1 }, 0, -1);
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 2, 0);
+            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(-1, realForget);
         }
 
@@ -356,9 +345,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void ForgetTest2()
         {
             InitializeModel(true, 0);
-            var agentKnowledge1 = new AgentKnowledge(1, new float[] {1, 1}, 0, -1, 0) {MinimumKnowledge = 1};
-            var realForget = _forgettingModel.AgentKnowledgeForget(agentKnowledge1, 0, 1, 0);
-            Assert.AreEqual(1, agentKnowledge1.GetKnowledgeBit(0));
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1, 1}, 0, -1) {MinimumKnowledge = 1};
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
+            Assert.AreEqual(1, actorKnowledge.GetKnowledgeBit(0));
             Assert.AreEqual(0, realForget);
         }
     }

@@ -15,13 +15,13 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Environment;
 using Symu.Forms;
 using Symu.Messaging.Messages;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 using SymuScenariosAndEvents.Classes;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
@@ -32,6 +32,7 @@ namespace SymuScenariosAndEvents
 {
     public partial class Home : SymuForm
     {
+        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
 
         public Home()
@@ -61,7 +62,7 @@ namespace SymuScenariosAndEvents
 
             #endregion
 
-            tbWorkers.Text = _environment.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            tbWorkers.Text = _organization.WorkersCount.ToString(CultureInfo.InvariantCulture);
         }
 
         private void Form1_PrepareStyle(object sender, ChartPrepareStyleInfoEventArgs args)
@@ -83,9 +84,9 @@ namespace SymuScenariosAndEvents
             }
         }
 
-        protected override void UpdateSettings()
+        protected override void SetUpOrganization()
         {
-            base.UpdateSettings();
+            base.SetUpOrganization();
             Iterations.Max = ushort.Parse(NumberOfIterations.Text, CultureInfo.InvariantCulture);
             if (TimeBased.Checked)
             {
@@ -120,12 +121,12 @@ namespace SymuScenariosAndEvents
 
             if (ModelsOn.Checked)
             {
-                OrganizationEntity.Models.On(1);
-                OrganizationEntity.Models.Generator = RandomGenerator.RandomUniform;
+                _organization.Models.SetOn(1);
+                _organization.Models.Generator = RandomGenerator.RandomUniform;
             }
             else
             {
-                OrganizationEntity.Models.Off();
+                _organization.Models.SetOff();
             }
 
             #endregion
@@ -134,22 +135,21 @@ namespace SymuScenariosAndEvents
 
             if (MurphiesOn.Checked)
             {
-                OrganizationEntity.Murphies.On(1);
-                OrganizationEntity.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
-                OrganizationEntity.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
+                _organization.Murphies.SetOn(1);
+                _organization.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
+                _organization.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
             }
             else
             {
-                OrganizationEntity.Murphies.Off();
+                _organization.Murphies.SetOff();
             }
 
             #endregion
 
 
             SetRandomLevel(cbRandomLevel.SelectedIndex);
-            SetTimeStepType(TimeStepType.Daily);
-
             cbIterations.Enabled = false;
+            _organization.AddKnowledge();
         }
 
         private void SetEvents()
@@ -178,55 +178,57 @@ namespace SymuScenariosAndEvents
 
             if (AddPerson.Checked)
             {
-                SymuEvent symuEvent = null;
+                EventEntity eventEntity = null;
                 switch (eventType)
                 {
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        symuEvent = new SymuEvent(0) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.Organization.MetaNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        symuEvent = new CyclicalEvent(0) { EveryStep = cyclicalStep};
+                        eventEntity = new CyclicalEvent(_environment.Organization.MetaNetwork) { EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        symuEvent = new RandomEvent(0) { Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.Organization.MetaNetwork) { Ratio = randomRatio};
+                        break;
+                    case Cyclicity.Always:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                if (symuEvent != null)
+                if (eventEntity != null)
                 {
-                    symuEvent.OnExecute += _environment.PersonEvent;
-                    AddEvent(symuEvent);
+                    eventEntity.OnExecute += _environment.PersonEvent;
                 }
             }
 
             if (AddKnowledge.Checked)
             {
-                SymuEvent symuEvent = null;
+                EventEntity eventEntity = null;
                 switch (eventType)
                 {
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        symuEvent = new SymuEvent(1) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.Organization.MetaNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        symuEvent = new CyclicalEvent(1) { EveryStep = cyclicalStep};
+                        eventEntity = new CyclicalEvent(_environment.Organization.MetaNetwork) { EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        symuEvent = new RandomEvent(1) { Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.Organization.MetaNetwork) { Ratio = randomRatio};
+                        break;
+                    case Cyclicity.Always:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                if (symuEvent != null)
+                if (eventEntity != null)
                 {
-                    symuEvent.OnExecute += _environment.KnowledgeEvent;
-                    AddEvent(symuEvent);
+                    eventEntity.OnExecute += _environment.KnowledgeEvent;
                 }
             }
         }
@@ -302,7 +304,7 @@ namespace SymuScenariosAndEvents
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment);
+            Start(_environment, _organization);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -405,7 +407,7 @@ namespace SymuScenariosAndEvents
         {
             try
             {
-                _environment.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
+                _organization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)

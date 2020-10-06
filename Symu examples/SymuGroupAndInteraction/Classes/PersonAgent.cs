@@ -13,8 +13,8 @@ using System;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -26,14 +26,20 @@ namespace SymuGroupAndInteraction.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new PersonAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+            var entity = new ActorEntity(environment.Organization.MetaNetwork);
+            var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
         }
@@ -42,8 +48,8 @@ namespace SymuGroupAndInteraction.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private PersonAgent(IAgentId entityId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            entityId, environment, template)
         {
         }
 

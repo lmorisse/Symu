@@ -11,8 +11,10 @@
 
 using System;
 using Symu.Classes.Organization;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -20,98 +22,13 @@ namespace SymuMessageAndTask.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        private float _costOfTask = 1F;
+        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
 
-        private float _initialCapacity = 1F;
-
-        private int _numberOfTasks = 1;
-
-        private float _switchingContextCost = 1F;
-        private int _workersCount = 5;
-
-        public int WorkersCount
+        public ExampleEnvironment()
         {
-            get => _workersCount;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException("WorkersCount should be > 0");
-                }
-
-                _workersCount = value;
-            }
-        }
-
-        public float InitialCapacity
-        {
-            get => _initialCapacity;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("InitialCapacity should be >= 0");
-                }
-
-                _initialCapacity = value;
-            }
-        }
-
-        public int NumberOfTasks
-        {
-            get => _numberOfTasks;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("NumberOfMessages should be >= 0");
-                }
-
-                _numberOfTasks = value;
-            }
-        }
-
-        public float CostOfTask
-        {
-            get => _costOfTask;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("CostOfTask should be >= 0");
-                }
-
-                _costOfTask = value;
-            }
-        }
-
-        public float SwitchingContextCost
-        {
-            get => _switchingContextCost;
-            set
-            {
-                if (value < 1)
-                {
-                    throw new ArgumentOutOfRangeException("SwitchingContextCost should be >= 1");
-                }
-
-                _switchingContextCost = value;
-            }
-        }
-
-        public override void SetOrganization(OrganizationEntity organization)
-        {
-            if (organization == null)
-            {
-                throw new ArgumentNullException(nameof(organization));
-            }
-
-            base.SetOrganization(organization);
-
             IterationResult.Off();
             IterationResult.Tasks.On = true;
             IterationResult.Messages.On = true;
-            organization.Murphies.Off();
 
             SetDebug(false);
         }
@@ -119,17 +36,16 @@ namespace SymuMessageAndTask.Classes
         public override void SetAgents()
         {
             base.SetAgents();
-            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
-            for (var i = 0; i < WorkersCount; i++)
+            var group = GroupAgent.CreateInstance(this);
+            for (var i = 0; i < ExampleOrganization.WorkersCount; i++)
             {
-                var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                var actor = PersonAgent.CreateInstance(this, Organization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork);
-                WhitePages.MetaNetwork.Resource.Add(email);
-                var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
-                WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
-                var agentGroup = new AgentOrganization(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
+                var email = EmailEntity.CreateInstance(Organization.MetaNetwork, Organization.Models);
+                var actorResource = new ActorResource(actor.AgentId, email.EntityId, new ResourceUsage(0));
+                Organization.MetaNetwork.ActorResource.Add(actorResource);
+                var actorGroup = new ActorOrganization(actor.AgentId, group.AgentId);
+                Organization.MetaNetwork.ActorOrganization.Add(actorGroup);
             }
         }
     }

@@ -86,6 +86,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.MinimumBeliefToSendPerBit = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.RiskAversion = new System.Windows.Forms.ComboBox();
+            this.label46 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.ThresholdForReacting = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
@@ -104,7 +106,7 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.tbInfluencers = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.tbKnowledge = new System.Windows.Forms.TextBox();
+            this.tbBeliefs = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -114,8 +116,6 @@
             this.documentationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.issuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RiskAversion = new System.Windows.Forms.ComboBox();
-            this.label46 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -730,6 +730,23 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Agent workers";
             // 
+            // RiskAversion
+            // 
+            this.RiskAversion.FormattingEnabled = true;
+            this.RiskAversion.Location = new System.Drawing.Point(223, 289);
+            this.RiskAversion.Name = "RiskAversion";
+            this.RiskAversion.Size = new System.Drawing.Size(121, 24);
+            this.RiskAversion.TabIndex = 155;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(30, 292);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(126, 17);
+            this.label46.TabIndex = 154;
+            this.label46.Text = "Risk aversion level";
+            // 
             // label19
             // 
             this.label19.AutoSize = true;
@@ -872,7 +889,7 @@
             // 
             this.groupBox6.Controls.Add(this.tbInfluencers);
             this.groupBox6.Controls.Add(this.label16);
-            this.groupBox6.Controls.Add(this.tbKnowledge);
+            this.groupBox6.Controls.Add(this.tbBeliefs);
             this.groupBox6.Controls.Add(this.label12);
             this.groupBox6.Controls.Add(this.tbWorkers);
             this.groupBox6.Controls.Add(this.label2);
@@ -883,7 +900,7 @@
             this.groupBox6.Size = new System.Drawing.Size(374, 156);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Symu";
+            this.groupBox6.Text = "Simulation";
             // 
             // tbInfluencers
             // 
@@ -905,12 +922,12 @@
             // 
             // tbKnowledge
             // 
-            this.tbKnowledge.Location = new System.Drawing.Point(242, 22);
-            this.tbKnowledge.Name = "tbKnowledge";
-            this.tbKnowledge.Size = new System.Drawing.Size(87, 22);
-            this.tbKnowledge.TabIndex = 44;
-            this.tbKnowledge.Text = "5";
-            this.tbKnowledge.TextChanged += new System.EventHandler(this.tbKnowledge_TextChanged);
+            this.tbBeliefs.Location = new System.Drawing.Point(242, 22);
+            this.tbBeliefs.Name = "tbBeliefs";
+            this.tbBeliefs.Size = new System.Drawing.Size(87, 22);
+            this.tbBeliefs.TabIndex = 44;
+            this.tbBeliefs.Text = "5";
+            this.tbBeliefs.TextChanged += new System.EventHandler(this.tbKnowledge_TextChanged);
             // 
             // label12
             // 
@@ -987,23 +1004,6 @@
             this.issuesToolStripMenuItem.Size = new System.Drawing.Size(195, 26);
             this.issuesToolStripMenuItem.Text = "Issues";
             this.issuesToolStripMenuItem.Click += new System.EventHandler(this.issuesToolStripMenuItem_Click);
-            // 
-            // RiskAversion
-            // 
-            this.RiskAversion.FormattingEnabled = true;
-            this.RiskAversion.Location = new System.Drawing.Point(223, 289);
-            this.RiskAversion.Name = "RiskAversion";
-            this.RiskAversion.Size = new System.Drawing.Size(121, 24);
-            this.RiskAversion.TabIndex = 155;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(30, 292);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(126, 17);
-            this.label46.TabIndex = 154;
-            this.label46.Text = "Risk aversion level";
             // 
             // Home
             // 
@@ -1105,7 +1105,7 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Label TasksDone;
         private System.Windows.Forms.TextBox tbInfluencers;
-        private System.Windows.Forms.TextBox tbKnowledge;
+        private System.Windows.Forms.TextBox tbBeliefs;
         private System.Windows.Forms.TextBox tbSteps;
         private System.Windows.Forms.TextBox tbWorkers;
         private System.Windows.Forms.TextBox ThresholdForReacting;

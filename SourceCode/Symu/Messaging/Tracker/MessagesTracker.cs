@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces;
 using Symu.Messaging.Delayed;
 using Symu.Messaging.Messages;
 using Symu.Results.Messaging;

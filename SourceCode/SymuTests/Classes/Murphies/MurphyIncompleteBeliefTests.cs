@@ -16,48 +16,44 @@ using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.DNA.Networks.TwoModesNetworks;
-using Symu.Repository.Entity;
+using Symu.Common.Interfaces;
+using Symu.DNA.Edges;
+using Symu.DNA.GraphNetworks;
+using Symu.Repository.Entities;
+using SymuTests.Helpers;
+using ActorBelief = Symu.Repository.Edges.ActorBelief;
 
 #endregion
 
 namespace SymuTests.Classes.Murphies
 {
     [TestClass]
-    public class MurphyIncompleteBeliefTests
+    public class MurphyIncompleteBeliefTests : BaseTestClass
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly MurphyIncompleteBelief _murphy = new MurphyIncompleteBelief();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
-        private AgentBeliefs _agentBeliefs;
         private Belief _belief;
         private BeliefsModel _beliefsModel;
         private CognitiveArchitecture _cognitiveArchitecture;
-        private MetaNetwork _network;
+        private ActorBelief _actorBelief;
 
         [TestInitialize]
         public void Initialize()
         {
-            var models = new OrganizationModels {Generator = RandomGenerator.RandomUniform};
-            _network = new MetaNetwork(models.InteractionSphere);
+            Organization.Models.Generator = RandomGenerator.RandomUniform;
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
                 MessageContent = {CanReceiveBeliefs = true, CanReceiveKnowledge = true},
                 InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
-            var modelEntity = new ModelEntity();
-            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, _network, models.Generator) {On = true};
-            _belief = new Belief(1, "1", 1, models.Generator, BeliefWeightLevel.RandomWeight);
-
-            _network.Belief.Add(_belief);
-            var agentBelief = new AgentBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _network.AgentBelief.Add(_agentId, agentBelief);
-            _agentBeliefs = _network.AgentBelief.GetAgentBeliefs(_agentId);
-
+            var modelEntity = new BeliefModelEntity {On = true};
+            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, Network, Organization.Models.Generator) ;
+            _belief = new Belief(Network, 1, Organization.Models.Generator, BeliefWeightLevel.RandomWeight);
+            _actorBelief = new ActorBelief(_agentId, _belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
+            Network.ActorBelief.Add(_actorBelief);
+            
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }
@@ -73,11 +69,11 @@ namespace SymuTests.Classes.Murphies
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             Assert.ThrowsException<ArgumentNullException>(() =>
-                _murphy.CheckBelief(_belief, null, _agentBeliefs, ref mandatoryCheck, ref requiredCheck,
+                _murphy.CheckBelief(_belief, null, _actorBelief, ref mandatoryCheck, ref requiredCheck,
                     ref mandatoryIndex,
                     ref requiredIndex));
             // no belief
-            Assert.ThrowsException<NullReferenceException>(() => _murphy.CheckBelief(null, _taskBits, _agentBeliefs,
+            Assert.ThrowsException<ArgumentNullException>(() => _murphy.CheckBelief(null, _taskBits, _actorBelief,
                 ref mandatoryCheck, ref requiredCheck, ref mandatoryIndex, ref requiredIndex));
         }
 
@@ -91,7 +87,7 @@ namespace SymuTests.Classes.Murphies
             float requiredCheck = 0;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            _murphy.CheckBelief(_belief, _taskBits, _agentBeliefs, ref mandatoryCheck, ref requiredCheck,
+            _murphy.CheckBelief(_belief, _taskBits, _actorBelief, ref mandatoryCheck, ref requiredCheck,
                 ref mandatoryIndex,
                 ref requiredIndex);
             Assert.AreEqual(0, mandatoryCheck);
@@ -108,13 +104,14 @@ namespace SymuTests.Classes.Murphies
             float requiredCheck = 0;
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
-            _beliefsModel.On = true;
-            _beliefsModel.AddBelief(_belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
+            _murphy.On = true;
+            _beliefsModel.Entity.On = true;
+            _beliefsModel.AddBelief(_belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _beliefsModel.InitializeBeliefs();
             // Force beliefBits
-            _beliefsModel.GetAgentBelief(_belief.Id).BeliefBits.SetBit(0, 1);
+            _beliefsModel.SetBelief(_belief.EntityId, 0, 1);
             _belief.Weights.SetBit(0, 1);
-            _murphy.CheckBelief(_belief, _taskBits, _agentBeliefs, ref mandatoryCheck, ref requiredCheck,
+            _murphy.CheckBelief(_belief, _taskBits, _actorBelief, ref mandatoryCheck, ref requiredCheck,
                 ref mandatoryIndex,
                 ref requiredIndex);
             Assert.AreEqual(1, mandatoryCheck);

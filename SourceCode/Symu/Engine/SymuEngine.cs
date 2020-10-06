@@ -15,10 +15,11 @@ using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces;
 using Symu.DNA.MatrixNetworks;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 using Symu.Results;
 
 #endregion
@@ -31,7 +32,7 @@ namespace Symu.Engine
     /// </summary>
     public class SymuEngine
     {
-        public List<SimulationScenario> Scenarii { get; } = new List<SimulationScenario>();
+        public List<ScenarioAgent> Scenarii { get; } = new List<ScenarioAgent>();
 
         /// <summary>
         ///     Environment of the simulation
@@ -78,17 +79,12 @@ namespace Symu.Engine
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
-        public void AddScenario(SimulationScenario scenario)
+        public void AddScenario(ScenarioAgent scenario)
         {
             if (!Scenarii.Exists(s => s.AgentId.Equals(scenario.AgentId)))
             {
                 Scenarii.Add(scenario);
             }
-        }
-
-        public void AddEvent(SymuEvent symuEvent)
-        {
-            Environment.AddEvent(symuEvent);
         }
 
         #endregion
@@ -126,6 +122,7 @@ namespace Symu.Engine
         {
             SimulationResults.Clear();
             Iterations.SetUp();
+            Environment.Schedule.Clear();
         }
 
         public virtual void Process()
@@ -171,7 +168,6 @@ namespace Symu.Engine
             {
                 OnNextStep();
             }
-
             PostIteration();
         }
 
@@ -192,7 +188,6 @@ namespace Symu.Engine
             {
                 AnalyzeIteration();
             }
-
             State = AgentState.Stopped;
         }
 
@@ -229,10 +224,6 @@ namespace Symu.Engine
 
             SetEnvironment(environment);
             PreIteration();
-            InitializeIteration();
-            environment.Start();
-            environment.WaitingForStart();
-            environment.InitializeInteractionSphere();
             environment.PreStep();
             environment.Messages.WaitingToClearAllMessages();
         }
@@ -242,10 +233,10 @@ namespace Symu.Engine
             ushort step0 = 0;
             foreach (var scenario in Scenarii.Where(sc => sc.IsActive))
             {
-                var clone = scenario.Clone();
-                clone.SetUp();
+                //var clone = (ScenarioAgent)scenario.Clone();
+                scenario.SetUp();
                 // scenarii could have different Day0 (>0)
-                step0 = step0 == 0 ? clone.Day0 : Math.Min(step0, clone.Day0);
+                step0 = step0 == 0 ? scenario.Day0 : Math.Min(step0, scenario.Day0);
             }
 
             Environment.Schedule.Step = step0;

@@ -12,13 +12,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
+
 using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.DNA.Networks.OneModeNetworks;
-using Symu.DNA.Networks.TwoModesNetworks;
-using Symu.Repository.Entity;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
+using Symu.DNA.GraphNetworks;
+using Symu.DNA.GraphNetworks.TwoModesNetworks;
 
 #endregion
 
@@ -32,7 +32,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class ResourceTaskModel
     {
-        private readonly IId _resourceId;
+        private readonly IAgentId _resourceId;
+        private readonly OneModeNetwork _TaskNetwork;
         private readonly ResourceTaskNetwork _resourceTaskNetwork;
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="resourceId"></param>
         /// <param name="network"></param>
-        public ResourceTaskModel(IId resourceId, MetaNetwork network)
+        public ResourceTaskModel(IAgentId resourceId, MetaNetwork network)
         {
             if (network == null)
             {
@@ -50,12 +51,13 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             _resourceId = resourceId;
             _resourceTaskNetwork = network.ResourceTask;
+            _TaskNetwork = network.Task;
         }
 
         /// <summary>
         ///     Get all the tasks (activities) that an agent can do
         /// </summary>
-        public IEnumerable<ITask> Tasks => _resourceTaskNetwork.GetValues(_resourceId);
+        public IEnumerable<IAgentId> TaskIds => _resourceTaskNetwork.TargetsFilteredBySource(_resourceId);
         /// <summary>
         ///     Get the all the knowledges for all the tasks of an agent
         /// </summary>
@@ -65,27 +67,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             get
             {
                 var knowledge = new Dictionary<ITask, IEnumerable<IKnowledge>>();
-                foreach (var task in Tasks)
+                foreach (var taskId in TaskIds)
                 {
-                    knowledge.Add(task,task.Knowledges);
+                    var task = _TaskNetwork.GetEntity<ITask>(taskId);
+                    knowledge.Add(task,task.Knowledge);
                 }
 
                 return knowledge;
             }
-        }
-
-        /// <summary>
-        ///     Add an activity to an agent can perform
-        /// </summary>
-        /// <param name="task"></param>
-        public void AddResourceTask(ITask task)
-        {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-
-            _resourceTaskNetwork.Add(_resourceId, task);
         }
 
         /// <summary>
@@ -101,7 +90,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             foreach (var task in tasks)
             {
-                _resourceTaskNetwork.Add(_resourceId, task);
+                var resourceTask= new ResourceTask(_resourceId, task.EntityId);
+                _resourceTaskNetwork.Add(resourceTask);
             }
         }
     }

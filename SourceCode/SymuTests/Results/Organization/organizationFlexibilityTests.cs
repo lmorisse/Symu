@@ -12,15 +12,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
-using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
-using Symu.Common.Interfaces.Agent;
-using Symu.DNA.Networks.TwoModesNetworks.Sphere;
-using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.DNA.Edges;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
+using Symu.Repository.Edges;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 
@@ -29,19 +25,18 @@ using SymuTests.Helpers;
 namespace SymuTests.Results.Organization
 {
     [TestClass]
-    public class OrganizationFlexibilityTests
+    public class OrganizationFlexibilityTests: BaseTestClass
     {
-        private readonly TestEnvironment _environment = new TestEnvironment();
-        private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
         private OrganizationFlexibility _result;
 
         [TestInitialize]
         public void Initialize()
         {
-            _organizationEntity.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.SocialDemographics);
-            _organizationEntity.Models.InteractionSphere.On = true;
-            _environment.SetOrganization(_organizationEntity);
-            _result = new OrganizationFlexibility(_environment);
+            Organization.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.SocialDemographics);
+            Organization.Models.InteractionSphere.On = true;
+            Environment.SetOrganization(Organization);
+            Simulation.Initialize(Environment);
+            _result = new OrganizationFlexibility(Environment);
         }
 
         #region triads
@@ -74,21 +69,14 @@ namespace SymuTests.Results.Organization
 
         private void SetAgents(int count)
         {
-            var agents = new List<IAgentId>();
+            var agentIds = new List<IAgentId>();
             for (var i = 0; i < count; i++)
             {
-                var agent = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
+                var agent = TestCognitiveAgent.CreateInstance(Environment);
                 agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
                 agent.State = AgentState.Started;
-                agents.Add(agent.AgentId);
+                agentIds.Add(agent.AgentId);
             }
-
-            InitializeNetworkLinks(agents);
-            _environment.InitializeInteractionSphere();
-        }
-        private void InitializeNetworkLinks(List<IAgentId> agentIds)
-        {
-            var count = agentIds.Count;
             for (var i = 0; i < count; i++)
             {
                 var agentId1 = agentIds[i];
@@ -96,10 +84,11 @@ namespace SymuTests.Results.Organization
                 for (var j = i + 1; j < count; j++)
                 {
                     var agentId2 = agentIds[j];
-                    var interaction = new AgentAgent(agentId1, agentId2);
-                    _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
+                    var interaction = new ActorActor(agentId1, agentId2);
+                    Environment.Organization.MetaNetwork.ActorActor.Add(interaction);
                 }
             }
+            Environment.InitializeInteractionSphere();
         }
 
         #endregion

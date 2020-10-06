@@ -21,44 +21,46 @@ using Symu.Classes.Task;
 using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.TwoModesNetworks;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 using Symu.Results.Blocker;
 using SymuTests.Helpers;
+using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
 namespace SymuTests.Classes.Agents
 {
     [TestClass]
-    public class CognitiveAgentTests
+    public class CognitiveAgentTests : BaseTestClass
     {
-        private readonly TestEnvironment _environment = new TestEnvironment();
-        private readonly Knowledge _knowledge = new Knowledge(1, "1", 1);
-        private readonly Knowledge _knowledge2 = new Knowledge(2, "2", 1);
-        private readonly List<Knowledge> _knowledges = new List<Knowledge>();
-        private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
-        private readonly SymuEngine _symu = new SymuEngine();
+        private Belief _belief;
+        private Knowledge _knowledge;
         private TestCognitiveAgent _agent;
-        private AgentKnowledge _agentKnowledge;
         private TestCognitiveAgent _agent2 ;
-        private readonly UId _uid1 = new UId(1);
-        private AgentAgent _agentAgent;
+        private IActorActor _actorActor;
 
         [TestInitialize]
         public void Initialize()
         {
-            _environment.SetOrganization(_organizationEntity);
-            _symu.SetEnvironment(_environment);
-            _organizationEntity.Models.On(1);
-            _environment.IterationResult.On();
+            //Organization
+            Organization.Models.SetOn(1);
+            _knowledge = new Knowledge(Organization.MetaNetwork, Organization.Models, "1", 1);
+            _belief = _knowledge.AssociatedBelief;
 
-            _agent = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
+            Environment.SetOrganization(Organization);
+            Environment.IterationResult.On();
+
+            // At this point use _environment.Organization.MetaNetwork
+            Simulation.Initialize(Environment);
+
+            _agent = TestCognitiveAgent.CreateInstance(Environment);
+
             _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             _agent.Cognitive.MessageContent.CanReceiveBeliefs = true;
@@ -69,31 +71,15 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums = CommunicationMediums.Email;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
+            _agent.InfluenceModel.Influentialness = 1;
+            _agent.InfluenceModel.Influenceability = 1;
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.EntityId, new float[] {1}, 0, -1);
+            _agent.BeliefsModel.AddBelief(_belief.EntityId);
+            _agent.Start();
 
-            _agent2 = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
-
-            var expertise = new AgentExpertise();
-            _knowledges.Add(_knowledge);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_knowledge);
-            var belief = new Belief(_knowledge, _knowledge.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Belief.Add(belief);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(_knowledge2);
-            var belief2 = new Belief(_knowledge2, _knowledge2.Length, _environment.Organization.Models.Generator, _environment.Organization.Models.BeliefWeightLevel);
-            _environment.WhitePages.MetaNetwork.Belief.Add(belief2);
-            _agentKnowledge = new AgentKnowledge(_knowledge.Id, new float[] {1}, 0, -1, 0);
-            expertise.Add(_agentKnowledge);
-            _environment.WhitePages.MetaNetwork.AgentKnowledge.Add(_agent.AgentId, expertise);
-
-            Assert.AreEqual(AgentState.NotStarted, _agent.State);
-            //_agent.Start();
-            //_agent.WaitingToStart();
-            _environment.Start();
-            _environment.WaitingForStart();
-            Assert.AreEqual(AgentState.Started, _agent.State);
-            _environment.Schedule.Step = 0;
-            _agent.BeliefsModel.AddBelief(_knowledge.Id);
-            _agent.BeliefsModel.InitializeBeliefs();
-            _agentAgent = new AgentAgent(_agent.AgentId, _agent2.AgentId);
+            _agent2 = TestCognitiveAgent.CreateInstance(Environment);
+            _actorActor = new ActorActor(_agent.AgentId, _agent2.AgentId);
+            _agent2.Start();
         }
 
         /// <summary>
@@ -102,6 +88,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AgentTest()
         {
+            Assert.AreEqual(AgentState.Started, _agent.State);
             Assert.AreEqual(1, UId.Cast(_agent.AgentId.Id));
             Assert.IsNotNull(_agent.Environment);
             Assert.IsNotNull(_agent.Cognitive);
@@ -113,12 +100,35 @@ namespace SymuTests.Classes.Agents
 
         private TestCognitiveAgent AddAgent()
         {
-            var agent = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
+            var agent = TestCognitiveAgent.CreateInstance(Environment);
             agent.Cognitive.InteractionPatterns.LimitNumberOfNewInteractions = false;
             agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             agent.Start();
             agent.WaitingToStart();
             return agent;
+        }
+
+        [TestMethod()]
+        public void StartTest()
+        {
+            var agent = AddAgent();
+            Assert.AreEqual(AgentState.Started, agent.State);
+            Assert.IsNotNull(agent.TaskProcessor);
+        }
+
+
+        [TestMethod()]
+        public void HasEmailTest()
+        {
+            Assert.IsNull(_agent.Email);
+            Assert.IsFalse(_agent.HasEmail);
+            var email = EmailEntity.CreateInstance(Environment.Organization.MetaNetwork, Organization.Models);
+            var usage = new ResourceUsage(0);
+            var actorResource = new ActorResource(_agent.AgentId, email.EntityId, usage);
+            Environment.Organization.MetaNetwork.ActorResource.Add(actorResource);
+            _agent.EmailId = email.EntityId;
+            Assert.IsTrue(_agent.HasEmail);
+            Assert.IsNotNull(_agent.Email);
         }
 
         #region message
@@ -173,8 +183,8 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
-            Assert.AreEqual(1, _environment.Messages.LastSentMessages.Count);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual(1, Environment.Messages.LastSentMessages.Count);
             Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerStep);
         }
 
@@ -192,8 +202,8 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.PostMessage(message);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
-            Assert.AreEqual(0, _environment.Messages.LastSentMessages.Count);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual(0, Environment.Messages.LastSentMessages.Count);
             Assert.AreEqual(1, _agent.MessageProcessor.MissedMessages.Count);
             Assert.AreEqual(0, _agent.MessageProcessor.NumberReceivedPerPeriod);
         }
@@ -204,11 +214,11 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest()
         {
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 0, 0);
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = _knowledge.Id,
+                KnowledgeId = _knowledge.EntityId,
                 KnowledgeBits = bit1S
             };
             _agent.LearningModel.On = true;
@@ -219,7 +229,7 @@ namespace SymuTests.Classes.Agents
                 CommunicationMediums.System);
 
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(0, _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).GetKnowledgeSum());
+            Assert.AreEqual(0, _agent.KnowledgeModel.GetActorKnowledge(_knowledge.EntityId).GetKnowledgeSum());
         }
 
         /// <summary>
@@ -228,11 +238,11 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void LearnKnowledgesFromPostMessageTest1()
         {
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 0, 0);
             var bit1S = new KnowledgeBits(new float[] {1}, 0, -1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = _knowledge.Id,
+                KnowledgeId = _knowledge.EntityId,
                 KnowledgeBits = bit1S
             };
             _agent.LearningModel.On = true;
@@ -241,7 +251,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnKnowledgesFromPostMessage(message);
-            Assert.AreEqual(1, _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).GetKnowledgeSum());
+            Assert.AreEqual(1, _agent.KnowledgeModel.GetActorKnowledge(_knowledge.EntityId).GetKnowledgeSum());
         }
 
         [TestMethod]
@@ -250,39 +260,24 @@ namespace SymuTests.Classes.Agents
             var bit1S = new Bits(new float[] {1}, 0);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = _knowledge.Id,
+                KnowledgeId = _knowledge.EntityId,
                 KnowledgeBits = bit1S,
                 BeliefBits = bit1S
             };
-            var belief = SetBeliefs();
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments,
                 CommunicationMediums.Email);
             _agent.LearnBeliefsFromPostMessage(message);
-            Assert.AreEqual(1, _agent.BeliefsModel.GetAgentBelief(belief.Id).GetBeliefSum());
+            Assert.AreEqual(1, _agent.BeliefsModel.GetActorBelief(_belief.EntityId).GetBeliefSum());
         }
 
-        private Belief SetBeliefs()
-        {
-            _agent.Cognitive.KnowledgeAndBeliefs.HasBelief = true;
-            var belief = new Belief(1, "1", 1, RandomGenerator.RandomBinary, BeliefWeightLevel.RandomWeight);
-            _environment.WhitePages.MetaNetwork.Belief.Add(belief);
-            _agent.BeliefsModel.AddBelief(belief.Id, BeliefLevel.NeitherAgreeNorDisagree);
-            _agent.BeliefsModel.InitializeBeliefs(true);
-            _agent.InfluenceModel.Influentialness = 1;
-            _agent.InfluenceModel.Influenceability = 1;
-            return belief;
-        }
+
 
         private void SetExpertise(KnowledgeBits bit0S)
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            // Knowledge
-            var knowledge = new Knowledge(1, "1", 1);
-            _environment.WhitePages.MetaNetwork.Knowledge.Add(knowledge);
-            var agentExpertise = new AgentExpertise();
-            var agentKnowledge = new AgentKnowledge(knowledge.Id, bit0S);
-            agentExpertise.Add(agentKnowledge);
-            _environment.WhitePages.MetaNetwork.AgentKnowledge.Add(_agent.AgentId, agentExpertise);
+            var knowledge = new Knowledge(Organization.MetaNetwork, Organization.Models, "1", 1);
+            var actorKnowledge = new ActorKnowledge(_agent.AgentId, knowledge.EntityId, bit0S);
+            Environment.Organization.MetaNetwork.ActorKnowledge.Add(actorKnowledge);
         }
 
         #endregion
@@ -469,11 +464,11 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.Send(message);
-            _environment.Messages.WaitingToClearAllMessages();
+            Environment.Messages.WaitingToClearAllMessages();
             //environment trace the message
-            Assert.IsTrue(_environment.Messages.MessagesReceivedByAgent(0, agent2.AgentId).Any());
-            Assert.IsTrue(_environment.Messages.MessagesSentByAgent(0, _agent.AgentId).Any());
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Any);
+            Assert.IsTrue(Environment.Messages.MessagesReceivedByAgent(0, agent2.AgentId).Any());
+            Assert.IsTrue(Environment.Messages.MessagesSentByAgent(0, _agent.AgentId).Any());
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Any);
             // Agent1
             Assert.AreEqual(1, _agent.MessageProcessor.NumberMessagesPerStep);
         }
@@ -491,11 +486,11 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.Send(message);
-            _environment.Messages.WaitingToClearAllMessages();
+            Environment.Messages.WaitingToClearAllMessages();
             //environment trace the message
-            Assert.IsNull(_environment.Messages.MessagesReceivedByAgent(0, _agent2.AgentId));
-            Assert.IsNull(_environment.Messages.MessagesSentByAgent(0, _agent.AgentId));
-            Assert.IsFalse(_environment.Messages.LastSentMessages.Any);
+            Assert.IsNull(Environment.Messages.MessagesReceivedByAgent(0, _agent2.AgentId));
+            Assert.IsNull(Environment.Messages.MessagesSentByAgent(0, _agent.AgentId));
+            Assert.IsFalse(Environment.Messages.LastSentMessages.Any);
             // Agent1
             Assert.AreEqual(0, _agent.MessageProcessor.NumberMessagesPerStep);
         }
@@ -507,10 +502,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void ReplyTest()
         {
-            var knowledge = new Knowledge(1, "1", 1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = knowledge.Id,
+                KnowledgeId = _knowledge.EntityId,
                 KnowledgeBit = 0
             };
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments)
@@ -521,19 +515,15 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            //_environment.WhitePages.MetaNetwork.AgentKnowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
-            //    .SetKnowledgeBit(0, 1, 0);
-            _agent.KnowledgeModel.GetAgentKnowledge(knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            var belief = SetBeliefs();
-            _agent.BeliefsModel.GetAgentBelief(belief.Id).SetBeliefBit(0, 1);
-            //_environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
 
             _agent.Reply(message);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
-            var messageSent = _environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
+            var messageSent = Environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
             Assert.IsNotNull(messageSent);
             Assert.IsNotNull(messageSent.Attachments.KnowledgeBits);
             Assert.IsNotNull(messageSent.Attachments.BeliefBits);
@@ -542,10 +532,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void ReplyDelayedTest()
         {
-            var knowledge = new Knowledge(1, "1", 1);
             var attachments = new MessageAttachments
             {
-                KnowledgeId = knowledge.Id,
+                KnowledgeId = _knowledge.EntityId,
                 KnowledgeBit = 0
             };
             var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, 0, attachments)
@@ -556,18 +545,14 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.MessageContent.CanSendKnowledge = true;
             var bits = new KnowledgeBits(new float[] {1}, 0, -1);
             SetExpertise(bits);
-            //_environment.WhitePages.MetaNetwork.Knowledge.GetAgentKnowledge<AgentKnowledge>(_agent.AgentId, knowledge.Id)
-            //    .SetKnowledgeBit(0, 1, 0);
-            _agent.KnowledgeModel.GetAgentKnowledge(knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 1, 0);
             // Belief
             _agent.Cognitive.MessageContent.CanSendBeliefs = true;
-            var belief = SetBeliefs();
-            _agent.BeliefsModel.GetAgentBelief(belief.Id).SetBeliefBit(0, 1);
-            //_environment.WhitePages.MetaNetwork.AgentBelief.GetAgentBelief<AgentBelief>(_agent.AgentId, belief.Id).BeliefBits.SetBit(0, 1);
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
             _agent.ReplyDelayed(message, 0);
 
             Assert.AreEqual(1, _agent.MessageProcessor.NumberSentPerPeriod);
-            var messageSent = _environment.Messages.DelayedMessages.Last(0);
+            var messageSent = Environment.Messages.DelayedMessages.Last(0);
             Assert.IsNotNull(messageSent);
             Assert.IsNotNull(messageSent.Attachments.KnowledgeBits);
             Assert.IsNotNull(messageSent.Attachments.BeliefBits);
@@ -580,8 +565,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void AskPreStepTest()
         {
-            _environment.Schedule.Step = 0;
-            _environment.Organization.Murphies.UnAvailability.On = false;
+            Environment.Schedule.Step = 0;
+            Environment.Organization.Murphies.UnAvailability.On = false;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
             _agent.Cognitive.InteractionPatterns.IsolationCyclicity = Cyclicity.None;
             _agent.MessageProcessor.IncrementMessagesPerPeriod(CommunicationMediums.Email, true);
@@ -605,10 +590,8 @@ namespace SymuTests.Classes.Agents
         public void AskPreStepTest1()
         {
             _agent.ForgettingModel.On = false;
-            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _agent.KnowledgeModel.InitializeExpertise(0);
-            _environment.InitializeInteractionSphere();
-            _environment.PreStep();
+            Environment.InitializeInteractionSphere();
+            Environment.PreStep();
             Assert.AreEqual(0, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
 
@@ -621,10 +604,8 @@ namespace SymuTests.Classes.Agents
         {
             _agent.ForgettingModel.On = true;
             _agent.ForgettingModel.InternalCharacteristics.ForgettingMean = 1;
-            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
-            _agent.KnowledgeModel.InitializeExpertise(0);
-            _environment.InitializeInteractionSphere();
-            _environment.PreStep();
+            Environment.InitializeInteractionSphere();
+            Environment.PreStep();
             Assert.AreEqual(1, _agent.ForgettingModel.ForgettingExpertise.Count);
         }
 
@@ -638,7 +619,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void NonPassingHandleCapacityTest()
         {
-            _environment.Schedule.Step = 5;
+            Environment.Schedule.Step = 5;
             _agent.HandleCapacity(false, true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
@@ -650,9 +631,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void PassingHandleCapacityTest1()
         {
-            _environment.Schedule.Step = 0;
+            Environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.Organization.Murphies.UnAvailability.On = false;
+            Environment.Organization.Murphies.UnAvailability.On = false;
             _agent.HandleCapacity(false, true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(1, _agent.Capacity.Actual);
@@ -664,9 +645,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void NonPassingHandleCapacityTest2()
         {
-            _environment.Schedule.Step = 0;
+            Environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.Organization.Murphies.UnAvailability.On = false;
+            Environment.Organization.Murphies.UnAvailability.On = false;
             _agent.Cognitive.InteractionPatterns.AgentCanBeIsolated = Frequency.Always;
             _agent.HandleCapacity(true, true);
             Assert.AreEqual(0, _agent.Capacity.Initial);
@@ -679,9 +660,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleCapacityTest1()
         {
-            _environment.Schedule.Step = 0;
+            Environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.Organization.Murphies.UnAvailability.On = false;
+            Environment.Organization.Murphies.UnAvailability.On = false;
             _agent.HandleCapacity(false, true);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(1, _agent.Capacity.Actual);
@@ -693,16 +674,15 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void HandleCapacityTest2()
         {
-            _environment.Schedule.Step = 0;
+            Environment.Schedule.Step = 0;
             _agent.Cognitive.TasksAndPerformance.CanPerformTask = true;
-            _environment.Organization.Murphies.UnAvailability.On = false;
+            Environment.Organization.Murphies.UnAvailability.On = false;
             _agent.HandleCapacity(false, false);
             Assert.AreEqual(1, _agent.Capacity.Initial);
             Assert.AreEqual(0, _agent.Capacity.Actual);
         }
 
         #endregion
-
 
         #region status
 
@@ -774,7 +754,7 @@ namespace SymuTests.Classes.Agents
             };
             _agent.MessageProcessor.DelayedMessages.Enqueue(message, 0);
             _agent.HandleStatus(false);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Count >= 1);
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Count >= 1);
             //Assert.IsTrue(_environment.Messages.CheckMessages);
         }
 
@@ -859,7 +839,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(_agentAgent);
+            Environment.Organization.MetaNetwork.ActorActor.Add(_actorActor);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -915,6 +895,73 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InteractionPatterns.ThresholdForNewInteraction = 1;
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
+        /// <summary>
+        /// model off
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForNewInteractionsTest()
+        {
+            Environment.Organization.MetaNetwork.InteractionSphere.Model.On = false;
+            Assert.IsFalse(_agent.GetAgentIdsForNewInteractions().Any());
+        }
+        /// <summary>
+        /// model on - sphereUpdate false
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForNewInteractionsTest1()
+        {
+            Environment.Organization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
+            for (var i = 0; i < 2; i++)
+            {
+                _ = TestCognitiveAgent.CreateInstance(Environment);
+            }
+            Environment.Organization.MetaNetwork.InteractionSphere.SetSphere(true,
+                Environment.WhitePages.AllAgentIds().ToList(), Environment.Organization.MetaNetwork);
+            Assert.IsFalse(_agent.GetAgentIdsForNewInteractions().Any());
+        }
+        /// <summary>
+        /// model on
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForNewInteractionsTest2()
+        {
+            Environment.Organization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = true;
+            for (var i = 0; i < 2; i++)
+            {
+                _ = TestCognitiveAgent.CreateInstance(Environment);
+            }
+            Environment.Organization.MetaNetwork.InteractionSphere.SetSphere(true,
+                Environment.WhitePages.AllAgentIds().ToList(), Environment.Organization.MetaNetwork);
+            Assert.IsTrue(_agent.GetAgentIdsForNewInteractions().Any());
+        }
+        /// <summary>
+        /// Model off
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForInteractionsTest()
+        {
+            Environment.Organization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
+            Assert.IsFalse(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
+        }
+        /// <summary>
+        /// Model on - list empty
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForInteractionsTest1()
+        {
+            Assert.IsFalse(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
+        }
+        /// <summary>
+        /// Model on - list empty
+        /// </summary>
+        [TestMethod()]
+        public void GetAgentIdsForInteractionsTest2()
+        {
+            Environment.Organization.MetaNetwork.ActorActor.Add(_actorActor);
+            Environment.Organization.MetaNetwork.InteractionSphere.SetSphere(true,
+            Environment.WhitePages.AllAgentIds().ToList(), Environment.Organization.MetaNetwork);
+            Assert.IsTrue(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
+        }
 
         #endregion
 
@@ -926,8 +973,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckBlockersTest()
         {
-            _environment.IterationResult.Initialize();
-            _organizationEntity.Murphies.MultipleBlockers = false;
+            Environment.IterationResult.Initialize();
+            Organization.Murphies.MultipleBlockers = false;
             var task = new SymuTask(0);
             task.Add(Murphy.IncompleteBelief, 0);
             _agent.CheckNewBlockers(task);
@@ -956,10 +1003,10 @@ namespace SymuTests.Classes.Agents
             };
 
             // To be sure to send a delayed message
-            _organizationEntity.Murphies.IncompleteInformation.ResponseTime = 10;
-            _organizationEntity.Murphies.IncompleteInformation.RateOfAnswers = 0;
+            Organization.Murphies.IncompleteInformation.ResponseTime = 10;
+            Organization.Murphies.IncompleteInformation.RateOfAnswers = 0;
             _agent.AskHelp(message);
-            Assert.AreEqual(0, _environment.Messages.DelayedMessages.Count);
+            Assert.AreEqual(0, Environment.Messages.DelayedMessages.Count);
         }
 
         /// <summary>
@@ -983,12 +1030,12 @@ namespace SymuTests.Classes.Agents
             };
 
             // To be sure to send a delayed message
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.RateOfAgentsOn = 1;
-            _organizationEntity.Murphies.IncompleteInformation.ResponseTime = 10;
-            _organizationEntity.Murphies.IncompleteInformation.RateOfAnswers = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.RateOfAgentsOn = 1;
+            Organization.Murphies.IncompleteInformation.ResponseTime = 10;
+            Organization.Murphies.IncompleteInformation.RateOfAnswers = 1;
             _agent.AskHelp(message);
-            Assert.AreEqual(1, _environment.Messages.DelayedMessages.Count);
+            Assert.AreEqual(1, Environment.Messages.DelayedMessages.Count);
         }
 
         /// <summary>
@@ -998,7 +1045,7 @@ namespace SymuTests.Classes.Agents
         public void CheckBeliefsBitsTest()
         {
             var task = new SymuTask(0);
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.CheckBlockerIncompleteBeliefs(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
@@ -1014,9 +1061,9 @@ namespace SymuTests.Classes.Agents
         public void CheckBeliefsBitsTest1()
         {
             var task = new SymuTask(0);
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.NoRequiredBits);
-            _organizationEntity.Murphies.IncompleteBelief.On = true;
+            Organization.Murphies.IncompleteBelief.On = true;
             _agent.CheckBlockerIncompleteBeliefs(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteBelief, 0));
@@ -1029,10 +1076,10 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckBeliefsBitsTest2()
         {
-            _organizationEntity.Murphies.IncompleteBelief.On = true;
-            _organizationEntity.Murphies.IncompleteBelief.MandatoryRatio = 1;
+            Organization.Murphies.IncompleteBelief.On = true;
+            Organization.Murphies.IncompleteBelief.MandatoryRatio = 1;
             var task = new SymuTask(0);
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.CheckBlockerIncompleteBeliefs(task);
             Assert.AreEqual(0, task.Priority);
@@ -1044,12 +1091,12 @@ namespace SymuTests.Classes.Agents
             var task = new SymuTask(0)
             {
                 Weight = 1,
-                KeyActivity = _uid1
+                KeyActivity = Uid1
             };
             var attachments = new MessageAttachments();
             attachments.Add(0);
             attachments.Add(task);
-            attachments.KnowledgeId = _knowledge.Id;
+            attachments.KnowledgeId = _knowledge.EntityId;
             attachments.KnowledgeBit = 0;
             return new Message(_agent.AgentId, _agent.AgentId, MessageAction.Ask, SymuYellowPages.Help,
                 attachments,
@@ -1063,8 +1110,8 @@ namespace SymuTests.Classes.Agents
         public void AskHelpIncompleteTest()
         {
             var message = SetMessageWithTaskAndKnowledge();
-            _organizationEntity.Murphies.IncompleteBelief.RateOfAnswers = 0;
-            _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
+            Organization.Murphies.IncompleteBelief.RateOfAnswers = 0;
+            _agent.AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.AreEqual(_agent.Capacity.Initial, _agent.Capacity.Actual);
         }
 
@@ -1076,17 +1123,17 @@ namespace SymuTests.Classes.Agents
         public void AskHelpIncompleteTest1()
         {
             var message = SetMessageWithTaskAndKnowledge();
-            _organizationEntity.Murphies.IncompleteBelief.RateOfAnswers = 1;
-            _organizationEntity.Murphies.IncompleteBelief.ResponseTime = 0;
+            Organization.Murphies.IncompleteBelief.RateOfAnswers = 1;
+            Organization.Murphies.IncompleteBelief.ResponseTime = 0;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             // no belief
-            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
-            _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 0);
+            _agent.AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
-            var reply = _environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
+            var reply = Environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
             Assert.IsNull(reply.Attachments.BeliefBits);
         }
 
@@ -1099,17 +1146,17 @@ namespace SymuTests.Classes.Agents
         public void AskHelpIncompleteTest2()
         {
             var message = SetMessageWithTaskAndKnowledge();
-            _organizationEntity.Murphies.IncompleteBelief.RateOfAnswers = 1;
-            _organizationEntity.Murphies.IncompleteBelief.ResponseTime = 10;
+            Organization.Murphies.IncompleteBelief.RateOfAnswers = 1;
+            Organization.Murphies.IncompleteBelief.ResponseTime = 10;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             // no belief
-            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0);
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 0);
             _agent.AskHelpIncomplete(message, 3);
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
-            Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
+            Assert.IsFalse(Environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
-            var reply = _environment.Messages.DelayedMessages.Last();
+            var reply = Environment.Messages.DelayedMessages.Last();
             Assert.IsNull(reply.Attachments.BeliefBits);
         }
 
@@ -1121,16 +1168,16 @@ namespace SymuTests.Classes.Agents
         public void AskHelpIncompleteTest3()
         {
             var message = SetMessageWithTaskAndKnowledge();
-            _organizationEntity.Murphies.IncompleteBelief.RateOfAnswers = 1;
-            _organizationEntity.Murphies.IncompleteBelief.ResponseTime = 0;
+            Organization.Murphies.IncompleteBelief.RateOfAnswers = 1;
+            Organization.Murphies.IncompleteBelief.ResponseTime = 0;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
-            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 1);
-            _agent.AskHelpIncomplete(message, _environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
+            _agent.AskHelpIncomplete(message, Environment.Organization.Murphies.IncompleteBelief.DelayToReplyToHelp());
             Assert.IsTrue(_agent.Capacity.Initial > _agent.Capacity.Actual);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Exists(MessageAction.Reply, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
-            var reply = _environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
+            var reply = Environment.Messages.LastSentMessages.SentByAgent(0, _agent.AgentId).Last();
             Assert.IsNotNull(reply.Attachments.BeliefBits);
         }
 
@@ -1140,17 +1187,17 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void RecoverBlockerBeliefByGuessingTest()
         {
-            _organizationEntity.Murphies.IncompleteBelief.On = true;
-            _organizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
-            _environment.Organization.Models.Generator = RandomGenerator.RandomUniform;
+            Organization.Murphies.IncompleteBelief.On = true;
+            Organization.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
+            Environment.Organization.Models.Generator = RandomGenerator.RandomUniform;
             var task = new SymuTask(0) {Weight = 1};
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.FullRequiredBits);
-            _environment.Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing = 2;
+            Environment.Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing = 2;
 
-            var agentBelief = _agent.BeliefsModel.GetAgentBelief(_knowledge.Id);
-            agentBelief.BeliefBits.SetBit(0, 0);
-            var blocker = new Blocker(1, 0) {Parameter = _knowledge.Id, Parameter2 = (byte) 0};
+            var actorBelief = _agent.BeliefsModel.GetActorBelief(_belief.EntityId);
+            actorBelief.BeliefBits.SetBit(0, 0);
+            var blocker = new Blocker(1, 0) {Parameter = _knowledge.EntityId, Parameter2 = (byte) 0};
 
             _agent.RecoverBlockerIncompleteBeliefByGuessing(task, blocker);
             Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
@@ -1159,7 +1206,7 @@ namespace SymuTests.Classes.Agents
                 return;
             }
 
-            Assert.AreNotEqual(0, agentBelief.BeliefBits.GetBit(0));
+            Assert.AreNotEqual(0, actorBelief.BeliefBits.GetBit(0));
             Assert.AreNotEqual(1, task.Weight);
         }
 
@@ -1218,7 +1265,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = false;
+            Organization.Murphies.IncompleteInformation.On = false;
             var task = new SymuTask(0);
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
         }
@@ -1230,8 +1277,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests1()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 0;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.ThresholdForReacting = 0;
             var task = new SymuTask(0);
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
         }
@@ -1244,8 +1291,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests2()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.ThresholdForReacting = 1;
             var task = new SymuTask(0) {Assigned = _agent.AgentId};
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
             Assert.IsFalse(task.IsBlocked);
@@ -1260,8 +1307,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests3()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.ThresholdForReacting = 1;
             var task = new SymuTask(0) {Weight = 0, Assigned = _agent.AgentId };
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
             Assert.IsFalse(task.IsBlocked);
@@ -1276,8 +1323,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests4()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.ThresholdForReacting = 1;
             var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId, Creator = _agent2.AgentId};
             Assert.IsTrue(_agent.CheckBlockerIncompleteInformation(task));
         }
@@ -1291,8 +1338,8 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckIncompleteInformationTests5()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.ThresholdForReacting = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.ThresholdForReacting = 1;
             var task = new SymuTask(0) { Weight = 1, Assigned = _agent.AgentId};
             Assert.IsFalse(_agent.CheckBlockerIncompleteInformation(task));
         }
@@ -1305,32 +1352,32 @@ namespace SymuTests.Classes.Agents
         {
             // Add teammates with knowledge
             var teammate = AddAgent();
-            var group = TestCognitiveAgent.CreateInstance(_organizationEntity.NextEntityId(), 2, _environment);
+            var group = TestCognitiveAgent.CreateInstance(2, Environment);
             group.Start();
-            var agentGroup = new AgentOrganization(_agent.AgentId, 100);
-            var teammateGroup = new AgentOrganization(teammate.AgentId, 100);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, group.AgentId);
-            _environment.WhitePages.MetaNetwork.AddAgentToGroup(teammateGroup, group.AgentId);
-            var interaction = new AgentAgent(_agent.AgentId, teammate.AgentId);
-            _environment.WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
-            teammate.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            var actorOrganization = new ActorOrganization(_agent.AgentId, group.AgentId, 100);
+            var teammateOrganization = new ActorOrganization(teammate.AgentId, group.AgentId, 100);
+            Environment.Organization.MetaNetwork.ActorOrganization.Add(actorOrganization);
+            Environment.Organization.MetaNetwork.ActorOrganization.Add(teammateOrganization);
+            var interaction = new ActorActor(_agent.AgentId, teammate.AgentId);
+            Environment.Organization.MetaNetwork.ActorActor.Add(interaction);
+            teammate.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
-            _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 1, 0);
+            Environment.Organization.MetaNetwork.InteractionSphere.SetSphere(true,
+                Environment.WhitePages.AllAgentIds().ToList(), Environment.Organization.MetaNetwork);
 
-            var task = new SymuTask(0) {KeyActivity = _uid1 };
+            var task = new SymuTask(0) {KeyActivity = Uid1 };
 
             var blocker = new Blocker(Murphy.IncompleteKnowledge, 0)
             {
-                Parameter = _knowledge.Id,
+                Parameter = _knowledge.EntityId,
                 Parameter2 = (byte) 0
             };
-            _organizationEntity.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
+            Organization.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             _agent.TryRecoverBlockerIncompleteKnowledge(task, blocker);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(_agent.Capacity.Actual < 1);
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
@@ -1342,9 +1389,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckKnowledgesBitsTest()
         {
-            _organizationEntity.Murphies.IncompleteKnowledge.On = false;
+            Organization.Murphies.IncompleteKnowledge.On = false;
             var task = new SymuTask(0) {Weight = 1};
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.FullRequiredBits);
             _agent.CheckBlockerIncompleteKnowledge(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
@@ -1359,9 +1406,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckKnowledgesBitsTest1()
         {
-            _organizationEntity.Murphies.IncompleteKnowledge.On = true;
+            Organization.Murphies.IncompleteKnowledge.On = true;
             var task = new SymuTask(0) {Weight = 1};
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.NoRequiredBits);
             _agent.CheckBlockerIncompleteKnowledge(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
@@ -1375,12 +1422,12 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckKnowledgesBitsTest2()
         {
-            _organizationEntity.Murphies.IncompleteKnowledge.On = true;
+            Organization.Murphies.IncompleteKnowledge.On = true;
             var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId };
             task.SetTasksManager(_agent.TaskProcessor.TasksManager);
-            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, _knowledges,
+            task.SetKnowledgesBits(_agent.Cognitive.TasksAndPerformance.TaskModel, Knowledges,
                 MurphyTask.FullRequiredBits);
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 0, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
 
             Assert.IsTrue(_agent.TaskProcessor.TasksManager.BlockerResult.Cancelled == 1 ||
@@ -1394,14 +1441,14 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckKnowledgesBitsTest3()
         {
-            _organizationEntity.Murphies.IncompleteKnowledge.On = true;
-            _organizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
-            _organizationEntity.Murphies.IncompleteKnowledge.RequiredRatio = 1;
-            _organizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
+            Organization.Murphies.IncompleteKnowledge.On = true;
+            Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
+            Organization.Murphies.IncompleteKnowledge.RequiredRatio = 1;
+            Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
             var task = new SymuTask(0) {Weight = 1, Assigned= _agent.AgentId};
-            task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges, 1);
+            task.SetKnowledgesBits(Organization.Murphies.IncompleteKnowledge, Knowledges, 1);
             _agent.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge = false;
-            _agent.KnowledgeModel.AddKnowledge(_knowledge.Id, KnowledgeLevel.FullKnowledge, 0, -1);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
             _agent.CheckBlockerIncompleteKnowledge(task);
             Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
@@ -1415,13 +1462,13 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void CheckKnowledgesBitsTest4()
         {
-            _organizationEntity.Murphies.IncompleteKnowledge.On = true;
-            _organizationEntity.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
-            _organizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
+            Organization.Murphies.IncompleteKnowledge.On = true;
+            Organization.Murphies.IncompleteKnowledge.MandatoryRatio = 0;
+            Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
             var task = new SymuTask(0) {Weight = 1, Assigned = _agent.AgentId };
-            task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges,
+            task.SetKnowledgesBits(Organization.Murphies.IncompleteKnowledge, Knowledges,
                 MurphyTask.FullRequiredBits);
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 1, 0);
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 1, 0);
             _agent.CheckBlockerIncompleteKnowledge(task);
             Assert.AreEqual(ImpactLevel.None, task.Incorrectness);
             Assert.IsFalse(task.Blockers.Exists(Murphy.IncompleteKnowledge, 0));
@@ -1433,15 +1480,15 @@ namespace SymuTests.Classes.Agents
             _agent.Cognitive.InternalCharacteristics.CanLearn = true;
             _agent.LearningModel.On = true;
             _agent.LearningModel.RateOfAgentsOn = 1;
-            _organizationEntity.Murphies.IncompleteKnowledge.On = true;
-            _organizationEntity.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
-            _organizationEntity.Murphies.IncompleteKnowledge.CostFactorOfGuessing = 2;
+            Organization.Murphies.IncompleteKnowledge.On = true;
+            Organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess = 1;
+            Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing = 2;
             var task = new SymuTask(0) {Weight = 1};
-            task.SetKnowledgesBits(_organizationEntity.Murphies.IncompleteKnowledge, _knowledges,
+            task.SetKnowledgesBits(Organization.Murphies.IncompleteKnowledge, Knowledges,
                 MurphyTask.FullRequiredBits);
 
-            _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id).SetKnowledgeBit(0, 0, 0);
-            _agent.RecoverBlockerIncompleteKnowledgeByGuessing(task, null, _knowledge.Id, 0,
+            _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId,0, 0, 0);
+            _agent.RecoverBlockerIncompleteKnowledgeByGuessing(task, null, _knowledge.EntityId, 0,
                 BlockerResolution.Guessing);
             Assert.AreNotEqual(ImpactLevel.None, task.Incorrectness);
             if (task.HasBeenCancelledBy.Any())
@@ -1450,10 +1497,10 @@ namespace SymuTests.Classes.Agents
             }
 
             Assert.IsTrue(1 < task.Weight);
-            var agentKnowledge =
-                _agent.KnowledgeModel.GetAgentKnowledge(_knowledge.Id);
+            var actorKnowledge =
+                _agent.KnowledgeModel.GetActorKnowledge(_knowledge.EntityId);
             Assert.AreEqual(_agent.LearningModel.TasksAndPerformance.LearningByDoingRate,
-                agentKnowledge.GetKnowledgeBit(0));
+                actorKnowledge.GetKnowledgeBit(0));
         }
 
         /// <summary>
@@ -1469,7 +1516,7 @@ namespace SymuTests.Classes.Agents
             };
             var blocker = task.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(task.IsBlocked);
         }
@@ -1480,13 +1527,13 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void TryRecoverBlockerIncompleteInformationTest1()
         {
-            _organizationEntity.Murphies.IncompleteInformation.On = true;
-            _organizationEntity.Murphies.IncompleteInformation.LimitNumberOfTries = 1;
+            Organization.Murphies.IncompleteInformation.On = true;
+            Organization.Murphies.IncompleteInformation.LimitNumberOfTries = 1;
             var task = new SymuTask(0) {Weight = 1};
             var blocker = task.Add(Murphy.IncompleteKnowledge, 0, (ushort) 0);
             blocker.NumberOfTries = 2;
             _agent.TryRecoverBlockerIncompleteInformation(task, blocker);
-            Assert.IsFalse(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
+            Assert.IsFalse(Environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsFalse(task.IsBlocked);
         }
@@ -1499,25 +1546,25 @@ namespace SymuTests.Classes.Agents
         {
             // Add teammates with knowledge
             var teammate = AddAgent();
-            teammate.BeliefsModel.AddBelief(_knowledge.Id, BeliefLevel.StronglyAgree);
+            teammate.BeliefsModel.AddBeliefFromKnowledgeId(_knowledge.EntityId, BeliefLevel.StronglyAgree);
             teammate.BeliefsModel.InitializeBeliefs();
-            _agent.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 0.1F);
-            teammate.BeliefsModel.GetAgentBelief(_knowledge.Id).BeliefBits.SetBit(0, 1F);
-            _environment.WhitePages.MetaNetwork.InteractionSphere.SetSphere(true,
-                _environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), _environment.WhitePages.MetaNetwork);
+            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 0.1F);
+            teammate.BeliefsModel.SetBelief(_belief.EntityId,0, 1F);
+            Environment.Organization.MetaNetwork.InteractionSphere.SetSphere(true,
+                Environment.WhitePages.AllAgentIds().Cast<IAgentId>().ToList(), Environment.Organization.MetaNetwork);
 
-            var task = new SymuTask(0) {Weight = 1, KeyActivity = _uid1 };
+            var task = new SymuTask(0) {Weight = 1, KeyActivity = Uid1 };
 
             var blocker = new Blocker(Murphy.IncompleteBelief, 0)
             {
-                Parameter = _knowledge.Id,
+                Parameter = _knowledge.EntityId,
                 Parameter2 = (byte) 0
             };
-            _organizationEntity.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
+            Organization.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
             _agent.SetInitialCapacity();
             _agent.Capacity.Reset();
             _agent.TryRecoverBlockerIncompleteBelief(task, blocker);
-            Assert.IsTrue(_environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
+            Assert.IsTrue(Environment.Messages.LastSentMessages.Exists(MessageAction.Ask, SymuYellowPages.Help,
                 _agent.AgentId.ClassId, _agent.AgentId.ClassId));
             Assert.IsTrue(_agent.Capacity.Actual < 1);
             Assert.IsTrue(_agent.TimeSpent[task.KeyActivity] > 0);
@@ -1531,13 +1578,16 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void TryRecoverBlockerIncompleteBeliefTest1()
         {
-            _organizationEntity.Murphies.IncompleteBelief.On = true;
-            _organizationEntity.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
-            _organizationEntity.Murphies.IncompleteBelief.LimitNumberOfTries = 1;
-            var task = new SymuTask(0) {Weight = 1, KeyActivity = _uid1 };
+            var knowledge2 = new Knowledge(Environment.Organization.MetaNetwork, Environment.Organization.Models, "2", 1);
+            _ = new Belief(Environment.Organization.MetaNetwork, knowledge2, knowledge2.Length, Organization.Models.Generator, Organization.Models.BeliefWeightLevel);
+
+            Organization.Murphies.IncompleteBelief.On = true;
+            Organization.Murphies.IncompleteBelief.RateOfIncorrectGuess = 1;
+            Organization.Murphies.IncompleteBelief.LimitNumberOfTries = 1;
+            var task = new SymuTask(0) {Weight = 1, KeyActivity = Uid1 };
             var blocker = new Blocker(Murphy.IncompleteBelief, 0)
             {
-                Parameter = _knowledge2.Id,
+                Parameter = knowledge2.EntityId,
                 Parameter2 = (byte) 0,
                 NumberOfTries = 2
             };
@@ -1560,8 +1610,8 @@ namespace SymuTests.Classes.Agents
         public void ImpactOfTheCommunicationMediumOnCapacityTest()
         {
             _agent.Capacity.Set(1);
-            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, true, _uid1);
-            Assert.IsTrue(_agent.TimeSpent[_uid1] > 0);
+            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, true, Uid1);
+            Assert.IsTrue(_agent.TimeSpent[Uid1] > 0);
         }
 
         /// <summary>
@@ -1571,20 +1621,20 @@ namespace SymuTests.Classes.Agents
         public void ImpactOfTheCommunicationMediumOnCapacityTest1()
         {
             _agent.Capacity.Set(1);
-            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, false, _uid1);
-            Assert.IsTrue(_agent.TimeSpent[_uid1] > 0);
+            _agent.ImpactOfTheCommunicationMediumOnTimeSpent(CommunicationMediums.Email, false, Uid1);
+            Assert.IsTrue(_agent.TimeSpent[Uid1] > 0);
         }
 
         [TestMethod]
         public void AddTimeSpentTest()
         {
-            _agent.AddTimeSpent(_uid1, 1);
-            Assert.AreEqual(1, _agent.TimeSpent[_uid1]);
-            _agent.AddTimeSpent(_uid1, 1);
-            Assert.AreEqual(2, _agent.TimeSpent[_uid1]);
-            var uid2 = new UId(2);
+            _agent.AddTimeSpent(Uid1, 1);
+            Assert.AreEqual(1, _agent.TimeSpent[Uid1]);
+            _agent.AddTimeSpent(Uid1, 1);
+            Assert.AreEqual(2, _agent.TimeSpent[Uid1]);
+            var uid2 = new AgentId(2,2);
             _agent.AddTimeSpent(uid2, 1);
-            Assert.AreEqual(2, _agent.TimeSpent[_uid1]);
+            Assert.AreEqual(2, _agent.TimeSpent[Uid1]);
             Assert.AreEqual(1, _agent.TimeSpent[uid2]);
         }
 

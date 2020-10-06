@@ -12,9 +12,12 @@
 using System;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Classes;
+using Symu.Common.Interfaces;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -23,49 +26,27 @@ namespace SymuScenariosAndEvents.Classes
     public class ExampleEnvironment : SymuEnvironment
     {
         private IAgentId _groupId;
-        public byte WorkersCount { get; set; } = 5;
-        private byte KnowledgeCount { get; } = 2;
 
         public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
+        public ExampleOrganization ExampleOrganization => (ExampleOrganization) Organization;
 
-        public override void SetOrganization(OrganizationEntity organization)
+        public ExampleEnvironment()
         {
-            if (organization == null)
-            {
-                throw new ArgumentNullException(nameof(organization));
-            }
-
-            base.SetOrganization(organization);
 
             IterationResult.Blockers.On = true;
             IterationResult.Tasks.On = true;
 
             SetDebug(false);
-        }
-
-        /// <summary>
-        ///     Add Organization knowledge
-        /// </summary>
-        public override void AddOrganizationKnowledge()
-        {
-            base.AddOrganizationKnowledge();
-            // KnowledgeCount are added for tasks initialization
-            // Adn Beliefs are created based on knowledge
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
-                Organization.AddKnowledge(knowledge);
-            }
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         public override void SetAgents()
         {
             base.SetAgents();
 
-            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
+            var group = GroupAgent.CreateInstance(this);
             _groupId = group.AgentId;
-            for (var j = 0; j < WorkersCount; j++)
+            for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
             {
                 AddPersonAgent();
             }
@@ -73,14 +54,13 @@ namespace SymuScenariosAndEvents.Classes
 
         private PersonAgent AddPersonAgent()
         {
-            var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+            var actor = PersonAgent.CreateInstance(this, ExampleOrganization.Templates.Human);
             actor.GroupId = _groupId;
-            var email = Email.CreateInstance(actor.AgentId.Id, Organization.Models, WhitePages.MetaNetwork);
-            WhitePages.MetaNetwork.Resource.Add(email);
-            var agentResource = new AgentResource(email.Id, new ResourceUsage(0));
-            WhitePages.MetaNetwork.AgentResource.Add(actor.AgentId, agentResource);
-            var agentGroup = new AgentOrganization(actor.AgentId, 100);
-            WhitePages.MetaNetwork.AddAgentToGroup(agentGroup, _groupId);
+            var email = EmailEntity.CreateInstance(ExampleOrganization.MetaNetwork, Organization.Models);
+            var actorResource = new ActorResource(actor.AgentId,email.EntityId, new ResourceUsage(0));
+            ExampleOrganization.MetaNetwork.ActorResource.Add(actorResource);
+            var actorOrganization = new ActorOrganization(actor.AgentId, _groupId);
+            ExampleOrganization.MetaNetwork.ActorOrganization.Add(actorOrganization);
             return actor;
         }
 
@@ -95,13 +75,12 @@ namespace SymuScenariosAndEvents.Classes
         public void KnowledgeEvent(object sender, EventArgs e)
         {
             // knowledge length of 10 is arbitrary in this example
-            var knowledge = new Knowledge(KnowledgeCount, KnowledgeCount.ToString(), 10);
-            WhitePages.MetaNetwork.Knowledge.Add(knowledge);
+            var knowledge = new Knowledge(ExampleOrganization.MetaNetwork, ExampleOrganization.Models, ExampleOrganization.KnowledgeCount.ToString(), 10);
 
             foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.ClassId))
             {
-                person.KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.BasicKnowledge, 0.15F, -1);
-                person.KnowledgeModel.InitializeKnowledge(knowledge.Id, Schedule.Step);
+                person.KnowledgeModel.AddKnowledge(knowledge.EntityId, KnowledgeLevel.BasicKnowledge, 0.15F, -1);
+                person.KnowledgeModel.InitializeKnowledge(knowledge.EntityId, Schedule.Step);
             }
         }
 

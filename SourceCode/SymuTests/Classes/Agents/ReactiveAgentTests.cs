@@ -9,21 +9,14 @@
 
 #region using directives
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Blockers;
-using Symu.Classes.Murphies;
 using Symu.Classes.Organization;
-using Symu.Classes.Task;
 using Symu.Common;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Results.Blocker;
 using SymuTests.Helpers;
 
 #endregion
@@ -31,28 +24,23 @@ using SymuTests.Helpers;
 namespace SymuTests.Classes.Agents
 {
     [TestClass]
-    public class ReactiveAgentTests
+    public class ReactiveAgentTests: BaseTestClass
     {
-        private readonly TestEnvironment _environment = new TestEnvironment();
-        private readonly OrganizationEntity _organizationEntity = new OrganizationEntity("1");
-        private readonly SymuEngine _symu = new SymuEngine();
         private TestReactiveAgent _agent;
         
         [TestInitialize]
         public void Initialize()
         {
-            _environment.SetOrganization(_organizationEntity);
-            _symu.SetEnvironment(_environment);
-            _organizationEntity.Models.On(1);
-            _environment.IterationResult.On();
+            Organization.Models.SetOn(1);
+            Environment.SetOrganization(Organization);
+            Environment.IterationResult.On();
 
-            _agent = TestReactiveAgent.CreateInstance(_organizationEntity.NextEntityId(), _environment);
-            
+            _agent = TestReactiveAgent.CreateInstance(Environment);
             Assert.AreEqual(AgentState.NotStarted, _agent.State);
-            _agent.Start();
-            _agent.WaitingToStart();
+
+            Simulation.Initialize(Environment);
+
             Assert.AreEqual(AgentState.Started, _agent.State);
-            _environment.Schedule.Step = 0;
         }
 
         /// <summary>
@@ -77,9 +65,9 @@ namespace SymuTests.Classes.Agents
                 Medium = CommunicationMediums.Email
             };
             _agent.OnBeforeSendMessage(message);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesCount);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.SentMessagesByEmail);
-            Assert.IsTrue(_environment.Messages.Result.SentMessagesCost>0);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.SentMessagesByEmail);
+            Assert.IsTrue(Environment.Messages.Result.SentMessagesCost>0);
         }
 
         #endregion
@@ -101,11 +89,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Email;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(2, Environment.Messages.Result.ReceivedMessagesCount);
         }
 
         /// <summary>
@@ -121,11 +109,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
             message.Medium = CommunicationMediums.Email;
             _agent.Post(message);
             Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -143,11 +131,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.ReceivedMessagesCount);
             //TODO test Missed messages
         }
 
@@ -166,11 +154,11 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.ReceivedMessagesCount);
             message.Medium = CommunicationMediums.Meeting;
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(2, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual<uint>(2, Environment.Messages.Result.ReceivedMessagesCount);
             //TODO test Missed messages
         }
 
@@ -185,13 +173,13 @@ namespace SymuTests.Classes.Agents
             // Post as a delayed message
             _agent.PostAsADelayedMessage(message, 0);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.ReceivedMessagesCount);
-            Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual(0, Environment.Messages.WaitingMessages.Count);
             // Post Delayed messages
             _agent.PostDelayedMessages();
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(1, _environment.Messages.Result.ReceivedMessagesCount);
-            Assert.AreEqual(0, _environment.Messages.WaitingMessages.Count);
+            Assert.AreEqual<uint>(1, Environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual(0, Environment.Messages.WaitingMessages.Count);
         }
         #endregion
 
@@ -207,7 +195,7 @@ namespace SymuTests.Classes.Agents
             var message = new Message();
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -220,12 +208,12 @@ namespace SymuTests.Classes.Agents
             var message = new Message();
             _agent.Post(message);
             Assert.AreEqual(1, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
 
             _agent.State = AgentState.Starting;
             _agent.Post(message);
             Assert.AreEqual(2, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual<uint>(0, _environment.Messages.Result.SentMessagesCount);
+            Assert.AreEqual<uint>(0, Environment.Messages.Result.SentMessagesCount);
         }
 
         /// <summary>
@@ -243,7 +231,7 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual((uint) 1, Environment.Messages.Result.ReceivedMessagesCount);
         }
 
         /// <summary>
@@ -261,7 +249,7 @@ namespace SymuTests.Classes.Agents
             };
             _agent.Post(message);
             Assert.AreEqual(0, _agent.MessageProcessor.DelayedMessages.Count);
-            Assert.AreEqual((uint) 1, _environment.Messages.Result.ReceivedMessagesCount);
+            Assert.AreEqual((uint) 1, Environment.Messages.Result.ReceivedMessagesCount);
         }
 
         #endregion
@@ -318,7 +306,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.State = AgentState.Stopping;
             Assert.AreEqual(AgentState.Stopping, _agent.State);
-            _environment.StopAgents();
+            Environment.StopAgents();
             Assert.AreEqual(AgentState.Stopped, _agent.State);
         }
 

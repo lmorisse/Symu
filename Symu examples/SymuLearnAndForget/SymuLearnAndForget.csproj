@@ -97,6 +97,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ExampleOrganization.cs" />
     <Compile Include="Classes\ExpertAgent.cs" />
     <Compile Include="Classes\LearnByAskingAgent.cs" />
     <Compile Include="Classes\LearnByDoingAgent.cs" />

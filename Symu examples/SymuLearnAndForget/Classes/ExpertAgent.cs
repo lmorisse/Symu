@@ -13,12 +13,11 @@ using System;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -27,14 +26,20 @@ namespace SymuLearnAndForget.Classes
     public sealed class ExpertAgent : CognitiveAgent
     {
         public const byte Class = 2;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static ExpertAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static ExpertAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new ExpertAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new ExpertAgent(environment, template);
             agent.Initialize();
             return agent;
         }
@@ -43,8 +48,8 @@ namespace SymuLearnAndForget.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private ExpertAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private ExpertAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
         {
         }
 
@@ -66,7 +71,7 @@ namespace SymuLearnAndForget.Classes
         public override void SetModels()
         {
             base.SetModels();
-            KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).Knowledge.Id, KnowledgeLevel.Expert,
+            KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).ExampleOrganization.Knowledge.EntityId, KnowledgeLevel.Expert,
                 Cognitive.InternalCharacteristics);
         }
 

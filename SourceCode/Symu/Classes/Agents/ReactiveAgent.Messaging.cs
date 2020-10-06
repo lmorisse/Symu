@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 
@@ -22,11 +22,10 @@ using Symu.Messaging.Messages;
 
 namespace Symu.Classes.Agents
 {
-    /// <summary>
-    ///     An abstract base class for agents.
-    ///     You must define your own agent derived classes derived
-    /// </summary>
-    public abstract partial class ReactiveAgent
+    ///     The default implementation of IAgent
+    ///     You can define your own class agent by inheritance or implementing directly IAgent
+    ///     This partial class focus on messaging methods
+    public partial class ReactiveAgent
     {
         /// <summary>
         ///     Messaging of the agent
@@ -157,7 +156,7 @@ namespace Symu.Classes.Agents
             // Impact of the Communication channels on the remaining capacity
             var cost =
                 Environment.Organization.Communication.TimeSpent(message.Medium, true,
-                    Environment.Organization.Models.RandomLevelValue);
+                    Environment.RandomLevelValue);
             Environment.Messages.TrackMessageSent(message, cost);
         }
 

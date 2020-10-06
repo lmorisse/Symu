@@ -10,7 +10,8 @@
 #region using directives
 
 using System;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 
 #endregion
 

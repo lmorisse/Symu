@@ -132,7 +132,7 @@ namespace Symu.Results
             {
                 if (result is KeyFrames keyFrame)
                 {
-                    keyFrame.Add(Environment.Schedule.Step, Environment.WhitePages.MetaNetwork.ToMatrix());
+                    keyFrame.Add(Environment.Schedule.Step, Environment.Organization.MetaNetwork.ToMatrix());
                     keyFrame.SetResults();
                 }
                 else

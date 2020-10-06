@@ -14,15 +14,18 @@ using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
+
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.Networks;
-using Symu.DNA.Networks.OneModeNetworks;
-using Symu.DNA.Networks.TwoModesNetworks;
-using Symu.Repository.Entity;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
+using Symu.DNA.GraphNetworks;
+using Symu.DNA.GraphNetworks.TwoModesNetworks;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 using static Symu.Common.Constants;
+using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -37,10 +40,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class LearningModel : ModelEntity
     {
         private readonly RandomGenerator _model;
-        private readonly IAgentId _id;
+        private readonly IAgentId _agentId;
         private readonly InternalCharacteristics _internalCharacteristics;
-        private readonly KnowledgeNetwork _knowledgeNetwork;
-        private readonly AgentKnowledgeNetwork _agentKnowledgeNetwork;
+        private readonly OneModeNetwork _knowledgeNetwork;
+        private readonly TwoModesNetwork<IEntityKnowledge> _entityKnowledgeNetwork;
         private readonly byte _randomLevel;
         /// <summary>
         ///     Accumulates all learning of the agent during the simulation
@@ -70,20 +73,25 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns></returns>
         public float GetKnowledgePotential()
         {
-            return Expertise.GetAgentKnowledges<AgentKnowledge>().Sum(l => l.GetKnowledgePotential());
+            return _entityKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).Sum(l => l.GetKnowledgePotential());
         }
 
-        public LearningModel(IAgentId agentId, OrganizationModels models, MetaNetwork network,
-            CognitiveArchitecture cognitiveArchitecture, RandomGenerator model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="agentId"></param>
+        /// <param name="models"></param>
+        /// <param name="knowledgeNetwork"></param>
+        /// <param name="entityKnowledgeNetwork">ActorKnowledgeNetwork, ResourceKnowledgeNetwork depending on the agent</param>
+        /// <param name="cognitiveArchitecture"></param>
+        /// <param name="model"></param>
+        /// <param name="randomLevel"></param>
+        public LearningModel(IAgentId agentId, OrganizationModels models, OneModeNetwork knowledgeNetwork, TwoModesNetwork<IEntityKnowledge> entityKnowledgeNetwork,
+            CognitiveArchitecture cognitiveArchitecture, RandomGenerator model, byte randomLevel)
         {
             if (models == null)
             {
                 throw new ArgumentNullException(nameof(models));
-            }
-
-            if (network == null)
-            {
-                throw new ArgumentNullException(nameof(network));
             }
 
             if (cognitiveArchitecture == null)
@@ -92,38 +100,21 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             models.Learning.CopyTo(this);
-            _id = agentId;
+            _agentId = agentId;
             TasksAndPerformance = cognitiveArchitecture.TasksAndPerformance;
             _internalCharacteristics = cognitiveArchitecture.InternalCharacteristics;
-            _knowledgeNetwork = network.Knowledge;
-            _agentKnowledgeNetwork = network.AgentKnowledge;
-            _randomLevel = models.RandomLevelValue;
+            _knowledgeNetwork = knowledgeNetwork;
+            _entityKnowledgeNetwork = entityKnowledgeNetwork ?? throw new ArgumentNullException(nameof(entityKnowledgeNetwork));
+            _randomLevel = randomLevel;
             if (!cognitiveArchitecture.InternalCharacteristics.CanLearn || !cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge)
             {
                 // Agent is not concerned by this model
                 On = false;
             }
-
-            Expertise = _agentKnowledgeNetwork.Exists(_id) ? _agentKnowledgeNetwork.GetAgentExpertise(_id): null;
             _model = model;
         }
 
         public TasksAndPerformance TasksAndPerformance { get; set; }
-
-        private AgentExpertise Expertise { get; }
-        //{
-        //    get
-        //    {
-        //        if (!_networkKnowledges.Exists(_id))
-        //        {
-        //            return null;
-        //        }
-
-        //        var expertise = _networkKnowledges.GetAgentExpertise(_id);
-        //        expertise.OnAfterLearning += AfterLearning;
-        //        return expertise;
-        //    }
-        //}
 
         /// <summary>
         ///     EventHandler triggered after learning a new information
@@ -139,7 +130,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeBits">the knowledge Bits to learn</param>
         /// <param name="maxRateLearnable">Maximum rate learnable from the message, depending on the medium used</param>
         /// <param name="step"></param>
-        public void Learn(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
+        public void Learn(IAgentId knowledgeId, Bits knowledgeBits, float maxRateLearnable, ushort step)
         {
             Learn(knowledgeId, knowledgeBits, maxRateLearnable, _internalCharacteristics.MinimumRemainingKnowledge,
                 _internalCharacteristics.TimeToLive, step);
@@ -155,7 +146,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void Learn(IId knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
+        public void Learn(IAgentId knowledgeId, Bits knowledgeBits, float maxRateLearnable, float minimumKnowledge,
             short timeToLive, ushort step)
         {
             if (!IsAgentOn())
@@ -178,8 +169,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
 
-            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            var agentKnowledge = Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId);
+            LearnNewKnowledge(_agentId, knowledgeId, minimumKnowledge, timeToLive, step);
+            var agentKnowledge = _entityKnowledgeNetwork.Edge<ActorKnowledge>(_agentId,knowledgeId);
             Learn(knowledgeBits, maxRateLearnable, agentKnowledge, step);
         }
 
@@ -189,9 +180,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="knowledgeBits">KnowledgeBits from other agent, source of learning</param>
         /// <param name="maxRateLearnable"></param>
-        /// <param name="agentKnowledge"></param>
+        /// <param name="actorKnowledge"></param>
         /// <param name="step"></param>
-        public void Learn(Bits knowledgeBits, float maxRateLearnable, AgentKnowledge agentKnowledge, ushort step)
+        public void Learn(Bits knowledgeBits, float maxRateLearnable, ActorKnowledge actorKnowledge, ushort step)
         {
             if (!IsAgentOn())
             {
@@ -202,9 +193,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(knowledgeBits));
             }
 
-            if (agentKnowledge is null)
+            if (actorKnowledge is null)
             {
-                throw new ArgumentNullException(nameof(agentKnowledge));
+                throw new ArgumentNullException(nameof(actorKnowledge));
             }
 
             var learningRate = NextLearning();
@@ -216,13 +207,13 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             for (byte i = 0; i < knowledgeBits.Length; i++)
                 // other agent must have more knowledge bit than the agent
             {
-                if (!(knowledgeBits.GetBit(i) > 0) || !(knowledgeBits.GetBit(i) >= agentKnowledge.GetKnowledgeBit(i)))
+                if (!(knowledgeBits.GetBit(i) > 0) || !(knowledgeBits.GetBit(i) >= actorKnowledge.GetKnowledgeBit(i)))
                 {
                     continue;
                 }
 
                 var learning = Math.Min(knowledgeBits.GetBit(i), learningRate * maxRateLearnable);
-                AgentKnowledgeLearn(agentKnowledge, i, learning, step);
+                AgentKnowledgeLearn(actorKnowledge, i, learning, step);
             }
         }
 
@@ -235,31 +226,31 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float Learn(IId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive, ushort step)
+        public float Learn(IAgentId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive, ushort step)
         {
             if (!IsAgentOn())
             {
                 return 0;
             }
 
-            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            return AgentKnowledgeLearn(Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId), knowledgeBit, NextLearning(), step);
+            LearnNewKnowledge(_agentId, knowledgeId, minimumKnowledge, timeToLive, step);
+            return AgentKnowledgeLearn(_entityKnowledgeNetwork.Edge<ActorKnowledge>(_agentId,knowledgeId), knowledgeBit, NextLearning(), step);
         }
 
         /// <summary>
         ///     Agent learn _knowledgeBits at a learningRate
         ///     OnAfterLearning event is triggered if learning occurs, you can subscribe to this event to treat the new learning
         /// </summary>
-        /// <param name="agentKnowledge"></param>
+        /// <param name="actorKnowledge"></param>
         /// <param name="index"></param>
         /// <param name="learningRate"></param>
         /// <param name="step"></param>
         /// <returns>The real learning value</returns>
-        public float AgentKnowledgeLearn(AgentKnowledge agentKnowledge, byte index, float learningRate, ushort step)
+        public float AgentKnowledgeLearn(ActorKnowledge actorKnowledge, byte index, float learningRate, ushort step)
         {
-            if (agentKnowledge == null)
+            if (actorKnowledge == null)
             {
-                throw new ArgumentNullException(nameof(agentKnowledge));
+                throw new ArgumentNullException(nameof(actorKnowledge));
             }
 
             if (Math.Abs(learningRate) < Tolerance)
@@ -267,11 +258,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            var realLearning = agentKnowledge.KnowledgeBits.UpdateBit(index, learningRate, step);
+            var realLearning = actorKnowledge.KnowledgeBits.UpdateBit(index, learningRate, step);
             CumulativeLearning += realLearning;
             if (realLearning > Tolerance)
             {
-                var learningEventArgs = new LearningEventArgs(agentKnowledge.KnowledgeId, index, realLearning);
+                var learningEventArgs = new LearningEventArgs(actorKnowledge.Target, index, realLearning);
                 OnAfterLearning?.Invoke(this, learningEventArgs);
             }
 
@@ -285,7 +276,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeBit">the knowledge Bit to learn</param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float LearnByDoing(IId knowledgeId, byte knowledgeBit, ushort step)
+        public float LearnByDoing(IAgentId knowledgeId, byte knowledgeBit, ushort step)
         {
             return LearnByDoing(knowledgeId, knowledgeBit, _internalCharacteristics.MinimumRemainingKnowledge,
                 _internalCharacteristics.TimeToLive, step);
@@ -300,7 +291,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
         /// <returns>The real learning</returns>
-        public float LearnByDoing(IId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive,
+        public float LearnByDoing(IAgentId knowledgeId, byte knowledgeBit, float minimumKnowledge, short timeToLive,
             ushort step)
         {
             if (!IsAgentOn())
@@ -308,8 +299,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return 0;
             }
 
-            LearnNewKnowledge(_id, knowledgeId, minimumKnowledge, timeToLive, step);
-            return AgentKnowledgeLearn(Expertise.GetAgentKnowledge<AgentKnowledge>(knowledgeId), knowledgeBit, NextLearningByDoing(), step);
+            LearnNewKnowledge(_agentId, knowledgeId, minimumKnowledge, timeToLive, step);
+            return AgentKnowledgeLearn(_entityKnowledgeNetwork.Edge<ActorKnowledge>(_agentId, knowledgeId), knowledgeBit, NextLearningByDoing(), step);
         }
 
         public float NextLearning()
@@ -350,17 +341,21 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="minimumKnowledge"></param>
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
-        public void LearnNewKnowledge(IAgentId agentId, IId knowledgeId, float minimumKnowledge, short timeToLive,
+        public void LearnNewKnowledge(IAgentId agentId, IAgentId knowledgeId, float minimumKnowledge, short timeToLive,
             ushort step)
         {
-            if (_agentKnowledgeNetwork.Exists(agentId, knowledgeId))
+            if (!_knowledgeNetwork.Exists(knowledgeId))
+            {
+                throw new NullReferenceException(nameof(knowledgeId));
+            }
+            if (_entityKnowledgeNetwork.Exists(agentId, knowledgeId))
             {
                 return;
             }
 
-            var agentKnowledge = new AgentKnowledge(knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
-            _agentKnowledgeNetwork.Add(agentId, agentKnowledge);
-            var knowledge = _knowledgeNetwork.Get<Knowledge>(knowledgeId);
+            var agentKnowledge = new ActorKnowledge(agentId, knowledgeId, KnowledgeLevel.NoKnowledge, minimumKnowledge, timeToLive);
+            _entityKnowledgeNetwork.Add(agentKnowledge);
+            var knowledge = _knowledgeNetwork.GetEntity<Knowledge>(knowledgeId);
             agentKnowledge.InitializeKnowledge(knowledge.Length, _model, KnowledgeLevel.NoKnowledge, step);
         }
 

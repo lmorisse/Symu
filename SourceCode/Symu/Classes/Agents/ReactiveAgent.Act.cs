@@ -23,11 +23,11 @@ using Symu.Repository;
 namespace Symu.Classes.Agents
 {
     /// <summary>
-    ///     An abstract base class for agents.
-    ///     You must define your own agent derived classes derived
+    ///     The default implementation of IAgent
+    ///     You can define your own class agent by inheritance or implementing directly IAgent
     ///     This partial class focus on Act methods
     /// </summary>
-    public abstract partial class ReactiveAgent
+    public partial class ReactiveAgent
     {
         /// <summary>
         ///     This is the method that is called when the agent receives a message and is activated.

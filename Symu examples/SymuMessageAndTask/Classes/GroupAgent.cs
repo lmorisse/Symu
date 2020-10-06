@@ -13,8 +13,7 @@ using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Task;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -26,14 +25,20 @@ namespace SymuMessageAndTask.Classes
     public sealed class GroupAgent : ReactiveAgent
     {
         public const byte Class = 1;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static GroupAgent CreateInstance(IId id, SymuEnvironment environment)
+        public static GroupAgent CreateInstance(SymuEnvironment environment)
         {
-            var agent = new GroupAgent(id, environment);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new GroupAgent(environment);
             agent.Initialize();
             return agent;
         }
@@ -42,8 +47,8 @@ namespace SymuMessageAndTask.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private GroupAgent(IId id, SymuEnvironment environment) : base(
-            new AgentId(id, Class), environment)
+        private GroupAgent(SymuEnvironment environment) : base(
+            ClassId, environment)
         {
         }
 
@@ -57,7 +62,7 @@ namespace SymuMessageAndTask.Classes
             base.ActMessage(message);
             switch (message.Subject)
             {
-                case SymuYellowPages.Tasks:
+                case SymuYellowPages.Task:
                     ActTasks(message);
                     break;
             }
@@ -81,13 +86,13 @@ namespace SymuMessageAndTask.Classes
             }
 
             var tasks = new List<SymuTask>();
-            for (var i = 0; i < environment.NumberOfTasks; i++)
+            for (var i = 0; i < environment.ExampleOrganization.NumberOfTasks; i++)
             {
                 // Create the next task 
                 var task = new SymuTask(Schedule.Step)
                 {
                     Parent = Schedule.Step,
-                    Weight = environment.CostOfTask
+                    Weight = environment.ExampleOrganization.CostOfTask
                 };
                 tasks.Add(task);
             }

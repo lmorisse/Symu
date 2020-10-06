@@ -12,14 +12,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
-using Symu.DNA.Networks.TwoModesNetworks.Sphere;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 
 #endregion
 
 namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
-    public class InteractionPatternsTests
+    public class InteractionPatternsTests 
     {
         private InteractionPatterns _interaction;
 

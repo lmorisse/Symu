@@ -13,8 +13,11 @@ using System;
 using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common;
+using Symu.Common.Classes;
+using Symu.DNA.Edges;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Edges;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -22,50 +25,20 @@ namespace SymuLearnAndForget.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
+        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
         public LearnFromSourceAgent LearnFromSourceAgent { get; private set; }
         public LearnByDoingAgent LearnByDoingAgent { get; private set; }
         public LearnByAskingAgent LearnByAskingAgent { get; private set; }
         public LearnAgent DoesNotLearnAgent { get; private set; }
         public ExpertAgent ExpertAgent { get; private set; }
-        public Knowledge Knowledge { get; set; }
-        public KnowledgeLevel KnowledgeLevel { get; set; }
-        public Wiki WikiEntity;
 
-        public override void SetOrganization(OrganizationEntity organization)
+
+        public ExampleEnvironment()
         {
-            if (organization == null)
-            {
-                throw new ArgumentNullException(nameof(organization));
-            }
-
-            base.SetOrganization(organization);
-
             IterationResult.KnowledgeAndBeliefResults.On = true;
-            Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
-            Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
 
             SetDebug(false);
-        }
-
-        /// <summary>
-        ///     Add Organization knowledge
-        /// </summary>
-        public override void AddOrganizationKnowledge()
-        {
-            base.AddOrganizationKnowledge();
-            Organization.AddKnowledge(Knowledge);
-        }
-
-        /// <summary>
-        ///     Add Organization database
-        /// </summary>
-        public override void AddOrganizationDatabase()
-        {
-            base.AddOrganizationDatabase();
-
-            WikiEntity = Wiki.CreateInstance(Organization.AgentId.Id, Organization.Models, Organization.MetaNetwork);
-            WikiEntity.InitializeKnowledge(Knowledge, 0);
-            Organization.AddResource(WikiEntity);
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         public override void SetAgents()
@@ -73,16 +46,16 @@ namespace SymuLearnAndForget.Classes
             base.SetAgents();
 
             LearnFromSourceAgent =
-                LearnFromSourceAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnFromSourceAgent.CreateInstance(this, Organization.Templates.Human);
             LearnByDoingAgent =
-                LearnByDoingAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnByDoingAgent.CreateInstance(this, Organization.Templates.Human);
             LearnByAskingAgent =
-                LearnByAskingAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
-            DoesNotLearnAgent = LearnAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
-            ExpertAgent = ExpertAgent.CreateInstance(Organization.NextEntityId(), this, Organization.Templates.Human);
+                LearnByAskingAgent.CreateInstance(this, Organization.Templates.Human);
+            DoesNotLearnAgent = LearnAgent.CreateInstance(this, Organization.Templates.Human);
+            ExpertAgent = ExpertAgent.CreateInstance(this, Organization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
-            var interaction = new AgentAgent(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
-            WhitePages.MetaNetwork.AgentAgent.AddInteraction(interaction);
+            var interaction = new ActorActor(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
+            Organization.MetaNetwork.ActorActor.Add(interaction);
         }
     }
 }

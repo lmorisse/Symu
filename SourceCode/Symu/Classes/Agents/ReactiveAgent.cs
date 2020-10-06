@@ -11,8 +11,7 @@
 
 using System;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
@@ -23,10 +22,18 @@ using Symu.Repository;
 namespace Symu.Classes.Agents
 {
     /// <summary>
-    ///     An abstract base class for agents.
-    ///     You must define your own agent derived classes derived
+    /// The Agent interface
     /// </summary>
-    public abstract partial class ReactiveAgent : IAgent
+    public interface IAgent
+    {
+        //todo => c#8 IAgentId AgentId;
+        IAgent Clone();
+    }
+    /// <summary>
+    ///     The default implementation of IAgent
+    ///     You can define your own class agent by inheritance or implementing directly IAgent
+    /// </summary>
+    public partial class ReactiveAgent// todo : IAgent
     {
         /// <summary>
         ///     constructor for generic new()
@@ -35,9 +42,19 @@ namespace Symu.Classes.Agents
         protected ReactiveAgent()
         {
         }
-
         /// <summary>
         ///     Constructor with standard agent template
+        ///     and without an existing AgentId
+        ///     The constructor will set the AgentId based on the classId
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="environment"></param>
+        protected ReactiveAgent(IClassId classId, SymuEnvironment environment): this(environment?.WhitePages.NextAgentId(classId), environment)
+        {
+        }
+        /// <summary>
+        ///     Constructor with standard agent template
+        ///     and with an existing IAgentId
         /// </summary>
         /// <param name="agentId"></param>
         /// <param name="environment"></param>
@@ -45,9 +62,26 @@ namespace Symu.Classes.Agents
         {
             AgentId = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment.AddAgent(this);
+            Environment.WhitePages.AddAgent(this);
             State = AgentState.NotStarted;
             Created = Schedule.Step;
+        }
+
+        /// <summary>
+        /// Initialize the agent models
+        /// </summary>
+        /// <remarks>Should be called after the constructor
+        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
+        public virtual ReactiveAgent Clone()
+        {
+            var clone = new ReactiveAgent
+            {
+                AgentId = AgentId, 
+                Environment = Environment
+            };
+            State = AgentState.NotStarted;
+            Created = Schedule.Step;
+            return clone;
         }
 
         /// <summary>
@@ -61,7 +95,7 @@ namespace Symu.Classes.Agents
         public ushort Stopped { get; private set; }
 
         /// <summary>
-        ///     The name of the agent. Each agent must have a unique name in its environment.
+        ///     The id of the agent. Each agent must have a unique name in its environment.
         ///     Most operations are performed using agent names rather than agent objects.
         /// </summary>
         public IAgentId AgentId { get; set; }
@@ -94,6 +128,7 @@ namespace Symu.Classes.Agents
             InitializeModels();
             SetModels();
         }
+
 
         #region Start/stop
 
@@ -171,7 +206,7 @@ namespace Symu.Classes.Agents
             State = AgentState.Starting;
             if (Environment == null)
             {
-                throw new Exception("Environment is null in agent " + AgentId.Id + " (ConcurrentAgent.Start)");
+                throw new Exception("Environment is null in agent " + AgentId + " (ConcurrentAgent.Start)");
             }
 
             //now in CreateAgent
@@ -297,6 +332,6 @@ namespace Symu.Classes.Agents
 
         /// <summary>Indicates whether a structure is null. This property is read-only.</summary>
         /// <returns>true if the value of this object is null. Otherwise, false.</returns>
-        public bool IsNull => AgentId.IsNull;
+        public bool IsNull => AgentId== null || AgentId.IsNull;
     }
 }

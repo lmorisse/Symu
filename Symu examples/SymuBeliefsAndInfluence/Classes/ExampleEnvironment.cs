@@ -11,15 +11,16 @@
 
 using System;
 using System.Collections.Generic;
-using Symu.Classes.Agents;
+using System.Linq;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces;
-using Symu.Common.Interfaces.Agent;
+using Symu.DNA.Edges;
+using Symu.DNA.Entities;
+using Symu.DNA.GraphNetworks;
 using Symu.Environment;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -27,88 +28,46 @@ namespace SymuBeliefsAndInfluence.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public byte WorkersCount { get; set; } = 5;
-        public byte InfluencersCount { get; set; } = 2;
-        public byte KnowledgeCount { get; set; } = 2;
-        public List<InfluencerAgent> Influencers { get; } = new List<InfluencerAgent>();
-        public PromoterTemplate InfluencerTemplate { get; } = new PromoterTemplate();
+        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
 
-        public SimpleHumanTemplate WorkerTemplate { get; } = new SimpleHumanTemplate();
-
-        public override void SetOrganization(OrganizationEntity organization)
+        public ExampleEnvironment()
         {
-            if (organization == null)
-            {
-                throw new ArgumentNullException(nameof(organization));
-            }
-
-            base.SetOrganization(organization);
-
-            organization.Models.Influence.On = true;
-            organization.Models.Influence.RateOfAgentsOn = 1;
-            organization.Models.Beliefs.On = true;
-            organization.Models.Beliefs.RateOfAgentsOn = 1;
-            organization.Models.Generator = RandomGenerator.RandomUniform;
-            organization.Murphies.Off();
-            organization.Murphies.IncompleteBelief.On = true;
-            organization.Murphies.IncompleteBelief.RateOfAgentsOn = 1;
             IterationResult.Tasks.On = true;
             IterationResult.KnowledgeAndBeliefResults.On = true;
             IterationResult.OrganizationFlexibility.On = true;
 
-            // Interaction sphere setup
-            organization.Models.InteractionSphere.On = true;
-            organization.Models.InteractionSphere.SphereUpdateOverTime = true;
-            organization.Models.InteractionSphere.RandomlyGeneratedSphere = false;
-            organization.Models.InteractionSphere.RelativeBeliefWeight = 0.5F;
-            organization.Models.InteractionSphere.RelativeActivityWeight = 0;
-            organization.Models.InteractionSphere.RelativeKnowledgeWeight = 0.25F;
-            organization.Models.InteractionSphere.SocialDemographicWeight = 0.25F;
-
-            Organization.Communication.Email.CostToReceiveLevel = GenericLevel.None;
-            Organization.Communication.Email.CostToSendLevel = GenericLevel.None;
-
             SetDebug(false);
-        }
 
-        /// <summary>
-        ///     Add Organization knowledge
-        /// </summary>
-        public override void AddOrganizationKnowledge()
-        {
-            base.AddOrganizationKnowledge();
-            // KnowledgeCount are added for tasks initialization
-            // Adn Beliefs are created based on knowledge
-            for (var i = 0; i < KnowledgeCount; i++)
-            {
-                // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge(Organization.MetaNetwork.Knowledge.NextIdentity(), i.ToString(), 10);
-                Organization.AddKnowledge(knowledge);
-            }
+            SetTimeStepType(TimeStepType.Daily);
         }
 
         public override void SetAgents()
         {
             base.SetAgents();
-            // the group is created just to initialize the interactionNetwork
-            var group = GroupAgent.CreateInstance(Organization.NextEntityId(), this);
-            WhitePages.MetaNetwork.AgentOrganization.AddKey(group.AgentId);
-
-            for (var j = 0; j < InfluencersCount; j++)
+            
+            for (var j = 0; j < ExampleOrganization.InfluencersCount; j++)
             {
-                var actor = InfluencerAgent.CreateInstance(Organization.NextEntityId(), this, InfluencerTemplate);
-                Influencers.Add(actor);
-                var agentGroup = new AgentOrganization(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AgentOrganization.Add(@group.AgentId, agentGroup);
+                var actor = InfluencerAgent.CreateInstance(this, ExampleOrganization.InfluencerTemplate);
+                ExampleOrganization.Influencers.Add(actor);
             }
 
-            for (var j = 0; j < WorkersCount; j++)
+            for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
             {
-                var actor = PersonAgent.CreateInstance(Organization.NextEntityId(), this, WorkerTemplate);
-                var agentGroup = new AgentOrganization(actor.AgentId, 100);
-                WhitePages.MetaNetwork.AgentOrganization.Add(@group.AgentId, agentGroup);
+                _ = PersonAgent.CreateInstance(this, ExampleOrganization.WorkerTemplate);
             }
 
+            var actorIds =
+                Organization.MetaNetwork.Actor.GetEntityIds().ToList();
+            // Set the interactions between the actors
+            // Those interactions could be managed via an organization agent.
+            for (var i = 0; i < actorIds.Count-1; i++)
+            {
+                for (var j = i+1; j < actorIds.Count; j++)
+                {
+                    var interaction = new ActorActor(actorIds[i], actorIds[j]);
+                    Organization.MetaNetwork.ActorActor.Add(interaction);
+                }
+            }
         }
     }
 }

@@ -9,8 +9,7 @@
 
 using System;
 using Symu.Classes.Agents;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Repository;
 
@@ -18,20 +17,32 @@ namespace SymuTests.Helpers
 {
     internal sealed class TestReactiveAgent : ReactiveAgent
     {
-        public static byte ClassId = SymuYellowPages.Actor;
+        public static byte Class = SymuYellowPages.Actor;
+        public static IClassId ClassId => new ClassId(Class);
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static TestReactiveAgent CreateInstance(IId id, SymuEnvironment environment)
+        public static TestReactiveAgent CreateInstance(SymuEnvironment environment)
         {
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var agent = new TestReactiveAgent(id, environment);
+            var agent = new TestReactiveAgent(environment.WhitePages.NextAgentId(Class), environment);
+            agent.Initialize();
+            return agent;
+        }
+        public static TestReactiveAgent CreateInstance(byte classId, SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new TestReactiveAgent(environment.WhitePages.NextAgentId(classId), environment);
             agent.Initialize();
             return agent;
         }
@@ -40,25 +51,9 @@ namespace SymuTests.Helpers
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestReactiveAgent(IId id, SymuEnvironment environment) : base(new AgentId(id, ClassId), environment)
+        private TestReactiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment)
         {
         }
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        internal TestReactiveAgent(IId id)
-        {
-            AgentId = new AgentId(id, ClassId);
-        }
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        internal TestReactiveAgent(byte id)
-        {
-            AgentId = new AgentId(id, ClassId);
 
-        }
     }
 }

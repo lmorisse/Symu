@@ -12,7 +12,7 @@
 using System;
 using Symu.Common;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Networks.TwoModesNetworks.Sphere;
+using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 
 #endregion
 

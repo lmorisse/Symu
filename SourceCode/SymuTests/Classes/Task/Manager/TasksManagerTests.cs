@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
-using Symu.Common.Interfaces.Agent;
+using Symu.Common.Interfaces;
 using Symu.Messaging.Messages;
 
 #endregion

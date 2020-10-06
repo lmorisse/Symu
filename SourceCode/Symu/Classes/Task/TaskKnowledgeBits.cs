@@ -7,7 +7,8 @@
 
 #endregion
 
-using Symu.Common.Interfaces.Entity;
+using Symu.Common.Interfaces;
+
 
 namespace Symu.Classes.Task
 {
@@ -29,7 +30,7 @@ namespace Symu.Classes.Task
         /// </summary>
         private byte[] _required;
 
-        public IId KnowledgeId { get; set; }
+        public IAgentId KnowledgeId { get; set; }
 
         /// <summary>
         ///     specifies what the values of the required bits must be for an agent to complete a task.

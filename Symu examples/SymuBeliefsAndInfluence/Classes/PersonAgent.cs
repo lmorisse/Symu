@@ -17,13 +17,13 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task;
 using Symu.Common;
-using Symu.Common.Interfaces.Agent;
-using Symu.Common.Interfaces.Entity;
-using Symu.DNA.Networks.OneModeNetworks;
+using Symu.Common.Interfaces;
+
+using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
-using Symu.Repository.Entity;
+using Symu.Repository.Entities;
 
 #endregion
 
@@ -32,14 +32,21 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
         /// <summary>
         /// Factory method to create an agent
         /// Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static PersonAgent CreateInstance(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
         {
-            var agent = new PersonAgent(id, environment, template);
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+            var entity = new ActorEntity(environment.Organization.MetaNetwork);
+            var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
         }
@@ -48,13 +55,13 @@ namespace SymuBeliefsAndInfluence.Classes
         /// Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IId id, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            new AgentId(id, Class), environment, template)
+        private PersonAgent(IAgentId entityId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            entityId, environment, template)
         {
+
         }
 
-        public IEnumerable<IKnowledge> Knowledges => Environment.Organization.Knowledge;
-        public IEnumerable<IAgentId> Influencers => ((ExampleEnvironment) Environment).Influencers.Select(x => x.AgentId);
+        public IEnumerable<IAgentId> Influencers => Organization.Influencers.Select(x => x.AgentId);
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -82,12 +89,11 @@ namespace SymuBeliefsAndInfluence.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledge in Knowledges)
+            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledge.Id, KnowledgeLevel.FullKnowledge,
+                KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);
-                //Beliefs are added with knowledge based on DefaultBeliefLevel of the worker cognitive template
-                BeliefsModel.AddBelief(knowledge.Id, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
+                BeliefsModel.AddBeliefFromKnowledgeId(knowledgeId, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
             }
         }
 
@@ -97,7 +103,7 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 Weight = 1
             };
-            task.SetKnowledgesBits(Environment.Organization.Murphies.IncompleteBelief, Knowledges, 1);
+            task.SetKnowledgesBits(Environment.Organization.Murphies.IncompleteBelief, Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
             Post(task);
         }
 
@@ -123,7 +129,7 @@ namespace SymuBeliefsAndInfluence.Classes
             // Ask advice from influencers
             var attachments = new MessageAttachments
             {
-                KnowledgeId = (IId) blocker.Parameter,
+                KnowledgeId = (IAgentId) blocker.Parameter,
                 KnowledgeBit = (byte) blocker.Parameter2
             };
             SendToMany(Influencers, MessageAction.Ask, SymuYellowPages.Belief, attachments, CommunicationMediums.Email);
