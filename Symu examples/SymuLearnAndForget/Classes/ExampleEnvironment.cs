@@ -47,8 +47,7 @@ namespace SymuLearnAndForget.Classes
             DoesNotLearnAgent = LearnAgent.CreateInstance(this, MainOrganization.Templates.Human);
             ExpertAgent = ExpertAgent.CreateInstance(this, MainOrganization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
-            var interaction = new ActorActor(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
-            MainOrganization.MetaNetwork.ActorActor.Add(interaction);
+            _ = new ActorActor(MainOrganization.MetaNetwork.ActorActor, LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
         }
     }
 }

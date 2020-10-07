@@ -15,6 +15,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.OrgMod.Edges;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Entities;
 
 #endregion
@@ -26,21 +27,22 @@ namespace Symu.Repository.Edges
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class ActorKnowledge : EntityKnowledge //IActorKnowledge
+    public class ActorKnowledge : EntityKnowledge 
     {
         /// <summary>
         ///     Constructor used by WorkerCognitiveAgent for ForgettingKnowledge
         /// </summary>
+        /// <param name="network"></param>
         /// <param name="actorId"></param>
         /// <param name="knowledgeId"></param>
         /// <param name="knowledgeBits"></param>
-        public ActorKnowledge(IAgentId actorId, IAgentId knowledgeId, KnowledgeBits knowledgeBits) : base(actorId,
+        public ActorKnowledge(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, KnowledgeBits knowledgeBits) : base(network, actorId,
             knowledgeId)
         {
             KnowledgeBits = knowledgeBits;
             Length = KnowledgeBits?.Length ?? 0;
-        }
-
+        }        
+        
         /// <summary>
         ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
         /// </summary>
@@ -62,6 +64,27 @@ namespace Symu.Repository.Edges
         }
 
         /// <summary>
+        ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
+        /// </summary>
+        /// <param name="network"></param>
+        /// <param name="actorId"></param>
+        /// <param name="knowledgeId"></param>
+        /// <param name="knowledgeBits"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        /// <param name="step"></param>
+        public ActorKnowledge(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, float[] knowledgeBits, float minimumKnowledge,
+            short timeToLive,
+            ushort step = 0) : base(network, actorId, knowledgeId)
+        {
+            MinimumKnowledge = minimumKnowledge;
+            TimeToLive = timeToLive;
+            KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
+            KnowledgeBits.SetBits(knowledgeBits, step);
+            Length = KnowledgeBits.Length;
+        }
+
+        /// <summary>
         ///     Constructor based on the knowledge Id and the knowledge Level.
         ///     KnowledgeBits is not yet initialized.
         ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
@@ -73,6 +96,27 @@ namespace Symu.Repository.Edges
         /// <param name="timeToLive"></param>
         public ActorKnowledge(IAgentId actorId, IAgentId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
             short timeToLive) : base(actorId, knowledgeId)
+        {
+            KnowledgeLevel = level;
+            MinimumKnowledge = minimumKnowledge;
+            TimeToLive = timeToLive;
+            KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
+            Length = KnowledgeBits.Length;
+        }
+
+        /// <summary>
+        ///     Constructor based on the knowledge Id and the knowledge Level.
+        ///     KnowledgeBits is not yet initialized.
+        ///     NetworkKnowledges.InitializeAgentKnowledge must be called to initialized KnowledgeBits
+        /// </summary>
+        /// <param name="network"></param>
+        /// <param name="actorId"></param>
+        /// <param name="knowledgeId"></param>
+        /// <param name="level"></param>
+        /// <param name="minimumKnowledge"></param>
+        /// <param name="timeToLive"></param>
+        public ActorKnowledge(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
+            short timeToLive) : base(network, actorId, knowledgeId)
         {
             KnowledgeLevel = level;
             MinimumKnowledge = minimumKnowledge;

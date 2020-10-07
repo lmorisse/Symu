@@ -192,8 +192,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            var actorKnowledge = new ActorKnowledge(_agentId, knowledgeId, level, minimumKnowledge, timeToLive);
-            _actorKnowledgeNetwork.Add(actorKnowledge);
+            _ = new ActorKnowledge(_actorKnowledgeNetwork, _agentId, knowledgeId, level, minimumKnowledge, timeToLive);
         }
 
         /// <summary>

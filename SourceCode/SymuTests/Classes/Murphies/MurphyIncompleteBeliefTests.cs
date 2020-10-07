@@ -50,9 +50,8 @@ namespace SymuTests.Classes.Murphies
             _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, Network,
                 MainOrganization.Models.Generator);
             _belief = new Belief(Network, 1, MainOrganization.Models.Generator, BeliefWeightLevel.RandomWeight);
-            _actorBelief = new ActorBelief(_agentId, _belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
-            Network.ActorBelief.Add(_actorBelief);
-
+            _actorBelief = new ActorBelief(Network.ActorBelief, _agentId, _belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
+            
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }

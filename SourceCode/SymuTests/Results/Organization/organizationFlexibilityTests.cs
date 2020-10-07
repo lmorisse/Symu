@@ -84,8 +84,7 @@ namespace SymuTests.Results.Organization
                 for (var j = i + 1; j < count; j++)
                 {
                     var agentId2 = agentIds[j];
-                    var interaction = new ActorActor(agentId1, agentId2);
-                    Environment.MainOrganization.MetaNetwork.ActorActor.Add(interaction);
+                    _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, agentId1, agentId2);
                 }
             }
 

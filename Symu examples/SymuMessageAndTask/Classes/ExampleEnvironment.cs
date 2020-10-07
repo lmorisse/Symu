@@ -40,10 +40,8 @@ namespace SymuMessageAndTask.Classes
                 var actor = PersonAgent.CreateInstance(this, MainOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
                 var email = EmailEntity.CreateInstance(MainOrganization.MetaNetwork, MainOrganization.Models);
-                var actorResource = new ActorResource(actor.AgentId, email.EntityId, new ResourceUsage(0));
-                MainOrganization.MetaNetwork.ActorResource.Add(actorResource);
-                var actorGroup = new ActorOrganization(actor.AgentId, group.AgentId);
-                MainOrganization.MetaNetwork.ActorOrganization.Add(actorGroup);
+                _ = new ActorResource(MainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
+                _ = new ActorOrganization(MainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, group.AgentId);
             }
         }
     }

@@ -143,10 +143,8 @@ namespace Symu.Repository.Entities
             }
 
             var knowledge = MetaNetwork.Knowledge.GetEntity<Knowledge>(knowledgeId);
-            var resourceKnowledge =
-                new ActorKnowledge(EntityId, knowledgeId, KnowledgeLevel.NoKnowledge, 0, TimeToLive);
+            var resourceKnowledge = new ActorKnowledge(MetaNetwork.ResourceKnowledge, EntityId, knowledgeId, KnowledgeLevel.NoKnowledge, 0, TimeToLive);
             resourceKnowledge.InitializeWith0(knowledge.Length, step);
-            Add(resourceKnowledge);
         }
 
         /// <summary>

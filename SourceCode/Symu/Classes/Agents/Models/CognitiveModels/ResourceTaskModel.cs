@@ -88,8 +88,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             foreach (var task in tasks)
             {
-                var resourceTask = new ResourceTask(_resourceId, task.EntityId);
-                _resourceTaskNetwork.Add(resourceTask);
+                _ = new ResourceTask(_resourceTaskNetwork, _resourceId, task.EntityId);
             }
         }
     }

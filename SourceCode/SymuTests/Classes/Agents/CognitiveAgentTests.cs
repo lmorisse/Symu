@@ -37,7 +37,6 @@ namespace SymuTests.Classes.Agents
     [TestClass]
     public class CognitiveAgentTests : BaseTestClass
     {
-        private IActorActor _actorActor;
         private TestCognitiveAgent _agent;
         private TestCognitiveAgent _agent2;
         private Belief _belief;
@@ -76,7 +75,6 @@ namespace SymuTests.Classes.Agents
             _agent.Start();
 
             _agent2 = TestCognitiveAgent.CreateInstance(Environment);
-            _actorActor = new ActorActor(_agent.AgentId, _agent2.AgentId);
             _agent2.Start();
         }
 
@@ -122,8 +120,7 @@ namespace SymuTests.Classes.Agents
             Assert.IsFalse(_agent.HasEmail);
             var email = EmailEntity.CreateInstance(Environment.MainOrganization.MetaNetwork, MainOrganization.Models);
             var usage = new ResourceUsage(0);
-            var actorResource = new ActorResource(_agent.AgentId, email.EntityId, usage);
-            Environment.MainOrganization.MetaNetwork.ActorResource.Add(actorResource);
+            _ = new ActorResource(Environment.MainOrganization.MetaNetwork.ActorResource, _agent.AgentId, email.EntityId, usage);
             _agent.EmailId = email.EntityId;
             Assert.IsTrue(_agent.HasEmail);
             Assert.IsNotNull(_agent.Email);
@@ -272,9 +269,8 @@ namespace SymuTests.Classes.Agents
         private void SetExpertise(KnowledgeBits bit0S)
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            var knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
-            var actorKnowledge = new ActorKnowledge(_agent.AgentId, knowledge.EntityId, bit0S);
-            Environment.MainOrganization.MetaNetwork.ActorKnowledge.Add(actorKnowledge);
+            var knowledge = new Knowledge(Environment.MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
+            _ = new ActorKnowledge(Environment.MainOrganization.MetaNetwork.ActorKnowledge, _agent.AgentId, knowledge.EntityId, bit0S);
         }
 
         #endregion
@@ -836,7 +832,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            Environment.MainOrganization.MetaNetwork.ActorActor.Add(_actorActor);
+            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -962,7 +958,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForInteractionsTest2()
         {
-            Environment.MainOrganization.MetaNetwork.ActorActor.Add(_actorActor);
+            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
                 Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
@@ -1362,12 +1358,9 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             var group = TestCognitiveAgent.CreateInstance(2, Environment);
             group.Start();
-            var actorOrganization = new ActorOrganization(_agent.AgentId, group.AgentId);
-            var teammateOrganization = new ActorOrganization(teammate.AgentId, group.AgentId);
-            Environment.MainOrganization.MetaNetwork.ActorOrganization.Add(actorOrganization);
-            Environment.MainOrganization.MetaNetwork.ActorOrganization.Add(teammateOrganization);
-            var interaction = new ActorActor(_agent.AgentId, teammate.AgentId);
-            Environment.MainOrganization.MetaNetwork.ActorActor.Add(interaction);
+            _ = new ActorOrganization(Environment.MainOrganization.MetaNetwork.ActorOrganization, _agent.AgentId, group.AgentId);
+            _ = new ActorOrganization(Environment.MainOrganization.MetaNetwork.ActorOrganization, teammate.AgentId, group.AgentId);
+            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, teammate.AgentId);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId, 0, 1, 0);

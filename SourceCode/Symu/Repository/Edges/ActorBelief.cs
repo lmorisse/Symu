@@ -15,6 +15,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.OrgMod.Edges;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
 
@@ -41,6 +42,10 @@ namespace Symu.Repository.Edges
         private const int RangeMax = 1;
 
         public ActorBelief(IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel) : base(actorId, beliefId)
+        {
+            BeliefLevel = beliefLevel;
+        }
+        public ActorBelief(ActorBeliefNetwork network, IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel) : base(network, actorId, beliefId)
         {
             BeliefLevel = beliefLevel;
         }
