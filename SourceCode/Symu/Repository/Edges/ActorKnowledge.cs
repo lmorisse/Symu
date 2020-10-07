@@ -13,7 +13,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Edges;
+using Symu.OrgMod.Edges;
 using Symu.Repository.Entities;
 
 namespace Symu.Repository.Edges

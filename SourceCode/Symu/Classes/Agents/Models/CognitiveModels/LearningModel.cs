@@ -18,10 +18,9 @@ using Symu.Common.Interfaces;
 
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
-using Symu.DNA.GraphNetworks.TwoModesNetworks;
+using Symu.OrgMod.Edges;
+using Symu.OrgMod.GraphNetworks;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;

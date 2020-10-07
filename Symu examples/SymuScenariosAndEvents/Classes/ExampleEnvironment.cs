@@ -10,13 +10,12 @@
 #region using directives
 
 using System;
-using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
 using Symu.Environment;
+using Symu.OrgMod.Edges;
+using Symu.OrgMod.Entities;
 using Symu.Repository.Entities;
 
 #endregion

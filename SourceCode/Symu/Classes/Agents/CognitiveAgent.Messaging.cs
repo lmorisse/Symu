@@ -15,9 +15,9 @@ using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Edges;
 using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
+using Symu.OrgMod.Edges;
 using Symu.Repository.Edges;
 
 #endregion

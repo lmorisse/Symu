@@ -9,14 +9,11 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.DNA.Edges;
-using Symu.Environment;
 using Symu.Repository.Entities;
 
 #endregion

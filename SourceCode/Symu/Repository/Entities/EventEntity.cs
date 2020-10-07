@@ -15,8 +15,8 @@
 
 using System;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 
 #endregion
 
@@ -25,12 +25,12 @@ namespace Symu.Repository.Entities
     /// <summary>
     ///     EventEntity helps you schedule one shot events that happen during the simulation
     /// </summary>
-    public class EventEntity: DNA.Entities.EventEntity
+    public class EventEntity: OrgMod.Entities.EventEntity
     {
         public EventEntity() 
         {
         }
-        public EventEntity(MetaNetwork metaNetwork) : base(metaNetwork)
+        public EventEntity(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {
         }
 

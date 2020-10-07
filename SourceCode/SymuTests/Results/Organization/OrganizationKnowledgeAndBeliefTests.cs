@@ -10,7 +10,6 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.DNA.Edges;
 using Symu.Environment;
 using Symu.Repository.Entities;
 using Symu.Results.Organization;

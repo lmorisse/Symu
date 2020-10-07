@@ -17,8 +17,7 @@ using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces;
-
-using Symu.DNA.Entities;
+using Symu.OrgMod.Entities;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using Symu.Results.Blocker;

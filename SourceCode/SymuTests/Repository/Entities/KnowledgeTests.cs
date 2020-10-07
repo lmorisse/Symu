@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Common.Classes;
-using Symu.DNA.GraphNetworks;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 

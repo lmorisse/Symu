@@ -17,10 +17,8 @@ using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Environment;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 

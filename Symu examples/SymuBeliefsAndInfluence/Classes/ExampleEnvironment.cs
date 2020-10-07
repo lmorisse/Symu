@@ -9,18 +9,10 @@
 
 #region using directives
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents.Models.CognitiveTemplates;
-using Symu.Classes.Organization;
-using Symu.Common;
 using Symu.Common.Classes;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
 using Symu.Environment;
-using Symu.Repository.Entities;
+using Symu.OrgMod.Edges;
 
 #endregion
 

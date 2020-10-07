@@ -1,6 +1,5 @@
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
 using Symu.Environment;
 
 #region Licence

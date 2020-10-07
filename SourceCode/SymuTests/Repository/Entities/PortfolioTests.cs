@@ -11,7 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
+using Symu.OrgMod.Entities;
 using Symu.Repository.Edges;
 
 #endregion

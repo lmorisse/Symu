@@ -9,18 +9,13 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
 using Symu.Environment;
-using Symu.Repository.Edges;
-using Symu.Repository.Entities;
 
 #endregion
 

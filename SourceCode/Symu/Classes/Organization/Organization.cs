@@ -16,11 +16,9 @@ using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
 using Symu.Common.Interfaces;
-
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Messaging.Templates;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 using Symu.Repository;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
@@ -42,12 +40,12 @@ namespace Symu.Classes.Organization
         public Organization(string name) //: base(new MetaNetwork(), Class, name)
         {
             Name = name;
-            MetaNetwork = new MetaNetwork(Models.InteractionSphere);
+            MetaNetwork = new GraphMetaNetwork(Models.InteractionSphere);
         }
 
         public string Name { get; set; }
 
-        public MetaNetwork MetaNetwork { get; protected set; }
+        public GraphMetaNetwork MetaNetwork { get; protected set; }
 
         /// <summary>
         ///     List of the models used by the organizationEntity

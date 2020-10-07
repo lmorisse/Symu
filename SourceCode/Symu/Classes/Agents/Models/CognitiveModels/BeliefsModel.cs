@@ -20,11 +20,10 @@ using Symu.Common.Interfaces;
 
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.DNA;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
-using Symu.DNA.GraphNetworks.TwoModesNetworks;
 using Symu.Messaging.Templates;
+using Symu.OrgMod.Edges;
+using Symu.OrgMod.GraphNetworks;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
@@ -60,7 +59,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="network"></param>
         /// <param name="model"></param>
         public BeliefsModel(IAgentId agentId, BeliefModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            MetaNetwork network, RandomGenerator model)
+            GraphMetaNetwork network, RandomGenerator model)
         {
             if (network == null)
             {

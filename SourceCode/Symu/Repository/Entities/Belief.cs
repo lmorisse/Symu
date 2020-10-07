@@ -13,8 +13,8 @@ using System;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 
 #endregion
 
@@ -37,18 +37,18 @@ namespace Symu.Repository.Entities
         private const int RangeMax = 1;
         public Belief(){}
 
-        public Belief(MetaNetwork metaNetwork, byte length, RandomGenerator model,
+        public Belief(GraphMetaNetwork metaNetwork, byte length, RandomGenerator model,
             BeliefWeightLevel beliefWeightLevel) :base(metaNetwork)
         {
             Length = length;
             InitializeWeights(model, length, beliefWeightLevel);
         }
-        public Belief(MetaNetwork metaNetwork, byte length, RandomGenerator model,
+        public Belief(GraphMetaNetwork metaNetwork, byte length, RandomGenerator model,
             BeliefWeightLevel beliefWeightLevel, string name) : this(metaNetwork, length, model, beliefWeightLevel)
         {
             Name = name;
         }
-        public Belief(MetaNetwork metaNetwork, IKnowledge knowledge, byte length, RandomGenerator model,
+        public Belief(GraphMetaNetwork metaNetwork, IKnowledge knowledge, byte length, RandomGenerator model,
             BeliefWeightLevel beliefWeightLevel): this(metaNetwork, length, model, beliefWeightLevel)
         {
             if (knowledge == null)

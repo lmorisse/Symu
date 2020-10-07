@@ -137,6 +137,10 @@
       <Project>{9FE9126A-E35E-4BB9-A114-3FA3AEA5F0C6}</Project>
       <Name>SymuDNA</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Symu.OrgMod\Github\SourceCode\SymuOrgMod\SymuOrgMod.csproj">
+      <Project>{47cc693f-e61d-4dfc-bbe9-e99720b2ef4f}</Project>
+      <Name>SymuOrgMod</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SourceCode\SymuForm\SymuForm.csproj">
       <Project>{d6e71e07-917e-44d2-8ae0-4c18dd5524df}</Project>
       <Name>SymuForm</Name>

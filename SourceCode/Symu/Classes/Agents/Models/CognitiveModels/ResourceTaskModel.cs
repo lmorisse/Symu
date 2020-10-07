@@ -15,10 +15,10 @@ using System.Linq;
 using Symu.Common.Interfaces;
 
 using Symu.DNA;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
-using Symu.DNA.GraphNetworks.TwoModesNetworks;
+using Symu.OrgMod.Edges;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 
 #endregion
 
@@ -42,7 +42,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         /// <param name="resourceId"></param>
         /// <param name="network"></param>
-        public ResourceTaskModel(IAgentId resourceId, MetaNetwork network)
+        public ResourceTaskModel(IAgentId resourceId, GraphMetaNetwork network)
         {
             if (network == null)
             {

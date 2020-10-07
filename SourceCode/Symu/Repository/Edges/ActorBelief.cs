@@ -14,7 +14,7 @@ using System.Linq;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Edges;
+using Symu.OrgMod.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
 
@@ -27,7 +27,7 @@ namespace Symu.Repository.Edges
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class ActorBelief : DNA.Edges.ActorBelief//IActorBelief
+    public class ActorBelief : OrgMod.Edges.ActorBelief//IActorBelief
     {
         //todo RangeMin/Max should be at the Network level in the generic TwoModesNetwork - id. ActorKnowledge
         /// <summary>

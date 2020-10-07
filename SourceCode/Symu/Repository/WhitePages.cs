@@ -17,8 +17,7 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 
 using Symu.DNA;
-using Symu.DNA.GraphNetworks;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
+using Symu.OrgMod.GraphNetworks;
 
 #endregion
 
@@ -35,7 +34,7 @@ namespace Symu.Repository
     /// <remarks>FIPA Norm : equivalent of the Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        private readonly MetaNetwork _metaNetworkReference;
+        private readonly GraphMetaNetwork _metaNetworkReference;
         /// <summary>
         ///     Local agents of this environment
         /// </summary>

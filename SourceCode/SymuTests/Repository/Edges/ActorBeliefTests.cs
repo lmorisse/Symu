@@ -13,7 +13,6 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.DNA.GraphNetworks;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 using ActorBelief = Symu.Repository.Edges.ActorBelief;

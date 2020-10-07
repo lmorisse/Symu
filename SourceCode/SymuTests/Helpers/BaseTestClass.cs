@@ -12,10 +12,10 @@
 using System.Collections.Generic;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
 using Symu.Engine;
 using Symu.Environment;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 using Symu.Repository;
 
 #endregion
@@ -33,7 +33,7 @@ namespace SymuTests.Helpers
         protected readonly SymuEnvironment Environment = new SymuEnvironment();
         protected IEnumerable<IKnowledge> Knowledges => Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>();
         protected readonly IAgentId Uid1 = new AgentId(1, 1);
-        protected MetaNetwork Network => Organization.MetaNetwork;
+        protected GraphMetaNetwork Network => Organization.MetaNetwork;
         protected WhitePages WhitePages => Environment.WhitePages;
     }
 }

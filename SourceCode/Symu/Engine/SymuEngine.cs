@@ -16,7 +16,6 @@ using Symu.Classes.Agents;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Interfaces;
-using Symu.DNA.MatrixNetworks;
 using Symu.Environment;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;

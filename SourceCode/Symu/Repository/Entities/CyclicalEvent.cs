@@ -9,8 +9,8 @@
 
 
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 
 namespace Symu.Repository.Entities
 {
@@ -26,7 +26,7 @@ namespace Symu.Repository.Entities
             return step % EveryStep == 0;
         }
         public CyclicalEvent(){}
-        public CyclicalEvent(MetaNetwork metaNetwork) : base(metaNetwork)
+        public CyclicalEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {
         }
         /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>

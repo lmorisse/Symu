@@ -9,15 +9,9 @@
 
 #region using directives
 
-using System;
-using System.Linq;
-using Symu.Classes.Organization;
-using Symu.Common;
 using Symu.Common.Classes;
-using Symu.DNA.Edges;
 using Symu.Environment;
-using Symu.Repository.Edges;
-using Symu.Repository.Entities;
+using Symu.OrgMod.Edges;
 
 #endregion
 

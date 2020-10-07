@@ -10,7 +10,7 @@
 #region using directives
 
 using System.Diagnostics.CodeAnalysis;
-using Symu.DNA.Entities;
+using Symu.OrgMod.Entities;
 
 #endregion
 

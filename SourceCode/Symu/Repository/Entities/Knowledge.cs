@@ -14,9 +14,9 @@ using Symu.Classes.Organization;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
-using KnowledgeEntity = Symu.DNA.Entities.KnowledgeEntity;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
+using KnowledgeEntity = Symu.OrgMod.Entities.KnowledgeEntity;
 
 #endregion
 
@@ -29,11 +29,11 @@ namespace Symu.Repository.Entities
     ///     Each bit represent a single atomic fact
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class Knowledge: KnowledgeEntity//IKnowledge
+    public class Knowledge: OrgMod.Entities.KnowledgeEntity//IKnowledge
     {
         private readonly OrganizationModels _models;
         public Knowledge(){ }
-        public Knowledge(MetaNetwork metaNetwork, OrganizationModels models, string name, byte length) : base(metaNetwork, name)
+        public Knowledge(GraphMetaNetwork metaNetwork, OrganizationModels models, string name, byte length) : base(metaNetwork, name)
         {
             Length = length;
             if (length > Bits.MaxBits)

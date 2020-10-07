@@ -11,8 +11,6 @@
 
 using System;
 using Symu.Classes.Task;
-using Symu.DNA.Edges;
-using Symu.DNA.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using ActorBelief = Symu.Repository.Edges.ActorBelief;

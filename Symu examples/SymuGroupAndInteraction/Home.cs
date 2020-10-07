@@ -15,11 +15,9 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
-using Symu.Common.Classes;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Forms;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Entities;
 using SymuGroupAndInteraction.Classes;
 

@@ -13,8 +13,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
+using Symu.OrgMod.Entities;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 

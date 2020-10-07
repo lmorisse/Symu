@@ -13,8 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Classes;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Engine;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Entities;
 
 #endregion

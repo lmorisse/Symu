@@ -17,8 +17,6 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.DNA.Edges;
-using Symu.DNA.GraphNetworks;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 using ActorBelief = Symu.Repository.Edges.ActorBelief;

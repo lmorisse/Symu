@@ -14,8 +14,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common.Classes;
-using Symu.DNA.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Engine;
+using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Entities;
 using SymuGroupAndInteraction.Classes;
 

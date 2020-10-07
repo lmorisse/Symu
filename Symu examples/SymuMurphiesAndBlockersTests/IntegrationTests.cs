@@ -193,7 +193,7 @@ namespace SymuMurphiesAndBlockersTests
 
             Assert.AreEqual(100, CapacityRatio());
             // they may have some tasks cancelled
-            Assert.IsTrue(95 < TasksRatio());
+            Assert.IsTrue(90 < TasksRatio());
 
             Assert.AreEqual(0, _environment.IterationResult.Blockers.Done);
             Assert.AreEqual(0, _environment.IterationResult.Blockers.BlockersStillInProgress);

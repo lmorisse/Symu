@@ -10,8 +10,8 @@
 #region using directives
 
 using Symu.Common.Interfaces;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
+using Symu.OrgMod.Edges;
+using Symu.OrgMod.Entities;
 
 #endregion
 

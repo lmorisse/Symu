@@ -19,9 +19,9 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
+using Symu.OrgMod.Entities;
 using Symu.Repository;
 using Symu.Repository.Entities;
 

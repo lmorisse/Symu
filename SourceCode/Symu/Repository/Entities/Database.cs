@@ -14,11 +14,9 @@ using System.Linq;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
-
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
-using Symu.DNA.GraphNetworks;
 using Symu.Messaging.Templates;
+using Symu.OrgMod.Entities;
+using Symu.OrgMod.GraphNetworks;
 using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
@@ -50,7 +48,7 @@ namespace Symu.Repository.Entities
         {
             CognitiveArchitecture= new CognitiveArchitecture();
         }
-        public Database(MetaNetwork metaNetwork, OrganizationModels models, CommunicationTemplate medium, byte classId): base(metaNetwork, classId)
+        public Database(GraphMetaNetwork metaNetwork, OrganizationModels models, CommunicationTemplate medium, byte classId): base(metaNetwork, classId)
         {
             if (metaNetwork is null)
             {

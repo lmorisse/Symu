@@ -13,9 +13,8 @@ using System;
 using System.Linq;
 using Symu.Classes.Agents;
 using Symu.Common.Interfaces;
-using Symu.DNA.Edges;
-using Symu.DNA.Entities;
 using Symu.Environment;
+using Symu.OrgMod.Edges;
 
 #endregion
 

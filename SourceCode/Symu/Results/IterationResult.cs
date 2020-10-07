@@ -16,7 +16,6 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.DNA;
-using Symu.DNA.MatrixNetworks;
 using Symu.Environment;
 using Symu.Results.Blocker;
 using Symu.Results.Messaging;
@@ -132,7 +131,7 @@ namespace Symu.Results
             {
                 if (result is KeyFrames keyFrame)
                 {
-                    keyFrame.Add(Environment.Schedule.Step, Environment.Organization.MetaNetwork.ToMatrix());
+                    keyFrame.Add(Environment.Schedule.Step, Environment.Organization.MetaNetwork);
                     keyFrame.SetResults();
                 }
                 else

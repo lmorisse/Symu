@@ -10,11 +10,9 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Agents;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Common.Interfaces;
-using Symu.DNA.Entities;
 using Symu.Environment;
 using Symu.Messaging.Messages;
 

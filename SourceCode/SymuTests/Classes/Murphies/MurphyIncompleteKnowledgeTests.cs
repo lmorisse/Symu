@@ -16,7 +16,6 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-using Symu.DNA.GraphNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
