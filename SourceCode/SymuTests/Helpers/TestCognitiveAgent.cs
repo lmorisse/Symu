@@ -19,17 +19,27 @@ using Symu.Repository;
 
 namespace SymuTests.Helpers
 {
-
     /// <summary>
     ///     Class for tests
     /// </summary>
     internal sealed class TestCognitiveAgent : CognitiveAgent
     {
         public static byte Class = SymuYellowPages.Actor;
-        public static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private TestCognitiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment,
+            environment.MainOrganization.Templates.Human)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static TestCognitiveAgent CreateInstance(SymuEnvironment environment)
@@ -43,6 +53,7 @@ namespace SymuTests.Helpers
             agent.Initialize();
             return agent;
         }
+
         public static TestCognitiveAgent CreateInstance(byte classId, SymuEnvironment environment)
         {
             if (environment == null)
@@ -54,24 +65,17 @@ namespace SymuTests.Helpers
             agent.Initialize();
             return agent;
         }
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestCognitiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment,
-            environment.Organization.Templates.Human)
-        {
-        }
 
         /// <summary>
-        /// Initialize the agent models
+        ///     Initialize the agent models
         /// </summary>
-        /// <remarks>Should be called after the constructor
-        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
+        /// <remarks>
+        ///     Should be called after the constructor
+        ///     Use the factory method CreateInstance instead of the constructor to call Initialize implicitly
+        /// </remarks>
         public override ReactiveAgent Clone()
         {
-
-            var agent = (TestCognitiveAgent)base.Clone();
+            var agent = (TestCognitiveAgent) base.Clone();
             agent.Initialize();
             return agent;
         }

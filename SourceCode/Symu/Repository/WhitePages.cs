@@ -16,9 +16,6 @@ using Symu.Classes.Agents;
 using Symu.Common;
 using Symu.Common.Interfaces;
 
-using Symu.DNA;
-using Symu.OrgMod.GraphNetworks;
-
 #endregion
 
 namespace Symu.Repository
@@ -34,7 +31,6 @@ namespace Symu.Repository
     /// <remarks>FIPA Norm : equivalent of the Agent Management System (AMS)</remarks>
     public class WhitePages
     {
-        private readonly GraphMetaNetwork _metaNetworkReference;
         /// <summary>
         ///     Local agents of this environment
         /// </summary>
@@ -44,24 +40,50 @@ namespace Symu.Repository
         ///     Stopped keep a trace of all the agentIds stopped during the iteration
         /// </summary>
         public List<ReactiveAgent> StoppedAgents { get; } = new List<ReactiveAgent>();
+
         /// <summary>
         ///     Local agents of this environment
         /// </summary>
         public ConcurrentAgents<ReactiveAgent> Agents { get; } = new ConcurrentAgents<ReactiveAgent>();
 
-        
+
         public AgentState State { get; set; } = AgentState.NotStarted;
 
-        public bool Any() => Agents.Any;
+        public bool Any()
+        {
+            return Agents.Any;
+        }
+
+        public void WaitingForStart(IAgentId agentId)
+        {
+            while (!ExistsAndStarted(agentId))
+            {
+            }
+        }
+
+        /// <summary>
+        ///     Waiting for all the Agents to stop
+        ///     Useful for unit tests
+        /// </summary>
+        /// <param name="agentId"></param>
+        public void WaitingForStop(IAgentId agentId)
+        {
+            while (ExistsAndStarted(agentId))
+            {
+            }
+        }
 
         #region AgentId management
+
         /// <summary>
         ///     Latest unique index of agents
         /// </summary>
         public ushort AgentIndex { get; set; } = 1;
+
         /// <summary>
-        /// Use this method to get the next unique AgentId.
-        /// Use Organization.MetaNetwork.[The good OneModeNetwork].NextEntityId if agent has an entity stored in the metaNetwork
+        ///     Use this method to get the next unique AgentId.
+        ///     Use Organization.MetaNetwork.[The good OneModeNetwork].NextEntityId if agent has an entity stored in the
+        ///     metaNetwork
         /// </summary>
         /// <param name="classId"></param>
         /// <returns></returns>
@@ -69,14 +91,17 @@ namespace Symu.Repository
         {
             return new AgentId(AgentIndex++, classId);
         }
+
         /// <summary>
-        /// Use this method to get the next unique AgentId.
-        /// Use Organization.MetaNetwork.[The good OneModeNetwork].NextEntityId if agent has an entity stored in the metaNetwork
+        ///     Use this method to get the next unique AgentId.
+        ///     Use Organization.MetaNetwork.[The good OneModeNetwork].NextEntityId if agent has an entity stored in the
+        ///     metaNetwork
         /// </summary>
         public IAgentId NextAgentId(IClassId classId)
         {
             return new AgentId(AgentIndex++, classId);
         }
+
         #endregion
 
         #region Initialize / remove agent
@@ -123,25 +148,6 @@ namespace Symu.Repository
 
         #endregion
 
-        public void WaitingForStart(IAgentId agentId)
-        {
-            while (!ExistsAndStarted(agentId))
-            {
-            }
-        }
-
-        /// <summary>
-        ///     Waiting for all the Agents to stop
-        ///     Useful for unit tests
-        /// </summary>
-        /// <param name="agentId"></param>
-        public void WaitingForStop(IAgentId agentId)
-        {
-            while (ExistsAndStarted(agentId))
-            {
-            }
-        }
-
         #region Shortcuts to AgentNetwork
 
         /// <summary>
@@ -180,7 +186,7 @@ namespace Symu.Repository
         /// <param name="agent">The concurrent agent that will be added</param>
         public void AddAgent(ReactiveAgent agent)
         {
-            if (agent == null ||agent.IsNull)
+            if (agent == null || agent.IsNull)
             {
                 throw new ArgumentNullException(nameof(agent));
             }
@@ -192,6 +198,7 @@ namespace Symu.Repository
                 //todo should be done only in reference
                 Agents.Remove(agent.AgentId);
             }
+
             Agents.Add(agent);
             //todo should be done only in reference
             if (!_agentsReference.Exists(x => x.AgentId.Equals(agent.AgentId)))
@@ -296,7 +303,8 @@ namespace Symu.Repository
         /// <param name="classKey"></param>
         /// <param name="excludeIds"></param>
         /// <returns></returns>
-        public IEnumerable<IAgentId> GetFilteredAgentsWithExclusionList(IClassId classKey, ICollection<IAgentId> excludeIds)
+        public IEnumerable<IAgentId> GetFilteredAgentsWithExclusionList(IClassId classKey,
+            ICollection<IAgentId> excludeIds)
         {
             var actors = FilteredAgentIdsByClassId(classKey).ToList();
             if (excludeIds != null)
@@ -317,7 +325,7 @@ namespace Symu.Repository
         ///     Get the number of agents which are part of the interaction sphere
         /// </summary>
         public ushort GetInteractionSphereCount =>
-            (ushort)AllCognitiveAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
+            (ushort) AllCognitiveAgents().Count(a => a.Cognitive.InteractionPatterns.IsPartOfInteractionSphere);
 
         /// <summary>
         ///     Get the agents which are part of the interaction sphere
@@ -349,6 +357,5 @@ namespace Symu.Repository
         }
 
         #endregion
-
     }
 }

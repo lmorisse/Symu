@@ -16,7 +16,6 @@ using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
-using Symu.Repository.Edges;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
 
@@ -25,16 +24,16 @@ using SymuTests.Helpers;
 namespace SymuTests.Results.Organization
 {
     [TestClass]
-    public class OrganizationFlexibilityTests: BaseTestClass
+    public class OrganizationFlexibilityTests : BaseTestClass
     {
         private OrganizationFlexibility _result;
 
         [TestInitialize]
         public void Initialize()
         {
-            Organization.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.SocialDemographics);
-            Organization.Models.InteractionSphere.On = true;
-            Environment.SetOrganization(Organization);
+            MainOrganization.Models.InteractionSphere.SetInteractionPatterns(InteractionStrategy.SocialDemographics);
+            MainOrganization.Models.InteractionSphere.On = true;
+            Environment.SetOrganization(MainOrganization);
             Simulation.Initialize(Environment);
             _result = new OrganizationFlexibility(Environment);
         }
@@ -77,6 +76,7 @@ namespace SymuTests.Results.Organization
                 agent.State = AgentState.Started;
                 agentIds.Add(agent.AgentId);
             }
+
             for (var i = 0; i < count; i++)
             {
                 var agentId1 = agentIds[i];
@@ -85,9 +85,10 @@ namespace SymuTests.Results.Organization
                 {
                     var agentId2 = agentIds[j];
                     var interaction = new ActorActor(agentId1, agentId2);
-                    Environment.Organization.MetaNetwork.ActorActor.Add(interaction);
+                    Environment.MainOrganization.MetaNetwork.ActorActor.Add(interaction);
                 }
             }
+
             Environment.InitializeInteractionSphere();
         }
 

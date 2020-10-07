@@ -23,8 +23,6 @@ namespace SymuGroupAndInteraction.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
-
         public ExampleEnvironment()
         {
             IterationResult.OrganizationFlexibility.On = true;
@@ -32,20 +30,22 @@ namespace SymuGroupAndInteraction.Classes
             SetTimeStepType(TimeStepType.Daily);
         }
 
+        public ExampleMainOrganization ExampleMainOrganization => (ExampleMainOrganization) MainOrganization;
+
         public override void SetAgents()
         {
             base.SetAgents();
 
-            for (var i = 0; i < ExampleOrganization.GroupsCount; i++)
+            for (var i = 0; i < ExampleMainOrganization.GroupsCount; i++)
             {
                 var group = GroupAgent.CreateInstance(this);
-                for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
+                for (var j = 0; j < ExampleMainOrganization.WorkersCount; j++)
                 {
                     var actor = PersonAgent.CreateInstance(this,
-                        Organization.Templates.Human);
+                        MainOrganization.Templates.Human);
                     group.AddPerson(actor);
-                    SetAgentKnowledge(actor, ExampleOrganization.MetaNetwork.Knowledge.GetEntityIds().ToList(), i);
-                    SetAgentTasks(actor, ExampleOrganization.MetaNetwork.Task.GetEntityIds().ToList(), i);
+                    SetAgentKnowledge(actor, ExampleMainOrganization.MetaNetwork.Knowledge.GetEntityIds().ToList(), i);
+                    SetAgentTasks(actor, ExampleMainOrganization.MetaNetwork.Task.GetEntityIds().ToList(), i);
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace SymuGroupAndInteraction.Classes
         private void SetAgentKnowledge(CognitiveAgent actor, IReadOnlyList<IAgentId> knowledgeIds, int i)
         {
             var index = 0;
-            switch (ExampleOrganization.Knowledge)
+            switch (ExampleMainOrganization.Knowledge)
             {
                 case 0:
                     // same Knowledge for all
@@ -65,10 +65,11 @@ namespace SymuGroupAndInteraction.Classes
                     break;
                 case 2:
                     // Knowledge is randomly defined for agentId
-                    index = DiscreteUniform.Sample(0, ExampleOrganization.GroupsCount - 1);
+                    index = DiscreteUniform.Sample(0, ExampleMainOrganization.GroupsCount - 1);
                     break;
             }
-            actor.KnowledgeModel.AddKnowledge(knowledgeIds[index], ExampleOrganization.KnowledgeLevel,
+
+            actor.KnowledgeModel.AddKnowledge(knowledgeIds[index], ExampleMainOrganization.KnowledgeLevel,
                 actor.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge,
                 actor.Cognitive.InternalCharacteristics.TimeToLive);
         }
@@ -76,7 +77,7 @@ namespace SymuGroupAndInteraction.Classes
         private void SetAgentTasks(CognitiveAgent actor, IReadOnlyList<IAgentId> taskIds, int i)
         {
             var index = 0;
-            switch (ExampleOrganization.Activities)
+            switch (ExampleMainOrganization.Activities)
             {
                 case 0:
                     // same activity for all
@@ -88,9 +89,10 @@ namespace SymuGroupAndInteraction.Classes
                     break;
                 case 2:
                     // Activity is randomly defined for agentId
-                    index = DiscreteUniform.Sample(0, ExampleOrganization.GroupsCount - 1);
+                    index = DiscreteUniform.Sample(0, ExampleMainOrganization.GroupsCount - 1);
                     break;
             }
+
             actor.TaskModel.AddActorTask(taskIds[index]);
         }
     }

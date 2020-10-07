@@ -27,7 +27,7 @@ namespace Symu.Repository.Edges
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class ActorBelief : OrgMod.Edges.ActorBelief//IActorBelief
+    public class ActorBelief : OrgMod.Edges.ActorBelief //IActorBelief
     {
         //todo RangeMin/Max should be at the Network level in the generic TwoModesNetwork - id. ActorKnowledge
         /// <summary>
@@ -40,16 +40,16 @@ namespace Symu.Repository.Edges
         /// </summary>
         private const int RangeMax = 1;
 
-        /// <summary>
-        /// The value used to feed the matrix network
-        /// For a binary matrix network, the value is 1
-        /// </summary>
-        public override float Weight => GetBeliefSum();
-
         public ActorBelief(IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel) : base(actorId, beliefId)
         {
             BeliefLevel = beliefLevel;
         }
+
+        /// <summary>
+        ///     The value used to feed the matrix network
+        ///     For a binary matrix network, the value is 1
+        /// </summary>
+        public override float Weight => GetBeliefSum();
 
         public Bits BeliefBits { get; set; } = new Bits(RangeMin);
         public BeliefLevel BeliefLevel { get; }
@@ -250,13 +250,8 @@ namespace Symu.Repository.Edges
             {
                 return Bits.CompareTo(BeliefBits, actorBelief.BeliefBits);
             }
+
             return 0;
         }
-
-        public void SetBeliefBit(byte index, float value)
-        {
-            BeliefBits.SetBit(index, value);
-        }
-
     }
 }

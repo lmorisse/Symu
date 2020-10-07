@@ -12,7 +12,6 @@
 using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task.Manager;
-using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.Repository.Entities;
 
@@ -23,11 +22,21 @@ namespace SymuLearnAndForget.Classes
     public sealed class LearnFromSourceAgent : LearnAgent
     {
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private LearnFromSourceAgent(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(environment, template)
+        {
+        }
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnFromSourceAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public new static LearnFromSourceAgent CreateInstance(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template)
         {
             if (environment == null)
             {
@@ -37,15 +46,6 @@ namespace SymuLearnAndForget.Classes
             var agent = new LearnFromSourceAgent(environment, template);
             agent.Initialize();
             return agent;
-        }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnFromSourceAgent(SymuEnvironment environment,
-            CognitiveArchitectureTemplate template) : base(environment, template)
-        {
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SymuLearnAndForget.Classes
             // The source has the maximum knowledge bit
             bits.SetBit(knowledgeBit, 1);
             LearningModel.Learn(Knowledge.EntityId, bits,
-                Environment.Organization.Communication.Email.MaxRateLearnable,
+                Environment.MainOrganization.Communication.Email.MaxRateLearnable,
                 Schedule.Step);
             // the information learned is stored in a wiki
             // not the total knowledge of the agent, it is tacit knowledge for the agent

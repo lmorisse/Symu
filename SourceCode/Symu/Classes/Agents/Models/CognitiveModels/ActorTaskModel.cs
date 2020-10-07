@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Interfaces;
-using Symu.DNA;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
@@ -31,8 +30,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class ActorTaskModel
     {
-        private readonly IAgentId _agentId;
         private readonly ActorTaskNetwork _actorTaskNetwork;
+        private readonly IAgentId _agentId;
         private readonly OneModeNetwork _taskNetwork;
 
         /// <summary>

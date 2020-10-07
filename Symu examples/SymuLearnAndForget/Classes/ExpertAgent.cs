@@ -26,10 +26,21 @@ namespace SymuLearnAndForget.Classes
     public sealed class ExpertAgent : CognitiveAgent
     {
         public const byte Class = 2;
-        public static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private ExpertAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static ExpertAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
@@ -42,15 +53,6 @@ namespace SymuLearnAndForget.Classes
             var agent = new ExpertAgent(environment, template);
             agent.Initialize();
             return agent;
-        }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private ExpertAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            ClassId, environment, template)
-        {
         }
 
         /// <summary>
@@ -71,7 +73,8 @@ namespace SymuLearnAndForget.Classes
         public override void SetModels()
         {
             base.SetModels();
-            KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).ExampleOrganization.Knowledge.EntityId, KnowledgeLevel.Expert,
+            KnowledgeModel.AddKnowledge(((ExampleEnvironment) Environment).ExampleMainOrganization.Knowledge.EntityId,
+                KnowledgeLevel.Expert,
                 Cognitive.InternalCharacteristics);
         }
 

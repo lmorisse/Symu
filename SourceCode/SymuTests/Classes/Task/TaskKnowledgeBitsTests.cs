@@ -20,8 +20,8 @@ namespace SymuTests.Classes.Task
     [TestClass]
     public class EntityKnowledgeBitsTests
     {
-        private readonly IAgentId _knowledgeId = new AgentId(1,1);
         private readonly TaskKnowledgesBits _knowledgeBits = new TaskKnowledgesBits();
+        private readonly IAgentId _knowledgeId = new AgentId(1, 1);
         private TaskKnowledgeBits _bits;
 
 

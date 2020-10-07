@@ -15,10 +15,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Common.Classes;
 using Symu.Forms;
 using Symu.Messaging.Messages;
 using Symu.Repository.Entities;
@@ -30,8 +28,8 @@ namespace SymuMurphiesAndBlockers
 {
     public partial class Home : SymuForm
     {
-        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
+        private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();
 
         public Home()
         {
@@ -43,69 +41,69 @@ namespace SymuMurphiesAndBlockers
         {
             DisplayButtons();
 
-            tbWorkers.Text = _organization.WorkersCount.ToString(CultureInfo.InvariantCulture);
-            tbKnowledge.Text = _organization.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
-            cbMultipleBlockers.Checked = _organization.Murphies.MultipleBlockers;
+            tbWorkers.Text = _mainOrganization.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            tbKnowledge.Text = _mainOrganization.KnowledgeCount.ToString(CultureInfo.InvariantCulture);
+            cbMultipleBlockers.Checked = _mainOrganization.Murphies.MultipleBlockers;
             KnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
-            KnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_organization.KnowledgeLevel);
+            KnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_mainOrganization.KnowledgeLevel);
             BeliefsLevel.Items.AddRange(BeliefLevelService.GetNames());
-            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(_organization.Templates.Human.Cognitive
+            BeliefsLevel.SelectedItem = BeliefLevelService.GetName(_mainOrganization.Templates.Human.Cognitive
                 .KnowledgeAndBeliefs.DefaultBeliefLevel);
             EmailComm.Checked = true;
 
             #region unavaibility
 
             tbUnavailabilityThreshold.Text =
-                _organization.Murphies.UnAvailability.RateOfUnavailability.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.UnAvailability.RateOfUnavailability.ToString(CultureInfo.InvariantCulture);
             UnavailabilityRate.Text =
-                _organization.Murphies.UnAvailability.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.UnAvailability.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
 
             #endregion
 
             #region incomplete knowledge murphy
 
             tbKnowledgeThreshHoldForDoing.Text =
-                _organization.Murphies.IncompleteKnowledge.ThresholdForReacting.ToString(CultureInfo
+                _mainOrganization.Murphies.IncompleteKnowledge.ThresholdForReacting.ToString(CultureInfo
                     .InvariantCulture);
             tbLackRateOfIncorrectGuess.Text =
-                _organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess.ToString(CultureInfo
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess.ToString(CultureInfo
                     .InvariantCulture);
             tbLackRateOfAnswers.Text =
-                _organization.Murphies.IncompleteKnowledge.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
             tbLackResponseTime.Text =
-                _organization.Murphies.IncompleteKnowledge.ResponseTime.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteKnowledge.ResponseTime.ToString(CultureInfo.InvariantCulture);
             cbLimitNumberOfTriesKnowledge.Checked =
-                _organization.Murphies.IncompleteKnowledge.LimitNumberOfTries != -1;
+                _mainOrganization.Murphies.IncompleteKnowledge.LimitNumberOfTries != -1;
             tbMaxNumberOfTriesKnowledge.Text =
-                _organization.Murphies.IncompleteKnowledge.LimitNumberOfTries.ToString(
+                _mainOrganization.Murphies.IncompleteKnowledge.LimitNumberOfTries.ToString(
                     CultureInfo.InvariantCulture);
-            tbLackDelayBeforeSearchingExternally.Text = _organization.Murphies.IncompleteKnowledge
+            tbLackDelayBeforeSearchingExternally.Text = _mainOrganization.Murphies.IncompleteKnowledge
                 .DelayBeforeSearchingExternally.ToString(CultureInfo.InvariantCulture);
             tbRequiredMandatoryRatio.Text =
-                _organization.Murphies.IncompleteKnowledge.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteKnowledge.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
 
             KnowledgeRate.Text =
-                _organization.Murphies.IncompleteKnowledge.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
-            EmailSearching.Checked = _organization.Models.Learning.On;
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+            EmailSearching.Checked = _mainOrganization.Models.Learning.On;
 
             #endregion
 
             #region incomplete belief murphy
 
             BeliefsRate.Text =
-                _organization.Murphies.IncompleteBelief.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteBelief.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
             tbBeliefRateIncorrectGuess.Text =
-                _organization.Murphies.IncompleteBelief.RateOfIncorrectGuess
+                _mainOrganization.Murphies.IncompleteBelief.RateOfIncorrectGuess
                     .ToString(CultureInfo.InvariantCulture);
             tbBeliefRateAnswers.Text =
-                _organization.Murphies.IncompleteBelief.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteBelief.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
             tbBeliefResponseTime.Text =
-                _organization.Murphies.IncompleteBelief.ResponseTime.ToString(CultureInfo.InvariantCulture);
-            cbLimitNumberOfTriesBelief.Checked = _organization.Murphies.IncompleteBelief.LimitNumberOfTries != -1;
+                _mainOrganization.Murphies.IncompleteBelief.ResponseTime.ToString(CultureInfo.InvariantCulture);
+            cbLimitNumberOfTriesBelief.Checked = _mainOrganization.Murphies.IncompleteBelief.LimitNumberOfTries != -1;
             tbMaxNumberOfTriesBelief.Text =
-                _organization.Murphies.IncompleteBelief.LimitNumberOfTries.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteBelief.LimitNumberOfTries.ToString(CultureInfo.InvariantCulture);
             BeliefsRiskAversion.Text =
-                _organization.Murphies.IncompleteBelief.ThresholdForReacting
+                _mainOrganization.Murphies.IncompleteBelief.ThresholdForReacting
                     .ToString(CultureInfo.InvariantCulture);
 
             #endregion
@@ -113,21 +111,21 @@ namespace SymuMurphiesAndBlockers
             #region incomplete information murphy
 
             InformationRateAgentsOn.Text =
-                _organization.Murphies.IncompleteInformation.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteInformation.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
             InformationRateOfIncorrectGuess.Text =
-                _organization.Murphies.IncompleteInformation.RateOfIncorrectGuess.ToString(CultureInfo
+                _mainOrganization.Murphies.IncompleteInformation.RateOfIncorrectGuess.ToString(CultureInfo
                     .InvariantCulture);
             InformationRateOfAnswer.Text =
-                _organization.Murphies.IncompleteInformation.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteInformation.RateOfAnswers.ToString(CultureInfo.InvariantCulture);
             InformationResponseTime.Text =
-                _organization.Murphies.IncompleteInformation.ResponseTime.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteInformation.ResponseTime.ToString(CultureInfo.InvariantCulture);
             InformationLimitOfTries.Checked =
-                _organization.Murphies.IncompleteInformation.LimitNumberOfTries != -1;
+                _mainOrganization.Murphies.IncompleteInformation.LimitNumberOfTries != -1;
             InformationMaxOfTries.Text =
-                _organization.Murphies.IncompleteInformation.LimitNumberOfTries.ToString(CultureInfo
+                _mainOrganization.Murphies.IncompleteInformation.LimitNumberOfTries.ToString(CultureInfo
                     .InvariantCulture);
             InformationThreshold.Text =
-                _organization.Murphies.IncompleteInformation.ThresholdForReacting.ToString(CultureInfo
+                _mainOrganization.Murphies.IncompleteInformation.ThresholdForReacting.ToString(CultureInfo
                     .InvariantCulture);
 
             #endregion
@@ -137,8 +135,8 @@ namespace SymuMurphiesAndBlockers
                 switch (item.Text)
                 {
                     case "Incomplete information":
-                        gbInformation.Visible = _organization.Murphies.IncompleteInformation.On;
-                        item.Checked = _organization.Murphies.IncompleteInformation.On;
+                        gbInformation.Visible = _mainOrganization.Murphies.IncompleteInformation.On;
+                        item.Checked = _mainOrganization.Murphies.IncompleteInformation.On;
                         break;
                     case "Changing Information":
                         //item.Checked = murphies.ChangingInformation.On;
@@ -150,16 +148,16 @@ namespace SymuMurphiesAndBlockers
                         //item.Checked = murphies.CommunicationBreakDown.On;
                         break;
                     case "Agent unavailability":
-                        gbBelief.Visible = _organization.Murphies.UnAvailability.On;
-                        item.Checked = _organization.Murphies.UnAvailability.On;
+                        gbBelief.Visible = _mainOrganization.Murphies.UnAvailability.On;
+                        item.Checked = _mainOrganization.Murphies.UnAvailability.On;
                         break;
                     case "Incomplete knowledge":
-                        gbUncompleteKnowledge.Visible = _organization.Murphies.IncompleteKnowledge.On;
-                        item.Checked = _organization.Murphies.IncompleteKnowledge.On;
+                        gbUncompleteKnowledge.Visible = _mainOrganization.Murphies.IncompleteKnowledge.On;
+                        item.Checked = _mainOrganization.Murphies.IncompleteKnowledge.On;
                         break;
                     case "Incomplete belief":
-                        gbBelief.Visible = _organization.Murphies.IncompleteBelief.On;
-                        item.Checked = _organization.Murphies.IncompleteBelief.On;
+                        gbBelief.Visible = _mainOrganization.Murphies.IncompleteBelief.On;
+                        item.Checked = _mainOrganization.Murphies.IncompleteBelief.On;
                         break;
                 }
             }
@@ -170,43 +168,43 @@ namespace SymuMurphiesAndBlockers
             base.SetUpOrganization();
             if (!cbLimitNumberOfTriesBelief.Checked)
             {
-                _organization.Murphies.IncompleteBelief.LimitNumberOfTries = -1;
+                _mainOrganization.Murphies.IncompleteBelief.LimitNumberOfTries = -1;
             }
             else
             {
-                _organization.Murphies.IncompleteBelief.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteBelief.LimitNumberOfTries =
                     Convert.ToSByte(BeliefsRate.Text, CultureInfo.InvariantCulture);
             }
 
             if (!cbLimitNumberOfTriesKnowledge.Checked)
             {
-                _organization.Murphies.IncompleteKnowledge.LimitNumberOfTries = -1;
+                _mainOrganization.Murphies.IncompleteKnowledge.LimitNumberOfTries = -1;
             }
             else
             {
-                _organization.Murphies.IncompleteKnowledge.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteKnowledge.LimitNumberOfTries =
                     Convert.ToSByte(tbMaxNumberOfTriesKnowledge.Text, CultureInfo.InvariantCulture);
             }
 
             if (!InformationLimitOfTries.Checked)
             {
-                _organization.Murphies.IncompleteInformation.LimitNumberOfTries = -1;
+                _mainOrganization.Murphies.IncompleteInformation.LimitNumberOfTries = -1;
             }
             else
             {
-                _organization.Murphies.IncompleteInformation.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteInformation.LimitNumberOfTries =
                     Convert.ToSByte(InformationMaxOfTries.Text, CultureInfo.InvariantCulture);
             }
 
-            _organization.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
-            _organization.KnowledgeLevel =
+            _mainOrganization.Murphies.MultipleBlockers = cbMultipleBlockers.Checked;
+            _mainOrganization.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(KnowledgeLevel.SelectedItem.ToString());
-            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(BeliefsLevel.SelectedItem.ToString());
 
-            _organization.Models.Learning.On = EmailSearching.Checked;
+            _mainOrganization.Models.Learning.On = EmailSearching.Checked;
 
-            _organization.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
+            _mainOrganization.Templates.Human.Cognitive.InteractionCharacteristics.PreferredCommunicationMediums =
                 EmailComm.Checked ? CommunicationMediums.Email : CommunicationMediums.FaceToFace;
 
 
@@ -215,7 +213,7 @@ namespace SymuMurphiesAndBlockers
             AddScenario(scenario);
 
 
-            _organization.AddKnowledge();
+            _mainOrganization.AddKnowledge();
         }
 
         protected override void OnStopped()
@@ -226,7 +224,7 @@ namespace SymuMurphiesAndBlockers
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment, _organization);
+            Start(_environment, _mainOrganization);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -246,10 +244,11 @@ namespace SymuMurphiesAndBlockers
             WriteTextSafe(Capacity, _environment.IterationResult.Tasks.Capacity.Last().Density
                 .ToString("F1", CultureInfo.InvariantCulture));
 
-            var tasksDoneRatio = _environment.Schedule.Step * _environment.ExampleOrganization.WorkersCount < Constants.Tolerance
+            var tasksDoneRatio = _environment.Schedule.Step * _environment.ExampleMainOrganization.WorkersCount <
+                                 Constants.Tolerance
                 ? 0
                 : _environment.IterationResult.Tasks.Done * 100 /
-                  (_environment.Schedule.Step * _environment.ExampleOrganization.WorkersCount);
+                  (_environment.Schedule.Step * _environment.ExampleMainOrganization.WorkersCount);
 
             WriteTextSafe(TasksDone, tasksDoneRatio
                 .ToString("F1", CultureInfo.InvariantCulture));
@@ -314,7 +313,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -332,7 +331,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.KnowledgeCount = byte.Parse(tbKnowledge.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.KnowledgeCount = byte.Parse(tbKnowledge.Text, CultureInfo.InvariantCulture);
                 tbKnowledge.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -350,7 +349,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.ThresholdForReacting =
+                _mainOrganization.Murphies.IncompleteKnowledge.ThresholdForReacting =
                     float.Parse(tbKnowledgeThreshHoldForDoing.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshHoldForDoing.BackColor = SystemColors.Window;
             }
@@ -369,7 +368,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess =
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfIncorrectGuess =
                     float.Parse(tbLackRateOfIncorrectGuess.Text, CultureInfo.InvariantCulture);
                 tbLackRateOfIncorrectGuess.BackColor = SystemColors.Window;
             }
@@ -388,7 +387,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.RateOfAnswers =
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfAnswers =
                     float.Parse(tbLackRateOfAnswers.Text, CultureInfo.InvariantCulture);
                 tbLackRateOfAnswers.BackColor = SystemColors.Window;
             }
@@ -407,7 +406,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.ResponseTime =
+                _mainOrganization.Murphies.IncompleteKnowledge.ResponseTime =
                     byte.Parse(tbLackResponseTime.Text, CultureInfo.InvariantCulture);
                 tbLackResponseTime.BackColor = SystemColors.Window;
             }
@@ -426,7 +425,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteKnowledge.LimitNumberOfTries =
                     sbyte.Parse(tbMaxNumberOfTriesKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMaxNumberOfTriesKnowledge.BackColor = SystemColors.Window;
             }
@@ -445,7 +444,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally =
+                _mainOrganization.Murphies.IncompleteKnowledge.DelayBeforeSearchingExternally =
                     byte.Parse(tbLackDelayBeforeSearchingExternally.Text, CultureInfo.InvariantCulture);
                 tbLackDelayBeforeSearchingExternally.BackColor = SystemColors.Window;
             }
@@ -464,7 +463,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.MandatoryRatio =
+                _mainOrganization.Murphies.IncompleteKnowledge.MandatoryRatio =
                     float.Parse(tbRequiredMandatoryRatio.Text, CultureInfo.InvariantCulture);
                 tbRequiredMandatoryRatio.BackColor = SystemColors.Window;
             }
@@ -483,7 +482,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.RateOfIncorrectGuess =
+                _mainOrganization.Murphies.IncompleteBelief.RateOfIncorrectGuess =
                     float.Parse(tbBeliefRateIncorrectGuess.Text, CultureInfo.InvariantCulture);
                 tbBeliefRateIncorrectGuess.BackColor = SystemColors.Window;
             }
@@ -502,7 +501,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.RateOfAnswers =
+                _mainOrganization.Murphies.IncompleteBelief.RateOfAnswers =
                     float.Parse(tbBeliefRateAnswers.Text, CultureInfo.InvariantCulture);
                 tbBeliefRateAnswers.BackColor = SystemColors.Window;
             }
@@ -521,7 +520,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.ResponseTime =
+                _mainOrganization.Murphies.IncompleteBelief.ResponseTime =
                     byte.Parse(tbBeliefResponseTime.Text, CultureInfo.InvariantCulture);
                 tbBeliefResponseTime.BackColor = SystemColors.Window;
             }
@@ -540,7 +539,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteBelief.LimitNumberOfTries =
                     sbyte.Parse(tbMaxNumberOfTriesBelief.Text, CultureInfo.InvariantCulture);
                 tbMaxNumberOfTriesBelief.BackColor = SystemColors.Window;
             }
@@ -559,7 +558,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.UnAvailability.RateOfUnavailability =
+                _mainOrganization.Murphies.UnAvailability.RateOfUnavailability =
                     float.Parse(tbUnavailabilityThreshold.Text, CultureInfo.InvariantCulture);
                 tbUnavailabilityThreshold.BackColor = SystemColors.Window;
             }
@@ -578,7 +577,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.RateOfAgentsOn =
+                _mainOrganization.Murphies.IncompleteBelief.RateOfAgentsOn =
                     float.Parse(BeliefsRate.Text, CultureInfo.InvariantCulture);
                 BeliefsRate.BackColor = SystemColors.Window;
             }
@@ -597,7 +596,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.UnAvailability.RateOfAgentsOn =
+                _mainOrganization.Murphies.UnAvailability.RateOfAgentsOn =
                     float.Parse(UnavailabilityRate.Text, CultureInfo.InvariantCulture);
                 UnavailabilityRate.BackColor = SystemColors.Window;
             }
@@ -616,7 +615,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.RateOfAgentsOn =
+                _mainOrganization.Murphies.IncompleteKnowledge.RateOfAgentsOn =
                     float.Parse(KnowledgeRate.Text, CultureInfo.InvariantCulture);
                 KnowledgeRate.BackColor = SystemColors.Window;
             }
@@ -635,7 +634,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.ThresholdForReacting =
+                _mainOrganization.Murphies.IncompleteBelief.ThresholdForReacting =
                     float.Parse(BeliefsRiskAversion.Text, CultureInfo.InvariantCulture);
                 BeliefsRiskAversion.BackColor = SystemColors.Window;
             }
@@ -655,7 +654,7 @@ namespace SymuMurphiesAndBlockers
             switch (e.Item.Text)
             {
                 case "Incomplete information":
-                    _organization.Murphies.IncompleteInformation.On = e.Item.Checked;
+                    _mainOrganization.Murphies.IncompleteInformation.On = e.Item.Checked;
                     gbInformation.Visible = e.Item.Checked;
                     break;
                 case "Changing Information":
@@ -665,16 +664,16 @@ namespace SymuMurphiesAndBlockers
                 case "Communication breakdowns":
                     break;
                 case "Agent unavailability":
-                    _organization.Murphies.UnAvailability.On = e.Item.Checked;
+                    _mainOrganization.Murphies.UnAvailability.On = e.Item.Checked;
                     gbUnavailabilities.Visible = e.Item.Checked;
                     break;
                 case "Incomplete knowledge":
                     gbUncompleteKnowledge.Visible = e.Item.Checked;
-                    _organization.Murphies.IncompleteKnowledge.On = e.Item.Checked;
+                    _mainOrganization.Murphies.IncompleteKnowledge.On = e.Item.Checked;
                     break;
                 case "Incomplete belief":
                     gbBelief.Visible = e.Item.Checked;
-                    _organization.Murphies.IncompleteBelief.On = e.Item.Checked;
+                    _mainOrganization.Murphies.IncompleteBelief.On = e.Item.Checked;
                     break;
             }
         }
@@ -683,7 +682,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.RateOfAgentsOn =
+                _mainOrganization.Murphies.IncompleteInformation.RateOfAgentsOn =
                     float.Parse(InformationRateAgentsOn.Text, CultureInfo.InvariantCulture);
                 InformationRateAgentsOn.BackColor = SystemColors.Window;
             }
@@ -702,7 +701,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.ThresholdForReacting =
+                _mainOrganization.Murphies.IncompleteInformation.ThresholdForReacting =
                     float.Parse(InformationThreshold.Text, CultureInfo.InvariantCulture);
                 InformationThreshold.BackColor = SystemColors.Window;
             }
@@ -721,7 +720,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.RateOfAnswers =
+                _mainOrganization.Murphies.IncompleteInformation.RateOfAnswers =
                     float.Parse(InformationRateOfAnswer.Text, CultureInfo.InvariantCulture);
                 InformationRateOfAnswer.BackColor = SystemColors.Window;
             }
@@ -740,7 +739,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.ResponseTime =
+                _mainOrganization.Murphies.IncompleteInformation.ResponseTime =
                     byte.Parse(InformationResponseTime.Text, CultureInfo.InvariantCulture);
                 InformationResponseTime.BackColor = SystemColors.Window;
             }
@@ -759,7 +758,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.LimitNumberOfTries =
+                _mainOrganization.Murphies.IncompleteInformation.LimitNumberOfTries =
                     sbyte.Parse(InformationMaxOfTries.Text, CultureInfo.InvariantCulture);
                 InformationMaxOfTries.BackColor = SystemColors.Window;
             }
@@ -778,7 +777,7 @@ namespace SymuMurphiesAndBlockers
         {
             try
             {
-                _organization.Murphies.IncompleteInformation.RateOfIncorrectGuess =
+                _mainOrganization.Murphies.IncompleteInformation.RateOfIncorrectGuess =
                     float.Parse(InformationRateOfIncorrectGuess.Text, CultureInfo.InvariantCulture);
                 InformationRateOfIncorrectGuess.BackColor = SystemColors.Window;
             }

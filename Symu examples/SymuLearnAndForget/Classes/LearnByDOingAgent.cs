@@ -13,7 +13,6 @@ using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
-
 using Symu.Environment;
 
 #endregion
@@ -22,13 +21,22 @@ namespace SymuLearnAndForget.Classes
 {
     public sealed class LearnByDoingAgent : LearnAgent
     {
+        /// <summary>
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private LearnByDoingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            environment, template)
+        {
+        }
 
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnByDoingAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public new static LearnByDoingAgent CreateInstance(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template)
         {
             if (environment == null)
             {
@@ -40,21 +48,13 @@ namespace SymuLearnAndForget.Classes
             return agent;
         }
 
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnByDoingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(environment, template)
-        {
-        }
-
         public override void GetNewTasks()
         {
             var task = new SymuTask(0)
             {
                 Parent = Schedule.Step,
                 // Cost impact of learning by doing
-                Weight = 1 * Environment.Organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing
+                Weight = 1 * Environment.MainOrganization.Murphies.IncompleteKnowledge.CostFactorOfGuessing
             };
             Post(task);
         }
@@ -71,7 +71,8 @@ namespace SymuLearnAndForget.Classes
 
             // Agent don't know enough to do it (and learn it) by himself
             // He needs minimum initial knowledge to do and learn
-            if (!Environment.Organization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.EntityId, knowledgeBit,
+            if (!Environment.MainOrganization.Murphies.IncompleteKnowledge.CheckKnowledge(Knowledge.EntityId,
+                knowledgeBit,
                 KnowledgeModel, Schedule.Step))
             {
                 return;

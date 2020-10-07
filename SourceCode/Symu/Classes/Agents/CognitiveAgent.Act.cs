@@ -15,7 +15,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
-using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 
@@ -71,13 +70,13 @@ namespace Symu.Classes.Agents
         private SymuTask ConvertMessageIntoTask(Message message)
         {
             var communication =
-                Environment.Organization.Communication.TemplateFromChannel(message.Medium);
+                Environment.MainOrganization.Communication.TemplateFromChannel(message.Medium);
             var task = new SymuTask(Schedule.Step)
             {
                 Type = message.Medium.ToString(),
                 TimeToLive = communication.TimeToLive,
                 Parent = message,
-                Weight = Environment.Organization.Communication.TimeSpent(message.Medium, false,
+                Weight = Environment.MainOrganization.Communication.TimeSpent(message.Medium, false,
                     Environment.RandomLevelValue),
                 Assigned = message.Receiver
                 //todo maybe define a specific KeyActivity to follow the time spent on messaging?

@@ -16,7 +16,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Classes;
@@ -31,8 +30,8 @@ namespace SymuLearnAndForget
 {
     public partial class Home : SymuForm
     {
-        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
+        private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();
         private ushort _fullKnowledge;
 
         public Home()
@@ -49,7 +48,7 @@ namespace SymuLearnAndForget
 
             tbKnowledgeLength.Text = "50";
             cbBinaryKnowledge.Checked =
-                _organization.Models.Generator == RandomGenerator.RandomBinary;
+                _mainOrganization.Models.Generator == RandomGenerator.RandomBinary;
 
             #endregion
 
@@ -57,43 +56,43 @@ namespace SymuLearnAndForget
 
             cbLearningOn.Checked = true;
             tbMicroLearningAgentRate.Text = "1";
-            cbHasInitialKnowledge.Checked = _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs
+            cbHasInitialKnowledge.Checked = _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs
                 .HasInitialKnowledge;
             cbInitialKnowledgeLevel.Items.AddRange(KnowledgeLevelService.GetNames());
-            cbInitialKnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_organization.KnowledgeLevel);
+            cbInitialKnowledgeLevel.SelectedItem = KnowledgeLevelService.GetName(_mainOrganization.KnowledgeLevel);
             cbHasKnowledge.Checked =
-                _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge;
+                _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge;
             tbKnowledgeThreshold.Text =
-                _organization.Murphies.IncompleteKnowledge.ThresholdForReacting
+                _mainOrganization.Murphies.IncompleteKnowledge.ThresholdForReacting
                     .ToString(CultureInfo.InvariantCulture);
             tbTimeToLive.Text =
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive.ToString(
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive.ToString(
                     CultureInfo.InvariantCulture);
             tbLearnRate.Text =
-                _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate.ToString(CultureInfo
+                _mainOrganization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate.ToString(CultureInfo
                     .InvariantCulture);
             tbLearnByDoingRate.Text =
-                _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate.ToString(
+                _mainOrganization.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate.ToString(
                     CultureInfo.InvariantCulture);
             tbTaskCostFactor.Text =
-                _organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing
+                _mainOrganization.Murphies.IncompleteKnowledge.CostFactorOfGuessing
                     .ToString(CultureInfo.InvariantCulture);
             cbCanSendKnowledge.Checked =
-                _organization.Templates.Human.Cognitive.MessageContent.CanSendKnowledge;
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.CanSendKnowledge;
             cbCanReceiveKnowledge.Checked =
-                _organization.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge;
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge;
             // Email
             tbMinKnowledge.Text =
-                _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit.ToString(
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit.ToString(
                     CultureInfo.InvariantCulture);
             tbMinBitsKnowledge.Text =
-                _organization.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend
                     .ToString(CultureInfo.InvariantCulture);
             tbMaxBitsKnowledge.Text =
-                _organization.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend
                     .ToString(CultureInfo.InvariantCulture);
             tbMaxRateLearnable.Text =
-                _organization.Communication.Email.MaxRateLearnable.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Communication.Email.MaxRateLearnable.ToString(CultureInfo.InvariantCulture);
 
             #endregion
 
@@ -102,21 +101,21 @@ namespace SymuLearnAndForget
             cbForgettingOn.Checked = true;
             tbForgettingAgentRate.Text = "1";
             tbForgettingMean.Text =
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean.ToString(
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean.ToString(
                     CultureInfo.InvariantCulture);
             cgForgettingStdDev.Items.AddRange(GenericLevelService.GetNames());
             cgForgettingStdDev.SelectedItem =
-                GenericLevelService.GetName(_organization.Templates.Human.Cognitive.InternalCharacteristics
+                GenericLevelService.GetName(_mainOrganization.Templates.Human.Cognitive.InternalCharacteristics
                     .ForgettingStandardDeviation);
-            cbPartialForgetting.Checked = _organization.Templates.Human.Cognitive.InternalCharacteristics
+            cbPartialForgetting.Checked = _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics
                 .PartialForgetting;
             tbPartialForgettingRate.Text =
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgettingRate
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgettingRate
                     .ToString(CultureInfo.InvariantCulture);
             tbMinimRemainningLevel.Text =
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge
                     .ToString(CultureInfo.InvariantCulture);
-            switch (_organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode)
+            switch (_mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode)
             {
                 case ForgettingSelectingMode.Random:
                     rbICForgettingSelectingRandomMode.Checked = true;
@@ -124,6 +123,8 @@ namespace SymuLearnAndForget
                 case ForgettingSelectingMode.Oldest:
                     rbICForgettingSelectingOldestMode.Checked = true;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             #endregion
@@ -135,7 +136,7 @@ namespace SymuLearnAndForget
 
             #region Knowledge
 
-            _organization.Models.Generator = cbBinaryKnowledge.Checked
+            _mainOrganization.Models.Generator = cbBinaryKnowledge.Checked
                 ? RandomGenerator.RandomBinary
                 : RandomGenerator.RandomUniform;
 
@@ -143,29 +144,29 @@ namespace SymuLearnAndForget
 
             #region Learning
 
-            _organization.Models.Learning.On = cbLearningOn.Checked;
-            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge =
+            _mainOrganization.Models.Learning.On = cbLearningOn.Checked;
+            _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasKnowledge =
                 cbHasKnowledge.Checked;
-            _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge =
+            _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasInitialKnowledge =
                 cbHasInitialKnowledge.Checked;
-            _organization.KnowledgeLevel =
+            _mainOrganization.KnowledgeLevel =
                 KnowledgeLevelService.GetValue(cbInitialKnowledgeLevel.SelectedItem.ToString());
 
-            _organization.Templates.Human.Cognitive.MessageContent.CanSendKnowledge =
+            _mainOrganization.Templates.Human.Cognitive.MessageContent.CanSendKnowledge =
                 cbCanSendKnowledge.Checked;
-            _organization.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge =
+            _mainOrganization.Templates.Human.Cognitive.MessageContent.CanReceiveKnowledge =
                 cbCanReceiveKnowledge.Checked;
 
             #endregion
 
             #region Forgetting
 
-            _organization.Models.Forgetting.On = cbForgettingOn.Checked;
-            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingStandardDeviation =
+            _mainOrganization.Models.Forgetting.On = cbForgettingOn.Checked;
+            _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingStandardDeviation =
                 GenericLevelService.GetValue(cgForgettingStdDev.SelectedItem.ToString());
-            _organization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgetting =
+            _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgetting =
                 cbPartialForgetting.Checked;
-            _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
+            _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingSelectingMode =
                 rbICForgettingSelectingRandomMode.Checked
                     ? ForgettingSelectingMode.Random
                     : ForgettingSelectingMode.Oldest;
@@ -178,12 +179,12 @@ namespace SymuLearnAndForget
             AddScenario(scenario);
 
             SetRandomLevel(cbRandomLevel.SelectedIndex);
-            _organization.AddWiki();
+            _mainOrganization.AddWiki();
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment, _organization);
+            Start(_environment, _mainOrganization);
         }
 
         protected override void OnStopped()
@@ -253,9 +254,12 @@ namespace SymuLearnAndForget
                 _environment.ExpertAgent.ForgettingModel.PercentageForgetting.ToString("F1",
                     CultureInfo.InvariantCulture));
             // Wiki
-            WriteTextSafe(lblWiki, _environment.ExampleOrganization.WikiEntity.GetKnowledgesSum().ToString("F1", CultureInfo.InvariantCulture));
+            WriteTextSafe(lblWiki,
+                _environment.ExampleMainOrganization.WikiEntity.GetKnowledgesSum()
+                    .ToString("F1", CultureInfo.InvariantCulture));
             if (_fullKnowledge == 0 &&
-                Math.Abs(_environment.ExampleOrganization.WikiEntity.GetKnowledgesSum() - _environment.ExampleOrganization.Knowledge.Length) < Tolerance)
+                Math.Abs(_environment.ExampleMainOrganization.WikiEntity.GetKnowledgesSum() -
+                         _environment.ExampleMainOrganization.Knowledge.Length) < Tolerance)
             {
                 _fullKnowledge = _environment.Schedule.Step;
             }
@@ -302,7 +306,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Models.Learning.RateOfAgentsOn =
+                _mainOrganization.Models.Learning.RateOfAgentsOn =
                     float.Parse(tbMicroLearningAgentRate.Text, CultureInfo.InvariantCulture);
                 tbMicroLearningAgentRate.BackColor = SystemColors.Window;
             }
@@ -321,7 +325,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.ThresholdForReacting =
+                _mainOrganization.Murphies.IncompleteKnowledge.ThresholdForReacting =
                     float.Parse(tbKnowledgeThreshold.Text, CultureInfo.InvariantCulture);
                 tbKnowledgeThreshold.BackColor = SystemColors.Window;
             }
@@ -340,7 +344,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate =
+                _mainOrganization.Templates.Human.Cognitive.TasksAndPerformance.LearningRate =
                     float.Parse(tbLearnRate.Text, CultureInfo.InvariantCulture);
                 tbLearnRate.BackColor = SystemColors.Window;
             }
@@ -359,7 +363,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate =
+                _mainOrganization.Templates.Human.Cognitive.TasksAndPerformance.LearningByDoingRate =
                     float.Parse(tbLearnByDoingRate.Text, CultureInfo.InvariantCulture);
                 tbLearnByDoingRate.BackColor = SystemColors.Window;
             }
@@ -378,7 +382,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Murphies.IncompleteKnowledge.CostFactorOfGuessing =
+                _mainOrganization.Murphies.IncompleteKnowledge.CostFactorOfGuessing =
                     float.Parse(tbTaskCostFactor.Text, CultureInfo.InvariantCulture);
                 tbTaskCostFactor.BackColor = SystemColors.Window;
             }
@@ -397,9 +401,9 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
-                _organization.Communication.Email.MinimumKnowledgeToSendPerBit =
+                _mainOrganization.Communication.Email.MinimumKnowledgeToSendPerBit =
                     float.Parse(tbMinKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMinKnowledge.BackColor = SystemColors.Window;
             }
@@ -418,9 +422,9 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MinimumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
-                _organization.Communication.Email.MinimumNumberOfBitsOfKnowledgeToSend =
+                _mainOrganization.Communication.Email.MinimumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMinBitsKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMinBitsKnowledge.BackColor = SystemColors.Window;
             }
@@ -439,9 +443,9 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
+                _mainOrganization.Templates.Human.Cognitive.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
-                _organization.Communication.Email.MaximumNumberOfBitsOfKnowledgeToSend =
+                _mainOrganization.Communication.Email.MaximumNumberOfBitsOfKnowledgeToSend =
                     byte.Parse(tbMaxBitsKnowledge.Text, CultureInfo.InvariantCulture);
                 tbMaxBitsKnowledge.BackColor = SystemColors.Window;
             }
@@ -460,7 +464,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Communication.Email.MaxRateLearnable =
+                _mainOrganization.Communication.Email.MaxRateLearnable =
                     float.Parse(tbMaxRateLearnable.Text, CultureInfo.InvariantCulture);
                 tbMaxRateLearnable.BackColor = SystemColors.Window;
             }
@@ -479,7 +483,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Models.Forgetting.RateOfAgentsOn =
+                _mainOrganization.Models.Forgetting.RateOfAgentsOn =
                     float.Parse(tbForgettingAgentRate.Text, CultureInfo.InvariantCulture);
                 tbForgettingAgentRate.BackColor = SystemColors.Window;
             }
@@ -498,7 +502,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean =
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.ForgettingMean =
                     float.Parse(tbForgettingMean.Text, CultureInfo.InvariantCulture);
                 tbForgettingMean.BackColor = SystemColors.Window;
             }
@@ -517,7 +521,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive =
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.TimeToLive =
                     short.Parse(tbTimeToLive.Text, CultureInfo.InvariantCulture);
                 tbTimeToLive.BackColor = SystemColors.Window;
             }
@@ -536,7 +540,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgettingRate =
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.PartialForgettingRate =
                     float.Parse(tbPartialForgettingRate.Text, CultureInfo.InvariantCulture);
                 tbPartialForgettingRate.BackColor = SystemColors.Window;
             }
@@ -555,7 +559,7 @@ namespace SymuLearnAndForget
         {
             try
             {
-                _organization.Templates.Human.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge =
+                _mainOrganization.Templates.Human.Cognitive.InternalCharacteristics.MinimumRemainingKnowledge =
                     float.Parse(tbMinimRemainningLevel.Text, CultureInfo.InvariantCulture);
                 tbMinimRemainningLevel.BackColor = SystemColors.Window;
             }
@@ -580,7 +584,7 @@ namespace SymuLearnAndForget
                     throw new ArgumentOutOfRangeException("Knowledge should be < " + Bits.MaxBits);
                 }
 
-                _ = new Knowledge(_organization.MetaNetwork, _organization.Models, "1", value);
+                _ = new Knowledge(_mainOrganization.MetaNetwork, _mainOrganization.Models, "1", value);
                 tbKnowledgeLength.BackColor = SystemColors.Window;
             }
             catch (FormatException)

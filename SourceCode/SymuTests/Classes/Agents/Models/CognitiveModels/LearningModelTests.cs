@@ -12,14 +12,13 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents.Models.CognitiveModels;
-using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Engine;
+using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -29,17 +28,17 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
     public class LearningModelTests : BaseTestClass
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
-        private Knowledge _knowledge;
-        private CognitiveArchitecture _cognitiveArchitecture;
-        private LearningModel _learningModel;
         private ActorKnowledge _actorKnowledge;
+        private CognitiveArchitecture _cognitiveArchitecture;
+        private Knowledge _knowledge;
+        private LearningModel _learningModel;
 
         [TestInitialize]
         public void Initialize()
         {
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
             InitializeModel(0, true);
-            _actorKnowledge = new ActorKnowledge(_agentId,_knowledge.EntityId, new float[] { 0, 0 }, 0, -1, 0);
+            _actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0, 0}, 0, -1);
             Network.ActorKnowledge.Add(_actorKnowledge);
         }
 
@@ -48,8 +47,10 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             Environment.RandomLevel = randomLevelLevel;
             _cognitiveArchitecture = new CognitiveArchitecture();
             _cognitiveArchitecture.InternalCharacteristics.CanLearn = true;
-            _learningModel = new LearningModel(_agentId, Organization.Models, Network.Knowledge,Network.ActorKnowledge,
-                _cognitiveArchitecture, RandomGenerator.RandomBinary, Environment.RandomLevelValue) {On = modelOn, RateOfAgentsOn = 1};
+            _learningModel = new LearningModel(_agentId, MainOrganization.Models, Network.Knowledge,
+                    Network.ActorKnowledge,
+                    _cognitiveArchitecture, RandomGenerator.RandomBinary, Environment.RandomLevelValue)
+                {On = modelOn, RateOfAgentsOn = 1};
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void LearnByDoingTest0()
         {
             _learningModel.On = false;
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
             Network.ActorKnowledge.Add(actorKnowledge);
             var realLearning = _learningModel.LearnByDoing(_knowledge.EntityId, 0, 0, -1, 0);
             Assert.AreEqual(0, actorKnowledge.GetKnowledgeSum());
@@ -209,6 +210,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.TasksAndPerformance.LearningStandardDeviation = GenericLevel.Complete;
             Assert.AreNotEqual(1, _learningModel.NextLearningByDoing());
         }
+
         /// <summary>
         ///     Non passing test
         /// </summary>

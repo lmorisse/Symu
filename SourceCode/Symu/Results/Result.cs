@@ -9,7 +9,6 @@
 
 #region using directives
 
-using System;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Environment;
@@ -32,6 +31,8 @@ namespace Symu.Results
         }
 
         protected SymuEnvironment Environment { get; }
+
+        #region IResult Members
 
         /// <summary>
         ///     If set to true, Tasks will be filled with value and stored during the simulation
@@ -67,5 +68,7 @@ namespace Symu.Results
         /// </summary>
         /// <returns></returns>
         public abstract IResult Clone();
+
+        #endregion
     }
 }

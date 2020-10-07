@@ -7,31 +7,43 @@
 
 #endregion
 
-namespace Symu.Results.Blocker
+namespace Symu.Results.Blockers
 {
-    /// <summary>
-    ///     Type of blocker resolution
-    /// </summary>
-    public enum BlockerResolution
+    public class BlockerResult
     {
+        /// <summary>
+        ///     Number of blockers In Progress
+        /// </summary>
+        public int InProgress { get; set; }
+
+        /// <summary>
+        ///     Number of blockers AverageDone
+        /// </summary>
+        public int Done { get; set; }
+
         /// <summary>
         ///     Blocker is resolved by asking help to internal agents
         /// </summary>
-        Internal,
+        public int InternalHelp { get; set; }
 
         /// <summary>
         ///     Blocker is resolved by searching or asking help to external agents
         /// </summary>
-        External,
+        public int ExternalHelp { get; set; }
 
         /// <summary>
         ///     Blocker is resolved by guessing the answer
         /// </summary>
-        Guessing,
+        public int Guess { get; set; }
 
         /// <summary>
         ///     Blocker is resolved by searching in agent's databases
         /// </summary>
-        Searching
+        public int Search { get; set; }
+
+        /// <summary>
+        ///     Blocker is resolved by cancelling the task
+        /// </summary>
+        public int Cancelled { get; set; }
     }
 }

@@ -17,6 +17,7 @@ using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 using static Symu.Common.Constants;
+
 #endregion
 
 namespace SymuTests.Repository.Edges
@@ -24,27 +25,27 @@ namespace SymuTests.Repository.Edges
     [TestClass]
     public class ActorKnowledgeTests : BaseTestClass
     {
-        private Knowledge _knowledge;
-        private Knowledge _knowledge1;
-        private Knowledge _knowledge2;
-        private ActorKnowledge _actorKnowledge ;
         private readonly float[] _knowledge01Bits = {0, 1};
         private readonly float[] _knowledge0Bits = {0, 0};
         private readonly float[] _knowledge1Bits = {1, 1};
+        private ActorKnowledge _actorKnowledge;
         private ActorKnowledge _actorKnowledge0;
         private ActorKnowledge _actorKnowledge01;
         private ActorKnowledge _actorKnowledge1;
+        private Knowledge _knowledge;
+        private Knowledge _knowledge1;
+        private Knowledge _knowledge2;
 
         [TestInitialize]
         public void Initialize()
         {
             var agentId = new AgentId(1, 1);
-            _knowledge = new Knowledge(Network, Organization.Models, "0", 10);
-            _knowledge1 = new Knowledge(Network, Organization.Models, "1", 10);
-            _knowledge2 = new Knowledge(Network, Organization.Models, "2", 10);
-            _actorKnowledge0 = new ActorKnowledge(agentId, _knowledge.EntityId, _knowledge0Bits, 0, -1, 0);
-            _actorKnowledge1 = new ActorKnowledge(agentId, _knowledge1.EntityId, _knowledge1Bits, 0, -1, 0);
-            _actorKnowledge01 = new ActorKnowledge(agentId, _knowledge2.EntityId, _knowledge01Bits, 0, -1, 0);
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "0", 10);
+            _knowledge1 = new Knowledge(Network, MainOrganization.Models, "1", 10);
+            _knowledge2 = new Knowledge(Network, MainOrganization.Models, "2", 10);
+            _actorKnowledge0 = new ActorKnowledge(agentId, _knowledge.EntityId, _knowledge0Bits, 0, -1);
+            _actorKnowledge1 = new ActorKnowledge(agentId, _knowledge1.EntityId, _knowledge1Bits, 0, -1);
+            _actorKnowledge01 = new ActorKnowledge(agentId, _knowledge2.EntityId, _knowledge01Bits, 0, -1);
             _actorKnowledge = new ActorKnowledge(agentId, _knowledge.EntityId, KnowledgeLevel.BasicKnowledge, 0, -1);
         }
 
@@ -139,6 +140,7 @@ namespace SymuTests.Repository.Edges
         }
 
         #region Initialize AgentKnowledge
+
         /// <summary>
         ///     Random Binary Generator
         /// </summary>
@@ -162,7 +164,8 @@ namespace SymuTests.Repository.Edges
         [TestMethod]
         public void InitializeBitsTest1()
         {
-            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.FullKnowledge, 0);
+            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary,
+                KnowledgeLevel.FullKnowledge, 0);
             var knowledgeBits = _actorKnowledge.KnowledgeBits;
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
@@ -183,7 +186,8 @@ namespace SymuTests.Repository.Edges
         [TestMethod]
         public void InitializeBitsTest2()
         {
-            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.NoKnowledge, 0);
+            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary,
+                KnowledgeLevel.NoKnowledge, 0);
             var knowledgeBits = _actorKnowledge.KnowledgeBits;
             byte no1 = 0;
             for (byte i = 0; i < 10; i++)
@@ -227,7 +231,8 @@ namespace SymuTests.Repository.Edges
         [TestMethod]
         public void InitializeBitsTest5()
         {
-            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.Random, 0);
+            _actorKnowledge.InitializeKnowledge(_knowledge.Length, RandomGenerator.RandomBinary, KnowledgeLevel.Random,
+                0);
             var knowledgeBits = _actorKnowledge.KnowledgeBits;
             for (byte i = 0; i < 10; i++)
             {
@@ -236,6 +241,7 @@ namespace SymuTests.Repository.Edges
                 Assert.IsTrue(knowledgeBits.GetBit(i) <= 1);
             }
         }
+
         #endregion
     }
 }

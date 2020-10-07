@@ -14,7 +14,6 @@
 #region using directives
 
 using System;
-using Symu.Common.Interfaces;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
 
@@ -25,11 +24,12 @@ namespace Symu.Repository.Entities
     /// <summary>
     ///     EventEntity helps you schedule one shot events that happen during the simulation
     /// </summary>
-    public class EventEntity: OrgMod.Entities.EventEntity
+    public class EventEntity : OrgMod.Entities.EventEntity
     {
-        public EventEntity() 
+        public EventEntity()
         {
         }
+
         public EventEntity(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {
         }
@@ -40,6 +40,7 @@ namespace Symu.Repository.Entities
         ///     EventHandler triggered after the event SetTaskInProgress
         /// </summary>
         public event EventHandler OnExecute;
+
         /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public override object Clone()

@@ -11,10 +11,8 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents;
-using Symu.Classes.Organization;
 using Symu.Common;
 using Symu.Common.Interfaces;
-using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Repository;
 using SymuTests.Helpers;
@@ -24,15 +22,15 @@ using SymuTests.Helpers;
 namespace SymuTests.Classes.Agents
 {
     [TestClass]
-    public class ReactiveAgentTests: BaseTestClass
+    public class ReactiveAgentTests : BaseTestClass
     {
         private TestReactiveAgent _agent;
-        
+
         [TestInitialize]
         public void Initialize()
         {
-            Organization.Models.SetOn(1);
-            Environment.SetOrganization(Organization);
+            MainOrganization.Models.SetOn(1);
+            Environment.SetOrganization(MainOrganization);
             Environment.IterationResult.On();
 
             _agent = TestReactiveAgent.CreateInstance(Environment);
@@ -67,7 +65,7 @@ namespace SymuTests.Classes.Agents
             _agent.OnBeforeSendMessage(message);
             Assert.AreEqual<uint>(1, Environment.Messages.Result.SentMessagesCount);
             Assert.AreEqual<uint>(1, Environment.Messages.Result.SentMessagesByEmail);
-            Assert.IsTrue(Environment.Messages.Result.SentMessagesCost>0);
+            Assert.IsTrue(Environment.Messages.Result.SentMessagesCost > 0);
         }
 
         #endregion
@@ -181,6 +179,7 @@ namespace SymuTests.Classes.Agents
             Assert.AreEqual<uint>(1, Environment.Messages.Result.ReceivedMessagesCount);
             Assert.AreEqual(0, Environment.Messages.WaitingMessages.Count);
         }
+
         #endregion
 
         #region System message
@@ -290,7 +289,8 @@ namespace SymuTests.Classes.Agents
             var attachments = new MessageAttachments();
             attachments.Add((byte) 1);
             attachments.Add((byte) 2);
-            var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Add, SymuYellowPages.Subscribe, attachments);
+            var message = new Message(_agent.AgentId, _agent.AgentId, MessageAction.Add, SymuYellowPages.Subscribe,
+                attachments);
             _agent.AddSubscribe(message);
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(1));
             Assert.AreEqual(1, _agent.MessageProcessor.Subscriptions.SubscribersCount(2));

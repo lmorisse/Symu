@@ -1,21 +1,34 @@
-﻿using System;
+﻿#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Task;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
+
+#endregion
 
 namespace SymuTests.Classes.Task
 {
     [TestClass]
     public class MurphyTaskTests : BaseTestClass
     {
-        private Knowledge _knowledge ;
         private readonly MurphyTask _taskModel = new MurphyTask();
+        private Knowledge _knowledge;
 
         [TestInitialize]
         public void Initialize()
         {
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 10);
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 10);
         }
 
         [TestMethod]

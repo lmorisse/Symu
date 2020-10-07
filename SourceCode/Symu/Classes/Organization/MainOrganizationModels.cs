@@ -9,11 +9,9 @@
 
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symu.Common.Classes;
-using Symu.Engine;
 using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Entities;
 
@@ -30,6 +28,7 @@ namespace Symu.Classes.Organization
             return clone;
         }
     }
+
     public class ForgettingModelEntity : ModelEntity
     {
         public override ModelEntity Clone()
@@ -39,6 +38,7 @@ namespace Symu.Classes.Organization
             return clone;
         }
     }
+
     public class InfluenceModelEntity : ModelEntity
     {
         public override ModelEntity Clone()
@@ -48,6 +48,7 @@ namespace Symu.Classes.Organization
             return clone;
         }
     }
+
     public class BeliefModelEntity : ModelEntity
     {
         public override ModelEntity Clone()
@@ -57,6 +58,7 @@ namespace Symu.Classes.Organization
             return clone;
         }
     }
+
     public class KnowledgeModelEntity : ModelEntity
     {
         public override ModelEntity Clone()
@@ -66,14 +68,13 @@ namespace Symu.Classes.Organization
             return clone;
         }
     }
+
     /// <summary>
     ///     List of the models used by the organizationEntity
     /// </summary>
-    public class OrganizationModels
+    public class MainOrganizationModels
     {
-        public List<ModelEntity> List { get; }= new List<ModelEntity>();
-
-        public OrganizationModels()
+        public MainOrganizationModels()
         {
             Add(new LearningModelEntity());
             Add(new ForgettingModelEntity());
@@ -83,45 +84,43 @@ namespace Symu.Classes.Organization
             Add(new InteractionSphereModel());
         }
 
-        public void Add(ModelEntity model)
-        {
-            if (!List.Contains(model))
-            {
-                List.Add(model);
-            }
-        }
+        public List<ModelEntity> List { get; } = new List<ModelEntity>();
 
         /// <summary>
         ///     Agent knowledge learning model
         /// </summary>
-        public LearningModelEntity Learning => Get<LearningModelEntity>();//{ get; set; } = new LearningModelEntity();
+        public LearningModelEntity Learning => Get<LearningModelEntity>(); //{ get; set; } = new LearningModelEntity();
 
         /// <summary>
         ///     Agent knowledge forgetting model
         /// </summary>
-        public ForgettingModelEntity Forgetting => Get<ForgettingModelEntity>();//{ get; set; } = new ForgettingModelEntity();
+        public ForgettingModelEntity Forgetting =>
+            Get<ForgettingModelEntity>(); //{ get; set; } = new ForgettingModelEntity();
 
         /// <summary>
         ///     Agent influence model
         /// </summary>
-        public InfluenceModelEntity Influence => Get<InfluenceModelEntity>();//{ get; set; } = new InfluenceModelEntity();
+        public InfluenceModelEntity Influence =>
+            Get<InfluenceModelEntity>(); //{ get; set; } = new InfluenceModelEntity();
 
         /// <summary>
         ///     Agent influence model
         /// </summary>
-        public BeliefModelEntity Beliefs => Get<BeliefModelEntity>();//{ get; set; } = new BeliefModelEntity();
+        public BeliefModelEntity Beliefs => Get<BeliefModelEntity>(); //{ get; set; } = new BeliefModelEntity();
 
         /// <summary>
         ///     Agent knowledge model
         /// </summary>
-        public KnowledgeModelEntity Knowledge => Get<KnowledgeModelEntity>();//{ get; set; } = new KnowledgeModelEntity();
+        public KnowledgeModelEntity Knowledge =>
+            Get<KnowledgeModelEntity>(); //{ get; set; } = new KnowledgeModelEntity();
 
         /// <summary>
         ///     Impact level of agent's belief on how agent will accept to do the task
         /// </summary>
         public BeliefWeightLevel BeliefWeightLevel { get; set; } = BeliefWeightLevel.RandomWeight;
 
-        public InteractionSphereModel InteractionSphere => Get<InteractionSphereModel>();// { get; set; } = new InteractionSphereModel();
+        public InteractionSphereModel InteractionSphere =>
+            Get<InteractionSphereModel>(); // { get; set; } = new InteractionSphereModel();
 
         /// <summary>
         ///     Random generator modes in order to create random network
@@ -133,14 +132,23 @@ namespace Symu.Classes.Organization
         /// </summary>
         public float Intraday { get; set; } = 0.01F;
 
-        public OrganizationModels Clone()
+        public void Add(ModelEntity model)
         {
-            var clone = new OrganizationModels();
+            if (!List.Contains(model))
+            {
+                List.Add(model);
+            }
+        }
+
+        public MainOrganizationModels Clone()
+        {
+            var clone = new MainOrganizationModels();
             clone.List.Clear();
             foreach (var model in List)
             {
                 clone.Add(model.Clone());
             }
+
             clone.Generator = Generator;
             clone.BeliefWeightLevel = BeliefWeightLevel;
             return clone;
@@ -159,7 +167,7 @@ namespace Symu.Classes.Organization
         {
             foreach (var model in List)
             {
-                model.On=true;
+                model.On = true;
                 model.RateOfAgentsOn = rate;
             }
         }
@@ -169,7 +177,7 @@ namespace Symu.Classes.Organization
         /// </summary>
         public void SetOff()
         {
-            List.ForEach(x => x.On =false);
+            List.ForEach(x => x.On = false);
         }
     }
 }

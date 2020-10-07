@@ -17,7 +17,7 @@ using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
+using Symu.Repository.Edges;
 
 #endregion
 
@@ -29,8 +29,9 @@ namespace Symu.Repository.Entities
     /// </summary>
     public class Database : ResourceEntity
     {
-        public const byte Class = SymuYellowPages.Database;
-        public static IClassId ClassId => new ClassId(Class);
+        public new const byte Class = SymuYellowPages.Database;
+        public new static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
         ///     the numerical reduction in knowledge if the bit is to be effected by the stochastic forgetting process
         ///     It impacts the KnowledgeBits of the Agent
@@ -38,22 +39,26 @@ namespace Symu.Repository.Entities
         /// </summary>
         private const float ForgettingRate = 1;
 
+        private ForgettingModel _forgettingModel;
+
         /// <summary>
         ///     Database of the stored information
         /// </summary>
         private LearningModel _learningModel;
-        private ForgettingModel _forgettingModel;
 
         public Database()
         {
-            CognitiveArchitecture= new CognitiveArchitecture();
+            CognitiveArchitecture = new CognitiveArchitecture();
         }
-        public Database(GraphMetaNetwork metaNetwork, OrganizationModels models, CommunicationTemplate medium, byte classId): base(metaNetwork, classId)
+
+        public Database(GraphMetaNetwork metaNetwork, MainOrganizationModels models, CommunicationTemplate medium,
+            byte classId) : base(metaNetwork, classId)
         {
             if (metaNetwork is null)
             {
                 throw new ArgumentNullException(nameof(metaNetwork));
             }
+
             if (models is null)
             {
                 throw new ArgumentNullException(nameof(models));
@@ -88,6 +93,7 @@ namespace Symu.Repository.Entities
             CopyEntityTo(clone);
             return clone;
         }
+
         public override void CopyEntityTo(IEntity entity)
         {
             base.CopyEntityTo(entity);
@@ -95,12 +101,13 @@ namespace Symu.Repository.Entities
             {
                 return;
             }
+
             CognitiveArchitecture.CopyTo(copy.CognitiveArchitecture);
             copy._learningModel = _learningModel;
             copy._forgettingModel = _forgettingModel;
         }
 
-        public void SetCognitiveArchitecture(CommunicationTemplate medium) 
+        public void SetCognitiveArchitecture(CommunicationTemplate medium)
         {
             if (medium == null)
             {
@@ -127,6 +134,7 @@ namespace Symu.Repository.Entities
             CognitiveArchitecture.InternalCharacteristics.CanLearn = true;
             CognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
         }
+
         public void InitializeKnowledge(IAgentId knowledgeId, ushort step)
         {
             if (ExistsKnowledge(knowledgeId))
@@ -135,7 +143,8 @@ namespace Symu.Repository.Entities
             }
 
             var knowledge = MetaNetwork.Knowledge.GetEntity<Knowledge>(knowledgeId);
-            var resourceKnowledge = new ActorKnowledge(EntityId, knowledgeId, KnowledgeLevel.NoKnowledge, 0, TimeToLive);
+            var resourceKnowledge =
+                new ActorKnowledge(EntityId, knowledgeId, KnowledgeLevel.NoKnowledge, 0, TimeToLive);
             resourceKnowledge.InitializeWith0(knowledge.Length, step);
             Add(resourceKnowledge);
         }
@@ -196,7 +205,8 @@ namespace Symu.Repository.Entities
         /// </summary>
         public float GetKnowledgesSum()
         {
-            return MetaNetwork.ResourceKnowledge.EdgesFilteredBySource<ActorKnowledge>(EntityId).Sum(l => l.GetKnowledgeSum());
+            return MetaNetwork.ResourceKnowledge.EdgesFilteredBySource<ActorKnowledge>(EntityId)
+                .Sum(l => l.GetKnowledgeSum());
         }
 
         /// <summary>

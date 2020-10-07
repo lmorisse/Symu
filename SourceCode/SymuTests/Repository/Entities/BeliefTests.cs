@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Organization;
 using Symu.Common.Classes;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
@@ -23,17 +22,16 @@ namespace SymuTests.Repository.Entities
     [TestClass]
     public class BeliefTests : BaseTestClass
     {
-
         private Belief _belief;
         private Knowledge _knowledge;
 
         [TestInitialize]
         public void Initialize()
         {
-            Organization.Models.Generator = RandomGenerator.RandomUniform;
-            Organization.Models.BeliefWeightLevel = BeliefWeightLevel.RandomWeight;
-            Organization.Models.Beliefs.On = true;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 10);
+            MainOrganization.Models.Generator = RandomGenerator.RandomUniform;
+            MainOrganization.Models.BeliefWeightLevel = BeliefWeightLevel.RandomWeight;
+            MainOrganization.Models.Beliefs.On = true;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 10);
             _belief = _knowledge.AssociatedBelief;
         }
 
@@ -44,7 +42,7 @@ namespace SymuTests.Repository.Entities
             Assert.AreEqual(_knowledge.EntityId, _belief.KnowledgeId);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void CloneTest()
         {
             _belief.InitializeWeights(RandomGenerator.RandomBinary, 1, BeliefWeightLevel.RandomWeight);

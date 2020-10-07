@@ -10,15 +10,11 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using Symu.Classes.Task.Manager;
-using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Messaging.Manager;
 using Symu.Messaging.Messages;
 using Symu.OrgMod.Edges;
-using Symu.Repository.Edges;
 
 #endregion
 
@@ -43,6 +39,91 @@ namespace Symu.Classes.Agents
         public CommunicationMediums NextMedium => CommunicationMediumsModel.NextMedium(Cognitive
             .InteractionCharacteristics
             .PreferredCommunicationMediums);
+
+        #region Send messages
+
+        /// <summary>
+        ///     Send a message to another agent define by the message.Receiver
+        ///     It count in the Mailbox.NumberMessagesPerStep
+        ///     It will be effectively sent only if IsMessages is above Limits
+        /// </summary>
+        /// <param name="message"></param>
+        public override void Send(Message message)
+        {
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            switch (message.Medium)
+            {
+                case CommunicationMediums.System:
+                    OnBeforeSendMessage(message);
+                    Environment.SendAgent(message);
+                    OnAfterSendMessage(message);
+                    break;
+                default:
+                {
+                    if (Status == AgentStatus.Offline ||
+                        !IsMessagesPerPeriodBelowLimit(message.Medium) ||
+                        !IsMessagesSendPerPeriodBelowLimit(message.Medium))
+                    {
+                        return;
+                    }
+
+                    OnBeforeSendMessage(message);
+                    Environment.SendAgent(message);
+                    OnAfterSendMessage(message);
+                    break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Reply message
+
+        /// <summary>
+        ///     Reply to a message from another agent
+        ///     It does count in the Mailbox.NumberMessagesPerStep
+        ///     It doesn't count in the Mailbox.NumberSentPerPeriod
+        ///     It will be effectively sent only if IsMessages is above Limits
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="delayed"></param>
+        /// <param name="delay"></param>
+        public override void Reply(Message message, bool delayed, ushort delay)
+        {
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            if (!IsMessagesPerPeriodBelowLimit(message.Medium))
+            {
+                return;
+            }
+
+            if (message.HasAttachments && message.Medium != CommunicationMediums.System)
+            {
+                var ma = message.Attachments;
+                var communication =
+                    Environment.MainOrganization.Communication.TemplateFromChannel(message.Medium);
+                ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication,
+                    Schedule.Step, out var knowledgeIndexToSend);
+                ma.BeliefBits =
+                    BeliefsModel.FilterBeliefToSendFromKnowledgeId(ma.KnowledgeId, ma.KnowledgeBit, communication);
+                // The agent is asked for his knowledge, so he can't forget it
+                if (ma.KnowledgeBits != null)
+                {
+                    ForgettingModel.UpdateForgettingProcess(ma.KnowledgeId, knowledgeIndexToSend);
+                }
+            }
+
+            base.Reply(message, delayed, delay);
+        }
+
+        #endregion
 
         #region Post message
 
@@ -117,7 +198,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.Organization.MetaNetwork.ActorActor.HasActiveInteraction(AgentId, senderId))
+            if (Environment.MainOrganization.MetaNetwork.ActorActor.HasActiveInteraction(AgentId, senderId))
             {
                 return true;
             }
@@ -142,12 +223,14 @@ namespace Symu.Classes.Agents
             _newInteractionCounter++;
 
             // Decide to positively answer to this new interaction
-            if (Environment.Organization.Models.InteractionSphere.SphereUpdateOverTime)
+            if (!Environment.MainOrganization.Models.InteractionSphere.SphereUpdateOverTime)
             {
-                // Message.Sender is now part of agent interaction sphere
-                var interaction = new ActorActor(AgentId, senderId);
-                Environment.Organization.MetaNetwork.ActorActor.Add(interaction);
+                return true;
             }
+
+            // Message.Sender is now part of agent interaction sphere
+            var interaction = new ActorActor(AgentId, senderId);
+            Environment.MainOrganization.MetaNetwork.ActorActor.Add(interaction);
 
             return true;
         }
@@ -169,7 +252,7 @@ namespace Symu.Classes.Agents
             base.OnBeforeSendMessage(message);
             // Impact of the Communication channels on the remaining capacity
             var cost =
-                Environment.Organization.Communication.TimeSpent(message.Medium, true,
+                Environment.MainOrganization.Communication.TimeSpent(message.Medium, true,
                     Environment.RandomLevelValue);
             Capacity.Decrement(cost);
         }
@@ -212,7 +295,7 @@ namespace Symu.Classes.Agents
             }
 
             var communication =
-                Environment.Organization.Communication.TemplateFromChannel(message.Medium);
+                Environment.MainOrganization.Communication.TemplateFromChannel(message.Medium);
             LearningModel.Learn(message.Attachments.KnowledgeId,
                 message.Attachments.KnowledgeBits, communication.MaxRateLearnable, Schedule.Step);
             if (message.Medium == CommunicationMediums.Email && HasEmail)
@@ -244,90 +327,6 @@ namespace Symu.Classes.Agents
             var beliefId = BeliefsModel.GetBeliefIdFromKnowledgeId(message.Attachments.KnowledgeId);
             InfluenceModel.BeInfluenced(beliefId, message.Attachments.BeliefBits,
                 message.Sender, Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel);
-        }
-
-        #endregion
-
-        #region Send messages
-
-        /// <summary>
-        ///     Send a message to another agent define by the message.Receiver
-        ///     It count in the Mailbox.NumberMessagesPerStep
-        ///     It will be effectively sent only if IsMessages is above Limits
-        /// </summary>
-        /// <param name="message"></param>
-        public override void Send(Message message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            switch (message.Medium)
-            {
-                case CommunicationMediums.System:
-                    OnBeforeSendMessage(message);
-                    Environment.SendAgent(message);
-                    OnAfterSendMessage(message);
-                    break;
-                default:
-                {
-                    if (Status == AgentStatus.Offline ||
-                        !IsMessagesPerPeriodBelowLimit(message.Medium) ||
-                        !IsMessagesSendPerPeriodBelowLimit(message.Medium))
-                    {
-                        return;
-                    }
-
-                    OnBeforeSendMessage(message);
-                    Environment.SendAgent(message);
-                    OnAfterSendMessage(message);
-                    break;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Reply message
-
-        /// <summary>
-        ///     Reply to a message from another agent
-        ///     It does count in the Mailbox.NumberMessagesPerStep
-        ///     It doesn't count in the Mailbox.NumberSentPerPeriod
-        ///     It will be effectively sent only if IsMessages is above Limits
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="delayed"></param>
-        /// <param name="delay"></param>
-        public override void Reply(Message message, bool delayed, ushort delay)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            if (!IsMessagesPerPeriodBelowLimit(message.Medium))
-            {
-                return;
-            }
-
-            if (message.HasAttachments && message.Medium != CommunicationMediums.System)
-            {
-                var ma = message.Attachments;
-                var communication =
-                    Environment.Organization.Communication.TemplateFromChannel(message.Medium);
-                ma.KnowledgeBits = KnowledgeModel.FilterKnowledgeToSend(ma.KnowledgeId, ma.KnowledgeBit, communication,
-                    Schedule.Step, out var knowledgeIndexToSend);
-                ma.BeliefBits = BeliefsModel.FilterBeliefToSendFromKnowledgeId(ma.KnowledgeId, ma.KnowledgeBit, communication);
-                // The agent is asked for his knowledge, so he can't forget it
-                if (ma.KnowledgeBits != null)
-                {
-                    ForgettingModel.UpdateForgettingProcess(ma.KnowledgeId, knowledgeIndexToSend);
-                }
-            }
-
-            base.Reply(message, delayed, delay);
         }
 
         #endregion

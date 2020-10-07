@@ -12,15 +12,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.DNA;
 using Symu.Environment;
-using Symu.Results.Blocker;
+using Symu.Results.Blockers;
 using Symu.Results.Messaging;
 using Symu.Results.Organization;
-using Symu.Results.Task;
+using Symu.Results.Tasks;
 
 #endregion
 
@@ -67,8 +66,9 @@ namespace Symu.Results
         public bool SeemsToBeBlocked { get; set; }
         public bool NotFinishedInTime { get; set; }
         public ushort NumberOfItemsNotDone { get; set; }
+
         /// <summary>
-        /// Keyframes from Symu.DNA: list of meta-network snapshot over the time
+        ///     Keyframes from Symu.DNA: list of meta-network snapshot over the time
         /// </summary>
         public KeyFrames KeyFrames { get; } = new KeyFrames();
 
@@ -131,7 +131,7 @@ namespace Symu.Results
             {
                 if (result is KeyFrames keyFrame)
                 {
-                    keyFrame.Add(Environment.Schedule.Step, Environment.Organization.MetaNetwork);
+                    keyFrame.Add(Environment.Schedule.Step, Environment.MainOrganization.MetaNetwork);
                     keyFrame.SetResults();
                 }
                 else
@@ -140,6 +140,7 @@ namespace Symu.Results
                 }
             }
         }
+
         public bool ComputeResults(IResult result)
         {
             if (result == null)
@@ -242,7 +243,7 @@ namespace Symu.Results
         /// <returns></returns>
         public TResult Get<TResult>() where TResult : IResult
         {
-            return (TResult)Results.Find(x => x is TResult);
+            return (TResult) Results.Find(x => x is TResult);
         }
 
         /// <summary>

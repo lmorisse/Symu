@@ -10,7 +10,6 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common.Classes;
 using Symu.Engine;
@@ -29,16 +28,17 @@ namespace SymuScenariosAndEventsTests
     public class IntegrationTests
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
-        private readonly ExampleOrganization _organization = new ExampleOrganization();
+        private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();
         private readonly SymuEngine _simulation = new SymuEngine();
 
         [TestInitialize]
         public void Initialize()
         {
-            _environment.SetOrganization(_organization);
+            _environment.SetOrganization(_mainOrganization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);
         }
+
         private void AddScenario(ushort max)
         {
             var scenario = TimeBasedScenario.CreateInstance(_environment);
@@ -46,9 +46,10 @@ namespace SymuScenariosAndEventsTests
             _simulation.AddScenario(scenario);
             _simulation.Iterations.Max = max;
         }
+
         private void Process()
         {
-            _organization.AddKnowledge();
+            _mainOrganization.AddKnowledge();
             _simulation.Process();
         }
 
@@ -86,7 +87,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void SuccessTest2()
         {
-            _organization.WorkersCount = 0;
+            _mainOrganization.WorkersCount = 0;
 
             AddScenario(3);
             Process();
@@ -105,8 +106,8 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void SuccessTest3()
         {
-            _organization.Models.SetOn(1);
-            _organization.Models.Generator = RandomGenerator.RandomUniform;
+            _mainOrganization.Models.SetOn(1);
+            _mainOrganization.Models.Generator = RandomGenerator.RandomUniform;
             SuccessTest(3);
         }
 
@@ -116,7 +117,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void SuccessTest4()
         {
-            _organization.Murphies.SetOn(1);
+            _mainOrganization.Murphies.SetOn(1);
             SuccessTest(3);
         }
 
@@ -126,9 +127,9 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void SuccessTest5()
         {
-            _organization.Murphies.SetOn(1);
-            _organization.Models.SetOn(1);
-            _organization.Models.Generator = RandomGenerator.RandomUniform;
+            _mainOrganization.Murphies.SetOn(1);
+            _mainOrganization.Models.SetOn(1);
+            _mainOrganization.Models.Generator = RandomGenerator.RandomUniform;
             SuccessTest(3);
         }
 
@@ -176,7 +177,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest()
         {
-            var symuEvent = new EventEntity(_organization.MetaNetwork) { Step = 10};
+            var symuEvent = new EventEntity(_mainOrganization.MetaNetwork) {Step = 10};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -187,7 +188,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest1()
         {
-            var symuEvent = new CyclicalEvent(_organization.MetaNetwork) {EveryStep = 5};
+            var symuEvent = new CyclicalEvent(_mainOrganization.MetaNetwork) {EveryStep = 5};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -198,7 +199,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventWorkerTest2()
         {
-            var symuEvent = new RandomEvent(_organization.MetaNetwork) { Ratio = 0.1F};
+            var symuEvent = new RandomEvent(_mainOrganization.MetaNetwork) {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -209,7 +210,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest()
         {
-            var symuEvent = new EventEntity(_organization.MetaNetwork) { Step = 10};
+            var symuEvent = new EventEntity(_mainOrganization.MetaNetwork) {Step = 10};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }
@@ -220,7 +221,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest1()
         {
-            var symuEvent = new CyclicalEvent(_organization.MetaNetwork) { EveryStep = 5};
+            var symuEvent = new CyclicalEvent(_mainOrganization.MetaNetwork) {EveryStep = 5};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }
@@ -231,7 +232,7 @@ namespace SymuScenariosAndEventsTests
         [TestMethod]
         public void EventKnowledgeTest2()
         {
-            var symuEvent = new RandomEvent(_organization.MetaNetwork) { Ratio = 0.1F};
+            var symuEvent = new RandomEvent(_mainOrganization.MetaNetwork) {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }

@@ -11,7 +11,6 @@
 
 using System;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
-
 using Symu.Environment;
 using Symu.Messaging.Messages;
 using Symu.Repository;
@@ -23,11 +22,21 @@ namespace SymuLearnAndForget.Classes
     public sealed class LearnByAskingAgent : LearnAgent
     {
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private LearnByAskingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+            : base(environment, template)
+        {
+        }
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static LearnByAskingAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public new static LearnByAskingAgent CreateInstance(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template)
         {
             if (environment == null)
             {
@@ -37,15 +46,6 @@ namespace SymuLearnAndForget.Classes
             var agent = new LearnByAskingAgent(environment, template);
             agent.Initialize();
             return agent;
-        }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private LearnByAskingAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template)
-            : base(environment, template)
-        {
         }
 
         /// <summary>

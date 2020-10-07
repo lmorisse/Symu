@@ -13,11 +13,8 @@ using System;
 using Symu.Classes.Organization;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA;
 using Symu.Repository;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 
 #endregion
@@ -32,20 +29,12 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class InfluenceModel
     {
-        /// <summary>
-        ///     how susceptible an agent will be to the influentialness of another agent
-        /// </summary>
-        public float Influenceability { get; set; }
-
-        /// <summary>
-        ///     how influential an agent will be
-        /// </summary>
-        public float Influentialness { get; set; }
+        private readonly BeliefsModel _beliefsModel;
 
         private readonly RandomGenerator _model;
+
         //private readonly ActorNetwork _actorNetwork;
         private readonly WhitePages _whitePages;
-        private readonly BeliefsModel _beliefsModel;
 
         /// <summary>
         ///     Initialize influence model :
@@ -82,7 +71,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             if (cognitiveArchitecture.InternalCharacteristics.CanInfluenceOrBeInfluence && On)
             {
-
                 Influenceability = NextInfluenceability(cognitiveArchitecture.InternalCharacteristics);
                 Influentialness = NextInfluentialness(cognitiveArchitecture.InternalCharacteristics);
             }
@@ -92,6 +80,16 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 Influentialness = 0;
             }
         }
+
+        /// <summary>
+        ///     how susceptible an agent will be to the influentialness of another agent
+        /// </summary>
+        public float Influenceability { get; set; }
+
+        /// <summary>
+        ///     how influential an agent will be
+        /// </summary>
+        public float Influentialness { get; set; }
 
         public bool On { get; set; }
 

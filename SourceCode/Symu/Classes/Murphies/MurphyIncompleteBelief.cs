@@ -13,7 +13,6 @@ using System;
 using Symu.Classes.Task;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
-using ActorBelief = Symu.Repository.Edges.ActorBelief;
 
 #endregion
 

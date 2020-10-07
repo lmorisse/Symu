@@ -13,9 +13,9 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
+using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
-using ActorBelief = Symu.Repository.Edges.ActorBelief;
 
 #endregion
 
@@ -23,18 +23,18 @@ using ActorBelief = Symu.Repository.Edges.ActorBelief;
 namespace SymuTests.Repository.Edges
 {
     [TestClass]
-    public class ActorBeliefTests :BaseTestClass
+    public class ActorBeliefTests : BaseTestClass
     {
         private const RandomGenerator Model = new RandomGenerator();
-        private ActorBelief _actorBelief0 ;
-        private ActorBelief _actorBelief1 ;
-        private ActorBelief _actorBelief2 ;
-        private Belief _belief0 ;
-        private Belief _belief1 ;
-        private Belief _belief2 ;
         private readonly float[] _bits0 = { };
-        private readonly float[] _bits1 = { 0 };
-        private readonly float[] _bits2 = { 0, 0 };
+        private readonly float[] _bits1 = {0};
+        private readonly float[] _bits2 = {0, 0};
+        private ActorBelief _actorBelief0;
+        private ActorBelief _actorBelief1;
+        private ActorBelief _actorBelief2;
+        private Belief _belief0;
+        private Belief _belief1;
+        private Belief _belief2;
 
         [TestInitialize]
         public void Initialize()

@@ -7,8 +7,11 @@
 
 #endregion
 
+#region using directives
+
 using Symu.Common.Interfaces;
 
+#endregion
 
 namespace Symu.Classes.Task
 {

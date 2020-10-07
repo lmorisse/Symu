@@ -19,7 +19,7 @@ using Symu.Environment;
 
 #endregion
 
-namespace Symu.Results.Task
+namespace Symu.Results.Tasks
 {
     /// <summary>
     ///     Manage the task metrics for the simulation
@@ -98,7 +98,8 @@ namespace Symu.Results.Task
             HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>()
+                .Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             Tasks.TryAdd(Environment.Schedule.Step, result);
         }

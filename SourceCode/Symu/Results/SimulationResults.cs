@@ -10,7 +10,6 @@
 #region using directives
 
 using System.Collections.Generic;
-using Symu.DNA;
 
 #endregion
 
@@ -21,11 +20,11 @@ namespace Symu.Results
     /// </summary>
     public class SimulationResults
     {
-
         /// <summary>
-        /// List of specific (except generic DNA result) IterationResult
+        ///     List of specific (except generic DNA result) IterationResult
         /// </summary>
         public List<IterationResult> List { get; } = new List<IterationResult>();
+
         public int Count => List.Count;
 
         /// <summary>

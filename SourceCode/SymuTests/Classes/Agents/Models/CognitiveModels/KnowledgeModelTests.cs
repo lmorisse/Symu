@@ -20,9 +20,9 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Edges;
+using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -32,20 +32,20 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
     public class KnowledgeModelTests : BaseTestClass
     {
         private const float Threshold = 0.1F;
-        private readonly byte[] _taskKnowledge0 = { 0 };
-        private readonly byte[] _taskKnowledge1 = { 1 };
-        private readonly float[] _knowledgeFloatBits = { 0.1F, 0.1F }; 
-        private readonly float[] _knowledge01Bits = { 0, 1 };
-        private readonly float[] _knowledge0Bits = { 0, 0 };
+        private readonly AgentId _agentId = new AgentId(1, 1);
+        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
+        private readonly float[] _knowledge01Bits = {0, 1};
+        private readonly float[] _knowledge0Bits = {0, 0};
+        private readonly float[] _knowledge1Bits = {1, 1, 1, 1};
+        private readonly float[] _knowledge1FBits = {1, 0.5F, 0.3F, 0};
+        private readonly float[] _knowledgeFloatBits = {0.1F, 0.1F};
+        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
+        private readonly byte[] _taskKnowledge0 = {0};
+        private readonly byte[] _taskKnowledge1 = {1};
         private ActorKnowledge _actorKnowledge0;
         private ActorKnowledge _actorKnowledge01;
         private ActorKnowledge _actorKnowledge1;
         private ActorKnowledge _actorKnowledgeFloat;
-        private readonly AgentId _agentId = new AgentId(1, 1);
-        private readonly EmailTemplate _emailTemplate = new EmailTemplate();
-        private readonly float[] _knowledge1Bits = {1, 1, 1, 1};
-        private readonly float[] _knowledge1FBits = {1, 0.5F, 0.3F, 0};
-        private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private CognitiveArchitecture _cognitiveArchitecture;
         private Knowledge _knowledge;
         private Knowledge _knowledge1;
@@ -63,17 +63,18 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
                 InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new KnowledgeModelEntity {On = true};
-            _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, Network, RandomGenerator.RandomBinary);
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
-            _knowledge1 = new Knowledge(Network, Organization.Models, "1", 1);
-            _knowledge2 = new Knowledge(Network, Organization.Models, "1", 1);
-            _knowledge3 = new Knowledge(Network, Organization.Models, "1", 1);
+            _knowledgeModel = new KnowledgeModel(_agentId, modelEntity, _cognitiveArchitecture, Network,
+                RandomGenerator.RandomBinary);
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            _knowledge1 = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            _knowledge2 = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            _knowledge3 = new Knowledge(Network, MainOrganization.Models, "1", 1);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
-            _actorKnowledge0 = new ActorKnowledge(_agentId, _knowledge.EntityId, _knowledge0Bits, 0, -1, 0);
-            _actorKnowledge1 = new ActorKnowledge(_agentId, _knowledge1.EntityId, _knowledge1Bits, 0, -1, 0);
-            _actorKnowledge01 = new ActorKnowledge(_agentId, _knowledge2.EntityId, _knowledge01Bits, 0, -1, 0);
-            _actorKnowledgeFloat = new ActorKnowledge(_agentId, _knowledge3.EntityId, _knowledgeFloatBits, 0, -1, 0);
+            _actorKnowledge0 = new ActorKnowledge(_agentId, _knowledge.EntityId, _knowledge0Bits, 0, -1);
+            _actorKnowledge1 = new ActorKnowledge(_agentId, _knowledge1.EntityId, _knowledge1Bits, 0, -1);
+            _actorKnowledge01 = new ActorKnowledge(_agentId, _knowledge2.EntityId, _knowledge01Bits, 0, -1);
+            _actorKnowledgeFloat = new ActorKnowledge(_agentId, _knowledge3.EntityId, _knowledgeFloatBits, 0, -1);
         }
 
         /// <summary>
@@ -84,8 +85,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasKnowledge = true;
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1, 0);
-            var expertise = new List<IEntityKnowledge>{ actorKnowledge};
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
+            var expertise = new List<IEntityKnowledge> {actorKnowledge};
             _knowledgeModel.AddExpertise(expertise);
             Assert.AreEqual(1, Network.ActorKnowledge.EdgesFilteredBySource(_agentId).Count());
         }
@@ -104,7 +105,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void NullInitializeAgentKnowledgeTest()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => _knowledgeModel.InitializeActorKnowledge(null, false, 0));
+            Assert.ThrowsException<ArgumentNullException>(
+                () => _knowledgeModel.InitializeActorKnowledge(null, false, 0));
         }
 
         [TestMethod]
@@ -125,10 +127,11 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasInitialKnowledge = true;
             Network.Knowledge.Add(_knowledge);
-            _knowledgeModel.AddKnowledge(_knowledge.EntityId, new float[] { 0 }, 0, -1);
+            _knowledgeModel.AddKnowledge(_knowledge.EntityId, new float[] {0}, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
             Assert.IsNotNull(_knowledgeModel.GetActorKnowledge(_knowledge.EntityId).KnowledgeBits);
         }
+
         /// <summary>
         ///     Non passing test - agent !HasKnowledge
         /// </summary>
@@ -181,7 +184,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void GetFilteredKnowledgeToSendTest1()
         {
             _cognitiveArchitecture.MessageContent.CanSendKnowledge = true;
-            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(new AgentId(0,0), 0, _emailTemplate, 0, out _));
+            Assert.IsNull(_knowledgeModel.FilterKnowledgeToSend(new AgentId(0, 0), 0, _emailTemplate, 0, out _));
         }
 
         /// <summary>
@@ -208,7 +211,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
 
             _knowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.SetKnowledge(_knowledge.EntityId,0, 1, 0);
+            _knowledgeModel.SetKnowledge(_knowledge.EntityId, 0, 1, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.EntityId, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.AreEqual(1, bits.GetSum());
@@ -229,7 +232,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MaximumNumberOfBitsOfKnowledgeToSend = 0;
             _knowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.SetKnowledge(_knowledge.EntityId,_knowledge1FBits, 0);
+            _knowledgeModel.SetKnowledge(_knowledge.EntityId, _knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.EntityId, 0, _emailTemplate, 0, out _);
             Assert.IsNull(bits);
         }
@@ -251,7 +254,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 2;
             _knowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.SetKnowledge(_knowledge.EntityId,_knowledge1FBits, 0);
+            _knowledgeModel.SetKnowledge(_knowledge.EntityId, _knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.EntityId, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.AreEqual(1, bits.GetSum());
@@ -274,7 +277,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _emailTemplate.MinimumNumberOfBitsOfKnowledgeToSend = 4;
             _knowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.SetKnowledge(_knowledge.EntityId,_knowledge1FBits, 0);
+            _knowledgeModel.SetKnowledge(_knowledge.EntityId, _knowledge1FBits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.EntityId, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.IsTrue(1F <= bits.GetSum());
@@ -292,7 +295,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.MessageContent.MaximumNumberOfBitsOfKnowledgeToSend = 3;
             _knowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.Expert, 0, -1);
             _knowledgeModel.InitializeExpertise(0);
-            _knowledgeModel.SetKnowledge(_knowledge.EntityId,_knowledge1Bits, 0);
+            _knowledgeModel.SetKnowledge(_knowledge.EntityId, _knowledge1Bits, 0);
             var bits = _knowledgeModel.FilterKnowledgeToSend(_knowledge.EntityId, 0, _emailTemplate, 0, out _);
             Assert.IsNotNull(bits);
             Assert.IsTrue(1F <= bits.GetSum());
@@ -345,8 +348,9 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void KnowsEnoughTest()
         {
-            var knowledge4 = new Knowledge(Network, Organization.Models, "1", 1);
-            var actorKnowledge = new ActorKnowledge(_agentId, knowledge4.EntityId, KnowledgeLevel.BasicKnowledge, 0, -1);
+            var knowledge4 = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            var actorKnowledge =
+                new ActorKnowledge(_agentId, knowledge4.EntityId, KnowledgeLevel.BasicKnowledge, 0, -1);
             // Non passing test
             Assert.IsFalse(KnowledgeModel.KnowsEnough(actorKnowledge, 0, Threshold, 0));
             // Passing tests
@@ -365,13 +369,14 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void HasTest()
         {
-            float[] bits = { 0, 1 };
+            float[] bits = {0, 1};
             var knowledgeBits = new KnowledgeBits(bits, 0, -1);
             var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, knowledgeBits);
             Network.ActorKnowledge.Add(actorKnowledge);
             Assert.IsFalse(_knowledgeModel.KnowsEnough(_knowledge.EntityId, 0, 0.1F, 0));
             Assert.IsTrue(_knowledgeModel.KnowsEnough(_knowledge.EntityId, 1, 0.1F, 0));
         }
+
         #endregion
     }
 }

@@ -10,8 +10,6 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Organization;
-using Symu.Engine;
 using Symu.Messaging.Messages;
 using SymuTests.Helpers;
 
@@ -20,13 +18,12 @@ using SymuTests.Helpers;
 namespace SymuTests.Environment
 {
     [TestClass]
-    public class SymuEnvironmentTests: BaseTestClass
+    public class SymuEnvironmentTests : BaseTestClass
     {
-
         [TestInitialize]
         public void Initialize()
         {
-            Environment.SetOrganization(Organization);
+            Environment.SetOrganization(MainOrganization);
             Simulation.SetEnvironment(Environment);
         }
 

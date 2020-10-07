@@ -23,10 +23,21 @@ namespace SymuGroupAndInteraction.Classes
     public sealed class GroupAgent : ReactiveAgent
     {
         public const byte Class = 1;
-        public static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private GroupAgent(SymuEnvironment environment) : base(
+            ClassId, environment)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static GroupAgent CreateInstance(SymuEnvironment environment)
@@ -35,18 +46,10 @@ namespace SymuGroupAndInteraction.Classes
             {
                 throw new ArgumentNullException(nameof(environment));
             }
+
             var agent = new GroupAgent(environment);
             agent.Initialize();
             return agent;
-        }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private GroupAgent(SymuEnvironment environment) : base(
-            ClassId, environment)
-        {
         }
 
         public void AddPerson(PersonAgent newPerson)
@@ -55,15 +58,16 @@ namespace SymuGroupAndInteraction.Classes
             {
                 throw new ArgumentNullException(nameof(newPerson));
             }
+
             // this new person is member of the group
             newPerson.GroupId = AgentId;
             var actorOrganization = new ActorOrganization(newPerson.AgentId, AgentId);
-            Environment.Organization.MetaNetwork.ActorOrganization.Add(actorOrganization);
+            Environment.MainOrganization.MetaNetwork.ActorOrganization.Add(actorOrganization);
             // All the members of this group have interactions
-            var actorIds = Environment.Organization.MetaNetwork.ActorOrganization.SourcesFilteredByTarget(AgentId);
+            var actorIds = Environment.MainOrganization.MetaNetwork.ActorOrganization.SourcesFilteredByTarget(AgentId);
             foreach (var interaction in actorIds.Select(actorId => new ActorActor(actorId, newPerson.AgentId)))
             {
-                Environment.Organization.MetaNetwork.ActorActor.Add(interaction);
+                Environment.MainOrganization.MetaNetwork.ActorActor.Add(interaction);
             }
         }
     }

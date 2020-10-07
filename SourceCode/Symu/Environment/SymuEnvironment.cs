@@ -13,20 +13,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Symu.Classes.Agents;
 using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Classes;
-using Symu.Common.Interfaces;
 using Symu.Engine;
 using Symu.Messaging.Messages;
 using Symu.Messaging.Tracker;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.Entities;
 using Symu.Repository;
-using Symu.Repository.Edges;
-using Symu.Repository.Entities;
 using Symu.Results;
 using EventEntity = Symu.Repository.Entities.EventEntity;
 
@@ -39,13 +35,14 @@ namespace Symu.Environment
     /// </summary>
     public class SymuEnvironment
     {
+        protected MainOrganization MainOrganizationReference {get; set; }
+
         public SymuEnvironment()
         {
             IterationResult = new IterationResult(this);
         }
 
-        protected Organization _organizationReference;
-        public Organization Organization { get; protected set; }
+        public MainOrganization MainOrganization { get; protected set; }
 
         /// <summary>
         ///     The white pages service of the simulation
@@ -83,7 +80,7 @@ namespace Symu.Environment
         /// </summary>
         public RandomLevel RandomLevel { get; set; } = RandomLevel.NoRandom;
 
-        public byte RandomLevelValue => (byte)RandomLevel;
+        public byte RandomLevelValue => (byte) RandomLevel;
 
         public void SetRandomLevel(int level)
         {
@@ -104,15 +101,41 @@ namespace Symu.Environment
             }
         }
 
-        #region Start and Stop
+        #region Events
+
         /// <summary>
-        /// Once this method is called followed by InitializeIteration (via Initialize or Process methods)
-        /// You have to use Environment.Organization instead of your organization
+        ///     Schedule Events from the list Events
+        /// </summary>
+        public void ScheduleEvents()
+        {
+            foreach (var symuEvent in MainOrganization.MetaNetwork.Event.List.Cast<EventEntity>())
+            {
+                symuEvent.Schedule(Schedule.Step);
+            }
+        }
+
+        //public void AddEvent(EventEntity eventEntity)
+        //{
+        //    if (eventEntity == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(eventEntity));
+        //    }
+
+        //    Organization.MetaNetwork.Event.Add(eventEntity);
+        //}
+
+        #endregion
+
+        #region Start and Stop
+
+        /// <summary>
+        ///     Once this method is called followed by InitializeIteration (via Initialize or Process methods)
+        ///     You have to use Environment.Organization instead of your organization
         /// </summary>
         /// <param name="organization"></param>
-        public virtual void SetOrganization(Organization organization)
+        public virtual void SetOrganization(MainOrganization organization)
         {
-            _organizationReference = organization ?? throw new ArgumentNullException(nameof(organization));
+            MainOrganizationReference = organization ?? throw new ArgumentNullException(nameof(organization));
         }
 
         /// <summary>
@@ -181,46 +204,21 @@ namespace Symu.Environment
             WhitePages.AgentIndex = 1;
             Messages.Clear();
             //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
-            Organization = _organizationReference.Clone();
-            WhitePages.Clear(); 
+            MainOrganization = MainOrganizationReference.Clone();
+            WhitePages.Clear();
             IterationResult.Initialize();
             SetAgents();
             // Intentionally after SetAgents
             //InitializeInteractionNetwork();
             WhitePages.SetStarted();
         }
+
         /// <summary>
         ///     Create every agent of the environment in this method
         /// </summary>
         /// <remarks>Call Initialize method after having created an agent</remarks>
         public virtual void SetAgents()
         {
-        }
-
-        /// <summary>
-        ///     Initialize the network interactions.
-        ///     For performance it is not done in AddMemberToGroup at initialization
-        /// </summary>
-        public void InitializeInteractionNetwork()
-        {
-            foreach (var organizationId in Organization.MetaNetwork.ActorOrganization.Targets())
-            {
-                var agentIds = Organization.MetaNetwork.ActorOrganization.SourcesFilteredByTargetAndSourceClassId(organizationId, ActorEntity.ClassId)
-                    .ToList();
-
-                var count = agentIds.Count;
-                for (var i = 0; i < count; i++)
-                {
-                    var agentId1 = agentIds[i];
-                    // interaction are undirected
-                    for (var j = i + 1; j < count; j++)
-                    {
-                        var agentId2 = agentIds[j];
-                        var interaction = new ActorActor(agentId1, agentId2);
-                        Organization.MetaNetwork.ActorActor.Add(interaction);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -379,7 +377,8 @@ namespace Symu.Environment
             var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.AgentId).ToList();
-            Organization.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds, Organization.MetaNetwork);
+            MainOrganization.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds,
+                MainOrganization.MetaNetwork);
         }
 
         /// <summary>
@@ -415,31 +414,6 @@ namespace Symu.Environment
         {
             WhitePages.AllAgents().ToList().ForEach(a => a.Start());
         }
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        ///     Schedule Events from the list Events
-        /// </summary>
-        public void ScheduleEvents()
-        {
-            foreach (var symuEvent in Organization.MetaNetwork.Event.List.Cast<EventEntity>())
-            {
-                symuEvent.Schedule(Schedule.Step);
-            }
-        }
-
-        //public void AddEvent(EventEntity eventEntity)
-        //{
-        //    if (eventEntity == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(eventEntity));
-        //    }
-
-        //    Organization.MetaNetwork.Event.Add(eventEntity);
-        //}
 
         #endregion
     }

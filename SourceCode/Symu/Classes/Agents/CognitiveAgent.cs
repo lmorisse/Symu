@@ -19,7 +19,6 @@ using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces;
 using Symu.Environment;
 using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 
 #endregion
@@ -30,22 +29,11 @@ namespace Symu.Classes.Agents
     ///     An abstract base class for agents.
     ///     You must define your own agent derived classes derived
     /// </summary>
-    public abstract partial class CognitiveAgent: ReactiveAgent
+    public abstract partial class CognitiveAgent : ReactiveAgent
     {
-
-        private byte _newInteractionCounter;
         private readonly CognitiveArchitectureTemplate _cognitiveTemplate;
 
-        /// <summary>
-        ///     Constructor with standard agent template
-        ///     and without an existing AgentId
-        ///     The constructor will set the AgentId based on the classId
-        /// </summary>
-        /// <param name="classId"></param>
-        /// <param name="environment"></param>
-        protected CognitiveAgent(IClassId classId, SymuEnvironment environment) : this(environment?.WhitePages.NextAgentId(classId), environment)
-        {
-        }
+        private byte _newInteractionCounter;
 
         /// <summary>
         ///     Constructor with specific agentTemplate
@@ -54,10 +42,12 @@ namespace Symu.Classes.Agents
         /// <param name="environment"></param>
         /// <param name="template"></param>
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
-        protected CognitiveAgent(IClassId classId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : this(environment?.WhitePages.NextAgentId(classId), environment, template)
+        protected CognitiveAgent(IClassId classId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+            : this(environment?.WhitePages.NextAgentId(classId), environment, template)
         {
             _cognitiveTemplate = template;
         }
+
         /// <summary>
         ///     Constructor with standard agent template
         ///     and with an existing IAgentId
@@ -67,7 +57,7 @@ namespace Symu.Classes.Agents
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
         protected CognitiveAgent(IAgentId agentId, SymuEnvironment environment) : base(agentId, environment)
         {
-            _cognitiveTemplate = environment.Organization.Templates.Standard;
+            _cognitiveTemplate = environment.MainOrganization.Templates.Standard;
         }
 
         /// <summary>
@@ -77,7 +67,8 @@ namespace Symu.Classes.Agents
         /// <param name="environment"></param>
         /// <param name="template"></param>
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
-        protected CognitiveAgent(IAgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(agentId, environment)
+        protected CognitiveAgent(IAgentId agentId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
+            : base(agentId, environment)
         {
             _cognitiveTemplate = template;
         }
@@ -93,12 +84,14 @@ namespace Symu.Classes.Agents
         /// <summary>
         ///     If agent has an email, get the email database of the agent
         /// </summary>
-        public EmailEntity Email => HasEmail ? Environment.Organization.MetaNetwork.Resource.GetEntity<EmailEntity>(EmailId) : null;
+        public EmailEntity Email =>
+            HasEmail ? Environment.MainOrganization.MetaNetwork.Resource.GetEntity<EmailEntity>(EmailId) : null;
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
-        public bool HasEmail => EmailId != null && !EmailId.IsNull && Environment.Organization.MetaNetwork.ActorResource.Exists(AgentId, EmailId);
+        public bool HasEmail => EmailId != null && !EmailId.IsNull &&
+                                Environment.MainOrganization.MetaNetwork.ActorResource.Exists(AgentId, EmailId);
 
         /// <summary>
         ///     If agent has an email
@@ -145,7 +138,7 @@ namespace Symu.Classes.Agents
         #region Initialization
 
         /// <summary>
-        /// Should be called after the constructor 
+        ///     Should be called after the constructor
         /// </summary>
         protected override void Initialize()
         {
@@ -186,13 +179,14 @@ namespace Symu.Classes.Agents
         /// </summary>
         public IEnumerable<IAgentId> GetAgentIdsForNewInteractions()
         {
-            if (!Environment.Organization.Models.InteractionSphere.IsAgentOn())
+            if (!Environment.MainOrganization.Models.InteractionSphere.IsAgentOn())
             {
                 // Agent don't want to have new interactions today
                 return new List<IAgentId>();
             }
 
-            var agentIds = Environment.Organization.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(AgentId,
+            var agentIds = Environment.MainOrganization.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(
+                AgentId,
                 Cognitive.InteractionPatterns.NextInteractionStrategy());
             return FilterAgentIdsToInteract(agentIds.ToList());
         }
@@ -204,7 +198,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public IEnumerable<IAgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
-            return Environment.Organization.MetaNetwork.InteractionSphere
+            return Environment.MainOrganization.MetaNetwork.InteractionSphere
                 .GetAgentIdsForInteractions(AgentId, interactionStrategy);
         }
 
@@ -223,7 +217,8 @@ namespace Symu.Classes.Agents
             var numberOfNewInteractions =
                 Cognitive.InteractionPatterns.MaxNumberOfNewInteractions - _newInteractionCounter;
             if (Cognitive.InteractionPatterns.LimitNumberOfNewInteractions && numberOfNewInteractions > 0 &&
-                agentIds.Count > numberOfNewInteractions && agentIds.Count > Cognitive.InteractionPatterns.MaxNumberOfNewInteractions)
+                agentIds.Count > numberOfNewInteractions &&
+                agentIds.Count > Cognitive.InteractionPatterns.MaxNumberOfNewInteractions)
             {
                 agentIds.RemoveRange(Cognitive.InteractionPatterns.MaxNumberOfNewInteractions,
                     agentIds.Count - Cognitive.InteractionPatterns.MaxNumberOfNewInteractions);
@@ -244,16 +239,19 @@ namespace Symu.Classes.Agents
         {
             base.InitializeModels();
             // Initialize agent models
-            KnowledgeModel = new KnowledgeModel(AgentId, Environment.Organization.Models.Knowledge, Cognitive,
-                Environment.Organization.MetaNetwork, Environment.Organization.Models.Generator);
-            BeliefsModel = new BeliefsModel(AgentId, Environment.Organization.Models.Beliefs, Cognitive,
-                Environment.Organization.MetaNetwork, Environment.Organization.Models.Generator);
-            LearningModel = new LearningModel(AgentId, Environment.Organization.Models, Environment.Organization.MetaNetwork.Knowledge,
-                Environment.Organization.MetaNetwork.ActorKnowledge, Cognitive, Environment.Organization.Models.Generator, Environment.RandomLevelValue);
-            ForgettingModel = new ForgettingModel(AgentId, Environment.Organization.MetaNetwork.ActorKnowledge, Cognitive, Environment.Organization.Models, Environment.RandomLevelValue);
-            InfluenceModel = new InfluenceModel(Environment.Organization.Models.Influence,
-                Cognitive, Environment.WhitePages, BeliefsModel, Environment.Organization.Models.Generator);
-            TaskModel = new ActorTaskModel(AgentId, Cognitive, Environment.Organization.MetaNetwork);
+            KnowledgeModel = new KnowledgeModel(AgentId, Environment.MainOrganization.Models.Knowledge, Cognitive,
+                Environment.MainOrganization.MetaNetwork, Environment.MainOrganization.Models.Generator);
+            BeliefsModel = new BeliefsModel(AgentId, Environment.MainOrganization.Models.Beliefs, Cognitive,
+                Environment.MainOrganization.MetaNetwork, Environment.MainOrganization.Models.Generator);
+            LearningModel = new LearningModel(AgentId, Environment.MainOrganization.Models,
+                Environment.MainOrganization.MetaNetwork.Knowledge,
+                Environment.MainOrganization.MetaNetwork.ActorKnowledge, Cognitive,
+                Environment.MainOrganization.Models.Generator, Environment.RandomLevelValue);
+            ForgettingModel = new ForgettingModel(AgentId, Environment.MainOrganization.MetaNetwork.ActorKnowledge,
+                Cognitive, Environment.MainOrganization.Models, Environment.RandomLevelValue);
+            InfluenceModel = new InfluenceModel(Environment.MainOrganization.Models.Influence,
+                Cognitive, Environment.WhitePages, BeliefsModel, Environment.MainOrganization.Models.Generator);
+            TaskModel = new ActorTaskModel(AgentId, Cognitive, Environment.MainOrganization.MetaNetwork);
         }
 
         /// <summary>

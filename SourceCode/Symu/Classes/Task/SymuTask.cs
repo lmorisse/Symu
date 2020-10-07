@@ -12,15 +12,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Classes.Agents;
 using Symu.Classes.Blockers;
 using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Interfaces;
 using Symu.OrgMod.Entities;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
-using Symu.Results.Blocker;
+using Symu.Results.Blockers;
 using static Symu.Common.Constants;
 
 #endregion

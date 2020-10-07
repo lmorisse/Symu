@@ -15,10 +15,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
-using Symu.Common.Classes;
 using Symu.Forms;
 using Symu.Repository.Entities;
 using SymuBeliefsAndInfluence.Classes;
@@ -30,8 +28,8 @@ namespace SymuBeliefsAndInfluence
 {
     public partial class Home : SymuForm
     {
-        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
+        private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();
         private int _initialTasksDone;
 
         public Home()
@@ -44,63 +42,64 @@ namespace SymuBeliefsAndInfluence
         {
             DisplayButtons();
 
-            InfluenceModelOn.Checked = _organization.Models.Influence.On;
+            InfluenceModelOn.Checked = _mainOrganization.Models.Influence.On;
             InfluenceRateOfAgentsOn.Text =
-                _organization.Models.Influence.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Models.Influence.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
 
-            BeliefsModelOn.Checked = _organization.Models.Beliefs.On;
+            BeliefsModelOn.Checked = _mainOrganization.Models.Beliefs.On;
             BeliefsRateOfAgentsOn.Text =
-                _organization.Models.Beliefs.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Models.Beliefs.RateOfAgentsOn.ToString(CultureInfo.InvariantCulture);
 
-            tbWorkers.Text = _organization.WorkersCount.ToString(CultureInfo.InvariantCulture);
-            tbInfluencers.Text = _organization.InfluencersCount.ToString(CultureInfo.InvariantCulture);
-            tbBeliefs.Text = _organization.BeliefCount.ToString(CultureInfo.InvariantCulture);
+            tbWorkers.Text = _mainOrganization.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            tbInfluencers.Text = _mainOrganization.InfluencersCount.ToString(CultureInfo.InvariantCulture);
+            tbBeliefs.Text = _mainOrganization.BeliefCount.ToString(CultureInfo.InvariantCulture);
 
-            HasBeliefs.Checked = _organization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
+            HasBeliefs.Checked = _mainOrganization.Templates.Human.Cognitive.KnowledgeAndBeliefs.HasBelief;
             ThresholdForReacting.Text =
-                _organization.Murphies.IncompleteBelief.ThresholdForReacting
+                _mainOrganization.Murphies.IncompleteBelief.ThresholdForReacting
                     .ToString(CultureInfo.InvariantCulture);
 
             #region Influencer
 
             InfluencerBeliefLevel.Items.AddRange(BeliefLevelService.GetNames());
-            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(_organization.InfluencerTemplate.Cognitive
+            InfluencerBeliefLevel.SelectedItem = BeliefLevelService.GetName(_mainOrganization.InfluencerTemplate
+                .Cognitive
                 .KnowledgeAndBeliefs.DefaultBeliefLevel);
-            MinimumBeliefToSendPerBit.Text = _organization.InfluencerTemplate.Cognitive.MessageContent
+            MinimumBeliefToSendPerBit.Text = _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                 .MinimumBeliefToSendPerBit.ToString(CultureInfo.InvariantCulture);
-            MinimumNumberOfBitsOfBeliefToSend.Text = _organization.InfluencerTemplate.Cognitive.MessageContent
+            MinimumNumberOfBitsOfBeliefToSend.Text = _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                 .MinimumNumberOfBitsOfBeliefToSend.ToString(CultureInfo.InvariantCulture);
-            MaximumNumberOfBitsOfBeliefToSend.Text = _organization.InfluencerTemplate.Cognitive.MessageContent
+            MaximumNumberOfBitsOfBeliefToSend.Text = _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                 .MaximumNumberOfBitsOfBeliefToSend.ToString(CultureInfo.InvariantCulture);
-            InfluentialnessMin.Text = _organization.InfluencerTemplate.Cognitive.InternalCharacteristics
+            InfluentialnessMin.Text = _mainOrganization.InfluencerTemplate.Cognitive.InternalCharacteristics
                 .InfluentialnessRateMin.ToString(CultureInfo.InvariantCulture);
-            InfluentialnessMax.Text = _organization.InfluencerTemplate.Cognitive.InternalCharacteristics
+            InfluentialnessMax.Text = _mainOrganization.InfluencerTemplate.Cognitive.InternalCharacteristics
                 .InfluentialnessRateMax.ToString(CultureInfo.InvariantCulture);
-            CanSendBeliefs.Checked = _organization.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs;
+            CanSendBeliefs.Checked = _mainOrganization.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs;
 
             #endregion
 
             #region Worker
 
             MandatoryRatio.Text =
-                _organization.Murphies.IncompleteBelief.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
+                _mainOrganization.Murphies.IncompleteBelief.MandatoryRatio.ToString(CultureInfo.InvariantCulture);
 
 
             RiskAversion.Items.AddRange(GenericLevelService.GetNames());
             RiskAversion.SelectedItem =
-                GenericLevelService.GetName(_organization.WorkerTemplate.Cognitive.InternalCharacteristics
+                GenericLevelService.GetName(_mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics
                     .RiskAversionLevel);
 
             BeliefWeight.Items.AddRange(BeliefWeightLevelService.GetNames());
             BeliefWeight.SelectedItem =
-                BeliefWeightLevelService.GetName(_organization.Models.BeliefWeightLevel);
-            InfluenceabilityMin.Text = _organization.WorkerTemplate.Cognitive.InternalCharacteristics
+                BeliefWeightLevelService.GetName(_mainOrganization.Models.BeliefWeightLevel);
+            InfluenceabilityMin.Text = _mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics
                 .InfluenceabilityRateMin.ToString(CultureInfo.InvariantCulture);
-            InfluenceabilityMax.Text = _organization.WorkerTemplate.Cognitive.InternalCharacteristics
+            InfluenceabilityMax.Text = _mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics
                 .InfluenceabilityRateMax.ToString(CultureInfo.InvariantCulture);
-            CanReceiveBeliefs.Checked = _organization.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs;
+            CanReceiveBeliefs.Checked = _mainOrganization.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs;
             HasInitialBeliefs.Checked =
-                _organization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
+                _mainOrganization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief;
 
             #endregion
         }
@@ -109,32 +108,32 @@ namespace SymuBeliefsAndInfluence
         {
             base.SetUpOrganization();
 
-            _organization.Models.Influence.On = InfluenceModelOn.Checked;
-            _organization.Models.Beliefs.On = BeliefsModelOn.Checked;
+            _mainOrganization.Models.Influence.On = InfluenceModelOn.Checked;
+            _mainOrganization.Models.Beliefs.On = BeliefsModelOn.Checked;
 
-            _organization.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
+            _mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics.RiskAversionLevel =
                 GenericLevelService.GetValue(RiskAversion.SelectedItem.ToString());
 
             #region influencer
 
-            _organization.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
-            _organization.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
-            _organization.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
+            _mainOrganization.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
+            _mainOrganization.InfluencerTemplate.Cognitive.MessageContent.CanSendBeliefs = CanSendBeliefs.Checked;
+            _mainOrganization.InfluencerTemplate.Cognitive.KnowledgeAndBeliefs.DefaultBeliefLevel =
                 BeliefLevelService.GetValue(InfluencerBeliefLevel.SelectedItem.ToString());
 
             #endregion
 
             #region Worker
 
-            _organization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
-            _organization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
-            _organization.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
-            _organization.Models.BeliefWeightLevel =
+            _mainOrganization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasBelief = HasBeliefs.Checked;
+            _mainOrganization.WorkerTemplate.Cognitive.KnowledgeAndBeliefs.HasInitialBelief = HasInitialBeliefs.Checked;
+            _mainOrganization.WorkerTemplate.Cognitive.MessageContent.CanReceiveBeliefs = CanReceiveBeliefs.Checked;
+            _mainOrganization.Models.BeliefWeightLevel =
                 BeliefWeightLevelService.GetValue(BeliefWeight.SelectedItem.ToString());
 
             #endregion
 
-            _organization.AddBeliefs();
+            _mainOrganization.AddBeliefs();
         }
 
         /// <summary>
@@ -158,7 +157,7 @@ namespace SymuBeliefsAndInfluence
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment, _organization);
+            Start(_environment, _mainOrganization);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -187,10 +186,11 @@ namespace SymuBeliefsAndInfluence
             WriteTextSafe(InitialTotalBeliefs,
                 _environment.IterationResult.KnowledgeAndBeliefResults.Beliefs.First().Percentage
                     .ToString("F1", CultureInfo.InvariantCulture));
-            var tasksDoneRatio = _environment.Schedule.Step * _environment.ExampleOrganization.WorkersCount < Tolerance
-                ? 0
-                : _environment.IterationResult.Tasks.Done * 100 /
-                  (_environment.Schedule.Step * _environment.ExampleOrganization.WorkersCount);
+            var tasksDoneRatio =
+                _environment.Schedule.Step * _environment.ExampleMainOrganization.WorkersCount < Tolerance
+                    ? 0
+                    : _environment.IterationResult.Tasks.Done * 100 /
+                      (_environment.Schedule.Step * _environment.ExampleMainOrganization.WorkersCount);
             if (_environment.Schedule.Step == 1)
             {
                 _initialTasksDone = tasksDoneRatio;
@@ -223,7 +223,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -241,7 +241,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.BeliefCount = byte.Parse(tbBeliefs.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.BeliefCount = byte.Parse(tbBeliefs.Text, CultureInfo.InvariantCulture);
                 tbBeliefs.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -259,7 +259,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin =
+                _mainOrganization.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMin =
                     float.Parse(InfluentialnessMin.Text, CultureInfo.InvariantCulture);
                 InfluentialnessMin.BackColor = SystemColors.Window;
             }
@@ -278,7 +278,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax =
+                _mainOrganization.InfluencerTemplate.Cognitive.InternalCharacteristics.InfluentialnessRateMax =
                     float.Parse(InfluentialnessMax.Text, CultureInfo.InvariantCulture);
                 InfluentialnessMax.BackColor = SystemColors.Window;
             }
@@ -297,7 +297,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin =
+                _mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMin =
                     float.Parse(InfluenceabilityMin.Text, CultureInfo.InvariantCulture);
                 InfluenceabilityMin.BackColor = SystemColors.Window;
             }
@@ -316,7 +316,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax =
+                _mainOrganization.WorkerTemplate.Cognitive.InternalCharacteristics.InfluenceabilityRateMax =
                     float.Parse(InfluenceabilityMax.Text, CultureInfo.InvariantCulture);
                 InfluenceabilityMax.BackColor = SystemColors.Window;
             }
@@ -335,7 +335,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencerTemplate.Cognitive.MessageContent
+                _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                         .MinimumBeliefToSendPerBit =
                     float.Parse(MinimumBeliefToSendPerBit.Text, CultureInfo.InvariantCulture);
                 MinimumBeliefToSendPerBit.BackColor = SystemColors.Window;
@@ -355,7 +355,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencerTemplate.Cognitive.MessageContent
+                _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                     .MinimumNumberOfBitsOfBeliefToSend = byte.Parse(MinimumNumberOfBitsOfBeliefToSend.Text,
                     CultureInfo.InvariantCulture);
                 MinimumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
@@ -375,7 +375,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencerTemplate.Cognitive.MessageContent
+                _mainOrganization.InfluencerTemplate.Cognitive.MessageContent
                     .MaximumNumberOfBitsOfBeliefToSend = byte.Parse(MaximumNumberOfBitsOfBeliefToSend.Text,
                     CultureInfo.InvariantCulture);
                 MaximumNumberOfBitsOfBeliefToSend.BackColor = SystemColors.Window;
@@ -395,7 +395,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.InfluencersCount = byte.Parse(tbInfluencers.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.InfluencersCount = byte.Parse(tbInfluencers.Text, CultureInfo.InvariantCulture);
                 tbInfluencers.BackColor = SystemColors.Window;
             }
             catch (FormatException)
@@ -413,7 +413,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.MandatoryRatio =
+                _mainOrganization.Murphies.IncompleteBelief.MandatoryRatio =
                     float.Parse(MandatoryRatio.Text, CultureInfo.InvariantCulture);
                 MandatoryRatio.BackColor = SystemColors.Window;
             }
@@ -432,7 +432,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.Models.Influence.RateOfAgentsOn =
+                _mainOrganization.Models.Influence.RateOfAgentsOn =
                     float.Parse(InfluenceRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
                 InfluenceRateOfAgentsOn.BackColor = SystemColors.Window;
             }
@@ -451,7 +451,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.Models.Beliefs.RateOfAgentsOn =
+                _mainOrganization.Models.Beliefs.RateOfAgentsOn =
                     float.Parse(BeliefsRateOfAgentsOn.Text, CultureInfo.InvariantCulture);
                 BeliefsRateOfAgentsOn.BackColor = SystemColors.Window;
             }
@@ -470,7 +470,7 @@ namespace SymuBeliefsAndInfluence
         {
             try
             {
-                _organization.Murphies.IncompleteBelief.ThresholdForReacting =
+                _mainOrganization.Murphies.IncompleteBelief.ThresholdForReacting =
                     float.Parse(ThresholdForReacting.Text, CultureInfo.InvariantCulture);
                 ThresholdForReacting.BackColor = SystemColors.Window;
             }

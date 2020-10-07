@@ -12,7 +12,6 @@
 using System;
 using Symu.Common.Interfaces;
 
-
 #endregion
 
 namespace Symu.Classes.Agents.Models.CognitiveModels

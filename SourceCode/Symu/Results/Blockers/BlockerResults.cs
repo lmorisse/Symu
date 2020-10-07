@@ -19,7 +19,7 @@ using Symu.Environment;
 
 #endregion
 
-namespace Symu.Results.Blocker
+namespace Symu.Results.Blockers
 {
     /// <summary>
     ///     Manage the task blockers results for the simulation
@@ -98,7 +98,8 @@ namespace Symu.Results.Blocker
             HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>()
+                .Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             Results.TryAdd(Environment.Schedule.Step, result);
         }

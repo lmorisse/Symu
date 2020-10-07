@@ -12,7 +12,6 @@
 using System;
 using Symu.Common;
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 
 #endregion
@@ -74,6 +73,7 @@ namespace Symu.Messaging.Templates
             }
         }
 
+        //todo use it
         public bool CanReceiveBeliefs { get; set; }
 
         /// <summary>

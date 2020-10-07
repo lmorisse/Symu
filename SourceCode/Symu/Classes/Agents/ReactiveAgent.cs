@@ -22,18 +22,19 @@ using Symu.Repository;
 namespace Symu.Classes.Agents
 {
     /// <summary>
-    /// The Agent interface
+    ///     The Agent interface
     /// </summary>
     public interface IAgent
     {
         //todo => c#8 IAgentId AgentId;
         IAgent Clone();
     }
+
     /// <summary>
     ///     The default implementation of IAgent
     ///     You can define your own class agent by inheritance or implementing directly IAgent
     /// </summary>
-    public partial class ReactiveAgent// todo : IAgent
+    public partial class ReactiveAgent // todo : IAgent
     {
         /// <summary>
         ///     constructor for generic new()
@@ -42,6 +43,7 @@ namespace Symu.Classes.Agents
         protected ReactiveAgent()
         {
         }
+
         /// <summary>
         ///     Constructor with standard agent template
         ///     and without an existing AgentId
@@ -49,9 +51,11 @@ namespace Symu.Classes.Agents
         /// </summary>
         /// <param name="classId"></param>
         /// <param name="environment"></param>
-        protected ReactiveAgent(IClassId classId, SymuEnvironment environment): this(environment?.WhitePages.NextAgentId(classId), environment)
+        protected ReactiveAgent(IClassId classId, SymuEnvironment environment) : this(
+            environment?.WhitePages.NextAgentId(classId), environment)
         {
         }
+
         /// <summary>
         ///     Constructor with standard agent template
         ///     and with an existing IAgentId
@@ -65,23 +69,6 @@ namespace Symu.Classes.Agents
             Environment.WhitePages.AddAgent(this);
             State = AgentState.NotStarted;
             Created = Schedule.Step;
-        }
-
-        /// <summary>
-        /// Initialize the agent models
-        /// </summary>
-        /// <remarks>Should be called after the constructor
-        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
-        public virtual ReactiveAgent Clone()
-        {
-            var clone = new ReactiveAgent
-            {
-                AgentId = AgentId, 
-                Environment = Environment
-            };
-            State = AgentState.NotStarted;
-            Created = Schedule.Step;
-            return clone;
         }
 
         /// <summary>
@@ -118,11 +105,36 @@ namespace Symu.Classes.Agents
 
         protected Schedule Schedule => Environment.Schedule;
 
+        /// <summary>Indicates whether a structure is null. This property is read-only.</summary>
+        /// <returns>true if the value of this object is null. Otherwise, false.</returns>
+        public bool IsNull => AgentId == null || AgentId.IsNull;
+
         /// <summary>
-        /// Initialize the agent models
+        ///     Initialize the agent models
         /// </summary>
-        /// <remarks>Should be called after the constructor
-        /// Use the factory method CreateInstance instead of the constructor to call Initialize implicitly</remarks>
+        /// <remarks>
+        ///     Should be called after the constructor
+        ///     Use the factory method CreateInstance instead of the constructor to call Initialize implicitly
+        /// </remarks>
+        public virtual ReactiveAgent Clone()
+        {
+            var clone = new ReactiveAgent
+            {
+                AgentId = AgentId,
+                Environment = Environment
+            };
+            State = AgentState.NotStarted;
+            Created = Schedule.Step;
+            return clone;
+        }
+
+        /// <summary>
+        ///     Initialize the agent models
+        /// </summary>
+        /// <remarks>
+        ///     Should be called after the constructor
+        ///     Use the factory method CreateInstance instead of the constructor to call Initialize implicitly
+        /// </remarks>
         protected virtual void Initialize()
         {
             InitializeModels();
@@ -187,6 +199,7 @@ namespace Symu.Classes.Agents
         public virtual void SetModels()
         {
         }
+
         protected virtual void InitializeModels()
         {
         }
@@ -320,18 +333,6 @@ namespace Symu.Classes.Agents
             Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe, subject);
         }
 
-        /// <summary>
-        ///     UnSubscribe to all subjects
-        /// </summary>
-        public void Unsubscribe(IAgentId agentId)
-        {
-            Send(agentId, MessageAction.Remove, SymuYellowPages.Subscribe);
-        }
-
         #endregion
-
-        /// <summary>Indicates whether a structure is null. This property is read-only.</summary>
-        /// <returns>true if the value of this object is null. Otherwise, false.</returns>
-        public bool IsNull => AgentId== null || AgentId.IsNull;
     }
 }

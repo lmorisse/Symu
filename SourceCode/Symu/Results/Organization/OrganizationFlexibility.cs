@@ -66,7 +66,7 @@ namespace Symu.Results.Organization
         public void HandleTriads(ushort agentsCount)
         {
             var numberOfTriads =
-                InteractionMatrix.NumberOfTriads(Environment.Organization.MetaNetwork.InteractionSphere.Sphere);
+                InteractionMatrix.NumberOfTriads(Environment.MainOrganization.MetaNetwork.InteractionSphere.Sphere);
             var maxTriads = InteractionMatrix.MaxTriads(agentsCount);
             var triads = new DensityStruct(numberOfTriads, maxTriads, Environment.Schedule.Step);
             Triads.Add(triads);
@@ -77,7 +77,7 @@ namespace Symu.Results.Organization
         /// </summary>
         public void HandleLinks(ushort agentsCount)
         {
-            var actualLinks = Environment.Organization.MetaNetwork.ActorActor.Count;
+            var actualLinks = Environment.MainOrganization.MetaNetwork.ActorActor.Count;
             var maxLinks = Combinatorics.Combinations(agentsCount, 2);
             var sphere = new DensityStruct(actualLinks, maxLinks, Environment.Schedule.Step);
             Links.Add(sphere);
@@ -88,8 +88,8 @@ namespace Symu.Results.Organization
         /// </summary>
         public void HandleSphere()
         {
-            var actualSphereWeight = Environment.Organization.MetaNetwork.InteractionSphere.GetSphereWeight();
-            var maxSphereWeight = Environment.Organization.MetaNetwork.InteractionSphere.GetMaxSphereWeight();
+            var actualSphereWeight = Environment.MainOrganization.MetaNetwork.InteractionSphere.GetSphereWeight();
+            var maxSphereWeight = Environment.MainOrganization.MetaNetwork.InteractionSphere.GetMaxSphereWeight();
             var sphere = new DensityStruct(actualSphereWeight, maxSphereWeight, Environment.Schedule.Step);
             Sphere.Add(sphere);
         }

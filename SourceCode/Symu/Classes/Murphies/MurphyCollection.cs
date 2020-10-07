@@ -98,11 +98,8 @@ namespace Symu.Classes.Murphies
 
         public MurphyCollection Clone()
         {
-            var clone = new MurphyCollection();
-
             //todo : for the moment it is a simple copy
-            clone = this;
-            return clone;
+            return this;
         }
     }
 }

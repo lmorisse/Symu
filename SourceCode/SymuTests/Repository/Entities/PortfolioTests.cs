@@ -21,7 +21,7 @@ namespace SymuTests.Repository.Entities
     [TestClass]
     public class PortfolioTests
     {
-        private readonly IAgentId _agentId = new AgentId(1,1);
+        private readonly IAgentId _agentId = new AgentId(1, 1);
         private readonly IResourceUsage _isSupportOn = new ResourceUsage(2);
         private readonly IResourceUsage _isUsing = new ResourceUsage(3);
         private readonly IAgentId _resourceId = new AgentId(1, 0);
@@ -29,7 +29,7 @@ namespace SymuTests.Repository.Entities
         [TestMethod]
         public void EqualsTest()
         {
-            var portfolio = new ActorPortfolio(_agentId,_resourceId, _isSupportOn, 100);
+            var portfolio = new ActorPortfolio(_agentId, _resourceId, _isSupportOn, 100);
             Assert.IsTrue(portfolio.Equals(_isSupportOn));
             Assert.IsFalse(portfolio.Equals(_isUsing));
         }

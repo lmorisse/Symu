@@ -19,25 +19,9 @@ using Symu.Environment;
 namespace Symu.Classes.Scenario
 {
     public class TaskBasedScenario : ScenarioAgent
-    {/// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
-        /// </summary>
-        /// <returns></returns>
-        public static TaskBasedScenario CreateInstance(SymuEnvironment environment)
-        {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            var agent = new TaskBasedScenario(environment);
-            agent.Initialize();
-            return agent;
-        }
-
+    {
         /// <summary>
-        /// Constructor of the agent
+        ///     Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
         private TaskBasedScenario(SymuEnvironment environment) : base(null, environment)
@@ -53,6 +37,23 @@ namespace Symu.Classes.Scenario
         public ushort NumberOfTasks { get; set; }
 
         public static sbyte NoLimit { get; } = -1;
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static TaskBasedScenario CreateInstance(SymuEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var agent = new TaskBasedScenario(environment);
+            agent.Initialize();
+            return agent;
+        }
 
         public override void PreStep()
         {

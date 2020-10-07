@@ -27,32 +27,36 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class InfluencerAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
-        public static IClassId ClassId => new ClassId(Class);
-        /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
-        /// </summary>
-        /// <returns></returns>
-        public static InfluencerAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
-        {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            var entity = new ActorEntity(environment.Organization.MetaNetwork);
-            var agent = new InfluencerAgent(entity.EntityId, environment, template);
-            agent.Initialize();
-            return agent;
-        }
 
         /// <summary>
-        /// Constructor of the agent
+        ///     Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
         private InfluencerAgent(IAgentId entityId, SymuEnvironment environment,
             CognitiveArchitectureTemplate template) : base(
             entityId, environment, template)
         {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
+        /// </summary>
+        /// <returns></returns>
+        public static InfluencerAgent CreateInstance(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
+            var agent = new InfluencerAgent(entity.EntityId, environment, template);
+            agent.Initialize();
+            return agent;
         }
 
         /// <summary>
@@ -76,7 +80,7 @@ namespace SymuBeliefsAndInfluence.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);

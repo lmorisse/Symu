@@ -13,7 +13,6 @@ using System;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Task;
 using Symu.Common.Interfaces;
-using Symu.Repository.Edges;
 
 #endregion
 
@@ -36,7 +35,8 @@ namespace Symu.Classes.Murphies
         /// <param name="mandatoryIndex"></param>
         /// <param name="requiredIndex"></param>
         /// <param name="step"></param>
-        public void CheckKnowledge(IAgentId knowledgeId, TaskKnowledgeBits taskBitIndexes, KnowledgeModel knowledgeModel,
+        public void CheckKnowledge(IAgentId knowledgeId, TaskKnowledgeBits taskBitIndexes,
+            KnowledgeModel knowledgeModel,
             ref bool mandatoryCheck,
             ref bool requiredCheck, ref byte mandatoryIndex, ref byte requiredIndex, ushort step)
         {

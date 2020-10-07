@@ -25,10 +25,21 @@ namespace SymuMessageAndTask.Classes
     public sealed class GroupAgent : ReactiveAgent
     {
         public const byte Class = 1;
-        public static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private GroupAgent(SymuEnvironment environment) : base(
+            ClassId, environment)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static GroupAgent CreateInstance(SymuEnvironment environment)
@@ -41,15 +52,6 @@ namespace SymuMessageAndTask.Classes
             var agent = new GroupAgent(environment);
             agent.Initialize();
             return agent;
-        }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private GroupAgent(SymuEnvironment environment) : base(
-            ClassId, environment)
-        {
         }
 
         public override void ActMessage(Message message)
@@ -86,13 +88,13 @@ namespace SymuMessageAndTask.Classes
             }
 
             var tasks = new List<SymuTask>();
-            for (var i = 0; i < environment.ExampleOrganization.NumberOfTasks; i++)
+            for (var i = 0; i < environment.ExampleMainOrganization.NumberOfTasks; i++)
             {
                 // Create the next task 
                 var task = new SymuTask(Schedule.Step)
                 {
                     Parent = Schedule.Step,
-                    Weight = environment.ExampleOrganization.CostOfTask
+                    Weight = environment.ExampleMainOrganization.CostOfTask
                 };
                 tasks.Add(task);
             }

@@ -23,7 +23,6 @@ using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -42,6 +41,41 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly TwoModesNetwork<IEntityKnowledge> _entityKnowledgeNetwork;
         private readonly byte _randomLevel;
         private bool _isAgentOnToday;
+
+        public ForgettingModel(IAgentId agentId, TwoModesNetwork<IEntityKnowledge> entityKnowledgeNetwork,
+            CognitiveArchitecture cognitive, ForgettingModelEntity entity, bool knowledgeModelOn, byte randomLevel)
+        {
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            if (cognitive is null)
+            {
+                throw new ArgumentNullException(nameof(cognitive));
+            }
+
+            _agentId = agentId;
+            _entityKnowledgeNetwork =
+                entityKnowledgeNetwork ?? throw new ArgumentNullException(nameof(entityKnowledgeNetwork));
+            InternalCharacteristics = cognitive.InternalCharacteristics;
+            _randomLevel = randomLevel;
+
+            entity.CopyTo(this);
+            if (!knowledgeModelOn || !cognitive.KnowledgeAndBeliefs.HasKnowledge || !InternalCharacteristics.CanForget)
+            {
+                // If KnowledgeModel Off or has no knowledge, there is no knowledge to forget
+                // Agent is not concerned by this model
+                On = false;
+            }
+        }
+
+        public ForgettingModel(IAgentId agentId, TwoModesNetwork<IEntityKnowledge> entityKnowledgeNetwork,
+            CognitiveArchitecture cognitive, MainOrganizationModels models, byte randomLevel) :
+            this(agentId, entityKnowledgeNetwork, cognitive, models?.Forgetting, models != null && models.Knowledge.On, randomLevel)
+        {
+        }
+
         /// <summary>
         ///     Accumulates all forgetting of the agent for this knowledge during the simulation
         /// </summary>
@@ -66,51 +100,22 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return percentage;
             }
         }
-        /// <summary>
-        ///     Get the sum of all the knowledge
-        /// </summary>
-        /// <returns></returns>
-        public float GetKnowledgeSum()
-        {
-            return _entityKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).Sum(l => l.GetKnowledgeSum());
-        }
-
-        public ForgettingModel(IAgentId agentId, TwoModesNetwork<IEntityKnowledge> entityKnowledgeNetwork, CognitiveArchitecture cognitive, ForgettingModelEntity entity, bool knowledgeModelOn, byte randomLevel)
-        {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            if (cognitive is null)
-            {
-                throw new ArgumentNullException(nameof(cognitive));
-            }
-
-            _agentId = agentId;
-            _entityKnowledgeNetwork = entityKnowledgeNetwork ?? throw new ArgumentNullException(nameof(entityKnowledgeNetwork));
-            InternalCharacteristics = cognitive.InternalCharacteristics;
-            _randomLevel = randomLevel;
-
-            entity.CopyTo(this);
-            if (!knowledgeModelOn || !cognitive.KnowledgeAndBeliefs.HasKnowledge || !InternalCharacteristics.CanForget)
-            {
-                // If KnowledgeModel Off or has no knowledge, there is no knowledge to forget
-                // Agent is not concerned by this model
-                On = false;
-            }
-        }
-
-        public ForgettingModel(IAgentId agentId, TwoModesNetwork<IEntityKnowledge> entityKnowledgeNetwork, CognitiveArchitecture cognitive, OrganizationModels models, byte randomLevel) :
-            this(agentId, entityKnowledgeNetwork, cognitive, models?.Forgetting, models.Knowledge.On, randomLevel)
-        {
-        }
 
         public InternalCharacteristics InternalCharacteristics { get; set; }
 
         //public EntityExpertise Expertise => _actorKnowledgeNetwork.EdgesFilteredBySource(_agentId);
         //private ActorExpertise Expertise { get;  }
         public List<ActorKnowledge> ForgettingExpertise { get; } = new List<ActorKnowledge>();
+
+        /// <summary>
+        ///     Get the sum of all the knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgeSum()
+        {
+            return _entityKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId)
+                .Sum(l => l.GetKnowledgeSum());
+        }
 
         /// <summary>
         ///     Return the next forgetting rate
@@ -340,7 +345,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                     throw new ArgumentOutOfRangeException();
             }
 
-            return new ActorKnowledge(actorKnowledge.Source, actorKnowledge.Target, forgettingKnowledgeBits, 0, -1, 0);
+            return new ActorKnowledge(actorKnowledge.Source, actorKnowledge.Target, forgettingKnowledgeBits, 0, -1);
         }
 
         /// <summary>
@@ -371,7 +376,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// </summary>
         public void ForgettingProcess(float forgettingRate, ushort step)
         {
-            _entityKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).ToList().ForEach(x => ForgettingProcess(x, forgettingRate, step));
+            _entityKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).ToList()
+                .ForEach(x => ForgettingProcess(x, forgettingRate, step));
         }
 
         /// <summary>
@@ -400,7 +406,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new ArgumentNullException(nameof(workingBits));
             }
 
-            var forgettingKnowledge = ForgettingExpertise.Find( x=> x.EqualsTarget(knowledgeId));
+            var forgettingKnowledge = ForgettingExpertise.Find(x => x.EqualsTarget(knowledgeId));
             if (forgettingKnowledge == null)
             {
                 return;

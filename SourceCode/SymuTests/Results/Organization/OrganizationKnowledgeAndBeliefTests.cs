@@ -10,40 +10,38 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Environment;
 using Symu.Repository.Entities;
 using Symu.Results.Organization;
 using SymuTests.Helpers;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
 namespace SymuTests.Results.Organization
 {
     [TestClass]
-    public class OrganizationKnowledgeAndBeliefTests: BaseTestClass
+    public class OrganizationKnowledgeAndBeliefTests : BaseTestClass
     {
-        private Knowledge _knowledge;
-        private Knowledge _knowledge1;
-        private Belief _belief;
-        private Belief _belief1;
-        private KnowledgeAndBeliefResults _result;
         private TestCognitiveAgent _agent;
         private TestCognitiveAgent _agent1;
+        private Belief _belief;
+        private Belief _belief1;
+        private Knowledge _knowledge;
+        private Knowledge _knowledge1;
+        private KnowledgeAndBeliefResults _result;
 
 
         [TestInitialize]
         public void Initialize()
         {
             // Entities
-            Organization.Models.SetOn(1);
+            MainOrganization.Models.SetOn(1);
             _result = new KnowledgeAndBeliefResults(Environment);
-            _knowledge = new Knowledge(Organization.MetaNetwork, Organization.Models, "1", 1);
-            _knowledge1 = new Knowledge(Organization.MetaNetwork, Organization.Models, "2", 1);
+            _knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
+            _knowledge1 = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "2", 1);
             _belief = _knowledge.AssociatedBelief;
             _belief1 = _knowledge1.AssociatedBelief;
 
-            Environment.SetOrganization(Organization);
+            Environment.SetOrganization(MainOrganization);
             Simulation.Initialize(Environment);
 
 
@@ -72,7 +70,7 @@ namespace SymuTests.Results.Organization
         [TestMethod]
         public void HandleKnowledge1Test()
         {
-            _agent.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge,0, -1);
+            _agent.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent.KnowledgeModel.InitializeExpertise(0);
             _agent1.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             _agent1.KnowledgeModel.InitializeExpertise(0);
@@ -126,7 +124,7 @@ namespace SymuTests.Results.Organization
 
             _agent1.BeliefsModel.AddBelief(_belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _agent1.BeliefsModel.InitializeBeliefs(false);
-            _agent1.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
+            _agent1.BeliefsModel.SetBelief(_belief.EntityId, 0, 1);
 
             _result.HandleBelief();
             Assert.AreEqual(1, _result.Beliefs[0].Mean);
@@ -141,14 +139,14 @@ namespace SymuTests.Results.Organization
             _agent.BeliefsModel.AddBelief(_belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.BeliefsModel.AddBelief(_belief1.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _agent.BeliefsModel.InitializeBeliefs(false);
-            _agent.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
-            _agent.BeliefsModel.SetBelief(_belief1.EntityId,0, 1);
+            _agent.BeliefsModel.SetBelief(_belief.EntityId, 0, 1);
+            _agent.BeliefsModel.SetBelief(_belief1.EntityId, 0, 1);
 
             _agent1.BeliefsModel.AddBelief(_belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _agent1.BeliefsModel.AddBelief(_belief1.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             _agent1.BeliefsModel.InitializeBeliefs(false);
-            _agent1.BeliefsModel.SetBelief(_belief.EntityId,0, 1);
-            _agent1.BeliefsModel.SetBelief(_belief1.EntityId,0, 1);
+            _agent1.BeliefsModel.SetBelief(_belief.EntityId, 0, 1);
+            _agent1.BeliefsModel.SetBelief(_belief1.EntityId, 0, 1);
 
             _result.HandleBelief();
             Assert.AreEqual(2, _result.Beliefs[0].Mean);

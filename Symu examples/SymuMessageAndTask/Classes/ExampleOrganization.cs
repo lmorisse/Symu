@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: SymuBiz - SymuGroupAndInteraction
+// Description: SymuBiz - SymuMessageAndTask
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -11,15 +11,13 @@
 
 using System;
 using Symu.Classes.Organization;
-using Symu.Common;
 
 #endregion
 
 namespace SymuMessageAndTask.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
-
         private float _costOfTask = 1F;
 
         private float _initialCapacity = 1F;
@@ -28,6 +26,11 @@ namespace SymuMessageAndTask.Classes
 
         private float _switchingContextCost = 1F;
         private int _workersCount = 5;
+
+        public ExampleMainOrganization() : base("symu")
+        {
+            Murphies.SetOff();
+        }
 
         public int WorkersCount
         {
@@ -98,14 +101,10 @@ namespace SymuMessageAndTask.Classes
                 _switchingContextCost = value;
             }
         }
-        public ExampleOrganization(): base("symu")
-        {
-            Murphies.SetOff();
-        }
 
-        public override Organization Clone()
+        public override MainOrganization Clone()
         {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
             clone.CostOfTask = CostOfTask;
             clone.InitialCapacity = InitialCapacity;

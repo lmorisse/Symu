@@ -13,11 +13,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Classes.Organization;
 using Symu.Classes.Task;
-using Symu.Common.Classes;
 using Symu.Common.Interfaces;
+using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -28,16 +27,16 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
     {
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly ForgettingModelEntity _forgetting = new ForgettingModelEntity();
-        private Knowledge _knowledge ;
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
         private CognitiveArchitecture _cognitiveArchitecture;
         private ForgettingModel _forgettingModel;
         private InternalCharacteristics _internalCharacteristics;
+        private Knowledge _knowledge;
 
         [TestInitialize]
         public void Initialize()
         {
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
             _forgetting.On = true;
@@ -53,7 +52,8 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             _cognitiveArchitecture.InternalCharacteristics.CanForget = true;
             _forgetting.On = modelOn;
             _forgetting.RateOfAgentsOn = 1;
-            _forgettingModel = new ForgettingModel(_agentId,Network.ActorKnowledge, _cognitiveArchitecture, _forgetting, true, randomLevel);
+            _forgettingModel = new ForgettingModel(_agentId, Network.ActorKnowledge, _cognitiveArchitecture,
+                _forgetting, true, randomLevel);
             _forgettingModel.InitializeForgettingProcess();
         }
 
@@ -108,6 +108,49 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
             InitializeModel(true, 0);
 
             Assert.AreEqual(_internalCharacteristics.ForgettingMean, _forgettingModel.NextMean());
+        }
+
+
+        /// <summary>
+        ///     Minimum Knowledge level = 0
+        ///     above min range
+        /// </summary>
+        [TestMethod]
+        public void ForgetTest()
+        {
+            InitializeModel(true, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1, 1}, 0, -1);
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
+            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
+            Assert.AreEqual(-1, realForget);
+        }
+
+        /// <summary>
+        ///     Minimum Knowledge level = 0
+        ///     below min range
+        /// </summary>
+        [TestMethod]
+        public void ForgetTest1()
+        {
+            InitializeModel(true, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1, 1}, 0, -1);
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 2, 0);
+            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
+            Assert.AreEqual(-1, realForget);
+        }
+
+        /// <summary>
+        ///     Minimum Knowledge level = 1
+        /// </summary>
+        [TestMethod]
+        public void ForgetTest2()
+        {
+            InitializeModel(true, 0);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1, 1}, 0, -1)
+                {MinimumKnowledge = 1};
+            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
+            Assert.AreEqual(1, actorKnowledge.GetKnowledgeBit(0));
+            Assert.AreEqual(0, realForget);
         }
 
         #region forgetting process
@@ -293,7 +336,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         [TestMethod]
         public void FinalizeForgettingKnowledgeTest()
         {
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1 }, 0, -1);
+            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1}, 0, -1);
             Network.ActorKnowledge.Add(actorKnowledge);
             InitializeModel(true, 0);
             // ForgettingBits value > minimumRemainingLevel 
@@ -305,47 +348,5 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         }
 
         #endregion
-
-
-        /// <summary>
-        ///     Minimum Knowledge level = 0
-        ///     above min range
-        /// </summary>
-        [TestMethod]
-        public void ForgetTest()
-        {
-            InitializeModel(true, 0);
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1, 1 }, 0, -1);
-            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
-            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
-            Assert.AreEqual(-1, realForget);
-        }
-
-        /// <summary>
-        ///     Minimum Knowledge level = 0
-        ///     below min range
-        /// </summary>
-        [TestMethod]
-        public void ForgetTest1()
-        {
-            InitializeModel(true, 0);
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] { 1, 1 }, 0, -1);
-            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 2, 0);
-            Assert.AreEqual(0, actorKnowledge.GetKnowledgeBit(0));
-            Assert.AreEqual(-1, realForget);
-        }
-
-        /// <summary>
-        ///     Minimum Knowledge level = 1
-        /// </summary>
-        [TestMethod]
-        public void ForgetTest2()
-        {
-            InitializeModel(true, 0);
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {1, 1}, 0, -1) {MinimumKnowledge = 1};
-            var realForget = _forgettingModel.AgentKnowledgeForget(actorKnowledge, 0, 1, 0);
-            Assert.AreEqual(1, actorKnowledge.GetKnowledgeBit(0));
-            Assert.AreEqual(0, realForget);
-        }
     }
 }

@@ -20,6 +20,8 @@ namespace SymuTests.Helpers
     {
         public bool Result { get; private set; }
 
+        #region IResult Members
+
         /// <summary>
         ///     If set to true, Tasks will be filled with value and stored during the simulation
         /// </summary>
@@ -54,5 +56,7 @@ namespace SymuTests.Helpers
             CopyTo(test);
             return test;
         }
+
+        #endregion
     }
 }

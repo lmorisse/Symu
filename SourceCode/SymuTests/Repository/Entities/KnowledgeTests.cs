@@ -1,12 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Organization;
-using Symu.Common.Classes;
+﻿#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
 
+#endregion
+
 namespace SymuTests.Repository.Entities
 {
-    [TestClass()]
+    [TestClass]
     public class KnowledgeTests : BaseTestClass
     {
         private Knowledge _knowledge;
@@ -15,63 +26,68 @@ namespace SymuTests.Repository.Entities
         public void Initialize()
         {
         }
+
         /// <summary>
-        /// model Off
+        ///     model Off
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void KnowledgeTest()
         {
-            Organization.Models.Beliefs.On = false;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
+            MainOrganization.Models.Beliefs.On = false;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
             Assert.AreEqual(1, _knowledge.Length);
             Assert.IsNull(_knowledge.AssociatedBelief);
         }
+
         /// <summary>
-        /// model On
+        ///     model On
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void KnowledgeTest1()
         {
-            Organization.Models.Beliefs.On = true;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
+            MainOrganization.Models.Beliefs.On = true;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
             Assert.AreEqual(1, _knowledge.Length);
             Assert.IsNotNull(_knowledge.AssociatedBelief);
             Assert.AreEqual(_knowledge.EntityId, _knowledge.AssociatedBelief.KnowledgeId);
         }
+
         /// <summary>
-        /// model off
+        ///     model off
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void CloneTest()
         {
-            Organization.Models.Beliefs.On = false;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
-            var clone = (Knowledge)_knowledge.Clone();
+            MainOrganization.Models.Beliefs.On = false;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            var clone = (Knowledge) _knowledge.Clone();
             Assert.AreEqual(_knowledge.Length, clone.Length);
             Assert.IsNull(clone.AssociatedBelief);
-        }        
+        }
+
         /// <summary>
-        /// model on
+        ///     model on
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void CloneTest1()
         {
-            Organization.Models.Beliefs.On = true;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
-            var clone = (Knowledge)_knowledge.Clone();
+            MainOrganization.Models.Beliefs.On = true;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            var clone = (Knowledge) _knowledge.Clone();
             Assert.AreEqual(_knowledge.Length, clone.Length);
             Assert.AreEqual(_knowledge.AssociatedBelief, clone.AssociatedBelief);
         }
+
         /// <summary>
-        /// mix, in case of a change in Models.Beliefs 
+        ///     mix, in case of a change in Models.Beliefs
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void CloneTest2()
         {
-            Organization.Models.Beliefs.On = false;
-            _knowledge = new Knowledge(Network, Organization.Models, "1", 1);
-            Organization.Models.Beliefs.On = true;
-            var clone = (Knowledge)_knowledge.Clone();
+            MainOrganization.Models.Beliefs.On = false;
+            _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
+            MainOrganization.Models.Beliefs.On = true;
+            var clone = (Knowledge) _knowledge.Clone();
             Assert.AreEqual(_knowledge.Length, clone.Length);
             Assert.IsNotNull(clone.AssociatedBelief);
             Assert.AreEqual(_knowledge.AssociatedBelief, clone.AssociatedBelief);

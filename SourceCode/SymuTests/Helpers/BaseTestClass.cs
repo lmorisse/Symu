@@ -27,13 +27,15 @@ namespace SymuTests.Helpers
     /// </summary>
     public class BaseTestClass
     {
-        protected readonly Organization Organization = new Organization("1");
-        protected readonly SymuEngine Simulation = new SymuEngine();
+        protected SymuEnvironment Environment { get; } = new SymuEnvironment();
+        protected MainOrganization MainOrganization { get; } = new MainOrganization("1");
+        protected SymuEngine Simulation { get; } = new SymuEngine();
+        protected IAgentId Uid1 { get; } = new AgentId(1, 1);
 
-        protected readonly SymuEnvironment Environment = new SymuEnvironment();
-        protected IEnumerable<IKnowledge> Knowledges => Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>();
-        protected readonly IAgentId Uid1 = new AgentId(1, 1);
-        protected GraphMetaNetwork Network => Organization.MetaNetwork;
+        protected IEnumerable<IKnowledge> Knowledges =>
+            Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>();
+
+        protected GraphMetaNetwork Network => MainOrganization.MetaNetwork;
         protected WhitePages WhitePages => Environment.WhitePages;
     }
 }

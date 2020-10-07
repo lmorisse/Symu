@@ -11,10 +11,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Symu.Common.Interfaces;
-
-using Symu.DNA;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
@@ -33,8 +30,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     public class ResourceTaskModel
     {
         private readonly IAgentId _resourceId;
-        private readonly OneModeNetwork _TaskNetwork;
         private readonly ResourceTaskNetwork _resourceTaskNetwork;
+        private readonly OneModeNetwork _taskNetwork;
 
         /// <summary>
         ///     Initialize influence model :
@@ -51,13 +48,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             _resourceId = resourceId;
             _resourceTaskNetwork = network.ResourceTask;
-            _TaskNetwork = network.Task;
+            _taskNetwork = network.Task;
         }
 
         /// <summary>
         ///     Get all the tasks (activities) that an agent can do
         /// </summary>
         public IEnumerable<IAgentId> TaskIds => _resourceTaskNetwork.TargetsFilteredBySource(_resourceId);
+
         /// <summary>
         ///     Get the all the knowledges for all the tasks of an agent
         /// </summary>
@@ -69,8 +67,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 var knowledge = new Dictionary<ITask, IEnumerable<IKnowledge>>();
                 foreach (var taskId in TaskIds)
                 {
-                    var task = _TaskNetwork.GetEntity<ITask>(taskId);
-                    knowledge.Add(task,task.Knowledge);
+                    var task = _taskNetwork.GetEntity<ITask>(taskId);
+                    knowledge.Add(task, task.Knowledge);
                 }
 
                 return knowledge;
@@ -90,7 +88,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             foreach (var task in tasks)
             {
-                var resourceTask= new ResourceTask(_resourceId, task.EntityId);
+                var resourceTask = new ResourceTask(_resourceId, task.EntityId);
                 _resourceTaskNetwork.Add(resourceTask);
             }
         }

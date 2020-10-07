@@ -27,6 +27,7 @@ namespace Symu.Repository
         ///     From 0 to 19
         /// </summary>
         public const byte Role = ClassIdCollection.Role;
+
         public const byte Knowledge = ClassIdCollection.Knowledge;
         public const byte Belief = ClassIdCollection.Belief;
         public const byte Organization = ClassIdCollection.Organization;
@@ -44,6 +45,7 @@ namespace Symu.Repository
         public const byte SplitStep = 15;
         public const byte Wiki = 16;
         public const byte Email = 17;
+
         public const byte Database = 18;
         //public const byte Cadence = 11;
         //public const byte EndOfYear = 12;

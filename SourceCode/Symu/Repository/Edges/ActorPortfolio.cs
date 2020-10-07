@@ -22,7 +22,8 @@ namespace Symu.Repository.Edges
     /// </summary>
     public class ActorPortfolio : ActorResource
     {
-        public ActorPortfolio(IAgentId actorId, IAgentId resourceId, IResourceUsage resourceUsage, float weight): base(actorId, resourceId, resourceUsage, weight)
+        public ActorPortfolio(IAgentId actorId, IAgentId resourceId, IResourceUsage resourceUsage, float weight) : base(
+            actorId, resourceId, resourceUsage, weight)
         {
         }
     }

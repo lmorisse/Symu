@@ -15,7 +15,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Symu.Classes.Organization;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Common.Classes;
@@ -32,8 +31,8 @@ namespace SymuScenariosAndEvents
 {
     public partial class Home : SymuForm
     {
-        private readonly ExampleOrganization _organization = new ExampleOrganization();
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
+        private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();
 
         public Home()
         {
@@ -62,7 +61,7 @@ namespace SymuScenariosAndEvents
 
             #endregion
 
-            tbWorkers.Text = _organization.WorkersCount.ToString(CultureInfo.InvariantCulture);
+            tbWorkers.Text = _mainOrganization.WorkersCount.ToString(CultureInfo.InvariantCulture);
         }
 
         private void Form1_PrepareStyle(object sender, ChartPrepareStyleInfoEventArgs args)
@@ -121,12 +120,12 @@ namespace SymuScenariosAndEvents
 
             if (ModelsOn.Checked)
             {
-                _organization.Models.SetOn(1);
-                _organization.Models.Generator = RandomGenerator.RandomUniform;
+                _mainOrganization.Models.SetOn(1);
+                _mainOrganization.Models.Generator = RandomGenerator.RandomUniform;
             }
             else
             {
-                _organization.Models.SetOff();
+                _mainOrganization.Models.SetOff();
             }
 
             #endregion
@@ -135,13 +134,13 @@ namespace SymuScenariosAndEvents
 
             if (MurphiesOn.Checked)
             {
-                _organization.Murphies.SetOn(1);
-                _organization.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
-                _organization.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
+                _mainOrganization.Murphies.SetOn(1);
+                _mainOrganization.Murphies.IncompleteKnowledge.CommunicationMediums = CommunicationMediums.Email;
+                _mainOrganization.Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
             }
             else
             {
-                _organization.Murphies.SetOff();
+                _mainOrganization.Murphies.SetOff();
             }
 
             #endregion
@@ -149,7 +148,7 @@ namespace SymuScenariosAndEvents
 
             SetRandomLevel(cbRandomLevel.SelectedIndex);
             cbIterations.Enabled = false;
-            _organization.AddKnowledge();
+            _mainOrganization.AddKnowledge();
         }
 
         private void SetEvents()
@@ -184,13 +183,14 @@ namespace SymuScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        eventEntity = new EventEntity(_environment.Organization.MetaNetwork) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.MainOrganization.MetaNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        eventEntity = new CyclicalEvent(_environment.Organization.MetaNetwork) { EveryStep = cyclicalStep};
+                        eventEntity = new CyclicalEvent(_environment.MainOrganization.MetaNetwork)
+                            {EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        eventEntity = new RandomEvent(_environment.Organization.MetaNetwork) { Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.MainOrganization.MetaNetwork) {Ratio = randomRatio};
                         break;
                     case Cyclicity.Always:
                         break;
@@ -212,13 +212,14 @@ namespace SymuScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        eventEntity = new EventEntity(_environment.Organization.MetaNetwork) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.MainOrganization.MetaNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        eventEntity = new CyclicalEvent(_environment.Organization.MetaNetwork) { EveryStep = cyclicalStep};
+                        eventEntity = new CyclicalEvent(_environment.MainOrganization.MetaNetwork)
+                            {EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        eventEntity = new RandomEvent(_environment.Organization.MetaNetwork) { Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.MainOrganization.MetaNetwork) {Ratio = randomRatio};
                         break;
                     case Cyclicity.Always:
                         break;
@@ -304,7 +305,7 @@ namespace SymuScenariosAndEvents
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Start(_environment, _organization);
+            Start(_environment, _mainOrganization);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -407,7 +408,7 @@ namespace SymuScenariosAndEvents
         {
             try
             {
-                _organization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
+                _mainOrganization.WorkersCount = byte.Parse(tbWorkers.Text, CultureInfo.InvariantCulture);
                 tbWorkers.BackColor = SystemColors.Window;
             }
             catch (FormatException)

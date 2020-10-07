@@ -11,9 +11,7 @@
 
 using System;
 using Symu.Classes.Murphies;
-
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
 
@@ -114,6 +112,7 @@ namespace Symu.Classes.Task
             // Normal use
             return level * MandatoryRatio;
         }
+
         /// <summary>
         ///     Given a KnowledgeModel and a KnowledgeLevel
         ///     return the required knowledgeBits index for the task: an array fill of random index of the GetBits

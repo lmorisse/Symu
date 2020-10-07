@@ -20,8 +20,6 @@ namespace SymuMessageAndTask.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
-
         public ExampleEnvironment()
         {
             IterationResult.Off();
@@ -31,19 +29,21 @@ namespace SymuMessageAndTask.Classes
             SetDebug(false);
         }
 
+        public ExampleMainOrganization ExampleMainOrganization => (ExampleMainOrganization) MainOrganization;
+
         public override void SetAgents()
         {
             base.SetAgents();
             var group = GroupAgent.CreateInstance(this);
-            for (var i = 0; i < ExampleOrganization.WorkersCount; i++)
+            for (var i = 0; i < ExampleMainOrganization.WorkersCount; i++)
             {
-                var actor = PersonAgent.CreateInstance(this, Organization.Templates.Human);
+                var actor = PersonAgent.CreateInstance(this, MainOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = EmailEntity.CreateInstance(Organization.MetaNetwork, Organization.Models);
+                var email = EmailEntity.CreateInstance(MainOrganization.MetaNetwork, MainOrganization.Models);
                 var actorResource = new ActorResource(actor.AgentId, email.EntityId, new ResourceUsage(0));
-                Organization.MetaNetwork.ActorResource.Add(actorResource);
+                MainOrganization.MetaNetwork.ActorResource.Add(actorResource);
                 var actorGroup = new ActorOrganization(actor.AgentId, group.AgentId);
-                Organization.MetaNetwork.ActorOrganization.Add(actorGroup);
+                MainOrganization.MetaNetwork.ActorOrganization.Add(actorGroup);
             }
         }
     }

@@ -20,8 +20,6 @@ namespace SymuBeliefsAndInfluence.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
-
         public ExampleEnvironment()
         {
             IterationResult.Tasks.On = true;
@@ -33,31 +31,33 @@ namespace SymuBeliefsAndInfluence.Classes
             SetTimeStepType(TimeStepType.Daily);
         }
 
+        public ExampleMainOrganization ExampleMainOrganization => (ExampleMainOrganization) MainOrganization;
+
         public override void SetAgents()
         {
             base.SetAgents();
-            
-            for (var j = 0; j < ExampleOrganization.InfluencersCount; j++)
+
+            for (var j = 0; j < ExampleMainOrganization.InfluencersCount; j++)
             {
-                var actor = InfluencerAgent.CreateInstance(this, ExampleOrganization.InfluencerTemplate);
-                ExampleOrganization.Influencers.Add(actor);
+                var actor = InfluencerAgent.CreateInstance(this, ExampleMainOrganization.InfluencerTemplate);
+                ExampleMainOrganization.Influencers.Add(actor);
             }
 
-            for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
+            for (var j = 0; j < ExampleMainOrganization.WorkersCount; j++)
             {
-                _ = PersonAgent.CreateInstance(this, ExampleOrganization.WorkerTemplate);
+                _ = PersonAgent.CreateInstance(this, ExampleMainOrganization.WorkerTemplate);
             }
 
             var actorIds =
-                Organization.MetaNetwork.Actor.GetEntityIds().ToList();
+                MainOrganization.MetaNetwork.Actor.GetEntityIds().ToList();
             // Set the interactions between the actors
             // Those interactions could be managed via an organization agent.
-            for (var i = 0; i < actorIds.Count-1; i++)
+            for (var i = 0; i < actorIds.Count - 1; i++)
             {
-                for (var j = i+1; j < actorIds.Count; j++)
+                for (var j = i + 1; j < actorIds.Count; j++)
                 {
                     var interaction = new ActorActor(actorIds[i], actorIds[j]);
-                    Organization.MetaNetwork.ActorActor.Add(interaction);
+                    MainOrganization.MetaNetwork.ActorActor.Add(interaction);
                 }
             }
         }

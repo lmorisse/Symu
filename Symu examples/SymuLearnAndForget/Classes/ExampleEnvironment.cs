@@ -19,14 +19,6 @@ namespace SymuLearnAndForget.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
-        public LearnFromSourceAgent LearnFromSourceAgent { get; private set; }
-        public LearnByDoingAgent LearnByDoingAgent { get; private set; }
-        public LearnByAskingAgent LearnByAskingAgent { get; private set; }
-        public LearnAgent DoesNotLearnAgent { get; private set; }
-        public ExpertAgent ExpertAgent { get; private set; }
-
-
         public ExampleEnvironment()
         {
             IterationResult.KnowledgeAndBeliefResults.On = true;
@@ -35,21 +27,28 @@ namespace SymuLearnAndForget.Classes
             SetTimeStepType(TimeStepType.Daily);
         }
 
+        public ExampleMainOrganization ExampleMainOrganization => (ExampleMainOrganization) MainOrganization;
+        public LearnFromSourceAgent LearnFromSourceAgent { get; private set; }
+        public LearnByDoingAgent LearnByDoingAgent { get; private set; }
+        public LearnByAskingAgent LearnByAskingAgent { get; private set; }
+        public LearnAgent DoesNotLearnAgent { get; private set; }
+        public ExpertAgent ExpertAgent { get; private set; }
+
         public override void SetAgents()
         {
             base.SetAgents();
 
             LearnFromSourceAgent =
-                LearnFromSourceAgent.CreateInstance(this, Organization.Templates.Human);
+                LearnFromSourceAgent.CreateInstance(this, MainOrganization.Templates.Human);
             LearnByDoingAgent =
-                LearnByDoingAgent.CreateInstance(this, Organization.Templates.Human);
+                LearnByDoingAgent.CreateInstance(this, MainOrganization.Templates.Human);
             LearnByAskingAgent =
-                LearnByAskingAgent.CreateInstance(this, Organization.Templates.Human);
-            DoesNotLearnAgent = LearnAgent.CreateInstance(this, Organization.Templates.Human);
-            ExpertAgent = ExpertAgent.CreateInstance(this, Organization.Templates.Human);
+                LearnByAskingAgent.CreateInstance(this, MainOrganization.Templates.Human);
+            DoesNotLearnAgent = LearnAgent.CreateInstance(this, MainOrganization.Templates.Human);
+            ExpertAgent = ExpertAgent.CreateInstance(this, MainOrganization.Templates.Human);
             // Active link between expert and LearnByAskingAgent to be able to exchange information
             var interaction = new ActorActor(LearnByAskingAgent.AgentId, ExpertAgent.AgentId);
-            Organization.MetaNetwork.ActorActor.Add(interaction);
+            MainOrganization.MetaNetwork.ActorActor.Add(interaction);
         }
     }
 }

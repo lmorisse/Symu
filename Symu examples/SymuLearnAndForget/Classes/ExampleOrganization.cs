@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: SymuBiz - SymuGroupAndInteraction
+// Description: SymuBiz - SymuLearnAndForget
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -18,15 +18,23 @@ using Symu.Repository.Entities;
 
 namespace SymuLearnAndForget.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
+        public ExampleMainOrganization() : base("symu")
+        {
+            Models.SetOn(1);
+            Murphies.IncompleteKnowledge.On = true;
+            Communication.Email.CostToSendLevel = GenericLevel.None;
+            Communication.Email.CostToReceiveLevel = GenericLevel.None;
+        }
+
         public Knowledge Knowledge
         {
             get
             {
                 if (MetaNetwork.Knowledge.Any())
                 {
-                    return (Knowledge)MetaNetwork.Knowledge.List.First();
+                    return (Knowledge) MetaNetwork.Knowledge.List.First();
                 }
 
                 return null;
@@ -36,17 +44,9 @@ namespace SymuLearnAndForget.Classes
         public KnowledgeLevel KnowledgeLevel { get; set; }
         public WikiEntity WikiEntity { get; private set; }
 
-        public ExampleOrganization(): base("symu")
+        public override MainOrganization Clone()
         {
-            Models.SetOn(1);
-            Murphies.IncompleteKnowledge.On = true;
-            Communication.Email.CostToSendLevel = GenericLevel.None;
-            Communication.Email.CostToReceiveLevel = GenericLevel.None;
-        }
-
-        public override Organization Clone()
-        {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
             clone.KnowledgeLevel = KnowledgeLevel;
             clone.WikiEntity = WikiEntity;

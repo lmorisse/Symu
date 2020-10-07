@@ -15,9 +15,7 @@ using System.Linq;
 using Symu.Classes.Organization;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.GraphNetworks;
@@ -25,7 +23,6 @@ using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
 using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
-using ActorKnowledge = Symu.Repository.Edges.ActorKnowledge;
 
 #endregion
 
@@ -39,12 +36,12 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class KnowledgeModel
     {
-        private readonly RandomGenerator _model;
+        private readonly ActorKnowledgeNetwork _actorKnowledgeNetwork;
         private readonly IAgentId _agentId;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
-        private readonly MessageContent _messageContent;
-        private readonly ActorKnowledgeNetwork _actorKnowledgeNetwork;
         private readonly OneModeNetwork _knowledgeNetwork;
+        private readonly MessageContent _messageContent;
+        private readonly RandomGenerator _model;
 
         /// <summary>
         ///     Initialize Knowledge model :
@@ -55,7 +52,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="cognitiveArchitecture"></param>
         /// <param name="network"></param>
         /// <param name="model"></param>
-        public KnowledgeModel(IAgentId agentId, KnowledgeModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
+        public KnowledgeModel(IAgentId agentId, KnowledgeModelEntity entity,
+            CognitiveArchitecture cognitiveArchitecture,
             GraphMetaNetwork network, RandomGenerator model)
         {
             if (entity is null)
@@ -94,59 +92,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         public IReadOnlyList<IEntityKnowledge> Expertise =>
             On ? _actorKnowledgeNetwork.EdgesFilteredBySource(_agentId).ToList() : new List<IEntityKnowledge>();
 
-        #region Knowledge Analyze
-
-        /// <summary>
-        ///     Get the sum of all the knowledge
-        /// </summary>
-        /// <returns></returns>
-        public float GetKnowledgeSum()
-        {
-            return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).Sum(l => l.GetKnowledgeSum());
-        }
-
-        /// <summary>
-        ///     Get the maximum potential knowledge
-        /// </summary>
-        /// <returns></returns>
-        public float GetKnowledgePotential()
-        {
-            return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).Sum(l => l.GetKnowledgePotential());
-        }
-        /// <summary>
-        ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
-        /// </summary>
-        public float PercentageKnowledge
-        {
-            get
-            {
-                float percentage = 0;
-                var sum = GetKnowledgeSum();
-                var potential = GetKnowledgePotential();
-                if (potential > Tolerance)
-                {
-                    percentage = 100 * sum / potential;
-                }
-
-                return percentage;
-            }
-        }
-
-        /// <summary>
-        ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
-        /// </summary>
-        public float Obsolescence(float step)
-        {
-            if (_actorKnowledgeNetwork.EdgesFilteredBySourceCount(_agentId) > 0)
-            {
-                return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId)
-                    .Average(t => t.KnowledgeBits.Obsolescence(step));
-            }
-
-            return 0;
-        }
-        #endregion
-
         /// <summary>
         ///     Initialize the expertise of the agent based on the knowledge network
         /// </summary>
@@ -159,13 +104,12 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             }
 
             //_actorKnowledgeNetwork.Add(Expertise);
-            
+
             foreach (var agentKnowledge in _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId))
             {
                 InitializeActorKnowledge(agentKnowledge, !_knowledgeAndBeliefs.HasInitialKnowledge, step);
             }
         }
-
 
 
         /// <summary>
@@ -268,7 +212,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             var actorKnowledge = new ActorKnowledge(_agentId, knowledgeId, knowledgeBits, minimumKnowledge, timeToLive);
             _actorKnowledgeNetwork.Add(actorKnowledge);
-
         }
 
 
@@ -345,7 +288,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public ActorKnowledge GetActorKnowledge(IAgentId knowledgeId)
         {
-            return _actorKnowledgeNetwork.Edge<ActorKnowledge>(_agentId,knowledgeId);
+            return _actorKnowledgeNetwork.Edge<ActorKnowledge>(_agentId, knowledgeId);
         }
 
         public void SetKnowledge(IAgentId knowledgeId, byte index, float value, ushort step)
@@ -355,6 +298,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 throw new NullReferenceException(nameof(actorKnowledge));
             }
+
             actorKnowledge.SetKnowledgeBit(index, value, step);
         }
 
@@ -365,6 +309,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 throw new NullReferenceException(nameof(actorKnowledge));
             }
+
             actorKnowledge.SetKnowledgeBits(knowledgeBits, step);
         }
 
@@ -372,6 +317,62 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         {
             return _knowledgeNetwork.GetEntity<Knowledge>(knowledgeId);
         }
+
+        #region Knowledge Analyze
+
+        /// <summary>
+        ///     Get the sum of all the knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgeSum()
+        {
+            return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId).Sum(l => l.GetKnowledgeSum());
+        }
+
+        /// <summary>
+        ///     Get the maximum potential knowledge
+        /// </summary>
+        /// <returns></returns>
+        public float GetKnowledgePotential()
+        {
+            return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId)
+                .Sum(l => l.GetKnowledgePotential());
+        }
+
+        /// <summary>
+        ///     Percentage of all Knowledge of the agent for all knowledge during the simulation
+        /// </summary>
+        public float PercentageKnowledge
+        {
+            get
+            {
+                float percentage = 0;
+                var sum = GetKnowledgeSum();
+                var potential = GetKnowledgePotential();
+                if (potential > Tolerance)
+                {
+                    percentage = 100 * sum / potential;
+                }
+
+                return percentage;
+            }
+        }
+
+        /// <summary>
+        ///     Average of all the knowledge obsolescence : 1 - LastTouched.Average()/LastStep
+        /// </summary>
+        public float Obsolescence(float step)
+        {
+            if (_actorKnowledgeNetwork.EdgesFilteredBySourceCount(_agentId) > 0)
+            {
+                return _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId)
+                    .Average(t => t.KnowledgeBits.Obsolescence(step));
+            }
+
+            return 0;
+        }
+
+        #endregion
 
         #region KnowsEnough
 
@@ -385,7 +386,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="step"></param>
         /// <returns>0 if agentKnowLedgeBits include taskKnowledge</returns>
         /// <returns>index if agentKnowLedgeBits include taskKnowledge</returns>
-        public bool Check(ActorKnowledge actorKnowledge, byte[] taskKnowledgeIndexes, out byte index, float knowledgeThreshHoldForDoing, ushort step)
+        public bool Check(ActorKnowledge actorKnowledge, byte[] taskKnowledgeIndexes, out byte index,
+            float knowledgeThreshHoldForDoing, ushort step)
         {
             if (taskKnowledgeIndexes is null)
             {
@@ -415,14 +417,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeThreshHoldForAnswer"></param>
         /// <param name="step"></param>
         /// <returns>true if the agent has the knowledge</returns>
-        public bool KnowsEnough(IAgentId knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer, ushort step)
+        public bool KnowsEnough(IAgentId knowledgeId, byte knowledgeBit, float knowledgeThreshHoldForAnswer,
+            ushort step)
         {
-            if (!_actorKnowledgeNetwork.Exists(_agentId, knowledgeId))
-            {
-                return false;
-            }
-
-            return KnowsEnough(GetActorKnowledge(knowledgeId), knowledgeBit, knowledgeThreshHoldForAnswer, step);
+            return _actorKnowledgeNetwork.Exists(_agentId, knowledgeId) && 
+                   KnowsEnough(GetActorKnowledge(knowledgeId), knowledgeBit, knowledgeThreshHoldForAnswer, step);
         }
 
         /// <summary>
@@ -433,7 +432,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="knowledgeThreshHoldForAnswer"></param>
         /// <param name="step"></param>
         /// <returns>true if agent has the knowledge</returns>
-        public static bool KnowsEnough(ActorKnowledge actorKnowledge, byte index, float knowledgeThreshHoldForAnswer, ushort step)
+        public static bool KnowsEnough(ActorKnowledge actorKnowledge, byte index, float knowledgeThreshHoldForAnswer,
+            ushort step)
         {
             if (actorKnowledge == null)
             {
@@ -452,6 +452,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             return actorKnowledge.KnowledgeBits.GetBit(index, step) >= knowledgeThreshHoldForAnswer;
         }
+
         #endregion
     }
 }

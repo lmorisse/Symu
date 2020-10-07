@@ -19,7 +19,7 @@ using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 namespace SymuTests.Classes.Agents.Models.CognitiveModels
 {
     [TestClass]
-    public class InteractionPatternsTests 
+    public class InteractionPatternsTests
     {
         private InteractionPatterns _interaction;
 

@@ -7,10 +7,12 @@
 
 #endregion
 
+#region using directives
 
-using Symu.Common.Interfaces;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
+
+#endregion
 
 namespace Symu.Repository.Entities
 {
@@ -19,16 +21,21 @@ namespace Symu.Repository.Entities
     /// </summary>
     public class CyclicalEvent : EventEntity
     {
+        public CyclicalEvent()
+        {
+        }
+
+        public CyclicalEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
+        {
+        }
+
         public ushort EveryStep { get; set; }
 
         public override bool Trigger(ushort step)
         {
             return step % EveryStep == 0;
         }
-        public CyclicalEvent(){}
-        public CyclicalEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
-        {
-        }
+
         /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public override object Clone()
@@ -45,6 +52,7 @@ namespace Symu.Repository.Entities
             {
                 return;
             }
+
             copy.EveryStep = EveryStep;
         }
     }

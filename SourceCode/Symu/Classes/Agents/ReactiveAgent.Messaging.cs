@@ -11,7 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using Symu.Classes.Task.Manager;
 using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
@@ -22,9 +21,9 @@ using Symu.Messaging.Messages;
 
 namespace Symu.Classes.Agents
 {
-    ///     The default implementation of IAgent
-    ///     You can define your own class agent by inheritance or implementing directly IAgent
-    ///     This partial class focus on messaging methods
+    /// The default implementation of IAgent
+    /// You can define your own class agent by inheritance or implementing directly IAgent
+    /// This partial class focus on messaging methods
     public partial class ReactiveAgent
     {
         /// <summary>
@@ -155,7 +154,7 @@ namespace Symu.Classes.Agents
             MessageProcessor.IncrementMessagesPerPeriod(message.Medium, true);
             // Impact of the Communication channels on the remaining capacity
             var cost =
-                Environment.Organization.Communication.TimeSpent(message.Medium, true,
+                Environment.MainOrganization.Communication.TimeSpent(message.Medium, true,
                     Environment.RandomLevelValue);
             Environment.Messages.TrackMessageSent(message, cost);
         }
@@ -291,6 +290,7 @@ namespace Symu.Classes.Agents
                 // receiver is already stopped
                 return;
             }
+
             SendDelayed(message, step);
         }
 

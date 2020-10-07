@@ -12,7 +12,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Agents;
 using Symu.Classes.Task;
 using Symu.Classes.Task.Manager;
 using Symu.Common.Interfaces;
@@ -25,8 +24,8 @@ namespace SymuTests.Classes.Task.Manager
     [TestClass]
     public class TasksManagerTests
     {
-        private readonly TasksLimit _tasksLimit = new TasksLimit();
         private readonly AgentId _agentId = new AgentId(1, 1);
+        private readonly TasksLimit _tasksLimit = new TasksLimit();
         private SymuTask _message;
         private SymuTask _task;
         private List<SymuTask> _tasks;
@@ -36,7 +35,9 @@ namespace SymuTests.Classes.Task.Manager
         public void Initialize()
         {
             _task = new SymuTask(0) {Assigned = _agentId};
-            _message = new SymuTask(0) {Parent = new Message(),
+            _message = new SymuTask(0)
+            {
+                Parent = new Message(),
                 Assigned = _agentId
             };
             var tasksLimit = new TasksLimit();

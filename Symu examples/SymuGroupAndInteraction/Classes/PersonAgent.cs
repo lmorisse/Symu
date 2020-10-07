@@ -26,10 +26,27 @@ namespace SymuGroupAndInteraction.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
-        public static IClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private PersonAgent(IAgentId entityId, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(
+            entityId, environment, template)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        /// <summary>
+        ///     Agent is member of a group
+        /// </summary>
+        public IAgentId GroupId { get; set; }
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
@@ -38,25 +55,12 @@ namespace SymuGroupAndInteraction.Classes
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-            var entity = new ActorEntity(environment.Organization.MetaNetwork);
+
+            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
             var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
         }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IAgentId entityId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            entityId, environment, template)
-        {
-        }
-
-        /// <summary>
-        ///     Agent is member of a group
-        /// </summary>
-        public IAgentId GroupId { get; set; }
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent

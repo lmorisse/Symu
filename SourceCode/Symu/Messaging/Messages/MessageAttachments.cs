@@ -12,8 +12,6 @@
 using System;
 using System.Collections.Generic;
 using Symu.Common.Interfaces;
-
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 
 #endregion

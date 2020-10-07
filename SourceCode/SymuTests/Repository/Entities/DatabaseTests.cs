@@ -10,8 +10,6 @@
 #region using directives
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Symu.Classes.Organization;
-using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Entities;
 using Symu.Repository.Entities;
@@ -22,27 +20,29 @@ using SymuTests.Helpers;
 namespace SymuTests.Repository.Entities
 {
     [TestClass]
-    public class DatabaseTests: BaseTestClass
+    public class DatabaseTests : BaseTestClass
     {
-        private IKnowledge _knowledge ;
+        private readonly CommunicationTemplate _communication = new EmailTemplate();
         private readonly float[] _floats1 = {1, 1};
         private Bits _bits1;
         private Database _database;
-        private readonly CommunicationTemplate _communication = new EmailTemplate();
+        private IKnowledge _knowledge;
 
         [TestInitialize]
         public void Initialize()
         {
-            Organization.Models.SetOn(1);
-            _knowledge = new Knowledge(Organization.MetaNetwork, Organization.Models, "1", (byte)_floats1.Length);
-            _database = new Database(Organization.MetaNetwork, Organization.Models, _communication, 0);
+            MainOrganization.Models.SetOn(1);
+            _knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1",
+                (byte) _floats1.Length);
+            _database = new Database(MainOrganization.MetaNetwork, MainOrganization.Models, _communication, 0);
             _database.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 10;
             _bits1 = new Bits(_floats1, 0);
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void CloneTest()
         {
-            var clone = (Database)_database.Clone();
+            var clone = (Database) _database.Clone();
             Assert.AreEqual(_database.TimeToLive, clone.TimeToLive);
         }
 
@@ -131,8 +131,9 @@ namespace SymuTests.Repository.Entities
         [TestMethod]
         public void ForgettingProcessTest2()
         {
-            Organization.Models.Forgetting.On = true;
-            _database = new Database(Organization.MetaNetwork, Organization.Models, _communication, Environment.RandomLevelValue);
+            MainOrganization.Models.Forgetting.On = true;
+            _database = new Database(MainOrganization.MetaNetwork, MainOrganization.Models, _communication,
+                Environment.RandomLevelValue);
             _database.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
             _database.StoreKnowledge(_knowledge.EntityId, _bits1, 1, 0);
             _database.ForgettingProcess(2);

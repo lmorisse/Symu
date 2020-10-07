@@ -9,7 +9,6 @@
 
 #region using directives
 
-using Symu.Classes.Agents.Models;
 using Symu.Common.Classes;
 
 #endregion

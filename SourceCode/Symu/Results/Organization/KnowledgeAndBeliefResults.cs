@@ -111,7 +111,7 @@ namespace Symu.Results.Organization
         public void HandleKnowledge()
         {
             var sum = Environment.WhitePages.AllCognitiveAgents()
-                .Select(e=> e.KnowledgeModel.GetKnowledgeSum()).ToList();
+                .Select(e => e.KnowledgeModel.GetKnowledgeSum()).ToList();
             var potential = Environment.WhitePages.AllCognitiveAgents()
                 .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);

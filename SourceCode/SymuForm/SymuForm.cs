@@ -18,7 +18,6 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Environment;
-using Symu.Repository.Entities;
 using Symu.Results;
 
 #endregion
@@ -185,7 +184,8 @@ namespace Symu.Forms
         /// <summary>
         /// </summary>
         /// <param name="environment"></param>
-        protected void Start(SymuEnvironment environment, Organization organization)
+        /// <param name="organization"></param>
+        protected void Start(SymuEnvironment environment, MainOrganization organization)
         {
             if (environment is null)
             {
@@ -314,7 +314,7 @@ namespace Symu.Forms
 
         #region Initialize / set
 
-        private void SetUp(SymuEnvironment environment, Organization organization)
+        private void SetUp(SymuEnvironment environment, MainOrganization organization)
         {
             Engine.SetEnvironment(environment);
             SetUpOrganization();

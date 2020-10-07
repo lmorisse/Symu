@@ -11,20 +11,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Xml.XPath;
 using Symu.Classes.Organization;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-
 using Symu.Common.Math.ProbabilityDistributions;
-using Symu.DNA;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Edges;
 using Symu.OrgMod.GraphNetworks;
 using Symu.OrgMod.GraphNetworks.TwoModesNetworks;
-using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using static Symu.Common.Constants;
 using ActorBelief = Symu.Repository.Edges.ActorBelief;
@@ -41,13 +36,12 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
     /// <remarks>From Construct Software</remarks>
     public class BeliefsModel
     {
-        private readonly RandomGenerator _model;
+        private readonly ActorBeliefNetwork _actorBeliefNetwork;
         private readonly IAgentId _agentId;
+        private readonly OneModeNetwork _beliefNetwork;
         private readonly KnowledgeAndBeliefs _knowledgeAndBeliefs;
         private readonly MessageContent _messageContent;
-        private readonly ActorBeliefNetwork _actorBeliefNetwork;
-        private readonly OneModeNetwork _beliefNetwork;
-        public BeliefModelEntity Entity { get; }
+        private readonly RandomGenerator _model;
 
         /// <summary>
         ///     Initialize Beliefs model :
@@ -79,6 +73,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             _model = model;
             Entity = entity ?? throw new ArgumentNullException(nameof(entity));
         }
+
+        public BeliefModelEntity Entity { get; }
 
         public bool On => _knowledgeAndBeliefs.HasBelief && Entity.IsAgentOn();
 
@@ -114,6 +110,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
             AddBeliefsFromKnowledge(expertiseActor, _knowledgeAndBeliefs.DefaultBeliefLevel);
         }
+
         public void AddBeliefsFromKnowledge(IEnumerable<IEntityKnowledge> expertise, BeliefLevel beliefLevel)
         {
             if (expertise is null)
@@ -136,8 +133,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         {
             AddBeliefFromKnowledgeId(knowledgeId, _knowledgeAndBeliefs.DefaultBeliefLevel);
         }
+
         /// <summary>
-        ///     Add an agentId's beliefs 
+        ///     Add an agentId's beliefs
         ///     using the default beliefLevel
         /// </summary>
         /// <param name="beliefId"></param>
@@ -145,8 +143,9 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         {
             AddBelief(beliefId, _knowledgeAndBeliefs.DefaultBeliefLevel);
         }
+
         /// <summary>
-        ///     Add an agentId's beliefs 
+        ///     Add an agentId's beliefs
         ///     using the beliefLevel
         /// </summary>
         /// <param name="beliefId"></param>
@@ -181,14 +180,16 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 throw new NullReferenceException(nameof(belief));
             }
+
             var actorBelief = new ActorBelief(_agentId, belief.EntityId, beliefLevel);
             _actorBeliefNetwork.Add(actorBelief);
         }
 
         public ActorBelief GetActorBelief(IAgentId beliefId)
         {
-            return _actorBeliefNetwork.Edge<ActorBelief>(_agentId,beliefId);
+            return _actorBeliefNetwork.Edge<ActorBelief>(_agentId, beliefId);
         }
+
         public void SetBelief(IAgentId beliefId, byte index, float value)
         {
             GetActorBelief(beliefId).BeliefBits.SetBit(index, value);
@@ -207,8 +208,10 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public Belief GetBeliefFromKnowledgeId(IAgentId knowledgeId)
         {
-            return _beliefNetwork.List.OfType<Belief>().FirstOrDefault(x => x.KnowledgeId != null && x.KnowledgeId.Equals(knowledgeId));
+            return _beliefNetwork.List.OfType<Belief>()
+                .FirstOrDefault(x => x.KnowledgeId != null && x.KnowledgeId.Equals(knowledgeId));
         }
+
         public IAgentId GetBeliefIdFromKnowledgeId(IAgentId knowledgeId)
         {
             var belief = GetBeliefFromKnowledgeId(knowledgeId);
@@ -224,12 +227,14 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns>a beliefBits if he has the belief or the right</returns>
         /// <returns>With binary KnowledgeBits it will return a float of 0</returns>
         /// <example>KnowledgeBits[0,1,0.6] and MinimumKnowledgeToSend = 0.8 => KnowledgeBits[0,1,0]</example>
-        public Bits FilterBeliefToSendFromKnowledgeId(IAgentId knowledgeId, byte beliefBit, CommunicationTemplate medium)
+        public Bits FilterBeliefToSendFromKnowledgeId(IAgentId knowledgeId, byte beliefBit,
+            CommunicationTemplate medium)
         {
             var beliefId = GetBeliefIdFromKnowledgeId(knowledgeId);
 
             return FilterBeliefToSend(beliefId, beliefBit, medium);
         }
+
         /// <summary>
         ///     The agent have received a message that ask for belief in return
         ///     stochastic Filtering agentKnowledge based on MinimumBitsOfKnowledgeToSend/MaximumBitsOfKnowledgeToSend
@@ -317,12 +322,12 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns>true if the agent has the knowledge</returns>
         public bool BelievesEnough(IAgentId beliefId, byte beliefBit, float beliefThreshHoldForAnswer)
         {
-            if (!_actorBeliefNetwork.Exists(_agentId,beliefId))
+            if (!_actorBeliefNetwork.Exists(_agentId, beliefId))
             {
                 return false;
             }
 
-            var belief = _actorBeliefNetwork.Edge<ActorBelief>(_agentId,beliefId);
+            var belief = _actorBeliefNetwork.Edge<ActorBelief>(_agentId, beliefId);
             return belief.BelievesEnough(beliefBit, beliefThreshHoldForAnswer);
         }
 
@@ -332,10 +337,11 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <returns></returns>
         public float GetBeliefsSum()
         {
-            if (! On || Beliefs == null)
+            if (!On || Beliefs == null)
             {
                 return 0;
             }
+
             return _actorBeliefNetwork.EdgesFilteredBySource<ActorBelief>(_agentId).Sum(l => l.GetBeliefSum());
         }
 
@@ -349,6 +355,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 return 0;
             }
+
             return _actorBeliefNetwork.EdgesFilteredBySource<ActorBelief>(_agentId).Sum(l => l.GetBeliefPotential());
         }
 
@@ -362,8 +369,8 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 return;
             }
-                
-            foreach (var agentBelief in _actorBeliefNetwork.EdgesFilteredBySource<ActorBelief>(_agentId) )
+
+            foreach (var agentBelief in _actorBeliefNetwork.EdgesFilteredBySource<ActorBelief>(_agentId))
             {
                 InitializeActorBelief(agentBelief, neutral);
             }

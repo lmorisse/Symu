@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: SymuBiz - SymuGroupAndInteraction
+// Description: SymuBiz - SymuScenariosAndEvents
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -16,21 +16,21 @@ using Symu.Repository.Entities;
 
 namespace SymuScenariosAndEvents.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
-
-        public byte WorkersCount { get; set; } = 5;
-        public byte KnowledgeCount { get; private set; } = 2;
-        public ExampleOrganization(): base("symu")
+        public ExampleMainOrganization() : base("symu")
         {
             Models.Knowledge.On = true;
         }
 
-        public override Organization Clone()
+        public byte WorkersCount { get; set; } = 5;
+        public byte KnowledgeCount { get; private set; } = 2;
+
+        public override MainOrganization Clone()
         {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
-            clone.WorkersCount= WorkersCount;
+            clone.WorkersCount = WorkersCount;
             clone.KnowledgeCount = KnowledgeCount;
             return clone;
         }

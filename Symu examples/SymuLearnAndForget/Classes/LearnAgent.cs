@@ -28,11 +28,29 @@ namespace SymuLearnAndForget.Classes
     public class LearnAgent : CognitiveAgent
     {
         public const byte Class = 2;
-        public static IClassId ClassId => new ClassId(Class);
-        protected ExampleOrganization Organization => ((ExampleEnvironment) Environment).ExampleOrganization;
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        protected LearnAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
+        {
+            Wiki = MainOrganization.WikiEntity;
+            Knowledge = GetKnowledge();
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+
+        protected ExampleMainOrganization MainOrganization =>
+            ((ExampleEnvironment) Environment).ExampleMainOrganization;
+
+        protected Database Wiki { get; }
+        protected Knowledge Knowledge { get; set; }
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static LearnAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
@@ -46,20 +64,6 @@ namespace SymuLearnAndForget.Classes
             agent.Initialize();
             return agent;
         }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        protected LearnAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            ClassId, environment, template)
-        {
-            Wiki = Organization.WikiEntity;
-            Knowledge = GetKnowledge();
-        }
-
-        protected Database Wiki { get; }
-        protected Knowledge Knowledge { get; set; }
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -80,8 +84,8 @@ namespace SymuLearnAndForget.Classes
         public override void SetModels()
         {
             base.SetModels();
-            KnowledgeModel.AddKnowledge(Organization.Knowledge.EntityId,
-                Organization.KnowledgeLevel, Cognitive.InternalCharacteristics);
+            KnowledgeModel.AddKnowledge(MainOrganization.Knowledge.EntityId,
+                MainOrganization.KnowledgeLevel, Cognitive.InternalCharacteristics);
         }
 
         public override void OnAfterTaskProcessorStart()
@@ -111,8 +115,8 @@ namespace SymuLearnAndForget.Classes
 
         private Knowledge GetKnowledge()
         {
-            var knowledgeId = Environment.Organization.MetaNetwork.Knowledge.List.First().EntityId;
-            return (Knowledge)Environment.Organization.MetaNetwork.Knowledge.GetEntity(knowledgeId);
+            var knowledgeId = Environment.MainOrganization.MetaNetwork.Knowledge.List.First().EntityId;
+            return (Knowledge) Environment.MainOrganization.MetaNetwork.Knowledge.GetEntity(knowledgeId);
         }
     }
 }

@@ -11,10 +11,12 @@
 
 #endregion
 
+#region using directives
+
 using System.Collections.Generic;
 using System.Linq;
-using Symu.Common.Classes;
-using Symu.Messaging.Templates;
+
+#endregion
 
 namespace Symu.Classes.Agents.Models.CognitiveTemplates
 {
@@ -36,6 +38,7 @@ namespace Symu.Classes.Agents.Models.CognitiveTemplates
             Add(Promoter);
             Add(Internet);
         }
+
         public StandardAgentTemplate Standard { get; } = new StandardAgentTemplate();
         public SimpleHumanTemplate Human { get; } = new SimpleHumanTemplate();
         public PromoterTemplate Promoter { get; } = new PromoterTemplate();

@@ -36,7 +36,7 @@ namespace SymuTests.Classes.Task
             for (var i = 0; i < 2; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                var knowledge = new Knowledge(Network, Organization.Models, i.ToString(), 10);
+                var knowledge = new Knowledge(Network, MainOrganization.Models, i.ToString(), 10);
                 _knowledges.Add(knowledge);
             }
         }

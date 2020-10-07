@@ -11,12 +11,9 @@
 
 using System;
 using Symu.Classes.Organization;
-using Symu.Common.Classes;
-using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
-using KnowledgeEntity = Symu.OrgMod.Entities.KnowledgeEntity;
 
 #endregion
 
@@ -29,17 +26,23 @@ namespace Symu.Repository.Entities
     ///     Each bit represent a single atomic fact
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class Knowledge: OrgMod.Entities.KnowledgeEntity//IKnowledge
+    public class Knowledge : KnowledgeEntity //IKnowledge
     {
-        private readonly OrganizationModels _models;
-        public Knowledge(){ }
-        public Knowledge(GraphMetaNetwork metaNetwork, OrganizationModels models, string name, byte length) : base(metaNetwork, name)
+        private readonly MainOrganizationModels _models;
+
+        public Knowledge()
+        {
+        }
+
+        public Knowledge(GraphMetaNetwork metaNetwork, MainOrganizationModels models, string name, byte length) : base(
+            metaNetwork, name)
         {
             Length = length;
             if (length > Bits.MaxBits)
             {
                 throw new ArgumentOutOfRangeException("Length should be <= " + Bits.MaxBits);
             }
+
             _models = models ?? throw new ArgumentNullException(nameof(models));
             AddAssociatedBelief();
         }
@@ -51,10 +54,12 @@ namespace Symu.Repository.Entities
         ///     size range [0; 10]
         /// </summary>
         public byte Length { get; private set; }
+
         /// <summary>
-        /// A belief may be associated with this knowledge if models.Beliefs is On
+        ///     A belief may be associated with this knowledge if models.Beliefs is On
         /// </summary>
         public Belief AssociatedBelief { get; private set; }
+
         /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public override object Clone()
@@ -71,6 +76,7 @@ namespace Symu.Repository.Entities
             {
                 return;
             }
+
             AddAssociatedBelief();
             copy.Length = Length;
             copy.AssociatedBelief = AssociatedBelief;
@@ -112,6 +118,8 @@ namespace Symu.Repository.Entities
                     return 0.9F;
                 case KnowledgeLevel.FullKnowledge:
                     return 1.0F;
+                case KnowledgeLevel.Random:
+                    return ContinuousUniform.Sample(0, 1F);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
@@ -135,6 +143,8 @@ namespace Symu.Repository.Entities
                     return 0.6F;
                 case KnowledgeLevel.FullKnowledge:
                     return 1F;
+                case KnowledgeLevel.Random:
+                    return ContinuousUniform.Sample(0, 1F);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }

@@ -1,28 +1,37 @@
-using Symu.Classes.Organization;
+#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
+#region using directives
+
+#region using directives
+
+#region Licence
+
+// Description: SymuBiz - SymuTests
+// Website: https://symu.org
+// Copyright: (c) 2020 laurent morisseau
+// License : the program is distributed under the terms of the GNU General Public License
+
+#endregion
+
 using Symu.Common.Interfaces;
-using Symu.Environment;
-
-#region Licence
-
-// Description: SymuBiz - SymuTests
-// Website: https://symu.org
-// Copyright: (c) 2020 laurent morisseau
-// License : the program is distributed under the terms of the GNU General Public License
-
-#endregion
-
-#region using directives
-
-#region using directives
-
-#region Licence
-
-// Description: SymuBiz - SymuTests
-// Website: https://symu.org
-// Copyright: (c) 2020 laurent morisseau
-// License : the program is distributed under the terms of the GNU General Public License
-
-#endregion
 
 #region using directives
 
@@ -31,8 +40,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Common;
-using Symu.Engine;
 using SymuTests.Helpers;
+
+#endregion
 
 #endregion
 
@@ -43,7 +53,7 @@ using SymuTests.Helpers;
 namespace SymuTests.Repository
 {
     [TestClass]
-    public class WhitePagesTests: BaseTestClass
+    public class WhitePagesTests : BaseTestClass
     {
         private const byte ClassName1 = 11;
 
@@ -52,7 +62,7 @@ namespace SymuTests.Repository
         [TestInitialize]
         public void Initialize()
         {
-            Environment.SetOrganization(Organization);
+            Environment.SetOrganization(MainOrganization);
             Environment.InitializeIteration();
             Simulation.SetEnvironment(Environment);
         }
@@ -90,7 +100,8 @@ namespace SymuTests.Repository
             Environment.WhitePages.WaitingForStart(_agent.AgentId);
             Assert.IsTrue(Environment.WhitePages.ExistsAndStarted(_agent.AgentId));
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void ClearTest()
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
@@ -120,7 +131,7 @@ namespace SymuTests.Repository
             Environment.InitializeIteration();
             //Assert
             Assert.IsFalse(Environment.WhitePages.StoppedAgents.Any());
-            Assert.AreEqual(0, Environment.Organization.MetaNetwork.Actor.Count);
+            Assert.AreEqual(0, Environment.MainOrganization.MetaNetwork.Actor.Count);
         }
 
         [TestMethod]
@@ -192,7 +203,8 @@ namespace SymuTests.Repository
             }
 
             Assert.AreEqual(10,
-                Environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds).Count);
+                Environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
+                    .Count);
         }
 
         [TestMethod]
@@ -212,7 +224,8 @@ namespace SymuTests.Repository
             }
 
             Assert.AreEqual(10,
-                Environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds).Count());
+                Environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
+                    .Count());
         }
     }
 }

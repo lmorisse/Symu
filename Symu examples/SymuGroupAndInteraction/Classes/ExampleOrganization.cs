@@ -18,23 +18,24 @@ using Symu.Repository.Entities;
 
 namespace SymuGroupAndInteraction.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
-        public byte GroupsCount { get; set; } = 2;
-        public byte WorkersCount { get; set; } = 5;
-        public byte Knowledge { get; set; }
-        public byte Activities { get; set; } 
-        public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
-
-        public ExampleOrganization(): base("symu")
+        public ExampleMainOrganization() : base("symu")
         {
             Models.SetOn(1);
             Models.InteractionSphere.SphereUpdateOverTime = true;
             Models.Generator = RandomGenerator.RandomUniform;
         }
-        public override Organization Clone()
+
+        public byte GroupsCount { get; set; } = 2;
+        public byte WorkersCount { get; set; } = 5;
+        public byte Knowledge { get; set; }
+        public byte Activities { get; set; }
+        public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.FullKnowledge;
+
+        public override MainOrganization Clone()
         {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
             clone.GroupsCount = GroupsCount;
             clone.WorkersCount = WorkersCount;

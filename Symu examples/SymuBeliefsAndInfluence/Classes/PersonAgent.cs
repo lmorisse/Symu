@@ -31,11 +31,25 @@ namespace SymuBeliefsAndInfluence.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
-        public static IClassId ClassId => new ClassId(Class);
-        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private PersonAgent(IAgentId entityId, SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(
+            entityId, environment, template)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleMainOrganization MainOrganization => ((ExampleEnvironment) Environment).ExampleMainOrganization;
+
+        public IEnumerable<IAgentId> Influencers => MainOrganization.Influencers.Select(x => x.AgentId);
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
@@ -44,23 +58,12 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-            var entity = new ActorEntity(environment.Organization.MetaNetwork);
+
+            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
             var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
         }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(IAgentId entityId, SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            entityId, environment, template)
-        {
-
-        }
-
-        public IEnumerable<IAgentId> Influencers => Organization.Influencers.Select(x => x.AgentId);
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -88,7 +91,7 @@ namespace SymuBeliefsAndInfluence.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);
@@ -102,7 +105,8 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 Weight = 1
             };
-            task.SetKnowledgesBits(Environment.Organization.Murphies.IncompleteBelief, Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
+            task.SetKnowledgesBits(Environment.MainOrganization.Murphies.IncompleteBelief,
+                Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
             Post(task);
         }
 

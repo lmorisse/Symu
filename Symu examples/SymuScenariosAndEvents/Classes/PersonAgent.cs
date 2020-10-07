@@ -32,10 +32,25 @@ namespace SymuScenariosAndEvents.Classes
     public sealed class PersonAgent : CognitiveAgent
     {
         public const byte Class = SymuYellowPages.Actor;
-        public static ClassId ClassId => new ClassId(Class);
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private PersonAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
+        {
+        }
+
+        public static ClassId ClassId => new ClassId(Class);
+
+        public IAgentId GroupId { get; set; }
+
+        private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
         public static PersonAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
@@ -49,19 +64,6 @@ namespace SymuScenariosAndEvents.Classes
             agent.Initialize();
             return agent;
         }
-
-        /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private PersonAgent(SymuEnvironment environment, CognitiveArchitectureTemplate template) : base(
-            ClassId, environment, template)
-        {
-        }
-
-        public IAgentId GroupId { get; set; }
-
-        private MurphyTask Model => ((ExampleEnvironment) Environment).Model;
 
         /// <summary>
         ///     Customize the cognitive architecture of the agent
@@ -90,7 +92,7 @@ namespace SymuScenariosAndEvents.Classes
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.Intermediate,
                     Cognitive.InternalCharacteristics);
@@ -105,9 +107,10 @@ namespace SymuScenariosAndEvents.Classes
                 // Weight is randomly distributed around 1, but has a minimum of 0
                 Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.RandomLevelValue)),
                 // Creator is randomly  a person of the group - for the incomplete information murphy
-                Creator = (AgentId)Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
+                Creator = (AgentId) Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
-            task.SetKnowledgesBits(Model, Environment.Organization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
+            task.SetKnowledgesBits(Model, Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(),
+                1);
             Post(task);
         }
 

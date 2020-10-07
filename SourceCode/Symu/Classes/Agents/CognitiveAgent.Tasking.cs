@@ -15,8 +15,6 @@ using Symu.Classes.Agents.Models;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
-
-using Symu.Environment;
 using Symu.Messaging.Messages;
 using static Symu.Common.Constants;
 
@@ -86,7 +84,7 @@ namespace Symu.Classes.Agents
             float timeSpent;
             if (Schedule.Type == TimeStepType.Intraday)
             {
-                timeSpent = Math.Min(Environment.Organization.Models.Intraday, Capacity.Actual);
+                timeSpent = Math.Min(Environment.MainOrganization.Models.Intraday, Capacity.Actual);
             }
             else
             {
@@ -190,11 +188,13 @@ namespace Symu.Classes.Agents
         public virtual void MurphiesImpactsOnCapacity()
         {
             // Unavailability
-            if (Environment.Organization.Murphies.UnAvailability.Next())
+            if (!Environment.MainOrganization.Murphies.UnAvailability.Next())
             {
-                Capacity.Initial = 0;
-                Status = AgentStatus.Offline;
+                return;
             }
+
+            Capacity.Initial = 0;
+            Status = AgentStatus.Offline;
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Symu.Classes.Agents
             }
 
             var impact =
-                Environment.Organization.Communication.TimeSpent(medium, send,
+                Environment.MainOrganization.Communication.TimeSpent(medium, send,
                     Environment.RandomLevelValue);
             AddTimeSpent(keyActivity, impact);
         }
@@ -250,6 +250,7 @@ namespace Symu.Classes.Agents
                 // This can be improve inCognitiveAgent.Act.ConvertMessageIntoTask
                 return;
             }
+
             if (TimeSpent == null)
             {
                 throw new ArgumentNullException(nameof(TimeSpent));

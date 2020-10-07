@@ -17,9 +17,9 @@ using Symu.Classes.Organization;
 using Symu.Classes.Task;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
+using Symu.Repository.Edges;
 using Symu.Repository.Entities;
 using SymuTests.Helpers;
-using ActorBelief = Symu.Repository.Edges.ActorBelief;
 
 #endregion
 
@@ -31,15 +31,15 @@ namespace SymuTests.Classes.Murphies
         private readonly AgentId _agentId = new AgentId(1, 1);
         private readonly MurphyIncompleteBelief _murphy = new MurphyIncompleteBelief();
         private readonly TaskKnowledgeBits _taskBits = new TaskKnowledgeBits();
+        private ActorBelief _actorBelief;
         private Belief _belief;
         private BeliefsModel _beliefsModel;
         private CognitiveArchitecture _cognitiveArchitecture;
-        private ActorBelief _actorBelief;
 
         [TestInitialize]
         public void Initialize()
         {
-            Organization.Models.Generator = RandomGenerator.RandomUniform;
+            MainOrganization.Models.Generator = RandomGenerator.RandomUniform;
             _cognitiveArchitecture = new CognitiveArchitecture
             {
                 KnowledgeAndBeliefs = {HasBelief = true, HasKnowledge = true},
@@ -47,11 +47,12 @@ namespace SymuTests.Classes.Murphies
                 InternalCharacteristics = {CanLearn = true, CanForget = true, CanInfluenceOrBeInfluence = true}
             };
             var modelEntity = new BeliefModelEntity {On = true};
-            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, Network, Organization.Models.Generator) ;
-            _belief = new Belief(Network, 1, Organization.Models.Generator, BeliefWeightLevel.RandomWeight);
+            _beliefsModel = new BeliefsModel(_agentId, modelEntity, _cognitiveArchitecture, Network,
+                MainOrganization.Models.Generator);
+            _belief = new Belief(Network, 1, MainOrganization.Models.Generator, BeliefWeightLevel.RandomWeight);
             _actorBelief = new ActorBelief(_agentId, _belief.EntityId, BeliefLevel.NeitherAgreeNorDisagree);
             Network.ActorBelief.Add(_actorBelief);
-            
+
             _taskBits.SetMandatory(new byte[] {0});
             _taskBits.SetRequired(new byte[] {0});
         }

@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using Symu.Common.Interfaces;
 using Symu.Common.Math.ProbabilityDistributions;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
@@ -25,6 +24,14 @@ namespace Symu.Repository.Entities
     public class RandomEvent : EventEntity
     {
         private float _ratio;
+
+        public RandomEvent()
+        {
+        }
+
+        public RandomEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
+        {
+        }
 
         public float Ratio
         {
@@ -44,10 +51,7 @@ namespace Symu.Repository.Entities
         {
             return Bernoulli.Sample(_ratio);
         }
-        public RandomEvent(){}
-        public RandomEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
-        {
-        }
+
         /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public override object Clone()
@@ -64,6 +68,7 @@ namespace Symu.Repository.Entities
             {
                 return;
             }
+
             copy.Ratio = Ratio;
         }
     }

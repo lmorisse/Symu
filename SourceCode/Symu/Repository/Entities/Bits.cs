@@ -10,7 +10,6 @@
 #region using directives
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 #endregion
@@ -42,8 +41,9 @@ namespace Symu.Repository.Entities
         {
             _bits = bits;
         }
+
         /// <summary>
-        /// The minimum value a Bit can take
+        ///     The minimum value a Bit can take
         /// </summary>
         public float RangeMin { get; }
 
@@ -171,7 +171,7 @@ namespace Symu.Repository.Entities
 
         public override bool Equals(object obj)
         {
-            return obj is Bits bits && 
+            return obj is Bits bits &&
                    _bits.SequenceEqual(bits._bits) &&
                    Length == bits.Length;
         }

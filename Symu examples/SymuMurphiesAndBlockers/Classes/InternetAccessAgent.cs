@@ -26,14 +26,27 @@ namespace SymuMurphiesAndBlockers.Classes
     public sealed class InternetAccessAgent : CognitiveAgent
     {
         public const byte Class = 1;
-        public static IClassId ClassId => new ClassId(Class);
-        private ExampleOrganization Organization => ((ExampleEnvironment)Environment).ExampleOrganization;
+
         /// <summary>
-        /// Factory method to create an agent
-        /// Call the Initialize method
+        ///     Constructor of the agent
+        /// </summary>
+        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
+        private InternetAccessAgent(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template) : base(
+            ClassId, environment, template)
+        {
+        }
+
+        public static IClassId ClassId => new ClassId(Class);
+        private ExampleMainOrganization MainOrganization => ((ExampleEnvironment) Environment).ExampleMainOrganization;
+
+        /// <summary>
+        ///     Factory method to create an agent
+        ///     Call the Initialize method
         /// </summary>
         /// <returns></returns>
-        public static InternetAccessAgent CreateInstance(SymuEnvironment environment, CognitiveArchitectureTemplate template)
+        public static InternetAccessAgent CreateInstance(SymuEnvironment environment,
+            CognitiveArchitectureTemplate template)
         {
             if (environment == null)
             {
@@ -46,25 +59,15 @@ namespace SymuMurphiesAndBlockers.Classes
         }
 
         /// <summary>
-        /// Constructor of the agent
-        /// </summary>
-        /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private InternetAccessAgent(SymuEnvironment environment,
-            CognitiveArchitectureTemplate template) : base(
-            ClassId, environment, template)
-        {
-        }
-
-        /// <summary>
         ///     Customize the models of the agent
         ///     After setting the Agent basics models
         /// </summary>
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.Organization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
             {
-                KnowledgeModel.AddKnowledge(knowledgeId, Organization.KnowledgeLevel,
+                KnowledgeModel.AddKnowledge(knowledgeId, MainOrganization.KnowledgeLevel,
                     Cognitive.InternalCharacteristics);
             }
         }

@@ -9,7 +9,6 @@
 
 #region using directives
 
-using System;
 using Symu.Classes.Organization;
 using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
@@ -25,17 +24,25 @@ namespace Symu.Repository.Entities
     /// </summary>
     public class WikiEntity : Database
     {
-        public const byte Class = SymuYellowPages.Wiki;
-        public static IClassId ClassId => new ClassId(Class);
-        public static WikiEntity CreateInstance(GraphMetaNetwork metaNetwork, OrganizationModels models)
+        public new const byte Class = SymuYellowPages.Wiki;
+        public new static IClassId ClassId => new ClassId(Class);
+
+        private WikiEntity()
+        {
+        }
+
+        private WikiEntity(GraphMetaNetwork metaNetwork, MainOrganizationModels models) : base(metaNetwork, models,
+            new ViaPlatformTemplate(), Class)
+        {
+        }
+
+
+        public static WikiEntity CreateInstance(GraphMetaNetwork metaNetwork, MainOrganizationModels models)
         {
             return new WikiEntity(metaNetwork, models);
         }
 
-        private WikiEntity(){}
-        private WikiEntity(GraphMetaNetwork metaNetwork, OrganizationModels models) : base(metaNetwork, models, new ViaPlatformTemplate(), Class)
-        {
-        }        /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
+        /// <summary>Creates a new object that is a copy of the current instance, with the same EntityId.</summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public override object Clone()
         {

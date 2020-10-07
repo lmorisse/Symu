@@ -1,6 +1,6 @@
 ﻿#region Licence
 
-// Description: SymuBiz - SymuGroupAndInteraction
+// Description: SymuBiz - SymuMurphiesAndBlockers
 // Website: https://symu.org
 // Copyright: (c) 2020 laurent morisseau
 // License : the program is distributed under the terms of the GNU General Public License
@@ -18,14 +18,9 @@ using Symu.Repository.Entities;
 
 namespace SymuMurphiesAndBlockers.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
-        public byte WorkersCount { get; set; } = 5;
-        public byte KnowledgeCount { get; set; } = 2;
-
-        public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.Intermediate;
-
-        public ExampleOrganization(): base("symu")
+        public ExampleMainOrganization() : base("symu")
         {
             Models.Beliefs.On = true;
             Models.Knowledge.On = true;
@@ -38,13 +33,18 @@ namespace SymuMurphiesAndBlockers.Classes
             Murphies.IncompleteBelief.CommunicationMediums = CommunicationMediums.Email;
         }
 
-        public override Organization Clone()
+        public byte WorkersCount { get; set; } = 5;
+        public byte KnowledgeCount { get; set; } = 2;
+
+        public KnowledgeLevel KnowledgeLevel { get; set; } = KnowledgeLevel.Intermediate;
+
+        public override MainOrganization Clone()
         {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
             clone.WorkersCount = WorkersCount;
             clone.KnowledgeCount = KnowledgeCount;
-            clone.KnowledgeLevel =KnowledgeLevel ;
+            clone.KnowledgeLevel = KnowledgeLevel;
             return clone;
         }
 

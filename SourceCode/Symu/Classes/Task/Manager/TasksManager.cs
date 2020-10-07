@@ -14,8 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Symu.Messaging.Messages;
-using Symu.Results.Blocker;
-using Symu.Results.Task;
+using Symu.Results.Blockers;
+using Symu.Results.Tasks;
 using static Symu.Common.Constants;
 
 #endregion

@@ -20,16 +20,9 @@ using Symu.Repository.Entities;
 
 namespace SymuBeliefsAndInfluence.Classes
 {
-    public class ExampleOrganization : Organization
+    public class ExampleMainOrganization : MainOrganization
     {
-        public byte WorkersCount { get; set; } = 5;
-        public byte InfluencersCount { get; set; } = 2;
-        public byte BeliefCount { get; set; } = 2;
-        public List<InfluencerAgent> Influencers { get; private set; } = new List<InfluencerAgent>();
-        public PromoterTemplate InfluencerTemplate { get; private set; } = new PromoterTemplate();
-
-        public SimpleHumanTemplate WorkerTemplate { get; private set; } = new SimpleHumanTemplate();
-        public ExampleOrganization(): base("Symu")
+        public ExampleMainOrganization() : base("Symu")
         {
             Models.Influence.On = true;
             Models.Beliefs.On = true;
@@ -50,9 +43,18 @@ namespace SymuBeliefsAndInfluence.Classes
             Communication.Email.CostToReceiveLevel = GenericLevel.None;
             Communication.Email.CostToSendLevel = GenericLevel.None;
         }
-        public override Organization Clone()
+
+        public byte WorkersCount { get; set; } = 5;
+        public byte InfluencersCount { get; set; } = 2;
+        public byte BeliefCount { get; set; } = 2;
+        public List<InfluencerAgent> Influencers { get; private set; } = new List<InfluencerAgent>();
+        public PromoterTemplate InfluencerTemplate { get; private set; } = new PromoterTemplate();
+
+        public SimpleHumanTemplate WorkerTemplate { get; private set; } = new SimpleHumanTemplate();
+
+        public override MainOrganization Clone()
         {
-            var clone = new ExampleOrganization();
+            var clone = new ExampleMainOrganization();
             CopyTo(clone);
             clone.WorkersCount = WorkersCount;
             clone.InfluencersCount = InfluencersCount;

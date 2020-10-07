@@ -20,7 +20,7 @@ using TestResult = SymuTests.Helpers.TestResult;
 namespace SymuTests.Results
 {
     [TestClass]
-    public class IterationResultTests: BaseTestClass
+    public class IterationResultTests : BaseTestClass
     {
         private IterationResult _result;
         private TestResult _specificResult;

@@ -22,11 +22,6 @@ namespace SymuMurphiesAndBlockers.Classes
 {
     public class ExampleEnvironment : SymuEnvironment
     {
-        public ExampleOrganization ExampleOrganization => (ExampleOrganization)Organization;
-        public MurphyTask Model => Organization.Murphies.IncompleteKnowledge;
-
-        public InternetAccessAgent Internet { get; private set; }
-
         public ExampleEnvironment()
         {
             IterationResult.Blockers.On = true;
@@ -36,21 +31,26 @@ namespace SymuMurphiesAndBlockers.Classes
             SetTimeStepType(TimeStepType.Daily);
         }
 
+        public ExampleMainOrganization ExampleMainOrganization => (ExampleMainOrganization) MainOrganization;
+        public MurphyTask Model => MainOrganization.Murphies.IncompleteKnowledge;
+
+        public InternetAccessAgent Internet { get; private set; }
+
         public override void SetAgents()
         {
             base.SetAgents();
 
             var group = GroupAgent.CreateInstance(this);
-            Internet = InternetAccessAgent.CreateInstance(this, ExampleOrganization.Templates.Internet);
-            for (var j = 0; j < ExampleOrganization.WorkersCount; j++)
+            Internet = InternetAccessAgent.CreateInstance(this, ExampleMainOrganization.Templates.Internet);
+            for (var j = 0; j < ExampleMainOrganization.WorkersCount; j++)
             {
-                var actor = PersonAgent.CreateInstance(this, ExampleOrganization.Templates.Human);
+                var actor = PersonAgent.CreateInstance(this, ExampleMainOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = EmailEntity.CreateInstance(ExampleOrganization.MetaNetwork, Organization.Models);
+                var email = EmailEntity.CreateInstance(ExampleMainOrganization.MetaNetwork, MainOrganization.Models);
                 var actorResource = new ActorResource(actor.AgentId, email.EntityId, new ResourceUsage(0));
-                ExampleOrganization.MetaNetwork.ActorResource.Add(actorResource);
+                ExampleMainOrganization.MetaNetwork.ActorResource.Add(actorResource);
                 var actorGroup = new ActorOrganization(actor.AgentId, group.AgentId);
-                ExampleOrganization.MetaNetwork.ActorOrganization.Add(actorGroup);
+                ExampleMainOrganization.MetaNetwork.ActorOrganization.Add(actorGroup);
             }
         }
     }
