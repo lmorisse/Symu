@@ -24,7 +24,6 @@ namespace SymuTests.Environment
         public void Initialize()
         {
             Environment.SetOrganization(MainOrganization);
-            Simulation.SetEnvironment(Environment);
         }
 
         [TestMethod]
@@ -32,8 +31,7 @@ namespace SymuTests.Environment
         {
             var agent1 = TestReactiveAgent.CreateInstance(Environment);
             var agent2 = TestReactiveAgent.CreateInstance(Environment);
-            Environment.Start();
-            Environment.WaitingForStart();
+            Simulation.Initialize(Environment);
             Environment.WhitePages.RemoveAgent(agent2);
             var message = new Message(agent1.AgentId, agent2.AgentId, MessageAction.Handle, 1);
             Assert.AreEqual(MessageState.Created, message.State);

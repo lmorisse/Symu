@@ -63,8 +63,7 @@ namespace SymuTests.Repository
         public void Initialize()
         {
             Environment.SetOrganization(MainOrganization);
-            Environment.InitializeIteration();
-            Simulation.SetEnvironment(Environment);
+            Simulation.Initialize(Environment);
         }
 
         [TestMethod]

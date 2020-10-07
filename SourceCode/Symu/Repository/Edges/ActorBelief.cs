@@ -27,7 +27,7 @@ namespace Symu.Repository.Edges
     ///     KnowledgeId, KnowledgeLevel, KnowledgeBits
     /// </summary>
     /// <example>Dev Java, test, project management, sociology, ...</example>
-    public class ActorBelief : OrgMod.Edges.ActorBelief //IActorBelief
+    public class ActorBelief : OrgMod.Edges.ActorBelief 
     {
         //todo RangeMin/Max should be at the Network level in the generic TwoModesNetwork - id. ActorKnowledge
         /// <summary>
