@@ -21,13 +21,13 @@ using SymuLearnAndForget.Classes;
 #endregion
 
 
-namespace SymuLearnAndForgetTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuLearnAndForget
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuLearnAndForgetTests
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();

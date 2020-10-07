@@ -19,13 +19,13 @@ using SymuMessageAndTask.Classes;
 #endregion
 
 
-namespace SymuMessageAndTaskTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuMessageAndTask
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuMessageAndTaskTests
     {
         private const int NumberOfSteps = 10;
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();

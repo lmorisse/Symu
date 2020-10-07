@@ -21,13 +21,13 @@ using SymuBeliefsAndInfluence.Classes;
 #endregion
 
 
-namespace SymuBeliefsAndInfluenceTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuBeliefsAndInfluence
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuBeliefsAndInfluenceTests
     {
         private const int NumberOfSteps = 15; // 3 IterationResult computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();

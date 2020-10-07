@@ -19,13 +19,13 @@ using SymuScenariosAndEvents.Classes;
 #endregion
 
 
-namespace SymuScenariosAndEventsTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuScenariosAndEvents
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuScenariosAndEventsTests
     {
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
         private readonly ExampleMainOrganization _mainOrganization = new ExampleMainOrganization();

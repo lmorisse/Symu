@@ -21,13 +21,13 @@ using SymuGroupAndInteraction.Classes;
 #endregion
 
 
-namespace SymuGroupAndInteractionTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuGroupAndInteraction
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuGroupAndInteractionTests
     {
         private const int NumberOfSteps = 15; // 2 organizationFlexibility computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();

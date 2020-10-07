@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>SymuMurphiesAndBlockersTests</AssemblyName>
+    <AssemblyName>SymuExamplesTests</AssemblyName>
 
-    <RootNamespace>SymuMurphiesAndBlockersTests</RootNamespace>
+    <RootNamespace>SymuExamplesTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +27,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SourceCode\Symu\Symu.csproj" />
+    <ProjectReference Include="..\SymuBeliefsAndInfluence\SymuBeliefsAndInfluence.csproj" />
+    <ProjectReference Include="..\SymuGroupAndInteraction\SymuGroupAndInteraction.csproj" />
+    <ProjectReference Include="..\SymuLearnAndForget\SymuLearnAndForget.csproj" />
+    <ProjectReference Include="..\SymuMessageAndTask\SymuMessageAndTask.csproj" />
     <ProjectReference Include="..\SymuMurphiesAndBlockers\SymuMurphiesAndBlockers.csproj" />
+    <ProjectReference Include="..\SymuScenariosAndEvents\SymuScenariosAndEvents.csproj" />
   </ItemGroup>
 
 </Project>

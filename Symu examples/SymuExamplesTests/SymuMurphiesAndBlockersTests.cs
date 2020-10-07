@@ -22,13 +22,13 @@ using SymuMurphiesAndBlockers.Classes;
 #endregion
 
 
-namespace SymuMurphiesAndBlockersTests
+namespace SymuExamplesTests
 {
     /// <summary>
-    ///     Integration tests using SymuEngine
+    ///     Integration tests for SymuMurphiesAndBlockers
     /// </summary>
     [TestClass]
-    public class IntegrationTests
+    public class SymuMurphiesAndBlockersTests
     {
         private const int NumberOfSteps = 15; // 3 IterationResult computations
         private readonly ExampleEnvironment _environment = new ExampleEnvironment();
