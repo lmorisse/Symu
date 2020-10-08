@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.0
+This release contains a refactoring of 
+* Organizational network analysis to the new repository Symu.DNA
+* Organizational modeling to the new repository Symu.OrgMod
+
 ## 0.9.1
 This release contains a refactoring of the agent class
 
