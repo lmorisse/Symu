@@ -51,6 +51,12 @@ namespace Symu.Repository.Entities
             CognitiveArchitecture = new CognitiveArchitecture();
         }
 
+        public static Database CreateInstance(GraphMetaNetwork metaNetwork, MainOrganizationModels models, CommunicationTemplate medium,
+            byte classId)
+        {
+            return new Database(metaNetwork, models, medium, classId);
+        }
+
         public Database(GraphMetaNetwork metaNetwork, MainOrganizationModels models, CommunicationTemplate medium,
             byte classId) : base(metaNetwork, classId)
         {

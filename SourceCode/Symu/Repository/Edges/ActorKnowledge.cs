@@ -29,6 +29,10 @@ namespace Symu.Repository.Edges
     /// <example>Dev Java, test, project management, sociology, ...</example>
     public class ActorKnowledge : EntityKnowledge 
     {
+        public static ActorKnowledge CreateInstance(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, KnowledgeBits knowledgeBits)
+        {
+            return new ActorKnowledge(network, actorId, knowledgeId, knowledgeBits);
+        }
         /// <summary>
         ///     Constructor used by WorkerCognitiveAgent for ForgettingKnowledge
         /// </summary>
@@ -41,8 +45,7 @@ namespace Symu.Repository.Edges
         {
             KnowledgeBits = knowledgeBits;
             Length = KnowledgeBits?.Length ?? 0;
-        }        
-        
+        }
         /// <summary>
         ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
         /// </summary>
@@ -62,7 +65,11 @@ namespace Symu.Repository.Edges
             KnowledgeBits.SetBits(knowledgeBits, step);
             Length = KnowledgeBits.Length;
         }
-
+        public static ActorKnowledge CreateInstance(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, float[] knowledgeBits, float minimumKnowledge,
+            short timeToLive, ushort step = 0)
+        {
+            return new ActorKnowledge(network, actorId, knowledgeId, knowledgeBits, minimumKnowledge, timeToLive, step);
+        }
         /// <summary>
         ///     Constructor used by Agent.Cognitive for ForgettingKnowledge
         /// </summary>
@@ -74,8 +81,7 @@ namespace Symu.Repository.Edges
         /// <param name="timeToLive"></param>
         /// <param name="step"></param>
         public ActorKnowledge(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, float[] knowledgeBits, float minimumKnowledge,
-            short timeToLive,
-            ushort step = 0) : base(network, actorId, knowledgeId)
+            short timeToLive, ushort step = 0) : base(network, actorId, knowledgeId)
         {
             MinimumKnowledge = minimumKnowledge;
             TimeToLive = timeToLive;
@@ -83,7 +89,6 @@ namespace Symu.Repository.Edges
             KnowledgeBits.SetBits(knowledgeBits, step);
             Length = KnowledgeBits.Length;
         }
-
         /// <summary>
         ///     Constructor based on the knowledge Id and the knowledge Level.
         ///     KnowledgeBits is not yet initialized.
@@ -103,7 +108,11 @@ namespace Symu.Repository.Edges
             KnowledgeBits = new KnowledgeBits(minimumKnowledge, timeToLive);
             Length = KnowledgeBits.Length;
         }
-
+        public static ActorKnowledge CreateInstance(TwoModesNetwork<IEntityKnowledge> network, IAgentId actorId, IAgentId knowledgeId, KnowledgeLevel level, float minimumKnowledge,
+            short timeToLive)
+        {
+            return new ActorKnowledge(network, actorId, knowledgeId, level, minimumKnowledge, timeToLive);
+        }
         /// <summary>
         ///     Constructor based on the knowledge Id and the knowledge Level.
         ///     KnowledgeBits is not yet initialized.

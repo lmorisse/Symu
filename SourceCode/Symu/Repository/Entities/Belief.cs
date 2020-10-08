@@ -40,6 +40,25 @@ namespace Symu.Repository.Entities
         {
         }
 
+
+        public static Belief CreateInstance(GraphMetaNetwork metaNetwork, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel)
+        {
+            return new Belief(metaNetwork, length, model, beliefWeightLevel);
+        }
+
+        public static Belief CreateInstance(GraphMetaNetwork metaNetwork, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel, string name)
+        {
+            return new Belief(metaNetwork, length, model, beliefWeightLevel, name);
+        }
+
+        public static Belief CreateInstance(GraphMetaNetwork metaNetwork, IKnowledge knowledge, byte length, RandomGenerator model,
+            BeliefWeightLevel beliefWeightLevel)
+        {
+            return new Belief(metaNetwork, knowledge, length, model, beliefWeightLevel);
+        }
+
         public Belief(GraphMetaNetwork metaNetwork, byte length, RandomGenerator model,
             BeliefWeightLevel beliefWeightLevel) : base(metaNetwork)
         {

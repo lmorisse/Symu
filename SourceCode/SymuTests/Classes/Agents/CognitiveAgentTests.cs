@@ -120,7 +120,7 @@ namespace SymuTests.Classes.Agents
             Assert.IsFalse(_agent.HasEmail);
             var email = EmailEntity.CreateInstance(Environment.MainOrganization.MetaNetwork, MainOrganization.Models);
             var usage = new ResourceUsage(0);
-            _ = new ActorResource(Environment.MainOrganization.MetaNetwork.ActorResource, _agent.AgentId, email.EntityId, usage);
+            ActorResource.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorResource, _agent.AgentId, email.EntityId, usage);
             _agent.EmailId = email.EntityId;
             Assert.IsTrue(_agent.HasEmail);
             Assert.IsNotNull(_agent.Email);
@@ -270,7 +270,7 @@ namespace SymuTests.Classes.Agents
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
             var knowledge = new Knowledge(Environment.MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
-            _ = new ActorKnowledge(Environment.MainOrganization.MetaNetwork.ActorKnowledge, _agent.AgentId, knowledge.EntityId, bit0S);
+            ActorKnowledge.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorKnowledge, _agent.AgentId, knowledge.EntityId, bit0S);
         }
 
         #endregion
@@ -832,7 +832,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
+            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -958,7 +958,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForInteractionsTest2()
         {
-            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
+            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
                 Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
@@ -1358,9 +1358,9 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             var group = TestCognitiveAgent.CreateInstance(2, Environment);
             group.Start();
-            _ = new ActorOrganization(Environment.MainOrganization.MetaNetwork.ActorOrganization, _agent.AgentId, group.AgentId);
-            _ = new ActorOrganization(Environment.MainOrganization.MetaNetwork.ActorOrganization, teammate.AgentId, group.AgentId);
-            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, teammate.AgentId);
+            ActorOrganization.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorOrganization, _agent.AgentId, group.AgentId);
+            ActorOrganization.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorOrganization, teammate.AgentId, group.AgentId);
+            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, teammate.AgentId);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId, 0, 1, 0);
@@ -1581,7 +1581,7 @@ namespace SymuTests.Classes.Agents
         {
             var knowledge2 = new Knowledge(Environment.MainOrganization.MetaNetwork,
                 Environment.MainOrganization.Models, "2", 1);
-            _ = new Belief(Environment.MainOrganization.MetaNetwork, knowledge2, knowledge2.Length,
+            Belief.CreateInstance(Environment.MainOrganization.MetaNetwork, knowledge2, knowledge2.Length,
                 MainOrganization.Models.Generator, MainOrganization.Models.BeliefWeightLevel);
 
             MainOrganization.Murphies.IncompleteBelief.On = true;

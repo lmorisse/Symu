@@ -36,7 +36,7 @@ namespace SymuExamplesTests
         [TestInitialize]
         public void Initialize()
         {
-            _ = new Knowledge(_mainOrganization.MetaNetwork, _mainOrganization.Models, "1", 50);
+            Knowledge.CreateInstance(_mainOrganization.MetaNetwork, _mainOrganization.Models, "1", 50);
             _environment.SetOrganization(_mainOrganization);
             _simulation.SetEnvironment(_environment);
             _environment.SetDebug(true);

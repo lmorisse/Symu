@@ -28,7 +28,10 @@ namespace Symu.Repository.Entities
         public RandomEvent()
         {
         }
-
+        public new static RandomEvent CreateInstance(GraphMetaNetwork metaNetwork)
+        {
+            return new RandomEvent(metaNetwork);
+        }
         public RandomEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {
         }

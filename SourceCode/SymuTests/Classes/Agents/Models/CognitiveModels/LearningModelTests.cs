@@ -38,8 +38,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _knowledge = new Knowledge(Network, MainOrganization.Models, "1", 1);
             InitializeModel(0, true);
-            _actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0, 0}, 0, -1);
-            Network.ActorKnowledge.Add(_actorKnowledge);
+            _actorKnowledge = new ActorKnowledge(Network.ActorKnowledge, _agentId, _knowledge.EntityId, new float[] {0, 0}, 0, -1);
         }
 
         public void InitializeModel(RandomLevel randomLevelLevel, bool modelOn)
@@ -60,8 +59,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         public void LearnByDoingTest0()
         {
             _learningModel.On = false;
-            var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
-            Network.ActorKnowledge.Add(actorKnowledge);
+            var actorKnowledge = new ActorKnowledge(Network.ActorKnowledge, _agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
             var realLearning = _learningModel.LearnByDoing(_knowledge.EntityId, 0, 0, -1, 0);
             Assert.AreEqual(0, actorKnowledge.GetKnowledgeSum());
             Assert.AreEqual(0, realLearning);

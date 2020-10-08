@@ -192,7 +192,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _ = new ActorKnowledge(_actorKnowledgeNetwork, _agentId, knowledgeId, level, minimumKnowledge, timeToLive);
+            ActorKnowledge.CreateInstance(_actorKnowledgeNetwork, _agentId, knowledgeId, level, minimumKnowledge, timeToLive);
         }
 
         /// <summary>
@@ -209,8 +209,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            var actorKnowledge = new ActorKnowledge(_agentId, knowledgeId, knowledgeBits, minimumKnowledge, timeToLive);
-            _actorKnowledgeNetwork.Add(actorKnowledge);
+            ActorKnowledge.CreateInstance(_actorKnowledgeNetwork, _agentId, knowledgeId, knowledgeBits, minimumKnowledge, timeToLive);
         }
 
 

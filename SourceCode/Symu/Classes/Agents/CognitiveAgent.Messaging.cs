@@ -229,7 +229,7 @@ namespace Symu.Classes.Agents
             }
 
             // Message.Sender is now part of agent interaction sphere
-            _ = new ActorActor(Environment.MainOrganization.MetaNetwork.ActorActor, AgentId, senderId);
+            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, AgentId, senderId);
 
             return true;
         }

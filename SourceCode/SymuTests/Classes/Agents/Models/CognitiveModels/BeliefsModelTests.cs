@@ -103,7 +103,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             _cognitiveArchitecture.KnowledgeAndBeliefs.HasBelief = true;
             var actorKnowledge = new ActorKnowledge(_agentId, _knowledge.EntityId, new float[] {0}, 0, -1);
-            _ = new Belief(Network, _knowledge, _knowledge.Length, RandomGenerator.RandomUniform,
+            Belief.CreateInstance(Network, _knowledge, _knowledge.Length, RandomGenerator.RandomUniform,
                 BeliefWeightLevel.RandomWeight);
             var expertise = new List<IEntityKnowledge> {actorKnowledge};
             _beliefsModel.AddBeliefsFromKnowledge(expertise);

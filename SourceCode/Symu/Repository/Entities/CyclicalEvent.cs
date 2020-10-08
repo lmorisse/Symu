@@ -24,6 +24,10 @@ namespace Symu.Repository.Entities
         public CyclicalEvent()
         {
         }
+        public static CyclicalEvent CreateInstance(GraphMetaNetwork metaNetwork)
+        {
+            return new CyclicalEvent(metaNetwork);
+        }
 
         public CyclicalEvent(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {

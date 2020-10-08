@@ -45,7 +45,7 @@ namespace SymuScenariosAndEvents.Classes
             for (var i = 0; i < KnowledgeCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                _ = new Knowledge(MetaNetwork, Models, i.ToString(), 10);
+                Knowledge.CreateInstance(MetaNetwork, Models, i.ToString(), 10);
             }
         }
     }

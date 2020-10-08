@@ -157,7 +157,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _ = new ActorBelief(_actorBeliefNetwork, _agentId, beliefId, beliefLevel);
+            ActorBelief.CreateInstance(_actorBeliefNetwork, _agentId, beliefId, beliefLevel);
         }
 
 
@@ -180,7 +180,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 throw new NullReferenceException(nameof(belief));
             }
 
-            _ = new ActorBelief(_actorBeliefNetwork, _agentId, belief.EntityId, beliefLevel);
+            ActorBelief.CreateInstance(_actorBeliefNetwork, _agentId, belief.EntityId, beliefLevel);
         }
 
         public ActorBelief GetActorBelief(IAgentId beliefId)
@@ -423,7 +423,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
                 return;
             }
 
-            _ = new ActorBelief(_actorBeliefNetwork, _agentId, beliefId, beliefLevel);
+            ActorBelief.CreateInstance(_actorBeliefNetwork, _agentId, beliefId, beliefLevel);
             InitializeBeliefs(true);
         }
     }

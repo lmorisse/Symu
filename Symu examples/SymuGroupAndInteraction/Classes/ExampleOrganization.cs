@@ -53,7 +53,7 @@ namespace SymuGroupAndInteraction.Classes
             for (ushort i = 0; i < GroupsCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                _ = new Knowledge(MetaNetwork, Models, i.ToString(), 10);
+                Symu.Repository.Entities.Knowledge.CreateInstance(MetaNetwork, Models, i.ToString(), 10);
                 //Beliefs are created based on knowledge
             }
         }
@@ -65,7 +65,7 @@ namespace SymuGroupAndInteraction.Classes
         {
             for (ushort i = 0; i < GroupsCount; i++)
             {
-                _ = new TaskEntity(MetaNetwork);
+                TaskEntity.CreateInstance(MetaNetwork);
             }
         }
     }

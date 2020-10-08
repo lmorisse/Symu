@@ -55,8 +55,8 @@ namespace SymuScenariosAndEvents.Classes
             var actor = PersonAgent.CreateInstance(this, ExampleMainOrganization.Templates.Human);
             actor.GroupId = _groupId;
             var email = EmailEntity.CreateInstance(ExampleMainOrganization.MetaNetwork, MainOrganization.Models);
-            _ = new ActorResource(ExampleMainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
-            _ = new ActorOrganization(ExampleMainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, _groupId);
+            ActorResource.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
+            ActorOrganization.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, _groupId);
             return actor;
         }
 

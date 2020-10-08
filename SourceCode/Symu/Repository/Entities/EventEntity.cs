@@ -29,7 +29,10 @@ namespace Symu.Repository.Entities
         public EventEntity()
         {
         }
-
+        public new static EventEntity CreateInstance(GraphMetaNetwork metaNetwork)
+        {
+            return new EventEntity(metaNetwork);
+        }
         public EventEntity(GraphMetaNetwork metaNetwork) : base(metaNetwork)
         {
         }

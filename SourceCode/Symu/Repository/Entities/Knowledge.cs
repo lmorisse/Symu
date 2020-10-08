@@ -33,6 +33,10 @@ namespace Symu.Repository.Entities
         public Knowledge()
         {
         }
+        public static Knowledge CreateInstance(GraphMetaNetwork metaNetwork, MainOrganizationModels models, string name, byte length)
+        {
+            return new Knowledge(metaNetwork, models, name, length);
+        }
 
         public Knowledge(GraphMetaNetwork metaNetwork, MainOrganizationModels models, string name, byte length) : base(
             metaNetwork, name)

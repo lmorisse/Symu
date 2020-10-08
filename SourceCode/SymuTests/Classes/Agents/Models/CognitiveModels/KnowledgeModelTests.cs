@@ -370,7 +370,7 @@ namespace SymuTests.Classes.Agents.Models.CognitiveModels
         {
             float[] bits = {0, 1};
             var knowledgeBits = new KnowledgeBits(bits, 0, -1);
-            _ = new ActorKnowledge(Network.ActorKnowledge, _agentId, _knowledge.EntityId, knowledgeBits);
+            ActorKnowledge.CreateInstance(Network.ActorKnowledge, _agentId, _knowledge.EntityId, knowledgeBits);
             Assert.IsFalse(_knowledgeModel.KnowsEnough(_knowledge.EntityId, 0, 0.1F, 0));
             Assert.IsTrue(_knowledgeModel.KnowsEnough(_knowledge.EntityId, 1, 0.1F, 0));
         }

@@ -41,9 +41,22 @@ namespace Symu.Repository.Edges
         /// </summary>
         private const int RangeMax = 1;
 
+
         public ActorBelief(IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel) : base(actorId, beliefId)
         {
             BeliefLevel = beliefLevel;
+        }
+        /// <summary>
+        /// Factory
+        /// </summary>
+        /// <param name="network"></param>
+        /// <param name="actorId"></param>
+        /// <param name="beliefId"></param>
+        /// <param name="beliefLevel"></param>
+        /// <returns></returns>
+        public static ActorBelief CreateInstance(ActorBeliefNetwork network, IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel)
+        {
+            return new ActorBelief(network, actorId, beliefId, beliefLevel);
         }
         public ActorBelief(ActorBeliefNetwork network, IAgentId actorId, IAgentId beliefId, BeliefLevel beliefLevel) : base(network, actorId, beliefId)
         {

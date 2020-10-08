@@ -92,7 +92,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="taskId"></param>
         public void AddActorTask(IAgentId taskId)
         {
-            _ = new ActorTask(_actorTaskNetwork, _agentId, taskId);
+            ActorTask.CreateInstance(_actorTaskNetwork, _agentId, taskId);
         }
 
         /// <summary>

@@ -26,17 +26,17 @@ namespace Symu.Classes.Organization
     ///     You must define your own organization derived classes.
     /// </summary>
     //TODO should be an abstract class
-    public class MainOrganization //: Entity
+    public class MainOrganization 
     {
         public const byte Class = ClassIdCollection.Organization;
+        public static IClassId ClassId => new ClassId(Class);
 
-        public MainOrganization(string name) //: base(new MetaNetwork(), Class, name)
+        public MainOrganization(string name) 
         {
             Name = name;
             MetaNetwork = new GraphMetaNetwork(Models.InteractionSphere);
         }
 
-        public static IClassId ClassId => new ClassId(Class);
 
         public string Name { get; set; }
 

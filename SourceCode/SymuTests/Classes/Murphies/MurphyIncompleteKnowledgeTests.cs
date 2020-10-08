@@ -104,8 +104,7 @@ namespace SymuTests.Classes.Murphies
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             _murphy.On = true;
-            var actorKnowledge = new ActorKnowledge(Uid1, _knowledge.EntityId, new float[] {0}, 0, -1);
-            Network.ActorKnowledge.Add(actorKnowledge);
+            ActorKnowledge.CreateInstance(Network.ActorKnowledge, Uid1, _knowledge.EntityId, new float[] {0}, 0, -1);
             _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck,
                 ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);
@@ -123,8 +122,7 @@ namespace SymuTests.Classes.Murphies
             byte mandatoryIndex = 0;
             byte requiredIndex = 0;
             _murphy.On = true;
-            var actorKnowledge = new ActorKnowledge(Uid1, _knowledge.EntityId, new float[] {1}, 0, -1);
-            Network.ActorKnowledge.Add(actorKnowledge);
+            ActorKnowledge.CreateInstance(Network.ActorKnowledge, Uid1, _knowledge.EntityId, new float[] {1}, 0, -1);
             _murphy.CheckKnowledge(_knowledge.EntityId, _taskBits, _knowledgeModel, ref mandatoryCheck,
                 ref requiredCheck, ref mandatoryIndex,
                 ref requiredIndex, 0);

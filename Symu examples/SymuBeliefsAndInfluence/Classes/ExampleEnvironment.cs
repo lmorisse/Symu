@@ -56,7 +56,7 @@ namespace SymuBeliefsAndInfluence.Classes
             {
                 for (var j = i + 1; j < actorIds.Count; j++)
                 {
-                    _ = new ActorActor(MainOrganization.MetaNetwork.ActorActor, actorIds[i], actorIds[j]);
+                    ActorActor.CreateInstance(MainOrganization.MetaNetwork.ActorActor, actorIds[i], actorIds[j]);
                 }
             }
         }
