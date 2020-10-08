@@ -37,7 +37,6 @@ namespace Symu.Classes.Organization
             MetaNetwork = new GraphMetaNetwork(Models.InteractionSphere);
         }
 
-
         public string Name { get; set; }
 
         public GraphMetaNetwork MetaNetwork { get; protected set; }

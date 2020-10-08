@@ -32,7 +32,7 @@ namespace Symu.Repository.Entities
         }
 
         private EmailEntity(GraphMetaNetwork metaNetwork, MainOrganizationModels models) : base(metaNetwork, models,
-            new EmailTemplate(), Class)
+            new EmailTemplate(), ClassId)
         {
         }
 

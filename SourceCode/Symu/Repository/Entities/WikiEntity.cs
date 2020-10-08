@@ -32,7 +32,7 @@ namespace Symu.Repository.Entities
         }
 
         private WikiEntity(GraphMetaNetwork metaNetwork, MainOrganizationModels models) : base(metaNetwork, models,
-            new ViaPlatformTemplate(), Class)
+            new ViaPlatformTemplate(), ClassId)
         {
         }
 

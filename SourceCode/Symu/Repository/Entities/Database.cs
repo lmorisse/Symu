@@ -52,13 +52,13 @@ namespace Symu.Repository.Entities
         }
 
         public static Database CreateInstance(GraphMetaNetwork metaNetwork, MainOrganizationModels models, CommunicationTemplate medium,
-            byte classId)
+            IClassId classId)
         {
             return new Database(metaNetwork, models, medium, classId);
         }
 
         public Database(GraphMetaNetwork metaNetwork, MainOrganizationModels models, CommunicationTemplate medium,
-            byte classId) : base(metaNetwork, classId)
+            IClassId classId) : base(metaNetwork, classId)
         {
             if (metaNetwork is null)
             {

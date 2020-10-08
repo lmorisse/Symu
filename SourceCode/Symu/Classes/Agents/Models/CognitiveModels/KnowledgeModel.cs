@@ -82,10 +82,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
 
         public bool On { get; set; }
 
-        ///// <summary>
-        /////     Get the Agent Expertise
-        ///// </summary>
-        //public EntityExpertise Expertise => _actorKnowledgeNetwork.EdgesFilteredBySource(_agentId);
         /// <summary>
         ///     Get a readonly list of the actor knowledge
         /// </summary>
@@ -102,8 +98,6 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
             {
                 return;
             }
-
-            //_actorKnowledgeNetwork.Add(Expertise);
 
             foreach (var agentKnowledge in _actorKnowledgeNetwork.EdgesFilteredBySource<ActorKnowledge>(_agentId))
             {
