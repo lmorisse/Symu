@@ -24,6 +24,7 @@ using Symu.OrgMod.Edges;
 using Symu.OrgMod.Entities;
 using Symu.Repository;
 using Symu.Results;
+using Symu.SysDyn;
 using EventEntity = Symu.Repository.Entities.EventEntity;
 
 #endregion
@@ -35,6 +36,7 @@ namespace Symu.Environment
     /// </summary>
     public class SymuEnvironment
     {
+        //TODO refactor MainOrganizationReference, StateMachineReference, ... in a readonly struct
         protected MainOrganization MainOrganizationReference {get; set; }
 
         public SymuEnvironment()
@@ -42,6 +44,9 @@ namespace Symu.Environment
             IterationResult = new IterationResult(this);
         }
 
+        /// <summary>
+        /// The MainOrganization that encapsulates the metaNetwork, the organizational models and so on.
+        /// </summary>
         public MainOrganization MainOrganization { get; protected set; }
 
         /// <summary>
@@ -50,7 +55,12 @@ namespace Symu.Environment
         /// </summary>
         public WhitePages WhitePages { get; } = new WhitePages();
 
+        /// <summary>
+        /// The iteration result manage and store all results of an iteration
+        /// </summary>
         public IterationResult IterationResult { get; set; }
+
+        public SysDynModel SysDynModel { get; set; }
 
         /// <summary>
         ///     Use to slow down or speed up the simulation
@@ -388,7 +398,9 @@ namespace Symu.Environment
         /// </summary>
         public void PreStep()
         {
-            WhitePages.AllAgents().ToList().ForEach(a => a.PreStep());
+            var agents = WhitePages.AllAgents().ToList();
+            SysDynModel.Process(agents);
+            agents.ForEach(a => a.PreStep());
         }
 
         /// <summary>

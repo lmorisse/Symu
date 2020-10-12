@@ -25,6 +25,9 @@ using Symu.Results.Tasks;
 
 namespace Symu.Results
 {
+    /// <summary>
+    /// The iteration result manage and store all results of an iteration
+    /// </summary>
     public class IterationResult
     {
         public IterationResult(SymuEnvironment environment)

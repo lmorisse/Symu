@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0">
+  <header>
+    <name>SysDyn</name>
+    <vendor>Symu</vendor>
+  </header>
+  <sim_specs method="Euler" time_units="Time">
+    <start>0</start>
+    <stop>12</stop>
+    <dt>0.25</dt>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="Employees">
+        <eqn>10</eqn>
+        <inflow>Attrition</inflow>
+        <outflow>Recruitment</outflow>
+        <non_negative />
+      </stock>
+      <flow name="Attrition">
+        <eqn>Employees*0.1</eqn>
+        <non_negative />
+      </flow>
+      <flow name="Recruitment">
+        <eqn>Employees*0.1</eqn>
+        <non_negative />
+      </flow>
+    </variables>
+  </model>
+</xmile>

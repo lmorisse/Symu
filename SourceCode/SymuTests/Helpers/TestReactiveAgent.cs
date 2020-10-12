@@ -19,7 +19,7 @@ using Symu.Repository;
 
 namespace SymuTests.Helpers
 {
-    internal sealed class TestReactiveAgent : ReactiveAgent
+    internal class TestReactiveAgent : ReactiveAgent
     {
         public static byte Class = SymuYellowPages.Actor;
 
@@ -27,7 +27,7 @@ namespace SymuTests.Helpers
         ///     Constructor of the agent
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
-        private TestReactiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment)
+        protected TestReactiveAgent(IAgentId id, SymuEnvironment environment) : base(id, environment)
         {
         }
 

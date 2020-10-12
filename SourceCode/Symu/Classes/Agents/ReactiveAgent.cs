@@ -22,15 +22,6 @@ using Symu.Repository;
 namespace Symu.Classes.Agents
 {
     /// <summary>
-    ///     The Agent interface
-    /// </summary>
-    public interface IAgent
-    {
-        //todo => c#8 IAgentId AgentId;
-        IAgent Clone();
-    }
-
-    /// <summary>
     ///     The default implementation of IAgent
     ///     You can define your own class agent by inheritance or implementing directly IAgent
     /// </summary>
@@ -334,5 +325,9 @@ namespace Symu.Classes.Agents
         }
 
         #endregion
+
+        public virtual void SetProperty(string propertyName, float value)
+        {
+        }
     }
 }
