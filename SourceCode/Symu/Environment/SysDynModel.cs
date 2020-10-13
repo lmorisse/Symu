@@ -18,6 +18,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.SysDyn;
 using Symu.SysDyn.Model;
+using Symu.SysDyn.Simulation;
 
 #endregion
 
@@ -29,7 +30,7 @@ namespace Symu.Environment
     public class SysDynModel
     {
         private readonly StateMachine _stateMachine;
-        private readonly List<NodeAgent> _nodeAgentList = new List<NodeAgent>();
+        private readonly List<SysDynVariableAgent> _variableAgent = new List<SysDynVariableAgent>();
 
         public SysDynModel(string xmlFile)
         {
@@ -45,21 +46,34 @@ namespace Symu.Environment
 
             _stateMachine.Process();
 
-            foreach (var nodeAgent in _nodeAgentList)
+            foreach (var variableAgent in _variableAgent)
             {
-                var agent = agents.Find(x => x.AgentId.Equals(nodeAgent.AgentId));
-                agent.SetProperty(nodeAgent.Property, _stateMachine.GetVariable(nodeAgent.NodeId));
+                var agent = agents.Find(x => x.AgentId.Equals(variableAgent.AgentId));
+                agent.SetProperty(variableAgent.Property, _stateMachine.Variables.GetValue(variableAgent.VariableName));
             }
         }
 
-        public void AddNodeAgent(string nodeId, IAgentId agentId, string property)
+        public void UpdateVariables(List<ReactiveAgent> agents)
         {
-            _nodeAgentList.Add(new NodeAgent(nodeId, agentId, property));
+            if (agents == null)
+            {
+                throw new ArgumentNullException(nameof(agents));
+            }
+            foreach (var variableAgent in _variableAgent)
+            {
+                var agent = agents.Find(x => x.AgentId.Equals(variableAgent.AgentId));
+                _stateMachine.Variables.SetValue(variableAgent.VariableName, agent.GetProperty(variableAgent.Property));
+            }
         }
 
-        public float GetVariable(string nodeId)
+        public void AddVariableAgent(string variableName, IAgentId agentId, string property)
         {
-            return _stateMachine.GetVariable(nodeId);
+            _variableAgent.Add(new SysDynVariableAgent(variableName, agentId, property));
+        }
+
+        public float GetVariable(string variableName)
+        {
+            return _stateMachine.Variables.GetValue(variableName);
         }
     }
 }

@@ -16,15 +16,15 @@ namespace Symu.Environment
     /// NodeAgent is used with SysDynModel
     /// It make the link between a Symu.SysDyn.Node and a Symu.Agent and its property used in SysDyn
     /// </summary>
-    public readonly struct NodeAgent
+    public readonly struct SysDynVariableAgent
     {
-        public NodeAgent(string nodeId, IAgentId agentId, string property)
+        public SysDynVariableAgent(string variableName, IAgentId agentId, string property)
         {
-            NodeId = nodeId;
+            VariableName = variableName;
             AgentId = agentId;
             Property = property;
         }
-        public string NodeId { get; }
+        public string VariableName { get; }
         public IAgentId AgentId { get; }
         public string Property { get; }
     }

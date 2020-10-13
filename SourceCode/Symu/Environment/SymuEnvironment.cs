@@ -399,6 +399,9 @@ namespace Symu.Environment
         public void PreStep()
         {
             var agents = WhitePages.AllAgents().ToList();
+            // First update variables with the agents' properties' values
+            SysDynModel.UpdateVariables(agents);
+            // Then Process 
             SysDynModel.Process(agents);
             agents.ForEach(a => a.PreStep());
         }

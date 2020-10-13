@@ -326,8 +326,23 @@ namespace Symu.Classes.Agents
 
         #endregion
 
+        /// <summary>
+        /// SetProperty is used to set a property value by its name
+        /// It useful for Symu.SysDyn
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="value"></param>
         public virtual void SetProperty(string propertyName, float value)
         {
+        }
+        /// <summary>
+        /// GetProperty is used to get a property value by its name
+        /// It useful for Symu.SysDyn
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public virtual float GetProperty(string propertyName)
+        {
+            return 0;
         }
     }
 }

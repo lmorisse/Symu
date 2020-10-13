@@ -9,7 +9,7 @@ namespace SymuTests.Environment
     public class SysDynModelTests : BaseTestClass
     {
         private const string XmlFile = "../../../Resources/sysdyn.xmile";
-        private const string NodeId = "Employees";
+        private const string VariableName = "Employees";
         private TestSysDynAgent _agent;
 
         [TestInitialize]
@@ -17,20 +17,28 @@ namespace SymuTests.Environment
         {
             _agent = new TestSysDynAgent(Environment.WhitePages.NextAgentId(TestReactiveAgent.ClassId), Environment);
             Environment.SysDynModel = new SysDynModel(XmlFile);
-            Environment.SysDynModel.AddNodeAgent(NodeId, _agent.AgentId, "Property1");
+            Environment.SysDynModel.AddVariableAgent(VariableName, _agent.AgentId, "Property1");
         }
 
         [TestMethod()]
         public void SysDynModelTest()
         {
-            Assert.AreEqual(10, Environment.SysDynModel.GetVariable(NodeId));
+            Assert.AreEqual(10, Environment.SysDynModel.GetVariable(VariableName));
         }
 
         [TestMethod()]
         public void ProcessTest()
         {
             Environment.SysDynModel.Process(Environment.WhitePages.AllAgents().ToList());
-            Assert.AreEqual(Environment.SysDynModel.GetVariable(NodeId), _agent.Property1);
+            Assert.AreEqual(Environment.SysDynModel.GetVariable(VariableName), _agent.Property1);
+        }
+
+        [TestMethod()]
+        public void UpdateVariablesTest()
+        {
+            _agent.Property1 = 2;
+            Environment.SysDynModel.UpdateVariables(Environment.WhitePages.AllAgents().ToList());
+            Assert.AreEqual(Environment.SysDynModel.GetVariable(VariableName), _agent.Property1);
         }
     }
 }

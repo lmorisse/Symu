@@ -37,5 +37,14 @@ namespace SymuTests.Helpers
                     break;
             }
         }
+        public override float GetProperty(string propertyName)
+        {
+            return propertyName switch
+            {
+                "Property1" => Property1,
+                "Property2" => Property2,
+                _ => throw new ArgumentOutOfRangeException(nameof(propertyName))
+            };
+        }
     }
 }
