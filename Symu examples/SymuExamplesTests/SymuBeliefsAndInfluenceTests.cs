@@ -16,7 +16,7 @@ using Symu.Common;
 using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Repository.Entities;
-using SymuBeliefsAndInfluence.Classes;
+using SymuExamples.BeliefsAndInfluence;
 
 #endregion
 

@@ -31,7 +31,10 @@ namespace Symu.Environment
     {
         private readonly StateMachine _stateMachine;
         private readonly List<SysDynVariableAgent> _variableAgent = new List<SysDynVariableAgent>();
-
+        public SysDynModel()
+        {
+            throw new NotImplementedException();
+        }
         public SysDynModel(string xmlFile)
         {
             _stateMachine = new StateMachine(xmlFile);
@@ -71,9 +74,33 @@ namespace Symu.Environment
             _variableAgent.Add(new SysDynVariableAgent(variableName, agentId, property));
         }
 
+        /// <summary>
+        /// Get the value of a variable by its name
+        /// </summary>
+        /// <param name="variableName"></param>
+        /// <returns></returns>
         public float GetVariable(string variableName)
         {
             return _stateMachine.Variables.GetValue(variableName);
+        }
+
+        /// <summary>
+        /// Set the simulation
+        /// </summary>
+        /// <param name="pauseInterval"></param>
+        /// <param name="deltaTime"></param>
+        /// <param name="timeUnits"></param>
+        public void SetSimulation(float deltaTime, ushort pauseInterval, TimeStepType timeUnits)
+        {
+            _stateMachine.Simulation.DeltaTime = deltaTime;
+            _stateMachine.Simulation.PauseInterval = pauseInterval;
+            _stateMachine.Simulation.TimeUnits = timeUnits;
+        }
+
+        public void Clear()
+        {
+            _stateMachine.Simulation.Clear();
+            _stateMachine.Results.Clear();
         }
     }
 }

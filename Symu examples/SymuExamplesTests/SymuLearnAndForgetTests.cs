@@ -16,7 +16,7 @@ using Symu.Classes.Scenario;
 using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.Repository.Entities;
-using SymuLearnAndForget.Classes;
+using SymuExamples.LearnAndForget;
 
 #endregion
 

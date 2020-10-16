@@ -42,6 +42,8 @@ namespace Symu.Environment
         public SymuEnvironment()
         {
             IterationResult = new IterationResult(this);
+            SysDynModel = new SysDynModel();
+            SysDynModel.SetSimulation(0.25F, 1, Schedule.Type);
         }
 
         /// <summary>
@@ -60,6 +62,9 @@ namespace Symu.Environment
         /// </summary>
         public IterationResult IterationResult { get; set; }
 
+        /// <summary>
+        /// Models from Symu.SysDyn 
+        /// </summary>
         public SysDynModel SysDynModel { get; set; }
 
         /// <summary>
@@ -215,6 +220,7 @@ namespace Symu.Environment
             Messages.Clear();
             //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
             MainOrganization = MainOrganizationReference.Clone();
+            SysDynModel.Clear();
             WhitePages.Clear();
             IterationResult.Initialize();
             SetAgents();

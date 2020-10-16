@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Symu.Classes.Scenario;
 using Symu.Common;
 using Symu.Engine;
-using SymuMessageAndTask.Classes;
+using SymuExamples.MessageAndTask;
 
 #endregion
 

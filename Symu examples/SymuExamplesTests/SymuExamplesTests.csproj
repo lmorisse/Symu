@@ -27,12 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SourceCode\Symu\Symu.csproj" />
-    <ProjectReference Include="..\SymuBeliefsAndInfluence\SymuBeliefsAndInfluence.csproj" />
-    <ProjectReference Include="..\SymuGroupAndInteraction\SymuGroupAndInteraction.csproj" />
-    <ProjectReference Include="..\SymuLearnAndForget\SymuLearnAndForget.csproj" />
-    <ProjectReference Include="..\SymuMessageAndTask\SymuMessageAndTask.csproj" />
-    <ProjectReference Include="..\SymuMurphiesAndBlockers\SymuMurphiesAndBlockers.csproj" />
-    <ProjectReference Include="..\SymuScenariosAndEvents\SymuScenariosAndEvents.csproj" />
+    <ProjectReference Include="..\SymuExamples\SymuExamples.csproj" />
   </ItemGroup>
 
 </Project>

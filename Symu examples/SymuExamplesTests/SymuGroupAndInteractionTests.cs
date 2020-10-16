@@ -16,7 +16,7 @@ using Symu.Common.Classes;
 using Symu.Engine;
 using Symu.OrgMod.GraphNetworks.TwoModesNetworks.Sphere;
 using Symu.Repository.Entities;
-using SymuGroupAndInteraction.Classes;
+using SymuExamples.GroupAndInteraction;
 
 #endregion
 
