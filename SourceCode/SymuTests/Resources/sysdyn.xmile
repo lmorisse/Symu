@@ -5,7 +5,7 @@
     <name>SysDyn</name>
     <vendor>Symu</vendor>
   </header>
-  <sim_specs method="Euler" time_units="Time">
+  <sim_specs method="Euler" time_units="Daily">
     <start>0</start>
     <stop>12</stop>
     <dt>0.25</dt>

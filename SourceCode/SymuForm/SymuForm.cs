@@ -354,10 +354,21 @@ namespace Symu.Forms
         {
             Engine.Environment.SetDelay(value);
         }
-
+        /// <summary>
+        /// Level of stochastic random
+        /// </summary>
+        /// <param name="value"></param>
         protected void SetRandomLevel(int value)
         {
             Engine.Environment.SetRandomLevel(value);
+        }
+        /// <summary>
+        /// Level of fidelity of the simulation
+        /// </summary>
+        /// <param name="value"></param>
+        protected void SetFidelity(int value)
+        {
+            Engine.Environment.SetFidelity(value);
         }
 
         protected void SetTimeStepType(TimeStepType type)

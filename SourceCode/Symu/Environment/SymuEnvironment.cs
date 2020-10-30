@@ -43,7 +43,7 @@ namespace Symu.Environment
         {
             IterationResult = new IterationResult(this);
             SysDynModel = new SysDynModel();
-            SysDynModel.SetSimulation(0.25F, 1, Schedule.Type);
+            SysDynModel.SetSimulation(Fidelity, 1, Schedule.Type);
         }
 
         /// <summary>
@@ -94,6 +94,10 @@ namespace Symu.Environment
         ///     Define level of random for the simulation.
         /// </summary>
         public RandomLevel RandomLevel { get; set; } = RandomLevel.NoRandom;
+        /// <summary>
+        ///     Define level of fidelity of the simulation.
+        /// </summary>
+        public Fidelity Fidelity { get; set; } = Fidelity.Low;
 
         public byte RandomLevelValue => (byte) RandomLevel;
 
@@ -112,6 +116,21 @@ namespace Symu.Environment
                     break;
                 default:
                     RandomLevel = RandomLevel.NoRandom;
+                    break;
+            }
+        }
+        public void SetFidelity(int level)
+        {
+            switch (level)
+            {
+                default:
+                    Fidelity= Fidelity.Low;
+                    break;
+                case 1:
+                    Fidelity = Fidelity.Medium;
+                    break;
+                case 2:
+                    Fidelity = Fidelity.High;
                     break;
             }
         }
@@ -220,7 +239,7 @@ namespace Symu.Environment
             Messages.Clear();
             //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
             MainOrganization = MainOrganizationReference.Clone();
-            SysDynModel.Clear();
+            SysDynModel.Initialize();
             WhitePages.Clear();
             IterationResult.Initialize();
             SetAgents();

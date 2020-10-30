@@ -16,6 +16,7 @@ using NCalc2.Grammar;
 using Symu.Classes.Agents;
 using Symu.Common.Classes;
 using Symu.Common.Interfaces;
+using Symu.Engine;
 using Symu.SysDyn;
 using Symu.SysDyn.Model;
 using Symu.SysDyn.Simulation;
@@ -33,7 +34,7 @@ namespace Symu.Environment
         private readonly List<SysDynVariableAgent> _variableAgent = new List<SysDynVariableAgent>();
         public SysDynModel()
         {
-            throw new NotImplementedException();
+            _stateMachine = new StateMachine {Optimized = true};
         }
         public SysDynModel(string xmlFile)
         {
@@ -88,19 +89,31 @@ namespace Symu.Environment
         /// Set the simulation
         /// </summary>
         /// <param name="pauseInterval"></param>
-        /// <param name="deltaTime"></param>
+        /// <param name="fidelity"></param>
         /// <param name="timeUnits"></param>
-        public void SetSimulation(float deltaTime, ushort pauseInterval, TimeStepType timeUnits)
+        public void SetSimulation(Fidelity fidelity, ushort pauseInterval, TimeStepType timeUnits)
         {
-            _stateMachine.Simulation.DeltaTime = deltaTime;
+            switch (fidelity)
+            {
+                case Fidelity.Low:
+                    _stateMachine.Simulation.DeltaTime = 0.5F;
+                    break;
+                case Fidelity.Medium:
+                    _stateMachine.Simulation.DeltaTime = 0.25F;
+                    break;
+                case Fidelity.High:
+                    _stateMachine.Simulation.DeltaTime = 0.125F;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fidelity), fidelity, null);
+            }
             _stateMachine.Simulation.PauseInterval = pauseInterval;
             _stateMachine.Simulation.TimeUnits = timeUnits;
         }
 
-        public void Clear()
+        public void Initialize()
         {
-            _stateMachine.Simulation.Clear();
-            _stateMachine.Results.Clear();
+            _stateMachine.Initialize();
         }
     }
 }
