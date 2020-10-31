@@ -1,6 +1,9 @@
 # Release notes
 
 ## 1.0.0
+This release contains a new feature that allow the integration of system dynamics models into the simulation using the new repository Symu.SysDyn.
+
+## 1.0.0
 This release contains a refactoring of 
 * Organizational network analysis to the new repository Symu.DNA
 * Organizational modeling to the new repository Symu.OrgMod
