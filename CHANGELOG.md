@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.1.0 [☰](https://github.com/lmorisse/symu/compare/v1.1.0..v1.0.0) by [lmorisse](https://github.com/lmorisse)
+* Extract system dynamics feature to new Symu.SysDyn project
+
 ## 1.0.0 [☰](https://github.com/lmorisse/symu/compare/v1.0.0..v0.9.1) by [lmorisse](https://github.com/lmorisse)
 * SymuTools refactored in Symu.Common solution
 * Extract organizational network analysis to new Symu.DNA project
