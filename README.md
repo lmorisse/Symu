@@ -56,7 +56,9 @@ To build Symu examples, you'll need to add Symu.dll, Symu.Forms.dll, Symu.Common
 
 #### External dependencies
 * [Math.net](https://www.math.net/)
-* Some examples are using [SyncFusion](https://www.syncfusion.com/)
+* [NCalc2](https://www.nuget.org/packages/NCalc2/)
+* Some examples are using :
+** [SyncFusion](https://www.syncfusion.com/)
 
 ### Running
 
