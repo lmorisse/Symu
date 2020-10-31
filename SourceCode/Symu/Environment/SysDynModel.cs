@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.XPath;
 using NCalc2.Grammar;
 using Symu.Classes.Agents;
@@ -18,6 +19,7 @@ using Symu.Common.Classes;
 using Symu.Common.Interfaces;
 using Symu.Engine;
 using Symu.SysDyn;
+using Symu.SysDyn.Functions;
 using Symu.SysDyn.Model;
 using Symu.SysDyn.Simulation;
 
@@ -30,15 +32,16 @@ namespace Symu.Environment
     /// </summary>
     public class SysDynModel
     {
-        private readonly StateMachine _stateMachine;
+        public static string ExternalUpdate => SysDyn.Functions.ExternalUpdate.Value;
+        public StateMachine StateMachine { get; }
         private readonly List<SysDynVariableAgent> _variableAgent = new List<SysDynVariableAgent>();
         public SysDynModel()
         {
-            _stateMachine = new StateMachine {Optimized = true};
+            StateMachine = new StateMachine {Optimized = true};
         }
         public SysDynModel(string xmlFile)
         {
-            _stateMachine = new StateMachine(xmlFile);
+            StateMachine = new StateMachine(xmlFile);
         }
 
         public void Process(List<ReactiveAgent> agents)
@@ -48,12 +51,13 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(agents));
             }
 
-            _stateMachine.Process();
+            StateMachine.Process();
 
-            foreach (var variableAgent in _variableAgent)
+            // update only non constant variables
+            foreach (var variableAgent in _variableAgent.Where(x => StateMachine.Variables.Exists(x.VariableName)))
             {
                 var agent = agents.Find(x => x.AgentId.Equals(variableAgent.AgentId));
-                agent.SetProperty(variableAgent.Property, _stateMachine.Variables.GetValue(variableAgent.VariableName));
+                agent.SetProperty(variableAgent.Property, StateMachine.Variables.GetValue(variableAgent.VariableName));
             }
         }
 
@@ -63,26 +67,27 @@ namespace Symu.Environment
             {
                 throw new ArgumentNullException(nameof(agents));
             }
-            foreach (var variableAgent in _variableAgent)
+            // update only non constant variables
+            foreach (var variableAgent in _variableAgent.Where( x=> StateMachine.Variables.Exists(x.VariableName)))
             {
                 var agent = agents.Find(x => x.AgentId.Equals(variableAgent.AgentId));
-                _stateMachine.Variables.SetValue(variableAgent.VariableName, agent.GetProperty(variableAgent.Property));
+                StateMachine.Variables.SetValue(variableAgent.VariableName,
+                    agent.GetProperty(variableAgent.Property));
             }
+        }
+        /// <summary>
+        /// In case of similar variable and property names
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="agentId"></param>
+        public void AddVariableAgent(string name, IAgentId agentId)
+        {
+            AddVariableAgent(name, agentId, name);
         }
 
         public void AddVariableAgent(string variableName, IAgentId agentId, string property)
         {
             _variableAgent.Add(new SysDynVariableAgent(variableName, agentId, property));
-        }
-
-        /// <summary>
-        /// Get the value of a variable by its name
-        /// </summary>
-        /// <param name="variableName"></param>
-        /// <returns></returns>
-        public float GetVariable(string variableName)
-        {
-            return _stateMachine.Variables.GetValue(variableName);
         }
 
         /// <summary>
@@ -96,24 +101,39 @@ namespace Symu.Environment
             switch (fidelity)
             {
                 case Fidelity.Low:
-                    _stateMachine.Simulation.DeltaTime = 0.5F;
+                    StateMachine.Simulation.DeltaTime = 0.5F;
                     break;
                 case Fidelity.Medium:
-                    _stateMachine.Simulation.DeltaTime = 0.25F;
+                    StateMachine.Simulation.DeltaTime = 0.25F;
                     break;
                 case Fidelity.High:
-                    _stateMachine.Simulation.DeltaTime = 0.125F;
+                    StateMachine.Simulation.DeltaTime = 0.125F;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fidelity), fidelity, null);
             }
-            _stateMachine.Simulation.PauseInterval = pauseInterval;
-            _stateMachine.Simulation.TimeUnits = timeUnits;
+            StateMachine.Simulation.PauseInterval = pauseInterval;
+            StateMachine.Simulation.TimeUnits = timeUnits;
+
+        }
+
+        public void Clear()
+        {
+            StateMachine.Clear();
         }
 
         public void Initialize()
         {
-            _stateMachine.Initialize();
+            StateMachine.Variables.Add(new Auxiliary("FrequencyFactor", Schedule.FrequencyFactor(StateMachine.Simulation.TimeUnits).ToString()));
+            StateMachine.Initialize();
+        }
+        /// <summary>
+        /// Add a model 
+        /// </summary>
+        /// <param name="model">List of the variables of the model</param>
+        public void Add(List<Variable> model)
+        {
+            StateMachine.Variables.AddRange(model);
         }
     }
 }

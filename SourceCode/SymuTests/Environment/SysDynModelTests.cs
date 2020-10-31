@@ -23,14 +23,14 @@ namespace SymuTests.Environment
         [TestMethod()]
         public void SysDynModelTest()
         {
-            Assert.AreEqual(10, Environment.SysDynModel.GetVariable(VariableName));
+            Assert.AreEqual(10, Environment.SysDynModel.StateMachine.Variables.GetValue(VariableName));
         }
 
         [TestMethod()]
         public void ProcessTest()
         {
             Environment.SysDynModel.Process(Environment.WhitePages.AllAgents().ToList());
-            Assert.AreEqual(Environment.SysDynModel.GetVariable(VariableName), _agent.Property1);
+            Assert.AreEqual(Environment.SysDynModel.StateMachine.Variables.GetValue(VariableName), _agent.Property1);
         }
 
         [TestMethod()]
@@ -38,7 +38,7 @@ namespace SymuTests.Environment
         {
             _agent.Property1 = 2;
             Environment.SysDynModel.UpdateVariables(Environment.WhitePages.AllAgents().ToList());
-            Assert.AreEqual(Environment.SysDynModel.GetVariable(VariableName), _agent.Property1);
+            Assert.AreEqual(Environment.SysDynModel.StateMachine.Variables.GetValue(VariableName), _agent.Property1);
         }
     }
 }

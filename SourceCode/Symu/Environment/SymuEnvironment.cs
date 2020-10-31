@@ -239,12 +239,13 @@ namespace Symu.Environment
             Messages.Clear();
             //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
             MainOrganization = MainOrganizationReference.Clone();
-            SysDynModel.Initialize();
             WhitePages.Clear();
             IterationResult.Initialize();
+            SysDynModel.Clear();
             SetAgents();
             // Intentionally after SetAgents
             //InitializeInteractionNetwork();
+            SysDynModel.Initialize();
             WhitePages.SetStarted();
         }
 

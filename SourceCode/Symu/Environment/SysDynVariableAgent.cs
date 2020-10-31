@@ -13,9 +13,10 @@ using Symu.SysDyn.Model;
 namespace Symu.Environment
 {
     /// <summary>
-    /// NodeAgent is used with SysDynModel
-    /// It make the link between a Symu.SysDyn.Node and a Symu.Agent and its property used in SysDyn
+    /// VariableAgent is used with SysDynModel
+    /// It make the link between a Symu.SysDyn.Variable and a Symu.Agent and its property used in SysDyn
     /// </summary>
+    /// <remarks>Symu.agent must implement IAgent.SetProperty</remarks>
     public readonly struct SysDynVariableAgent
     {
         public SysDynVariableAgent(string variableName, IAgentId agentId, string property)
@@ -24,8 +25,17 @@ namespace Symu.Environment
             AgentId = agentId;
             Property = property;
         }
+        /// <summary>
+        /// Symu.SysDyn.Variable.Name
+        /// </summary>
         public string VariableName { get; }
+        /// <summary>
+        /// Symu.Agent.AgentId
+        /// </summary>
         public IAgentId AgentId { get; }
+        /// <summary>
+        /// Symu.Agent.PropertyName
+        /// </summary>
         public string Property { get; }
     }
 }
