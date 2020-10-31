@@ -76,6 +76,8 @@ namespace Symu.Environment
             }
         }
         /// <summary>
+        /// Add a new SysDynVariableAgent 
+        /// It make the link between a Symu.SysDyn.Variable and a Symu.Agent and its property used in SysDyn
         /// In case of similar variable and property names
         /// </summary>
         /// <param name="name"></param>
@@ -84,7 +86,13 @@ namespace Symu.Environment
         {
             AddVariableAgent(name, agentId, name);
         }
-
+        /// <summary>
+        /// Add a new SysDynVariableAgent 
+        /// It make the link between a Symu.SysDyn.Variable and a Symu.Agent and its property used in SysDyn
+        /// </summary>
+        /// <param name="variableName"></param>
+        /// <param name="agentId"></param>
+        /// <param name="property"></param>
         public void AddVariableAgent(string variableName, IAgentId agentId, string property)
         {
             _variableAgent.Add(new SysDynVariableAgent(variableName, agentId, property));
