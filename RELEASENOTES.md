@@ -1,6 +1,6 @@
 # Release notes
 
-## 1.0.0
+## 1.1.0
 This release contains a new feature that allow the integration of system dynamics models into the simulation using the new repository Symu.SysDyn.
 
 ## 1.0.0
