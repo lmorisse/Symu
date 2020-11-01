@@ -132,14 +132,14 @@ namespace Symu.Environment
 
         public void Initialize()
         {
-            StateMachine.Variables.Add(new Auxiliary("FrequencyFactor", Schedule.FrequencyFactor(StateMachine.Simulation.TimeUnits).ToString()));
+            Auxiliary.CreateInstance(StateMachine.Variables, "FrequencyFactor", Schedule.FrequencyFactor(StateMachine.Simulation.TimeUnits).ToString());
             StateMachine.Initialize();
         }
         /// <summary>
         /// Add a model 
         /// </summary>
         /// <param name="model">List of the variables of the model</param>
-        public void Add(List<Variable> model)
+        public void Add(List<IVariable> model)
         {
             StateMachine.Variables.AddRange(model);
         }
