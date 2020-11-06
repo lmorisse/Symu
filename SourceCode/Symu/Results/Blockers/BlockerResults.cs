@@ -75,7 +75,7 @@ namespace Symu.Results.Blockers
 
         public override void SetResults()
         {
-            if (!Environment.WhitePages.Any())
+            if (!Environment.AgentNetwork.Any())
             {
                 return;
             }
@@ -95,10 +95,10 @@ namespace Symu.Results.Blockers
             //}
 
             // alive agents
-            HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.AgentNetwork.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>()
+            HandleResults(Environment.AgentNetwork.StoppedAgents.OfType<CognitiveAgent>()
                 .Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.BlockerResult), result);
             Results.TryAdd(Environment.Schedule.Step, result);

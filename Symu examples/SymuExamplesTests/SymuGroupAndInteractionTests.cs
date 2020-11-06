@@ -65,7 +65,7 @@ namespace SymuExamplesTests
 
         private int GetNotAcceptedMessages()
         {
-            return _environment.WhitePages.AllAgents().Sum(agent => agent.MessageProcessor.NotAcceptedMessages.Count);
+            return _environment.AgentNetwork.AllAgents().Sum(agent => agent.MessageProcessor.NotAcceptedMessages.Count);
         }
 
         #region n groups- 10 workers

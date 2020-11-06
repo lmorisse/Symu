@@ -55,7 +55,7 @@ namespace Symu.Environment
         ///     The white pages service of the simulation
         ///     To have access to all agents
         /// </summary>
-        public AgentNetwork WhitePages { get; } = new AgentNetwork();
+        public AgentNetwork AgentNetwork { get; } = new AgentNetwork();
 
         /// <summary>
         /// The iteration result manage and store all results of an iteration
@@ -177,7 +177,7 @@ namespace Symu.Environment
         /// </summary>
         public void WaitingForStart()
         {
-            while (WhitePages.AllAgents().ToList().Exists(a => a.State != AgentState.Started))
+            while (AgentNetwork.AllAgents().ToList().Exists(a => a.State != AgentState.Started))
             {
             }
         }
@@ -225,7 +225,7 @@ namespace Symu.Environment
         /// </returns>
         public bool StopIteration()
         {
-            return WhitePages.FilteredAgentsByClassCount(ScenarioAgent.ClassId) == 0;
+            return AgentNetwork.FilteredAgentsByClassCount(ScenarioAgent.ClassId) == 0;
         }
 
         /// <summary>
@@ -235,18 +235,18 @@ namespace Symu.Environment
         /// </summary>
         public virtual void InitializeIteration()
         {
-            WhitePages.AgentIndex = 1;
+            AgentNetwork.AgentIndex = 1;
             Messages.Clear();
             //At this point, we must use Environment.Organization.MetaNetwork and not Organization.MetaNetwork
             MainOrganization = MainOrganizationReference.Clone();
-            WhitePages.Clear();
+            AgentNetwork.Clear();
             IterationResult.Initialize();
             SysDynEngine.Clear();
             SetAgents();
             // Intentionally after SetAgents
             //InitializeInteractionNetwork();
             SysDynEngine.Initialize();
-            WhitePages.SetStarted();
+            AgentNetwork.SetStarted();
         }
 
         /// <summary>
@@ -262,16 +262,16 @@ namespace Symu.Environment
         /// </summary>
         public void StopAgents()
         {
-            WhitePages.ManageAgentsToStop();
+            AgentNetwork.ManageAgentsToStop();
             Messages.WaitingToClearAllMessages();
         }
 
         public List<ScenarioAgent> GetAllStoppedScenarii()
         {
-            var scenarioIds = WhitePages.StoppedAgents.FindAll(a => a.AgentId.ClassId.Equals(ScenarioAgent.ClassId))
+            var scenarioIds = AgentNetwork.StoppedAgents.FindAll(a => a.AgentId.ClassId.Equals(ScenarioAgent.ClassId))
                 .Select(x => x.AgentId);
 
-            return scenarioIds.Select(scenarioId => WhitePages.GetAgent<ScenarioAgent>(scenarioId))
+            return scenarioIds.Select(scenarioId => AgentNetwork.GetAgent<ScenarioAgent>(scenarioId))
                 .Where(scenario => scenario != null).ToList();
         }
 
@@ -290,10 +290,10 @@ namespace Symu.Environment
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (WhitePages.ExistsAgent(message.Receiver))
+            if (AgentNetwork.ExistsAgent(message.Receiver))
                 // Log is done within Agent.Post
             {
-                WhitePages.GetAgent(message.Receiver).Post(message);
+                AgentNetwork.GetAgent(message.Receiver).Post(message);
             }
             else
             {
@@ -354,7 +354,7 @@ namespace Symu.Environment
 
             SendDelayedMessages();
 
-            var agents = WhitePages.AllAgents().Shuffle();
+            var agents = AgentNetwork.AllAgents().Shuffle();
             if (Schedule.Type <= TimeStepType.Daily)
             {
                 if (Schedule.IsWorkingDay)
@@ -410,7 +410,7 @@ namespace Symu.Environment
         //todo should be done in MetaNetwork
         private void SetInteractionSphere(bool initialization)
         {
-            var agentIds = WhitePages.AllCognitiveAgents().Where(x =>
+            var agentIds = AgentNetwork.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.AgentId).ToList();
             MainOrganization.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds,
@@ -424,7 +424,7 @@ namespace Symu.Environment
         /// </summary>
         public void PreStep()
         {
-            var agents = WhitePages.AllAgents().ToList();
+            var agents = AgentNetwork.AllAgents().ToList();
             // First update variables with the agents' properties' values
             SysDynEngine.UpdateVariables(agents);
             // Then Process 
@@ -438,7 +438,7 @@ namespace Symu.Environment
         /// </summary>
         public void PostStep()
         {
-            WhitePages.AllAgents().ToList().ForEach(a => a.PostStep());
+            AgentNetwork.AllAgents().ToList().ForEach(a => a.PostStep());
             Messages.ClearMessagesSent(Schedule.Step);
             IterationResult.SetResults();
             Schedule.Step++;
@@ -453,7 +453,7 @@ namespace Symu.Environment
 
         public void Start()
         {
-            WhitePages.AllAgents().ToList().ForEach(a => a.Start());
+            AgentNetwork.AllAgents().ToList().ForEach(a => a.Start());
         }
 
         #endregion

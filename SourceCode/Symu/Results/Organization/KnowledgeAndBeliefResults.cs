@@ -79,10 +79,10 @@ namespace Symu.Results.Organization
 
         public void HandleLearning()
         {
-            var sum = Environment.WhitePages.AllCognitiveAgents()
+            var sum = Environment.AgentNetwork.AllCognitiveAgents()
                 .Select(e => e.LearningModel.CumulativeLearning)
                 .ToList();
-            var potentialKnowledge = Environment.WhitePages.AllCognitiveAgents()
+            var potentialKnowledge = Environment.AgentNetwork.AllCognitiveAgents()
                 .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var learning = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             Learning.Add(learning);
@@ -90,9 +90,9 @@ namespace Symu.Results.Organization
 
         public void HandleForgetting()
         {
-            var sum = Environment.WhitePages.AllCognitiveAgents()
+            var sum = Environment.AgentNetwork.AllCognitiveAgents()
                 .Select(e => e.ForgettingModel.CumulativeForgetting).ToList();
-            var sumKnowledge = Environment.WhitePages.AllCognitiveAgents()
+            var sumKnowledge = Environment.AgentNetwork.AllCognitiveAgents()
                 .Sum(e => e.KnowledgeModel.GetKnowledgeSum());
             var forgetting = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, sumKnowledge);
             Forgetting.Add(forgetting);
@@ -100,9 +100,9 @@ namespace Symu.Results.Organization
 
         public void HandleKnowledgeObsolescence()
         {
-            var sum = Environment.WhitePages.AllCognitiveAgents()
+            var sum = Environment.AgentNetwork.AllCognitiveAgents()
                 .Select(e => e.KnowledgeModel.Obsolescence(Environment.Schedule.Step)).ToList();
-            var potentialKnowledge = Environment.WhitePages.AllCognitiveAgents()
+            var potentialKnowledge = Environment.AgentNetwork.AllCognitiveAgents()
                 .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var obsolescence = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potentialKnowledge);
             KnowledgeObsolescence.Add(obsolescence);
@@ -110,9 +110,9 @@ namespace Symu.Results.Organization
 
         public void HandleKnowledge()
         {
-            var sum = Environment.WhitePages.AllCognitiveAgents()
+            var sum = Environment.AgentNetwork.AllCognitiveAgents()
                 .Select(e => e.KnowledgeModel.GetKnowledgeSum()).ToList();
-            var potential = Environment.WhitePages.AllCognitiveAgents()
+            var potential = Environment.AgentNetwork.AllCognitiveAgents()
                 .Sum(e => e.KnowledgeModel.GetKnowledgePotential());
             var knowledge = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Knowledge.Add(knowledge);
@@ -120,9 +120,9 @@ namespace Symu.Results.Organization
 
         public void HandleBelief()
         {
-            var sum = Environment.WhitePages.AllCognitiveAgents()
+            var sum = Environment.AgentNetwork.AllCognitiveAgents()
                 .Select(e => e.BeliefsModel.GetBeliefsSum()).ToList();
-            var potential = Environment.WhitePages.AllCognitiveAgents()
+            var potential = Environment.AgentNetwork.AllCognitiveAgents()
                 .Sum(e => e.BeliefsModel.GetBeliefsPotential());
             var belief = StatisticalResultStruct.SetStruct(Environment.Schedule.Step, sum, potential);
             Beliefs.Add(belief);

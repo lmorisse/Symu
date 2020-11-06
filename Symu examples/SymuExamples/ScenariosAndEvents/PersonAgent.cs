@@ -107,7 +107,7 @@ namespace SymuExamples.ScenariosAndEvents
                 // Weight is randomly distributed around 1, but has a minimum of 0
                 Weight = Math.Max(0, Normal.Sample(1, 0.1F * Environment.RandomLevelValue)),
                 // Creator is randomly  a person of the group - for the incomplete information murphy
-                Creator = (AgentId) Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
+                Creator = (AgentId) Environment.AgentNetwork.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
             task.SetKnowledgesBits(Model, Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(),
                 1);

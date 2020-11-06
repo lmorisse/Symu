@@ -15,7 +15,7 @@ namespace SymuTests.Environment
         [TestInitialize]
         public void Initialize()
         {
-            _agent = new TestSysDynAgent(Environment.WhitePages.NextAgentId(TestReactiveAgent.ClassId), Environment);
+            _agent = new TestSysDynAgent(Environment.AgentNetwork.NextAgentId(TestReactiveAgent.ClassId), Environment);
             Environment.SysDynEngine = new SysDynEngine(XmlFile);
             Environment.SysDynEngine.AddVariableAgent(VariableName, _agent.AgentId, "Property1");
         }
@@ -29,7 +29,7 @@ namespace SymuTests.Environment
         [TestMethod()]
         public void ProcessTest()
         {
-            Environment.SysDynEngine.Process(Environment.WhitePages.AllAgents().ToList());
+            Environment.SysDynEngine.Process(Environment.AgentNetwork.AllAgents().ToList());
             Assert.AreEqual(Environment.SysDynEngine.Models.RootModel.Variables.GetValue(VariableName), _agent.Property1);
         }
 
@@ -37,7 +37,7 @@ namespace SymuTests.Environment
         public void UpdateVariablesTest()
         {
             _agent.Property1 = 2;
-            Environment.SysDynEngine.UpdateVariables(Environment.WhitePages.AllAgents().ToList());
+            Environment.SysDynEngine.UpdateVariables(Environment.AgentNetwork.AllAgents().ToList());
             Assert.AreEqual(Environment.SysDynEngine.Models.RootModel.Variables.GetValue(VariableName), _agent.Property1);
         }
     }

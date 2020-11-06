@@ -106,7 +106,7 @@ namespace SymuExamples.MurphiesAndBlockers
             {
                 Weight = 1,
                 // Creator is randomly  a person of the group - for the incomplete information murphy
-                Creator = (AgentId) Environment.WhitePages.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
+                Creator = (AgentId) Environment.AgentNetwork.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
             task.SetKnowledgesBits(Model, Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(),
                 1);

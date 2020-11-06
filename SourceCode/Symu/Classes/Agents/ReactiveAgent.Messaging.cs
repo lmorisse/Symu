@@ -284,7 +284,7 @@ namespace Symu.Classes.Agents
                 throw new ArgumentNullException(nameof(message));
             }
 
-            var receiver = Environment.WhitePages.GetAgent(message.Receiver);
+            var receiver = Environment.AgentNetwork.GetAgent(message.Receiver);
             if (receiver == null || receiver.State == AgentState.Stopping)
             {
                 // receiver is already stopped

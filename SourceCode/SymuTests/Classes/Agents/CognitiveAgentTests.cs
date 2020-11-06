@@ -912,7 +912,7 @@ namespace SymuTests.Classes.Agents
             }
 
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
             Assert.IsFalse(_agent.GetAgentIdsForNewInteractions().Any());
         }
 
@@ -929,7 +929,7 @@ namespace SymuTests.Classes.Agents
             }
 
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForNewInteractions().Any());
         }
 
@@ -960,7 +960,7 @@ namespace SymuTests.Classes.Agents
         {
             ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
         }
 
@@ -1365,7 +1365,7 @@ namespace SymuTests.Classes.Agents
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId, 0, 1, 0);
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
 
             var task = new SymuTask(0) {KeyActivity = Uid1};
 
@@ -1552,7 +1552,7 @@ namespace SymuTests.Classes.Agents
             _agent.BeliefsModel.SetBelief(_belief.EntityId, 0, 0.1F);
             teammate.BeliefsModel.SetBelief(_belief.EntityId, 0, 1F);
             Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.WhitePages.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
 
             var task = new SymuTask(0) {Weight = 1, KeyActivity = Uid1};
 

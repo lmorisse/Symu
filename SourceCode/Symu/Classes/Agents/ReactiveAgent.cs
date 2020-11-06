@@ -44,7 +44,7 @@ namespace Symu.Classes.Agents
         /// <param name="classId"></param>
         /// <param name="environment"></param>
         protected ReactiveAgent(IClassId classId, SymuEnvironment environment) : this(
-            environment?.WhitePages.NextAgentId(classId), environment)
+            environment?.AgentNetwork.NextAgentId(classId), environment)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Symu.Classes.Agents
         {
             AgentId = agentId;
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment.WhitePages.AddAgent(this);
+            Environment.AgentNetwork.AddAgent(this);
             State = AgentState.NotStarted;
             Created = Schedule.Step;
         }

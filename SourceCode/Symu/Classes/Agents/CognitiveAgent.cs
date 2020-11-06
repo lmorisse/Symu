@@ -43,7 +43,7 @@ namespace Symu.Classes.Agents
         /// <param name="template"></param>
         /// <remarks> Make constructor private and create a factory method to create an agent that call the Initialize method</remarks>
         protected CognitiveAgent(IClassId classId, SymuEnvironment environment, CognitiveArchitectureTemplate template)
-            : this(environment?.WhitePages.NextAgentId(classId), environment, template)
+            : this(environment?.AgentNetwork.NextAgentId(classId), environment, template)
         {
             _cognitiveTemplate = template;
         }
@@ -250,7 +250,7 @@ namespace Symu.Classes.Agents
             ForgettingModel = new ForgettingModel(AgentId, Environment.MainOrganization.MetaNetwork.ActorKnowledge,
                 Cognitive, Environment.MainOrganization.Models, Environment.RandomLevelValue);
             InfluenceModel = new InfluenceModel(Environment.MainOrganization.Models.Influence,
-                Cognitive, Environment.WhitePages, BeliefsModel, Environment.MainOrganization.Models.Generator);
+                Cognitive, Environment.AgentNetwork, BeliefsModel, Environment.MainOrganization.Models.Generator);
             TaskModel = new ActorTaskModel(AgentId, Cognitive, Environment.MainOrganization.MetaNetwork);
         }
 

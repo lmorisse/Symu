@@ -58,24 +58,24 @@ namespace Symu.Results.Tasks
         {
             float sum;
             float max;
-            if (!Environment.WhitePages.Any())
+            if (!Environment.AgentNetwork.Any())
             {
                 return;
             }
 
             if (Environment.Schedule.IsWorkingDay)
             {
-                max = Environment.WhitePages.AllCognitiveAgents()
+                max = Environment.AgentNetwork.AllCognitiveAgents()
                     .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask);
-                sum = Environment.WhitePages.AllCognitiveAgents()
+                sum = Environment.AgentNetwork.AllCognitiveAgents()
                     .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTask)
                     .Select(x => x.Capacity.Initial).Sum();
             }
             else
             {
-                max = Environment.WhitePages.AllCognitiveAgents()
+                max = Environment.AgentNetwork.AllCognitiveAgents()
                     .Count(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds);
-                sum = Environment.WhitePages.AllCognitiveAgents()
+                sum = Environment.AgentNetwork.AllCognitiveAgents()
                     .Where(agent => agent.Cognitive.TasksAndPerformance.CanPerformTaskOnWeekEnds)
                     .Select(x => x.Capacity.Initial).Sum();
             }
@@ -89,16 +89,16 @@ namespace Symu.Results.Tasks
         private void HandleTasks()
         {
             var result = new TaskResult();
-            if (!Environment.WhitePages.Any())
+            if (!Environment.AgentNetwork.Any())
             {
                 return;
             }
 
             // alive agents
-            HandleResults(Environment.WhitePages.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
+            HandleResults(Environment.AgentNetwork.AllCognitiveAgents().Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             // stopped agents
-            HandleResults(Environment.WhitePages.StoppedAgents.OfType<CognitiveAgent>()
+            HandleResults(Environment.AgentNetwork.StoppedAgents.OfType<CognitiveAgent>()
                 .Where(agent => agent.TaskProcessor != null)
                 .Select(x => x.TaskProcessor.TasksManager.TaskResult), result);
             Tasks.TryAdd(Environment.Schedule.Step, result);

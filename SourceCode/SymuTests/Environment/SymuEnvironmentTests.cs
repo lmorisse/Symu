@@ -32,7 +32,7 @@ namespace SymuTests.Environment
             var agent1 = TestReactiveAgent.CreateInstance(Environment);
             var agent2 = TestReactiveAgent.CreateInstance(Environment);
             Simulation.Initialize(Environment);
-            Environment.WhitePages.RemoveAgent(agent2);
+            Environment.AgentNetwork.RemoveAgent(agent2);
             var message = new Message(agent1.AgentId, agent2.AgentId, MessageAction.Handle, 1);
             Assert.AreEqual(MessageState.Created, message.State);
             Environment.SendAgent(message);

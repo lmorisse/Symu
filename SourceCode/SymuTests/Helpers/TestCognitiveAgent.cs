@@ -49,7 +49,7 @@ namespace SymuTests.Helpers
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var agent = new TestCognitiveAgent(environment.WhitePages.NextAgentId(Class), environment);
+            var agent = new TestCognitiveAgent(environment.AgentNetwork.NextAgentId(Class), environment);
             agent.Initialize();
             return agent;
         }
@@ -61,7 +61,7 @@ namespace SymuTests.Helpers
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var agent = new TestCognitiveAgent(environment.WhitePages.NextAgentId(classId), environment);
+            var agent = new TestCognitiveAgent(environment.AgentNetwork.NextAgentId(classId), environment);
             agent.Initialize();
             return agent;
         }

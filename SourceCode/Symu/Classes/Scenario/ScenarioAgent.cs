@@ -28,7 +28,7 @@ namespace Symu.Classes.Scenario
         /// </summary>
         /// <remarks>Call the Initialize method after the constructor, or call the factory method</remarks>
         protected ScenarioAgent(object parent, SymuEnvironment environment) : base(
-            environment?.WhitePages.NextAgentId(Class), environment)
+            environment?.AgentNetwork.NextAgentId(Class), environment)
         {
             if (environment is null)
             {

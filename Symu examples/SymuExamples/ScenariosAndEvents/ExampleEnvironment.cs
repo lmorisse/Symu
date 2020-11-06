@@ -74,7 +74,7 @@ namespace SymuExamples.ScenariosAndEvents
             var knowledge = new Knowledge(ExampleMainOrganization.MetaNetwork, ExampleMainOrganization.Models,
                 ExampleMainOrganization.KnowledgeCount.ToString(), 10);
 
-            foreach (var person in WhitePages.FilteredCognitiveAgentsByClassId(PersonAgent.ClassId))
+            foreach (var person in AgentNetwork.FilteredCognitiveAgentsByClassId(PersonAgent.ClassId))
             {
                 person.KnowledgeModel.AddKnowledge(knowledge.EntityId, KnowledgeLevel.BasicKnowledge, 0.15F, -1);
                 person.KnowledgeModel.InitializeKnowledge(knowledge.EntityId, Schedule.Step);

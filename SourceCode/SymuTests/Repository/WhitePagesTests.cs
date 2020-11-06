@@ -70,25 +70,25 @@ namespace SymuTests.Repository
         public void ExistAgentTests()
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
-            Assert.IsTrue(Environment.WhitePages.ExistsAgent(_agent.AgentId));
+            Assert.IsTrue(Environment.AgentNetwork.ExistsAgent(_agent.AgentId));
         }
 
         [TestMethod]
         public void GetAgentTests()
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
-            Assert.AreEqual(_agent, Environment.WhitePages.GetAgent(_agent.AgentId));
+            Assert.AreEqual(_agent, Environment.AgentNetwork.GetAgent(_agent.AgentId));
         }
 
         [TestMethod]
         public void ExistAndStartedAgentTests()
         {
             var agentId = new AgentId(1, ClassName1);
-            Assert.IsFalse(Environment.WhitePages.ExistsAndStarted(agentId));
+            Assert.IsFalse(Environment.AgentNetwork.ExistsAndStarted(agentId));
             _agent = TestReactiveAgent.CreateInstance(Environment);
             _agent.Start();
-            Environment.WhitePages.WaitingForStart(_agent.AgentId);
-            Assert.IsTrue(Environment.WhitePages.ExistsAndStarted(_agent.AgentId));
+            Environment.AgentNetwork.WaitingForStart(_agent.AgentId);
+            Assert.IsTrue(Environment.AgentNetwork.ExistsAndStarted(_agent.AgentId));
         }
 
         [TestMethod]
@@ -96,19 +96,19 @@ namespace SymuTests.Repository
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
             _agent.Start();
-            Environment.WhitePages.WaitingForStart(_agent.AgentId);
-            Assert.IsTrue(Environment.WhitePages.ExistsAndStarted(_agent.AgentId));
+            Environment.AgentNetwork.WaitingForStart(_agent.AgentId);
+            Assert.IsTrue(Environment.AgentNetwork.ExistsAndStarted(_agent.AgentId));
         }
 
         [TestMethod]
         public void ClearTest()
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
-            Environment.WhitePages.StoppedAgents.Add(_agent);
+            Environment.AgentNetwork.StoppedAgents.Add(_agent);
             //_environment.Organization.MetaNetwork.Actor.Add(new ActorEntity(_environment.Organization.MetaNetwork));
-            Environment.WhitePages.Clear();
-            Assert.AreEqual(1, Environment.WhitePages.Agents.Count);
-            Assert.IsFalse(Environment.WhitePages.StoppedAgents.Any());
+            Environment.AgentNetwork.Clear();
+            Assert.AreEqual(1, Environment.AgentNetwork.Agents.Count);
+            Assert.IsFalse(Environment.AgentNetwork.StoppedAgents.Any());
             //Assert.IsFalse(_environment.Organization.MetaNetwork.Actor.Any());
         }
 
@@ -123,13 +123,13 @@ namespace SymuTests.Repository
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
             Environment.Start();
-            Environment.WhitePages.WaitingForStart(_agent.AgentId);
+            Environment.AgentNetwork.WaitingForStart(_agent.AgentId);
             _agent.State = AgentState.Stopping;
             Environment.StopAgents();
-            Environment.WhitePages.WaitingForStop(_agent.AgentId);
+            Environment.AgentNetwork.WaitingForStop(_agent.AgentId);
             Environment.InitializeIteration();
             //Assert
-            Assert.IsFalse(Environment.WhitePages.StoppedAgents.Any());
+            Assert.IsFalse(Environment.AgentNetwork.StoppedAgents.Any());
             Assert.AreEqual(0, Environment.MainOrganization.MetaNetwork.Actor.Count);
         }
 
@@ -137,10 +137,10 @@ namespace SymuTests.Repository
         public void RemoveASingleAgentTests()
         {
             _agent = TestReactiveAgent.CreateInstance(Environment);
-            Environment.WhitePages.RemoveAgent(_agent);
+            Environment.AgentNetwork.RemoveAgent(_agent);
 
-            Assert.AreEqual(0, Environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
-            Assert.AreEqual(1, Environment.WhitePages.StoppedAgents.Count);
+            Assert.AreEqual(0, Environment.AgentNetwork.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
+            Assert.AreEqual(1, Environment.AgentNetwork.StoppedAgents.Count);
         }
 
         [TestMethod]
@@ -151,8 +151,8 @@ namespace SymuTests.Repository
 
             Environment.StopAgents();
 
-            Assert.AreEqual(1, Environment.WhitePages.StoppedAgents.Count);
-            Assert.AreEqual(0, Environment.WhitePages.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
+            Assert.AreEqual(1, Environment.AgentNetwork.StoppedAgents.Count);
+            Assert.AreEqual(0, Environment.AgentNetwork.FilteredAgentsByClassCount(_agent.AgentId.ClassId));
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace SymuTests.Repository
             _agent = TestReactiveAgent.CreateInstance(Environment);
             Environment.Start();
             Environment.WaitingForStart();
-            Assert.IsTrue(Environment.WhitePages.ExistsAndStarted(_agent.AgentId));
+            Assert.IsTrue(Environment.AgentNetwork.ExistsAndStarted(_agent.AgentId));
         }
 
         /// <summary>
@@ -180,9 +180,9 @@ namespace SymuTests.Repository
 
             Environment.Start();
             Environment.WaitingForStart();
-            foreach (var agentId in Environment.WhitePages.AllAgentIds())
+            foreach (var agentId in Environment.AgentNetwork.AllAgentIds())
             {
-                Assert.IsTrue(Environment.WhitePages.ExistsAndStarted(agentId));
+                Assert.IsTrue(Environment.AgentNetwork.ExistsAndStarted(agentId));
             }
         }
 
@@ -202,14 +202,14 @@ namespace SymuTests.Repository
             }
 
             Assert.AreEqual(10,
-                Environment.WhitePages.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
+                Environment.AgentNetwork.GetFilteredAgentIdsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
                     .Count);
         }
 
         [TestMethod]
         public void GetFilteredAgentsWithExclusionListTest()
         {
-            Environment.WhitePages.Clear();
+            Environment.AgentNetwork.Clear();
             for (byte i = 0; i < 10; i++)
             {
                 _ = TestReactiveAgent.CreateInstance(Environment);
@@ -223,7 +223,7 @@ namespace SymuTests.Repository
             }
 
             Assert.AreEqual(10,
-                Environment.WhitePages.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
+                Environment.AgentNetwork.GetFilteredAgentsWithExclusionList(TestCognitiveAgent.ClassId, excludeIds)
                     .Count());
         }
     }

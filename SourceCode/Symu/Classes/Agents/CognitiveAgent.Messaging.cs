@@ -185,7 +185,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            var reactiveSender = Environment.WhitePages.GetAgent(senderId);
+            var reactiveSender = Environment.AgentNetwork.GetAgent(senderId);
             if (!(reactiveSender is CognitiveAgent sender))
             {
                 return true;

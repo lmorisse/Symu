@@ -36,6 +36,6 @@ namespace SymuTests.Helpers
             Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>();
 
         protected GraphMetaNetwork Network => MainOrganization.MetaNetwork;
-        protected AgentNetwork WhitePages => Environment.WhitePages;
+        protected AgentNetwork WhitePages => Environment.AgentNetwork;
     }
 }

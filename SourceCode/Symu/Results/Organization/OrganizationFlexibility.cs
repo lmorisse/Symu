@@ -96,7 +96,7 @@ namespace Symu.Results.Organization
 
         public override void SetResults()
         {
-            var actorCount = Environment.WhitePages.GetInteractionSphereCount;
+            var actorCount = Environment.AgentNetwork.GetInteractionSphereCount;
 
             HandleTriads(actorCount);
             HandleLinks(actorCount);
