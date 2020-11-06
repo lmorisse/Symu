@@ -55,7 +55,7 @@ namespace Symu.Environment
         ///     The white pages service of the simulation
         ///     To have access to all agents
         /// </summary>
-        public WhitePages WhitePages { get; } = new WhitePages();
+        public AgentNetwork WhitePages { get; } = new AgentNetwork();
 
         /// <summary>
         /// The iteration result manage and store all results of an iteration

@@ -34,7 +34,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         private readonly RandomGenerator _model;
 
         //private readonly ActorNetwork _actorNetwork;
-        private readonly WhitePages _whitePages;
+        private readonly AgentNetwork _whitePages;
 
         /// <summary>
         ///     Initialize influence model :
@@ -46,7 +46,7 @@ namespace Symu.Classes.Agents.Models.CognitiveModels
         /// <param name="beliefsModel"></param>
         /// <param name="model"></param>
         public InfluenceModel(InfluenceModelEntity entity, CognitiveArchitecture cognitiveArchitecture,
-            WhitePages whitePages, BeliefsModel beliefsModel, RandomGenerator model)
+            AgentNetwork whitePages, BeliefsModel beliefsModel, RandomGenerator model)
         {
             if (entity is null)
             {

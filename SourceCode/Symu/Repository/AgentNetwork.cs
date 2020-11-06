@@ -21,7 +21,7 @@ using Symu.Common.Interfaces;
 namespace Symu.Repository
 {
     /// <summary>
-    ///     white pages services
+    ///     Network of agents
     ///     maintaining a directory of agent identifiers (AgentId contains the transport address by which an agent can be
     ///     found)
     ///     agent’s life-cycle administration service
@@ -29,7 +29,7 @@ namespace Symu.Repository
     ///     in the multi-agent environment.
     /// </summary>
     /// <remarks>FIPA Norm : equivalent of the Agent Management System (AMS)</remarks>
-    public class WhitePages
+    public class AgentNetwork
     {
         /// <summary>
         ///     Local agents of this environment
@@ -46,32 +46,10 @@ namespace Symu.Repository
         /// </summary>
         public ConcurrentAgents<ReactiveAgent> Agents { get; } = new ConcurrentAgents<ReactiveAgent>();
 
-
-        public AgentState State { get; set; } = AgentState.NotStarted;
-
-        public bool Any()
-        {
-            return Agents.Any;
-        }
-
-        public void WaitingForStart(IAgentId agentId)
-        {
-            while (!ExistsAndStarted(agentId))
-            {
-            }
-        }
-
         /// <summary>
-        ///     Waiting for all the Agents to stop
-        ///     Useful for unit tests
+        /// State of the Simulation
         /// </summary>
-        /// <param name="agentId"></param>
-        public void WaitingForStop(IAgentId agentId)
-        {
-            while (ExistsAndStarted(agentId))
-            {
-            }
-        }
+        public AgentState State { get; set; } = AgentState.NotStarted;
 
         #region AgentId management
 
@@ -104,75 +82,11 @@ namespace Symu.Repository
 
         #endregion
 
-        #region Initialize / remove agent
+        #region AgentNetwork Management
 
-        /// <summary>
-        ///     Clear agents between two iterations
-        /// </summary>
-        public void Clear()
+        public bool Any()
         {
-            State = AgentState.Starting;
-            Agents.Clear();
-            StoppedAgents.Clear();
-            _agentsReference.ForEach(x => Agents.Add(x));
-            //todo => _agentsReference.ForEach(x => Agents.Add(x.Clone())); and change SetAGents
-        }
-
-        /// <summary>
-        ///     CLear agents between two iterations
-        /// </summary>
-        public void SetStarted()
-        {
-            State = AgentState.Started;
-        }
-
-        /// <summary>
-        ///     Stops the execution of the agent identified by name and removes it from the environment. Use the Remove method
-        ///     instead of Agent.Stop
-        ///     when the decision to stop an agent does not belong to the agent itself, but to some other agent or to an external
-        ///     factor.
-        ///     Don't call it directly, use WhitePages.RemoveAgent
-        /// </summary>
-        /// <param name="agent">The agent to be removed</param>
-        public void RemoveAgent(ReactiveAgent agent)
-        {
-            if (agent == null)
-            {
-                throw new ArgumentNullException(nameof(agent));
-            }
-
-            //MetaNetwork.RemoveActor(agent.AgentId);
-            Agents.Remove(agent.AgentId);
-            StoppedAgents.Add(agent);
-        }
-
-        #endregion
-
-        #region Shortcuts to AgentNetwork
-
-        /// <summary>
-        ///     Start Agent if start is set
-        /// </summary>
-        /// <param name="agentToStart"></param>
-        public static void StartAgent(ReactiveAgent agentToStart)
-        {
-            if (agentToStart is null)
-            {
-                throw new ArgumentNullException(nameof(agentToStart));
-            }
-
-            agentToStart.Start();
-        }
-
-        public bool ExistsAndStarted(IAgentId agentId)
-        {
-            if (!ExistsAgent(agentId))
-            {
-                return false;
-            }
-
-            var agent = GetAgent(agentId);
-            return agent != null && agent.State == AgentState.Started;
+            return Agents.Any;
         }
 
         public bool ExistsAgent(IAgentId agentId)
@@ -317,7 +231,62 @@ namespace Symu.Repository
 
         #endregion
 
-        #region ToStop & Stopped Agents
+        #region Start & clear agent
+
+        /// <summary>
+        ///     Clear agents between two iterations
+        /// </summary>
+        public void Clear()
+        {
+            State = AgentState.Starting;
+            Agents.Clear();
+            StoppedAgents.Clear();
+            _agentsReference.ForEach(x => Agents.Add(x));
+            //todo => _agentsReference.ForEach(x => Agents.Add(x.Clone())); and change SetAGents
+        }
+
+        /// <summary>
+        ///     CLear agents between two iterations
+        /// </summary>
+        public void SetStarted()
+        {
+            State = AgentState.Started;
+        }
+
+        /// <summary>
+        ///     Start Agent if start is set
+        /// </summary>
+        /// <param name="agentToStart"></param>
+        public static void StartAgent(ReactiveAgent agentToStart)
+        {
+            if (agentToStart is null)
+            {
+                throw new ArgumentNullException(nameof(agentToStart));
+            }
+
+            agentToStart.Start();
+        }
+
+        public void WaitingForStart(IAgentId agentId)
+        {
+            while (!ExistsAndStarted(agentId))
+            {
+            }
+        }
+        public bool ExistsAndStarted(IAgentId agentId)
+        {
+            if (!ExistsAgent(agentId))
+            {
+                return false;
+            }
+
+            var agent = GetAgent(agentId);
+            return agent != null && agent.State == AgentState.Started;
+        }
+
+        #endregion
+
+        #region Stop & remove agents
 
         public bool HasAgentsToStop => AllAgents().Count(a => a.State == AgentState.Stopping) > 0;
 
@@ -345,6 +314,37 @@ namespace Symu.Repository
                 RemoveAgent(agent);
                 agent.Dispose();
             }
+        }
+        /// <summary>
+        ///     Waiting for all the Agents to stop
+        ///     Useful for unit tests
+        /// </summary>
+        /// <param name="agentId"></param>
+        public void WaitingForStop(IAgentId agentId)
+        {
+            while (ExistsAndStarted(agentId))
+            {
+            }
+        }
+
+        /// <summary>
+        ///     Stops the execution of the agent identified by name and removes it from the environment. Use the Remove method
+        ///     instead of Agent.Stop
+        ///     when the decision to stop an agent does not belong to the agent itself, but to some other agent or to an external
+        ///     factor.
+        ///     Don't call it directly, use WhitePages.RemoveAgent
+        /// </summary>
+        /// <param name="agent">The agent to be removed</param>
+        public void RemoveAgent(ReactiveAgent agent)
+        {
+            if (agent == null)
+            {
+                throw new ArgumentNullException(nameof(agent));
+            }
+
+            //MetaNetwork.RemoveActor(agent.AgentId);
+            Agents.Remove(agent.AgentId);
+            StoppedAgents.Add(agent);
         }
 
         /// <summary>
