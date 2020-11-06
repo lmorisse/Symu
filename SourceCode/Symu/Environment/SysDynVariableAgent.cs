@@ -8,7 +8,6 @@
 #endregion
 
 using Symu.Common.Interfaces;
-using Symu.SysDyn.Model;
 
 namespace Symu.Environment
 {

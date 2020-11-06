@@ -11,6 +11,7 @@
 
 using Symu.Classes.Agents.Models.CognitiveModels;
 using Symu.Common;
+using Symu.Common.Classes;
 using Symu.Repository.Entities;
 
 #endregion

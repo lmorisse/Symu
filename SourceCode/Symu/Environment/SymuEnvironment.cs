@@ -42,8 +42,8 @@ namespace Symu.Environment
         public SymuEnvironment()
         {
             IterationResult = new IterationResult(this);
-            SysDynModel = new SysDynModel();
-            SysDynModel.SetSimulation(Fidelity, 1, Schedule.Type);
+            SysDynEngine = new SysDynEngine();
+            SysDynEngine.SetSimulation(Fidelity, 1, Schedule.Type);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Symu.Environment
         /// <summary>
         /// Models from Symu.SysDyn 
         /// </summary>
-        public SysDynModel SysDynModel { get; set; }
+        public SysDynEngine SysDynEngine { get; set; }
 
         /// <summary>
         ///     Use to slow down or speed up the simulation
@@ -241,11 +241,11 @@ namespace Symu.Environment
             MainOrganization = MainOrganizationReference.Clone();
             WhitePages.Clear();
             IterationResult.Initialize();
-            SysDynModel.Clear();
+            SysDynEngine.Clear();
             SetAgents();
             // Intentionally after SetAgents
             //InitializeInteractionNetwork();
-            SysDynModel.Initialize();
+            SysDynEngine.Initialize();
             WhitePages.SetStarted();
         }
 
@@ -426,9 +426,9 @@ namespace Symu.Environment
         {
             var agents = WhitePages.AllAgents().ToList();
             // First update variables with the agents' properties' values
-            SysDynModel.UpdateVariables(agents);
+            SysDynEngine.UpdateVariables(agents);
             // Then Process 
-            SysDynModel.Process(agents);
+            SysDynEngine.Process(agents);
             agents.ForEach(a => a.PreStep());
         }
 
