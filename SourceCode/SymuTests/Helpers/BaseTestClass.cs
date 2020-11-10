@@ -33,9 +33,9 @@ namespace SymuTests.Helpers
         protected IAgentId Uid1 { get; } = new AgentId(1, 1);
 
         protected IEnumerable<IKnowledge> Knowledges =>
-            Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>();
+            Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntities<IKnowledge>();
 
-        protected GraphMetaNetwork Network => MainOrganization.MetaNetwork;
+        protected GraphMetaNetwork Network => MainOrganization.ArtifactNetwork;
         protected AgentNetwork WhitePages => Environment.AgentNetwork;
     }
 }

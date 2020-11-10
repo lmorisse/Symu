@@ -583,7 +583,7 @@ namespace SymuExamples.LearnAndForget
                     throw new ArgumentOutOfRangeException("Knowledge should be < " + Bits.MaxBits);
                 }
 
-                Knowledge.CreateInstance(_mainOrganization.MetaNetwork, _mainOrganization.Models, "1", value);
+                Knowledge.CreateInstance(_mainOrganization.ArtifactNetwork, _mainOrganization.Models, "1", value);
                 tbKnowledgeLength.BackColor = SystemColors.Window;
             }
             catch (FormatException)

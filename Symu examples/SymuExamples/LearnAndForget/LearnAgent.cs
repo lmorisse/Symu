@@ -115,8 +115,8 @@ namespace SymuExamples.LearnAndForget
 
         private Knowledge GetKnowledge()
         {
-            var knowledgeId = Environment.MainOrganization.MetaNetwork.Knowledge.List.First().EntityId;
-            return (Knowledge) Environment.MainOrganization.MetaNetwork.Knowledge.GetEntity(knowledgeId);
+            var knowledgeId = Environment.MainOrganization.ArtifactNetwork.Knowledge.List.First().EntityId;
+            return (Knowledge) Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntity(knowledgeId);
         }
     }
 }

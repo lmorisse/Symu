@@ -54,9 +54,9 @@ namespace SymuExamples.ScenariosAndEvents
         {
             var actor = PersonAgent.CreateInstance(this, ExampleMainOrganization.Templates.Human);
             actor.GroupId = _groupId;
-            var email = EmailEntity.CreateInstance(ExampleMainOrganization.MetaNetwork, MainOrganization.Models);
-            ActorResource.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
-            ActorOrganization.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, _groupId);
+            var email = EmailEntity.CreateInstance(ExampleMainOrganization.ArtifactNetwork, MainOrganization.Models);
+            ActorResource.CreateInstance(ExampleMainOrganization.ArtifactNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
+            ActorOrganization.CreateInstance(ExampleMainOrganization.ArtifactNetwork.ActorOrganization, actor.AgentId, _groupId);
             return actor;
         }
 
@@ -71,7 +71,7 @@ namespace SymuExamples.ScenariosAndEvents
         public void KnowledgeEvent(object sender, EventArgs e)
         {
             // knowledge length of 10 is arbitrary in this example
-            var knowledge = new Knowledge(ExampleMainOrganization.MetaNetwork, ExampleMainOrganization.Models,
+            var knowledge = new Knowledge(ExampleMainOrganization.ArtifactNetwork, ExampleMainOrganization.Models,
                 ExampleMainOrganization.KnowledgeCount.ToString(), 10);
 
             foreach (var person in AgentNetwork.FilteredCognitiveAgentsByClassId(PersonAgent.ClassId))

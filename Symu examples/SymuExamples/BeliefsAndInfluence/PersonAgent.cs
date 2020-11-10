@@ -59,7 +59,7 @@ namespace SymuExamples.BeliefsAndInfluence
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
+            var entity = new ActorEntity(environment.MainOrganization.ArtifactNetwork);
             var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
@@ -91,7 +91,7 @@ namespace SymuExamples.BeliefsAndInfluence
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);
@@ -106,7 +106,7 @@ namespace SymuExamples.BeliefsAndInfluence
                 Weight = 1
             };
             task.SetKnowledgesBits(Environment.MainOrganization.Murphies.IncompleteBelief,
-                Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
+                Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntities<IKnowledge>(), 1);
             Post(task);
         }
 

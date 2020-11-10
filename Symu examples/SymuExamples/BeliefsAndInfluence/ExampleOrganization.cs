@@ -75,7 +75,7 @@ namespace SymuExamples.BeliefsAndInfluence
             for (var i = 0; i < BeliefCount; i++)
             {
                 // knowledge length of 10 is arbitrary in this example
-                Knowledge.CreateInstance(MetaNetwork, Models, i.ToString(), 10);
+                Knowledge.CreateInstance(ArtifactNetwork, Models, i.ToString(), 10);
             }
         }
     }

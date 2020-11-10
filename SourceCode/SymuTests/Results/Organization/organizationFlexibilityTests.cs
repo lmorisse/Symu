@@ -84,7 +84,7 @@ namespace SymuTests.Results.Organization
                 for (var j = i + 1; j < count; j++)
                 {
                     var agentId2 = agentIds[j];
-                    ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, agentId1, agentId2);
+                    ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, agentId1, agentId2);
                 }
             }
 

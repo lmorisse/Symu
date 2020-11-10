@@ -61,10 +61,10 @@ namespace SymuExamples.GroupAndInteraction
 
             // this new person is member of the group
             newPerson.GroupId = AgentId;
-            ActorOrganization.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorOrganization, newPerson.AgentId, AgentId);
+            ActorOrganization.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorOrganization, newPerson.AgentId, AgentId);
             // All the members of this group have interactions
-            var actorIds = Environment.MainOrganization.MetaNetwork.ActorOrganization.SourcesFilteredByTarget(AgentId).ToList();
-            actorIds.ForEach(actorId => ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, actorId, newPerson.AgentId));
+            var actorIds = Environment.MainOrganization.ArtifactNetwork.ActorOrganization.SourcesFilteredByTarget(AgentId).ToList();
+            actorIds.ForEach(actorId => ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, actorId, newPerson.AgentId));
         }
     }
 }

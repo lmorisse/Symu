@@ -32,9 +32,9 @@ namespace SymuTests.Repository.Entities
         public void Initialize()
         {
             MainOrganization.Models.SetOn(1);
-            _knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1",
+            _knowledge = new Knowledge(MainOrganization.ArtifactNetwork, MainOrganization.Models, "1",
                 (byte) _floats1.Length);
-            _database = new Database(MainOrganization.MetaNetwork, MainOrganization.Models, _communication, Database.ClassId);
+            _database = new Database(MainOrganization.ArtifactNetwork, MainOrganization.Models, _communication, Database.ClassId);
             _database.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 10;
             _bits1 = new Bits(_floats1, 0);
         }
@@ -132,7 +132,7 @@ namespace SymuTests.Repository.Entities
         public void ForgettingProcessTest2()
         {
             MainOrganization.Models.Forgetting.On = true;
-            _database = new Database(MainOrganization.MetaNetwork, MainOrganization.Models, _communication, Database.ClassId);
+            _database = new Database(MainOrganization.ArtifactNetwork, MainOrganization.Models, _communication, Database.ClassId);
             _database.CognitiveArchitecture.InternalCharacteristics.TimeToLive = 1;
             _database.StoreKnowledge(_knowledge.EntityId, _bits1, 1, 0);
             _database.ForgettingProcess(2);

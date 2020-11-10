@@ -182,14 +182,14 @@ namespace SymuExamples.ScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        eventEntity = new EventEntity(_environment.MainOrganization.MetaNetwork) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.MainOrganization.ArtifactNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        eventEntity = new CyclicalEvent(_environment.MainOrganization.MetaNetwork)
+                        eventEntity = new CyclicalEvent(_environment.MainOrganization.ArtifactNetwork)
                             {EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        eventEntity = new RandomEvent(_environment.MainOrganization.MetaNetwork) {Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.MainOrganization.ArtifactNetwork) {Ratio = randomRatio};
                         break;
                     case Cyclicity.Always:
                         break;
@@ -211,14 +211,14 @@ namespace SymuExamples.ScenariosAndEvents
                     case Cyclicity.None:
                         break;
                     case Cyclicity.OneShot:
-                        eventEntity = new EventEntity(_environment.MainOrganization.MetaNetwork) {Step = eventStep};
+                        eventEntity = new EventEntity(_environment.MainOrganization.ArtifactNetwork) {Step = eventStep};
                         break;
                     case Cyclicity.Cyclical:
-                        eventEntity = new CyclicalEvent(_environment.MainOrganization.MetaNetwork)
+                        eventEntity = new CyclicalEvent(_environment.MainOrganization.ArtifactNetwork)
                             {EveryStep = cyclicalStep};
                         break;
                     case Cyclicity.Random:
-                        eventEntity = new RandomEvent(_environment.MainOrganization.MetaNetwork) {Ratio = randomRatio};
+                        eventEntity = new RandomEvent(_environment.MainOrganization.ArtifactNetwork) {Ratio = randomRatio};
                         break;
                     case Cyclicity.Always:
                         break;

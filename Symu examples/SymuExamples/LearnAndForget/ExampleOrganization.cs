@@ -33,9 +33,9 @@ namespace SymuExamples.LearnAndForget
         {
             get
             {
-                if (MetaNetwork.Knowledge.Any())
+                if (ArtifactNetwork.Knowledge.Any())
                 {
-                    return (Knowledge) MetaNetwork.Knowledge.List.First();
+                    return (Knowledge) ArtifactNetwork.Knowledge.List.First();
                 }
 
                 return null;
@@ -61,7 +61,7 @@ namespace SymuExamples.LearnAndForget
         public void AddWiki()
         {
             //Wiki
-            WikiEntity = WikiEntity.CreateInstance(MetaNetwork, Models);
+            WikiEntity = WikiEntity.CreateInstance(ArtifactNetwork, Models);
             WikiEntity.InitializeKnowledge(Knowledge.EntityId, 0);
         }
     }

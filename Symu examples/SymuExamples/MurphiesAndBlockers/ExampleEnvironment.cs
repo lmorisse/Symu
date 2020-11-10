@@ -46,9 +46,9 @@ namespace SymuExamples.MurphiesAndBlockers
             {
                 var actor = PersonAgent.CreateInstance(this, ExampleMainOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = EmailEntity.CreateInstance(ExampleMainOrganization.MetaNetwork, MainOrganization.Models);
-                ActorResource.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
-                ActorOrganization.CreateInstance(ExampleMainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, group.AgentId);
+                var email = EmailEntity.CreateInstance(ExampleMainOrganization.ArtifactNetwork, MainOrganization.Models);
+                ActorResource.CreateInstance(ExampleMainOrganization.ArtifactNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
+                ActorOrganization.CreateInstance(ExampleMainOrganization.ArtifactNetwork.ActorOrganization, actor.AgentId, group.AgentId);
             }
         }
     }

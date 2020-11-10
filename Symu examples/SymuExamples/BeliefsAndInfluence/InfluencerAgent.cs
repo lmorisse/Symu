@@ -53,7 +53,7 @@ namespace SymuExamples.BeliefsAndInfluence
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
+            var entity = new ActorEntity(environment.MainOrganization.ArtifactNetwork);
             var agent = new InfluencerAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;
@@ -80,7 +80,7 @@ namespace SymuExamples.BeliefsAndInfluence
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, KnowledgeLevel.FullKnowledge,
                     Cognitive.InternalCharacteristics);

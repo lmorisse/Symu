@@ -65,7 +65,7 @@ namespace SymuExamples.MurphiesAndBlockers
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, MainOrganization.KnowledgeLevel,
                     Cognitive.InternalCharacteristics);

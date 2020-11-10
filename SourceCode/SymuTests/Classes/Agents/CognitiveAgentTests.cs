@@ -47,7 +47,7 @@ namespace SymuTests.Classes.Agents
         {
             //Organization
             MainOrganization.Models.SetOn(1);
-            _knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
+            _knowledge = new Knowledge(MainOrganization.ArtifactNetwork, MainOrganization.Models, "1", 1);
             _belief = _knowledge.AssociatedBelief;
 
             Environment.SetOrganization(MainOrganization);
@@ -118,9 +118,9 @@ namespace SymuTests.Classes.Agents
         {
             Assert.IsNull(_agent.Email);
             Assert.IsFalse(_agent.HasEmail);
-            var email = EmailEntity.CreateInstance(Environment.MainOrganization.MetaNetwork, MainOrganization.Models);
+            var email = EmailEntity.CreateInstance(Environment.MainOrganization.ArtifactNetwork, MainOrganization.Models);
             var usage = new ResourceUsage(0);
-            ActorResource.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorResource, _agent.AgentId, email.EntityId, usage);
+            ActorResource.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorResource, _agent.AgentId, email.EntityId, usage);
             _agent.EmailId = email.EntityId;
             Assert.IsTrue(_agent.HasEmail);
             Assert.IsNotNull(_agent.Email);
@@ -269,8 +269,8 @@ namespace SymuTests.Classes.Agents
         private void SetExpertise(KnowledgeBits bit0S)
         {
             _agent.Cognitive.KnowledgeAndBeliefs.HasKnowledge = true;
-            var knowledge = new Knowledge(Environment.MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
-            ActorKnowledge.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorKnowledge, _agent.AgentId, knowledge.EntityId, bit0S);
+            var knowledge = new Knowledge(Environment.MainOrganization.ArtifactNetwork, MainOrganization.Models, "1", 1);
+            ActorKnowledge.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorKnowledge, _agent.AgentId, knowledge.EntityId, bit0S);
         }
 
         #endregion
@@ -832,7 +832,7 @@ namespace SymuTests.Classes.Agents
         public void AcceptNewInteractionTest1()
         {
             _agent.Cognitive.InteractionPatterns.IsPartOfInteractionSphere = true;
-            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
+            ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
             Assert.IsTrue(_agent.AcceptNewInteraction(_agent2.AgentId));
         }
 
@@ -895,7 +895,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForNewInteractionsTest()
         {
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.Model.On = false;
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.Model.On = false;
             Assert.IsFalse(_agent.GetAgentIdsForNewInteractions().Any());
         }
 
@@ -905,14 +905,14 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForNewInteractionsTest1()
         {
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
             for (var i = 0; i < 2; i++)
             {
                 _ = TestCognitiveAgent.CreateInstance(Environment);
             }
 
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(true,
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.ArtifactNetwork);
             Assert.IsFalse(_agent.GetAgentIdsForNewInteractions().Any());
         }
 
@@ -922,14 +922,14 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForNewInteractionsTest2()
         {
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = true;
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.Model.SphereUpdateOverTime = true;
             for (var i = 0; i < 2; i++)
             {
                 _ = TestCognitiveAgent.CreateInstance(Environment);
             }
 
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(true,
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.ArtifactNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForNewInteractions().Any());
         }
 
@@ -939,7 +939,7 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForInteractionsTest()
         {
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.Model.SphereUpdateOverTime = false;
             Assert.IsFalse(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
         }
 
@@ -958,9 +958,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void GetAgentIdsForInteractionsTest2()
         {
-            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+            ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, _agent.AgentId, _agent2.AgentId);
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(true,
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.ArtifactNetwork);
             Assert.IsTrue(_agent.GetAgentIdsForInteractions(InteractionStrategy.Homophily).Any());
         }
 
@@ -1358,14 +1358,14 @@ namespace SymuTests.Classes.Agents
             var teammate = AddAgent();
             var group = TestCognitiveAgent.CreateInstance(2, Environment);
             group.Start();
-            ActorOrganization.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorOrganization, _agent.AgentId, group.AgentId);
-            ActorOrganization.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorOrganization, teammate.AgentId, group.AgentId);
-            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, _agent.AgentId, teammate.AgentId);
+            ActorOrganization.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorOrganization, _agent.AgentId, group.AgentId);
+            ActorOrganization.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorOrganization, teammate.AgentId, group.AgentId);
+            ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, _agent.AgentId, teammate.AgentId);
             teammate.KnowledgeModel.AddKnowledge(_knowledge.EntityId, KnowledgeLevel.FullKnowledge, 0, -1);
             teammate.KnowledgeModel.InitializeExpertise(0);
             _agent.KnowledgeModel.SetKnowledge(_knowledge.EntityId, 0, 1, 0);
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(true,
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.ArtifactNetwork);
 
             var task = new SymuTask(0) {KeyActivity = Uid1};
 
@@ -1551,8 +1551,8 @@ namespace SymuTests.Classes.Agents
             teammate.BeliefsModel.InitializeBeliefs();
             _agent.BeliefsModel.SetBelief(_belief.EntityId, 0, 0.1F);
             teammate.BeliefsModel.SetBelief(_belief.EntityId, 0, 1F);
-            Environment.MainOrganization.MetaNetwork.InteractionSphere.SetSphere(true,
-                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.MetaNetwork);
+            Environment.MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(true,
+                Environment.AgentNetwork.AllAgentIds().ToList(), Environment.MainOrganization.ArtifactNetwork);
 
             var task = new SymuTask(0) {Weight = 1, KeyActivity = Uid1};
 
@@ -1579,9 +1579,9 @@ namespace SymuTests.Classes.Agents
         [TestMethod]
         public void TryRecoverBlockerIncompleteBeliefTest1()
         {
-            var knowledge2 = new Knowledge(Environment.MainOrganization.MetaNetwork,
+            var knowledge2 = new Knowledge(Environment.MainOrganization.ArtifactNetwork,
                 Environment.MainOrganization.Models, "2", 1);
-            Belief.CreateInstance(Environment.MainOrganization.MetaNetwork, knowledge2, knowledge2.Length,
+            Belief.CreateInstance(Environment.MainOrganization.ArtifactNetwork, knowledge2, knowledge2.Length,
                 MainOrganization.Models.Generator, MainOrganization.Models.BeliefWeightLevel);
 
             MainOrganization.Murphies.IncompleteBelief.On = true;

@@ -134,7 +134,7 @@ namespace Symu.Results
             {
                 if (result is KeyFrames keyFrame)
                 {
-                    keyFrame.Add(Environment.Schedule.Step, Environment.MainOrganization.MetaNetwork);
+                    keyFrame.Add(Environment.Schedule.Step, Environment.MainOrganization.ArtifactNetwork);
                     keyFrame.SetResults();
                 }
                 else

@@ -39,9 +39,9 @@ namespace SymuExamples.MessageAndTask
             {
                 var actor = PersonAgent.CreateInstance(this, MainOrganization.Templates.Human);
                 actor.GroupId = group.AgentId;
-                var email = EmailEntity.CreateInstance(MainOrganization.MetaNetwork, MainOrganization.Models);
-                ActorResource.CreateInstance(MainOrganization.MetaNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
-                ActorOrganization.CreateInstance(MainOrganization.MetaNetwork.ActorOrganization, actor.AgentId, group.AgentId);
+                var email = EmailEntity.CreateInstance(MainOrganization.ArtifactNetwork, MainOrganization.Models);
+                ActorResource.CreateInstance(MainOrganization.ArtifactNetwork.ActorResource, actor.AgentId, email.EntityId, new ResourceUsage(0));
+                ActorOrganization.CreateInstance(MainOrganization.ArtifactNetwork.ActorOrganization, actor.AgentId, group.AgentId);
             }
         }
     }

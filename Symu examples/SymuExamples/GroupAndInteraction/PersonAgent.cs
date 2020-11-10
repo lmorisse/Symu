@@ -56,7 +56,7 @@ namespace SymuExamples.GroupAndInteraction
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            var entity = new ActorEntity(environment.MainOrganization.MetaNetwork);
+            var entity = new ActorEntity(environment.MainOrganization.ArtifactNetwork);
             var agent = new PersonAgent(entity.EntityId, environment, template);
             agent.Initialize();
             return agent;

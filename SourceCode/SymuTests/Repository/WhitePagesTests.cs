@@ -130,7 +130,7 @@ namespace SymuTests.Repository
             Environment.InitializeIteration();
             //Assert
             Assert.IsFalse(Environment.AgentNetwork.StoppedAgents.Any());
-            Assert.AreEqual(0, Environment.MainOrganization.MetaNetwork.Actor.Count);
+            Assert.AreEqual(0, Environment.MainOrganization.ArtifactNetwork.Actor.Count);
         }
 
         [TestMethod]

@@ -198,7 +198,7 @@ namespace Symu.Classes.Agents
                 return true;
             }
 
-            if (Environment.MainOrganization.MetaNetwork.ActorActor.HasActiveInteraction(AgentId, senderId))
+            if (Environment.MainOrganization.ArtifactNetwork.ActorActor.HasActiveInteraction(AgentId, senderId))
             {
                 return true;
             }
@@ -229,7 +229,7 @@ namespace Symu.Classes.Agents
             }
 
             // Message.Sender is now part of agent interaction sphere
-            ActorActor.CreateInstance(Environment.MainOrganization.MetaNetwork.ActorActor, AgentId, senderId);
+            ActorActor.CreateInstance(Environment.MainOrganization.ArtifactNetwork.ActorActor, AgentId, senderId);
 
             return true;
         }

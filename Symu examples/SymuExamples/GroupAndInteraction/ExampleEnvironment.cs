@@ -44,8 +44,8 @@ namespace SymuExamples.GroupAndInteraction
                     var actor = PersonAgent.CreateInstance(this,
                         MainOrganization.Templates.Human);
                     group.AddPerson(actor);
-                    SetAgentKnowledge(actor, ExampleMainOrganization.MetaNetwork.Knowledge.GetEntityIds().ToList(), i);
-                    SetAgentTasks(actor, ExampleMainOrganization.MetaNetwork.Task.GetEntityIds().ToList(), i);
+                    SetAgentKnowledge(actor, ExampleMainOrganization.ArtifactNetwork.Knowledge.GetEntityIds().ToList(), i);
+                    SetAgentTasks(actor, ExampleMainOrganization.ArtifactNetwork.Task.GetEntityIds().ToList(), i);
                 }
             }
         }

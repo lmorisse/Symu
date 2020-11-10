@@ -25,6 +25,7 @@ using Symu.OrgMod.Entities;
 using Symu.Repository;
 using Symu.Results;
 using Symu.SysDyn;
+using Symu.SysDyn.Models.Symu;
 using EventEntity = Symu.Repository.Entities.EventEntity;
 
 #endregion
@@ -52,8 +53,7 @@ namespace Symu.Environment
         public MainOrganization MainOrganization { get; protected set; }
 
         /// <summary>
-        ///     The white pages service of the simulation
-        ///     To have access to all agents
+        ///     The network of agents of the simulation
         /// </summary>
         public AgentNetwork AgentNetwork { get; } = new AgentNetwork();
 
@@ -142,7 +142,7 @@ namespace Symu.Environment
         /// </summary>
         public void ScheduleEvents()
         {
-            foreach (var symuEvent in MainOrganization.MetaNetwork.Event.List.Cast<EventEntity>())
+            foreach (var symuEvent in MainOrganization.ArtifactNetwork.Event.List.Cast<EventEntity>())
             {
                 symuEvent.Schedule(Schedule.Step);
             }
@@ -242,10 +242,10 @@ namespace Symu.Environment
             AgentNetwork.Clear();
             IterationResult.Initialize();
             SysDynEngine.Clear();
+            SysDynEngine.Initialize();
             SetAgents();
             // Intentionally after SetAgents
             //InitializeInteractionNetwork();
-            SysDynEngine.Initialize();
             AgentNetwork.SetStarted();
         }
 
@@ -255,6 +255,7 @@ namespace Symu.Environment
         /// <remarks>Call Initialize method after having created an agent</remarks>
         public virtual void SetAgents()
         {
+            SysDynEngine.Add(MainOrganization.ModelNetwork);
         }
 
         /// <summary>
@@ -413,8 +414,8 @@ namespace Symu.Environment
             var agentIds = AgentNetwork.AllCognitiveAgents().Where(x =>
                 x.Cognitive.InteractionPatterns.IsPartOfInteractionSphere &&
                 x.State == AgentState.Started).Select(x => x.AgentId).ToList();
-            MainOrganization.MetaNetwork.InteractionSphere.SetSphere(initialization, agentIds,
-                MainOrganization.MetaNetwork);
+            MainOrganization.ArtifactNetwork.InteractionSphere.SetSphere(initialization, agentIds,
+                MainOrganization.ArtifactNetwork);
         }
 
         /// <summary>
@@ -425,10 +426,7 @@ namespace Symu.Environment
         public void PreStep()
         {
             var agents = AgentNetwork.AllAgents().ToList();
-            // First update variables with the agents' properties' values
-            SysDynEngine.UpdateVariables(agents);
-            // Then Process 
-            SysDynEngine.Process(agents);
+            SysDynEngine.Process(agents, MainOrganization.ModelNetwork);
             agents.ForEach(a => a.PreStep());
         }
 

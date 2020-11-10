@@ -36,8 +36,8 @@ namespace SymuTests.Results.Organization
             // Entities
             MainOrganization.Models.SetOn(1);
             _result = new KnowledgeAndBeliefResults(Environment);
-            _knowledge = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "1", 1);
-            _knowledge1 = new Knowledge(MainOrganization.MetaNetwork, MainOrganization.Models, "2", 1);
+            _knowledge = new Knowledge(MainOrganization.ArtifactNetwork, MainOrganization.Models, "1", 1);
+            _knowledge1 = new Knowledge(MainOrganization.ArtifactNetwork, MainOrganization.Models, "2", 1);
             _belief = _knowledge.AssociatedBelief;
             _belief1 = _knowledge1.AssociatedBelief;
 

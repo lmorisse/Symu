@@ -87,10 +87,10 @@ namespace SymuExamplesTests
             _mainOrganization.Templates.Human.Cognitive.InteractionPatterns.MaxNumberOfNewInteractions = 1;
             _mainOrganization.Knowledge = 1;
             Process();
-            var links = _environment.MainOrganization.MetaNetwork.ActorActor.Count;
+            var links = _environment.MainOrganization.ArtifactNetwork.ActorActor.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
             Process();
-            Assert.AreEqual(links, _environment.MainOrganization.MetaNetwork.ActorActor.Count);
+            Assert.AreEqual(links, _environment.MainOrganization.ArtifactNetwork.ActorActor.Count);
             Assert.AreEqual(triads, _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }
 
@@ -174,19 +174,19 @@ namespace SymuExamplesTests
             _mainOrganization.Knowledge = 1;
             SetInteractionPatterns(InteractionStrategy.Knowledge);
             Process();
-            var links = _environment.MainOrganization.MetaNetwork.ActorActor.Count;
+            var links = _environment.MainOrganization.ArtifactNetwork.ActorActor.Count;
             var triads = _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber;
             // results should be a multiple of groups count, because interaction sphere can't change
             _environment.ExampleMainOrganization.GroupsCount = 2;
             Process();
             Assert.AreEqual(links * _environment.ExampleMainOrganization.GroupsCount,
-                _environment.MainOrganization.MetaNetwork.ActorActor.Count);
+                _environment.MainOrganization.ArtifactNetwork.ActorActor.Count);
             Assert.AreEqual(triads * _environment.ExampleMainOrganization.GroupsCount,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
             _environment.ExampleMainOrganization.GroupsCount = 3;
             Process();
             Assert.AreEqual(links * _environment.ExampleMainOrganization.GroupsCount,
-                _environment.MainOrganization.MetaNetwork.ActorActor.Count);
+                _environment.MainOrganization.ArtifactNetwork.ActorActor.Count);
             Assert.AreEqual(triads * _environment.ExampleMainOrganization.GroupsCount,
                 _environment.IterationResult.OrganizationFlexibility.Triads.Last().ActualNumber);
         }

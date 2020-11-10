@@ -177,7 +177,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventWorkerTest()
         {
-            var symuEvent = new EventEntity(_mainOrganization.MetaNetwork) {Step = 10};
+            var symuEvent = new EventEntity(_mainOrganization.ArtifactNetwork) {Step = 10};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -188,7 +188,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventWorkerTest1()
         {
-            var symuEvent = new CyclicalEvent(_mainOrganization.MetaNetwork) {EveryStep = 5};
+            var symuEvent = new CyclicalEvent(_mainOrganization.ArtifactNetwork) {EveryStep = 5};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -199,7 +199,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventWorkerTest2()
         {
-            var symuEvent = new RandomEvent(_mainOrganization.MetaNetwork) {Ratio = 0.1F};
+            var symuEvent = new RandomEvent(_mainOrganization.ArtifactNetwork) {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.PersonEvent;
             SuccessTest(3);
         }
@@ -210,7 +210,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventKnowledgeTest()
         {
-            var symuEvent = new EventEntity(_mainOrganization.MetaNetwork) {Step = 10};
+            var symuEvent = new EventEntity(_mainOrganization.ArtifactNetwork) {Step = 10};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }
@@ -221,7 +221,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventKnowledgeTest1()
         {
-            var symuEvent = new CyclicalEvent(_mainOrganization.MetaNetwork) {EveryStep = 5};
+            var symuEvent = new CyclicalEvent(_mainOrganization.ArtifactNetwork) {EveryStep = 5};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }
@@ -232,7 +232,7 @@ namespace SymuExamplesTests
         [TestMethod]
         public void EventKnowledgeTest2()
         {
-            var symuEvent = new RandomEvent(_mainOrganization.MetaNetwork) {Ratio = 0.1F};
+            var symuEvent = new RandomEvent(_mainOrganization.ArtifactNetwork) {Ratio = 0.1F};
             symuEvent.OnExecute += _environment.KnowledgeEvent;
             SuccessTest(3);
         }

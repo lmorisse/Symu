@@ -92,7 +92,7 @@ namespace SymuExamples.MurphiesAndBlockers
         public override void SetModels()
         {
             base.SetModels();
-            foreach (var knowledgeId in Environment.MainOrganization.MetaNetwork.Knowledge.GetEntityIds())
+            foreach (var knowledgeId in Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntityIds())
             {
                 KnowledgeModel.AddKnowledge(knowledgeId, MainOrganization.KnowledgeLevel,
                     Cognitive.InternalCharacteristics);
@@ -108,7 +108,7 @@ namespace SymuExamples.MurphiesAndBlockers
                 // Creator is randomly  a person of the group - for the incomplete information murphy
                 Creator = (AgentId) Environment.AgentNetwork.FilteredAgentIdsByClassId(ClassId).Shuffle().First()
             };
-            task.SetKnowledgesBits(Model, Environment.MainOrganization.MetaNetwork.Knowledge.GetEntities<IKnowledge>(),
+            task.SetKnowledgesBits(Model, Environment.MainOrganization.ArtifactNetwork.Knowledge.GetEntities<IKnowledge>(),
                 1);
             Post(task);
         }

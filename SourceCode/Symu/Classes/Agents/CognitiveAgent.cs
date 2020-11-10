@@ -85,13 +85,13 @@ namespace Symu.Classes.Agents
         ///     If agent has an email, get the email database of the agent
         /// </summary>
         public EmailEntity Email =>
-            HasEmail ? Environment.MainOrganization.MetaNetwork.Resource.GetEntity<EmailEntity>(EmailId) : null;
+            HasEmail ? Environment.MainOrganization.ArtifactNetwork.Resource.GetEntity<EmailEntity>(EmailId) : null;
 
         /// <summary>
         ///     If agent has an email
         /// </summary>
         public bool HasEmail => EmailId != null && !EmailId.IsNull &&
-                                Environment.MainOrganization.MetaNetwork.ActorResource.Exists(AgentId, EmailId);
+                                Environment.MainOrganization.ArtifactNetwork.ActorResource.Exists(AgentId, EmailId);
 
         /// <summary>
         ///     If agent has an email
@@ -185,7 +185,7 @@ namespace Symu.Classes.Agents
                 return new List<IAgentId>();
             }
 
-            var agentIds = Environment.MainOrganization.MetaNetwork.InteractionSphere.GetAgentIdsForNewInteractions(
+            var agentIds = Environment.MainOrganization.ArtifactNetwork.InteractionSphere.GetAgentIdsForNewInteractions(
                 AgentId,
                 Cognitive.InteractionPatterns.NextInteractionStrategy());
             return FilterAgentIdsToInteract(agentIds.ToList());
@@ -198,7 +198,7 @@ namespace Symu.Classes.Agents
         /// </summary>
         public IEnumerable<IAgentId> GetAgentIdsForInteractions(InteractionStrategy interactionStrategy)
         {
-            return Environment.MainOrganization.MetaNetwork.InteractionSphere
+            return Environment.MainOrganization.ArtifactNetwork.InteractionSphere
                 .GetAgentIdsForInteractions(AgentId, interactionStrategy);
         }
 
@@ -240,18 +240,18 @@ namespace Symu.Classes.Agents
             base.InitializeModels();
             // Initialize agent models
             KnowledgeModel = new KnowledgeModel(AgentId, Environment.MainOrganization.Models.Knowledge, Cognitive,
-                Environment.MainOrganization.MetaNetwork, Environment.MainOrganization.Models.Generator);
+                Environment.MainOrganization.ArtifactNetwork, Environment.MainOrganization.Models.Generator);
             BeliefsModel = new BeliefsModel(AgentId, Environment.MainOrganization.Models.Beliefs, Cognitive,
-                Environment.MainOrganization.MetaNetwork, Environment.MainOrganization.Models.Generator);
+                Environment.MainOrganization.ArtifactNetwork, Environment.MainOrganization.Models.Generator);
             LearningModel = new LearningModel(AgentId, Environment.MainOrganization.Models,
-                Environment.MainOrganization.MetaNetwork.Knowledge,
-                Environment.MainOrganization.MetaNetwork.ActorKnowledge, Cognitive,
+                Environment.MainOrganization.ArtifactNetwork.Knowledge,
+                Environment.MainOrganization.ArtifactNetwork.ActorKnowledge, Cognitive,
                 Environment.MainOrganization.Models.Generator, Environment.RandomLevelValue);
-            ForgettingModel = new ForgettingModel(AgentId, Environment.MainOrganization.MetaNetwork.ActorKnowledge,
+            ForgettingModel = new ForgettingModel(AgentId, Environment.MainOrganization.ArtifactNetwork.ActorKnowledge,
                 Cognitive, Environment.MainOrganization.Models, Environment.RandomLevelValue);
             InfluenceModel = new InfluenceModel(Environment.MainOrganization.Models.Influence,
                 Cognitive, Environment.AgentNetwork, BeliefsModel, Environment.MainOrganization.Models.Generator);
-            TaskModel = new ActorTaskModel(AgentId, Cognitive, Environment.MainOrganization.MetaNetwork);
+            TaskModel = new ActorTaskModel(AgentId, Cognitive, Environment.MainOrganization.ArtifactNetwork);
         }
 
         /// <summary>

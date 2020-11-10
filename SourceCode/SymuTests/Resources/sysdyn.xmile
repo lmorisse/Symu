@@ -12,14 +12,14 @@
   </sim_specs>
   <model>
     <variables>
-      <stock name="Employees">
+      <stock name="Employees" access="output">
         <eqn>10</eqn>
         <inflow>Attrition</inflow>
         <outflow>Recruitment</outflow>
         <non_negative />
       </stock>
-      <flow name="Attrition">
-        <eqn>Employees*0.1</eqn>
+      <flow name="Attrition" access="input">
+        <eqn>0.1</eqn>
         <non_negative />
       </flow>
       <flow name="Recruitment">

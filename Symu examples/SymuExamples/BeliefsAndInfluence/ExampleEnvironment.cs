@@ -49,14 +49,14 @@ namespace SymuExamples.BeliefsAndInfluence
             }
 
             var actorIds =
-                MainOrganization.MetaNetwork.Actor.GetEntityIds().ToList();
+                MainOrganization.ArtifactNetwork.Actor.GetEntityIds().ToList();
             // Set the interactions between the actors
             // Those interactions could be managed via an organization agent.
             for (var i = 0; i < actorIds.Count - 1; i++)
             {
                 for (var j = i + 1; j < actorIds.Count; j++)
                 {
-                    ActorActor.CreateInstance(MainOrganization.MetaNetwork.ActorActor, actorIds[i], actorIds[j]);
+                    ActorActor.CreateInstance(MainOrganization.ArtifactNetwork.ActorActor, actorIds[i], actorIds[j]);
                 }
             }
         }

@@ -10,12 +10,17 @@
 #region using directives
 
 using System;
+using System.Linq;
 using Symu.Classes.Agents.Models.CognitiveTemplates;
 using Symu.Classes.Murphies;
 using Symu.Common.Interfaces;
 using Symu.Messaging.Templates;
 using Symu.OrgMod.Entities;
 using Symu.OrgMod.GraphNetworks;
+using Symu.SysDyn.Engine;
+using Symu.SysDyn.Models;
+using Symu.SysDyn.Models.Symu;
+using Symu.SysDyn.Models.XMile;
 
 #endregion
 
@@ -34,12 +39,20 @@ namespace Symu.Classes.Organization
         public MainOrganization(string name) 
         {
             Name = name;
-            MetaNetwork = new GraphMetaNetwork(Models.InteractionSphere);
+            ArtifactNetwork = new GraphMetaNetwork(Models.InteractionSphere);
         }
 
         public string Name { get; set; }
 
-        public GraphMetaNetwork MetaNetwork { get; protected set; }
+        /// <summary>
+        /// Network of artifacts coming from Symu.OrgMod:
+        /// Actor, Role, Resource, Knowledge, Belief, Organization, Task, Event
+        /// </summary>
+        public GraphMetaNetwork ArtifactNetwork { get; protected set; }
+        /// <summary>
+        /// Network of models coming from Symu.SysDyn
+        /// </summary>
+        public ModelNetwork ModelNetwork { get; set; } = new ModelNetwork();
 
         /// <summary>
         ///     List of the models used by the organizationEntity
@@ -61,7 +74,7 @@ namespace Symu.Classes.Organization
         public CommunicationTemplates Communication { get; set; } = new CommunicationTemplates();
 
         /// <summary>
-        ///     List of the /Maydays handle in the simulation
+        ///     List of the Murphies handle in the simulation
         /// </summary>
         public MurphyCollection Murphies { get; protected set; } = new MurphyCollection();
 
@@ -79,7 +92,8 @@ namespace Symu.Classes.Organization
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            entity.MetaNetwork = MetaNetwork.Clone();
+            entity.ArtifactNetwork = ArtifactNetwork.Clone();
+            entity.ModelNetwork = ModelNetwork.Clone();
             entity.Models = Models.Clone();
             entity.Murphies = Murphies.Clone();
             entity.Communication = Communication;
